@@ -1,0 +1,90 @@
+# ____ ____ ___ ___ _ _  _ ____ ____
+# [__  |___  |   |  | |\ | | __ [__
+# ___] |___  |   |  | | \| |__] ___]
+#
+
+# =============== SKYFACTIONS CONFIG =============== #
+
+# Configuration for commands.
+Commands:
+  # You do NOT want this to be too low, definitely not 0. This will avoid database spam and anything else.
+  COOLDOWN: 5000
+
+
+
+Sounds:
+  # Sent when an island is successfully created.
+  ISLAND_CREATE_SUCCESS: "ui.toast.challenge_complete"
+  ISLAND_CREATE_SUCCESS_PITCH: 1f
+
+  # Sent when any command is run that opens a gui (e.g. /raid start).
+  GUI_OPEN: "ui.button.click"
+  GUI_OPEN_PITCH: 1f
+
+
+  # Sent when any cancel button is clicked in any gui.
+  GUI_CANCEL: "block.note_block.bass"
+  GUI_CANCEL_PITCH: 6f
+
+
+# General island config.
+Island:
+  # Name of the WORLD where faction islands will be located.
+  FACTION_WORLD_NAME: "faction_islands"
+  # Name of the WORLD where player islands will be located.
+  ISLAND_WORLD_NAME: "player_islands"
+
+  # Name of the WorldEdit schematic file for the normal island. Must end in .schem.
+  NORMAL_ISLAND_SCHEMATIC: 'island.schem'
+  # Name of the WorldEdit schematic file for the faction island. Must end in .schem.
+  FACTION_ISLAND_SCHEMATIC: 'faction_island.schem'
+
+
+
+
+# Island grid algorithm configuration
+Generation:
+  # Size of each region. The islands will be generated here, in the center of each region.
+  REGION_SIZE: 200
+  # Space between region islands.
+  REGION_PADDING: 100
+  # The center point where all islands start. [X, Y, Z]
+  GRID_ORIGIN: [0, 64, 0]
+
+
+
+Raiding:
+  # Cost of raiding a user in Gems.
+  RAIDING_COST: 2
+  # Cooldown for raiding (in milliseconds).
+  RAIDING_COOLDOWN: 10800000 # 3 Hours
+
+  # Height of where the attackers of a raid will spawn
+  SPAWN_HEIGHT: 250
+
+  # List of .nbs song names that are played when raiding (IN ORDER).
+  MUSIC_FILE_NAMES:
+    - The_Grounds_Color_Is_Yellow.nbs
+
+
+
+
+# Database config.
+Database:
+  # You can either use 'H2' (SQLite) or 'sql' (MySQL). Default: H2.
+  TYPE: 'H2'
+
+  # Connection values for MySQL if you decide to use it.
+  # HOST: The MySQL Host. Format: "<host>[:<port>]". Port defaults to 3306.
+  # NAME: The name of the database to use.
+  # USERNAME: The MySQL User to use.
+  # PASSWORD: The Password for the MySQL User.
+  DATABASE_HOST: ''
+  DATABASE_NAME: ''
+  DATABASE_USERNAME: ''
+  DATABASE_PASSWORD: ''
+
+  # Max lifetime for the database connection.
+  # Format: MINUTES
+  # Only applies for MySQL!
+  MAX_LIFETIME: 30

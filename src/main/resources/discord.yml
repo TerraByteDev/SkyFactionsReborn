@@ -1,0 +1,20 @@
+# ___  _ ____ ____ ____ ____ ___
+#|  \ | [__  |    |  | |__/ |  \
+#|__/ | ___] |___ |__| |  \ |__/
+#
+
+# =============== DISCORD CONFIG =============== #
+
+# ALL OF THESE COMMANDS REQUIRE A SERVER RESTART! DISCORD MESSAGES ARE STILL LOCATED IN THE MESSAGE CONFIG!
+
+Discord:
+  # Whether the discord feature is enabled.
+  ENABLED: true
+  # Token of the Discord Bot
+  TOKEN: "DISCORD_TOKEN_HERE"
+
+  # Where all raid notifications are sent.
+  RAID_CHANNEL: "CHANNEL_ID_HERE"
+
+  # API URL for getting the attacker's head.
+  AVATAR_API: "https://mc-heads.net/avatar/%player%.png/500"

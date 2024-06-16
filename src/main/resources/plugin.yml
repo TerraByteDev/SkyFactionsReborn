@@ -1,0 +1,36 @@
+name: SkyFactionsReborn
+version: '${project.version}'
+main: net.skullian.torrent.skyfactions.SkyFactionsReborn
+api-version: '1.20'
+authors: [Skullians, nouish]
+website: https://www.torrentsmp.com/
+
+depend: ["PlaceholderAPI", "FastAsyncWorldEdit", "WorldGuard", "Kingdoms", "JukeBox", "NoteBlockAPI"]
+
+commands:
+  island:
+    description: All island related commands.
+    usage: /<command>
+
+  link:
+    description: Link your discord account to get raid notifications.
+    usage: /<command>
+
+  unlink:
+    description: Unlink your discord account.
+    usage: /<command>
+
+  raid:
+    description: All raid related commands.
+    usage: /<command>
+
+  gems:
+    description: All gem related commands.
+    usage: /<command>
+
+permissions:
+  skyfactions.*:
+    description: Givs access to all SkyFactions commands.
+    default: op
+    children:
+      skyfactions.reload: true

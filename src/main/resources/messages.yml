@@ -1,0 +1,105 @@
+# _  _ ____ ____ ____ ____ ____ ____ ____
+# |\/| |___ [__  [__  |__| | __ |___ [__
+# |  | |___ ___] ___] |  | |__] |___ ___]
+#
+
+# =============== MESSAGE CONFIG =============== #
+
+# Coloring follows https://wiki.lewisdev.fun/text-colours-rgb/
+
+Messages:
+  SERVER_NAME: '&7[&r{#0083FF}&lSkyFactions{/#00FFC7}&r&7]'
+
+  PERMISSION_DENY: '%server_name% &c&lHey!&r&7 You are not allowed to execute this command.'
+  RELOADING: '%server_name%&r&7 Reloading SkyFactions, please wait...'
+  RELOADED: '%server_name%&r&a Plugin reloaded!'
+  COOLDOWN: '%server_name%&r&7 You must wait &c&l%cooldown%&r&7 seconds to use this command.'
+  INCORRECT_USAGE: '%server_name%&r&7 Incorrect usage of command. Usage: &c&l%usage%'
+  UNKNOWN_PLAYER: "%server_name%&r&7 Unknown player: &c&l%player%"
+
+  ERROR: '%server_name%&r&7 Something went wrong when trying to %operation%. Please try again later.'
+
+  Commands:
+    # Sent at the start and the bottom of the help command response.
+    COMMAND_HEAD: "&7------------- &r{#0083FF}&lSkyFactions{/#00FFC7}&r&7 -------------"
+
+    # Possible placeholders: %command_syntax% - Syntax of Command (e.g. "/<command> help") // %command_name% - Command Name (e.g. "help") // %command_description% - Description of Command.
+    # displayed when user uses /<command> help (or just does /<command>, which routes to /<command> help). It outlines all messages.
+    COMMAND_INFO: "{#15FB08}%command_syntax%{/#00B0CA}&r&6 - &3%command_description%"
+
+    # Sent when a player runs a command and there are no commands to show (e.g. they don't have perms to see them).
+    NO_COMMANDS_FOUND: '&c&lNo commands found!'
+
+  Islands:
+    # Sent when a player tries to create an island when they already have one.
+    ISLAND_CREATION_DENY: "%server_name% &r&c&lHey! &r&7You already have an island!"
+
+    # Sent when the player creates an island, and it is being created.
+    CREATING_MESSAGE: "%server_name%&r&e Creating your island, please wait..."
+
+    # Sent when the island has been successfully created.
+    CREATED_MESSAGE: "%server_name%&r&a&l Your island has been created!"
+
+  Discord:
+    # Sent to the player when they request to link (runs /link).
+    # Placeholders: %code% - Code to run in the discord.
+    LINK_PROMPT: "%server_name% &r&e Run '&c&l/link-mc %code%&r&e' in the discord to link your account!"
+
+    # Message content of the embed sent when a player is being raided.
+    # Placeholders: %attacker% - Name of attacker.
+    DISCORD_RAID_MESSAGE: "`❗` You are being raided by **%attacker%**!\n\n`⚔️` Defend thy honour!"
+
+    # Message sent to the player INGAME when linking is successful.
+    # Placeholders: %discord_name% - Username (tag) of the discord user you link to.
+    LINK_SUCCESS_MESSAGE: "%server_name% &a&lSuccess!&r&7 You are now linked to %discord_name%"
+
+    # Message sent to the user IN DISCORD when linkng is successful. (IS AN EMBED!)
+    # Placeholders: %player_name% - Name of ingame player you link to.
+    DISCORD_LINK_SUCCESS_MESSAGE: "`✅` Success! You are now linked to %player_name%"
+
+    # Sent when an error occurs when linking. (IS AN EMBED!)
+    DISCORD_LINK_ERROR: "`❌` Oops! Looks like something went wrong when trying to link your account.\nPlease try again later."
+
+    # Sent when the user is already linked (when discord command is run) (IS AN EMBED!)
+    # Placeholders: %player_name% - Name of ingame player you are already linked to.
+    DISCORD_ALREADY_LINKED: "`❌` You are already linked to %player_name%"
+
+    # Sent when the user is already linked (when ingame command is run) (IS AN EMBED!)
+    # Placeholders: %discord_name% - Username (tag) of the discord user you are already linked to.
+    ALREADY_LINKED: "%server_name% &c&lHey! &r&7You are already linked to %discord_name%!"
+
+    # Sent when the code is invalid. (IS AN EMBED!)
+    LINK_FAILED: "`❓` The code you entered is invalid. Please try again."
+
+    # Sent when the player tries to unlink (runs /unlink) when they are not unlinked.
+    NOT_LINKED: "%server_name% &c&lHey! &r&7You are not linked to a Discord account. Run &c&l/link&r&7 to get started!"
+
+    UNLINK_SUCCESS: "%server_name%&r&7 You have unlinked your discord account. You will no longer receive raid notifications on Discord."
+
+  Raiding:
+    # Display Name of the raid confirmation GUI item (after player executes /raid)
+    RAID_CONFIRMATION_NAME: "&a&lConfirm"
+    # Lore of the raid confirmation GUI item. Can be multiple lines.
+    # Placeholders: %raid_cost% - Cost in Gems of the raid.
+    RAID_CONFIRMATION_LORE:
+      - "&a&oThis will cost you %raid_cost% Gems."
+      - "&cYou will not be able to raid for 3 hours."
+    # Display Name of the raid cancel GUI item (after player executes /raid)
+    RAID_CANCEL_NAME: "&c&lCancel"
+
+    # Sent to the player if they try start a raid when on cooldown.
+    # Placeholders: %cooldown% - Cooldown left.
+    RAID_ON_COOLDOWN: "%server_name% &c&lHey!&r&7 You are on cooldown for &e&l%cooldown%."
+
+    # Sent to the player if they do not have sufficient gems to start a raid.
+    # Placeholders: %raid_cost% - How many gems to raid.
+    RAID_INSUFFICIENT_GEMS: "%server_name% &c&lHey!&r&7 You do not have enough gems to raid. You need %raid_cost% gems to raid."
+
+  Gems:
+    # Sent when the player runs /gems or /gems balance
+    GEM_COUNT: "&eYou have: &a&l%count%&r&e Gems."
+
+    # Sent after a successful /gems give command.
+    # Placeholders: %amount% - Amount of gems given / %player% - Player affected.
+    GEM_ADD_SUCCESS: "%server_name%&r&a Successfully added&r&e %amount%&r&a Gems to &r&e%player%."
+
