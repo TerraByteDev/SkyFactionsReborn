@@ -87,6 +87,9 @@ Messages:
     # Display Name of the raid cancel GUI item (after player executes /raid)
     RAID_CANCEL_NAME: "&c&lCancel"
 
+    # Sent when the player initiates a raid (assuming there are raidable players, has enough gems, etc.)
+    STARTING_RAID: "%server_name% &r&eStarting your raid, please wait..."
+
     # Sent to the player if they try start a raid when on cooldown.
     # Placeholders: %cooldown% - Cooldown left.
     RAID_ON_COOLDOWN: "%server_name% &c&lHey!&r&7 You are on cooldown for &e&l%cooldown%."
@@ -94,6 +97,10 @@ Messages:
     # Sent to the player if they do not have sufficient gems to start a raid.
     # Placeholders: %raid_cost% - How many gems to raid.
     RAID_INSUFFICIENT_GEMS: "%server_name% &c&lHey!&r&7 You do not have enough gems to raid. You need %raid_cost% gems to raid."
+
+    # Sent when there are no raidable players.
+    NO_PLAYERS: "%server_name% &r&cThere are no players that can be raided! Try again later."
+
 
   Gems:
     # Sent when the player runs /gems or /gems balance

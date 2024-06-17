@@ -26,7 +26,7 @@ public class ConfigHandler {
         this.file = new File(plugin.getDataFolder(), this.name);
         this.config = new YamlConfiguration();
 
-        new File(plugin.getDataFolder(), "/schematics").mkdir();
+        new File(plugin.getDataFolder(), "/schematics/raid_saves").mkdirs();
         new File(plugin.getDataFolder(), "/songs").mkdir();
     }
 

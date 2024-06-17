@@ -53,21 +53,21 @@ public class SkyIsland {
     public Location getPosition1(World world) {
         if (world == null) {
             double size = getSize() / 2.00;
-            return getCenter(null).subtract(new Location(null, size, 0, size));
+            return getCenter(null).subtract(new Location(null, size, -64, size));
         }
 
         double size = getSize() / 2.00;
-        return getCenter(world).subtract(new Location(world, size, 0, size));
+        return getCenter(world).subtract(new Location(world, size, -64, size));
     }
 
     public Location getPosition2(World world) {
         if (world == null) {
             double size = getSize() / 2.00;
-            return getCenter(null).add(new Location(null, size, 0, size));
+            return getCenter(null).add(new Location(null, size, 219, size));
         }
 
         double size = getSize() / 2.00;
-        return getCenter(world).add(new Location(world, size, 0, size));
+        return getCenter(world).add(new Location(world, size, 219, size));
     }
 
     public int getSize() {

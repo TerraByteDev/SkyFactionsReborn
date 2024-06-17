@@ -34,7 +34,7 @@ public class GemsGiveCommand extends CommandTemplate {
         } else {
 
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
-            if (offlinePlayer == null || !offlinePlayer.hasPlayedBefore()) {
+            if (!offlinePlayer.hasPlayedBefore()) {
                 Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
             } else {
                 SkyFactionsReborn.db.getGems(offlinePlayer.getPlayer()).thenAccept(gems -> {

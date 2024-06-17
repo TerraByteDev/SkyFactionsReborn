@@ -3,13 +3,14 @@ package net.skullian.torrent.skyfactions.island;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.extent.clipboard.io.*;
+import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -30,8 +31,8 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.concurrent.CompletableFuture;
 
 @Log4j2(topic = "SkyFactionsReborn")
@@ -87,7 +88,7 @@ public class IslandAPI {
                 }
 
                 com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(world);
-                Clipboard clipboard = null;
+                Clipboard clipboard;
                 ClipboardFormat format = ClipboardFormats.findByFile(schemFile);
                 try (ClipboardReader reader = format.getReader(new FileInputStream(schemFile))) {
                     clipboard = reader.read();
@@ -112,9 +113,7 @@ public class IslandAPI {
     }
 
     private static void teleportPlayerToLocation(Player player, Location location) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-            player.teleport(location);
-        });
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> player.teleport(location));
     }
 
     private static void createRegion(Player player, SkyIsland island, World world) {
@@ -136,9 +135,29 @@ public class IslandAPI {
         regionManager.addRegion(region);
     }
 
-    private static void takeRaidSchematic(Player player) throws SQLException {
+    public static CompletableFuture<Void> saveIslandSchematic(Player player, SkyIsland island) {
+        LOGGER.warn("Saving WE Schematic for {}", player.getName());
+        return CompletableFuture.runAsync(() -> {
+            World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
 
+            File file = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/schematics/raid_saves/" + player.getUniqueId() + ".schematic");
+            BlockVector3 bottom = BukkitAdapter.asBlockVector(island.getPosition1(null));
+            BlockVector3 top = BukkitAdapter.asBlockVector(island.getPosition2(null));
+            CuboidRegion region = new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
 
+            BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
+            ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
+                    BukkitAdapter.adapt(world), region, clipboard, region.getMinimumPoint()
+            );
+            forwardExtentCopy.setCopyingEntities(true);
+            Operations.complete(forwardExtentCopy);
+
+            try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(file))) {
+                writer.write(clipboard);
+            } catch (IOException error) {
+                error.printStackTrace();
+            }
+        });
     }
 }

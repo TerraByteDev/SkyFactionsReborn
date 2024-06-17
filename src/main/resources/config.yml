@@ -34,9 +34,9 @@ Island:
   # Name of the WORLD where player islands will be located.
   ISLAND_WORLD_NAME: "player_islands"
 
-  # Name of the WorldEdit schematic file for the normal island. Must end in .schem.
+  # Name of the WorldEdit schematic file for the normal island. MUST INCLUDE THE FILE EXTENSION!
   NORMAL_ISLAND_SCHEMATIC: 'island.schem'
-  # Name of the WorldEdit schematic file for the faction island. Must end in .schem.
+  # Name of the WorldEdit schematic file for the faction island. MUST INCLUDE THE FILE EXTENSION!
   FACTION_ISLAND_SCHEMATIC: 'faction_island.schem'
 
 
@@ -65,6 +65,9 @@ Raiding:
   # List of .nbs song names that are played when raiding (IN ORDER).
   MUSIC_FILE_NAMES:
     - The_Grounds_Color_Is_Yellow.nbs
+
+  # Players are spawned in a random pos at SPAWN_HEIGHT. The radius from the centre of the region is dictated here.
+  RANDOM_SPAWN_RADIUS: 30
 
 
 

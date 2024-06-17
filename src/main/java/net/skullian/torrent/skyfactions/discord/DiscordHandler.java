@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.kingdoms.constants.group.Kingdom;
 import org.kingdoms.constants.player.KingdomPlayer;
@@ -100,7 +101,7 @@ public class DiscordHandler {
 
     public void pingRaid(Player attacker, Player victim) {
             SkyFactionsReborn.db.getDiscordLink(victim).thenAccept(id -> {
-                if (id != null) {
+                if (id != null || !id.equals("none")) {
                     EmbedBuilder embedBuilder = new EmbedBuilder()
                             .setDescription(SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getString("Messages.Discord.DISCORD_RAID_MESSAGE").replace("%attacker%", attacker.getName()))
                             .setThumbnail(SkyFactionsReborn.configHandler.DISCORD_CONFIG.getString("Discord.AVATAR_API").replace("%player%", attacker.getUniqueId().toString()));

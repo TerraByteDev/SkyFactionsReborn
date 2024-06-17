@@ -6,8 +6,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.island.SkyIsland;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.sqlite.JDBC;
@@ -21,9 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class HikariHandler {
@@ -114,12 +112,7 @@ public class HikariHandler {
                      CREATE TABLE IF NOT EXISTS islands (
                      [id] INTEGER PRIMARY KEY,
                      [uuid] BLOB NOT NULL,
-                     [corner_x1] INTEGER NOT NULL,
-                     [corner_z1] INTEGER NOT NULL,
-                     [corner_x2] INTEGER NOT NULL,
-                     [corner_z2] INTEGER NOT NULL,
-                     [center_x] INTEGER NOT NULL,
-                     [center_z] INTEGER NOT NULL
+                     [last_raided] INTEGER NOT NULL
                      );
                      """);
 
@@ -129,7 +122,6 @@ public class HikariHandler {
                     [faction] STRING NOT NULL,
                     [gems] INTEGER NOT NULL,
                     [discord_id] STRING NOT NULL,
-                    [last_raided] INTEGER NOT NULL,
                     [last_raid] INTEGER NOT NULL
                     );
                     """);
@@ -138,12 +130,7 @@ public class HikariHandler {
                      CREATE TABLE IF NOT EXISTS factionIslands (
                      [id] INTEGER PRIMARY KEY,
                      [uuid] BLOB NOT NULL,
-                     [corner_x1] INTEGER NOT NULL,
-                     [corner_z1] INTEGER NOT NULL,
-                     [corner_x2] INTEGER NOT NULL,
-                     [corner_z2] INTEGER NOT NULL,
-                     [center_x] INTEGER NOT NULL,
-                     [center_z] INTEGER NOT NULL
+                     [last_raided] INTEGER NOT NULL
                      );
                     """)) {
 
@@ -193,20 +180,11 @@ public class HikariHandler {
     public CompletableFuture<Void> createIsland(Player player, SkyIsland island) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, corner_x1, corner_z1, corner_x2, corner_z2, center_x, center_z) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
-
-                Location corner1 = island.getPosition1(null);
-                Location corner2 = island.getPosition2(null);
-                Location center = island.getCenter(null);
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, last_raided) VALUES (?, ?, ?)")) {
 
                 statement.setInt(1, island.getId());
                 statement.setString(2, player.getUniqueId().toString());
-                statement.setInt(3, corner1.getBlockX());
-                statement.setInt(4, corner1.getBlockZ());
-                statement.setInt(5, corner2.getBlockX());
-                statement.setInt(6, corner2.getBlockZ());
-                statement.setInt(7, center.getBlockX());
-                statement.setInt(8, center.getBlockZ());
+                statement.setInt(3, 0);
 
                 statement.executeUpdate();
                 statement.close();
@@ -270,14 +248,13 @@ public class HikariHandler {
     public CompletableFuture<Void> registerPlayer(Player player) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO playerData (uuid, faction, gems, discord_id, last_raided, last_raid) VALUES (?, ?, ?, ?, ?, ?);")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO playerData (uuid, faction, gems, discord_id, last_raid) VALUES (?, ?, ?, ?, ?);")) {
 
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setString(2, "none");
-                statement.setString(3, "none");
-                statement.setInt(4, 0);
+                statement.setInt(3, 0);
+                statement.setString(4, "none");
                 statement.setInt(5, 0);
-                statement.setInt(6, 0);
 
                 statement.executeUpdate();
                 statement.close();
@@ -371,6 +348,36 @@ public class HikariHandler {
                 statement.close();
 
                 connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<List<IslandRaidData>> getRaidablePlayers(Player player) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE last_raided <=?")) {
+
+                statement.setLong(1, System.currentTimeMillis() - SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getLong("Raiding.RAIDING_COOLDOWN"));
+
+                List<IslandRaidData> islands = new ArrayList<>();
+                ResultSet set = statement.executeQuery();
+
+                while (set.next()) {
+                    int id = set.getInt("id");
+                    String uuid = set.getString("uuid");
+                    //if (player.getUniqueId().toString().equals(uuid)) continue;
+                    int last_raided = set.getInt("last_raided");
+
+                    islands.add(new IslandRaidData(id, uuid, last_raided));
+                }
+
+                statement.close();
+                connection.close();
+
+                return islands;
             } catch (SQLException error) {
                 handleError(error);
                 throw new RuntimeException(error);
