@@ -4,6 +4,7 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.island.IslandAPI;
 import net.skullian.torrent.skyfactions.raid.RaidManager;
+import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class RaidConfirmationItem extends AbstractItem {
 
         List<String> lore = SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getStringList("Messages.Raiding.RAID_CONFIRMATION_LORE");
         for (String loreLine : lore) {
-            itemBuilder.addLoreLines(ChatColor.translateAlternateColorCodes('&', loreLine.replace("%raid_cost%", SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.RAIDING_COST"))));
+            itemBuilder.addLoreLines(TextUtility.color(loreLine.replace("%raid_cost%", SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.RAIDING_COST"))));
         }
 
         return itemBuilder;

@@ -6,8 +6,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.island.SkyIsland;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.sqlite.JDBC;
@@ -336,12 +334,12 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<Void> updateLastRaid(Player player) {
+    public CompletableFuture<Void> updateLastRaid(Player player, long time) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("UPDATE playerData set last_raid = ? WHERE uuid = ?")) {
 
-                statement.setLong(1, System.currentTimeMillis());
+                statement.setLong(1, time);
                 statement.setString(2, player.getUniqueId().toString());
 
                 statement.executeUpdate();

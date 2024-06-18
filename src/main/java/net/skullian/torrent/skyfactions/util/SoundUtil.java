@@ -10,11 +10,12 @@ import lombok.extern.log4j.Log4j2;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class SoundUtil {
@@ -24,7 +25,7 @@ public class SoundUtil {
         player.playSound(sound, Sound.Emitter.self());
     }
 
-    private static void playMusic(Player player) {
+    public static void playMusic(Player player) {
         PlayerData data = JukeBox.getInstance().datas.getDatas(player);
         data.stopPlaying(true);
 
@@ -47,5 +48,27 @@ public class SoundUtil {
         radioSongPlayer.addPlayer(player);
 
         radioSongPlayer.setPlaying(true);
+    }
+
+    public static void soundAlarm(UUID uuid) {
+        CompletableFuture.runAsync(() -> {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null && player.isOnline()) {
+                String name = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.ALARM_SOUND");
+                float pitch = Float.parseFloat(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.ALARM_PITCH"));
+                int dur = 100;
+                int val = 50;
+                int it = dur / val + 1;
+
+                for (int i = 0; i < it; i++) {
+                    playSound(player, name, pitch, 1f);
+                    try {
+                        Thread.sleep(val);
+                    } catch (InterruptedException error) {
+                        error.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 }

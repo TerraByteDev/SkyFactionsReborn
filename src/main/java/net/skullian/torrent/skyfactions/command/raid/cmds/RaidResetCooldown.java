@@ -1,0 +1,38 @@
+package net.skullian.torrent.skyfactions.command.raid.cmds;
+
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.command.CommandTemplate;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
+public class RaidResetCooldown extends CommandTemplate {
+    @Override
+    public String getName() {
+        return "resetcd";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Reset your raid cooldown.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return "/raid resetcd";
+    }
+
+    @Override
+    public void perform(Player player, String[] args) {
+        SkyFactionsReborn.db.updateLastRaid(player, 0).thenAccept(result -> {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aSuccessfully reset your raid cooldown."));
+        }).exceptionally(ex -> {
+            ex.printStackTrace();
+            return null;
+        });
+    }
+
+    @Override
+    public String permission() {
+        return "skyfactions.raid.resetcd";
+    }
+}

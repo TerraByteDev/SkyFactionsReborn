@@ -69,6 +69,10 @@ Raiding:
   # Players are spawned in a random pos at SPAWN_HEIGHT. The radius from the centre of the region is dictated here.
   RANDOM_SPAWN_RADIUS: 30
 
+  # Sound played when an ONLINE player is about to be raided. Repeats quickly for 5s.
+  ALARM_SOUND: "block.note_block.bell"
+  ALARM_PITCH: 1f
+
 
 
 

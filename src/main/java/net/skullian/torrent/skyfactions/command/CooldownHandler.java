@@ -16,6 +16,7 @@ public class CooldownHandler {
     // returns true if the player is on cooldown
     // if not it returns false and the command can continue.
     public static boolean manageCooldown(Player player) {
+        if (player.hasPermission("skyfactions.cooldown.bypass")) return false;
         long cooldownDuration = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getLong("Commands.COOLDOWN");
 
         if (cooldowns.containsKey(player.getUniqueId())) {

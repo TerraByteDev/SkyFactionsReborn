@@ -101,7 +101,8 @@ public class DiscordHandler {
 
     public void pingRaid(Player attacker, Player victim) {
             SkyFactionsReborn.db.getDiscordLink(victim).thenAccept(id -> {
-                if (id != null || !id.equals("none")) {
+                System.out.println(id);
+                if (id != null && !id.equals("none")) {
                     EmbedBuilder embedBuilder = new EmbedBuilder()
                             .setDescription(SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getString("Messages.Discord.DISCORD_RAID_MESSAGE").replace("%attacker%", attacker.getName()))
                             .setThumbnail(SkyFactionsReborn.configHandler.DISCORD_CONFIG.getString("Discord.AVATAR_API").replace("%player%", attacker.getUniqueId().toString()));
