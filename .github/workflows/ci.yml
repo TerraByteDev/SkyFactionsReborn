@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches-ignore:
+      - dependabot/**
+  pull_request:
+
+jobs:
+  build:
+    name: Maven Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 17, 21 ]
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+
+      - name: Build with Maven
+        run: |
+          mvn --version
+          mvn --batch-mode --no-transfer-progress package
+          echo "artifact_name=$(mvn help:evaluate -Dexpression=project.build.finalName -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: matrix.java == 17
+        with:
+          name: ${{ env.artifact_name }}
+          path: |
+            target/*.jar
+            !target/original-*.jar
