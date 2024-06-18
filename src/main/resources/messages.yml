@@ -101,12 +101,15 @@ Messages:
     # Sent when there are no raidable players.
     NO_PLAYERS: "%server_name% &r&cThere are no players that can be raided! Try again later."
 
+    # Sent to the player when the raid is processing (preparing).
+    RAID_PROCESSING: "%server_name% &r&eStarting a raid, please wait..."
+
     # Sent to a player when they are being raided (imminent) and are online. Is as a list, each value is a new line.
     # Placeholders: %raider% - Player attacking / %player_name% - Player being raided.
     RAIDED_NOTIFICATION:
       - "&c&l---------------------------------------"
-      - "&a&l%player_name%&e&o, you are being raided by&c&l%raider%&e&o!"
-      - "&e&oGet back to your island and defend your island!"
+      - "&a&l%player_name%&e&o, you are being raided by &c&l%raider%&e&o!"
+      - "&e&oGet back to your island and defend thy honour!"
       - "&c&l---------------------------------------"
 
 

@@ -68,7 +68,7 @@ public class RaidManager {
                 if (!isPlayerOnline(playerUUID)) {
                     SkyFactionsReborn.dc.pingRaid(player, Bukkit.getOfflinePlayer(playerUUID).getPlayer());
                 } else {
-                    alertPlayer(playerUUID);
+                    alertPlayer(playerUUID, player);
                 }
                 currentRaids.put(player.getUniqueId(), playerUUID);
             }
@@ -130,13 +130,14 @@ public class RaidManager {
         return player.isOnline();
     }
 
-    private static void alertPlayer(UUID uuid) {
+    private static void alertPlayer(UUID uuid, Player attacker) {
         SoundUtil.soundAlarm(uuid);
-        List<String> alertList = SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getStringList("Raiding.RAIDED_NOTIFICATION");
-        for (String list : alertList) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (player.isOnline()) {
-                player.sendMessage(TextUtility.color(list));
+        List<String> alertList = SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getStringList("Messages.Raiding.RAIDED_NOTIFICATION");
+        Player player = Bukkit.getPlayer(uuid);
+        System.out.println(uuid);
+        if (player.isOnline()) {
+            for (String msg : alertList) {
+                player.sendMessage(TextUtility.color(msg.replace("%player_name%", player.getName()).replace("%raider%", attacker.getName())));
             }
         }
     }
