@@ -1,6 +1,9 @@
 package net.skullian.torrent.skyfactions.raid;
 
 import lombok.extern.log4j.Log4j2;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.db.IslandRaidData;
@@ -17,6 +20,7 @@ import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -83,6 +87,20 @@ public class RaidManager {
         } else {
             alertPlayer(uuid, attacker);
             teleportToPreparationArea(uuid);
+
+            Bukkit.getScheduler().runTaskLater(SkyFactionsReborn.getInstance(), () -> {
+                Player player = Bukkit.getPlayer(uuid);
+                if (!player.isOnline()) return;
+                SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
+                    World islandWorld = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
+                    if (islandWorld != null && island != null) {
+                        Location returnLoc = island.getCenter(islandWorld);
+                        player.teleport(returnLoc);
+                    }
+                });
+
+            }, (SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.RAID_PREPARATION_TIME") * 20L));
+            showCountdown(uuid, attacker);
         }
     }
 
@@ -156,19 +174,27 @@ public class RaidManager {
             if (world != null) {
                 Location location = new Location(world, loc.get(0), loc.get(1), loc.get(2));
                 player.teleport(location);
-
-                Bukkit.getScheduler().runTaskLater(SkyFactionsReborn.getInstance(), () -> {
-
-                    SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
-                        World islandWorld = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
-                        if (islandWorld != null && island != null) {
-                            Location returnLoc = island.getCenter(islandWorld);
-                            player.teleport(returnLoc);
-                        }
-                    });
-
-                }, (SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.RAID_PREPARATION_TIME") * 20L));
             }
         }
+    }
+
+    private static void showCountdown(UUID def, Player att) {
+        Player defp = Bukkit.getPlayer(def);
+        int length = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.COUNTDOWN_DURATION");
+        String countdown_sound = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.COUNTDOWN_SOUND");
+        int countdown_pitch = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.COUNTDOWN_PITCH");
+        final Component subtitle = Component.text(TextUtility.color(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.COUNTDOWN_SUBTITLE")));
+
+        for (int i = 0; i < length; i++) {
+            final Component mainTitle = Component.text(i + 1, NamedTextColor.RED);
+
+            final Title title = Title.title(mainTitle, subtitle);
+            defp.showTitle(title);
+            att.showTitle(title);
+
+            SoundUtil.playSound(defp, countdown_sound, countdown_pitch, 1f);
+            SoundUtil.playSound(att, countdown_sound, countdown_pitch, 1f);
+        }
+
     }
 }

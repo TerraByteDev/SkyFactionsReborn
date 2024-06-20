@@ -76,6 +76,13 @@ Raiding:
   ALARM_SOUND: "block.note_block.bell"
   ALARM_PITCH: 1f
 
+  # Sound when counting down for the start.
+  COUNTDOWN_SOUND: "block.note_block.hat"
+  COUNTDOWN_PITCH: 1f
+  COUNTDOWN_DURATION: 5 # IN SECONDS
+  # Upon countdown, a title going "5", then "4", etc (depends on your countdown duration is displayed). That is not configurable but the subtitle is.
+  COUNTDOWN_SUBTITLE: "&aGet ready!"
+
   # This is the name of the world where raid defenders will be teleported to be prepared for the raid.
   # Can be the same as the Hub world or normal world if you wish.
   RAID_PREPARATION_WORLD: "world"
