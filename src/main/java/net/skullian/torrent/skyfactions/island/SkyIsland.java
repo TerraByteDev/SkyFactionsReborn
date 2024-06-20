@@ -5,6 +5,8 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.List;
+
 @Getter
 public class SkyIsland {
 
@@ -15,7 +17,8 @@ public class SkyIsland {
     }
 
     public Location getCenter(World world) {
-            if (id == 1) return new Location(world, 0, 64, 0);
+        List<Integer> origin = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getIntegerList("Generation.GRID_ORIGIN");
+            if (id == 1) return new Location(world, origin.get(0), origin.get(1), origin.get(2));
 
             int pos = id - 1;
             int radius = (int) (Math.floor((Math.sqrt(pos) - 1) / 2) + 1);

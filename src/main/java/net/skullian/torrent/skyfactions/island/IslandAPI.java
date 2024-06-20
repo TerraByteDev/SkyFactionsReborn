@@ -156,10 +156,9 @@ public class IslandAPI {
             BlockVector3 bottom = BukkitAdapter.asBlockVector(island.getPosition1(null));
             BlockVector3 top = BukkitAdapter.asBlockVector(island.getPosition2(null));
             CuboidRegion region = new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
-            Region testregion = new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
 
 
-            /*BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+            BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
             ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
                     BukkitAdapter.adapt(world), region, clipboard, region.getMinimumPoint()
@@ -171,10 +170,6 @@ public class IslandAPI {
                 writer.write(clipboard);
             } catch (IOException error) {
                 error.printStackTrace();
-            }*/
-
-            try (EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
-                editSession.setBlocks(testregion, BlockTypes.AIR.getDefaultState());
             }
         });
     }

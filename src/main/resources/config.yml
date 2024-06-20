@@ -59,7 +59,6 @@ Raiding:
 
   # Cooldown for raiding (in milliseconds).
   RAIDING_COOLDOWN: 10800000 # 3 Hours
-
   # Cooldown for being raided (in milliseconds).
   RAIDED_COOLDOWN: 86400000 # 24 Hours
 
@@ -76,6 +75,15 @@ Raiding:
   # Sound played when an ONLINE player is about to be raided. Repeats quickly for 5s.
   ALARM_SOUND: "block.note_block.bell"
   ALARM_PITCH: 1f
+
+  # This is the name of the world where raid defenders will be teleported to be prepared for the raid.
+  # Can be the same as the Hub world or normal world if you wish.
+  RAID_PREPARATION_WORLD: "world"
+  # Position where raid defenders are spawned to be prepared for the raid.
+  # [x, y, z]
+  RAID_PREPARATION_POS: [0, 64, 0]
+  # Time in seconds that they are in the preparation area before being teleported back to their island.
+  RAID_PREPARATION_TIME: 30
 
 
 

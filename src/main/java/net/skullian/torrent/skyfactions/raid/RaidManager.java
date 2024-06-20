@@ -10,7 +10,9 @@ import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
@@ -65,17 +67,22 @@ public class RaidManager {
                     error.printStackTrace();
                     return null;
                 });
-                if (!isPlayerOnline(playerUUID)) {
-                    SkyFactionsReborn.dc.pingRaid(player, Bukkit.getOfflinePlayer(playerUUID).getPlayer());
-                } else {
-                    alertPlayer(playerUUID, player);
-                }
+                handleRaidedPlayer(player, playerUUID);
                 currentRaids.put(player.getUniqueId(), playerUUID);
             }
 
         } catch (InterruptedException | ExecutionException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "start a raid");
+        }
+    }
+
+    private static void handleRaidedPlayer(Player attacker, UUID uuid) {
+        if (!isPlayerOnline(uuid)) {
+            SkyFactionsReborn.dc.pingRaid(attacker, Bukkit.getOfflinePlayer(uuid).getPlayer());
+        } else {
+            alertPlayer(uuid, attacker);
+            teleportToPreparationArea(uuid);
         }
     }
 
@@ -134,10 +141,33 @@ public class RaidManager {
         SoundUtil.soundAlarm(uuid);
         List<String> alertList = SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getStringList("Messages.Raiding.RAIDED_NOTIFICATION");
         Player player = Bukkit.getPlayer(uuid);
-        System.out.println(uuid);
         if (player.isOnline()) {
             for (String msg : alertList) {
                 player.sendMessage(TextUtility.color(msg.replace("%player_name%", player.getName()).replace("%raider%", attacker.getName())));
+            }
+        }
+    }
+
+    private static void teleportToPreparationArea(UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
+        if (player.isOnline()) {
+            List<Integer> loc = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getIntegerList("Raiding.RAID_PREPARATION_POS");
+            World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.RAID_PREPARATION_WORLD"));
+            if (world != null) {
+                Location location = new Location(world, loc.get(0), loc.get(1), loc.get(2));
+                player.teleport(location);
+
+                Bukkit.getScheduler().runTaskLater(SkyFactionsReborn.getInstance(), () -> {
+
+                    SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
+                        World islandWorld = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
+                        if (islandWorld != null && island != null) {
+                            Location returnLoc = island.getCenter(islandWorld);
+                            player.teleport(returnLoc);
+                        }
+                    });
+
+                }, (SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.RAID_PREPARATION_TIME") * 20L));
             }
         }
     }
