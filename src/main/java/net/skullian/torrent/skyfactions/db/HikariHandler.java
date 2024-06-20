@@ -358,7 +358,7 @@ public class HikariHandler {
             try (Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE last_raided <=?")) {
 
-                statement.setLong(1, System.currentTimeMillis() - SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getLong("Raiding.RAIDING_COOLDOWN"));
+                statement.setLong(1, System.currentTimeMillis() - SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getLong("Raiding.RAIDED_COOLDOWN"));
 
                 List<IslandRaidData> islands = new ArrayList<>();
                 ResultSet set = statement.executeQuery();

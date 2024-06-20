@@ -56,8 +56,12 @@ Generation:
 Raiding:
   # Cost of raiding a user in Gems.
   RAIDING_COST: 2
+
   # Cooldown for raiding (in milliseconds).
   RAIDING_COOLDOWN: 10800000 # 3 Hours
+
+  # Cooldown for being raided (in milliseconds).
+  RAIDED_COOLDOWN: 86400000 # 24 Hours
 
   # Height of where the attackers of a raid will spawn
   SPAWN_HEIGHT: 250

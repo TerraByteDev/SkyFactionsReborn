@@ -2,16 +2,25 @@ package net.skullian.torrent.skyfactions.island;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.blocks.Blocks;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.*;
+import com.sk89q.worldedit.function.block.BlockReplace;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.util.formatting.text.BlockNbtComponent;
+import com.sk89q.worldedit.world.block.BaseBlock;
+import com.sk89q.worldedit.world.block.BlockType;
+import com.sk89q.worldedit.world.block.BlockTypes;
+import com.sk89q.worldedit.world.registry.BlockRegistry;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.DefaultDomain;
@@ -26,13 +35,16 @@ import net.skullian.torrent.skyfactions.util.FileUtil;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @Log4j2(topic = "SkyFactionsReborn")
@@ -144,8 +156,10 @@ public class IslandAPI {
             BlockVector3 bottom = BukkitAdapter.asBlockVector(island.getPosition1(null));
             BlockVector3 top = BukkitAdapter.asBlockVector(island.getPosition2(null));
             CuboidRegion region = new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
+            Region testregion = new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
 
-            BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+
+            /*BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
             ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
                     BukkitAdapter.adapt(world), region, clipboard, region.getMinimumPoint()
@@ -157,6 +171,10 @@ public class IslandAPI {
                 writer.write(clipboard);
             } catch (IOException error) {
                 error.printStackTrace();
+            }*/
+
+            try (EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(world))) {
+                editSession.setBlocks(testregion, BlockTypes.AIR.getDefaultState());
             }
         });
     }

@@ -30,6 +30,8 @@ public class IslandTest extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
+
+
         SkyFactionsReborn.db.registerPlayer(player).exceptionally(ex -> {
             ex.printStackTrace();
             return null;
