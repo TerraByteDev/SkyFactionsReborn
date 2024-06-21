@@ -30,7 +30,27 @@ commands:
 
 permissions:
   skyfactions.*:
-    description: Givs access to all SkyFactions commands.
-    default: op
+    description: Access to all SkyFactions commands.
     children:
+      skyfactions.island.create: true
+      skyfactions.island.help: true
+      skyfactions.island.teleport: true
+      skyfactions.command.info: true
       skyfactions.reload: true
+      skyfactions.raid.resetcooldown: true
+      skyfactions.raid.start: true
+      skyfactions.raid.help: true
+
+  skyfactions.island:
+    description: Has permission for all (GENERAL) island related features (tp, create, etc.)
+    children:
+      skyfactions.island.create: true
+      skyfactions.island.help: true
+      skyfactions.island.teleport: true
+      skyfactions.island.info: true
+
+  skyfactions.raid:
+    description: Has permission for all (GENERAL) raid related features (start, etc.)
+    children:
+      skyfactions.raid.help: true
+      skyfactions.raid.start: true

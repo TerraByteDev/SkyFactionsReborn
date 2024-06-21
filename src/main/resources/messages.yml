@@ -17,7 +17,7 @@ Messages:
   INCORRECT_USAGE: '%server_name%&r&7 Incorrect usage of command. Usage: &c&l%usage%'
   UNKNOWN_PLAYER: "%server_name%&r&7 Unknown player: &c&l%player%"
 
-  ERROR: '%server_name%&r&7 Something went wrong when trying to %operation%. Please try again later.'
+  ERROR: '%server_name%&r&7 Something went wrong when trying to %operation%. Please try again later. (&c%debug%&7)'
 
   Commands:
     # Sent at the start and the bottom of the help command response.

@@ -6,6 +6,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.island.SkyIsland;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.sqlite.JDBC;
@@ -449,10 +450,12 @@ public class HikariHandler {
     // ------------------ MISC ------------------ //
 
     public void handleError(SQLException error) {
-        LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
-        LOGGER.fatal("There was an error while performing database actions.");
-        LOGGER.fatal("Please contact the devs.");
-        LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
-        error.printStackTrace();
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+            LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
+            LOGGER.fatal("There was an error while performing database actions.");
+            LOGGER.fatal("Please contact the devs.");
+            LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
+            error.printStackTrace();
+        });
     }
 }

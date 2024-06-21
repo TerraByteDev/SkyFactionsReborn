@@ -32,7 +32,7 @@ public class IslandReloadCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        LOGGER.warn("[" + player.getName() + "] is reloading SkyFactionsReborn.");
+        LOGGER.warn("[{}] is reloading SkyFactionsReborn.", player.getName());
         Messages.RELOADING.send(player);
 
         SkyFactionsReborn.configHandler.reloadFiles();
@@ -42,6 +42,6 @@ public class IslandReloadCommand extends CommandTemplate {
 
     @Override
     public String permission() {
-        return "skyfactions.reload";
+        return "skyfactions.command.reload";
     }
 }

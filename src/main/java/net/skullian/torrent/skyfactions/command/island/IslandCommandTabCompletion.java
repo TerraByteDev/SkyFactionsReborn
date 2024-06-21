@@ -35,6 +35,9 @@ public class IslandCommandTabCompletion implements TabCompleter {
             if (sender.hasPermission("skyfactions.island.create")) {
                 completions.add("create");
             }
+            if (sender.hasPermission("skyfactions.island.teleport")) {
+                completions.add("teleport");
+            }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
         }

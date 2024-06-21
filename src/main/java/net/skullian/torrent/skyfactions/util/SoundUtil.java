@@ -50,9 +50,8 @@ public class SoundUtil {
         radioSongPlayer.setPlaying(true);
     }
 
-    public static void soundAlarm(UUID uuid) {
+    public static void soundAlarm(Player player) {
         CompletableFuture.runAsync(() -> {
-            Player player = Bukkit.getPlayer(uuid);
             if (player != null && player.isOnline()) {
                 String name = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.ALARM_SOUND");
                 float pitch = Float.parseFloat(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.ALARM_PITCH"));

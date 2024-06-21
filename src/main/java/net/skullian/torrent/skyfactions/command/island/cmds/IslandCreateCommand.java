@@ -37,7 +37,7 @@ public class IslandCreateCommand extends CommandTemplate {
             AtomicBoolean has = new AtomicBoolean(false);
             SkyFactionsReborn.db.hasIsland(player).thenAccept(has::set).exceptionally(ex -> {
                 ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "create an island");
+                Messages.ERROR.send(player, "%operation%", "create an island", "%debug%", "SQL_ISLAND_CHECK");
                 return null;
             }).get();
 
@@ -50,7 +50,7 @@ public class IslandCreateCommand extends CommandTemplate {
             }
         } catch (InterruptedException | ExecutionException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "create an island");
+            Messages.ERROR.send(player, "%operation%", "create an island", "%debug%", "SQL_ISLAND_CHECK");
         }
     }
 

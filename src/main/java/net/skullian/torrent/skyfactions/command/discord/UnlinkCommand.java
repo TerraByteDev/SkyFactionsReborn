@@ -26,13 +26,13 @@ public class UnlinkCommand implements CommandExecutor {
                         Messages.DISCORD_UNLINK_SUCCESS.send(player);
                     }).exceptionally(error -> {
                         error.printStackTrace();
-                        Messages.ERROR.send(player, "%operation%", "unlink your Discord.");
+                        Messages.ERROR.send(player, "%operation%", "unlink your Discord.", "%debug%", "SQL_DISCORD_UNLINK");
                         return null;
                     });
                 }
             }).exceptionally(ex -> {
                 ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "unlink your Discord.");
+                Messages.ERROR.send(player, "%operation%", "unlink your Discord.", "%debug%", "SQL_GET_DISCORD");
                 return null;
             });
         }

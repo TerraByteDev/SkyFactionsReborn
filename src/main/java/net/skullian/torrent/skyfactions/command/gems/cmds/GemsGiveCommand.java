@@ -42,12 +42,12 @@ public class GemsGiveCommand extends CommandTemplate {
                         Messages.GEM_ADD_SUCCESS.send(player, "%amount%", args[2], "%player%", offlinePlayer.getName());
                     }).exceptionally(ex -> {
                         ex.printStackTrace();
-                        Messages.ERROR.send(player, "%operation%", "give gems");
+                        Messages.ERROR.send(player, "%operation%", "give gems", "%debug%", "SQL_MODIFY_GEMS");
                         return null;
                     });
                 }).exceptionally(ex -> {
                     ex.printStackTrace();
-                    Messages.ERROR.send(player, "%operation%", "give gems");
+                    Messages.ERROR.send(player, "%operation%", "give gems", "%debug%", "SQL_GET_GEMS");
                     return null;
                 });
             }

@@ -40,6 +40,6 @@ public class IslandInfoCommand extends CommandTemplate {
 
     @Override
     public String permission() {
-        return "";
+        return "skyfactions.command.info";
     }
 }

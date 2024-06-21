@@ -33,19 +33,16 @@ public class RaidStartCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        try {
-
-            String cooldownLeft = RaidManager.getCooldownDuration(player);
-            if (cooldownLeft != null) {
-                Messages.RAID_ON_COOLDOWN.send(player, "%cooldown%", cooldownLeft);
+        String cooldownLeft = RaidManager.getCooldownDuration(player);
+        if (cooldownLeft != null) {
+            if (cooldownLeft.equals("ERROR")) {
+                Messages.ERROR.send(player, "%error%", "start a raid", "%debug%", "SQL_RAID_COOLDOWN_GET");
             } else {
-                PlayerRaidConfirmationUI.promptPlayer(player);
-                SoundUtil.playSound(player, "ui.button.click", 1f, 1f);
+                Messages.RAID_ON_COOLDOWN.send(player, "%cooldown%", cooldownLeft);
             }
-
-        } catch (SQLException error) {
-            SkyFactionsReborn.db.handleError(error);
-            Messages.ERROR.send(player, "%operation%", "start a raid");
+        } else {
+            PlayerRaidConfirmationUI.promptPlayer(player);
+            SoundUtil.playSound(player, "ui.button.click", 1f, 1f);
         }
     }
 

@@ -39,7 +39,7 @@ public class ConfigHandler {
             config.load(file);
         } catch (InvalidConfigurationException | IOException error) {
             LOGGER.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
-            LOGGER.fatal("There was an error loading config " + name);
+            LOGGER.fatal("There was an error loading config {}", name);
             LOGGER.fatal("Please check that config for any configuration mistakes.");
             LOGGER.fatal("Plugin will now disable.");
             LOGGER.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");

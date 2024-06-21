@@ -30,7 +30,7 @@ public class LinkCommand implements CommandExecutor {
                 }
             }).exceptionally(ex -> {
                 ex.printStackTrace();
-                Messages.ERROR.send(commandSender, "%operation%", "link your Discord.");
+                Messages.ERROR.send(commandSender, "%operation%", "link your Discord.", "%debug%", "SQL_GET_DISCORD");
                 return null;
             });
         }

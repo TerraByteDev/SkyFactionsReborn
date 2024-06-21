@@ -3,10 +3,7 @@ package net.skullian.torrent.skyfactions.command.island;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.command.island.cmds.IslandCreateCommand;
-import net.skullian.torrent.skyfactions.command.island.cmds.IslandInfoCommand;
-import net.skullian.torrent.skyfactions.command.island.cmds.IslandReloadCommand;
-import net.skullian.torrent.skyfactions.command.island.cmds.IslandTest;
+import net.skullian.torrent.skyfactions.command.island.cmds.*;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,6 +22,7 @@ public class IslandCommandHandler implements CommandExecutor {
         subcommands.add(new IslandReloadCommand());
         subcommands.add(new IslandInfoCommand());
         subcommands.add(new IslandTest());
+        subcommands.add(new IslandTeleportCommand());
     }
 
     @Override
