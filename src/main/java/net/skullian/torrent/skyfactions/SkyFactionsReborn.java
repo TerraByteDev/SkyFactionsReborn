@@ -14,6 +14,7 @@ import net.skullian.torrent.skyfactions.db.HikariHandler;
 import net.skullian.torrent.skyfactions.discord.DiscordHandler;
 import net.skullian.torrent.skyfactions.event.PlayerHandler;
 import net.skullian.torrent.skyfactions.papi.PlaceholderManager;
+import net.skullian.torrent.skyfactions.util.DependencyHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -62,8 +63,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
         dc = new DiscordHandler();
         dc.initialiseBot();
 
-        LOGGER.info("Syncing with PAPI.");
-        new PlaceholderManager(this).register();
+        LOGGER.info("Handling optional dependencies.");
+        DependencyHandler.init();
 
         initialiseDatabaseConnection();
     }

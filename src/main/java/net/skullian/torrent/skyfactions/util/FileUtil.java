@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 
 import java.io.File;
+import java.util.UUID;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class FileUtil {
@@ -16,5 +17,12 @@ public class FileUtil {
         }
         LOGGER.error("Failed to retrieve island schematic [{}]. Is the filename correct?", name);
         return null;
+    }
+
+    public static void removeSchematicFile(UUID playerUUID) {
+        File file = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/schematics/raid_saves/" + playerUUID + ".schematic");
+        if (file.exists() && file.isFile()) {
+            file.delete();
+        }
     }
 }

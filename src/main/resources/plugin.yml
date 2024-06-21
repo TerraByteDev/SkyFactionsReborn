@@ -5,7 +5,9 @@ api-version: '1.20'
 authors: [Skullians, nouish]
 website: https://www.torrentsmp.com/
 
-depend: ["PlaceholderAPI", "FastAsyncWorldEdit", "WorldGuard", "Kingdoms", "JukeBox", "NoteBlockAPI"]
+depend: ["FastAsyncWorldEdit", "WorldGuard", "Kingdoms"]
+softdepend: ["JukeBox", "PlaceholderAPI", "NoteBlockAPI"]
+loadbefore: ["JukeBox", "PlaceholderAPI", "NoteBlockAPI"]
 
 commands:
   island:

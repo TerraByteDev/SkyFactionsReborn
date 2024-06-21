@@ -26,28 +26,31 @@ public class SoundUtil {
     }
 
     public static void playMusic(Player player) {
-        PlayerData data = JukeBox.getInstance().datas.getDatas(player);
-        data.stopPlaying(true);
 
-
-        List<String> songs = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getStringList("Raiding.MUSIC_FILE_NAMES");
-        List<Song> nbsSongs = new ArrayList<>();
-
-        for (String song : songs) {
-            Song nbsSong = NBSDecoder.parse(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/songs/" + song));
-            if (nbsSong != null) {
-                nbsSongs.add(nbsSong);
-            } else {
-                LOGGER.error("Failed to find NBS Song [{}]!", song);
-            }
+        if (DependencyHandler.jukebox) {
+            PlayerData data = JukeBox.getInstance().datas.getDatas(player);
+            data.stopPlaying(true);
         }
+        if (DependencyHandler.nbapi) {
+            List<String> songs = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getStringList("Raiding.MUSIC_FILE_NAMES");
+            List<Song> nbsSongs = new ArrayList<>();
 
-        Playlist playlist = new Playlist(nbsSongs.toArray(nbsSongs.toArray(new Song[0])));
+            for (String song : songs) {
+                Song nbsSong = NBSDecoder.parse(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/songs/" + song));
+                if (nbsSong != null) {
+                    nbsSongs.add(nbsSong);
+                } else {
+                    LOGGER.error("Failed to find NBS Song [{}]!", song);
+                }
+            }
 
-        RadioSongPlayer radioSongPlayer = new RadioSongPlayer(playlist);
-        radioSongPlayer.addPlayer(player);
+            Playlist playlist = new Playlist(nbsSongs.toArray(nbsSongs.toArray(new Song[0])));
 
-        radioSongPlayer.setPlaying(true);
+            RadioSongPlayer radioSongPlayer = new RadioSongPlayer(playlist);
+            radioSongPlayer.addPlayer(player);
+
+            radioSongPlayer.setPlaying(true);
+        }
     }
 
     public static void soundAlarm(Player player) {
