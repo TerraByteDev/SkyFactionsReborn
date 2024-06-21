@@ -5,6 +5,7 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.island.IslandAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -33,7 +34,7 @@ public class IslandTeleportCommand extends CommandTemplate {
         SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
             World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
             if (world != null) {
-                player.teleport(island.getCenter(world));
+                IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
             } else {
                 Messages.ERROR.send(player, "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");
             }

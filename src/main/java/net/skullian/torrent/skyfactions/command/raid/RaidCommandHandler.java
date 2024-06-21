@@ -3,6 +3,7 @@ package net.skullian.torrent.skyfactions.command.raid;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
+import net.skullian.torrent.skyfactions.command.raid.cmds.RaidHelpCommand;
 import net.skullian.torrent.skyfactions.command.raid.cmds.RaidResetCooldown;
 import net.skullian.torrent.skyfactions.command.raid.cmds.RaidStartCommand;
 import net.skullian.torrent.skyfactions.config.Messages;
@@ -22,6 +23,7 @@ public class RaidCommandHandler implements CommandExecutor {
     public RaidCommandHandler() {
         subcommands.add(new RaidStartCommand());
         subcommands.add(new RaidResetCooldown());
+        subcommands.add(new RaidHelpCommand());
     }
 
     @Override

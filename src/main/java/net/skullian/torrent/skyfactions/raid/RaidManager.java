@@ -103,7 +103,7 @@ public class RaidManager {
                     World islandWorld = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
                     if (islandWorld != null && island != null) {
                         Location returnLoc = island.getCenter(islandWorld);
-                        def.teleport(returnLoc);
+                        IslandAPI.teleportPlayerToLocation(def, returnLoc);
                     }
                 });
 

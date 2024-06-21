@@ -102,7 +102,7 @@ public class IslandAPI {
         });
     }
 
-    private static void teleportPlayerToLocation(Player player, Location location) {
+    public static void teleportPlayerToLocation(Player player, Location location) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> player.teleport(location));
     }
 
@@ -150,6 +150,4 @@ public class IslandAPI {
             }
         });
     }
-
-    public static
 }
