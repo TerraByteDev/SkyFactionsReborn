@@ -25,11 +25,13 @@ public class SoundUtil {
         player.playSound(sound, Sound.Emitter.self());
     }
 
-    public static void playMusic(Player player) {
+    public static void playMusic(Player def, Player att) {
 
         if (DependencyHandler.jukebox) {
-            PlayerData data = JukeBox.getInstance().datas.getDatas(player);
+            PlayerData data = JukeBox.getInstance().datas.getDatas(def);
+            PlayerData attData = JukeBox.getInstance().datas.getDatas(att);
             data.stopPlaying(true);
+            attData.stopPlaying(true);
         }
         if (DependencyHandler.nbapi) {
             List<String> songs = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getStringList("Raiding.MUSIC_FILE_NAMES");
@@ -47,7 +49,8 @@ public class SoundUtil {
             Playlist playlist = new Playlist(nbsSongs.toArray(nbsSongs.toArray(new Song[0])));
 
             RadioSongPlayer radioSongPlayer = new RadioSongPlayer(playlist);
-            radioSongPlayer.addPlayer(player);
+            radioSongPlayer.addPlayer(att);
+            radioSongPlayer.addPlayer(def);
 
             radioSongPlayer.setPlaying(true);
         }
@@ -56,8 +59,8 @@ public class SoundUtil {
     public static void soundAlarm(Player player) {
         CompletableFuture.runAsync(() -> {
             if (player != null && player.isOnline()) {
-                String name = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.ALARM_SOUND");
-                float pitch = Float.parseFloat(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.ALARM_PITCH"));
+                String name = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Sounds.ALARM_SOUND");
+                float pitch = Float.parseFloat(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Sounds.ALARM_PITCH"));
                 int dur = 100;
                 int val = 50;
                 int it = dur / val + 1;

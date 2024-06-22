@@ -50,7 +50,7 @@ public class IslandAPI {
             teleportPlayerToLocation(player, island.getCenter(world));
             Messages.ISLAND_CREATING.send(player);
             // TODO MAKE CONFIGURABLE
-            SoundUtil.playSound(player, "ui.toast.challenge_complete", 1f, 1f);
+            SoundUtil.playSound(player, SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Sounds.ISLAND_CREATE_SUCCESS"), SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Sounds.ISLAND_CREATE_SUCCESS_PITCH"), 1f);
         }).exceptionally(ex -> {
             ex.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "create a new island", "%debug%", "FAWE_ISLAND_PASTE");

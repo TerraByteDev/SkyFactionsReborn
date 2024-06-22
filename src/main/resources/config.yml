@@ -5,12 +5,30 @@
 
 # =============== SKYFACTIONS CONFIG =============== #
 
+# Database config. Requires a restart to apply.
+Database:
+  # You can either use 'sqlite' or 'sql' (MySQL). Default: H2.
+  TYPE: 'sqlite'
+
+  # Connection values for MySQL if you decide to use it.
+  # HOST: The MySQL Host. Format: "<host>[:<port>]". Port defaults to 3306.
+  # NAME: The name of the database to use.
+  # USERNAME: The MySQL User to use.
+  # PASSWORD: The Password for the MySQL User.
+  DATABASE_HOST: ''
+  DATABASE_NAME: ''
+  DATABASE_USERNAME: ''
+  DATABASE_PASSWORD: ''
+
+  # Max lifetime for the database connection.
+  # Format: MINUTES
+  # Only applies for MySQL!
+  MAX_LIFETIME: 30
+
 # Configuration for commands.
 Commands:
   # You do NOT want this to be too low, definitely not 0. This will avoid database spam and anything else.
   COOLDOWN: 5000
-
-
 
 Sounds:
   # Sent when an island is successfully created.
@@ -21,10 +39,17 @@ Sounds:
   GUI_OPEN: "ui.button.click"
   GUI_OPEN_PITCH: 1f
 
-
   # Sent when any cancel button is clicked in any gui.
   GUI_CANCEL: "block.note_block.bass"
   GUI_CANCEL_PITCH: 6f
+
+  # Sound played when an ONLINE player is about to be raided. Repeats quickly for 5s.
+  ALARM_SOUND: "block.note_block.bell"
+  ALARM_PITCH: 1f
+
+  # Sound when counting down for the start.
+  COUNTDOWN_SOUND: "block.note_block.hat"
+  COUNTDOWN_PITCH: 1f
 
 
 # General island config.
@@ -42,14 +67,23 @@ Island:
 
 
 
-# Island grid algorithm configuration
+# Island grid generation algorithm configuration
 Generation:
-  # Size of each region. The islands will be generated here, in the center of each region.
-  REGION_SIZE: 200
-  # Space between region islands.
-  REGION_PADDING: 100
-  # The center point where all islands start. [X, Y, Z]
-  GRID_ORIGIN: [0, 64, 0]
+  PLAYER_ISLANDS:
+    # Size of each player region. The islands will be generated here, in the center of each region.
+    REGION_SIZE: 200
+    # Space between region islands.
+    REGION_PADDING: 100
+    # The center point where all islands start. [X, Y, Z]
+    GRID_ORIGIN: [ 0, 64, 0 ]
+
+  FACTION_ISLANDS:
+    # Size of each faction region. The islands will be generated here, in the center of each region.
+    REGION_SIZE: 300
+    # Space between region islands.
+    REGION_PADDING: 100
+    # The center point where all islands start. [X, Y, Z]
+    GRID_ORIGIN: [ 0, 64, 0 ]
 
 
 
@@ -72,17 +106,12 @@ Raiding:
   # Players are spawned in a random pos at SPAWN_HEIGHT. The radius from the centre of the region is dictated here.
   RANDOM_SPAWN_RADIUS: 30
 
-  # Sound played when an ONLINE player is about to be raided. Repeats quickly for 5s.
-  ALARM_SOUND: "block.note_block.bell"
-  ALARM_PITCH: 1f
-
-  # Sound when counting down for the start.
-  COUNTDOWN_SOUND: "block.note_block.hat"
-  COUNTDOWN_PITCH: 1f
   COUNTDOWN_DURATION: 5 # IN SECONDS
   # Upon countdown, a title going "5", then "4", etc (depends on your countdown duration is displayed). That is not configurable but the subtitle is.
   COUNTDOWN_SUBTITLE: "&aGet ready!"
 
+  # This is a feature where players can be teleported to areas to prepare themselves for the raid.
+  TELEPORT_TO_PREPARATION: true
   # This is the name of the world where raid defenders will be teleported to be prepared for the raid.
   # Can be the same as the Hub world or normal world if you wish.
   RAID_PREPARATION_WORLD: "world"
@@ -91,26 +120,3 @@ Raiding:
   RAID_PREPARATION_POS: [0, 64, 0]
   # Time in seconds that they are in the preparation area before being teleported back to their island.
   RAID_PREPARATION_TIME: 30
-
-
-
-
-# Database config.
-Database:
-  # You can either use 'H2' (SQLite) or 'sql' (MySQL). Default: H2.
-  TYPE: 'H2'
-
-  # Connection values for MySQL if you decide to use it.
-  # HOST: The MySQL Host. Format: "<host>[:<port>]". Port defaults to 3306.
-  # NAME: The name of the database to use.
-  # USERNAME: The MySQL User to use.
-  # PASSWORD: The Password for the MySQL User.
-  DATABASE_HOST: ''
-  DATABASE_NAME: ''
-  DATABASE_USERNAME: ''
-  DATABASE_PASSWORD: ''
-
-  # Max lifetime for the database connection.
-  # Format: MINUTES
-  # Only applies for MySQL!
-  MAX_LIFETIME: 30

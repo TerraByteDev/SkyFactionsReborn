@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 public class RaidResetCooldown extends CommandTemplate {
     @Override
     public String getName() {
-        return "resetcd";
+        return "resetcooldown";
     }
 
     @Override
@@ -25,9 +25,9 @@ public class RaidResetCooldown extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (CooldownHandler.manageCooldown(player)) return;
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
-
+        if (CooldownHandler.manageCooldown(player)) return;
+        
         SkyFactionsReborn.db.updateLastRaid(player, 0).thenAccept(result -> {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aSuccessfully reset your raid cooldown."));
         }).exceptionally(ex -> {

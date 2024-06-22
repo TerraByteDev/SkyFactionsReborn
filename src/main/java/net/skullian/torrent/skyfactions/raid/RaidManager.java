@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -54,40 +55,47 @@ public class RaidManager {
 
     public static void startRaid(Player player) {
         try {
-            Messages.RAID_PROCESSING.send(player);
-            SkyFactionsReborn.db.updateLastRaid(player, System.currentTimeMillis()).thenAccept(result -> SkyFactionsReborn.db.getGems(player).thenAccept(count -> SkyFactionsReborn.db.subtractGems(player, count, SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.RAIDING_COST")).thenAccept(res -> SoundUtil.playMusic(player)).exceptionally(error -> {
-                error.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "SQL_RAID_START");
-                handleRaidExecutionError(player);
-                return null;
-            })).exceptionally(error -> {
-                error.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "SQL_RAID_START");
-                handleRaidExecutionError(player);
-                return null;
-            })).get();
+            AtomicBoolean cancel = new AtomicBoolean(false);
 
+            Messages.RAID_PROCESSING.send(player);
+
+            SkyFactionsReborn.db.updateLastRaid(player, System.currentTimeMillis()).thenAccept(result -> SkyFactionsReborn.db.getGems(player).thenAccept(count -> SkyFactionsReborn.db.subtractGems(player, count, SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.RAIDING_COST")))).exceptionally(ex -> {
+                ex.printStackTrace();
+                cancel.set(true);
+                Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "SQL_RAID_START");
+                handleRaidExecutionError(player, false);
+                return null;
+            }).get();
+
+            if (cancel.get()) return;
             IslandRaidData island = getRandomRaidable(player);
             if (island != null) {
                 UUID playerUUID = UUID.fromString(island.getUuid());
                 IslandAPI.saveIslandSchematic(Objects.requireNonNull(Bukkit.getOfflinePlayer(playerUUID).getPlayer()), new SkyIsland(island.getId())).exceptionally(error -> {
+                    cancel.set(true);
                     error.printStackTrace();
                     Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "FAWE_ISLAND_SAVE");
-                    handleRaidExecutionError( player);
+                    handleRaidExecutionError(player, false);
                     return null;
                 });
-                handleRaidedPlayer(player, playerUUID);
+
+                if (cancel.get()) return;
+                handlePlayers(player, playerUUID);
                 processingRaid.put(player.getUniqueId(), playerUUID);
+            } else {
+                Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "ISLAND_RETURNED_NULL");
             }
 
         } catch (InterruptedException | ExecutionException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "MAIN_RAID_START");
-            handleRaidExecutionError(player);
+            handleRaidExecutionError(player, false);
         }
     }
 
-    private static void handleRaidedPlayer(Player attacker, UUID uuid) {
+    private static void handlePlayers(Player attacker, UUID uuid) {
+        AtomicBoolean cancel = new AtomicBoolean(false);
+
         if (!isPlayerOnline(uuid)) {
             SkyFactionsReborn.dc.pingRaid(attacker, Bukkit.getOfflinePlayer(uuid).getPlayer());
         } else {
@@ -97,6 +105,18 @@ public class RaidManager {
             alertPlayer(def, attacker);
             teleportToPreparationArea(def);
 
+            SkyFactionsReborn.db.getPlayerIsland(def).thenAccept(is -> SkyFactionsReborn.db.setIslandCooldown(is, System.currentTimeMillis())).exceptionally(ex -> {
+                cancel.set(true);
+
+                ex.printStackTrace();
+                Messages.ERROR.send(def, "%operation%", "start a raid", "%debug%", "SQL_ISLAND_COOLDOWN");
+                Messages.ERROR.send(attacker, "%operation%", "start a raid", "%debug%", "SQL_ISLAND_COOLDOWN");
+                handleRaidExecutionError(def, true);
+                handleRaidExecutionError(attacker, false);
+                return null;
+            });
+            if (cancel.get()) return;
+
             Bukkit.getScheduler().runTaskLater(SkyFactionsReborn.getInstance(), () -> {
                 if (!def.isOnline()) return;
                 SkyFactionsReborn.db.getPlayerIsland(def).thenAccept(island -> {
@@ -104,22 +124,26 @@ public class RaidManager {
                     if (islandWorld != null && island != null) {
                         Location returnLoc = island.getCenter(islandWorld);
                         IslandAPI.teleportPlayerToLocation(def, returnLoc);
+
+                        returnLoc.setY(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.SPAWN_HEIGHT"));
+                        IslandAPI.teleportPlayerToLocation(attacker, returnLoc);
+
+                        showCountdown(uuid, attacker).thenAccept(re -> {
+                            SoundUtil.playMusic(def, attacker);
+                        }).exceptionally(ex -> {
+                            cancel.set(true);
+                            ex.printStackTrace();
+                            Messages.ERROR.send(attacker, "%operation%", "start a raid", "%debug%", "MAIN_RAID_COUNTDOWN");
+                            Messages.ERROR.send(def, "%operation%", "start a raid", "%debug%", "MAIN_RAID_COUNTDOWN");
+                            handleRaidExecutionError(def, true);
+                            handleRaidExecutionError(attacker, false);
+
+                            return null;
+                        });
                     }
                 });
 
             }, (SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.RAID_PREPARATION_TIME") * 20L));
-
-            showCountdown(uuid, attacker).thenAccept(re -> {
-
-            }).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(attacker, "%operation%", "start a raid", "%debug%", "MAIN_RAID_COUNTDOWN");
-                Messages.ERROR.send(def, "%operation%", "start a raid", "%debug%", "MAIN_RAID_COUNTDOWN");
-                handleRaidExecutionError(def);
-                handleRaidExecutionError(attacker);
-
-                return null;
-            });
         }
     }
 
@@ -201,11 +225,11 @@ public class RaidManager {
             try {
                 Player defp = Bukkit.getPlayer(def);
                 int length = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.COUNTDOWN_DURATION");
-                String countdown_sound = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.COUNTDOWN_SOUND");
-                int countdown_pitch = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.COUNTDOWN_PITCH");
+                String countdown_sound = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Sounds.COUNTDOWN_SOUND");
+                int countdown_pitch = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Sounds.COUNTDOWN_PITCH");
                 final Component subtitle = Component.text(TextUtility.color(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Raiding.COUNTDOWN_SUBTITLE")));
-
-                for (int i = 0; i < length; i++) {
+                Thread.sleep(3500);
+                for (int i = length; i == 0; i--) {
                     final Component mainTitle = Component.text(i + 1, NamedTextColor.RED);
 
                     final Title title = Title.title(mainTitle, subtitle);
@@ -224,27 +248,39 @@ public class RaidManager {
 
     }
 
-    private static void handleRaidExecutionError(Player player) {
+    private static void handleRaidExecutionError(Player player, boolean isDefendant) {
         if (player != null) {
-            SkyFactionsReborn.db.updateLastRaid(player, 0).exceptionally(ex -> {
+            if (processingRaid.containsKey(player.getUniqueId()) || processingRaid.containsValue(player.getUniqueId())) {
+                processingRaid.remove(player.getUniqueId());
+            }
+        }
+
+        SkyFactionsReborn.db.updateLastRaid(player, 0).exceptionally(ex -> {
+            ex.printStackTrace();
+            Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_RAID_UPDATE");
+            return null;
+        });
+        SkyFactionsReborn.db.getGems(player).thenAccept(count -> SkyFactionsReborn.db.addGems(player, count, SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.RAIDING_COST")).exceptionally(ex -> {
+            ex.printStackTrace();
+            Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_GEMS_ADD");
+            return null;
+        })).exceptionally(ex -> {
+            ex.printStackTrace();
+            Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_GEMS_GET");
+            return null;
+        });
+
+        if (isDefendant) {
+            SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> SkyFactionsReborn.db.setIslandCooldown(island, 0).exceptionally(ex -> {
                 ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_RAID_UPDATE");
+                Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_ISLAND_COOLDOWN_UPDATE");
+                return null;
+            })).exceptionally(ex -> {
+                ex.printStackTrace();
+                Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_ISLAND_GET");
                 return null;
             });
-            SkyFactionsReborn.db.getGems(player).thenAccept(count -> {
-                SkyFactionsReborn.db.addGems(player, count, SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Raiding.RAIDING_COST")).exceptionally(ex -> {
-                    ex.printStackTrace();
-                    Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_GEMS_ADD");
-                    return null;
-                });
-            }).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_GEMS_GET");
-                return null;
-            });
-
-
-
         }
     }
 }
+

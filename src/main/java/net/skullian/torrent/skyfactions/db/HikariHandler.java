@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class HikariHandler {
@@ -41,7 +43,7 @@ public class HikariHandler {
 
     private void createDataSource(
             @NotNull File file, @NotNull String type) {
-        if (type.equals("H2")) {
+        if (type.equals("sqlite")) {
 
             HikariConfig sqliteConfig = new HikariConfig();
             sqliteConfig.setDataSourceClassName("org.sqlite.SQLiteDataSource");
@@ -100,6 +102,8 @@ public class HikariHandler {
             LOGGER.info("Using MySQL database '{}' on: {}:{}.",
                     databaseName, host.getHost(), host.getPortOrDefault(3306));
             dataSource = new HikariDataSource(mysqlConfig);
+        } else {
+            throw new IllegalStateException("Unknown database type: " + type);
         }
     }
 
@@ -235,6 +239,27 @@ public class HikariHandler {
 
                 statement.close();
                 connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> setIslandCooldown(SkyIsland island, long time) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                try (Connection connection = dataSource.getConnection();
+                    PreparedStatement statement = connection.prepareStatement("UPDATE islands set last_raided = ? WHERE id = ?")) {
+
+                    statement.setLong(1, time);
+                    statement.setInt(2, island.getId());
+
+                    statement.executeUpdate();
+                    statement.close();
+
+                    connection.close();
+                }
             } catch (SQLException error) {
                 handleError(error);
                 throw new RuntimeException(error);

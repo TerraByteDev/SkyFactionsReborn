@@ -17,7 +17,7 @@ public class SkyIsland {
     }
 
     public Location getCenter(World world) {
-        List<Integer> origin = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getIntegerList("Generation.GRID_ORIGIN");
+        List<Integer> origin = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getIntegerList("Generation.PLAYER_ISLANDS.GRID_ORIGIN");
             if (id == 1) return new Location(world, origin.get(0), origin.get(1), origin.get(2));
 
             int pos = id - 1;
@@ -48,7 +48,7 @@ public class SkyIsland {
                     throw new IllegalStateException("Could not find island location with ID: " + id);
             }
 
-            Location newLocation = location.multiply((SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Generation.REGION_SIZE") + SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Generation.REGION_PADDING")));
+            Location newLocation = location.multiply((SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Generation.PLAYER_ISLANDS.REGION_SIZE") + SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Generation.PLAYER_ISLANDS.REGION_PADDING")));
 
             return newLocation;
     }
