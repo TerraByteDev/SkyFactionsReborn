@@ -32,11 +32,15 @@ public class IslandTeleportCommand extends CommandTemplate {
         if (CooldownHandler.manageCooldown(player)) return;
 
         SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
-            World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
-            if (world != null) {
-                IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
+            if (island == null) {
+                Messages.NO_ISLAND.send(player);
             } else {
-                Messages.ERROR.send(player, "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");
+                World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
+                if (world != null) {
+                    IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
+                } else {
+                    Messages.ERROR.send(player, "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");
+                }
             }
         }).exceptionally(ex -> {
             ex.printStackTrace();

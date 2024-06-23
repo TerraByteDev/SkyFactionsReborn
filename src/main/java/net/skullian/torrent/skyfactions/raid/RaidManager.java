@@ -273,7 +273,7 @@ public class RaidManager {
         if (isDefendant) {
             SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> SkyFactionsReborn.db.setIslandCooldown(island, 0).exceptionally(ex -> {
                 ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_ISLAND_COOLDOWN_UPDATE");
+                Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_ISLAND_COOLDOWN");
                 return null;
             })).exceptionally(ex -> {
                 ex.printStackTrace();

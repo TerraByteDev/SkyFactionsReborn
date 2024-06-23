@@ -1,21 +1,22 @@
-package net.skullian.torrent.skyfactions.command.gems;
+package net.skullian.torrent.skyfactions.command.sf;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class GemsCommandTabCompletion implements TabCompleter {
+public class SFCommandTabCompletion implements TabCompleter {
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player) || args.length == 0 || !sender.hasPermission("skyfactions.island.help")) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
+        if (!(sender instanceof Player) || args.length == 0 || !sender.hasPermission("skyfactions.sf.help")) {
             return null;
         }
 
@@ -23,18 +24,18 @@ public class GemsCommandTabCompletion implements TabCompleter {
             String arg = args[0].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (sender.hasPermission("skyfactions.gems.help")) {
+            if (sender.hasPermission("skyfactions.sf.help")) {
                 completions.add("help");
             }
-            if (sender.hasPermission("skyfactions.gems.pay")) {
-                completions.add("pay");
+            if (sender.hasPermission("skyfactions.reload")) {
+                completions.add("reload");
+            }
+            if (sender.hasPermission("skyfactions.info")) {
+                completions.add("info");
             }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
         }
-
         return Arrays.asList("");
     }
-
-
 }

@@ -9,6 +9,8 @@ import net.skullian.torrent.skyfactions.command.island.IslandCommandHandler;
 import net.skullian.torrent.skyfactions.command.island.IslandCommandTabCompletion;
 import net.skullian.torrent.skyfactions.command.raid.RaidCommandHandler;
 import net.skullian.torrent.skyfactions.command.raid.RaidCommandTabCompletion;
+import net.skullian.torrent.skyfactions.command.sf.SFCommandHandler;
+import net.skullian.torrent.skyfactions.command.sf.SFCommandTabCompletion;
 import net.skullian.torrent.skyfactions.config.ConfigFileHandler;
 import net.skullian.torrent.skyfactions.db.HikariHandler;
 import net.skullian.torrent.skyfactions.discord.DiscordHandler;
@@ -47,14 +49,20 @@ public final class SkyFactionsReborn extends JavaPlugin {
         getCommand("island").setExecutor(new IslandCommandHandler());
         getCommand("island").setTabCompleter(new IslandCommandTabCompletion());
 
-        getCommand("link").setExecutor(new LinkCommand());
-        getCommand("unlink").setExecutor(new UnlinkCommand());
+        boolean discordEnabled = SkyFactionsReborn.configHandler.DISCORD_CONFIG.getBoolean("Discord.ENABLED");
+        if (discordEnabled) {
+            getCommand("link").setExecutor(new LinkCommand());
+            getCommand("unlink").setExecutor(new UnlinkCommand());
+        }
 
         getCommand("raid").setExecutor(new RaidCommandHandler());
         getCommand("raid").setTabCompleter(new RaidCommandTabCompletion());
 
         getCommand("gems").setExecutor(new GemsCommandHandler());
         getCommand("gems").setTabCompleter(new GemsCommandTabCompletion());
+
+        getCommand("sf").setExecutor(new SFCommandHandler());
+        getCommand("sf").setTabCompleter(new SFCommandTabCompletion());
 
         LOGGER.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);

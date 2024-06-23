@@ -15,7 +15,7 @@ public class IslandCommandTabCompletion implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player) || args.length == 0 || !sender.hasPermission("skyfactions.island.command") || !sender.hasPermission("skyfactions.island.help")) {
+        if (!(sender instanceof Player) || args.length == 0 || !sender.hasPermission("skyfactions.island.help")) {
             return null;
         }
 
@@ -23,12 +23,6 @@ public class IslandCommandTabCompletion implements TabCompleter {
             String arg = args[0].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (sender.hasPermission("skyfactions.command.reload")) {
-                completions.add("reload");
-            }
-            if (sender.hasPermission("skyfactions.island.info")) {
-                completions.add("info");
-            }
             if (sender.hasPermission("skyfactions.island.help")) {
                 completions.add("help");
             }
@@ -37,6 +31,16 @@ public class IslandCommandTabCompletion implements TabCompleter {
             }
             if (sender.hasPermission("skyfactions.island.teleport")) {
                 completions.add("teleport");
+            }
+
+            return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
+        } else if (args.length == 2) {
+            String subcmd = args[0].toLowerCase(Locale.ROOT);
+            String arg = args[1].toLowerCase(Locale.ROOT);
+            List<String> completions = new ArrayList<>();
+
+            if (sender.hasPermission("skyfactions.island.delete") && subcmd.equals("delete")) {
+                completions.add("confirm");
             }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));

@@ -19,8 +19,6 @@ public class IslandCommandHandler implements CommandExecutor {
 
     public IslandCommandHandler() {
         subcommands.add(new IslandCreateCommand());
-        subcommands.add(new IslandReloadCommand());
-        subcommands.add(new IslandInfoCommand());
         subcommands.add(new IslandTest());
         subcommands.add(new IslandTeleportCommand());
     }
@@ -37,7 +35,7 @@ public class IslandCommandHandler implements CommandExecutor {
                 }
             } else if (strings.length == 0) {
                 if (CooldownHandler.manageCooldown(player)) return true;
-                if (!player.hasPermission("skyfactions.island.command")  || !player.hasPermission("skyfactions.island.help")) {
+                if ( !player.hasPermission("skyfactions.island.help")) {
                     Messages.PERMISSION_DENY.send(player);
                     return true;
                 }

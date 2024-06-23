@@ -30,18 +30,26 @@ commands:
     description: All gem related commands.
     usage: /<command>
 
+  sf:
+    description: All general SkyFactions related commands.
+    usage: /<command>
+
 permissions:
   skyfactions.*:
     description: Access to all SkyFactions commands.
     children:
+      skyfactions.reload: true
       skyfactions.island.create: true
       skyfactions.island.help: true
       skyfactions.island.teleport: true
       skyfactions.command.info: true
-      skyfactions.reload: true
-      skyfactions.raid.resetcooldown: true
+      skyfactions.raid.resetcooldown: true # TODO REMOVE
       skyfactions.raid.start: true
       skyfactions.raid.help: true
+      skyfactions.sf.help: true
+      skyfactions.gems.pay: true
+      skyfactions.gems.help: true
+      skyfactions.gems.balance: true
 
   skyfactions.island:
     description: Has permission for all (GENERAL) island related features (tp, create, etc.)
@@ -49,7 +57,6 @@ permissions:
       skyfactions.island.create: true
       skyfactions.island.help: true
       skyfactions.island.teleport: true
-      skyfactions.island.info: true
 
   skyfactions.raid:
     description: Has permission for all (GENERAL) raid related features (start, etc.)

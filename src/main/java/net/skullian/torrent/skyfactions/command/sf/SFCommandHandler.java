@@ -1,29 +1,28 @@
-package net.skullian.torrent.skyfactions.command.raid;
+package net.skullian.torrent.skyfactions.command.sf;
 
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.command.raid.cmds.RaidHelpCommand;
-import net.skullian.torrent.skyfactions.command.raid.cmds.RaidResetCooldown;
-import net.skullian.torrent.skyfactions.command.raid.cmds.RaidStartCommand;
+import net.skullian.torrent.skyfactions.command.sf.cmds.SFHelpCommand;
+import net.skullian.torrent.skyfactions.command.sf.cmds.SFInfoCommand;
+import net.skullian.torrent.skyfactions.command.sf.cmds.SFReloadCommand;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.kingdoms.commands.general.misc.CommandCreate;
 
 import java.util.ArrayList;
 
-public class RaidCommandHandler implements CommandExecutor {
+public class SFCommandHandler implements CommandExecutor {
 
     private static ArrayList<CommandTemplate> subcommands = new ArrayList<>();
 
-    public RaidCommandHandler() {
-        subcommands.add(new RaidStartCommand());
-        subcommands.add(new RaidResetCooldown());
-        subcommands.add(new RaidHelpCommand());
+    public SFCommandHandler() {
+        subcommands.add(new SFHelpCommand());
+        subcommands.add(new SFInfoCommand());
+        subcommands.add(new SFReloadCommand());
     }
 
     @Override
@@ -38,7 +37,7 @@ public class RaidCommandHandler implements CommandExecutor {
                 }
             } else if (strings.length == 0) {
                 if (CooldownHandler.manageCooldown(player)) return true;
-                if (!player.hasPermission("skyfactions.raid.help")) {
+                if (!player.hasPermission("skyfactions.sf.help")) {
                     Messages.PERMISSION_DENY.send(player);
                     return true;
                 }

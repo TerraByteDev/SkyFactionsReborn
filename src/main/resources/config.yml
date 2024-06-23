@@ -25,6 +25,16 @@ Database:
   # Only applies for MySQL!
   MAX_LIFETIME: 30
 
+# SkyFactions Hub Config
+Hub:
+  # Name of the world that the hub is located in.
+  WORLD_NAME: "world"
+
+  # This is where players will spawn when they first join the server (you'd have to do that by setworldspawn or whatever).
+  # Also where players are teleported when they do /hub or their island is deleted.
+  HUB_LOCATION: [0, 64, 0]
+
+
 # Configuration for commands.
 Commands:
   # You do NOT want this to be too low, definitely not 0. This will avoid database spam and anything else.
@@ -64,7 +74,8 @@ Island:
   # Name of the WorldEdit schematic file for the faction island. MUST INCLUDE THE FILE EXTENSION!
   FACTION_ISLAND_SCHEMATIC: 'faction_island.schem'
 
-
+  # When a player runs /island delete, they have this amount of milliseconds before it expires.
+  DELETE_TIMEOUT:
 
 
 # Island grid generation algorithm configuration

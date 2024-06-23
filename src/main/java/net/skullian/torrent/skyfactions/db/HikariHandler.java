@@ -20,9 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class HikariHandler {
@@ -267,7 +265,49 @@ public class HikariHandler {
         });
     }
 
+    public CompletableFuture<Void> removeIsland(Player player) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                try (Connection connection = dataSource.getConnection();
+                    PreparedStatement statement = connection.prepareStatement("DELETE FROM islands WHERE uuid = ?")) {
+                    statement.setString(1, player.getUniqueId().toString());
+
+                    statement.executeUpdate();
+                    statement.close();
+
+                    connection.close();
+                }
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
     // ------------------ PLAYER DATA ------------------ //
+
+    public CompletableFuture<Boolean> playerIsRegistered(Player player) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM playerData WHERE uuid = ?")) {
+
+                statement.setString(1, player.getUniqueId().toString());
+
+                ResultSet set = statement.executeQuery();
+                if (set.next()) {
+                    return true;
+                }
+
+                statement.close();
+                connection.close();
+
+                return false;
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
 
     public CompletableFuture<Void> registerPlayer(Player player) {
         return CompletableFuture.runAsync(() -> {
@@ -478,6 +518,7 @@ public class HikariHandler {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             LOGGER.fatal("There was an error while performing database actions.");
+            LOGGER.fatal(""); // TODO: LINK TO DEBUGGING DOCS
             LOGGER.fatal("Please contact the devs.");
             LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             error.printStackTrace();

@@ -11,7 +11,9 @@ import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -32,10 +34,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class IslandAPI {
+
+    public static List<UUID> awaitingDeletion;
 
     public static void createIsland(Player player) {
 
@@ -89,7 +96,6 @@ public class IslandAPI {
                                 .createPaste(editSession)
                                 .to(BukkitAdapter.adapt(location).toBlockPoint())
                                 .build();
-
                         LOGGER.warn("Pasting schematic [{}] in world [{}] for player [{}].", schemFile.getName(), world.getName(), player.getName());
 
                         Operations.complete(operation);
@@ -147,6 +153,34 @@ public class IslandAPI {
             } catch (IOException error) {
                 error.printStackTrace();
                 throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public static void removePlayerIsland(Player player) {
+        SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
+            World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
+            if (world != null) {
+                try {
+                    Region region = new CuboidRegion(BukkitAdapter.adapt(island.getPosition1(world)).toBlockPoint(), BukkitAdapter.adapt(island.getPosition2(world)).toBlockPoint());
+                    cutRegion(region).get();
+                } catch (InterruptedException | ExecutionException error) {
+                    error.printStackTrace();
+                    Messages.ERROR.send(player, "%operation%", "delete your island", "%debug%", "FAWE_ISLAND_CUT");
+                }
+            } else {
+                Messages.ERROR.send(player, "%operation%", "delete your island", "%debug%", "WORLD_NOT_EXIST");
+            }
+        }).exceptionally(ex -> {
+            ex.printStackTrace();
+            return null;
+        });
+    }
+
+    private static CompletableFuture<Void> cutRegion(Region region) {
+        return CompletableFuture.runAsync(() -> {
+            try (EditSession editSession = WorldEdit.getInstance().newEditSession(region.getWorld())) {
+                editSession.setBlocks(region, BlockType.REGISTRY.get("air"));
             }
         });
     }

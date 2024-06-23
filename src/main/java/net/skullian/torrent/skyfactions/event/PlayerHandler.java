@@ -13,9 +13,19 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (!event.getPlayer().hasPlayedBefore()) {
-            LOGGER.info("Player [{}] has not joined before. Syncing database.", event.getPlayer().getName());
-            SkyFactionsReborn.db.registerPlayer(event.getPlayer());
-        }
+        SkyFactionsReborn.db.playerIsRegistered(event.getPlayer()).thenAccept(isRegistered -> {
+            if (!isRegistered) {
+                LOGGER.info("Player [{}] has not joined before. Syncing with database.", event.getPlayer().getName());
+                SkyFactionsReborn.db.registerPlayer(event.getPlayer()).exceptionally(ex -> {
+                    ex.printStackTrace();
+                    LOGGER.fatal("Failed to sync player [{}] with database!", event.getPlayer().getName());
+                    return null;
+                });
+            }
+        }).exceptionally(ex -> {
+            ex.printStackTrace();
+            LOGGER.fatal("Failed to check if player [{}] was registered with SkyFactionsReborn!", event.getPlayer().getName());
+            return null;
+        });
     }
 }

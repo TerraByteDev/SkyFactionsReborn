@@ -1,28 +1,28 @@
 package net.skullian.torrent.skyfactions.command.gems.cmds;
 
-import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
+import net.skullian.torrent.skyfactions.command.gems.GemsAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-public class GemsGiveCommand extends CommandTemplate {
+public class GemsPayCommand extends CommandTemplate {
     @Override
     public String getName() {
-        return "give";
+        return "pay";
     }
 
     @Override
     public String getDescription() {
-        return "Gives other players gems (ADMIN COMMAND)";
+        return "Give some of your gems to other players.";
     }
 
     @Override
     public String getSyntax() {
-        return "/gems give <player> <amount>";
+        return "/gems pay <player> <amount>";
     }
 
     @Override
@@ -37,19 +37,20 @@ public class GemsGiveCommand extends CommandTemplate {
             if (!offlinePlayer.hasPlayedBefore()) {
                 Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
             } else {
-                SkyFactionsReborn.db.getGems(offlinePlayer.getPlayer()).thenAccept(gems -> {
-                    SkyFactionsReborn.db.addGems(offlinePlayer.getPlayer(), gems, Integer.parseInt(args[2])).thenAccept(result -> {
-                        Messages.GEM_ADD_SUCCESS.send(player, "%amount%", args[2], "%player%", offlinePlayer.getName());
-                    }).exceptionally(ex -> {
-                        ex.printStackTrace();
-                        Messages.ERROR.send(player, "%operation%", "give gems", "%debug%", "SQL_MODIFY_GEMS");
-                        return null;
-                    });
-                }).exceptionally(ex -> {
-                    ex.printStackTrace();
-                    Messages.ERROR.send(player, "%operation%", "give gems", "%debug%", "SQL_GET_GEMS");
-                    return null;
-                });
+
+                int toPay = Integer.parseInt(args[2]);
+                int playerGemCount = GemsAPI.getGems(player);
+
+                if (playerGemCount >= toPay) {
+                    GemsAPI.subtractGems(player, toPay);
+                    GemsAPI.addGems(offlinePlayer.getPlayer(), toPay);
+
+                    Messages.GEM_ADD_SUCCESS.send(player, "%amount%", toPay, "%player%", offlinePlayer.getName());
+                } else {
+                    Messages.INSUFFICIENT_GEMS_COUNT.send(player);
+                }
+
+
             }
 
         }
@@ -57,6 +58,6 @@ public class GemsGiveCommand extends CommandTemplate {
 
     @Override
     public String permission() {
-        return "skyfactions.gems.give";
+        return "skyfactions.gems.pay";
     }
 }

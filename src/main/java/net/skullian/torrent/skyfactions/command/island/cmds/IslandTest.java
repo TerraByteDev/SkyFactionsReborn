@@ -1,15 +1,9 @@
 package net.skullian.torrent.skyfactions.command.island.cmds;
 
-import com.xxmicloxx.NoteBlockAPI.songplayer.NoteBlockSongPlayer;
-import com.xxmicloxx.NoteBlockAPI.songplayer.SongPlayer;
-import fr.skytasul.music.JukeBox;
-import fr.skytasul.music.PlayerData;
-import fr.skytasul.music.utils.JukeBoxRadio;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.island.IslandAPI;
 import org.bukkit.entity.Player;
-import org.kingdoms.constants.group.Kingdom;
 
 public class IslandTest extends CommandTemplate {
 
@@ -30,14 +24,12 @@ public class IslandTest extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-
-
-        SkyFactionsReborn.db.registerPlayer(player).exceptionally(ex -> {
+        SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
+            IslandAPI.removePlayerIsland(player);
+        }).exceptionally(ex -> {
             ex.printStackTrace();
             return null;
         });
-
-
     }
 
     @Override

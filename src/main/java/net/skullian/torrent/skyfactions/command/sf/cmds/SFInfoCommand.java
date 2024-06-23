@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.command.island.cmds;
+package net.skullian.torrent.skyfactions.command.sf.cmds;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
@@ -8,7 +8,7 @@ import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
 
-public class IslandInfoCommand extends CommandTemplate {
+public class SFInfoCommand extends CommandTemplate {
     @Override
     public String getName() {
         return "info";
@@ -16,12 +16,12 @@ public class IslandInfoCommand extends CommandTemplate {
 
     @Override
     public String getDescription() {
-        return "Gives you information concerning skyfactions.";
+        return "Gives you information concerning SkyFactions.";
     }
 
     @Override
     public String getSyntax() {
-        return "/island info";
+        return "/sf info";
     }
 
     @Override

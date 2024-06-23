@@ -16,7 +16,7 @@ public class RaidCommandTabCompletion implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
-        if (!(sender instanceof Player) || args.length == 0 || !sender.hasPermission("skyfactions.raid.command")  || !sender.hasPermission("skyfactions.raid.help")) {
+        if (!(sender instanceof Player) || args.length == 0 || !sender.hasPermission("skyfactions.raid.help")) {
             return null;
         }
 

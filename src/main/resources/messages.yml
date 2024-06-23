@@ -8,15 +8,17 @@
 # Coloring follows https://wiki.lewisdev.fun/text-colours-rgb/
 
 Messages:
-  SERVER_NAME: '&7[&r{#0083FF}&lSkyFactions{/#00FFC7}&r&7]'
+  SERVER_NAME: '&7[&r{#0083FF}&lSkyFactions{/#00FFC7}&r&7]' # Name of your server
 
-  PERMISSION_DENY: '%server_name% &c&lHey!&r&7 You are not allowed to execute this command.'
-  RELOADING: '%server_name%&r&7 Reloading SkyFactions, please wait...'
-  RELOADED: '%server_name%&r&a Plugin reloaded!'
-  COOLDOWN: '%server_name%&r&7 You must wait &c&l%cooldown%&r&7 seconds to use this command.'
-  INCORRECT_USAGE: '%server_name%&r&7 Incorrect usage of command. Usage: &c&l%usage%'
-  UNKNOWN_PLAYER: "%server_name%&r&7 Unknown player: &c&l%player%"
+  PERMISSION_DENY: '%server_name% &c&lHey!&r&7 You are not allowed to execute this command.' # Sent when a player tries to run a command they do not have permission for.
+  RELOADING: '%server_name%&r&7 Reloading SkyFactions, please wait...' # Message sent when the plugin is being reloaded.
+  RELOADED: '%server_name%&r&a Plugin reloaded!' # Message sent when plugin is finished reloading.
+  COOLDOWN: '%server_name%&r&7 You must wait &c&l%cooldown%&r&7 seconds to use this command.' # When the player tries to use a command that is on cooldown (configured in config.yml!).
+  INCORRECT_USAGE: '%server_name%&r&7 Incorrect usage of command. Usage: &c&l%usage%' # Sent when the player uses a command with improper syntax.
+  UNKNOWN_PLAYER: "%server_name%&r&7 Unknown player: &c&l%player%" # Sent when a command is ran on an unknown player (when applicable).
 
+  # Sent when an error occurs when trying to execute a command or task.
+  # Placeholders: %operation% - what was happening / %debug% - TODO: LINK TO DOCUMENTATION ERROR DEBUGGING
   ERROR: '%server_name%&r&7 Something went wrong when trying to %operation%. Please try again later. (&c%debug%&7)'
 
   Commands:
@@ -39,6 +41,15 @@ Messages:
 
     # Sent when the island has been successfully created.
     CREATED_MESSAGE: "%server_name%&r&a&l Your island has been created!"
+
+    # Sent when the player tries to run a command related to islands when they do not have one.
+    NO_ISLAND: "%server_name%&c&lHey!&r&7 You do not have an island!"
+
+    # Sent when the player initially runs /island delete, and has to rerun the command below.
+    CONFIRM_DELETION: "%server_name%&r7 Please run&c&l /island delete confirm&r&7 to confirm deletion of your island."
+
+    # Sent when the player runs /island delete confirm and the island has been removed.
+    DELETION_SUCCESS: "%server_name%&r&7 Your island has been successfully deleted."
 
   Discord:
     # Sent to the player when they request to link (runs /link).
@@ -118,7 +129,10 @@ Messages:
     # Sent when the player runs /gems or /gems balance
     GEM_COUNT: "&eYou have: &a&l%count%&r&e Gems."
 
-    # Sent after a successful /gems give command.
+    # Sent after a successful /gems paid command.
     # Placeholders: %amount% - Amount of gems given / %player% - Player affected.
-    GEM_ADD_SUCCESS: "%server_name%&r&a Successfully added&r&e %amount%&r&a Gems to &r&e%player%."
+    GEM_ADD_SUCCESS: "%server_name%&r&a Successfully paid&r&e %amount%&r&a Gems to &r&e%player%."
+
+    # Sent when a player tries to pay another player more gems than they have in their balance.
+    INSUFFICIENT_GEM_COUNT: "%server_name%&c&lHey!&r&7 You do not have enough gems for that!"
 

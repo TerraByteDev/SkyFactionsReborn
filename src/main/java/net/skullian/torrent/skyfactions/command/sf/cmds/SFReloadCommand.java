@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.command.island.cmds;
+package net.skullian.torrent.skyfactions.command.sf.cmds;
 
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
@@ -8,10 +8,8 @@ import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.entity.Player;
 
-import java.sql.SQLException;
-
 @Log4j2(topic = "SkyFactionsReborn")
-public class IslandReloadCommand extends CommandTemplate {
+public class SFReloadCommand extends CommandTemplate {
     @Override
     public String getName() {
         return "reload";
@@ -24,7 +22,7 @@ public class IslandReloadCommand extends CommandTemplate {
 
     @Override
     public String getSyntax() {
-        return "/island reload";
+        return "/sf reload";
     }
 
     @Override
@@ -42,6 +40,6 @@ public class IslandReloadCommand extends CommandTemplate {
 
     @Override
     public String permission() {
-        return "skyfactions.command.reload";
+        return "skyfactions.reload";
     }
 }
