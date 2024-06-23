@@ -56,24 +56,32 @@ public class SkyIsland {
     public Location getPosition1(World world) {
         if (world == null) {
             double size = getSize() / 2.00;
-            return getCenter(null).subtract(new Location(null, size, -64, size));
+            Location center = getCenter(null).subtract(new Location(null, size, 0, size));
+            center.setY(-64);
+            return center;
         }
 
         double size = getSize() / 2.00;
-        return getCenter(world).subtract(new Location(world, size, -64, size));
+        Location center = getCenter(world).subtract(new Location(world, size, 0, size));
+        center.setY(-64);
+        return center;
     }
 
     public Location getPosition2(World world) {
         if (world == null) {
             double size = getSize() / 2.00;
-            return getCenter(null).add(new Location(null, size, 219, size));
+            Location center = getCenter(null).add(new Location(null, size, 0, size));
+            center.setY(219);
+            return center;
         }
 
         double size = getSize() / 2.00;
-        return getCenter(world).add(new Location(world, size, 219, size));
+        Location center = getCenter(world).add(new Location(world, size, 0, size));
+        center.setY(219);
+        return center;
     }
 
     public int getSize() {
-        return SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Generation.REGION_SIZE");
+        return SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Generation.PLAYER_ISLANDS.REGION_SIZE");
     }
 }

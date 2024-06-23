@@ -43,13 +43,16 @@ Messages:
     CREATED_MESSAGE: "%server_name%&r&a&l Your island has been created!"
 
     # Sent when the player tries to run a command related to islands when they do not have one.
-    NO_ISLAND: "%server_name%&c&lHey!&r&7 You do not have an island!"
+    NO_ISLAND: "%server_name% &c&lHey!&r&7 You do not have an island!"
 
+    # Sent when a player runs /island delete confirm and the deletion is processing.
+    DELETION_PROCESSING: "%server_name%&r&e Deleting your island, please wait..."
     # Sent when the player initially runs /island delete, and has to rerun the command below.
-    CONFIRM_DELETION: "%server_name%&r7 Please run&c&l /island delete confirm&r&7 to confirm deletion of your island."
-
+    CONFIRM_DELETION: "%server_name%&r&7 Please run&c&l /island delete confirm&r&7 to confirm deletion of your island."
     # Sent when the player runs /island delete confirm and the island has been removed.
     DELETION_SUCCESS: "%server_name%&r&7 Your island has been successfully deleted."
+    # Sent when the player runs /island delete confirm before they run /island delete (2 step!)
+    DELETION_BLOCK: "%server_name%&c&l Hey!&r&7 You must run &c&l/island delete&r&7 before using this command."
 
   Discord:
     # Sent to the player when they request to link (runs /link).

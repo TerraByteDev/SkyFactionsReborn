@@ -51,7 +51,7 @@ Sounds:
 
   # Sent when any cancel button is clicked in any gui.
   GUI_CANCEL: "block.note_block.bass"
-  GUI_CANCEL_PITCH: 6f
+  GUI_CANCEL_PITCH: 4f
 
   # Sound played when an ONLINE player is about to be raided. Repeats quickly for 5s.
   ALARM_SOUND: "block.note_block.bell"

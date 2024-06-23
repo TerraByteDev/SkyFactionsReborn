@@ -34,7 +34,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -42,7 +42,7 @@ import java.util.concurrent.ExecutionException;
 @Log4j2(topic = "SkyFactionsReborn")
 public class IslandAPI {
 
-    public static List<UUID> awaitingDeletion;
+    public static HashSet<UUID> awaitingDeletion = new HashSet<>();
 
     public static void createIsland(Player player) {
 
@@ -55,8 +55,7 @@ public class IslandAPI {
 
         SkyFactionsReborn.db.createIsland(player, island).thenAccept(value -> pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").thenAccept(res -> {
             teleportPlayerToLocation(player, island.getCenter(world));
-            Messages.ISLAND_CREATING.send(player);
-            // TODO MAKE CONFIGURABLE
+            Messages.ISLAND_CREATED.send(player);
             SoundUtil.playSound(player, SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Sounds.ISLAND_CREATE_SUCCESS"), SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Sounds.ISLAND_CREATE_SUCCESS_PITCH"), 1f);
         }).exceptionally(ex -> {
             ex.printStackTrace();
@@ -162,8 +161,19 @@ public class IslandAPI {
             World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
             if (world != null) {
                 try {
-                    Region region = new CuboidRegion(BukkitAdapter.adapt(island.getPosition1(world)).toBlockPoint(), BukkitAdapter.adapt(island.getPosition2(world)).toBlockPoint());
+                    BlockVector3 bottom = BukkitAdapter.asBlockVector(island.getPosition1(null));
+                    BlockVector3 top = BukkitAdapter.asBlockVector(island.getPosition2(null));
+
+                    Region region = new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
                     cutRegion(region).get();
+
+                    SkyFactionsReborn.db.removeIsland(player).thenAccept(res -> {
+                        Messages.ISLAND_DELETION_SUCCESS.send(player);
+                    }).exceptionally(ex -> {
+                        ex.printStackTrace();
+                        Messages.ERROR.send(player, "%operation%", "delete your island", "%debug%", "SQL_ISLAND_DELETE");
+                        return null;
+                    });
                 } catch (InterruptedException | ExecutionException error) {
                     error.printStackTrace();
                     Messages.ERROR.send(player, "%operation%", "delete your island", "%debug%", "FAWE_ISLAND_CUT");
