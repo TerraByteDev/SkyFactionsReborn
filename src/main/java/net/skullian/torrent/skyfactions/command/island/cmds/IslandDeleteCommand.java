@@ -56,6 +56,8 @@ public class IslandDeleteCommand extends CommandTemplate {
 
                                 IslandAPI.awaitingDeletion.remove(player);
                                 IslandAPI.removePlayerIsland(player);
+
+                                // TODO: IMPL ISLAND TRUST REMOVAL
                             } else {
                                 Messages.ERROR.send(player, "%operation%", "delete your island", "%debug%", "WORLD_NOT_EXIST");
                             }

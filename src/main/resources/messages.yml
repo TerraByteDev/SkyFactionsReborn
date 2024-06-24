@@ -57,6 +57,9 @@ Messages:
     # Sent when a player successfully trusts another player to visit their island.
     # Placeholders: %player% - Name of player who is trusted.
     TRUST_SUCCESS: "%server_name%&a Successfully trusted %player%!"
+    # Sent when a player tries to trust a player that is already trusted.
+    ALREADY_TRUSTED: "%server_name%&r&c You have already trusted that player!"
+
     # Sent when a player successfully untrusts a player.
     # Placeholders: %player% - Untrusted player.
     UNTRUST_SUCCESS: "%server_name%&a Successfully untrusted %player%."
