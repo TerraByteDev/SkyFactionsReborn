@@ -113,8 +113,7 @@ public class HikariHandler {
                      CREATE TABLE IF NOT EXISTS islands (
                      [id] INTEGER PRIMARY KEY,
                      [uuid] BLOB NOT NULL,
-                     [last_raided] INTEGER NOT NULL,
-                     [trusted_players] VARCHAR(1024) NOT NULL,
+                     [last_raided] INTEGER NOT NULL
                      );
                      """);
 

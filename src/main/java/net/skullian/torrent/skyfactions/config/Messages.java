@@ -51,7 +51,7 @@ public enum Messages {
     UNTRUST_SUCCESS("Island.UNTRUST_SUCCESS"),
     UNTRUST_FAILURE("Island.UNTRUST_FAILURE"),
     PLAYER_NOT_TRUSTED("Island.VISIT_NOT_TRUSTED"),
-    VISIT_NO_ISLAND("IslandVISIT_NO_ISLAND");
+    VISIT_NO_ISLAND("Island.VISIT_NO_ISLAND");
 
     private static FileConfiguration config;
     private final String path;

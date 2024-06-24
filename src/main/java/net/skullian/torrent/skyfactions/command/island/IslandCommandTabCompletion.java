@@ -42,6 +42,9 @@ public class IslandCommandTabCompletion implements TabCompleter {
             if (sender.hasPermission("skyfactions.island.untrust")) {
                 completions.add("untrust");
             }
+            if (sender.hasPermission("skyfactions.island.visit")) {
+                completions.add("visit");
+            }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
         } else if (args.length == 2) {
