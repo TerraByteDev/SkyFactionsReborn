@@ -1,5 +1,6 @@
 package net.skullian.torrent.skyfactions.command.island;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -35,6 +36,12 @@ public class IslandCommandTabCompletion implements TabCompleter {
             if (sender.hasPermission("skyfactions.island.delete")) {
                 completions.add("delete");
             }
+            if (sender.hasPermission("skyfactions.island.trust")) {
+                completions.add("trust");
+            }
+            if (sender.hasPermission("skyfactions.island.untrust")) {
+                completions.add("untrust");
+            }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
         } else if (args.length == 2) {
@@ -42,8 +49,23 @@ public class IslandCommandTabCompletion implements TabCompleter {
             String arg = args[1].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (sender.hasPermission("skyfactions.island.delete") && subcmd.equals("delete")) {
+            if (subcmd.equals("delete") && sender.hasPermission("skyfactions.island.delete")) {
                 completions.add("confirm");
+            }
+            if (subcmd.equals("trust") && sender.hasPermission("skyfactions.island.trust")) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    completions.add(player.getName());
+                }
+            }
+            if (subcmd.equals("untrust") && sender.hasPermission("skyfactions.island.untrust")) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    completions.add(player.getName());
+                }
+            }
+            if (subcmd.equals("visit") && sender.hasPermission("skyfactions.island.visit")) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    completions.add(player.getName());
+                }
             }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));

@@ -23,6 +23,9 @@ public class IslandCommandHandler implements CommandExecutor {
         subcommands.add(new IslandTeleportCommand());
         subcommands.add(new IslandDeleteCommand());
         subcommands.add(new IslandHelpCommand());
+        subcommands.add(new IslandTrustCommand());
+        subcommands.add(new IslandUntrustCommand());
+        subcommands.add(new IslandVisitCommand());
     }
 
     @Override

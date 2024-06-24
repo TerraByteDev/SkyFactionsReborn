@@ -113,7 +113,8 @@ public class HikariHandler {
                      CREATE TABLE IF NOT EXISTS islands (
                      [id] INTEGER PRIMARY KEY,
                      [uuid] BLOB NOT NULL,
-                     [last_raided] INTEGER NOT NULL
+                     [last_raided] INTEGER NOT NULL,
+                     [trusted_players] VARCHAR(1024) NOT NULL,
                      );
                      """);
 
@@ -133,6 +134,13 @@ public class HikariHandler {
                      [uuid] BLOB NOT NULL,
                      [last_raided] INTEGER NOT NULL
                      );
+                    """);
+
+            PreparedStatement trustedPlayerTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS trustedPlayers (
+                    [island_id] INTEGER PRIMARY KEY NOT NULL,
+                    [uuid] BLOB NOT NULL
+                    );
                     """)) {
 
             islandsTable.executeUpdate();
@@ -143,6 +151,9 @@ public class HikariHandler {
 
             factionIslandTable.executeUpdate();
             factionIslandTable.close();
+
+            trustedPlayerTable.executeUpdate();
+            trustedPlayerTable.close();
 
             connection.close();
         }
@@ -181,7 +192,7 @@ public class HikariHandler {
     public CompletableFuture<Void> createIsland(Player player, SkyIsland island) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, last_raided) VALUES (?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, last_raided, trusted_players) VALUES (?, ?, ?, ?)")) {
 
                 statement.setInt(1, island.getId());
                 statement.setString(2, player.getUniqueId().toString());
@@ -508,6 +519,66 @@ public class HikariHandler {
             } catch (SQLException error) {
                 handleError(error);
                 throw new RuntimeException(error);
+            }
+        });
+    }
+
+    // ------------------ TRUSTING ------------------ //
+
+    public CompletableFuture<Boolean> isPlayerTrusted(Player player, int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM trustedPlayers WHERE island_id = ? AND uuid = ?")) {
+
+                statement.setInt(1, id);
+                statement.setString(2, player.getUniqueId().toString());
+
+                ResultSet set = statement.executeQuery();
+
+                statement.close();
+                connection.close();
+
+                return set.next();
+            } catch (SQLException error) {
+                handleError(error);
+            }
+
+            return false;
+        });
+    }
+
+    public CompletableFuture<Void> trustPlayer(Player player, int id) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO trustedPlayers (island_id, uuid) VALUES (?, ?)")) {
+
+               statement.setInt(1, id);
+               statement.setString(2, player.getUniqueId().toString());
+
+               statement.executeUpdate();
+               statement.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+           }
+        });
+    }
+
+    public CompletableFuture<Void> removeTrust(Player player, int id) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM trustedPlayers WHERE island_id = ? AND uuid = ?")) {
+
+                statement.setInt(1, id);
+                statement.setString(2, player.getUniqueId().toString());
+
+                statement.executeUpdate();
+
+                statement.close();
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
             }
         });
     }

@@ -54,6 +54,22 @@ Messages:
     # Sent when the player runs /island delete confirm before they run /island delete (2 step!)
     DELETION_BLOCK: "%server_name%&c&l Hey!&r&7 You must run &c&l/island delete&r&7 before using this command."
 
+    # Sent when a player successfully trusts another player to visit their island.
+    # Placeholders: %player% - Name of player who is trusted.
+    TRUST_SUCCESS: "%server_name%&a Successfully trusted %player%!"
+    # Sent when a player successfully untrusts a player.
+    # Placeholders: %player% - Untrusted player.
+    UNTRUST_SUCCESS: "%server_name%&a Successfully untrusted %player%."
+
+    # Sent when a player tries to untrust a player that is not trusted already.
+    UNTRUST_FAILURE: "%server_name%&c That player is not trusted by you!"
+    # Sent when a player tries to visit a player's island without being trusted.
+    VISIT_NOT_TRUSTED: "%server_name%&c&l Hey!&r&7 You must be trusted to visit that island!"
+
+    # Sent when a player tries to visit a player that has no island.
+    VISIT_NO_ISLAND: "%server_name%&c&l Hey!&r&7 That player does not have an island!"
+
+
   Discord:
     # Sent to the player when they request to link (runs /link).
     # Placeholders: %code% - Code to run in the discord.
