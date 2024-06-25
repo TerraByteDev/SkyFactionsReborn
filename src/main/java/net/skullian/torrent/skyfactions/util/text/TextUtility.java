@@ -3,6 +3,7 @@ package net.skullian.torrent.skyfactions.util.text;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class TextUtility {
@@ -26,21 +27,78 @@ public class TextUtility {
         return builder.toString();
     }
 
-    public static String[] stringToArray(String arrayString) {
-        try {
-            return objectMapper.readValue(arrayString, String[].class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
+    public static boolean isEnglish(@Nullable CharSequence seq) {
+        if (seq == null) {
+            return false;
+        } else {
+            int length = seq.length();
+            if (length == 0) {
+                return false;
+            } else {
+                for (int i = 0; i < length; i++) {
+                    char character = seq.charAt(i);
+
+                    if (character != ' ' && character != '_' && !isEnglishDigitOrLetter(character)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
         }
     }
 
-    public static String arrayToString(String[] array) {
-        try {
-            return objectMapper.writeValueAsString(array);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
+    public static boolean hasSymbols(@Nullable CharSequence seq) {
+        if (seq == null) {
+            return false;
+        } else {
+            int length = seq.length();
+            if (length == 0) {
+                return false;
+            } else {
+                for (int i = 0; i < length; i++) {
+                    char character = seq.charAt(i);
+
+                    if (character != ' ' && character != '_' && !Character.isLetterOrDigit(character)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
         }
     }
+
+    public static boolean containsNumbers(@Nullable CharSequence seq) {
+        if (seq == null) {
+            return false;
+        } else {
+            int length = seq.length();
+            if (length == 0) {
+                return false;
+            } else {
+                for (int i = 0; i < length; i++) {
+                    char character = seq.charAt(i);
+                    if (Character.isDigit(character)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+    }
+
+    public static boolean isEnglishDigitOrLetter(char character) {
+        return isEDigit(character) || isELetter(character);
+    }
+
+    public static boolean isEDigit(char ch) {
+        return ch >= '0' && ch <= '9';
+    }
+
+    public static boolean isELetter(char ch) {
+        return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z';
+    }
+
 }

@@ -3,6 +3,7 @@ package net.skullian.torrent.skyfactions.command;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.ConfigTypes;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.Settings;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class CooldownHandler {
     // if not it returns false and the command can continue.
     public static boolean manageCooldown(Player player) {
         if (player.hasPermission("skyfactions.cooldown.bypass")) return false;
-        long cooldownDuration = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getLong("Commands.COOLDOWN");
+        long cooldownDuration = Settings.COMMAND_COOLDOWN.getInt();
 
         if (cooldowns.containsKey(player.getUniqueId())) {
             long secondsLeft = ((cooldowns.get(player.getUniqueId()) / 1000) + (cooldownDuration / 1000)) - (System.currentTimeMillis() / 1000);

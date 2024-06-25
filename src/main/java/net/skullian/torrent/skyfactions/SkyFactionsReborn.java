@@ -3,6 +3,8 @@ package net.skullian.torrent.skyfactions;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.command.discord.LinkCommand;
 import net.skullian.torrent.skyfactions.command.discord.UnlinkCommand;
+import net.skullian.torrent.skyfactions.command.faction.FactionCommandHandler;
+import net.skullian.torrent.skyfactions.command.faction.FactionCommandTabCompletion;
 import net.skullian.torrent.skyfactions.command.gems.GemsCommandHandler;
 import net.skullian.torrent.skyfactions.command.gems.GemsCommandTabCompletion;
 import net.skullian.torrent.skyfactions.command.island.IslandCommandHandler;
@@ -12,6 +14,7 @@ import net.skullian.torrent.skyfactions.command.raid.RaidCommandTabCompletion;
 import net.skullian.torrent.skyfactions.command.sf.SFCommandHandler;
 import net.skullian.torrent.skyfactions.command.sf.SFCommandTabCompletion;
 import net.skullian.torrent.skyfactions.config.ConfigFileHandler;
+import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.db.HikariHandler;
 import net.skullian.torrent.skyfactions.discord.DiscordHandler;
 import net.skullian.torrent.skyfactions.event.PlayerHandler;
@@ -64,6 +67,9 @@ public final class SkyFactionsReborn extends JavaPlugin {
         getCommand("sf").setExecutor(new SFCommandHandler());
         getCommand("sf").setTabCompleter(new SFCommandTabCompletion());
 
+        getCommand("faction").setExecutor(new FactionCommandHandler());
+        getCommand("faction").setTabCompleter(new FactionCommandTabCompletion());
+
         LOGGER.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
 
@@ -94,7 +100,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
             // Initialise the database.
             db = new HikariHandler();
-            db.initialise(configHandler.SETTINGS_CONFIG.getString("Database.TYPE"));
+            db.initialise(Settings.DATABASE_TYPE.getString());
 
             // Cache the most recent ID.
             db.setCachedNextID();

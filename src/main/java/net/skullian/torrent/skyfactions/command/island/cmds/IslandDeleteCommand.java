@@ -5,6 +5,7 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.island.IslandAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -45,12 +46,12 @@ public class IslandDeleteCommand extends CommandTemplate {
                     if (args[1].equals("confirm")) {
 
                         if (IslandAPI.awaitingDeletion.contains(player.getUniqueId())) {
-                            World hubWorld = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Hub.WORLD_NAME"));
+                            World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
 
                             if (hubWorld != null) {
                                 Messages.DELETION_PROCESSING.send(player);
 
-                                List<Integer> hubLocArray = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getIntegerList("Hub.HUB_LOCATION");
+                                List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
                                 Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
                                 IslandAPI.teleportPlayerToLocation(player, location);
 

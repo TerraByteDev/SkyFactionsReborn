@@ -2,22 +2,23 @@ package net.skullian.torrent.skyfactions.island;
 
 import lombok.Getter;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.config.Settings;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.List;
 
 @Getter
-public class SkyIsland {
+public class PlayerIsland {
 
     private int id;
 
-    public SkyIsland(int id) {
+    public PlayerIsland(int id) {
         this.id = id;
     }
 
     public Location getCenter(World world) {
-        List<Integer> origin = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getIntegerList("Generation.PLAYER_ISLANDS.GRID_ORIGIN");
+        List<Integer> origin = Settings.GEN_PLAYER_GRID_ORIGIN.getIntegerList();
             if (id == 1) return new Location(world, origin.get(0), origin.get(1), origin.get(2));
 
             int pos = id - 1;
@@ -48,7 +49,7 @@ public class SkyIsland {
                     throw new IllegalStateException("Could not find island location with ID: " + id);
             }
 
-            Location newLocation = location.multiply((SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Generation.PLAYER_ISLANDS.REGION_SIZE") + SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Generation.PLAYER_ISLANDS.REGION_PADDING")));
+            Location newLocation = location.multiply((Settings.GEN_PLAYER_REGION_SIZE.getInt() + Settings.GEN_PLAYER_REGION_PADDING.getInt()));
 
             return newLocation;
     }
@@ -82,6 +83,6 @@ public class SkyIsland {
     }
 
     public int getSize() {
-        return SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Generation.PLAYER_ISLANDS.REGION_SIZE");
+        return Settings.GEN_PLAYER_REGION_SIZE.getInt();
     }
 }

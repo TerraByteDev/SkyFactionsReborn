@@ -5,7 +5,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.island.SkyIsland;
+import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -58,12 +59,10 @@ public class HikariHandler {
             LOGGER.info("Using SQLite Database.");
         } else if (type.equals("sql")) {
 
-            var config = SkyFactionsReborn.configHandler.SETTINGS_CONFIG;
-
-            String rawHost = config.getString("Database.DATABASE_HOST");
-            String databaseName = config.getString("Database.DATABASE_NAME");
-            String username = config.getString("Database.DATABASE_USERNAME");
-            String password = config.getString("Database.DATABASE_PASSWORD");
+            String rawHost = Settings.DATABASE_HOST.getString();
+            String databaseName = Settings.DATABASE_NAME.getString();
+            String username = Settings.DATABASE_USERNAME.getString();
+            String password = Settings.DATABASE_PASSWORD.getString();
 
             List<String> missingProperties = new ArrayList<>();
 
@@ -92,7 +91,7 @@ public class HikariHandler {
             mysqlConfig.setPoolName("SkyFactions");
             mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s",
                     host.getHost(), host.getPortOrDefault(3306), databaseName));
-            mysqlConfig.setMaxLifetime(TimeUnit.MINUTES.toMillis(config.getInt("MAX_LIFETIME")));
+            mysqlConfig.setMaxLifetime(TimeUnit.MINUTES.toMillis(Settings.DATABASE_MAX_LIFETIME.getInt()));
             mysqlConfig.setUsername(username);
             mysqlConfig.setPassword(password);
             mysqlConfig.setMaximumPoolSize(2);
@@ -188,7 +187,7 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<Void> createIsland(Player player, SkyIsland island) {
+    public CompletableFuture<Void> createIsland(Player player, PlayerIsland island) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, last_raided) VALUES (?, ?, ?)")) {
@@ -208,7 +207,7 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<SkyIsland> getPlayerIsland(Player player) {
+    public CompletableFuture<PlayerIsland> getPlayerIsland(Player player) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands where uuid = ?")) {
@@ -218,7 +217,7 @@ public class HikariHandler {
 
                 if (set.next()) {
                     int id = set.getInt("id");
-                    return new SkyIsland(id);
+                    return new PlayerIsland(id);
                 }
 
                 statement.close();
@@ -254,7 +253,7 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<Void> setIslandCooldown(SkyIsland island, long time) {
+    public CompletableFuture<Void> setIslandCooldown(PlayerIsland island, long time) {
         return CompletableFuture.runAsync(() -> {
             try {
                 try (Connection connection = dataSource.getConnection();
@@ -434,7 +433,7 @@ public class HikariHandler {
             try (Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE last_raided <=?")) {
 
-                statement.setLong(1, System.currentTimeMillis() - SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getLong("Raiding.RAIDED_COOLDOWN"));
+                statement.setLong(1, System.currentTimeMillis() - Settings.RAIDED_COOLDOWN.getInt());
 
                 List<IslandRaidData> islands = new ArrayList<>();
                 ResultSet set = statement.executeQuery();

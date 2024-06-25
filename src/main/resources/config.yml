@@ -74,9 +74,6 @@ Island:
   # Name of the WorldEdit schematic file for the faction island. MUST INCLUDE THE FILE EXTENSION!
   FACTION_ISLAND_SCHEMATIC: 'faction_island.schem'
 
-  # When a player runs /island delete, they have this amount of milliseconds before it expires.
-  DELETE_TIMEOUT:
-
 
 # Island grid generation algorithm configuration
 Generation:
@@ -131,3 +128,22 @@ Raiding:
   RAID_PREPARATION_POS: [0, 64, 0]
   # Time in seconds that they are in the preparation area before being teleported back to their island.
   RAID_PREPARATION_TIME: 30
+
+Factions:
+  # All configurations related to creation factions.
+  FACTION_CREATION:
+    # Minimum length of faction name.
+    MINIMUM_NAME_LENGTH: 3
+    # Maximum length of faction name.
+    MAXIMUM_NAME_LENGTH: 16
+
+    # Whether to allow numbers in the name.
+    ALLOW_NUMBERS: true
+    # Whether to allow non-english characters & numbers in the name.
+    ALLOW_NON_ENGLISH: false
+    # Allow symbols in the name.
+    ALLOW_SYMBOLS: false
+
+    # The plugin will automatically run through all of these strings and check that the faction name does not contain any of these.
+    # Can be regex patterns or just strings.
+    BLACKLISTED_NAMES: [ cunt, motherfucker, motherfuck, anus, anal, cock, dick, whore, suck, twat, shit, faggot, bitch, "butt|ass(?:hole)?", "^fag$", "nigg(?:a|er)", "tit(?:s|z|ies)?", "boob(?:s|z|ies)?"]

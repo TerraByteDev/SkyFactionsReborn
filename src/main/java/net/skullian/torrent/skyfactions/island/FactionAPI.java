@@ -1,5 +1,9 @@
 package net.skullian.torrent.skyfactions.island;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -11,10 +15,58 @@ import org.kingdoms.events.lands.ClaimLandEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class FactionAPI {
 
-    private static void createKingdomsRegion(Player player, SkyIsland island, World world) {
+    public static boolean hasKingdom(Player player) {
+        KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer(player.getUniqueId());
+
+        return kingdomPlayer.hasKingdom();
+    }
+
+    public static boolean hasValidName(Player player, String name) {
+        int minimumLength = Settings.FACTION_CREATION_MIN_LENGTH.getInt();
+        int maximumLength = Settings.FACTION_CREATION_MAX_LENGTH.getInt();
+        int length = name.length();
+        if (length >= minimumLength && length <= maximumLength) {
+            if (!Settings.FACTION_CREATION_ALLOW_NUMBERS.getBoolean() && TextUtility.containsNumbers(name)) {
+                Messages.FACTION_NO_NUMBERS.send(player);
+                return false;
+            } else if (!Settings.FACTION_CREATION_ALLOW_NON_ENGLISH.getBoolean() && !TextUtility.isEnglish(name)) {
+                Messages.FACTION_NON_ENGLISH.send(player);
+                return false;
+            } else if (!Settings.FACTION_CREATION_ALLOW_SYMBOLS.getBoolean() && TextUtility.hasSymbols(name)) {
+                Messages.FACTION_NO_SYMBOLS.send(player);
+                return false;
+            } else {
+                boolean regexMatch = false;
+                List<String> blacklistedNames = Settings.FACTION_CREATION_BLACKLISTED_NAMES.getList();
+
+                for (String blacklistedName : blacklistedNames) {
+                    if (Pattern.compile(blacklistedName).matcher(name).find()) {
+                        regexMatch = true;
+                        break;
+                    }
+                }
+
+                if (regexMatch) {
+                    Messages.FACTION_NAME_PROHIBITED.send(player);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+        } else {
+            Messages.FACTION_NAME_LENGTH_LIMIT.send(player, "%min%", minimumLength, "%max%", maximumLength);
+            return false;
+        }
+    }
+
+
+
+    private static void createKingdomsRegion(Player player, PlayerIsland island, World world) {
 
         KingdomPlayer kingdomPlayer = KingdomPlayer.getKingdomPlayer(player.getUniqueId());
 

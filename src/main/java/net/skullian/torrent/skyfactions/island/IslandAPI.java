@@ -23,13 +23,13 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.util.FileUtil;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.kingdoms.managers.land.claiming.ClaimProcessor;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,9 +47,9 @@ public class IslandAPI {
 
     public static void createIsland(Player player) {
 
-        SkyIsland island = new SkyIsland(SkyFactionsReborn.db.cachedNextID);
+        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.db.cachedNextID);
         SkyFactionsReborn.db.cachedNextID++;
-        World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
+        World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
 
         Messages.ISLAND_CREATING.send(player);
         createRegion(player, island, world) ;
@@ -57,7 +57,7 @@ public class IslandAPI {
         SkyFactionsReborn.db.createIsland(player, island).thenAccept(value -> pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").thenAccept(res -> {
             teleportPlayerToLocation(player, island.getCenter(world));
             Messages.ISLAND_CREATED.send(player);
-            SoundUtil.playSound(player, SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Sounds.ISLAND_CREATE_SUCCESS"), SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getInt("Sounds.ISLAND_CREATE_SUCCESS_PITCH"), 1f);
+            SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
         }).exceptionally(ex -> {
             ex.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "create a new island", "%debug%", "FAWE_ISLAND_PASTE");
@@ -79,9 +79,9 @@ public class IslandAPI {
                 } else {
                     File schemFile = null;
                     if (type.equals("player")) {
-                        schemFile = FileUtil.getSchematicFile(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.NORMAL_ISLAND_SCHEMATIC"));
+                        schemFile = FileUtil.getSchematicFile(Settings.ISLAND_PLAYER_SCHEMATIC.getString());
                     } else if (type.equals("faction")) {
-                        schemFile = FileUtil.getSchematicFile(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.FACTION_ISLAND_SCHEMATIC"));
+                        schemFile = FileUtil.getSchematicFile(Settings.ISLAND_FACTION_SCHEMATIC.getString());
                     }
 
                     com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(world);
@@ -112,7 +112,7 @@ public class IslandAPI {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> player.teleport(location));
     }
 
-    private static void createRegion(Player player, SkyIsland island, World world) {
+    private static void createRegion(Player player, PlayerIsland island, World world) {
         Location corner1 = island.getPosition1(null);
         Location corner2 = island.getPosition2(null);
 
@@ -129,10 +129,10 @@ public class IslandAPI {
         regionManager.addRegion(region);
     }
 
-    public static CompletableFuture<Void> saveIslandSchematic(Player player, SkyIsland island) {
+    public static CompletableFuture<Void> saveIslandSchematic(Player player, PlayerIsland island) {
         LOGGER.warn("Saving WE Schematic for {}", player.getName());
         return CompletableFuture.runAsync(() -> {
-            World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
+            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
 
             File file = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/schematics/raid_saves/" + player.getUniqueId() + ".schematic");
             BlockVector3 bottom = BukkitAdapter.asBlockVector(island.getPosition1(null));
@@ -159,7 +159,7 @@ public class IslandAPI {
 
     public static void removePlayerIsland(Player player) {
         SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
-            World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
+            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
             if (world != null) {
                 try {
                     BlockVector3 bottom = BukkitAdapter.asBlockVector(island.getPosition1(null));

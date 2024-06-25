@@ -13,7 +13,6 @@ public class ConfigFileHandler {
     private Map<ConfigTypes, ConfigHandler> configs;
     public ConfigFileHandler() { configs = new HashMap<>(); }
 
-    public FileConfiguration SETTINGS_CONFIG;
     public FileConfiguration MESSAGES_CONFIG;
     public FileConfiguration DISCORD_CONFIG;
 
@@ -24,8 +23,8 @@ public class ConfigFileHandler {
 
         configs.values().forEach(ConfigHandler::saveDefaultConfig);
         Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
+        Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
 
-        SETTINGS_CONFIG = getFile(ConfigTypes.SETTINGS).getConfig();
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();
         DISCORD_CONFIG = getFile(ConfigTypes.DISCORD).getConfig();
     }
@@ -35,8 +34,8 @@ public class ConfigFileHandler {
     public void reloadFiles() {
         configs.values().forEach(ConfigHandler::reload);
         Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
+        Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
 
-        SETTINGS_CONFIG = getFile(ConfigTypes.SETTINGS).getConfig();
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();
         DISCORD_CONFIG = getFile(ConfigTypes.DISCORD).getConfig();
     }

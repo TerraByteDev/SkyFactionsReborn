@@ -5,6 +5,7 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.island.IslandAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -45,7 +46,7 @@ public class IslandVisitCommand extends CommandTemplate {
                 if (is != null) {
 
                     SkyFactionsReborn.db.isPlayerTrusted(player, is.getId()).thenAccept(isTrusted -> {
-                        World world = Bukkit.getWorld(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Island.ISLAND_WORLD_NAME"));
+                        World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                         if (world == null) {
                             Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "WORLD_NOT_EXIST");
                         } else {

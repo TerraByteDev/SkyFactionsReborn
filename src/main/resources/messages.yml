@@ -159,3 +159,17 @@ Messages:
     # Sent when a player tries to pay another player more gems than they have in their balance.
     INSUFFICIENT_GEM_COUNT: "%server_name%&c&lHey!&r&7 You do not have enough gems for that!"
 
+  Factions:
+
+    # Sent when a player tries to create a faction with a name that is too short / too long.
+    # Placeholders: %min% - Minimum name length / %max% - Maximum name length.
+    NAME_LENGTH_LIMIT: "%server_name%&c&l Hey!&r&7 The name must be between&c&l %min%&r&7 and &c&l%max% &r&7characters long."
+    # Sent when a player tries to create a faction name that has numbers in (permitting it is configured to disallow numbers).
+    NAME_NO_NUMBERS: "%server_name%&c&l Hey!&r&7 You cannot use numbers in your name."
+    # Sent when a player tries to create a faction that contains non-english characters.
+    NAME_NON_ENGLISH: "%server_name%&c&l Hey!&r&7 You cannot use non-english characters in your name."
+    # Sent when a player tries to create a faction that contains symbols.
+    NAME_NO_SYMBOLS: "%server_name%&c&l Hey!&r&7 You cannot use symbols in your name."
+    # Sent when a player tries to create a faction that contains prohibited words.
+    NAME_PROHIBITED: "%server_name%&c Your name contains prohibited words."
+

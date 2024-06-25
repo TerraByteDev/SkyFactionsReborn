@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.config.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -34,7 +35,7 @@ public class SoundUtil {
             attData.stopPlaying(true);
         }
         if (DependencyHandler.nbapi) {
-            List<String> songs = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getStringList("Raiding.MUSIC_FILE_NAMES");
+            List<String> songs = Settings.RAIDING_MUSIC_FILES.getList();
             List<Song> nbsSongs = new ArrayList<>();
 
             for (String song : songs) {
@@ -59,8 +60,8 @@ public class SoundUtil {
     public static void soundAlarm(Player player) {
         CompletableFuture.runAsync(() -> {
             if (player != null && player.isOnline()) {
-                String name = SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Sounds.ALARM_SOUND");
-                float pitch = Float.parseFloat(SkyFactionsReborn.configHandler.SETTINGS_CONFIG.getString("Sounds.ALARM_PITCH"));
+                String name = Settings.ALARM_SOUND.getString();
+                float pitch = Settings.ALARM_SOUND_PITCH.getInt();
                 int dur = 100;
                 int val = 50;
                 int it = dur / val + 1;
