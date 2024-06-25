@@ -58,6 +58,7 @@ permissions:
       skyfactions.command.link: true
       skyfactions.command.unlink: true
       skyfactions.faction.help: true
+      skyfactions.faction.create: true
 
   skyfactions.island:
     description: Has permission for all (GENERAL) island related features (tp, create, etc.)
@@ -76,6 +77,7 @@ permissions:
     description: Has permission for all (GENERAL) faction related features (create, etc.)
     children:
       skyfactions.faction.help: true
+      skyfactions.faction.create: true
 
   skyfactions.discord:
     description: Has permission to link and unlink their discord account (link, unlink).
