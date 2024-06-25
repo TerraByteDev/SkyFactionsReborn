@@ -1,11 +1,14 @@
 package net.skullian.torrent.skyfactions.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 
+@Getter
 public enum Messages {
 
     SERVER_NAME("SERVER_NAME"),
@@ -52,14 +55,14 @@ public enum Messages {
     UNTRUST_FAILURE("Islands.UNTRUST_FAILURE"),
     PLAYER_NOT_TRUSTED("Islands.VISIT_NOT_TRUSTED"),
     VISIT_NO_ISLAND("Islands.VISIT_NO_ISLAND"),
-    PLAYER_ALREADY_TRUSTED("Islands.ALREADY_TRUSTED");
+    PLAYER_ALREADY_TRUSTED("Islands.ALREADY_TRUSTED"),
+    VISIT_PROCESSING("Islands.VISIT_PROCESSING");
 
+    @Setter
     private static FileConfiguration config;
     private final String path;
 
     Messages(String path) { this.path = path; }
-
-    public static void setConfig(FileConfiguration conf) { config = conf; }
 
     public String get(Object... replacements) {
         Object value = config.get("Messages." + this.path);
@@ -98,5 +101,4 @@ public enum Messages {
         return message.replace("%server_name%", prefix != null && !prefix.isEmpty() ? prefix : "");
     }
 
-    public String getPath() { return this.path; }
 }

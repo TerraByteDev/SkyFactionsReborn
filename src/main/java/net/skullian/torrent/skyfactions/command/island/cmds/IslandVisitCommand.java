@@ -33,6 +33,7 @@ public class IslandVisitCommand extends CommandTemplate {
         if (CooldownHandler.manageCooldown(player)) return;
 
         if (args.length > 1) {
+            Messages.VISIT_PROCESSING.send(player);
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
 
             if (!target.hasPlayedBefore()) {
@@ -41,7 +42,6 @@ public class IslandVisitCommand extends CommandTemplate {
             }
 
             SkyFactionsReborn.db.getPlayerIsland(target.getPlayer()).thenAccept(is -> {
-
                 if (is != null) {
 
                     SkyFactionsReborn.db.isPlayerTrusted(player, is.getId()).thenAccept(isTrusted -> {
