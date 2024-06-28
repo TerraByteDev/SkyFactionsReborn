@@ -1,6 +1,7 @@
 package net.skullian.torrent.skyfactions.db;
 
 import com.google.common.net.HostAndPort;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.log4j.Log4j2;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2(topic = "SkyFactionsReborn")
@@ -28,6 +31,10 @@ public class HikariHandler {
 
     private transient HikariDataSource dataSource;
     public int cachedNextID;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder()
+            .setDaemon(true)
+            .setNameFormat("skyfactions-database")
+            .build());
 
     public Connection getConnection() throws SQLException {
         return dataSource.getConnection();

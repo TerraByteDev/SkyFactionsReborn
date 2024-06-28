@@ -78,7 +78,7 @@ Island:
 # Island grid generation algorithm configuration
 Generation:
   PLAYER_ISLANDS:
-    # Size of each player region. The islands will be generated here, in the center of each region.
+    # Radius of each player region. The islands will be generated here, in the center of each region.
     REGION_SIZE: 200
     # Space between region islands.
     REGION_PADDING: 100
@@ -86,7 +86,7 @@ Generation:
     GRID_ORIGIN: [ 0, 64, 0 ]
 
   FACTION_ISLANDS:
-    # Size of each faction region. The islands will be generated here, in the center of each region.
+    # Radius of each faction region. The islands will be generated here, in the center of each region.
     REGION_SIZE: 300
     # Space between region islands.
     REGION_PADDING: 100
@@ -132,6 +132,10 @@ Raiding:
 Factions:
   # All configurations related to creation factions.
   FACTION_CREATION:
+    # Cost of creating a faction in money.
+    # Set this to 0 if you wish it to be free.
+    CREATION_COST: 100
+
     # Minimum length of faction name.
     MINIMUM_NAME_LENGTH: 3
     # Maximum length of faction name.

@@ -18,8 +18,8 @@ import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.db.HikariHandler;
 import net.skullian.torrent.skyfactions.discord.DiscordHandler;
 import net.skullian.torrent.skyfactions.event.PlayerHandler;
-import net.skullian.torrent.skyfactions.papi.PlaceholderManager;
 import net.skullian.torrent.skyfactions.util.DependencyHandler;
+import net.skullian.torrent.skyfactions.util.EconomyHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,6 +32,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static ConfigFileHandler configHandler;
     public static HikariHandler db;
     public static DiscordHandler dc;
+    public static EconomyHandler ec;
 
     String text = """
             
@@ -47,6 +48,10 @@ public final class SkyFactionsReborn extends JavaPlugin {
         LOGGER.info("Initialising Configs.");
         configHandler = new ConfigFileHandler();
         configHandler.loadFiles(this);
+
+        LOGGER.info("Initialising Economy.");
+        ec = new EconomyHandler();
+        ec.init(this);
 
         LOGGER.info("Registering Commands.");
         getCommand("island").setExecutor(new IslandCommandHandler());
@@ -69,6 +74,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
         getCommand("faction").setExecutor(new FactionCommandHandler());
         getCommand("faction").setTabCompleter(new FactionCommandTabCompletion());
+
 
         LOGGER.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);

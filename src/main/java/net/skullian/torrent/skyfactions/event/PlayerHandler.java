@@ -2,11 +2,15 @@ package net.skullian.torrent.skyfactions.event;
 
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.IslandAPI;
+import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.island.PlayerIsland;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import java.sql.SQLException;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class PlayerHandler implements Listener {
@@ -27,5 +31,17 @@ public class PlayerHandler implements Listener {
             LOGGER.fatal("Failed to check if player [{}] was registered with SkyFactionsReborn!", event.getPlayer().getName());
             return null;
         });
+
+        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer()).join();
+        if (island != null) {
+            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+            if (world != null) {
+                Location centerLocation = island.getCenter(world);
+                IslandAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
+
+                IslandAPI.updateWorldBorder(event.getPlayer(), Settings.GEN_PLAYER_REGION_SIZE.getInt(), centerLocation);
+                IslandAPI.worldBorderApi.sendRedScreenForSeconds(event.getPlayer(), 100, SkyFactionsReborn.getInstance());
+            }
+        }
     }
 }

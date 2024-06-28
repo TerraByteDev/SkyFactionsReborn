@@ -16,3 +16,41 @@ This plugin contains an abundance of smart features, including:
 - [Discord](https://discord.gg/Y7DVR9gpwa) - For general questions, support, and chatting about the plugin. For bug reports, use Github issues.
 - [Torrent Network](https://www.torrentsmp.com) - The first server to use this plugin!
 - [Documentation](https://docs.terrabytedev.com) - Extensive documentation for the plugin.
+
+## TODO (DEVELOPMENT)
+- Basic Faction management commands
+    - Create
+    - List
+    - Info
+    - Invite
+    - Help
+    - Teleport
+    - Visit?
+    - Bank
+    - Relationship (Ally / Truce / Enemy)
+    - Demote / Promote (ALIAS)
+    - Broadcast (ALIAS)
+    - Chat (ALIAS)
+    - Donate (ALIAS)
+    - Fly (ALIAS?)
+    - Kick (ALIAS)
+    - King (ALIAS)
+    - Surrender
+    - Joining
+      - Join Requests (ALIAS)
+      - Join Invites (ALIAS)
+      
+- Gems Redeem (Custom Model Data)
+- Finish Wiki
+- Raid support for both faction & players
+  - Raid Faction Challenge (SIMILAR TO /K CHALLENGE)
+  - Player Raid (WIP, NEED CONFIRMATION OF OBJECTIVES)
+- PlaceholderAPI support
+  - Top factions
+  - Top raids
+- Explore website & further dc bot support
+  - Top Factions
+  - Top Players
+  - Current Raids
+- Spectate system?
+- refactor code

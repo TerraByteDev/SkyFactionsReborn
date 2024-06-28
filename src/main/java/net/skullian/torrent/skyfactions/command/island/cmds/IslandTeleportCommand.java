@@ -6,7 +6,7 @@ import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
-import net.skullian.torrent.skyfactions.island.IslandAPI;
+import net.skullian.torrent.skyfactions.api.IslandAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;

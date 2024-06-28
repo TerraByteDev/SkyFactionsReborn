@@ -3,7 +3,6 @@ package net.skullian.torrent.skyfactions.util.gui.items;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.gui.ItemData;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -15,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class CreationPromptItem extends AbstractItem {
+public class GeneralBorderItem extends AbstractItem {
 
     private String NAME;
     private String MATERIAL;
@@ -23,7 +22,7 @@ public class CreationPromptItem extends AbstractItem {
     private int PITCH;
     private List<String> LORE;
 
-    public CreationPromptItem(ItemData data) {
+    public GeneralBorderItem(ItemData data) {
         this.NAME = data.getNAME();
         this.MATERIAL = data.getMATERIAL();
         this.SOUND = data.getSOUND();
@@ -50,4 +49,5 @@ public class CreationPromptItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
     }
+
 }

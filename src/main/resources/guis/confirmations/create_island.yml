@@ -1,0 +1,53 @@
+# Title of the GUI (Inventory)
+TITLE: "&a&lCreate Island"
+OPEN_SOUND: "ui.button.click"
+OPEN_PITCH: 1
+
+# This allows you to customise the shape of the GUI.
+# You can only have a maximum of 54 slots (9 x 6).
+# Each character represents an item / slot.
+# '.' represents an empty slot.
+# Any other characters are shown below under ITEMS
+# Each character (#, p, y, n) corresponds to an item.
+
+LAYOUT:
+  - "# # # # # # # # #"
+  - "# . . . p . . . #"
+  - "# . y . . . n . #"
+  - "# # # # # # # # #"
+
+ITEMS:
+  CONFIRM:
+    char: "y" # This is the character to use in the LAYOUT!
+    material: "LIME_TERRACOTTA"
+    text: "&a&lConfirm"
+    sound: "ui.button.click" # Sound played when the item is clicked. Set to 'none' to disable.
+    pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
+    lore:
+      - "&eClick to create an island!"
+
+  PROMPT:
+    char: "p"
+    material: "GOLD_INGOT"
+    text: "&eCreate a new island?"
+    sound: "none"
+    pitch: 0
+    lore:
+      - "&a&oDo you wish to create a new island?"
+
+  CANCEL:
+    char: "n"
+    material: "RED_TERRACOTTA"
+    text: "&c&lCancel"
+    sound: "block.note_block.bass"
+    pitch: 4
+    lore:
+      - "&eClick to cancel island creation."
+
+  BORDER:
+    char: "#"
+    material: "GRAY_STAINED_GLASS_PANE"
+    text: " " # No text
+    sound: "none"
+    pitch: 1
+    lore: "" # Empty lore

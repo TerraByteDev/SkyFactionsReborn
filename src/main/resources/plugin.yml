@@ -4,9 +4,10 @@ main: net.skullian.torrent.skyfactions.SkyFactionsReborn
 api-version: '1.20'
 authors: [Skullians, nouish]
 website: https://www.torrentsmp.com/
+load: POSTWORLD
 
-loadbefore: ["JukeBox", "PlaceholderAPI", "NoteBlockAPI"]
-depend: ["FastAsyncWorldEdit", "WorldGuard", "Kingdoms"]
+loadbefore: ["JukeBox", "PlaceholderAPI", "NoteBlockAPI", "WorldBorderAPI", "EssentialsX"]
+depend: ["FastAsyncWorldEdit", "WorldGuard", "Vault"]
 softdepend: ["JukeBox", "PlaceholderAPI", "NoteBlockAPI"]
 
 commands:

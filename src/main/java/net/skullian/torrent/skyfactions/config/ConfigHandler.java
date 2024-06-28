@@ -25,9 +25,6 @@ public class ConfigHandler {
         this.name = name + ".yml";
         this.file = new File(plugin.getDataFolder(), this.name);
         this.config = new YamlConfiguration();
-
-        new File(plugin.getDataFolder(), "/schematics/raid_saves").mkdirs();
-        new File(plugin.getDataFolder(), "/songs").mkdir();
     }
 
     public void saveDefaultConfig() {

@@ -3,7 +3,7 @@ package net.skullian.torrent.skyfactions.command.gems.cmds;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.command.gems.GemsAPI;
+import net.skullian.torrent.skyfactions.api.GemsAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;

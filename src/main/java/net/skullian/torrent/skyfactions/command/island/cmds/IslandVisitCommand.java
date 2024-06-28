@@ -6,7 +6,8 @@ import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
-import net.skullian.torrent.skyfactions.island.IslandAPI;
+import net.skullian.torrent.skyfactions.api.IslandAPI;
+import net.skullian.torrent.skyfactions.api.RaidAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -45,23 +46,30 @@ public class IslandVisitCommand extends CommandTemplate {
             SkyFactionsReborn.db.getPlayerIsland(target.getPlayer()).thenAccept(is -> {
                 if (is != null) {
 
-                    SkyFactionsReborn.db.isPlayerTrusted(player, is.getId()).thenAccept(isTrusted -> {
-                        World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-                        if (world == null) {
-                            Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "WORLD_NOT_EXIST");
-                        } else {
-                            if (isTrusted) {
-                                IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
+                    if (RaidAPI.currentRaids.containsValue(player.getUniqueId()) || RaidAPI.processingRaid.containsValue(player.getUniqueId())) {
+                        Messages.VISIT_IN_RAID.send(player);
+                    } else {
+                        SkyFactionsReborn.db.isPlayerTrusted(player, is.getId()).thenAccept(isTrusted -> {
+                            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+                            if (world == null) {
+                                Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "WORLD_NOT_EXIST");
                             } else {
-                                Messages.PLAYER_NOT_TRUSTED.send(player);
+                                if (isTrusted) {
+                                    Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+                                        IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
+                                        IslandAPI.updateWorldBorder(player, Settings.GEN_PLAYER_REGION_SIZE.getInt(), is.getCenter(world));
+                                    });
+                                } else {
+                                    Messages.PLAYER_NOT_TRUSTED.send(player);
+                                }
                             }
-                        }
 
-                    }).exceptionally(ex -> {
-                        ex.printStackTrace();
-                        Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "SQL_TRUST_GET");
-                        return null;
-                    });
+                        }).exceptionally(ex -> {
+                            ex.printStackTrace();
+                            Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "SQL_TRUST_GET");
+                            return null;
+                        });
+                    }
 
                 } else {
                     Messages.VISIT_NO_ISLAND.send(player);

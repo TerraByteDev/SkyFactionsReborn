@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.raid;
+package net.skullian.torrent.skyfactions.api;
 
 import lombok.extern.log4j.Log4j2;
 import net.kyori.adventure.text.Component;
@@ -8,7 +8,6 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.db.IslandRaidData;
-import net.skullian.torrent.skyfactions.island.IslandAPI;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
@@ -29,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Log4j2(topic = "SkyFactionsReborn")
-public class RaidManager {
+public class RaidAPI {
 
     // attacker, victim
     public static Map<UUID, UUID> processingRaid = new HashMap<>();
@@ -284,4 +283,3 @@ public class RaidManager {
         }
     }
 }
-

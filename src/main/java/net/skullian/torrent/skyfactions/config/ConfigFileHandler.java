@@ -1,6 +1,7 @@
 package net.skullian.torrent.skyfactions.config;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.util.FileUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -17,9 +18,17 @@ public class ConfigFileHandler {
     public FileConfiguration DISCORD_CONFIG;
 
     public void loadFiles(SkyFactionsReborn plugin) {
+        new File(plugin.getDataFolder(), "/schematics/raid_saves").mkdirs();
+        new File(plugin.getDataFolder(), "/songs").mkdir();
+
         registerFile(ConfigTypes.SETTINGS, new ConfigHandler(plugin, "config"));
         registerFile(ConfigTypes.MESSAGES, new ConfigHandler(plugin, "messages"));
         registerFile(ConfigTypes.DISCORD, new ConfigHandler(plugin, "discord"));
+        registerFile(ConfigTypes.GUI, new ConfigHandler(plugin, "guis/confirmations/create_island"));
+
+        for (GUIEnums gui : GUIEnums.values()) {
+            registerFile(ConfigTypes.GUI, new ConfigHandler(plugin, gui.getConfigPath()));
+        }
 
         configs.values().forEach(ConfigHandler::saveDefaultConfig);
         Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());

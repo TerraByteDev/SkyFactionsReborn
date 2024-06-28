@@ -4,6 +4,7 @@ public enum ConfigTypes {
 
     SETTINGS,
     MESSAGES,
-    DISCORD
+    DISCORD,
+    GUI
 
 }

@@ -1,5 +1,8 @@
 package net.skullian.torrent.skyfactions.util.gui.items;
 
+import net.skullian.torrent.skyfactions.util.SoundUtil;
+import net.skullian.torrent.skyfactions.util.gui.ItemData;
+import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,16 +13,41 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
+import java.util.List;
+
 public class RaidPromptItem extends AbstractItem {
+
+    private String NAME;
+    private String MATERIAL;
+    private String SOUND;
+    private int PITCH;
+    private List<String> LORE;
+
+    public RaidPromptItem(ItemData data) {
+        this.NAME = data.getNAME();
+        this.MATERIAL = data.getMATERIAL();
+        this.SOUND = data.getSOUND();
+        this.PITCH = data.getPITCH();
+        this.LORE = data.getLORE();
+    }
 
     @Override
     public ItemProvider getItemProvider() {
-        return new ItemBuilder(Material.GOLD_INGOT).setDisplayName(ChatColor.translateAlternateColorCodes('&', "&eDo you want to start a raid?"));
+        ItemBuilder builder = new ItemBuilder(Material.getMaterial(MATERIAL))
+                .setDisplayName(TextUtility.color(NAME));
+        for (String loreLine : LORE) {
+            builder.addLoreLines(TextUtility.color(loreLine));
+        }
+
+        return builder;
     }
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.setCancelled(true);
 
+        if (!SOUND.equalsIgnoreCase("none")) {
+            SoundUtil.playSound(player, SOUND, PITCH, 1);
+        }
     }
 }

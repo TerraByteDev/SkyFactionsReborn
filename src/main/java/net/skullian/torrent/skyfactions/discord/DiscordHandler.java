@@ -12,15 +12,8 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.kingdoms.constants.group.Kingdom;
-import org.kingdoms.constants.player.KingdomPlayer;
-import org.kingdoms.data.KingdomsDataCenter;
-import org.kingdoms.data.managers.KingdomManager;
-import org.kingdoms.main.Kingdoms;
 
-import java.sql.SQLException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;

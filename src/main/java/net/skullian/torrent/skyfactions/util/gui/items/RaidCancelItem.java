@@ -3,6 +3,8 @@ package net.skullian.torrent.skyfactions.util.gui.items;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
+import net.skullian.torrent.skyfactions.util.gui.ItemData;
+import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,20 +18,40 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 import java.util.List;
 
 public class RaidCancelItem extends AbstractItem {
+
+    private String NAME;
+    private String MATERIAL;
+    private String SOUND;
+    private int PITCH;
+    private List<String> LORE;
+
+    public RaidCancelItem(ItemData data) {
+        this.NAME = data.getNAME();
+        this.MATERIAL = data.getMATERIAL();
+        this.SOUND = data.getSOUND();
+        this.PITCH = data.getPITCH();
+        this.LORE = data.getLORE();
+    }
+
     @Override
     public ItemProvider getItemProvider() {
-        ItemBuilder itemBuilder = new ItemBuilder(Material.LIME_TERRACOTTA)
-                .setDisplayName(Messages.RAID_CANCEL_NAME.get());
+        // TODO - REMOVE LORE FROM MESSAGES.YML IN FAVOUR OF GUIS YAML
+        ItemBuilder builder = new ItemBuilder(Material.getMaterial(MATERIAL))
+                .setDisplayName(TextUtility.color(NAME));
+        for (String loreLine : LORE) {
+            builder.addLoreLines(TextUtility.color(loreLine));
+        }
 
-        List<String> lore = SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getStringList("Messages.Raiding.RAID_CANCEL_LORE");
-        itemBuilder.addLegacyLoreLines(lore);
-        return itemBuilder;
+        return builder;
     }
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.setCancelled(true);
         event.getInventory().close();
-        SoundUtil.playSound(player, "block.note_block.bass", 12f, 1f);
+
+        if (!SOUND.equalsIgnoreCase("none")) {
+            SoundUtil.playSound(player, SOUND, PITCH, 1);
+        }
     }
 }

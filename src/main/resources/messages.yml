@@ -72,6 +72,8 @@ Messages:
     VISIT_NOT_TRUSTED: "%server_name%&c&l Hey!&r&7 You must be trusted to visit that island!"
     # Sent when a player tries to visit a player that has no island.
     VISIT_NO_ISLAND: "%server_name%&c&l Hey!&r&7 That player does not have an island!"
+    # Sent when a player tries to visit a player that is participating in a raid.
+    VISIT_IN_RAID: "%server_name%&c&l Hey!&r&7 That player is raiding/being raided."
 
 
   Discord:
@@ -160,6 +162,8 @@ Messages:
     INSUFFICIENT_GEM_COUNT: "%server_name%&c&lHey!&r&7 You do not have enough gems for that!"
 
   Factions:
+    # Sent while creation of a faction is processing.
+    FACTION_CREATE_PROCESSING: "%server_name% &eCreating your faction, please wait..."
 
     # Sent when a player tries to create a faction with a name that is too short / too long.
     # Placeholders: %min% - Minimum name length / %max% - Maximum name length.
@@ -172,4 +176,8 @@ Messages:
     NAME_NO_SYMBOLS: "%server_name%&c&l Hey!&r&7 You cannot use symbols in your name."
     # Sent when a player tries to create a faction that contains prohibited words.
     NAME_PROHIBITED: "%server_name%&c Your name contains prohibited words."
+
+    # Sent when a player tries to create a faction but does not have enough money.
+    # Placeholders: %creation_cost% - Cost of faction creation.
+    INSUFFICIENT_FUNDS: "%server_name%&c&l Hey!&r&7 You do not have enough money to create a faction. You need &a&l$%creation_cost%&r&7 to create a faction."
 

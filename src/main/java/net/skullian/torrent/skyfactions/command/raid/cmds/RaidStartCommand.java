@@ -1,16 +1,13 @@
 package net.skullian.torrent.skyfactions.command.raid.cmds;
 
-import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.raid.RaidManager;
+import net.skullian.torrent.skyfactions.api.RaidAPI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.gui.PlayerRaidConfirmationUI;
 import org.bukkit.entity.Player;
-
-import java.sql.SQLException;
 
 public class RaidStartCommand extends CommandTemplate {
     @Override
@@ -33,7 +30,7 @@ public class RaidStartCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        String cooldownLeft = RaidManager.getCooldownDuration(player);
+        String cooldownLeft = RaidAPI.getCooldownDuration(player);
         if (cooldownLeft != null) {
             if (cooldownLeft.equals("ERROR")) {
                 Messages.ERROR.send(player, "%error%", "start a raid", "%debug%", "SQL_RAID_COOLDOWN_GET");

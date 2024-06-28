@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.command.gems;
+package net.skullian.torrent.skyfactions.api;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;

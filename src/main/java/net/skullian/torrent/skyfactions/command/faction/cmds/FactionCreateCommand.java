@@ -1,12 +1,14 @@
 package net.skullian.torrent.skyfactions.command.faction.cmds;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.IslandAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.island.FactionAPI;
+import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.config.Settings;
 import org.bukkit.entity.Player;
-import org.kingdoms.commands.general.text.CommandRename;
 
 public class FactionCreateCommand extends CommandTemplate {
     @Override
@@ -32,9 +34,21 @@ public class FactionCreateCommand extends CommandTemplate {
         if (args.length == 1) {
             Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
         } else if (args.length > 1) {
+            Messages.FACTION_CREATION_PROCESSING.send(player);
+
             String name = args[1];
 
-            FactionAPI.hasValidName(player, name);
+            if (FactionAPI.hasValidName(player, name)) {
+                int cost = Settings.FACTION_CREATION_COST.getInt();
+                if (cost > 0) {
+                    if (!SkyFactionsReborn.ec.hasEnoughMoney(player, cost)) {
+                        Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
+                        return;
+                    }
+
+                    SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);
+                }
+            }
         }
     }
 

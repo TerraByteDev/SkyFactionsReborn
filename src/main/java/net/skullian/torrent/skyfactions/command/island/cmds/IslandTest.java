@@ -2,7 +2,7 @@ package net.skullian.torrent.skyfactions.command.island.cmds;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
-import net.skullian.torrent.skyfactions.island.IslandAPI;
+import net.skullian.torrent.skyfactions.api.IslandAPI;
 import org.bukkit.entity.Player;
 
 public class IslandTest extends CommandTemplate {
