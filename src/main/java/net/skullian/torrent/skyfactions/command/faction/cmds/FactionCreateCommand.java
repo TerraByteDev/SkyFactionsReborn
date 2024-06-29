@@ -51,6 +51,8 @@ public class FactionCreateCommand extends CommandTemplate {
 
                         SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);;
                     }
+
+                    FactionAPI.createFaction(player, name);
                 }
             }
         }

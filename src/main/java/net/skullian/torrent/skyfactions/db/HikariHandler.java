@@ -140,7 +140,7 @@ public class HikariHandler {
 
             PreparedStatement factionTable = connection.prepareStatement("""
                     CREATE TABLE IF NOT EXISTS factions(
-                    [name] STRING UNIQUE NOT NULL,
+                    [name] STRING PRIMARY KEY UNIQUE NOT NULL,
                     [last_raid] INTEGER NOT NULL
                     );
                     """);

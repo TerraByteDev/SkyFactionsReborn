@@ -33,7 +33,9 @@ public class FactionAPI {
      */
     public static void createFaction(Player player, String name) {
         SkyFactionsReborn.db.registerFaction(player, name).join();
-        createIsland(player);
+        createIsland(player, name);
+
+        Messages.FACTION_CREATION_SUCCESS.send(player);
     }
 
     /**

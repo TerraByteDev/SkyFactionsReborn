@@ -2,6 +2,8 @@ package net.skullian.torrent.skyfactions.util.text;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.kingdoms.commands.general.misc.CommandCreate;
+import org.kingdoms.commands.general.text.CommandRename;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -58,13 +60,11 @@ public class TextUtility {
             } else {
                 for (int i = 0; i < length; i++) {
                     char character = seq.charAt(i);
-
                     if (character != ' ' && character != '_' && !Character.isLetterOrDigit(character)) {
-                        return false;
+                        return true;
                     }
                 }
-
-                return true;
+                return false;
             }
         }
     }
