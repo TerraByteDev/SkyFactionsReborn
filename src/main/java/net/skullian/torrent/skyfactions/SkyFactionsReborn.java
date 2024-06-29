@@ -109,7 +109,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
             db.initialise(Settings.DATABASE_TYPE.getString());
 
             // Cache the most recent ID.
-            db.setCachedNextID();
+            db.setIslandCachedNextID();
+            db.setFactionCachedNextID();
         } catch (SQLException error) {
             LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             LOGGER.fatal("There was an error initialising the database.");

@@ -12,8 +12,9 @@ import java.util.List;
 public class FactionIsland {
 
     private int id;
+    private int last_raided;
 
-    public FactionIsland(int id) { this.id = id; }
+    public FactionIsland(int id, int last_raided) { this.id = id; this.last_raided = last_raided; }
 
     public Location getCenter(World world) {
         List<Integer> origin = Settings.GEN_FACTION_GRID_ORIGIN.getIntegerList();

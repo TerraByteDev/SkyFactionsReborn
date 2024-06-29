@@ -3,6 +3,8 @@ package net.skullian.torrent.skyfactions.command.gems;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
+import net.skullian.torrent.skyfactions.command.gems.cmds.GemsBalanceCommand;
+import net.skullian.torrent.skyfactions.command.gems.cmds.GemsGiveCommand;
 import net.skullian.torrent.skyfactions.command.gems.cmds.GemsPayCommand;
 import net.skullian.torrent.skyfactions.command.gems.cmds.GemsHelpCommand;
 import net.skullian.torrent.skyfactions.config.Messages;
@@ -21,6 +23,8 @@ public class GemsCommandHandler implements CommandExecutor {
     public GemsCommandHandler() {
         subcommands.add(new GemsPayCommand());
         subcommands.add(new GemsHelpCommand());
+        subcommands.add(new GemsBalanceCommand());
+        subcommands.add(new GemsGiveCommand());
     }
 
     @Override

@@ -38,15 +38,19 @@ public class FactionCreateCommand extends CommandTemplate {
 
             String name = args[1];
 
-            if (FactionAPI.hasValidName(player, name)) {
-                int cost = Settings.FACTION_CREATION_COST.getInt();
-                if (cost > 0) {
-                    if (!SkyFactionsReborn.ec.hasEnoughMoney(player, cost)) {
-                        Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
-                        return;
-                    }
+            if (SkyFactionsReborn.db.isInFaction(player).join()) {
+                Messages.ALREADY_IN_FACTION.send(player);
+            } else {
+                if (FactionAPI.hasValidName(player, name)) {
+                    int cost = Settings.FACTION_CREATION_COST.getInt();
+                    if (cost > 0) {
+                        if (!SkyFactionsReborn.ec.hasEnoughMoney(player, cost)) {
+                            Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
+                            return;
+                        }
 
-                    SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);
+                        SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);;
+                    }
                 }
             }
         }

@@ -13,8 +13,5 @@ public class GUIData {
     private String TITLE;
     private String OPEN_SOUND;
     private int OPEN_PITCH;
-
     private String[] LAYOUT;
-    private List<String> ITEMS;
-
 }

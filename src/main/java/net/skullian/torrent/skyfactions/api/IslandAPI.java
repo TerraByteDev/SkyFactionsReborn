@@ -53,8 +53,8 @@ public class IslandAPI {
 
     public static void createIsland(Player player) {
 
-        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.db.cachedNextID);
-        SkyFactionsReborn.db.cachedNextID++;
+        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.db.cachedPlayerIslandID);
+        SkyFactionsReborn.db.cachedPlayerIslandID++;
         World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
 
         Messages.ISLAND_CREATING.send(player);

@@ -1,12 +1,13 @@
 package net.skullian.torrent.skyfactions.db;
 
 import com.google.common.net.HostAndPort;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -22,19 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class HikariHandler {
 
     private transient HikariDataSource dataSource;
-    public int cachedNextID;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder()
-            .setDaemon(true)
-            .setNameFormat("skyfactions-database")
-            .build());
+    public int cachedPlayerIslandID;
+    public int cachedFactionIslandID;
 
     public Connection getConnection() throws SQLException {
         return dataSource.getConnection();
@@ -136,9 +133,24 @@ public class HikariHandler {
             PreparedStatement factionIslandTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS factionIslands (
                      [id] INTEGER PRIMARY KEY,
-                     [uuid] BLOB NOT NULL,
+                     [faction_name] BLOB NOT NULL,
                      [last_raided] INTEGER NOT NULL
                      );
+                    """);
+
+            PreparedStatement factionTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS factions(
+                    [name] STRING UNIQUE NOT NULL,
+                    [last_raid] INTEGER NOT NULL
+                    );
+                    """);
+
+            PreparedStatement factionMemberTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS factionMembers(
+                    [faction_name] STRING PRIMARY KEY NOT NULL,
+                    [uuid] BLOB NOT NULL,
+                    [rank] STRING NOT NULL
+                    );
                     """);
 
             PreparedStatement trustedPlayerTable = connection.prepareStatement("""
@@ -156,6 +168,12 @@ public class HikariHandler {
 
             factionIslandTable.executeUpdate();
             factionIslandTable.close();
+
+            factionTable.executeUpdate();
+            factionTable.close();
+
+            factionMemberTable.executeUpdate();
+            factionMemberTable.close();
 
             trustedPlayerTable.executeUpdate();
             trustedPlayerTable.close();
@@ -238,7 +256,7 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<Void> setCachedNextID() {
+    public CompletableFuture<Void> setIslandCachedNextID() {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE id = (SELECT MAX(id) FROM islands);")) {
@@ -246,9 +264,31 @@ public class HikariHandler {
                 ResultSet set = statement.executeQuery();
                 if (set.next()) {
                     int id = set.getInt("id");
-                    this.cachedNextID = (id + 1);
+                    this.cachedPlayerIslandID = (id + 1);
                 } else {
-                    this.cachedNextID = 1;
+                    this.cachedPlayerIslandID = 1;
+                }
+
+                statement.close();
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> setFactionCachedNextID() {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE id = (SELECT MAX(id) FROM factionIslands);")) {
+
+                ResultSet set = statement.executeQuery();
+                if (set.next()) {
+                    int id = set.getInt("id");
+                    this.cachedFactionIslandID = (id + 1);
+                } else {
+                    this.cachedFactionIslandID = 1;
                 }
 
                 statement.close();
@@ -539,14 +579,11 @@ public class HikariHandler {
                 statement.setString(2, player.getUniqueId().toString());
 
                 ResultSet set = statement.executeQuery();
-                if (set.next()) {
-                    return true;
-                }
 
                 statement.close();
                 connection.close();
 
-                return false;
+                return set.next();
             } catch (SQLException error) {
                 handleError(error);
             }
@@ -591,13 +628,182 @@ public class HikariHandler {
         });
     }
 
+    // ------------------ FACTIONS ------------------ //
+
+    // TODO - Make all players / factions unraidable for CONFIGURABLE AMOUNT OF TIME!
+
+    public CompletableFuture<Void> registerFaction(Player owner, String name) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, last_raid) VALUES (?, ?)");
+                PreparedStatement factionOwnerRegistration = connection.prepareStatement("INSERT INTO factionMembers (faction_name, uuid, rank) VALUES (?, ?, ?)")) {
+
+               factionRegistration.setString(1, name);
+               factionRegistration.setInt(2, 0);
+
+               factionOwnerRegistration.setString(1, name);
+               factionOwnerRegistration.setString(2, owner.getUniqueId().toString());
+
+               factionOwnerRegistration.setString(3, "owner");
+               factionOwnerRegistration.executeUpdate();
+               factionOwnerRegistration.close();
+
+               factionRegistration.executeUpdate();
+               factionRegistration.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<Boolean> isInFaction(Player player) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement memberCheck = connection.prepareStatement("SELECT * FROM factionMembers WHERE uuid = ?")) {
+
+               memberCheck.setString(1, player.getUniqueId().toString());
+               ResultSet memberSet = memberCheck.executeQuery();
+
+               memberCheck.close();
+               connection.close();
+
+               return memberSet.next();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<Void> createFactionIsland(String name, FactionIsland island) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO factionIslands (id, faction_name, last_raided) VALUES (?, ?, ?)")) {
+
+               statement.setInt(1, island.getId());
+               statement.setString(2, name);
+               statement.setInt(3, island.getLast_raided());
+
+               statement.executeUpdate();
+               statement.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<FactionIsland> getFactionIsland(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE name = ?")) {
+
+               statement.setString(1, name);
+               ResultSet set = statement.executeQuery();
+
+               if (set.next()) {
+                   int id = set.getInt("id");
+                   int last_raided = set.getInt("last_raided");
+
+                   return new FactionIsland(id, last_raided);
+               }
+
+               set.close();
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+
+           return null;
+        });
+    }
+
+    public CompletableFuture<Faction> getFaction(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factions WHERE name = ?")) {
+
+               statement.setString(1, name);
+               ResultSet set = statement.executeQuery();
+
+               if (set.next()) {
+                   FactionIsland island = getFactionIsland(name).get();
+                   int last_raid = set.getInt("last_raid");
+
+                   return new Faction(island, name, last_raid);
+               }
+
+               statement.close();
+               connection.close();
+           } catch (SQLException | ExecutionException | InterruptedException error) {
+               if (error instanceof SQLException) {
+                   handleError((SQLException) error);
+               } else {
+                   error.printStackTrace();
+                   throw new RuntimeException(error);
+               }
+           }
+
+           return null;
+        });
+    }
+
+    public CompletableFuture<Faction> getFaction(Player player) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM factionMembers WHERE uuid = ?")) {
+
+               memberStatement.setString(1, player.getUniqueId().toString());
+
+               ResultSet set = memberStatement.executeQuery();
+               if (set.next()) {
+                   String name = set.getString("name");
+
+                    return getFaction(name).join();
+               }
+
+               memberStatement.close();
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+
+            return null;
+        });
+    }
+
+    public CompletableFuture<Void> updateFactionName(String name, String original_name) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE factions set name WHERE name = ?")) {
+
+               statement.setString(1, name);
+               statement.setString(2, original_name);
+               statement.executeUpdate();
+
+               statement.close();
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
     // ------------------ MISC ------------------ //
 
     public void handleError(SQLException error) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             LOGGER.fatal("There was an error while performing database actions.");
-            LOGGER.fatal(""); // TODO: LINK TO DEBUGGING DOCS
+            LOGGER.fatal("Please see https://docs.terrabytedev.com/skyfactions/errors-and-debugging for more information."); // TODO: LINK TO DEBUGGING DOCS
             LOGGER.fatal("Please contact the devs.");
             LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             error.printStackTrace();

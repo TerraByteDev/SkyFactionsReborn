@@ -65,7 +65,8 @@ public enum Messages {
     FACTION_NON_ENGLISH("Factions.NAME_NON_ENGLISH"),
     FACTION_NO_SYMBOLS("Factions.NAME_NO_SYMBOLS"),
     FACTION_NAME_PROHIBITED("Factions.NAME_PROHIBITED"),
-    FACTION_INSUFFICIENT_FUNDS("Factions.INSUFFICIENT_FUNDS");
+    FACTION_INSUFFICIENT_FUNDS("Factions.INSUFFICIENT_FUNDS"),
+    ALREADY_IN_FACTION("Factions.ALREADY_IN_FACTION");
 
     @Setter
     private static FileConfiguration config;
@@ -86,6 +87,8 @@ public enum Messages {
     }
 
     public void send(CommandSender receiver, Object... replacements) {
+        if (receiver == null) return;
+
         Object value = config.get("Messages." + this.path);
 
         String message;

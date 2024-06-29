@@ -74,9 +74,7 @@ public class TextUtility {
             return false;
         } else {
             int length = seq.length();
-            if (length == 0) {
-                return false;
-            } else {
+            if (length != 0) {
                 for (int i = 0; i < length; i++) {
                     char character = seq.charAt(i);
                     if (Character.isDigit(character)) {
@@ -84,8 +82,8 @@ public class TextUtility {
                     }
                 }
 
-                return false;
             }
+            return false;
         }
     }
 

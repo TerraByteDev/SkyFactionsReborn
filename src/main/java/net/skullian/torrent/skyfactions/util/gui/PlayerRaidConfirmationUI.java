@@ -16,9 +16,9 @@ public class PlayerRaidConfirmationUI {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("start_raid");
+            GUIData data = GUIAPI.getGUIData("confirmations/start_raid");
             Gui.Builder.Normal gui = registerItems(Gui.normal()
-                    .setStructure(data.getLAYOUT()), data);
+                    .setStructure(data.getLAYOUT()));
 
 
             Window window = Window.single()
@@ -34,21 +34,20 @@ public class PlayerRaidConfirmationUI {
         }
     }
 
-    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, GUIData guiData) {
+    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder) {
         try {
-            List<ItemData> data = GUIAPI.getItemData(guiData.getITEMS(), "start_raid");
+            List<ItemData> data = GUIAPI.getItemData("confirmations/create_island");
             for (ItemData itemData : data) {
-
                 switch (itemData.getITEM_ID()) {
 
                     case "CANCEL":
-                        builder.addIngredient(itemData.getCHARACTER(), new CreationCancelItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new RaidCancelItem(itemData));
                         break;
                     case "CONFIRM":
-                        builder.addIngredient(itemData.getCHARACTER(), new CreationConfirmationItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new RaidConfirmationItem(itemData));
                         break;
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new CreationPromptItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new RaidPromptItem(itemData));
                         break;
                     case "BORDER":
                         builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData));

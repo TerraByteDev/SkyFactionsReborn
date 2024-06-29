@@ -55,7 +55,7 @@ public class IslandDeleteCommand extends CommandTemplate {
                                 Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
                                 IslandAPI.teleportPlayerToLocation(player, location);
 
-                                IslandAPI.awaitingDeletion.remove(player);
+                                IslandAPI.awaitingDeletion.remove(player.getUniqueId());
                                 IslandAPI.removePlayerIsland(player);
 
                                 // TODO: IMPL ISLAND TRUST REMOVAL

@@ -30,6 +30,9 @@ public class GemsCommandTabCompletion implements TabCompleter {
             if (sender.hasPermission("skyfactions.gems.pay")) {
                 completions.add("pay");
             }
+            if (sender.hasPermission("skyfactions.gems.balance")) {
+                completions.add("balance");
+            }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
         }else if (args.length == 2) {

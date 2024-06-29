@@ -24,7 +24,6 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.SETTINGS, new ConfigHandler(plugin, "config"));
         registerFile(ConfigTypes.MESSAGES, new ConfigHandler(plugin, "messages"));
         registerFile(ConfigTypes.DISCORD, new ConfigHandler(plugin, "discord"));
-        registerFile(ConfigTypes.GUI, new ConfigHandler(plugin, "guis/confirmations/create_island"));
 
         for (GUIEnums gui : GUIEnums.values()) {
             registerFile(ConfigTypes.GUI, new ConfigHandler(plugin, gui.getConfigPath()));
@@ -44,6 +43,10 @@ public class ConfigFileHandler {
         configs.values().forEach(ConfigHandler::reload);
         Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
+
+        for (GUIEnums gui : GUIEnums.values()) {
+            registerFile(ConfigTypes.GUI, new ConfigHandler(SkyFactionsReborn.getInstance(), gui.getConfigPath()));
+        }
 
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();
         DISCORD_CONFIG = getFile(ConfigTypes.DISCORD).getConfig();

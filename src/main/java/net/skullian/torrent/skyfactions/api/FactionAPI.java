@@ -8,22 +8,60 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
-import net.skullian.torrent.skyfactions.island.PlayerIsland;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.Chunk;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class FactionAPI {
 
+    /**
+     * Create a new faction.
+     *
+     * @param player Owner of the faction.
+     * @param name Name of the faction.
+     */
+    public static void createFaction(Player player, String name) {
+        SkyFactionsReborn.db.registerFaction(player, name).join();
+        createIsland(player);
+    }
+
+    /**
+     * Get the faction from a player.
+     *
+     * @param player Member of faction (Owner, Moderator, whatever).
+     * @return {@link Faction}
+     */
+    public static Faction getFaction(Player player) {
+        return SkyFactionsReborn.db.getFaction(player).join();
+    }
+
+    /**
+     * Get the faction from a Faction's name.
+     *
+     * @param name Name of the faction.
+     * @return {@link Faction}
+     */
+    public static Faction getFaction(String name) {
+        return SkyFactionsReborn.db.getFaction(name).join();
+    }
+
+    /**
+     *
+     * @param player Player corresponded to string. Set to null if not needed.
+     * @param name String to check.
+     * @return {@link Boolean}
+     */
     public static boolean hasValidName(Player player, String name) {
         int minimumLength = Settings.FACTION_CREATION_MIN_LENGTH.getInt();
         int maximumLength = Settings.FACTION_CREATION_MAX_LENGTH.getInt();
@@ -78,5 +116,18 @@ public class FactionAPI {
 
         region.setOwners(owners);
         regionManager.addRegion(region);
+    }
+
+    private static void createIsland(Player player, String faction_name) {
+        FactionIsland island = new FactionIsland(SkyFactionsReborn.db.cachedFactionIslandID, 0);
+        SkyFactionsReborn.db.cachedFactionIslandID++;
+
+        World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
+        createRegion(player, island, world);
+
+        SkyFactionsReborn.db.createFactionIsland(faction_name, island).thenAccept(res -> IslandAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction")).thenAccept(val -> {
+           IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
+            SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
+        }).join();
     }
 }

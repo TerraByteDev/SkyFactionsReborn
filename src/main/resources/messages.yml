@@ -177,7 +177,10 @@ Messages:
     # Sent when a player tries to create a faction that contains prohibited words.
     NAME_PROHIBITED: "%server_name%&c Your name contains prohibited words."
 
+
     # Sent when a player tries to create a faction but does not have enough money.
     # Placeholders: %creation_cost% - Cost of faction creation.
     INSUFFICIENT_FUNDS: "%server_name%&c&l Hey!&r&7 You do not have enough money to create a faction. You need &a&l$%creation_cost%&r&7 to create a faction."
 
+    # Sent when a player tries to create, join a faction (etc.) when they are already in one.
+    ALREADY_IN_FACTION: "%server_name%&c&lHey!&r&7 You are already in a faction!"

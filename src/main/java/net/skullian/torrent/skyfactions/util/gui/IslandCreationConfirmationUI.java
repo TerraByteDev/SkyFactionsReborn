@@ -19,9 +19,9 @@ public class IslandCreationConfirmationUI {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("create_island");
+            GUIData data = GUIAPI.getGUIData("confirmations/create_island");
             Gui.Builder.Normal gui = registerItems(Gui.normal()
-                    .setStructure(data.getLAYOUT()), data);
+                    .setStructure(data.getLAYOUT()));
 
 
             Window window = Window.single()
@@ -37,11 +37,10 @@ public class IslandCreationConfirmationUI {
         }
     }
 
-    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, GUIData guiData) {
+    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder) {
         try {
-            List<ItemData> data = GUIAPI.getItemData(guiData.getITEMS(), "create_island");
+            List<ItemData> data = GUIAPI.getItemData("confirmations/create_island");
             for (ItemData itemData : data) {
-
                 switch (itemData.getITEM_ID()) {
 
                     case "CANCEL":
