@@ -1,8 +1,10 @@
 name: "Bug Report"
 description: If you find a bug or a problem, report it to us here.
-labels: bug, unconfirmed
+labels: [bug, unconfirmed]
 body:
 - type: markdown
+  attributes:
+    value: Bug reports should only be used for reporting issues with how the plugin works. For general questions, please use our [Discord Server](https://discord.gg/Y7DVR9gpwa) instead.
 
 - type: textarea
   attributes:
