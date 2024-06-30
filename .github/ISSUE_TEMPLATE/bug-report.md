@@ -6,30 +6,54 @@ labels: bug, unconfirmed
 assignees: Skullians
 
 ---
+- type: textarea
+  attributes:
+    label: Describe the Bug
+    description: A clear and concise description of what the bug is.
+  validations:
+    required: true
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+- type: textarea
+  attributes:
+    label: To Reproduce
+    description: Steps to reproduce the unintended behaviour. Include media (images, videos, whatever) if possible.
+  validations:
+    required: true
 
-**To Reproduce**
-Steps to reproduce the behavior:
-Include media (images, videos, whatever).
+- type: textarea
+  attributes:
+    label: Expected Behaviour
+    description: A clear and concise description of what you expect to happen.
+  validations:
+    required: true
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+- type: textarea
+  attributes:
+    label: Screenshots / Videos
+    description: If applicable, add screenshots or videos to help explain your problem.
+  validations:
+    required: true
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+- type: textarea
+  attributes:
+    label: Sever Information
+    description: Please provide information about your server (Server Software & Plugin Version)
+  validations:
+    required: true
+  
+- type: textarea
+  attributes:
+    label: Server Logs
+    description: Please upload your entire server logs via https://mclo.gs/. This will hide any personal information (e.g. IPs)
+  validations:
+    required: true
 
-**Server Information**
-1. Server Software (Paper, Pufferfish w/ Build Number)
-2. Plugin Version
-
-**Logs**
-Please upload your entire server logs via https://mclo.gs/.
-This will hide any personal information.
-
-**Additional context**
-Add any other context about the problem here.
+- type: textarea
+  attributes:
+    label: Additional Context
+    description: Add any other context about the problem here.
+  validations:
+    required: true
 
 **Is there an existing issue for this?**
 - [ ] I have searched current existing issues before creating this.
