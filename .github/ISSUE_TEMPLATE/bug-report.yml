@@ -53,7 +53,14 @@ body:
   validations:
     required: true
 
-**Is there an existing issue for this?**
-- [ ] I have searched current existing issues before creating this.
-- [ ] I checked all the boxes without reading them
-- [ ] I have provided all necessary and relevant details, including logs, reproduction steps, etc.
+- type: checkboxes
+  attributes:
+    label: Is there an existing issue for this?
+    description: Please [search here](https://github.com/TerraByteDev/SkyFactionsReborn/issues) to see if an issue already exists for your problem.
+    options:
+    - label: I have searched current existing issues before creating this.
+      required: true
+    - label: I checked all the boxes without reading them
+      required: false
+    - label: I have provided all necessary and relevant details, including logs, reproduction steps, etc.
+      required: true
