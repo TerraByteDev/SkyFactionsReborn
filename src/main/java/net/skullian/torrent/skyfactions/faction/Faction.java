@@ -66,4 +66,14 @@ public class Faction {
     public String getMOTD() {
         return SkyFactionsReborn.db.getMOTD(name).join();
     }
+
+    /**
+     * Set the Faction's MOTD.
+     *
+     * @param MOTD New MOTD.
+     * @return {@link String}
+     */
+    public void updateMOTD(String MOTD) {
+        SkyFactionsReborn.db.setMOTD(name, MOTD).join();
+    }
 }

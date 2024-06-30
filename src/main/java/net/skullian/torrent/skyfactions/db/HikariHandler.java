@@ -669,11 +669,14 @@ public class HikariHandler {
 
                memberCheck.setString(1, player.getUniqueId().toString());
                ResultSet memberSet = memberCheck.executeQuery();
+               if (memberSet.next()) {
+                   return true;
+               }
 
                memberCheck.close();
                connection.close();
 
-               return memberSet.next();
+               return false;
            } catch (SQLException error) {
                handleError(error);
                throw new RuntimeException(error);
@@ -704,7 +707,7 @@ public class HikariHandler {
     public CompletableFuture<FactionIsland> getFactionIsland(String name) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE name = ?")) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE faction_name = ?")) {
 
                statement.setString(1, name);
                ResultSet set = statement.executeQuery();
@@ -716,7 +719,7 @@ public class HikariHandler {
                    return new FactionIsland(id, last_raided);
                }
 
-               set.close();
+               statement.close();
                connection.close();
            } catch (SQLException error) {
                handleError(error);
@@ -736,8 +739,11 @@ public class HikariHandler {
                ResultSet set = statement.executeQuery();
 
                if (set.next()) {
-                   FactionIsland island = getFactionIsland(name).get();
                    int last_raid = set.getInt("last_raid");
+                   statement.close();
+                   connection.close();
+
+                   FactionIsland island = getFactionIsland(name).get();
 
                    return new Faction(island, name, last_raid);
                }
@@ -760,15 +766,20 @@ public class HikariHandler {
     public CompletableFuture<Faction> getFaction(Player player) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM factionMembers WHERE uuid = ?")) {
+                PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM factionMembers WHERE uuid = ?");
+                PreparedStatement factionStatement = connection.prepareStatement("SELECT * FROM factions WHERE name = ?")) {
 
                memberStatement.setString(1, player.getUniqueId().toString());
 
                ResultSet set = memberStatement.executeQuery();
-               if (set.next()) {
-                   String name = set.getString("name");
 
-                    return getFaction(name).join();
+               if (set.next()) {
+                   String name = set.getString("faction_name");
+
+                   memberStatement.close();
+                   connection.close();
+
+                   return getFaction(name).join();
                }
 
                memberStatement.close();
@@ -803,7 +814,7 @@ public class HikariHandler {
     public CompletableFuture<OfflinePlayer> getFactionOwner(String name) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND rank = owner")) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND rank = 'owner'")) {
 
                statement.setString(1, name);
                ResultSet set = statement.executeQuery();
@@ -828,7 +839,7 @@ public class HikariHandler {
     public CompletableFuture<List<OfflinePlayer>> getModerators(String name) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND rank = moderator")) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND rank = 'moderator'")) {
 
                statement.setString(1, name);
                ResultSet set = statement.executeQuery();
@@ -857,7 +868,7 @@ public class HikariHandler {
     public CompletableFuture<List<OfflinePlayer>> getMembers(String name) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers where faction_name = ? AND rank = member")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers where faction_name = ? AND rank = 'member'")) {
 
                 statement.setString(1, name);
                 ResultSet set = statement.executeQuery();
@@ -871,6 +882,9 @@ public class HikariHandler {
                         members.add(player);
                     }
                 }
+
+                statement.close();
+                connection.close();
 
                 return members;
             } catch (SQLException error) {
@@ -902,6 +916,25 @@ public class HikariHandler {
            }
 
            return "&aNone";
+        });
+    }
+
+    public CompletableFuture<Void> setMOTD(String factionName, String MOTD) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE factions SET motd = ? WHERE name = ?")) {
+
+                statement.setString(1, MOTD);
+                statement.setString(2, factionName);
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
         });
     }
 

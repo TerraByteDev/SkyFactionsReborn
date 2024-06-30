@@ -58,24 +58,10 @@ public class IslandAPI {
         createRegion(player, island, world) ;
 
         SkyFactionsReborn.db.createIsland(player, island).join();
-        pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").join();
-
-        teleportPlayerToLocation(player, island.getCenter(world));
-        Messages.ISLAND_CREATED.send(player);
-        SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
-
-        SkyFactionsReborn.db.createIsland(player, island).thenAccept(value -> pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").thenAccept(res -> {
+        pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").thenAccept(ac -> {
             teleportPlayerToLocation(player, island.getCenter(world));
             Messages.ISLAND_CREATED.send(player);
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
-        }).exceptionally(ex -> {
-            ex.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "create a new island", "%debug%", "FAWE_ISLAND_PASTE");
-            return null;
-        })).exceptionally(ex -> {
-            ex.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "create a new island", "%debug%", "SQL_ISLAND_CREATE");
-           return null;
         });
     }
 

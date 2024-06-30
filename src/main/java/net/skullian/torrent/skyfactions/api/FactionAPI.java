@@ -17,6 +17,7 @@ import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -24,6 +25,55 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class FactionAPI {
+
+    /**
+     * Check if a player is a moderator in their faction.
+     *
+     * @param player Player to check.
+     * @return {@link Boolean}
+     */
+    public static boolean isModerator(Player player) {
+        Faction faction = SkyFactionsReborn.db.getFaction(player).join();
+        if (faction != null) {
+            List<OfflinePlayer> moderators = SkyFactionsReborn.db.getModerators(faction.getName()).join();
+            return moderators.contains(Bukkit.getOfflinePlayer(player.getName()));
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a player owns the faction they are in.
+     *
+     * @param player Player to check.
+     * @return {@link Boolean}
+     */
+    public static boolean isOwner(Player player) {
+        Faction faction = SkyFactionsReborn.db.getFaction(player).join();
+        if (faction != null) {
+            OfflinePlayer owner = SkyFactionsReborn.db.getFactionOwner(faction.getName()).join();
+            return owner.getPlayer().equals(player);
+        }
+
+        return false;
+    }
+
+    /**
+     * Teleport the player to their faction's island.
+     *
+     * @param player Player to teleport.
+     */
+    public static void teleportToFactionIsland(Player player) {
+        World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
+
+        if (world != null) {
+            Faction faction = SkyFactionsReborn.db.getFaction(player).join();
+
+            IslandAPI.teleportPlayerToLocation(player, faction.getIsland().getCenter(world));
+        } else {
+            Messages.ERROR.send(player, "%operation%", "teleport to your faction's island", "%debug%", "WORLD_NOT_EXIST");
+        }
+    }
 
     /**
      * Create a new faction.

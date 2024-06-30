@@ -212,4 +212,11 @@ Messages:
         - "&eMembers: &a%members%&r"
         - "&6&l------------- &c&l%faction_name% &6&l-------------&r"
 
+    CHANGE_MOTD:
+      # Sent while the server is processing the MOTD change.
+      MOTD_PROCESSING: "%server_name%&e Changing the MOTD, please wait..."
+
+      # Sent once the server has finished changing the MOTD.
+      MOTD_CHANGE_SUCCESS: "%server_name%&a Successfully changed the MOTD!"
+
 

@@ -10,6 +10,7 @@ import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ public class FactionInfoCommand extends CommandTemplate {
         if (args.length == 1) {
             if (!FactionAPI.isInFaction(player)) {
                 Messages.NOT_IN_FACTION.send(player);
+                return;
             }
 
             Faction faction = FactionAPI.getFaction(player);
@@ -56,16 +58,24 @@ public class FactionInfoCommand extends CommandTemplate {
     }
 
     private void sendInfo(Player player, Faction faction) {
-        String moderators = String.join(", ", faction.getFactionModerators().stream().map(OfflinePlayer::getName).collect(Collectors.toList()));
-        String members = String.join(", ", faction.getMembers().stream().map(OfflinePlayer::getName).collect(Collectors.toList()));
 
         Messages.FACTION_INFO_LIST.send(player,
-                "%name%", faction.getName(),
+                "%faction_name%", faction.getName(),
                 "%motd%", TextUtility.color(faction.getMOTD()),
                 "%owner%", faction.getOwner().getName(),
-                "%moderators%", moderators,
-                "%members", members
+                "%moderators%", buildString(faction.getFactionModerators()),
+                "%members%", buildString(faction.getMembers())
                 );
+    }
+
+    private String buildString(List<OfflinePlayer> list) {
+        if (list.size() <= 0) {
+            return "&aNone";
+        } else if (list.size() > 0) {
+            return String.join(", ", list.stream().map(OfflinePlayer::getName).collect(Collectors.toList()));
+        }
+
+        return "&aNone";
     }
 
     @Override

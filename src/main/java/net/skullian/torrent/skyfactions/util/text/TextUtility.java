@@ -1,9 +1,13 @@
 package net.skullian.torrent.skyfactions.util.text;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.Settings;
+import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class TextUtility {
 
@@ -44,6 +48,33 @@ public class TextUtility {
 
                 return true;
             }
+        }
+    }
+
+    /**
+     * Check if a string contains blacklisted words.
+     * Blacklisted words (regex) are configured in config.yml.
+     *
+     * @param player Player to check
+     * @param name String to check.
+     * @return {@link Boolean}
+     */
+    public static boolean hasBlacklistedWords(Player player, String name) {
+        boolean regexMatch = false;
+        List<String> blacklistedNames = Settings.FACTION_CREATION_BLACKLISTED_NAMES.getList();
+
+        for (String blacklistedName : blacklistedNames) {
+            if (Pattern.compile(blacklistedName).matcher(name).find()) {
+                regexMatch = true;
+                break;
+            }
+        }
+
+        if (regexMatch) {
+            Messages.FACTION_NAME_PROHIBITED.send(player);
+            return true;
+        } else {
+            return false;
         }
     }
 

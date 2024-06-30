@@ -30,6 +30,12 @@ public class FactionCommandTabCompletion implements TabCompleter {
             if (sender.hasPermission("skyfactions.faction.create")) {
                 completions.add("create");
             }
+            if (sender.hasPermission("skyfactions.faction.info")) {
+                completions.add("info");
+            }
+            if (sender.hasPermission("skyfactions.faction.teleport")) {
+                completions.add("teleport");
+            }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
         }
