@@ -6,6 +6,8 @@ import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -67,7 +69,12 @@ public enum Messages {
     FACTION_NAME_PROHIBITED("Factions.FACTION_CREATION.NAME_PROHIBITED"),
     FACTION_INSUFFICIENT_FUNDS("Factions.FACTION_CREATION.INSUFFICIENT_FUNDS"),
     FACTION_CREATION_SUCCESS("Factions.FACTION_CREATION.FACTION_CREATE_SUCCESS"),
-    ALREADY_IN_FACTION("Factions.ALREADY_IN_FACTION");
+
+    ALREADY_IN_FACTION("Factions.ALREADY_IN_FACTION"),
+    NOT_IN_FACTION("Factions.NOT_IN_FACTION"),
+    FACTION_NOT_FOUND("Factions.FACTION_NOT_FOUND"),
+
+    FACTION_INFO_LIST("Factions.FACTION_INFO.INFORMATION_MESSAGE");
 
     @Setter
     private static FileConfiguration config;

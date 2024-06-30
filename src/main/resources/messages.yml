@@ -164,7 +164,14 @@ Messages:
   Factions:
 
     # Sent when a player tries to create, join a faction (etc.) when they are already in one.
-    ALREADY_IN_FACTION: "%server_name%&c&lHey!&r&7 You are already in a faction!"
+    ALREADY_IN_FACTION: "%server_name%&c&l Hey!&r&7 You are already in a faction!"
+
+    # Sent when a player tries to do faction-related commands that require you to be in a faction.
+    NOT_IN_FACTION: "%server_name%&c&l Hey!&r&7 You are not in a faction!"
+
+    # Sent when a player tries to join, get info of, etc. of a faction that does not exist.
+    # Placeholders: %name% - Faction Name.
+    FACTION_NOT_FOUND: "%server_name%&c Could not find faction with a name of %name%."
 
     FACTION_CREATION:
       # Sent while creation of a faction is processing.
