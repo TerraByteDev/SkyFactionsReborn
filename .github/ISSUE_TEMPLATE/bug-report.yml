@@ -1,0 +1,60 @@
+name: Bug Report
+description: If you find a bug or a problem, report it to us here.
+title: "[BUG]"
+labels: bug, unconfirmed
+body:
+  - type: markdown
+
+- type: textarea
+  attributes:
+    label: Describe the Bug
+    description: A clear and concise description of what the bug is.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: To Reproduce
+    description: Steps to reproduce the unintended behaviour. Include media (images, videos, whatever) if possible.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Expected Behaviour
+    description: A clear and concise description of what you expect to happen.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Screenshots / Videos
+    description: If applicable, add screenshots or videos to help explain your problem.
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Sever Information
+    description: Please provide information about your server (Server Software & Plugin Version)
+  validations:
+    required: true
+  
+- type: textarea
+  attributes:
+    label: Server Logs
+    description: Please upload your entire server logs via https://mclo.gs/. This will hide any personal information (e.g. IPs)
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: Additional Context
+    description: Add any other context about the problem here.
+  validations:
+    required: true
+
+**Is there an existing issue for this?**
+- [ ] I have searched current existing issues before creating this.
+- [ ] I checked all the boxes without reading them
+- [ ] I have provided all necessary and relevant details, including logs, reproduction steps, etc.
