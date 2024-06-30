@@ -32,6 +32,6 @@ This will hide any personal information.
 Add any other context about the problem here.
 
 **Is there an existing issue for this?**
-[ ] I have searched current existing issues before creating this.
-[ ] I checked all the boxes without reading them
-[ ] I have provided all necessary and relevant details, including logs, reproduction steps, etc.
+- [ ] I have searched current existing issues before creating this.
+- [ ] I checked all the boxes without reading them
+- [ ] I have provided all necessary and relevant details, including logs, reproduction steps, etc.
