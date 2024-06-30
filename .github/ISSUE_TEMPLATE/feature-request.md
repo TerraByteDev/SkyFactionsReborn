@@ -20,6 +20,6 @@ A clear and concise description of any alternative solutions or features you've 
 Add any other context or screenshots about the feature request here.
 
 **I have confirmed that...**
-[ ] ... such a feature does not exist already.
-[ ] ... I ticked all the boxes without reading them
-[ ] ... such a feature request has not been submitted already.
+- [ ] ... such a feature does not exist already.
+- [ ] ... I ticked all the boxes without reading them
+- [ ] ... such a feature request has not been submitted already.
