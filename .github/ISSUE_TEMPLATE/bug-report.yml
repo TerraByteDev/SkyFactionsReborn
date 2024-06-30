@@ -1,4 +1,4 @@
-name: Bug Report
+name: "Bug Report"
 description: If you find a bug or a problem, report it to us here.
 title: "[BUG]"
 labels: bug, unconfirmed
