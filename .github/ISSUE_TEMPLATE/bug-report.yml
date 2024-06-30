@@ -1,9 +1,8 @@
 name: "Bug Report"
 description: If you find a bug or a problem, report it to us here.
-title: "[BUG]"
 labels: bug, unconfirmed
 body:
-  - type: markdown
+- type: markdown
 
 - type: textarea
   attributes:
