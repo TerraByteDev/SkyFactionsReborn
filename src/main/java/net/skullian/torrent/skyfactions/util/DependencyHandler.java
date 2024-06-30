@@ -1,11 +1,9 @@
 package net.skullian.torrent.skyfactions.util;
 
-import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.IslandAPI;
 import net.skullian.torrent.skyfactions.papi.PlaceholderManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class DependencyHandler {
@@ -31,13 +29,6 @@ public class DependencyHandler {
         if (isPluginEnabled("NoteBlockAPI")) {
             LOGGER.info("Found NoteBlockAPI installed on the server.");
             nbapi = true;
-        }
-
-        RegisteredServiceProvider<WorldBorderApi> worldBorderApiRegisteredServiceProvider = SkyFactionsReborn.getInstance().getServer().getServicesManager().getRegistration(WorldBorderApi.class);
-        if (worldBorderApiRegisteredServiceProvider == null) {
-            throw new RuntimeException("Failed to find WorldBorderAPI!");
-        } else {
-            IslandAPI.worldBorderApi = worldBorderApiRegisteredServiceProvider.getProvider();
         }
     }
 

@@ -57,7 +57,6 @@ public class IslandVisitCommand extends CommandTemplate {
                                 if (isTrusted) {
                                     Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
                                         IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
-                                        IslandAPI.updateWorldBorder(player, Settings.GEN_PLAYER_REGION_SIZE.getInt(), is.getCenter(world));
                                     });
                                 } else {
                                     Messages.PLAYER_NOT_TRUSTED.send(player);

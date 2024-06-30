@@ -6,7 +6,7 @@ authors: [Skullians, nouish]
 website: https://www.torrentsmp.com/
 load: POSTWORLD
 
-loadbefore: ["JukeBox", "PlaceholderAPI", "NoteBlockAPI", "WorldBorderAPI", "EssentialsX"]
+loadbefore: ["JukeBox", "NoteBlockAPI", "EssentialsX"]
 depend: ["FastAsyncWorldEdit", "WorldGuard", "Vault"]
 softdepend: ["JukeBox", "PlaceholderAPI", "NoteBlockAPI"]
 
@@ -60,6 +60,7 @@ permissions:
       skyfactions.command.unlink: true
       skyfactions.faction.help: true
       skyfactions.faction.create: true
+      skyfactions.faction.info: true
 
   skyfactions.island:
     description: Has permission for all (GENERAL) island related features (tp, create, etc.)
@@ -79,6 +80,7 @@ permissions:
     children:
       skyfactions.faction.help: true
       skyfactions.faction.create: true
+      skyfactions.faction.info: true
 
   skyfactions.discord:
     description: Has permission to link and unlink their discord account (link, unlink).

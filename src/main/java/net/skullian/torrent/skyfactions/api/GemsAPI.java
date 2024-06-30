@@ -4,23 +4,20 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.entity.Player;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CompletionException;
 
 public class GemsAPI {
 
+    /**
+     * Get a player's gem count.
+     *
+     * @param player Player you want to get gem count from.
+     * @return {@link Integer}
+     */
     public static int getGems(Player player) {
         try {
-            AtomicInteger gemCount = new AtomicInteger();
-
-            SkyFactionsReborn.db.getGems(player).thenAccept(gemCount::set).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "get your gems count", "%debug%", "SQL_GEMS_GET");
-                return null;
-            }).get();
-
-            return gemCount.get();
-        } catch (InterruptedException | ExecutionException error) {
+            return SkyFactionsReborn.db.getGems(player).join();
+        } catch (CompletionException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "get your gems count", "%debug%", "SQL_GEMS_GET");
         }
@@ -28,27 +25,31 @@ public class GemsAPI {
         return 0;
     }
 
+    /**
+     * Add gems to a player.
+     *
+     * @param player Player to give gems to.
+     * @param addition Amount of gems to add.
+     */
     public static void addGems(Player player, int addition) {
         try {
-            SkyFactionsReborn.db.addGems(player, getGems(player), addition).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "add gems", "%debug%", "SQL_GEMS_ADD");
-                return null;
-            }).get();
-        } catch (ExecutionException | InterruptedException error) {
+            SkyFactionsReborn.db.addGems(player, getGems(player), addition).join();
+        } catch (CompletionException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "add gems", "%debug%", "SQL_GEMS_ADD");
         }
     }
 
+    /**
+     * Subtract gems from a player.
+     *
+     * @param player Player to subtract gems from.
+     * @param subtraction Amount of gems to remove.
+     */
     public static void subtractGems(Player player, int subtraction) {
         try {
-            SkyFactionsReborn.db.subtractGems(player, getGems(player), subtraction).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "decrease your gems count", "%debug%", "SQL_GEMS_SUBTRACT");
-                return null;
-            }).get();
-        } catch (ExecutionException | InterruptedException error) {
+            SkyFactionsReborn.db.subtractGems(player, getGems(player), subtraction).join();
+        } catch (CompletionException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "decrease your gems count", "%debug%", "SQL_GEMS_SUBTRACT");
         }

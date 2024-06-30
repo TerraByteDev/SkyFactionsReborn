@@ -39,8 +39,6 @@ public class PlayerHandler implements Listener {
                 Location centerLocation = island.getCenter(world);
                 IslandAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
 
-                IslandAPI.updateWorldBorder(event.getPlayer(), Settings.GEN_PLAYER_REGION_SIZE.getInt(), centerLocation);
-                IslandAPI.worldBorderApi.sendRedScreenForSeconds(event.getPlayer(), 100, SkyFactionsReborn.getInstance());
             }
         }
     }

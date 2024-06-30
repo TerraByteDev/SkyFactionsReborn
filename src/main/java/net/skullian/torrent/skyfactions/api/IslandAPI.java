@@ -1,7 +1,5 @@
 package net.skullian.torrent.skyfactions.api;
 
-import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
-import com.github.yannicklamprecht.worldborder.api.WorldBorderData;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -49,16 +47,22 @@ import java.util.concurrent.TimeUnit;
 public class IslandAPI {
 
     public static HashSet<UUID> awaitingDeletion = new HashSet<>();
-    public static WorldBorderApi worldBorderApi;
 
     public static void createIsland(Player player) {
 
         PlayerIsland island = new PlayerIsland(SkyFactionsReborn.db.cachedPlayerIslandID);
         SkyFactionsReborn.db.cachedPlayerIslandID++;
-        World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
 
+        World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
         Messages.ISLAND_CREATING.send(player);
         createRegion(player, island, world) ;
+
+        SkyFactionsReborn.db.createIsland(player, island).join();
+        pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").join();
+
+        teleportPlayerToLocation(player, island.getCenter(world));
+        Messages.ISLAND_CREATED.send(player);
+        SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
 
         SkyFactionsReborn.db.createIsland(player, island).thenAccept(value -> pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").thenAccept(res -> {
             teleportPlayerToLocation(player, island.getCenter(world));
@@ -200,11 +204,5 @@ public class IslandAPI {
                 editSession.setBlocks(region, BlockType.REGISTRY.get("air"));
             }
         });
-    }
-
-    public static void updateWorldBorder(Player player, int radius, Location location) {
-        System.out.println(worldBorderApi);
-
-        worldBorderApi.setBorder(player, radius, location);
     }
 }

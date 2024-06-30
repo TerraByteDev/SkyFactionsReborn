@@ -13,6 +13,16 @@ import java.util.*;
 
 public class GUIAPI {
 
+    /**
+     * No idea why you'd want to use this/
+     *
+     * @param guiName GUI 'path' in the config folder. E.g. "confirmations/create_island" corresponds to the "confirmations/create_island.yml"
+     *
+     * @throws IOException
+     * @throws InvalidConfigurationException
+     *
+     * @return {@link GUIData} GUI's corresponding Data.
+     */
     public static GUIData getGUIData(String guiName) throws IOException, InvalidConfigurationException {
         File file = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/guis/" + guiName + ".yml");
         if (file.exists()) {
@@ -32,7 +42,16 @@ public class GUIAPI {
         return null;
     }
 
-
+    /**
+     * Get a specific GUI's configured item datas.
+     *
+     * @param guiName GUI 'path' in the config folder. E.g. "confirmations/create_island" corresponds to the "confirmations/create_island.yml"
+     *
+     * @throws IOException
+     * @throws InvalidConfigurationException
+     *
+     * @return {@link List<ItemData>}
+     */
     public static List<ItemData> getItemData(String guiName) throws IOException, InvalidConfigurationException {
         File file = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/guis/" + guiName + ".yml");
         if (file.exists()) {

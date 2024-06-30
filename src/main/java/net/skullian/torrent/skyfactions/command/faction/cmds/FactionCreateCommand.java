@@ -38,7 +38,7 @@ public class FactionCreateCommand extends CommandTemplate {
 
             String name = args[1];
 
-            if (SkyFactionsReborn.db.isInFaction(player).join()) {
+            if (FactionAPI.isInFaction(player)) {
                 Messages.ALREADY_IN_FACTION.send(player);
             } else {
                 if (FactionAPI.hasValidName(player, name)) {

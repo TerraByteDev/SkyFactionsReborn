@@ -43,19 +43,19 @@ Commands:
 Sounds:
   # Sent when an island is successfully created.
   ISLAND_CREATE_SUCCESS: "ui.toast.challenge_complete"
-  ISLAND_CREATE_SUCCESS_PITCH: 1f
+  ISLAND_CREATE_SUCCESS_PITCH: 1
 
   # Sent when any command is run that opens a gui (e.g. /raid start).
   GUI_OPEN: "ui.button.click"
-  GUI_OPEN_PITCH: 1f
+  GUI_OPEN_PITCH: 1
 
   # Sound played when an ONLINE player is about to be raided. Repeats quickly for 5s.
   ALARM_SOUND: "block.note_block.bell"
-  ALARM_PITCH: 1f
+  ALARM_PITCH: 1
 
   # Sound when counting down for the start.
   COUNTDOWN_SOUND: "block.note_block.hat"
-  COUNTDOWN_PITCH: 1f
+  COUNTDOWN_PITCH: 1
 
 
 # General island config.

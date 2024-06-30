@@ -191,5 +191,18 @@ Messages:
       FACTION_CREATE_SUCCESS: "%server_name%&a Successfully created your faction!"
 
 
+    FACTION_INFO:
+      # Message sent when the player runs /faction info. Each entry is a new line.
+      # Placeholders: %faction_name% - Name of Faction / %owner% - Name of faction owner.
+      # Placeholders: %moderators% - List of all moderators of factions (those that can kick, etc.) / %members% - Members of the Faction.
+      # Placeholders: %motd% - MOTD of the Faction.
+      INFORMATION_MESSAGE:
+        - "&6&l------------- &c&l%faction_name% &6&l-------------&r"
+        - "&eMOTD: %motd%&r"
+        - ""
+        - "&eDuke: &a%owner%&r"
+        - "&eBarons: &a%moderators%&r"
+        - "&eMembers: &a%members%&r"
+        - "&6&l------------- &c&l%faction_name% &6&l-------------&r"
 
 

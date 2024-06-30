@@ -39,6 +39,17 @@ public class FactionAPI {
     }
 
     /**
+     * Check if a player is in a faction.
+     * You can alternatively use {@link #getFaction(Player)} and check if the return value is null.
+     *
+     * @param player Player to check.
+     * @return {@link Boolean}
+     */
+    public static boolean isInFaction(Player player) {
+        return SkyFactionsReborn.db.isInFaction(player).join();
+    }
+
+    /**
      * Get the faction from a player.
      *
      * @param player Member of faction (Owner, Moderator, whatever).

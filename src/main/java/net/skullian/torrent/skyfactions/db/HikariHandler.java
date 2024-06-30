@@ -10,6 +10,7 @@ import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.sqlite.JDBC;
@@ -141,6 +142,7 @@ public class HikariHandler {
             PreparedStatement factionTable = connection.prepareStatement("""
                     CREATE TABLE IF NOT EXISTS factions(
                     [name] STRING PRIMARY KEY UNIQUE NOT NULL,
+                    [motd] STRING NOT NULL,
                     [last_raid] INTEGER NOT NULL
                     );
                     """);
@@ -635,11 +637,12 @@ public class HikariHandler {
     public CompletableFuture<Void> registerFaction(Player owner, String name) {
         return CompletableFuture.runAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, last_raid) VALUES (?, ?)");
+                PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, last_raid) VALUES (?, ?, ?)");
                 PreparedStatement factionOwnerRegistration = connection.prepareStatement("INSERT INTO factionMembers (faction_name, uuid, rank) VALUES (?, ?, ?)")) {
 
                factionRegistration.setString(1, name);
-               factionRegistration.setInt(2, 0);
+               factionRegistration.setString(2, "&aNone");
+               factionRegistration.setInt(3, 0);
 
                factionOwnerRegistration.setString(1, name);
                factionOwnerRegistration.setString(2, owner.getUniqueId().toString());
@@ -794,6 +797,111 @@ public class HikariHandler {
                handleError(error);
                throw new RuntimeException(error);
            }
+        });
+    }
+
+    public CompletableFuture<OfflinePlayer> getFactionOwner(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND rank = owner")) {
+
+               statement.setString(1, name);
+               ResultSet set = statement.executeQuery();
+
+               if (set.next()) {
+                   UUID uuid = UUID.fromString(set.getString("uuid"));
+
+                   return Bukkit.getOfflinePlayer(uuid);
+               }
+
+               statement.close();
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+
+           return null;
+        });
+    }
+
+    public CompletableFuture<List<OfflinePlayer>> getModerators(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND rank = moderator")) {
+
+               statement.setString(1, name);
+               ResultSet set = statement.executeQuery();
+
+               List<OfflinePlayer> moderators = new ArrayList<>();
+               while (set.next()) {
+                   UUID uuid = UUID.fromString(set.getString("uuid"));
+                   OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+
+                   if (player != null) {
+                       moderators.add(player);
+                   }
+               }
+
+               statement.close();
+               connection.close();
+
+               return moderators;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<List<OfflinePlayer>> getMembers(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers where faction_name = ? AND rank = member")) {
+
+                statement.setString(1, name);
+                ResultSet set = statement.executeQuery();
+
+                List<OfflinePlayer> members = new ArrayList<>();
+                while (set.next()) {
+                    UUID uuid = UUID.fromString(set.getString("uuid"));
+                    OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+
+                    if (player != null) {
+                        members.add(player);
+                    }
+                }
+
+                return members;
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<String> getMOTD(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factions WHERE name = ?")) {
+
+               statement.setString(1, name);;
+               ResultSet set = statement.executeQuery();
+
+               if (set.next()) {
+                   String MOTD = set.getString("motd");
+
+                   return MOTD;
+               }
+
+               statement.close();
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+
+           return "&aNone";
         });
     }
 
