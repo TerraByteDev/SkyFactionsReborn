@@ -2,7 +2,7 @@
 name: Bug Report
 about: If you find a bug or a problem, report it to us here.
 title: "[BUG]"
-labels: ''
+labels: bug, unconfirmed
 assignees: Skullians
 
 ---
