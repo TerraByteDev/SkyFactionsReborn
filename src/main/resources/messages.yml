@@ -205,7 +205,7 @@ Messages:
       # Placeholders: %motd% - MOTD of the Faction.
       INFORMATION_MESSAGE:
         - "&6&l------------- &c&l%faction_name% &6&l-------------&r"
-        - "&eMOTD: %motd%&r"
+        - "&eMOTD:&r %motd%&r"
         - ""
         - "&eDuke: &a%owner%&r"
         - "&eBarons: &a%moderators%&r"

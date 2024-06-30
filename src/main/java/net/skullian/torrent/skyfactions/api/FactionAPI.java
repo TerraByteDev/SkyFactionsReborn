@@ -36,7 +36,7 @@ public class FactionAPI {
         Faction faction = SkyFactionsReborn.db.getFaction(player).join();
         if (faction != null) {
             List<OfflinePlayer> moderators = SkyFactionsReborn.db.getModerators(faction.getName()).join();
-            return moderators.contains(Bukkit.getOfflinePlayer(player.getName()));
+            return moderators.contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
         }
 
         return false;

@@ -3,10 +3,7 @@ package net.skullian.torrent.skyfactions.command.faction;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.command.faction.cmds.FactionCreateCommand;
-import net.skullian.torrent.skyfactions.command.faction.cmds.FactionHelpCommand;
-import net.skullian.torrent.skyfactions.command.faction.cmds.FactionInfoCommand;
-import net.skullian.torrent.skyfactions.command.faction.cmds.FactionTeleportCommand;
+import net.skullian.torrent.skyfactions.command.faction.cmds.*;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,6 +22,7 @@ public class FactionCommandHandler implements CommandExecutor {
         subcommands.add(new FactionInfoCommand());
         subcommands.add(new FactionHelpCommand());
         subcommands.add(new FactionTeleportCommand());
+        subcommands.add(new FactionMOTDCommand());
     }
 
     @Override

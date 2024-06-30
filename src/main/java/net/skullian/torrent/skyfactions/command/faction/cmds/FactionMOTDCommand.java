@@ -34,21 +34,30 @@ public class FactionMOTDCommand extends CommandTemplate {
             if (!FactionAPI.isInFaction(player)) {
                 Messages.NOT_IN_FACTION.send(player);
                 return;
-            } else if (!FactionAPI.isModerator(player) || !FactionAPI.isOwner(player)) {
-                Messages.PERMISSION_DENY.send(player);
-                return;
             }
 
-            Messages.MOTD_CHANGE_PROCESSING.send(player);
+            if (FactionAPI.isOwner(player) || FactionAPI.isModerator(player)) {
+                Messages.MOTD_CHANGE_PROCESSING.send(player);
 
-            // TODO: TEST!
-            String message = args[1];
-            if (!TextUtility.hasBlacklistedWords(player, message)) {
-                Faction faction = FactionAPI.getFaction(player);
-                if (faction != null) {
-                    faction.updateMOTD(message);
-                    Messages.MOTD_CHANGE_SUCCESS.send(player);
+                // TODO: TEST!
+                StringBuilder msg = new StringBuilder();
+                for (int i = 1; i < args.length; i++) {
+                    msg.append(args[i]).append(" ");
                 }
+                String message = msg.toString();
+
+
+
+                if (!TextUtility.hasBlacklistedWords(player, message)) {
+                    Faction faction = FactionAPI.getFaction(player);
+                    if (faction != null) {
+                        faction.updateMOTD(message);
+                        Messages.MOTD_CHANGE_SUCCESS.send(player);
+                    }
+                }
+            } else {
+                Messages.PERMISSION_DENY.send(player);
+
             }
 
 
