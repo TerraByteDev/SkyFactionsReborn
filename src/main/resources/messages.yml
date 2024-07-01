@@ -220,3 +220,22 @@ Messages:
       MOTD_CHANGE_SUCCESS: "%server_name%&a Successfully changed the MOTD!"
 
 
+  Obelisk:
+    # Sent when a player tries to access another player's or Faction's Obelisk (e.g. when visiting).
+    ACCESS_DENY: "%server_name% &c&lHey!&r&7 You cannot access this Obelisk!"
+
+    # Sent when the player tries to mine the block.
+    DESTROY_DENY: "%server_name% &c&lHey!&r&7 You cannot mine this block!"
+
+    OBELISK_BLOCK:
+      # Name of the Obelisk Block Item
+      ITEM_NAME: "{#0854FB}&lObelisk{/#8000FF}"
+
+      # Lore of the Obelisk Block Item
+      ITEM_LORE:
+        - "&6&l┍━━━━╝✹╚━━━━┑"
+        - "&c&n&lObelisk"
+        - "&eThis block is one of the main mechanics of SkyFactions."
+        - "&eThis allows you to manage defences, resources, and more."
+        - "&4&oGuard it with your life."
+        - "&6&l┕━━━━╗✹╔━━━━┙"

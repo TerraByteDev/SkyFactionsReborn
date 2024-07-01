@@ -44,16 +44,16 @@ public class IslandCreationConfirmationUI {
                 switch (itemData.getITEM_ID()) {
 
                     case "CANCEL":
-                        builder.addIngredient(itemData.getCHARACTER(), new CreationCancelItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new CreationCancelItem(itemData, GUIAPI.createItem(itemData)));
                         break;
                     case "CONFIRM":
-                        builder.addIngredient(itemData.getCHARACTER(), new CreationConfirmationItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new CreationConfirmationItem(itemData, GUIAPI.createItem(itemData)));
                         break;
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new CreationPromptItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new CreationPromptItem(itemData, GUIAPI.createItem(itemData)));
                         break;
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData)));
                         break;
                 }
             }

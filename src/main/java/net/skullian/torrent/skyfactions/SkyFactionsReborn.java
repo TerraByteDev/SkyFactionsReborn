@@ -17,7 +17,9 @@ import net.skullian.torrent.skyfactions.config.ConfigFileHandler;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.db.HikariHandler;
 import net.skullian.torrent.skyfactions.discord.DiscordHandler;
+import net.skullian.torrent.skyfactions.event.ObeliskInteractionListener;
 import net.skullian.torrent.skyfactions.event.PlayerHandler;
+import net.skullian.torrent.skyfactions.obelisk.ObeliskBlockManager;
 import net.skullian.torrent.skyfactions.util.DependencyHandler;
 import net.skullian.torrent.skyfactions.util.EconomyHandler;
 import org.bukkit.Bukkit;
@@ -33,6 +35,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static HikariHandler db;
     public static DiscordHandler dc;
     public static EconomyHandler ec;
+    public static ObeliskBlockManager obeliskBlockManager;
 
     String text = """
             
@@ -78,10 +81,14 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
         LOGGER.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
+        getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
 
         LOGGER.info("Initialising JDA / Discord.");
         dc = new DiscordHandler();
         dc.initialiseBot();
+
+        LOGGER.info("Handling Obelisk BlockEntities.");
+        obeliskBlockManager = new ObeliskBlockManager();
 
         LOGGER.info("Handling optional dependencies.");
         DependencyHandler.init();

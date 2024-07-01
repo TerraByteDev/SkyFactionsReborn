@@ -13,6 +13,7 @@ public class ItemData {
     private char CHARACTER;
     private String NAME;
     private String MATERIAL;
+    private String BASE64_TEXTURE;
     private String SOUND;
     private int PITCH;
     private List<String> LORE;

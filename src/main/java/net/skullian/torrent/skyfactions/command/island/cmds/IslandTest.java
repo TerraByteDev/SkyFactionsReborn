@@ -1,9 +1,13 @@
 package net.skullian.torrent.skyfactions.command.island.cmds;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.SkullAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.api.IslandAPI;
+import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class IslandTest extends CommandTemplate {
 
@@ -24,12 +28,8 @@ public class IslandTest extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
-            IslandAPI.removePlayerIsland(player);
-        }).exceptionally(ex -> {
-            ex.printStackTrace();
-            return null;
-        });
+        System.out.println("triggering");
+        ObeliskHandler.spawnPlayerObelisk(player, SkyFactionsReborn.db.getPlayerIsland(player).join());
     }
 
     @Override

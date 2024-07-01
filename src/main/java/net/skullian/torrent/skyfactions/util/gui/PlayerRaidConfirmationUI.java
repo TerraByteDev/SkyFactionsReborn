@@ -41,16 +41,16 @@ public class PlayerRaidConfirmationUI {
                 switch (itemData.getITEM_ID()) {
 
                     case "CANCEL":
-                        builder.addIngredient(itemData.getCHARACTER(), new RaidCancelItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new RaidCancelItem(itemData, GUIAPI.createItem(itemData)));
                         break;
                     case "CONFIRM":
-                        builder.addIngredient(itemData.getCHARACTER(), new RaidConfirmationItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new RaidConfirmationItem(itemData, GUIAPI.createItem(itemData)));
                         break;
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new RaidPromptItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new RaidPromptItem(itemData, GUIAPI.createItem(itemData)));
                         break;
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData)));
                         break;
                 }
             }

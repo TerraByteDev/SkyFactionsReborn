@@ -5,6 +5,7 @@ public enum ConfigTypes {
     SETTINGS,
     MESSAGES,
     DISCORD,
-    GUI
+    GUI,
+    OBELISK
 
 }

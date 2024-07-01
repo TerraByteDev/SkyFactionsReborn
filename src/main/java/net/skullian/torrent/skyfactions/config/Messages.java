@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -76,7 +75,12 @@ public enum Messages {
 
     FACTION_INFO_LIST("Factions.FACTION_INFO.INFORMATION_MESSAGE"),
     MOTD_CHANGE_PROCESSING("Factions.CHANGE_MOTD.MOTD_PROCESSING"),
-    MOTD_CHANGE_SUCCESS("Factions.CHANGE_MOTD.MOTD_CHANGE_SUCCESS");
+    MOTD_CHANGE_SUCCESS("Factions.CHANGE_MOTD.MOTD_CHANGE_SUCCESS"),
+
+    OBELISK_ACCESS_DENY("Obelisk.ACCESS_DENY"),
+    OBELISK_DESTROY_DENY("Obelisk.DESTROY_DENY"),
+    OBELISK_ITEM_NAME("Obelisk.OBELISK_BLOCK.ITEM_NAME"),
+    OBELISK_ITEM_LORE("Obelisk.OBELISK_BLOCK.ITEM_LORE");
 
     @Setter
     private static FileConfiguration config;
@@ -94,6 +98,21 @@ public enum Messages {
             message = value instanceof List ? TextUtility.fromList((List<?>) value) : value.toString();
         }
         return TextUtility.color(replace(message, replacements));
+    }
+
+    public List<String> formatToString(Object... replacements) {
+        List<String> values = config.getStringList("Messages." + this.path);
+
+        List<String> formattedValues = new ArrayList<>();
+        if (values != null) {
+            String formatted;
+            for (String value : values) {
+                formatted = TextUtility.color(value);
+                formattedValues.add(value);
+            }
+        }
+
+        return formattedValues;
     }
 
     public void send(CommandSender receiver, Object... replacements) {

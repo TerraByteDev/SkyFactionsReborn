@@ -206,6 +206,13 @@
           <version>1.7</version>
           <scope>provided</scope>
       </dependency>
+
+      <dependency>
+          <groupId>com.mojang</groupId>
+          <artifactId>authlib</artifactId>
+          <version>3.3.39</version>
+          <scope>provided</scope>
+      </dependency>
   </dependencies>
 
     <dependencyManagement>
@@ -219,4 +226,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
 </project>

@@ -3,9 +3,11 @@ package net.skullian.torrent.skyfactions.api;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.util.gui.GUIData;
 import net.skullian.torrent.skyfactions.util.gui.ItemData;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,10 +73,11 @@ public class GUIAPI {
                     String material = itemData.getString("material");
                     String text = itemData.getString("text");
                     String sound = itemData.getString("sound");
+                    String texture = itemData.getString("skull");
                     int pitch = itemData.getInt("pitch");
                     List<String> lore = itemData.getStringList("lore");
 
-                    data.add(new ItemData(name, charValue, text, material, sound, pitch, lore));
+                    data.add(new ItemData(name, charValue, text, material, texture, sound, pitch, lore));
                 }
 
                 return data;
@@ -82,5 +85,16 @@ public class GUIAPI {
         }
 
         return new ArrayList<>();
+    }
+
+    public static ItemStack createItem(ItemData data) {
+        ItemStack stack;
+        if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEARD")) {
+            stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
+        } else {
+            stack = new ItemStack(Material.getMaterial(data.getMATERIAL()));
+        }
+
+        return stack;
     }
 }
