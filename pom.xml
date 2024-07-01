@@ -113,7 +113,7 @@
       <dependency>
           <groupId>org.projectlombok</groupId>
           <artifactId>lombok</artifactId>
-          <version>1.18.32</version>
+          <version>1.18.34</version>
           <scope>provided</scope>
       </dependency>
 
@@ -203,7 +203,7 @@
       <dependency>
           <groupId>com.github.MilkBowl</groupId>
           <artifactId>VaultAPI</artifactId>
-          <version>1.7</version>
+          <version>1.7.1</version>
           <scope>provided</scope>
       </dependency>
 
@@ -220,7 +220,7 @@
             <dependency>
                 <groupId>com.intellectualsites.bom</groupId>
                 <artifactId>bom-newest</artifactId> <!--  Ref: https://github.com/IntellectualSites/bom -->
-                <version>1.45</version>
+                <version>1.46</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
