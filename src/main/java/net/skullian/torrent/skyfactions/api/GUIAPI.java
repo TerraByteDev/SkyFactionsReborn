@@ -89,7 +89,7 @@ public class GUIAPI {
 
     public static ItemStack createItem(ItemData data) {
         ItemStack stack;
-        if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEARD")) {
+        if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
             stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
         } else {
             stack = new ItemStack(Material.getMaterial(data.getMATERIAL()));
