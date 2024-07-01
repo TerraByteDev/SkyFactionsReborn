@@ -36,7 +36,7 @@ public class PlayerRaidConfirmationUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("confirmations/create_island");
+            List<ItemData> data = GUIAPI.getItemData("confirmations/start_raid");
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

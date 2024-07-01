@@ -25,6 +25,7 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
+import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.torrent.skyfactions.util.FileUtil;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import org.bukkit.*;
@@ -60,6 +61,8 @@ public class IslandAPI {
         SkyFactionsReborn.db.createIsland(player, island).join();
         pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").thenAccept(ac -> {
             teleportPlayerToLocation(player, island.getCenter(world));
+
+            ObeliskHandler.spawnPlayerObelisk(player, island);
             Messages.ISLAND_CREATED.send(player);
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
         });
@@ -95,7 +98,9 @@ public class IslandAPI {
                         LOGGER.warn("Pasting schematic [{}] in world [{}] for player [{}].", schemFile.getName(), world.getName(), player.getName());
 
                         Operations.complete(operation);
-                    }
+
+                        Thread.sleep(750);
+                    } catch (InterruptedException ignored) {}
                 }
             } catch (IOException e) {
                 LOGGER.error("Error pasting island schematic", e);
