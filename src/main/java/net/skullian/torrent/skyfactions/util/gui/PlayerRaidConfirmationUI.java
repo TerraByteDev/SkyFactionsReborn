@@ -2,7 +2,12 @@ package net.skullian.torrent.skyfactions.util.gui;
 
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.util.gui.data.GUIData;
+import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.gui.items.*;
+import net.skullian.torrent.skyfactions.util.gui.items.raid_start.RaidCancelItem;
+import net.skullian.torrent.skyfactions.util.gui.items.raid_start.RaidConfirmationItem;
+import net.skullian.torrent.skyfactions.util.gui.items.raid_start.RaidPromptItem;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -18,7 +23,7 @@ public class PlayerRaidConfirmationUI {
         try {
             GUIData data = GUIAPI.getGUIData("confirmations/start_raid");
             Gui.Builder.Normal gui = registerItems(Gui.normal()
-                    .setStructure(data.getLAYOUT()));
+                    .setStructure(data.getLAYOUT()), player);
 
 
             Window window = Window.single()
@@ -34,23 +39,23 @@ public class PlayerRaidConfirmationUI {
         }
     }
 
-    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder) {
+    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
             List<ItemData> data = GUIAPI.getItemData("confirmations/start_raid");
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 
                     case "CANCEL":
-                        builder.addIngredient(itemData.getCHARACTER(), new RaidCancelItem(itemData, GUIAPI.createItem(itemData)));
+                        builder.addIngredient(itemData.getCHARACTER(), new RaidCancelItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
                     case "CONFIRM":
-                        builder.addIngredient(itemData.getCHARACTER(), new RaidConfirmationItem(itemData, GUIAPI.createItem(itemData)));
+                        builder.addIngredient(itemData.getCHARACTER(), new RaidConfirmationItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new RaidPromptItem(itemData, GUIAPI.createItem(itemData)));
+                        builder.addIngredient(itemData.getCHARACTER(), new RaidPromptItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
                 }
             }

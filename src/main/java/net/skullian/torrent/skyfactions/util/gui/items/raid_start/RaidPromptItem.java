@@ -1,10 +1,8 @@
-package net.skullian.torrent.skyfactions.util.gui.items;
+package net.skullian.torrent.skyfactions.util.gui.items.raid_start;
 
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.util.gui.ItemData;
+import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -16,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class CreationPromptItem extends AbstractItem {
+public class RaidPromptItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -24,7 +22,7 @@ public class CreationPromptItem extends AbstractItem {
     private List<String> LORE;
     public ItemStack STACK;
 
-    public CreationPromptItem(ItemData data, ItemStack stack) {
+    public RaidPromptItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();

@@ -27,6 +27,10 @@ public class SkullAPI {
         return item;
     }
 
+    public static ItemStack convertToSkullFromURL(ItemStack item, String url) {
+        return convertToSkull(item, url);
+    }
+
     private static GameProfile makeProfile(String b64) {
         // random uuid based on the b64 string
         UUID id = new UUID(

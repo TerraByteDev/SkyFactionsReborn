@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.util.gui;
+package net.skullian.torrent.skyfactions.util.gui.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

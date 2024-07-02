@@ -1,12 +1,13 @@
 package net.skullian.torrent.skyfactions.api;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.util.gui.GUIData;
-import net.skullian.torrent.skyfactions.util.gui.ItemData;
+import net.skullian.torrent.skyfactions.util.gui.data.GUIData;
+import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -87,10 +88,15 @@ public class GUIAPI {
         return new ArrayList<>();
     }
 
-    public static ItemStack createItem(ItemData data) {
+    public static ItemStack createItem(ItemData data, Player player) {
         ItemStack stack;
         if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
-            stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
+            String texture = data.getBASE64_TEXTURE();
+            if (texture.equalsIgnoreCase("%player_skull%")) {
+                stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), player.getPlayerProfile().getTextures().getSkin().toString());
+            } else {
+                stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
+            }
         } else {
             stack = new ItemStack(Material.getMaterial(data.getMATERIAL()));
         }

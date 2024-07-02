@@ -1,12 +1,8 @@
-package net.skullian.torrent.skyfactions.util.gui.items;
+package net.skullian.torrent.skyfactions.util.gui.items.island_creation;
 
-import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.util.gui.ItemData;
+import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -18,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class RaidCancelItem extends AbstractItem {
+public class CreationPromptItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -26,7 +22,7 @@ public class RaidCancelItem extends AbstractItem {
     private List<String> LORE;
     public ItemStack STACK;
 
-    public RaidCancelItem(ItemData data, ItemStack stack) {
+    public CreationPromptItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
@@ -49,7 +45,6 @@ public class RaidCancelItem extends AbstractItem {
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.setCancelled(true);
-        event.getInventory().close();
 
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);

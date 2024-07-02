@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.util.gui.items;
+package net.skullian.torrent.skyfactions.util.gui.items.raid_start;
 
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
@@ -14,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class GeneralBorderItem extends AbstractItem {
+public class RaidCancelItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -22,7 +22,7 @@ public class GeneralBorderItem extends AbstractItem {
     private List<String> LORE;
     public ItemStack STACK;
 
-    public GeneralBorderItem(ItemData data, ItemStack stack) {
+    public RaidCancelItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
@@ -45,10 +45,10 @@ public class GeneralBorderItem extends AbstractItem {
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.setCancelled(true);
+        event.getInventory().close();
 
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
     }
-
 }
