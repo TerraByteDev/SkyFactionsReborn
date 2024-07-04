@@ -32,7 +32,7 @@ public class SkullAPI {
     }
 
     private static GameProfile makeProfile(String b64) {
-        // random uuid based on the b64 string
+        // random uuid based on the B64 string
         UUID id = new UUID(
                 b64.substring(b64.length() - 20).hashCode(),
                 b64.substring(b64.length() - 10).hashCode()
