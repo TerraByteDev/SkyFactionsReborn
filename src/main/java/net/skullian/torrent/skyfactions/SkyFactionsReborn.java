@@ -1,5 +1,6 @@
 package net.skullian.torrent.skyfactions;
 
+import com.jeff_media.customblockdata.CustomBlockData;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.command.discord.LinkCommand;
 import net.skullian.torrent.skyfactions.command.discord.UnlinkCommand;
@@ -92,6 +93,9 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
         LOGGER.info("Handling optional dependencies.");
         DependencyHandler.init();
+
+        LOGGER.info("Handling PDC Listener.");
+        CustomBlockData.registerListener(this);
 
         initialiseDatabaseConnection();
     }

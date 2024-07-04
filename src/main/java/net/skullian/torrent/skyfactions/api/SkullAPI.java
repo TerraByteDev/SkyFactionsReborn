@@ -2,7 +2,9 @@ package net.skullian.torrent.skyfactions.api;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -13,7 +15,6 @@ import java.util.UUID;
 
 public class SkullAPI {
 
-    private static Field blockProfileField;
     private static Method metaSetProfileMethod;
     private static Field metaProfileField;
 
@@ -27,8 +28,14 @@ public class SkullAPI {
         return item;
     }
 
-    public static ItemStack convertToSkullFromURL(ItemStack item, String url) {
-        return convertToSkull(item, url);
+    public static ItemStack getPlayerSkull(ItemStack item, Player player) {
+        if (item.getType() == Material.PLAYER_HEAD) {
+            SkullMeta meta = (SkullMeta) item.getItemMeta();
+            meta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
+            item.setItemMeta(meta);
+        }
+
+        return item;
     }
 
     private static GameProfile makeProfile(String b64) {

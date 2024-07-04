@@ -28,19 +28,27 @@
           <target>${java.version}</target>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.0</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>3.5.0</version>
+            <configuration>
+                <relocations>
+                    <relocation>
+                        <pattern>com.jeff_media.customblockdata</pattern>
+                        <shadedPattern>YOUR.PACKAGE.NAME.customblockdata</shadedPattern>
+                    </relocation>
+                </relocations>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
 
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -213,6 +221,13 @@
           <version>3.3.39</version>
           <scope>provided</scope>
       </dependency>
+
+      <dependency>
+          <groupId>com.jeff-media</groupId>
+          <artifactId>custom-block-data</artifactId>
+          <version>2.2.2</version>
+          <scope>compile</scope>
+      </dependency>
   </dependencies>
 
     <dependencyManagement>
@@ -226,6 +241,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
 
 
 </project>

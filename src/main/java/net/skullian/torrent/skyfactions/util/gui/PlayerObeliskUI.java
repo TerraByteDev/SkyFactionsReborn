@@ -8,6 +8,7 @@ import net.skullian.torrent.skyfactions.util.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.util.gui.items.island_creation.CreationCancelItem;
 import net.skullian.torrent.skyfactions.util.gui.items.island_creation.CreationConfirmationItem;
 import net.skullian.torrent.skyfactions.util.gui.items.island_creation.CreationPromptItem;
+import net.skullian.torrent.skyfactions.util.gui.items.obelisk.ObeliskDefencesItem;
 import net.skullian.torrent.skyfactions.util.gui.items.obelisk.ObeliskHeadItem;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -41,12 +42,20 @@ public class PlayerObeliskUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("obelisk/player_obelisk");
+            List<ItemData> data = GUIAPI.getItemData("obelisk/player_obelisk", player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 
                     case "HEAD":
                         builder.addIngredient(itemData.getCHARACTER(), new ObeliskHeadItem(itemData, GUIAPI.createItem(itemData, player)));
+                        break;
+
+                    case "DEFENCES":
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencesItem(itemData, GUIAPI.createItem(itemData, player)));
+                        break;
+
+                    case "BORDER":
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
                 }
             }

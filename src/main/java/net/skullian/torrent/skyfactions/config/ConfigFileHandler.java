@@ -1,7 +1,6 @@
 package net.skullian.torrent.skyfactions.config;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.util.FileUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -26,8 +25,8 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.DISCORD, new ConfigHandler(plugin, "discord"));
         registerFile(ConfigTypes.OBELISK, new ConfigHandler(plugin, "obelisk"));
 
-        for (GUIEnums gui : GUIEnums.values()) {
-            registerFile(ConfigTypes.GUI, new ConfigHandler(plugin, gui.getConfigPath()));
+        for (ExtraEnums enumEntry : ExtraEnums.values()) {
+            registerFile(ConfigTypes.EXTRA, new ConfigHandler(plugin, enumEntry.getConfigPath()));
         }
 
         configs.values().forEach(ConfigHandler::saveDefaultConfig);
@@ -47,8 +46,8 @@ public class ConfigFileHandler {
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
 
-        for (GUIEnums gui : GUIEnums.values()) {
-            registerFile(ConfigTypes.GUI, new ConfigHandler(SkyFactionsReborn.getInstance(), gui.getConfigPath()));
+        for (ExtraEnums enumEntry : ExtraEnums.values()) {
+            registerFile(ConfigTypes.EXTRA, new ConfigHandler(SkyFactionsReborn.getInstance(), enumEntry.getConfigPath()));
         }
 
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();

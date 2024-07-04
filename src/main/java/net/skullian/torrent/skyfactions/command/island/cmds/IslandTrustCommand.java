@@ -41,27 +41,20 @@ public class IslandTrustCommand extends CommandTemplate {
             SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(is -> {
                 if (is == null) {
                     Messages.NO_ISLAND.send(player);
-                } else { // TODO TEST
-                    SkyFactionsReborn.db.isPlayerTrusted(target.getPlayer(), is.getId()).thenAccept(isTrusted -> {
-                        if (isTrusted) {
-                            Messages.PLAYER_ALREADY_TRUSTED.send(player);
-                        } else {
+                } else {
+                    boolean isTrusted = SkyFactionsReborn.db.isPlayerTrusted(target.getPlayer(), is.getId()).join();
+                    if (isTrusted) {
+                        Messages.PLAYER_ALREADY_TRUSTED.send(player);
+                    } else {
+                        SkyFactionsReborn.db.trustPlayer(target.getPlayer(), is.getId()).thenAccept(result -> {
+                            Messages.TRUST_SUCCESS.send(player, "%player%", target.getName());
+                        }).exceptionally(ex -> {
+                            ex.printStackTrace();
+                            Messages.ERROR.send(player, "%operation%", "trust a player", "%debug%", "SQL_TRUST_ADD");
+                            return null;
+                        });
 
-                            SkyFactionsReborn.db.trustPlayer(target.getPlayer(), is.getId()).thenAccept(result -> {
-                                Messages.TRUST_SUCCESS.send(player, "%player%", target.getName());
-                            }).exceptionally(ex -> {
-                                ex.printStackTrace();
-                                Messages.ERROR.send(player, "%operation%", "trust a player", "%debug%", "SQL_TRUST_ADD");
-                                return null;
-                            });
-
-                        }
-                    }).exceptionally(ex -> {
-                        ex.printStackTrace();
-                        Messages.ERROR.send(player, "%operation%", "trust a player", "%debug%", "SQL_TRUST_GET");
-                        return null;
-                    });
-
+                    }
                 }
             }).exceptionally(ex -> {
                 ex.printStackTrace();

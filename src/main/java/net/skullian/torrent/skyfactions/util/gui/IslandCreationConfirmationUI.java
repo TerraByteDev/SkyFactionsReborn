@@ -41,7 +41,7 @@ public class IslandCreationConfirmationUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("confirmations/create_island");
+            List<ItemData> data = GUIAPI.getItemData("confirmations/create_island", player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

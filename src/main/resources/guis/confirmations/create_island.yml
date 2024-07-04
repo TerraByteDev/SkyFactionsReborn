@@ -1,7 +1,8 @@
 # Title of the GUI (Inventory)
 TITLE: "&a&lCreate Island"
+# Sound when GUI is opened.
 OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+OPEN_PITCH: 1 # Pitch of the sound.
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
@@ -17,6 +18,7 @@ LAYOUT:
   - "# # # # # # # # #"
 
 ITEMS:
+  # Confirm island creation
   CONFIRM:
     char: "y" # This is the character to use in the LAYOUT!
     material: "LIME_TERRACOTTA"
@@ -27,6 +29,7 @@ ITEMS:
     lore:
       - "&eClick to create an island!"
 
+  # 'Prompt' to create a new island.
   PROMPT:
     char: "p"
     material: "PLAYER_HEAD"
@@ -37,6 +40,7 @@ ITEMS:
     lore:
       - "&a&oDo you wish to create a new island?"
 
+  # Cancel island creation.
   CANCEL:
     char: "n"
     material: "RED_TERRACOTTA"
@@ -47,6 +51,7 @@ ITEMS:
     lore:
       - "&eClick to cancel island creation."
 
+  # Border of the GUI.
   BORDER:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"

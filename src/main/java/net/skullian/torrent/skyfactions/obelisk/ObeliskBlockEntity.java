@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 @Getter
 public class ObeliskBlockEntity {
     private Material BROKEN_MATERIAL = Material.AIR;
+    private Material HITBOX_MATERIAL = Material.BARRIER;
 
     private Location location;
     private ItemDisplay entity;
@@ -23,6 +24,7 @@ public class ObeliskBlockEntity {
     private void placeBlock(Location location, ObeliskItem blockItem) {
         World world = location.getWorld();
 
+        world.setBlockData(location, HITBOX_MATERIAL.createBlockData());
         Location entityLocation = getLocationFromBlock(location);
 
         world.spawn(entityLocation, ItemDisplay.class, entity -> {

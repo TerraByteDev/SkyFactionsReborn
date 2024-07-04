@@ -581,11 +581,14 @@ public class HikariHandler {
                 statement.setString(2, player.getUniqueId().toString());
 
                 ResultSet set = statement.executeQuery();
+                if (set.next()) {
+                    return true;
+                }
 
                 statement.close();
                 connection.close();
 
-                return set.next();
+                return false;
             } catch (SQLException error) {
                 handleError(error);
             }

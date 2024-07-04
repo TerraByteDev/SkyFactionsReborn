@@ -1,7 +1,8 @@
 # Title of the GUI (Inventory)
 TITLE: "&c&lStart Raid"
+# Sound when GUI is opened.
 OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+OPEN_PITCH: 1 # Pitch of the sound.
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
@@ -17,6 +18,8 @@ LAYOUT:
   - "# # # # # # # # #"
 
 ITEMS:
+
+  # Confirm a raid.
   CONFIRM:
     char: "y" # This is the character to use in the LAYOUT!
     material: "LIME_TERRACOTTA"
@@ -27,6 +30,7 @@ ITEMS:
     lore:
       - "&cClick to start a raid."
 
+  # 'Prompt' to start a raid.
   PROMPT:
     char: "p"
     material: "PLAYER_HEAD"
@@ -37,6 +41,7 @@ ITEMS:
     lore:
       - "&e&oDo you wish to start a new raid?"
 
+  # Cancel the raid.
   CANCEL:
     char: "n"
     material: "RED_TERRACOTTA"
@@ -47,6 +52,7 @@ ITEMS:
     lore:
       - "&eClick to cancel the raid."
 
+  # Border of the GUI.
   BORDER:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"

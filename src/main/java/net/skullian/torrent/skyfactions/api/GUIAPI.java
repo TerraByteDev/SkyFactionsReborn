@@ -49,13 +49,14 @@ public class GUIAPI {
      * Get a specific GUI's configured item datas.
      *
      * @param guiName GUI 'path' in the config folder. E.g. "confirmations/create_island" corresponds to the "confirmations/create_island.yml"
+     * @param player We only need this because there is a placeholder of %player_name%.
      *
      * @throws IOException
      * @throws InvalidConfigurationException
      *
      * @return {@link List<ItemData>}
      */
-    public static List<ItemData> getItemData(String guiName) throws IOException, InvalidConfigurationException {
+    public static List<ItemData> getItemData(String guiName, Player player) throws IOException, InvalidConfigurationException {
         File file = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/guis/" + guiName + ".yml");
         if (file.exists()) {
 
@@ -72,7 +73,7 @@ public class GUIAPI {
 
                     char charValue = itemData.getString("char").charAt(0);
                     String material = itemData.getString("material");
-                    String text = itemData.getString("text");
+                    String text = itemData.getString("text").replace("%player_name%", player.getName());
                     String sound = itemData.getString("sound");
                     String texture = itemData.getString("skull");
                     int pitch = itemData.getInt("pitch");
@@ -93,7 +94,7 @@ public class GUIAPI {
         if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
             String texture = data.getBASE64_TEXTURE();
             if (texture.equalsIgnoreCase("%player_skull%")) {
-                stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), player.getPlayerProfile().getTextures().getSkin().toString());
+                stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), player);
             } else {
                 stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
             }
