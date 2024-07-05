@@ -23,7 +23,7 @@ This plugin contains an abundance of smart features, including:
 - [ ] Raiding
     - [ ] Player Raiding
     - [ ] Faction Raiding
-        - [ ] Faction Surrebder
+        - [ ] Faction Surrender
 
 - [ ] Defences
     - [ ] Configuration
