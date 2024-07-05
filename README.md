@@ -18,6 +18,7 @@ This plugin contains an abundance of smart features, including:
     - [ ] Faction Nations
     - [ ] Faction Information - WIP
     - [ ] Faction Kick & Ban
+    - [ ] Faction Taxes
 
 - [ ] Raiding
     - [ ] Player Raiding
@@ -37,6 +38,7 @@ This plugin contains an abundance of smart features, including:
     - [ ] Defence purchase UI
     - [ ] Player & Faction UI differentiation
     - [ ] Rune conversion UI - WIP
+        - [ ] help me
 
 - [ ] Gems
     - [x] Pay
