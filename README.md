@@ -12,41 +12,41 @@ This plugin contains an abundance of smart features, including:
 - Much, much more
 
 # Development TODO
-[ ] Faction Functionality
-    [x] Faction Create
-    [x] Faction Help
-    [ ] Faction Nations
-    [ ] Faction Information - WIP
-    [ ] Faction Kick & Ban
+- [ ] Faction Functionality
+    - [x] Faction Create
+    - [x] Faction Help
+    - [ ] Faction Nations
+    - [ ] Faction Information - WIP
+    - [ ] Faction Kick & Ban
 
-[ ] Raiding
-    [ ] Player Raiding
-    [ ] Faction Raiding
-        [ ] Faction Surrebder
+- [ ] Raiding
+    - [ ] Player Raiding
+    - [ ] Faction Raiding
+        - [ ] Faction Surrebder
 
-[ ] Defences
-    [ ] Configuration
-    [ ] Basic Functionality
-    [ ] Upgrades
+- [ ] Defences
+    - [ ] Configuration
+    - [ ] Basic Functionality
+    - [ ] Upgrades
 
-[ ] Obelisk
-    [x] Custom Block Data
-    [ ] Relocation - WIP
-    [ ] Faction Member Management
-        [ ] Rank Promotion
-    [ ] Defence purchase UI
-    [ ] Player & Faction UI differentiation
-    [ ] Rune conversion UI - WIP
+- [ ] Obelisk
+    - [x] Custom Block Data
+    - [ ] Relocation - WIP
+    - [ ] Faction Member Management
+        - [ ] Rank Promotion
+    - [ ] Defence purchase UI
+    - [ ] Player & Faction UI differentiation
+    - [ ] Rune conversion UI - WIP
 
-[ ] Gems
-    [x] Pay
-    [x] Balance
-    [ ] Item Form
-        [ ] Custom Model Data
+- [ ] Gems
+    - [x] Pay
+    - [x] Balance
+    - [ ] Item Form
+        - [ ] Custom Model Data
 
-[ ] Misc
-    [ ] Refactor & Improve Code Quality
-    [ ] Split configs into further dedicated files.
+- [ ] Misc
+    - [ ] Refactor & Improve Code Quality
+    - [ ] Split configs into further dedicated files.
 
 ## Links
 - [Discord](https://discord.gg/Y7DVR9gpwa) - For general questions, support, and chatting about the plugin. For bug reports, use Github issues.
