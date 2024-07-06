@@ -10,6 +10,7 @@ import net.skullian.torrent.skyfactions.util.gui.items.island_creation.CreationC
 import net.skullian.torrent.skyfactions.util.gui.items.island_creation.CreationPromptItem;
 import net.skullian.torrent.skyfactions.util.gui.items.obelisk.ObeliskDefencesItem;
 import net.skullian.torrent.skyfactions.util.gui.items.obelisk.ObeliskHeadItem;
+import net.skullian.torrent.skyfactions.util.gui.items.obelisk.ObeliskRuneItem;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -52,6 +53,10 @@ public class PlayerObeliskUI {
 
                     case "DEFENCES":
                         builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencesItem(itemData, GUIAPI.createItem(itemData, player)));
+                        break;
+
+                    case "RUNES_CONVERSION":
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player), "player"));
                         break;
 
                     case "BORDER":

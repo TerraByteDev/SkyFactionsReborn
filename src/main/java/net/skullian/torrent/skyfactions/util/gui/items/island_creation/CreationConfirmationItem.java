@@ -22,7 +22,7 @@ public class CreationConfirmationItem extends AbstractItem {
     private String SOUND;
     private int PITCH;
     private List<String> LORE;
-    public ItemStack STACK;
+    private ItemStack STACK;
 
     public CreationConfirmationItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();

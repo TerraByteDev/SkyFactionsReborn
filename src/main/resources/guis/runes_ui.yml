@@ -1,0 +1,65 @@
+# Title of the GUI (Inventory)
+TITLE: "{#A908FB}Runes Menu{#004FFF}"
+OPEN_SOUND: "ui.button.click"
+OPEN_PITCH: 1
+
+# This allows you to customise the shape of the GUI.
+# You can only have a maximum of 54 slots (9 x 6).
+# Each character represents an item / slot.
+# '.' represents an empty slot.
+# Any other characters are shown below under ITEMS
+# Each character (#, p, y, n) corresponds to an item.
+
+# In this case, empty space is where players can input blocks.
+LAYOUT:
+  - "# # # # # # # # #"
+  - "# . . . . . . . #"
+  - "# . . . . . . . #"
+  - "# . . . . . . . #"
+  - "b # # # p # # # s"
+
+ITEMS:
+
+  # Prompt
+  PROMPT:
+    char: "p"
+    material: "NETHER_STAR"
+    skull: ""
+    text: "&aInsert Blocks"
+    sound: ""
+    pitch: 1
+    lore:
+      - "&9Insert blocks into the"
+      - "&9area above, and receive"
+      - "&9runes in return!"
+
+  # Back button, return to the main Obelisk UI
+  BACK:
+    char: "b"
+    material: "BARRIER"
+    skull: ""
+    text: "&c&oBack"
+    sound: "ui.button.click"
+    pitch: 1
+    lore: ""
+
+  # Confirmation to convert blocks into runes.
+  SUBMIT:
+    char: "s"
+    material: "GREEN_TERRACOTTA"
+    skull: ""
+    text: "&a&lConvert"
+    sound: "ui.button.click"
+    pitch: 1
+    lore:
+      - "&aConvert all blocks"
+      - "&asubmitted into runes."
+
+  BORDER:
+    char: "#"
+    material: "GRAY_STAINED_GLASS_PANE"
+    skull: ""
+    text: " " # No text
+    sound: "none"
+    pitch: 1
+    lore: "" # Empty lore

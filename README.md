@@ -25,6 +25,14 @@ This plugin contains an abundance of smart features, including:
     - [ ] Faction Raiding
         - [ ] Faction Surrender
 
+- [ ] Island
+    - [x] Island Creation
+    - [x] Island Trust
+    - [x] Island Untrust
+    - [x] Island Visit
+    - [x] Island Teleport
+    - [ ] Island Purging
+
 - [ ] Defences
     - [ ] Configuration
     - [ ] Basic Functionality

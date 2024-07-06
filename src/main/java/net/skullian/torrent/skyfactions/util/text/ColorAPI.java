@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import net.md_5.bungee.api.ChatColor;
 import net.skullian.torrent.skyfactions.util.text.pattern.GradientPattern;
 import net.skullian.torrent.skyfactions.util.text.pattern.MainPattern;
-import net.skullian.torrent.skyfactions.util.text.pattern.RainbowPattern;
 import net.skullian.torrent.skyfactions.util.text.pattern.SolidPattern;
 
 import java.awt.*;
@@ -18,7 +17,7 @@ public class ColorAPI {
     private static final boolean SUPPORTS_RGB = DataUtil.getVersion() >= 16;
     private static final List<String> SPECIAL_COLORS = Arrays.asList("&l", "&n", "&o", "&k", "&m");
 
-    private static final List<MainPattern> PATTERNS = Arrays.asList(new GradientPattern(), new SolidPattern(), new RainbowPattern());
+    private static final List<MainPattern> PATTERNS = Arrays.asList(new GradientPattern(), new SolidPattern());
 
     private static final Map<Color, ChatColor> COLORS = ImmutableMap.<Color, ChatColor>builder()
             .put(new Color(0), ChatColor.getByChar('0'))
@@ -74,39 +73,8 @@ public class ColorAPI {
         return stringBuilder.toString();
     }
 
-    public static String rainbow(String string, float saturation) {
-        StringBuilder specialColors = new StringBuilder();
-        for (String color : SPECIAL_COLORS) {
-            if (string.contains(color)) {
-                specialColors.append(color);
-                string = string.replace(color, "");
-            }
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        ChatColor[] colors = createRainbow(string.length(), saturation);
-        String[] characters = string.split("");
-        for (int i = 0; i < string.length(); i++) {
-            stringBuilder.append(colors[i]).append(specialColors).append(characters[i]);
-        }
-        return stringBuilder.toString();
-    }
-
     public static ChatColor getColor(String string) {
         return SUPPORTS_RGB ? ChatColor.of(new Color(Integer.parseInt(string, 16))) : getClosestColor(new Color(Integer.parseInt(string, 16)));
-    }
-
-    private static ChatColor[] createRainbow(int step, float saturation) {
-        ChatColor[] colors = new ChatColor[step];
-        double colorStep = (1.00 / step);
-        for (int i = 0; i < step; i++) {
-            Color color = Color.getHSBColor((float) (colorStep * i), saturation, saturation);
-            if (SUPPORTS_RGB) {
-                colors[i] = ChatColor.of(color);
-            } else {
-                colors[i] = getClosestColor(color);
-            }
-        }
-        return colors;
     }
 
     private static ChatColor[] createGradient(Color start, Color end, int step) {

@@ -54,6 +54,7 @@ public class RaidAPI {
     }
 
     public static void startRaid(Player player) {
+        // TODO REFACTOR ALL OF THIS
         try {
             AtomicBoolean cancel = new AtomicBoolean(false);
 
@@ -71,13 +72,6 @@ public class RaidAPI {
             IslandRaidData island = getRandomRaidable(player);
             if (island != null) {
                 UUID playerUUID = UUID.fromString(island.getUuid());
-                IslandAPI.saveIslandSchematic(Objects.requireNonNull(Bukkit.getOfflinePlayer(playerUUID).getPlayer()), new PlayerIsland(island.getId())).exceptionally(error -> {
-                    cancel.set(true);
-                    error.printStackTrace();
-                    Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "FAWE_ISLAND_SAVE");
-                    handleRaidExecutionError(player, false);
-                    return null;
-                });
 
                 if (cancel.get()) return;
                 handlePlayers(player, playerUUID);

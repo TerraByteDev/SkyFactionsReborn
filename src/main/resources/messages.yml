@@ -239,3 +239,11 @@ Messages:
         - "&eThis allows you to manage defences, resources, and more."
         - "&4&oGuard it with your life."
         - "&6&l┕━━━━╗✹╔━━━━┙"
+
+
+  Runes:
+    # Sent when items with enchants are not allowed for rune conversion.
+    ENCHANTS_DENY: "%server_name% &cYou cannot convert items with enchants."
+
+    # Sent when a player tries to convert an item with lore, or is blacklisted / not whitelisted.
+    GENERAL_DENY: "%server_name% &cYou cannot convert this item."

@@ -80,7 +80,10 @@ public enum Messages {
     OBELISK_ACCESS_DENY("Obelisk.ACCESS_DENY"),
     OBELISK_DESTROY_DENY("Obelisk.DESTROY_DENY"),
     OBELISK_ITEM_NAME("Obelisk.OBELISK_BLOCK.ITEM_NAME"),
-    OBELISK_ITEM_LORE("Obelisk.OBELISK_BLOCK.ITEM_LORE");
+    OBELISK_ITEM_LORE("Obelisk.OBELISK_BLOCK.ITEM_LORE"),
+
+    RUNE_ENCHANT_DENY("Runes.ENCHANTS_DENY"),
+    RUNE_GENERAL_DENY("Runes.GENERAL_DENY");
 
     @Setter
     private static FileConfiguration config;

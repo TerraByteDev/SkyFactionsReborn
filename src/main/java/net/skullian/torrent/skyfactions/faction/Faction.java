@@ -76,4 +76,18 @@ public class Faction {
     public void updateMOTD(String MOTD) {
         SkyFactionsReborn.db.setMOTD(name, MOTD).join();
     }
+
+    /**
+     * Get the Faction's rune count.
+     *
+     * @return {@link Integer}
+     */
+    public int getRunes() { return SkyFactionsReborn.db.getRunes(getName()).join(); }
+
+    /**
+     * Add to the Faction's rune count.
+     *
+     * @param addition Amount of runes to add.
+     */
+    public void addRunes(int addition) { SkyFactionsReborn.db.addRunes(name, addition).join(); }
 }

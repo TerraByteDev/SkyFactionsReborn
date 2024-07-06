@@ -11,9 +11,9 @@ OPEN_PITCH: 1
 # Each character (#, p, y, n) corresponds to an item.
 
 LAYOUT:
-  - "# # # # # # # # #"
-  - "# . . . p . . . #"
+  - "# # # # p # # # #"
   - "# . . . . . . . #"
+  - "# . . . r . . . #"
   - "# . . . d . . . #"
   - "# # # # # # # # #"
 
@@ -28,6 +28,19 @@ ITEMS:
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore: ""
 
+  # UI to convert select blocks into runes
+  RUNES_CONVERSION:
+    char: "r"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmVkOTQzZDVhNWM1YTRkZWQxNTEzNjliYTI2MjJjYzc5MzNiNjEyNTI3MzNkMGU3YjUxMGQxMTdlYTY4MjE4YSJ9fX0="
+    text: "&aRune Conversion"
+    sound: "ui.button.click"
+    pitch: 1
+    lore:
+      - "&eConvert select blocks"
+      - "&einto runes for purchases"
+      - "&elike&c defences!"
+
   # Place to see & buy defences.
   DEFENCES:
     char: "d"
@@ -37,7 +50,8 @@ ITEMS:
     sound: "ui.button.click"
     pitch: 1
     lore:
-      - "&eClick to see & buy defences."
+      - "&eView & buy defences"
+      - "&eto defend your island."
 
   BORDER:
     char: "#"

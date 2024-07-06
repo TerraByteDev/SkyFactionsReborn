@@ -126,6 +126,7 @@ public class HikariHandler {
                     [uuid] BLOB PRIMARY KEY UNIQUE NOT NULL,
                     [faction] STRING NOT NULL,
                     [gems] INTEGER NOT NULL,
+                    [runes] INTEGER NOT NULL,
                     [discord_id] STRING NOT NULL,
                     [last_raid] INTEGER NOT NULL
                     );
@@ -143,6 +144,7 @@ public class HikariHandler {
                     CREATE TABLE IF NOT EXISTS factions(
                     [name] STRING PRIMARY KEY UNIQUE NOT NULL,
                     [motd] STRING NOT NULL,
+                    [runes] INTEGER NOT NULL,
                     [last_raid] INTEGER NOT NULL
                     );
                     """);
@@ -370,13 +372,14 @@ public class HikariHandler {
     public CompletableFuture<Void> registerPlayer(Player player) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO playerData (uuid, faction, gems, discord_id, last_raid) VALUES (?, ?, ?, ?, ?);")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO playerData (uuid, faction, gems, runes, discord_id, last_raid) VALUES (?, ?, ?, ?, ?, ?);")) {
 
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setString(2, "none");
                 statement.setInt(3, 0);
-                statement.setString(4, "none");
-                statement.setInt(5, 0);
+                statement.setInt(4, 0);
+                statement.setString(5, "none");
+                statement.setInt(6, 0);
 
                 statement.executeUpdate();
                 statement.close();
@@ -640,12 +643,13 @@ public class HikariHandler {
     public CompletableFuture<Void> registerFaction(Player owner, String name) {
         return CompletableFuture.runAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, last_raid) VALUES (?, ?, ?)");
+                PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, runes, last_raid) VALUES (?, ?, ?, ?)");
                 PreparedStatement factionOwnerRegistration = connection.prepareStatement("INSERT INTO factionMembers (faction_name, uuid, rank) VALUES (?, ?, ?)")) {
 
                factionRegistration.setString(1, name);
                factionRegistration.setString(2, "&aNone");
                factionRegistration.setInt(3, 0);
+               factionRegistration.setInt(4, 0);
 
                factionOwnerRegistration.setString(1, name);
                factionOwnerRegistration.setString(2, owner.getUniqueId().toString());
@@ -940,6 +944,98 @@ public class HikariHandler {
            }
         });
     }
+
+    // ------------------ RUNES  ------------------ //
+
+    public CompletableFuture<Integer> getRunes(Player player) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM playerData WHERE uuid = ?")) {
+
+               statement.setString(1, player.getUniqueId().toString());
+               ResultSet set = statement.executeQuery();
+
+               if (set.next()) {
+                   return set.getInt("runes");
+               }
+
+               statement.close();
+               connection.close();
+
+               return 0;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<Integer> getRunes(String factionName) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factions WHERE name = ?")) {
+
+               statement.setString(1, factionName);
+               ResultSet set = statement.executeQuery();
+
+               if (set.next()) {
+                   return set.getInt("runes");
+               }
+
+               statement.close();
+               connection.close();
+
+               return 0;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<Void> addRunes(Player player, int addition) {
+        return CompletableFuture.runAsync(() -> {
+            int currentRunes = getRunes(player).join();
+            int newCount = currentRunes + addition;
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE playerData SET runes = ? WHERE uuid = ?")) {
+
+               statement.setInt(1, newCount);
+               statement.setString(2, player.getUniqueId().toString());
+
+               statement.executeUpdate();
+               statement.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<Void> addRunes(String factionName, int addition) {
+        return CompletableFuture.runAsync(() -> {
+            int currentRunes = getRunes(factionName).join();
+            int newCount = currentRunes + addition;
+
+            try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE factions SET runes = ? WHERE name = ?")) {
+
+                statement.setInt(1, newCount);
+                statement.setString(2, factionName);
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
 
     // ------------------ MISC ------------------ //
 

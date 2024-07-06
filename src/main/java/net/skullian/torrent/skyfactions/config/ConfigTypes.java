@@ -6,6 +6,7 @@ public enum ConfigTypes {
     MESSAGES,
     DISCORD,
     EXTRA,
-    OBELISK
+    OBELISK,
+    RUNES
 
 }

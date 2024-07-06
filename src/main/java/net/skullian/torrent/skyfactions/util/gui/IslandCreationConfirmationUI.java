@@ -11,20 +11,22 @@ import net.skullian.torrent.skyfactions.util.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.window.Window;
 
 import java.io.IOException;
 import java.util.List;
 
-public class IslandCreationConfirmationUI {
+public class IslandCreationConfirmationUI implements Listener {
 
     public static void promptPlayer(Player player) {
         try {
             GUIData data = GUIAPI.getGUIData("confirmations/create_island");
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player);
-
 
             Window window = Window.single()
                     .setViewer(player)

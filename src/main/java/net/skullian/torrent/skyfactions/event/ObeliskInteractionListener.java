@@ -68,8 +68,6 @@ public class ObeliskInteractionListener implements Listener {
 
         if (!hasPermissions(player, type, owner)) {
             Messages.OBELISK_ACCESS_DENY.send(player);
-        } else {
-
         }
     }
 

@@ -24,6 +24,7 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.MESSAGES, new ConfigHandler(plugin, "messages"));
         registerFile(ConfigTypes.DISCORD, new ConfigHandler(plugin, "discord"));
         registerFile(ConfigTypes.OBELISK, new ConfigHandler(plugin, "obelisk"));
+        registerFile(ConfigTypes.RUNES, new ConfigHandler(plugin, "runes"));
 
         for (ExtraEnums enumEntry : ExtraEnums.values()) {
             registerFile(ConfigTypes.EXTRA, new ConfigHandler(plugin, enumEntry.getConfigPath()));
@@ -33,6 +34,7 @@ public class ConfigFileHandler {
         Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
+        Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
 
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();
         DISCORD_CONFIG = getFile(ConfigTypes.DISCORD).getConfig();
@@ -45,6 +47,7 @@ public class ConfigFileHandler {
         Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
+        Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
 
         for (ExtraEnums enumEntry : ExtraEnums.values()) {
             registerFile(ConfigTypes.EXTRA, new ConfigHandler(SkyFactionsReborn.getInstance(), enumEntry.getConfigPath()));

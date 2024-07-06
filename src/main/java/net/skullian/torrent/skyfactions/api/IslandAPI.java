@@ -3,10 +3,8 @@ package net.skullian.torrent.skyfactions.api;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.extent.clipboard.io.*;
-import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -25,24 +23,18 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
-import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.torrent.skyfactions.util.FileUtil;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class IslandAPI {
@@ -128,34 +120,6 @@ public class IslandAPI {
 
         region.setOwners(owners);
         regionManager.addRegion(region);
-    }
-
-    public static CompletableFuture<Void> saveIslandSchematic(Player player, PlayerIsland island) {
-        LOGGER.warn("Saving WE Schematic for {}", player.getName());
-        return CompletableFuture.runAsync(() -> {
-            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-
-            File file = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/schematics/raid_saves/" + player.getUniqueId() + ".schematic");
-            BlockVector3 bottom = BukkitAdapter.asBlockVector(island.getPosition1(null));
-            BlockVector3 top = BukkitAdapter.asBlockVector(island.getPosition2(null));
-            CuboidRegion region = new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
-
-
-            BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
-
-            ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-                    BukkitAdapter.adapt(world), region, clipboard, region.getMinimumPoint()
-            );
-            forwardExtentCopy.setCopyingEntities(true);
-            Operations.complete(forwardExtentCopy);
-
-            try (ClipboardWriter writer = BuiltInClipboardFormat.SPONGE_SCHEMATIC.getWriter(new FileOutputStream(file))) {
-                writer.write(clipboard);
-            } catch (IOException error) {
-                error.printStackTrace();
-                throw new RuntimeException(error);
-            }
-        });
     }
 
     public static void removePlayerIsland(Player player) {
