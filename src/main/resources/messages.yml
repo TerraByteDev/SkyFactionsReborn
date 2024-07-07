@@ -247,3 +247,6 @@ Messages:
 
     # Sent when a player tries to convert an item with lore, or is blacklisted / not whitelisted.
     GENERAL_DENY: "%server_name% &cYou cannot convert this item."
+
+    # Sent when they successfully convert their items to runes.
+    CONVERSION_SUCCESS: "%server_name%&a&l Success!&r&7 You have gained &a&l%added%&r&7 runes!"

@@ -57,6 +57,7 @@ This plugin contains an abundance of smart features, including:
 - [ ] Misc
     - [ ] Refactor & Improve Code Quality
     - [ ] Split configs into further dedicated files.
+    - [ ] Config Versioning & Update Detection
 
 ## Links
 - [Discord](https://discord.gg/Y7DVR9gpwa) - For general questions, support, and chatting about the plugin. For bug reports, use Github issues.

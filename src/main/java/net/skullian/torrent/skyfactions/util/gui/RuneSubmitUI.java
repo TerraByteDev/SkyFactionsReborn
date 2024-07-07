@@ -1,5 +1,6 @@
 package net.skullian.torrent.skyfactions.util.gui;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.api.RunesAPI;
 import net.skullian.torrent.skyfactions.util.gui.data.GUIData;
@@ -16,31 +17,36 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.metadata.MetadataValueAdapter;
 import xyz.xenondevs.invui.gui.AbstractGui;
 import xyz.xenondevs.invui.gui.SlotElement;
 import xyz.xenondevs.invui.gui.structure.Structure;
 import xyz.xenondevs.invui.window.Window;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RuneSubmitUI extends AbstractGui {
 
-    private static AbstractGui GUI;
-    private static GUIData DATA;
-    private static Inventory INVENTORY;
+    private AbstractGui GUI;
+    private GUIData DATA;
+    private Inventory INVENTORY;
+    private String TYPE;
 
-    public RuneSubmitUI(Structure structure, GUIData data) {
+    public RuneSubmitUI(Structure structure, GUIData data, Player player, String type) {
         super(structure.getWidth(), structure.getHeight());
         GUI = this;
-        GUI.applyStructure(structure);
+        GUI.applyStructure(registerItems(structure, player, type));
         DATA = data;
+        TYPE = type;
     }
 
     @Override
     public void handleClick(int slotNumber, Player player, ClickType clickType, InventoryClickEvent event) {
         // TODO MIGRATE FROM ABSTRACTGUI TO ADDING INGREDIENT INVENTORY! https://discord.com/channels/859080327096172544/1005893933458538537/1259233825825751142
-
         SlotElement slotElement = this.getSlotElement(slotNumber);
         if (slotElement instanceof SlotElement.LinkedSlotElement) {
             SlotElement.LinkedSlotElement linkedElement = (SlotElement.LinkedSlotElement)slotElement;
@@ -53,17 +59,18 @@ public class RuneSubmitUI extends AbstractGui {
         } else if (slotElement instanceof SlotElement.InventorySlotElement) {
             this.handleInvSlotElementClick((SlotElement.InventorySlotElement)slotElement, event);
         } else if (event.getCursor() != null) {
-            INVENTORY = event.getClickedInventory();
             event.setCancelled(handleItemEntry(player, event.getCursor()));
         } else {
             event.setCancelled(true);
         }
+
+        this.INVENTORY = event.getClickedInventory();
     }
 
     @Override
     public void handleItemShift(InventoryClickEvent event) {
+        this.INVENTORY = event.getClickedInventory();
         event.setCancelled(handleItemEntry((Player) event.getWhoClicked(), event.getCurrentItem()));
-        INVENTORY = event.getClickedInventory();
     }
 
     // False = Do not cancel.
@@ -76,32 +83,41 @@ public class RuneSubmitUI extends AbstractGui {
         }
     }
 
-    public static void promptPlayer(Player player) {
-
+    public void promptPlayer(Player player) {
         Window window = Window.single()
                 .setViewer(player)
                 .setTitle(TextUtility.color(DATA.getTITLE()))
                 .setGui(GUI)
                 .addCloseHandler(() -> {
-                    for (int i = 0; i < INVENTORY.getSize(); i++) {
-                        if (GUI.hasSlotElement(i)) return;
-                        ItemStack stack = INVENTORY.getItem(i);
-                        if (stack != null && !stack.getType().equals(Material.AIR)) {
-                            player.getInventory().addItem(INVENTORY.getItem(i));
-                        }
-                    }
+                    handleClose(player);
                     })
                 .build();
 
-
+        player.setMetadata("rune_ui", new FixedMetadataValue(SkyFactionsReborn.getInstance(), true));
         window.open();
     }
 
-    public static Structure createStructure(Player player, String type, GUIData data) {
-        return registerItems(new Structure(data.getLAYOUT()), player, type);
+    private void handleClose(Player player) {
+        if (!player.hasMetadata("rune_ui")) return;
+        if (INVENTORY == null) return;
+
+        List<ItemStack> stacks = new ArrayList<>();
+        for (int i = 0; i < INVENTORY.getSize(); i++) {
+            if (GUI.hasSlotElement(i)) continue;
+            ItemStack stack = INVENTORY.getItem(i);
+            if (stack != null || !stack.getType().equals(Material.AIR)) {
+                player.getInventory().addItem(stack);
+            }
+        }
+
+        INVENTORY = null;
     }
 
-    private static Structure registerItems(Structure builder, Player player, String type) {
+    public static Structure createStructure(GUIData data) {
+        return new Structure(data.getLAYOUT());
+    }
+
+    private Structure registerItems(Structure builder, Player player, String type) {
         try {
             List<ItemData> data = GUIAPI.getItemData("runes_ui", player);
             for (ItemData itemData : data) {

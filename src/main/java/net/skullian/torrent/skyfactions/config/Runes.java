@@ -20,7 +20,7 @@ public enum Runes {
     MATERIALS_IS_BLACKLIST("FILTERS.MATERIALS.IS_BLACKLIST"),
     MATERIALS_LIST("FILTERS.MATERIALS.LIST"),
 
-    RUNE_OVERRIDES("RUNES.OVERRIDES");
+    RUNE_OVERRIDES("OVERRIDES");
 
     @Setter
     private static FileConfiguration config;
@@ -55,10 +55,10 @@ public enum Runes {
 
             for (String key : section.getKeys(false)) {
                 int count = section.getInt(key);
-
                 map.put(key, count);
             }
         }
+
 
         return map;
     }

@@ -37,9 +37,12 @@ ITEMS:
     sound: "ui.button.click"
     pitch: 1
     lore:
+      # Placeholders: %runes% - Rune Count.
       - "&eConvert select blocks"
       - "&einto runes for purchases"
       - "&elike&c defences!"
+      - ""
+      - "&eYou currently have &a&l%runes%&e runes."
 
   # Place to see & buy defences.
   DEFENCES:

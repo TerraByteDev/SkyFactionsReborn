@@ -1,5 +1,6 @@
 package net.skullian.torrent.skyfactions.util.gui.items.rune_submit;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.RunesAPI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.invui.gui.AbstractGui;
 import xyz.xenondevs.invui.item.ItemProvider;
@@ -59,11 +61,12 @@ public class RuneSubmitItem extends AbstractItem {
 
         List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < event.getClickedInventory().getSize(); i++) {
-            if (GUI.hasSlotElement(i)) return;
+            if (GUI.hasSlotElement(i)) continue;
 
             stacks.add(event.getClickedInventory().getItem(i));
         }
 
+        player.removeMetadata("rune_ui", SkyFactionsReborn.getInstance());
         if (TYPE.equals("player")) {
             RunesAPI.handleRuneConversion(stacks, player);
             player.closeInventory();

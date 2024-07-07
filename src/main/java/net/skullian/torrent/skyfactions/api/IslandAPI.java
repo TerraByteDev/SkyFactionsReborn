@@ -23,6 +23,7 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
+import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.torrent.skyfactions.util.FileUtil;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import org.bukkit.*;
@@ -54,7 +55,7 @@ public class IslandAPI {
         pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").thenAccept(ac -> {
             teleportPlayerToLocation(player, island.getCenter(world));
 
-            //ObeliskHandler.spawnPlayerObelisk(player, island);
+            ObeliskHandler.spawnPlayerObelisk(player, island);
             Messages.ISLAND_CREATED.send(player);
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
         });

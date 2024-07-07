@@ -83,7 +83,8 @@ public enum Messages {
     OBELISK_ITEM_LORE("Obelisk.OBELISK_BLOCK.ITEM_LORE"),
 
     RUNE_ENCHANT_DENY("Runes.ENCHANTS_DENY"),
-    RUNE_GENERAL_DENY("Runes.GENERAL_DENY");
+    RUNE_GENERAL_DENY("Runes.GENERAL_DENY"),
+    RUNE_CONVERSION_SUCCESS("Runes.CONVERSION_SUCCESS");
 
     @Setter
     private static FileConfiguration config;

@@ -34,13 +34,7 @@ public class IslandTest extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        System.out.println("triggering");
-        try {
-            GUIData data = GUIAPI.getGUIData("runes_ui");
-            new RuneSubmitUI(RuneSubmitUI.createStructure(player, "player", data), data).promptPlayer(player);
-        } catch (IOException | InvalidConfigurationException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override

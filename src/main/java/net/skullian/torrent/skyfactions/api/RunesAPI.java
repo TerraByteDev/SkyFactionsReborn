@@ -47,26 +47,27 @@ public class RunesAPI {
             List<ItemStack> remaindingItems = new ArrayList<>();
 
             for (ItemStack stack : stacks) {
-                if (stack == null || stack.getType().equals(Material.AIR)) return;
-
+                if (stack == null || stack.getType().equals(Material.AIR)) continue;
                 if (overrides.containsKey(stack.getType().name())) {
                     int amount = overrides.get(stack.getType().name()) * stack.getAmount();
                     total += amount;
                 } else {
-                    int quotient = Math.floorDiv(stack.getAmount(), forEach);
+                    int quotient = stack.getAmount() / forEach;
                     int remainder = stack.getAmount() % forEach;
-                    remainder = remainder > 0 ? remainder + 1 : 0;
 
                     int amount = quotient * returnForEach;
                     total += amount;
 
-                    ItemStack cloned = stack.clone();
-                    cloned.setAmount(remainder);
-                    remaindingItems.add(cloned);
+                    if (remainder > 0) {
+                        ItemStack cloned = stack.clone();
+                        cloned.setAmount(remainder);
+                        remaindingItems.add(cloned);
+                    }
                 }
             }
-
+            returnItems(remaindingItems, player);
             SkyFactionsReborn.db.addRunes(player, total);
+            Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
         }
     }
 
@@ -82,13 +83,12 @@ public class RunesAPI {
             List<ItemStack> remaindingItems = new ArrayList<>();
 
             for (ItemStack stack : stacks) {
-                if (stack == null || stack.getType().equals(Material.AIR)) return;
-
+                if (stack == null || stack.getType().equals(Material.AIR)) continue;
                 if (overrides.containsKey(stack.getType().name())) {
                     int amount = overrides.get(stack.getType().name()) * stack.getAmount();
                     total += amount;
                 } else {
-                    int quotient = Math.floorDiv(stack.getAmount(), forEach);
+                    int quotient = stack.getAmount() / forEach;
                     int remainder = stack.getAmount() % forEach;
                     remainder = remainder > 0 ? remainder + 1 : 0;
 
@@ -101,7 +101,10 @@ public class RunesAPI {
                 }
             }
 
+            returnItems(remaindingItems, player);
             faction.addRunes(total);
+            Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
+
         } else if (faction == null) {
             Messages.ERROR.send(player, "%operation%", "convert to runes", "%debug%", "SQL_UNKNOWN_FACTION");
             for (ItemStack stack : stacks) {
@@ -134,6 +137,16 @@ public class RunesAPI {
             return false;
         } else {
             return true;
+        }
+    }
+
+    private static void returnItems(List<ItemStack> stacks, Player player) {
+        if (!stacks.isEmpty()) {
+            for (ItemStack stack : stacks) {
+                if (stack == null || stack.getType().equals(Material.AIR)) return;
+
+                player.getInventory().addItem(stack);
+            }
         }
     }
 }

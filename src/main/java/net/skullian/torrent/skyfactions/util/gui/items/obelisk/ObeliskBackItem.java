@@ -1,5 +1,6 @@
 package net.skullian.torrent.skyfactions.util.gui.items.obelisk;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.gui.PlayerObeliskUI;
 import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
@@ -48,6 +49,10 @@ public class ObeliskBackItem extends AbstractItem {
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.setCancelled(true);
+
+        if (player.hasMetadata("rune_ui")) {
+            player.removeMetadata("rune_ui", SkyFactionsReborn.getInstance());
+        }
 
         if (TYPE.equals("player")) {
             PlayerObeliskUI.promptPlayer(player);

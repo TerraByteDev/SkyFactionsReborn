@@ -21,20 +21,22 @@ public class ObeliskHandler {
 
 
     public static void spawnPlayerObelisk(Player player, PlayerIsland island) {
-        World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-        if (world != null) {
-            Location islandCenter = island.getCenter(world);
-            List<Integer> offset = ObeliskConfig.OBELISK_SPAWN_OFFSET.getIntegerList();
-            Location offsetLocation = islandCenter.add(offset.get(0), offset.get(1), offset.get(2));
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+            if (world != null) {
+                Location islandCenter = island.getCenter(world);
+                List<Integer> offset = ObeliskConfig.OBELISK_SPAWN_OFFSET.getIntegerList();
+                Location offsetLocation = islandCenter.add(offset.get(0), offset.get(1), offset.get(2));
 
-            if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() > 0) {
-                SkyFactionsReborn.obeliskBlockManager.addBlock(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
-            } else {
-                offsetLocation.getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
+                if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() > 0) {
+                    SkyFactionsReborn.obeliskBlockManager.addBlock(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
+                } else {
+                    offsetLocation.getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
+                }
+
+                applyPDC(player.getUniqueId().toString(), offsetLocation.getBlock(), "player");
             }
-
-            applyPDC(player.getUniqueId().toString(), offsetLocation.getBlock(), "player");
-        }
+        });
     }
 
     private static void applyPDC(String ownerIdentifier, Block block, String type) {

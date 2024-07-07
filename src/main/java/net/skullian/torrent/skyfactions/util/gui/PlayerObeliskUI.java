@@ -56,7 +56,7 @@ public class PlayerObeliskUI {
                         break;
 
                     case "RUNES_CONVERSION":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player), "player"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player), "player", player));
                         break;
 
                     case "BORDER":

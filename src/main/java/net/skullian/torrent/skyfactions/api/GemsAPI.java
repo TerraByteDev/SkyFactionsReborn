@@ -33,7 +33,7 @@ public class GemsAPI {
      */
     public static void addGems(Player player, int addition) {
         try {
-            SkyFactionsReborn.db.addGems(player, getGems(player), addition).join();
+            SkyFactionsReborn.db.addGems(player, addition).join();
         } catch (CompletionException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "add gems", "%debug%", "SQL_GEMS_ADD");

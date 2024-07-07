@@ -117,6 +117,8 @@ public class HikariHandler {
                      CREATE TABLE IF NOT EXISTS islands (
                      [id] INTEGER PRIMARY KEY,
                      [uuid] BLOB NOT NULL,
+                     [gems] INTEGER NOT NULL,
+                     [runes] INTEGER NOT NULL,
                      [last_raided] INTEGER NOT NULL
                      );
                      """);
@@ -125,8 +127,6 @@ public class HikariHandler {
                     CREATE TABLE IF NOT EXISTS playerData (
                     [uuid] BLOB PRIMARY KEY UNIQUE NOT NULL,
                     [faction] STRING NOT NULL,
-                    [gems] INTEGER NOT NULL,
-                    [runes] INTEGER NOT NULL,
                     [discord_id] STRING NOT NULL,
                     [last_raid] INTEGER NOT NULL
                     );
@@ -136,6 +136,8 @@ public class HikariHandler {
                      CREATE TABLE IF NOT EXISTS factionIslands (
                      [id] INTEGER PRIMARY KEY,
                      [faction_name] BLOB NOT NULL,
+                     [runes] INTEGER NOT NULL,
+                     [gems] INTEGER NOT NULL,
                      [last_raided] INTEGER NOT NULL
                      );
                     """);
@@ -144,7 +146,6 @@ public class HikariHandler {
                     CREATE TABLE IF NOT EXISTS factions(
                     [name] STRING PRIMARY KEY UNIQUE NOT NULL,
                     [motd] STRING NOT NULL,
-                    [runes] INTEGER NOT NULL,
                     [last_raid] INTEGER NOT NULL
                     );
                     """);
@@ -219,11 +220,13 @@ public class HikariHandler {
     public CompletableFuture<Void> createIsland(Player player, PlayerIsland island) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, last_raided) VALUES (?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, gems, runes, last_raided) VALUES (?, ?, ?, ?, ?)")) {
 
                 statement.setInt(1, island.getId());
                 statement.setString(2, player.getUniqueId().toString());
                 statement.setInt(3, 0);
+                statement.setInt(4, 0);
+                statement.setInt(5, 0);
 
                 statement.executeUpdate();
                 statement.close();
@@ -372,14 +375,12 @@ public class HikariHandler {
     public CompletableFuture<Void> registerPlayer(Player player) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO playerData (uuid, faction, gems, runes, discord_id, last_raid) VALUES (?, ?, ?, ?, ?, ?);")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO playerData (uuid, faction, discord_id, last_raid) VALUES (?, ?, ?, ?);")) {
 
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setString(2, "none");
-                statement.setInt(3, 0);
+                statement.setString(3, "none");
                 statement.setInt(4, 0);
-                statement.setString(5, "none");
-                statement.setInt(6, 0);
 
                 statement.executeUpdate();
                 statement.close();
@@ -515,7 +516,7 @@ public class HikariHandler {
     public CompletableFuture<Integer> getGems(Player player) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM playerData WHERE uuid = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE uuid = ?")) {
 
                 statement.setString(1, player.getUniqueId().toString());
 
@@ -538,7 +539,7 @@ public class HikariHandler {
     public CompletableFuture<Void> subtractGems(Player player, int current, int amount) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("UPDATE playerData set gems = ? WHERE uuid = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("UPDATE islands set gems = ? WHERE uuid = ?")) {
 
                 statement.setInt(1, (current - amount));
                 statement.setString(2, player.getUniqueId().toString());
@@ -554,12 +555,14 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<Void> addGems(Player player, int current, int amount) {
+    public CompletableFuture<Void> addGems(Player player, int amount) {
+        int currentCount = getGems(player).join();
+        int newCount = currentCount + amount;
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("UPDATE playerData set gems = ? WHERE uuid = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("UPDATE islands set gems = ? WHERE uuid = ?")) {
 
-                statement.setInt(1, (current + amount));
+                statement.setInt(1, newCount);
                 statement.setString(2, player.getUniqueId().toString());
 
                 statement.executeUpdate();
@@ -643,13 +646,12 @@ public class HikariHandler {
     public CompletableFuture<Void> registerFaction(Player owner, String name) {
         return CompletableFuture.runAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, runes, last_raid) VALUES (?, ?, ?, ?)");
+                PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, last_raid) VALUES (?, ?, ?)");
                 PreparedStatement factionOwnerRegistration = connection.prepareStatement("INSERT INTO factionMembers (faction_name, uuid, rank) VALUES (?, ?, ?)")) {
 
                factionRegistration.setString(1, name);
                factionRegistration.setString(2, "&aNone");
                factionRegistration.setInt(3, 0);
-               factionRegistration.setInt(4, 0);
 
                factionOwnerRegistration.setString(1, name);
                factionOwnerRegistration.setString(2, owner.getUniqueId().toString());
@@ -694,11 +696,13 @@ public class HikariHandler {
     public CompletableFuture<Void> createFactionIsland(String name, FactionIsland island) {
         return CompletableFuture.runAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("INSERT INTO factionIslands (id, faction_name, last_raided) VALUES (?, ?, ?)")) {
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO factionIslands (id, faction_name, runes, gems, last_raided) VALUES (?, ?, ?, ?, ?)")) {
 
                statement.setInt(1, island.getId());
                statement.setString(2, name);
-               statement.setInt(3, island.getLast_raided());
+               statement.setInt(3, 0);
+               statement.setInt(4, 0);
+               statement.setInt(5, island.getLast_raided());
 
                statement.executeUpdate();
                statement.close();
@@ -797,6 +801,51 @@ public class HikariHandler {
            }
 
             return null;
+        });
+    }
+
+    public CompletableFuture<Integer> getGems(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE faction_name = ?")) {
+
+               statement.setString(1, name);
+               ResultSet set = statement.executeQuery();
+
+               if (set.next()) {
+                   int gems = set.getInt("gems");
+
+                   return gems;
+               }
+               statement.close();
+               connection.close();
+
+               return 0;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<Void> addGems(String name, int addition) {
+        return CompletableFuture.runAsync(() -> {
+           int gemCount = getGems(name).join();
+           int newCount = gemCount + addition;
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET gems = ? WHERE faction_name = ?")) {
+
+               statement.setInt(1, addition);
+               statement.setString(2, name);
+
+               statement.executeUpdate();
+               statement.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
         });
     }
 
@@ -950,7 +999,7 @@ public class HikariHandler {
     public CompletableFuture<Integer> getRunes(Player player) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM playerData WHERE uuid = ?")) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE uuid = ?")) {
 
                statement.setString(1, player.getUniqueId().toString());
                ResultSet set = statement.executeQuery();
@@ -973,7 +1022,7 @@ public class HikariHandler {
     public CompletableFuture<Integer> getRunes(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factions WHERE name = ?")) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE faction_name = ?")) {
 
                statement.setString(1, factionName);
                ResultSet set = statement.executeQuery();
@@ -998,7 +1047,7 @@ public class HikariHandler {
             int currentRunes = getRunes(player).join();
             int newCount = currentRunes + addition;
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("UPDATE playerData SET runes = ? WHERE uuid = ?")) {
+                PreparedStatement statement = connection.prepareStatement("UPDATE islands SET runes = ? WHERE uuid = ?")) {
 
                statement.setInt(1, newCount);
                statement.setString(2, player.getUniqueId().toString());
@@ -1020,7 +1069,7 @@ public class HikariHandler {
             int newCount = currentRunes + addition;
 
             try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("UPDATE factions SET runes = ? WHERE name = ?")) {
+                PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET runes = ? WHERE faction_name = ?")) {
 
                 statement.setInt(1, newCount);
                 statement.setString(2, factionName);

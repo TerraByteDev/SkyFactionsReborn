@@ -254,15 +254,7 @@ public class RaidAPI {
             Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_RAID_UPDATE");
             return null;
         });
-        SkyFactionsReborn.db.getGems(player).thenAccept(count -> SkyFactionsReborn.db.addGems(player, count, Settings.RAIDING_COST.getInt()).exceptionally(ex -> {
-            ex.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_GEMS_ADD");
-            return null;
-        })).exceptionally(ex -> {
-            ex.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_GEMS_GET");
-            return null;
-        });
+        SkyFactionsReborn.db.addGems(player, Settings.RAIDING_COST.getInt()).join();
 
         if (isDefendant) {
             SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> SkyFactionsReborn.db.setIslandCooldown(island, 0).exceptionally(ex -> {

@@ -1,5 +1,6 @@
 package net.skullian.torrent.skyfactions.util.gui.items.obelisk;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
@@ -28,14 +29,16 @@ public class ObeliskRuneItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
     private String TYPE;
+    private Player PLAYER;
 
-    public ObeliskRuneItem(ItemData data, ItemStack stack, String type) {
+    public ObeliskRuneItem(ItemData data, ItemStack stack, String type, Player player) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
         this.TYPE = type;
+        this.PLAYER = player;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class ObeliskRuneItem extends AbstractItem {
                 .setDisplayName(TextUtility.color(NAME));
 
         for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine));
+            builder.addLoreLines(TextUtility.color(loreLine.replace("%runes%", String.valueOf(SkyFactionsReborn.db.getRunes(PLAYER).join()))));
         }
 
         return builder;
@@ -59,8 +62,9 @@ public class ObeliskRuneItem extends AbstractItem {
                 SoundUtil.playSound(player, SOUND, PITCH, 1);
             }
 
+            // TODO fix
             GUIData data = GUIAPI.getGUIData("runes_ui");
-            new RuneSubmitUI(RuneSubmitUI.createStructure(player, TYPE, data), data).promptPlayer(player);
+            new RuneSubmitUI(RuneSubmitUI.createStructure(data), data, player, "player").promptPlayer(player);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
             event.getInventory().close();
