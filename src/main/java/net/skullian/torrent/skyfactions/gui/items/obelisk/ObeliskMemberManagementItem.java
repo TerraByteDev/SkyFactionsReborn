@@ -1,7 +1,7 @@
-package net.skullian.torrent.skyfactions.util.gui.items.obelisk;
+package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
+import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -14,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class ObeliskDefencesItem extends AbstractItem {
+public class ObeliskMemberManagementItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -22,7 +22,7 @@ public class ObeliskDefencesItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
 
-    public ObeliskDefencesItem(ItemData data, ItemStack stack) {
+    public ObeliskMemberManagementItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
@@ -49,5 +49,8 @@ public class ObeliskDefencesItem extends AbstractItem {
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
+
+        // TODO
     }
+
 }

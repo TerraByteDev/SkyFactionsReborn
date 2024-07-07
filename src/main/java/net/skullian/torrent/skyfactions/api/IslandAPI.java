@@ -135,6 +135,7 @@ public class IslandAPI {
                     cutRegion(region).get();
 
                     SkyFactionsReborn.db.removeIsland(player).thenAccept(res -> {
+                        SkyFactionsReborn.db.removeAllTrustedPlayers(island.getId());
                         Messages.ISLAND_DELETION_SUCCESS.send(player);
                     }).exceptionally(ex -> {
                         ex.printStackTrace();

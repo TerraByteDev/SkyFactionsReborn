@@ -14,23 +14,24 @@ LAYOUT:
   - "# # # # p # # # #"
   - "# . . . . . . . #"
   - "# . . . r . . . #"
-  - "# . . . d . . . #"
+  - "# . . . d m . . #"
   - "# # # # # # # # #"
 
 ITEMS:
-  # Head of the player.
-  HEAD:
+  # Faction Information.
+  FACTION:
     char: "p" # This is the character to use in the LAYOUT!
-    material: "PLAYER_HEAD"
-    skull: "%player_skull%" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
-    text: "&c%player_name%'s Obelisk" # Supported placeholders: %player_name% - Player's Name
+    material: "NETHER_STAR"
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
+    text: "&c%faction_name%'s Obelisk" # Supported placeholders: %faction_name% - Faction's Name
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
-      # Placeholders: %level% - Current Island Level
+      # Placeholders: %level% - Current Faction Level / %member_count% - Total Member Count
       # Placeholders: %rune_count% - Total Rune Count / %gem_count% - Total Gem Count
       - "&9Stats&r"
       - "&aLevel: &e%level%"
+      - "&aMember Count: &e%member_count%"
       - "&aRunes: &e%rune_count%"
       - "&aGems: &e%gem_count%"
 
@@ -61,6 +62,18 @@ ITEMS:
     lore:
       - "&eView & buy defences"
       - "&eto defend your island."
+
+  # Where you can view & manage your members.
+  MEMBER_MANAGEMENT:
+    char: "m"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTZiOWVkNDFkZThjODc1MmI4ZTllOWI1MDUyNDYzYzY0ZDVmY2RmNTIwZGE5M2I2NWM4MWI2YTEzNmIwMjdkMiJ9fX0="
+    text: "&e&lMembers"
+    sound: "ui.button.click"
+    pitch: 1
+    lore:
+      - "&eView & Manage your"
+      - "&eFaction members."
 
   BORDER:
     char: "#"

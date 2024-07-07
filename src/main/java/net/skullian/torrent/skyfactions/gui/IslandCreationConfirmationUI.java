@@ -1,13 +1,13 @@
-package net.skullian.torrent.skyfactions.util.gui;
+package net.skullian.torrent.skyfactions.gui;
 
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.util.gui.data.GUIData;
-import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.util.gui.items.island_creation.CreationCancelItem;
-import net.skullian.torrent.skyfactions.util.gui.items.island_creation.CreationConfirmationItem;
-import net.skullian.torrent.skyfactions.util.gui.items.island_creation.CreationPromptItem;
-import net.skullian.torrent.skyfactions.util.gui.items.GeneralBorderItem;
+import net.skullian.torrent.skyfactions.gui.data.GUIData;
+import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationCancelItem;
+import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationConfirmationItem;
+import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationPromptItem;
+import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;

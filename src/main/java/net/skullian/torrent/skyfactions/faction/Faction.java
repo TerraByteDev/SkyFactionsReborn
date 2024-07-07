@@ -15,6 +15,7 @@ public class Faction {
     private FactionIsland island;
     private String name;
     private int last_raid;
+    private int level;
 
     /**
         Get the Faction's island.
@@ -36,6 +37,7 @@ public class Faction {
 
     /**
      * Get the owner of the faction.
+     *
      * @return {@link OfflinePlayer}
      */
     public OfflinePlayer getOwner() {
@@ -43,19 +45,59 @@ public class Faction {
     }
 
     /**
-     * Get the moderators of the faction.
+     * Get the admins of the faction.
+     *
      * @return {@link List<OfflinePlayer>}
      */
-    public List<OfflinePlayer> getFactionModerators() {
-        return SkyFactionsReborn.db.getModerators(name).join();
+    public List<OfflinePlayer> getAdmins() {
+        return SkyFactionsReborn.db.getMembersByRank(name, "admin").join();
+    }
+
+    /**
+     * Change the rank of a player.
+     *
+     * @param player Player in question.
+     * @param newRank {@link RankType} New Rank of the player.
+     */
+    public void modifyPlayerRank(OfflinePlayer player, RankType newRank) {
+        SkyFactionsReborn.db.updateMemberRank(name, player.getPlayer(), newRank.getRankValue()).join();
+    }
+
+    /**
+     * Get the moderators of the faction.
+     *
+     * @return {@link List<OfflinePlayer>}
+     */
+    public List<OfflinePlayer> getModerators() {
+        return SkyFactionsReborn.db.getMembersByRank(name, "moderator").join();
+    }
+
+    /**
+     * Get the fighters of the faction.
+     *
+     * @return {@link List<OfflinePlayer>}
+     */
+    public List<OfflinePlayer> getFighters() {
+        return SkyFactionsReborn.db.getMembersByRank(name, "fighter").join();
     }
 
     /**
      * Get the members of the faction. Does not include moderators & owner.
+     *
      * @return {@link List<OfflinePlayer>}
      */
     public List<OfflinePlayer> getMembers() {
-        return SkyFactionsReborn.db.getMembers(name).join();
+        return SkyFactionsReborn.db.getMembersByRank(name, "member").join();
+    }
+
+    /**
+     * Get the total member count of the faction. Used for the Obelisk overview UI.
+     *
+     * @return {@link Integer}
+     */
+    public int getTotalMemberCount() {
+        int total = getMembers().size() + getModerators().size() + 1;
+        return total;
     }
 
     /**
@@ -90,4 +132,18 @@ public class Faction {
      * @param addition Amount of runes to add.
      */
     public void addRunes(int addition) { SkyFactionsReborn.db.addRunes(name, addition).join(); }
+
+    /**
+     * Get the Faction's gem count.
+     *
+     * @return {@link Integer}
+     */
+    public int getGems() { return SkyFactionsReborn.db.getGems(name).join(); }
+
+    /**
+     * Add gems to the Faction's gem balance.
+     *
+     * @param addition Gems to add.
+     */
+    public void addGems(int addition) { SkyFactionsReborn.db.addGems(name, addition).join(); }
 }

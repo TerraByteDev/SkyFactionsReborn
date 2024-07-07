@@ -15,6 +15,7 @@ This plugin contains an abundance of smart features, including:
 - [ ] Faction Functionality
     - [x] Faction Create
     - [x] Faction Help
+    - [ ] Faction Rename
     - [ ] Faction Nations
     - [ ] Faction Information - WIP
     - [ ] Faction Kick & Ban
@@ -43,10 +44,11 @@ This plugin contains an abundance of smart features, including:
     - [ ] Relocation - WIP
     - [ ] Faction Member Management
         - [ ] Rank Promotion
+        - [ ] Permission Handling
     - [ ] Defence purchase UI
     - [ ] Player & Faction UI differentiation
-    - [ ] Rune conversion UI - WIP
-        - [ ] help me
+    - [x] Rune conversion UI - WIP
+        - [x] help me
 
 - [ ] Gems
     - [x] Pay

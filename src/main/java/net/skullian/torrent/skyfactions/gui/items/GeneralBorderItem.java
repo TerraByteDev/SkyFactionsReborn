@@ -1,8 +1,7 @@
-package net.skullian.torrent.skyfactions.util.gui.items.raid_start;
+package net.skullian.torrent.skyfactions.gui.items;
 
-import net.skullian.torrent.skyfactions.api.RaidAPI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -15,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class RaidConfirmationItem extends AbstractItem {
+public class GeneralBorderItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -23,7 +22,7 @@ public class RaidConfirmationItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
 
-    public RaidConfirmationItem(ItemData data, ItemStack stack) {
+    public GeneralBorderItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
@@ -46,12 +45,10 @@ public class RaidConfirmationItem extends AbstractItem {
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.setCancelled(true);
-        event.getInventory().close();
+
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
-
-        if (!RaidAPI.hasEnoughGems(player)) return;
-        RaidAPI.startRaid(player);
     }
+
 }

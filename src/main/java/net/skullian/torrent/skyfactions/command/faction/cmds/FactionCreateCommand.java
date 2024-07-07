@@ -40,7 +40,7 @@ public class FactionCreateCommand extends CommandTemplate {
             for (int i = 1; i < args.length; i++) {
                 msg.append(args[i]).append(" ");
             }
-            String name = msg.toString();
+            String name = msg.toString().trim();
 
             if (FactionAPI.isInFaction(player)) {
                 Messages.ALREADY_IN_FACTION.send(player);

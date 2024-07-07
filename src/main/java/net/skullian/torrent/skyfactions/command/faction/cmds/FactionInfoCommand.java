@@ -62,8 +62,11 @@ public class FactionInfoCommand extends CommandTemplate {
         Messages.FACTION_INFO_LIST.send(player,
                 "%faction_name%", faction.getName(),
                 "%motd%", TextUtility.color(faction.getMOTD()),
+
                 "%owner%", faction.getOwner().getName(),
-                "%moderators%", buildString(faction.getFactionModerators()),
+                "%admins%", buildString(faction.getAdmins()),
+                "%moderators%", buildString(faction.getModerators()),
+                "%fighters%", buildString(faction.getFighters()),
                 "%members%", buildString(faction.getMembers())
                 );
     }

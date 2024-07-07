@@ -1,8 +1,8 @@
 package net.skullian.torrent.skyfactions.api;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.util.gui.data.GUIData;
-import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.data.GUIData;
+import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;

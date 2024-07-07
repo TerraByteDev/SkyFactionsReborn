@@ -6,7 +6,8 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.ObeliskConfig;
-import net.skullian.torrent.skyfactions.util.gui.PlayerObeliskUI;
+import net.skullian.torrent.skyfactions.gui.FactionObeliskUI;
+import net.skullian.torrent.skyfactions.gui.PlayerObeliskUI;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Beacon;
@@ -73,23 +74,19 @@ public class ObeliskInteractionListener implements Listener {
 
     private boolean hasPermissions(Player player, String type, String owner) {
         if (type.equals("player")) {
-
             if (owner.equals(player.getUniqueId().toString())) {
                 PlayerObeliskUI.promptPlayer(player);
                 return true;
             }
 
             return false;
-
         } else if (type.equals("faction")) {
-
             if (FactionAPI.getFaction(player).getName().equals(owner)) {
-                // TODO
+                FactionObeliskUI.promptPlayer(player);
                 return true;
             }
 
             return false;
-
         }
 
         return false;

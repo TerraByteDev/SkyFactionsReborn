@@ -1,7 +1,7 @@
-package net.skullian.torrent.skyfactions.util.gui.items.rune_submit;
+package net.skullian.torrent.skyfactions.gui.items.island_creation;
 
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -14,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class RunePromptItem extends AbstractItem {
+public class CreationPromptItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -22,7 +22,7 @@ public class RunePromptItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
 
-    public RunePromptItem(ItemData data, ItemStack stack) {
+    public CreationPromptItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();

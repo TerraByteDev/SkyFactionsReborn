@@ -9,6 +9,7 @@ import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.api.IslandAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -57,8 +58,6 @@ public class IslandDeleteCommand extends CommandTemplate {
 
                                 IslandAPI.awaitingDeletion.remove(player.getUniqueId());
                                 IslandAPI.removePlayerIsland(player);
-
-                                // TODO: IMPL ISLAND TRUST REMOVAL
                             } else {
                                 Messages.ERROR.send(player, "%operation%", "delete your island", "%debug%", "WORLD_NOT_EXIST");
                             }

@@ -117,6 +117,7 @@ public class HikariHandler {
                      CREATE TABLE IF NOT EXISTS islands (
                      [id] INTEGER PRIMARY KEY,
                      [uuid] BLOB NOT NULL,
+                     [level] INTEGER NOT NULL,
                      [gems] INTEGER NOT NULL,
                      [runes] INTEGER NOT NULL,
                      [last_raided] INTEGER NOT NULL
@@ -146,6 +147,7 @@ public class HikariHandler {
                     CREATE TABLE IF NOT EXISTS factions(
                     [name] STRING PRIMARY KEY UNIQUE NOT NULL,
                     [motd] STRING NOT NULL,
+                    [level] INTEGER NOT NULL,
                     [last_raid] INTEGER NOT NULL
                     );
                     """);
@@ -220,13 +222,14 @@ public class HikariHandler {
     public CompletableFuture<Void> createIsland(Player player, PlayerIsland island) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, gems, runes, last_raided) VALUES (?, ?, ?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, level, gems, runes, last_raided) VALUES (?, ?, ?,?, ?, ?)")) {
 
                 statement.setInt(1, island.getId());
                 statement.setString(2, player.getUniqueId().toString());
                 statement.setInt(3, 0);
                 statement.setInt(4, 0);
                 statement.setInt(5, 0);
+                statement.setInt(6, 0);
 
                 statement.executeUpdate();
                 statement.close();
@@ -304,6 +307,49 @@ public class HikariHandler {
                 handleError(error);
                 throw new RuntimeException(error);
             }
+        });
+    }
+
+    public CompletableFuture<Integer> getIslandLevel(PlayerIsland island) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE id = ?")) {
+
+               statement.setInt(1, island.getId());
+               ResultSet set = statement.executeQuery();
+
+               if (set.next()) {
+                   int level = set.getInt("level");
+
+                   return level;
+               }
+
+               statement.close();
+               connection.close();
+
+               return 0;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<Void> upgradeIslandLevel(PlayerIsland island) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE islands SET level = level + 1 WHERE id = ?")) {
+
+               statement.setInt(1, island.getId());
+
+               statement.executeUpdate();
+               statement.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
         });
     }
 
@@ -639,6 +685,52 @@ public class HikariHandler {
         });
     }
 
+    public CompletableFuture<Void> removeAllTrustedPlayers(int islandID) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("DELETE * FROM trustedPlayers WHERE island_id = ?")) {
+
+                statement.setInt(1, islandID);
+
+                statement.executeUpdate();
+                statement.close();
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<List<OfflinePlayer>> getTrustedPlayers(int islandID) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM trustedPlayers WHERE island_id = ?")) {
+
+               statement.setInt(1, islandID);
+               ResultSet set = statement.executeQuery();
+
+               List<OfflinePlayer> players = new ArrayList<>();
+               while (set.next()) {
+                   UUID uuid = UUID.fromString(set.getString("uuid"));
+                   OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+
+                   if (player.hasPlayedBefore()) {
+                       players.add(player);
+                   }
+               }
+
+               statement.close();
+               connection.close();
+
+               return players;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
     // ------------------ FACTIONS ------------------ //
 
     // TODO - Make all players / factions unraidable for CONFIGURABLE AMOUNT OF TIME!
@@ -646,12 +738,13 @@ public class HikariHandler {
     public CompletableFuture<Void> registerFaction(Player owner, String name) {
         return CompletableFuture.runAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, last_raid) VALUES (?, ?, ?)");
+                PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, level, last_raid) VALUES (?, ?, ?, ?)");
                 PreparedStatement factionOwnerRegistration = connection.prepareStatement("INSERT INTO factionMembers (faction_name, uuid, rank) VALUES (?, ?, ?)")) {
 
                factionRegistration.setString(1, name);
                factionRegistration.setString(2, "&aNone");
-               factionRegistration.setInt(3, 0);
+               factionRegistration.setInt(3, 1);
+               factionRegistration.setInt(4, 0);
 
                factionOwnerRegistration.setString(1, name);
                factionOwnerRegistration.setString(2, owner.getUniqueId().toString());
@@ -751,12 +844,13 @@ public class HikariHandler {
 
                if (set.next()) {
                    int last_raid = set.getInt("last_raid");
+                   int level = set.getInt("level");
                    statement.close();
                    connection.close();
 
                    FactionIsland island = getFactionIsland(name).get();
 
-                   return new Faction(island, name, last_raid);
+                   return new Faction(island, name, last_raid, level);
                }
 
                statement.close();
@@ -777,8 +871,7 @@ public class HikariHandler {
     public CompletableFuture<Faction> getFaction(Player player) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM factionMembers WHERE uuid = ?");
-                PreparedStatement factionStatement = connection.prepareStatement("SELECT * FROM factions WHERE name = ?")) {
+                PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM factionMembers WHERE uuid = ?")) {
 
                memberStatement.setString(1, player.getUniqueId().toString());
 
@@ -835,7 +928,7 @@ public class HikariHandler {
            try (Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET gems = ? WHERE faction_name = ?")) {
 
-               statement.setInt(1, addition);
+               statement.setInt(1, newCount);
                statement.setString(2, name);
 
                statement.executeUpdate();
@@ -892,28 +985,29 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<List<OfflinePlayer>> getModerators(String name) {
+    public CompletableFuture<List<OfflinePlayer>> getMembersByRank(String name, String rank) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND rank = 'moderator'")) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND rank = ?")) {
 
                statement.setString(1, name);
+               statement.setString(2, rank);
                ResultSet set = statement.executeQuery();
 
-               List<OfflinePlayer> moderators = new ArrayList<>();
-               while (set.next()) {
+               List<OfflinePlayer> players = new ArrayList<>();
+               if (set.next()) {
                    UUID uuid = UUID.fromString(set.getString("uuid"));
                    OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
 
-                   if (player != null) {
-                       moderators.add(player);
+                   if (player.hasPlayedBefore()) {
+                       players.add(player);
                    }
                }
 
                statement.close();
                connection.close();
 
-               return moderators;
+               return players;
            } catch (SQLException error) {
                handleError(error);
                throw new RuntimeException(error);
@@ -921,32 +1015,23 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<List<OfflinePlayer>> getMembers(String name) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers where faction_name = ? AND rank = 'member'")) {
+    public CompletableFuture<Void> updateMemberRank(String factionName, Player player, String rank) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE factionMembers SET rank = ? WHERE faction_name = ? AND uuid = ?")) {
 
-                statement.setString(1, name);
-                ResultSet set = statement.executeQuery();
+               statement.setString(1, rank);
+               statement.setString(2, factionName);
+               statement.setString(3, player.getUniqueId().toString());
 
-                List<OfflinePlayer> members = new ArrayList<>();
-                while (set.next()) {
-                    UUID uuid = UUID.fromString(set.getString("uuid"));
-                    OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+               statement.executeUpdate();
+               statement.close();
 
-                    if (player != null) {
-                        members.add(player);
-                    }
-                }
-
-                statement.close();
-                connection.close();
-
-                return members;
-            } catch (SQLException error) {
-                handleError(error);
-                throw new RuntimeException(error);
-            }
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
         });
     }
 
@@ -1092,7 +1177,7 @@ public class HikariHandler {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             LOGGER.fatal("There was an error while performing database actions.");
-            LOGGER.fatal("Please see https://docs.terrabytedev.com/skyfactions/errors-and-debugging for more information."); // TODO: LINK TO DEBUGGING DOCS
+            LOGGER.fatal("Please see https://docs.terrabytedev.com/skyfactions/errors-and-debugging for more information.");
             LOGGER.fatal("Please contact the devs.");
             LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             error.printStackTrace();

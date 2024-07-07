@@ -1,13 +1,13 @@
-package net.skullian.torrent.skyfactions.util.gui;
+package net.skullian.torrent.skyfactions.gui;
 
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.util.gui.data.GUIData;
-import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.util.gui.items.*;
-import net.skullian.torrent.skyfactions.util.gui.items.raid_start.RaidCancelItem;
-import net.skullian.torrent.skyfactions.util.gui.items.raid_start.RaidConfirmationItem;
-import net.skullian.torrent.skyfactions.util.gui.items.raid_start.RaidPromptItem;
+import net.skullian.torrent.skyfactions.gui.data.GUIData;
+import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.items.*;
+import net.skullian.torrent.skyfactions.gui.items.raid_start.RaidCancelItem;
+import net.skullian.torrent.skyfactions.gui.items.raid_start.RaidConfirmationItem;
+import net.skullian.torrent.skyfactions.gui.items.raid_start.RaidPromptItem;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;

@@ -4,6 +4,8 @@ import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.ObeliskConfig;
 import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -36,6 +38,25 @@ public class ObeliskHandler {
 
                 applyPDC(player.getUniqueId().toString(), offsetLocation.getBlock(), "player");
             }
+        });
+    }
+
+    public static void spawnFactionObelisk(Faction faction, FactionIsland island) {
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+           World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
+           if (world != null) {
+               Location islandCenter = island.getCenter(world);
+               List<Integer> offset = ObeliskConfig.OBELISK_SPAWN_OFFSET.getIntegerList();
+               Location offsetLocation = islandCenter.add(offset.get(0), offset.get(1), offset.get(2));
+
+               if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() > 0)  {
+                   SkyFactionsReborn.obeliskBlockManager.addBlock(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
+               } else {
+                   offsetLocation.getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
+               }
+
+               applyPDC(faction.getName(), offsetLocation.getBlock(), "faction");
+           }
         });
     }
 

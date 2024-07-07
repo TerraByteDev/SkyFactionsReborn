@@ -1,12 +1,12 @@
-package net.skullian.torrent.skyfactions.util.gui.items.obelisk;
+package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.util.gui.RuneSubmitUI;
-import net.skullian.torrent.skyfactions.util.gui.data.GUIData;
-import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.RuneSubmitUI;
+import net.skullian.torrent.skyfactions.gui.data.GUIData;
+import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -45,9 +45,15 @@ public class ObeliskRuneItem extends AbstractItem {
     public ItemProvider getItemProvider() {
         ItemBuilder builder = new ItemBuilder(STACK)
                 .setDisplayName(TextUtility.color(NAME));
+        int runes = 0;
+        if (TYPE.equals("player")) {
+            runes = SkyFactionsReborn.db.getRunes(PLAYER).join();
+        } else if (TYPE.equals("faction")) {
+            runes = SkyFactionsReborn.db.getRunes(SkyFactionsReborn.db.getFaction(PLAYER).join().getName()).join();
+        }
 
         for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine.replace("%runes%", String.valueOf(SkyFactionsReborn.db.getRunes(PLAYER).join()))));
+            builder.addLoreLines(TextUtility.color(loreLine.replace("%runes%", String.valueOf(runes))));
         }
 
         return builder;
@@ -62,9 +68,8 @@ public class ObeliskRuneItem extends AbstractItem {
                 SoundUtil.playSound(player, SOUND, PITCH, 1);
             }
 
-            // TODO fix
             GUIData data = GUIAPI.getGUIData("runes_ui");
-            new RuneSubmitUI(RuneSubmitUI.createStructure(data), data, player, "player").promptPlayer(player);
+            new RuneSubmitUI(RuneSubmitUI.createStructure(data), data, player, TYPE).promptPlayer(player);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
             event.getInventory().close();

@@ -13,6 +13,7 @@ import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
+import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -35,7 +36,7 @@ public class FactionAPI {
     public static boolean isModerator(Player player) {
         Faction faction = SkyFactionsReborn.db.getFaction(player).join();
         if (faction != null) {
-            List<OfflinePlayer> moderators = SkyFactionsReborn.db.getModerators(faction.getName()).join();
+            List<OfflinePlayer> moderators = SkyFactionsReborn.db.getMembersByRank(faction.getName(), "moderator").join();
             return moderators.contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
         }
 
@@ -84,8 +85,6 @@ public class FactionAPI {
     public static void createFaction(Player player, String name) {
         SkyFactionsReborn.db.registerFaction(player, name).join();
         createIsland(player, name);
-
-        Messages.FACTION_CREATION_SUCCESS.send(player);
     }
 
     /**
@@ -188,9 +187,13 @@ public class FactionAPI {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
         createRegion(player, island, world);
 
-        SkyFactionsReborn.db.createFactionIsland(faction_name, island).thenAccept(res -> IslandAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction")).thenAccept(val -> {
-           IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
+        SkyFactionsReborn.db.createFactionIsland(faction_name, island).join();
+        IslandAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction").thenAccept(ac -> {
+            IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
-        }).join();
+
+            ObeliskHandler.spawnFactionObelisk(SkyFactionsReborn.db.getFaction(faction_name).join(), island);
+            Messages.FACTION_CREATION_SUCCESS.send(player);
+        });
     }
 }

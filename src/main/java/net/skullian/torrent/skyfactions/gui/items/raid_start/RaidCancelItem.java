@@ -1,7 +1,7 @@
-package net.skullian.torrent.skyfactions.util.gui.items.obelisk;
+package net.skullian.torrent.skyfactions.gui.items.raid_start;
 
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -14,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class ObeliskHeadItem extends AbstractItem {
+public class RaidCancelItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -22,7 +22,7 @@ public class ObeliskHeadItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
 
-    public ObeliskHeadItem(ItemData data, ItemStack stack) {
+    public RaidCancelItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
@@ -45,6 +45,7 @@ public class ObeliskHeadItem extends AbstractItem {
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.setCancelled(true);
+        event.getInventory().close();
 
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);

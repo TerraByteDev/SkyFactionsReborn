@@ -6,7 +6,7 @@ import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.api.RaidAPI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.util.gui.PlayerRaidConfirmationUI;
+import net.skullian.torrent.skyfactions.gui.PlayerRaidConfirmationUI;
 import org.bukkit.entity.Player;
 
 public class RaidStartCommand extends CommandTemplate {

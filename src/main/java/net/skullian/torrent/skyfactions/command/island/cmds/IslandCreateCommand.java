@@ -6,7 +6,7 @@ import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.util.gui.IslandCreationConfirmationUI;
+import net.skullian.torrent.skyfactions.gui.IslandCreationConfirmationUI;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.ExecutionException;

@@ -39,7 +39,6 @@ public class FactionMOTDCommand extends CommandTemplate {
             if (FactionAPI.isOwner(player) || FactionAPI.isModerator(player)) {
                 Messages.MOTD_CHANGE_PROCESSING.send(player);
 
-                // TODO: TEST!
                 StringBuilder msg = new StringBuilder();
                 for (int i = 1; i < args.length; i++) {
                     msg.append(args[i]).append(" ");

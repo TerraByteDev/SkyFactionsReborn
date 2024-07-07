@@ -1,14 +1,14 @@
-package net.skullian.torrent.skyfactions.util.gui;
+package net.skullian.torrent.skyfactions.gui;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.api.RunesAPI;
-import net.skullian.torrent.skyfactions.util.gui.data.GUIData;
-import net.skullian.torrent.skyfactions.util.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.util.gui.items.GeneralBorderItem;
-import net.skullian.torrent.skyfactions.util.gui.items.obelisk.ObeliskBackItem;
-import net.skullian.torrent.skyfactions.util.gui.items.rune_submit.RunePromptItem;
-import net.skullian.torrent.skyfactions.util.gui.items.rune_submit.RuneSubmitItem;
+import net.skullian.torrent.skyfactions.gui.data.GUIData;
+import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
+import net.skullian.torrent.skyfactions.gui.items.rune_submit.RunePromptItem;
+import net.skullian.torrent.skyfactions.gui.items.rune_submit.RuneSubmitItem;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;

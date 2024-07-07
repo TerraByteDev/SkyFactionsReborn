@@ -20,7 +20,7 @@ public class RaidResetCooldown extends CommandTemplate {
 
     @Override
     public String getSyntax() {
-        return "/raid resetcd";
+        return "/raid resetcooldown";
     }
 
     @Override

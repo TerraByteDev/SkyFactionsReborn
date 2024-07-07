@@ -8,7 +8,7 @@ OPEN_PITCH: 1
 # Each character represents an item / slot.
 # '.' represents an empty slot.
 # Any other characters are shown below under ITEMS
-# Each character (#, p, y, n) corresponds to an item.
+# Each character corresponds to an item.
 
 # In this case, empty space is where players can input blocks.
 LAYOUT:

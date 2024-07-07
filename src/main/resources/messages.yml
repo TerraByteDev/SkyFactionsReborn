@@ -18,7 +18,7 @@ Messages:
   UNKNOWN_PLAYER: "%server_name%&r&7 Unknown player: &c&l%player%" # Sent when a command is ran on an unknown player (when applicable).
 
   # Sent when an error occurs when trying to execute a command or task.
-  # Placeholders: %operation% - what was happening / %debug% - TODO: LINK TO DOCUMENTATION ERROR DEBUGGING
+  # Placeholders: %operation% - what was happening / %debug% - Debug code to be used in accordance to https://docs.terrabytedev.com/skyfactions/errors-and-debugging.
   ERROR: '%server_name%&r&7 Something went wrong when trying to %operation%. Please try again later. (&c%debug%&7)'
 
   Commands:
@@ -179,7 +179,7 @@ Messages:
 
       # Sent when a player tries to create a faction with a name that is too short / too long.
       # Placeholders: %min% - Minimum name length / %max% - Maximum name length.
-      FACTION_CREATE_NAME_LENGTH_LIMIT: "%server_name%&c&l Hey!&r&7 The name must be between&c&l %min%&r&7 and &c&l%max% &r&7characters long."
+      NAME_LENGTH_LIMIT: "%server_name%&c&l Hey!&r&7 The name must be between&c&l %min%&r&7 and &c&l%max% &r&7characters long."
       # Sent when a player tries to create a faction name that has numbers in (permitting it is configured to disallow numbers).
       NAME_NO_NUMBERS: "%server_name%&c&l Hey!&r&7 You cannot use numbers in your name."
       # Sent when a player tries to create a faction that contains non-english characters.
@@ -200,16 +200,19 @@ Messages:
 
     FACTION_INFO:
       # Message sent when the player runs /faction info. Each entry is a new line.
-      # Placeholders: %faction_name% - Name of Faction / %owner% - Name of faction owner.
-      # Placeholders: %moderators% - List of all moderators of factions (those that can kick, etc.) / %members% - Members of the Faction.
+
       # Placeholders: %motd% - MOTD of the Faction.
+      # Placeholders: %owner% - Owner of the Faction. / %admins% - Admins of the faction.
+      # Placeholders: %
       INFORMATION_MESSAGE:
         - "&6&l------------- &c&l%faction_name% &6&l-------------&r"
         - "&eMOTD:&r %motd%&r"
         - ""
-        - "&eDuke: &a%owner%&r"
+        - "&eLord: &a%owner%&r"
+        - "&eDukes: &a%admins%&r"
         - "&eBarons: &a%moderators%&r"
-        - "&eMembers: &a%members%&r"
+        - "&eKnights: &a%fighters%&r"
+        - "&eSubjects: &a%members%&r"
         - "&6&l------------- &c&l%faction_name% &6&l-------------&r"
 
     CHANGE_MOTD:
@@ -218,6 +221,14 @@ Messages:
 
       # Sent once the server has finished changing the MOTD.
       MOTD_CHANGE_SUCCESS: "%server_name%&a Successfully changed the MOTD!"
+
+    FACTION_TITLES:
+      # See https://docs.terrabytedev.com/skyfactions/mechanics/factions/faction-ranks-titles
+      OWNER: "&c&lLord"
+      ADMIN: "&4&lDuke"
+      MODERATOR: "&9&lBaron"
+      FIGHTER: "&6&lKnight"
+      MEMBER: "&eSubject"
 
 
   Obelisk:
