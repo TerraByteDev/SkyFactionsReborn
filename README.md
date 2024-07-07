@@ -23,6 +23,7 @@ This plugin contains an abundance of smart features, including:
     - [ ] Faction Joining
         - [ ] Faction Invites
         - [ ] Faction Request Join
+    - [ ] Faction Levelling
 
 - [ ] Raiding
     - [ ] Player Raiding
@@ -36,6 +37,7 @@ This plugin contains an abundance of smart features, including:
     - [x] Island Visit
     - [x] Island Teleport
     - [ ] Island Purging
+    - [ ] Island Levelling
 
 - [ ] Defences
     - [ ] Configuration
