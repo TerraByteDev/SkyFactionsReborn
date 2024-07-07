@@ -15,9 +15,9 @@ This plugin contains an abundance of smart features, including:
 - [ ] Faction Functionality
     - [x] Faction Create
     - [x] Faction Help
-    - [ ] Faction Rename
+    - [ ] Faction Rename - WIP
     - [ ] Faction Nations
-    - [ ] Faction Information - WIP
+    - [x] Faction Information
     - [ ] Faction Kick & Ban
     - [ ] Faction Taxes
 
