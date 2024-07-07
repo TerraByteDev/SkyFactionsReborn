@@ -84,7 +84,8 @@ public enum Messages {
 
     RUNE_ENCHANT_DENY("Runes.ENCHANTS_DENY"),
     RUNE_GENERAL_DENY("Runes.GENERAL_DENY"),
-    RUNE_CONVERSION_SUCCESS("Runes.CONVERSION_SUCCESS");
+    RUNE_CONVERSION_SUCCESS("Runes.CONVERSION_SUCCESS"),
+    RUNE_INSUFFICIENT_ITEMS("Runes.INSUFFICIENT_ITEMS");
 
     @Setter
     private static FileConfiguration config;

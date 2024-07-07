@@ -42,7 +42,7 @@ ITEMS:
       - "&einto runes for purchases"
       - "&elike&c defences!"
       - ""
-      - "&eYou currently have &a&l%runes%&e runes."
+      - "&eYou currently have &a&l%runes%&e runes"
 
   # Place to see & buy defences.
   DEFENCES:

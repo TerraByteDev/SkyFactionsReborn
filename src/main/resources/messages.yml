@@ -250,3 +250,6 @@ Messages:
 
     # Sent when they successfully convert their items to runes.
     CONVERSION_SUCCESS: "%server_name%&a&l Success!&r&7 You have gained &a&l%added%&r&7 runes!"
+
+    # Sent when the player doesn't put enough of any item in to get any runes back.
+    INSUFFICIENT_ITEMS: "%server_name%&c You did not submit enough items to receive any runes."

@@ -102,8 +102,12 @@ public class RunesAPI {
             }
 
             returnItems(remaindingItems, player);
-            faction.addRunes(total);
-            Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
+            if (total > 0) {
+                faction.addRunes(total);
+                Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
+            } else {
+                Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
+            }
 
         } else if (faction == null) {
             Messages.ERROR.send(player, "%operation%", "convert to runes", "%debug%", "SQL_UNKNOWN_FACTION");
