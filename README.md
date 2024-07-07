@@ -20,6 +20,9 @@ This plugin contains an abundance of smart features, including:
     - [x] Faction Information
     - [ ] Faction Kick & Ban
     - [ ] Faction Taxes
+    - [ ] Faction Joining
+        - [ ] Faction Invites
+        - [ ] Faction Request Join
 
 - [ ] Raiding
     - [ ] Player Raiding
