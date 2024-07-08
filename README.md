@@ -24,6 +24,7 @@ This plugin contains an abundance of smart features, including:
         - [ ] Faction Invites
         - [ ] Faction Request Join
     - [ ] Faction Levelling
+    - [ ] Faction Audit Logs
 
 - [ ] Raiding
     - [ ] Player Raiding
@@ -47,13 +48,14 @@ This plugin contains an abundance of smart features, including:
 - [ ] Obelisk
     - [x] Custom Block Data
     - [ ] Relocation - WIP
-    - [ ] Faction Member Management
+    - [ ] Faction Member Management - WIP
         - [ ] Rank Promotion
         - [ ] Permission Handling
     - [ ] Defence purchase UI
     - [ ] Player & Faction UI differentiation
     - [x] Rune conversion UI - WIP
         - [x] help me
+    - [ ] Audit Logs
 
 - [ ] Gems
     - [x] Pay
