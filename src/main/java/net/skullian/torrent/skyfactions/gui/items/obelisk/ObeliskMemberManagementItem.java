@@ -1,8 +1,14 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
+import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.gui.obelisk.MemberManagementUI;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -50,7 +56,13 @@ public class ObeliskMemberManagementItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        // TODO
+        Faction faction = FactionAPI.getFaction(player);
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
+        if (faction.getOwner().equals(offlinePlayer) || faction.getAdmins().contains(offlinePlayer)) {
+            MemberManagementUI.promptPlayer(player);
+        } else {
+            Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_ADMIN_TITLE.get());
+        }
     }
 
 }

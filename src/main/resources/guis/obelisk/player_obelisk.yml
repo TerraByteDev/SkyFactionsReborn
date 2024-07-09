@@ -54,7 +54,7 @@ ITEMS:
   DEFENCES:
     char: "d"
     material: "PLAYER_HEAD"
-    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDg4YTcxZjFjOTJmN2QwODE3MjQ1YTczZTkwMWIxMTA2YTIxNjRkMTFhMjI2YjZjOTY5YTIwYTZjMTMzZDM2YiJ9fX0="
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2EzYjlkNzFiYjU5NDI2NTdkNjZhNjMwMzMyZGIyYjk2MTg5ZjI1MTI3MTBlYzhjMzE0OTIxOGM4NTNmZGRiNiJ9fX0="
     text: "&c&lDefences"
     sound: "ui.button.click"
     pitch: 1

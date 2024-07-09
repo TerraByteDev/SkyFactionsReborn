@@ -1,7 +1,9 @@
-package net.skullian.torrent.skyfactions.gui.items.island_creation;
+package net.skullian.torrent.skyfactions.gui.items.obelisk.audit_log;
 
-import net.skullian.torrent.skyfactions.util.SoundUtil;
+import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.db.AuditLogData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -14,29 +16,41 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class CreationPromptItem extends AbstractItem {
+public class AuditPaginationItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
     private int PITCH;
     private List<String> LORE;
+    private AuditLogData DATA;
     private ItemStack STACK;
 
-    public CreationPromptItem(ItemData data, ItemStack stack) {
+    public AuditPaginationItem(ItemData data, ItemStack stack, AuditLogData auditData) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
+        this.DATA = auditData;
         this.STACK = stack;
     }
 
     @Override
     public ItemProvider getItemProvider() {
         ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME));
+                .setDisplayName(TextUtility.color(NAME.replace("%audit_title%", DATA.getType())));
 
         for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine));
+            if (loreLine.contains("%audit_description%")) {
+                for (String part : TextUtility.toParts(DATA.getDescription())) {
+                    builder.addLoreLines(part);
+                }
+
+                continue;
+            }
+
+            builder.addLoreLines(TextUtility.color(loreLine
+                    .replace("%timestamp%", Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.get("%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp())))
+            ));
         }
 
         return builder;

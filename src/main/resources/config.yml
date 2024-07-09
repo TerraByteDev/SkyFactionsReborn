@@ -70,6 +70,9 @@ Island:
   # Name of the WorldEdit schematic file for the faction island. MUST INCLUDE THE FILE EXTENSION!
   FACTION_ISLAND_SCHEMATIC: 'faction_island.schem'
 
+  # Whether to teleport the player to their island when they join.
+  TELEPORT_ON_JOIN: true
+
 
 # Island grid generation algorithm configuration
 Generation:

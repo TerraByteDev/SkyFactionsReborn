@@ -4,13 +4,16 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.domains.DefaultDomain;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.faction.AuditLogType;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
@@ -84,6 +87,8 @@ public class FactionAPI {
      */
     public static void createFaction(Player player, String name) {
         SkyFactionsReborn.db.registerFaction(player, name).join();
+        Faction faction = FactionAPI.getFaction(name);
+        faction.createAuditLog(Bukkit.getOfflinePlayer(player.getUniqueId()), AuditLogType.FACTION_CREATE, "%player_name%", player.getName(), "%faction_name%", name);
         createIsland(player, name);
     }
 
@@ -163,15 +168,15 @@ public class FactionAPI {
         }
     }
 
-    private static void createRegion(Player player, FactionIsland island, World world) {
+    private static void createRegion(Player player, FactionIsland island, World world, String faction_name) {
         Location corner1 = island.getPosition1(null);
         Location corner2 = island.getPosition2(null);
 
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regionManager = container.get(BukkitAdapter.adapt(world));
         BlockVector3 min = BlockVector3.at(corner1.getBlockX(), -64, corner1.getBlockZ());
-        BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 319, corner2.getBlockZ());
-        ProtectedRegion region = new ProtectedCuboidRegion(player.getUniqueId().toString(), min, max);
+        BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 320, corner2.getBlockZ());
+        ProtectedRegion region = new ProtectedCuboidRegion(faction_name, min, max);
 
         DefaultDomain owners = region.getOwners();
         owners.addPlayer(player.getUniqueId());
@@ -185,7 +190,7 @@ public class FactionAPI {
         SkyFactionsReborn.db.cachedFactionIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
-        createRegion(player, island, world);
+        createRegion(player, island, world, faction_name);
 
         SkyFactionsReborn.db.createFactionIsland(faction_name, island).join();
         IslandAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction").thenAccept(ac -> {
@@ -195,5 +200,20 @@ public class FactionAPI {
             ObeliskHandler.spawnFactionObelisk(SkyFactionsReborn.db.getFaction(faction_name).join(), island);
             Messages.FACTION_CREATION_SUCCESS.send(player);
         });
+    }
+
+    public static boolean isInRegion(Player player, World world, String regionName) {
+        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        com.sk89q.worldedit.util.Location location = BukkitAdapter.adapt(player.getLocation());
+        RegionQuery query = container.createQuery();
+        ApplicableRegionSet set = query.getApplicableRegions(location);
+
+        for (ProtectedRegion region : set) {
+            if (region.getId().equalsIgnoreCase(regionName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

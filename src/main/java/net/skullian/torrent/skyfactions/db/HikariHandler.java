@@ -165,6 +165,16 @@ public class HikariHandler {
                     [island_id] INTEGER PRIMARY KEY NOT NULL,
                     [uuid] BLOB NOT NULL
                     );
+                    """);
+
+            PreparedStatement auditLogTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS auditLogs (
+                    [faction_name] STRING NOT NULL,
+                    [type] STRING NOT NULL,
+                    [uuid] BLOB NOT NULL,
+                    [description] BLOB NOT NULL,
+                    [timestamp] INTEGER NOT NULL
+                    );
                     """)) {
 
             islandsTable.executeUpdate();
@@ -184,6 +194,9 @@ public class HikariHandler {
 
             trustedPlayerTable.executeUpdate();
             trustedPlayerTable.close();
+
+            auditLogTable.executeUpdate();
+            auditLogTable.close();
 
             connection.close();
         }
@@ -1167,6 +1180,78 @@ public class HikariHandler {
                 handleError(error);
                 throw new RuntimeException(error);
             }
+        });
+    }
+
+    // ------------------ FACTION ADMINISTRATION ------------------ //
+
+    public CompletableFuture<Void> kickPlayer(OfflinePlayer player, String factionName) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE uuid = ? AND faction_name = ?")) {
+
+               statement.setString(1, player.getUniqueId().toString());
+               statement.setString(2, factionName);
+
+               statement.executeUpdate();
+               statement.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    // ------------------ FACTION AUDIT LOGGING ------------------ //
+
+    public CompletableFuture<Void> createAuditLog(OfflinePlayer player, String type, String description, String factionName) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO auditLogs (faction_name, type, uuid, description, timestamp) VALUES (?, ?, ?, ?, ?);")) {
+
+               statement.setString(1, factionName);
+               statement.setString(2, type);
+               statement.setString(3, player.getUniqueId().toString());
+               statement.setString(4, description);
+               statement.setLong(5, System.currentTimeMillis());
+
+               statement.executeUpdate();
+               statement.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<List<AuditLogData>> getAuditLogs(String factionName) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM auditLogs WHERE faction_name = ?")) {
+
+               statement.setString(1, factionName);
+               ResultSet set = statement.executeQuery();
+
+               List<AuditLogData> data = new ArrayList<>();
+               while (set.next()) {
+                   String faction_name = set.getString("faction_name");
+                   UUID uuid = UUID.fromString(set.getString("uuid"));
+                   String type = set.getString("type");
+                   String description = set.getString("description");
+                   long timestamp = set.getLong("timestamp");
+
+                   data.add(new AuditLogData(Bukkit.getOfflinePlayer(uuid), faction_name, type, description, timestamp));
+               }
+
+               return data;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
         });
     }
 

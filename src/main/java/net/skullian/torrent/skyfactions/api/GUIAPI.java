@@ -3,6 +3,7 @@ package net.skullian.torrent.skyfactions.api;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.data.PaginationItemData;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -17,7 +18,7 @@ import java.util.*;
 public class GUIAPI {
 
     /**
-     * No idea why you'd want to use this/
+     * No idea why you'd want to use this :/
      *
      * @param guiName GUI 'path' in the config folder. E.g. "confirmations/create_island" corresponds to the "confirmations/create_island.yml"
      *
@@ -45,6 +46,8 @@ public class GUIAPI {
         return null;
     }
 
+    // TODO: PACKAGE THE YAMLCONFIGURATION INTO THE GUIDATA, TO BE USED IN ITEMDATA RETRIEVAL!
+
     /**
      * Get a specific GUI's configured item datas.
      *
@@ -69,9 +72,10 @@ public class GUIAPI {
                 ConfigurationSection itemsConfig = config.getConfigurationSection("ITEMS");
                 List<ItemData> data = new ArrayList<>();
                 for (String name : itemsConfig.getKeys(false)) {
+                    boolean isModel = name.equalsIgnoreCase("MODEL");
                     ConfigurationSection itemData = itemsConfig.getConfigurationSection(name);
 
-                    char charValue = itemData.getString("char").charAt(0);
+                    char charValue = !isModel ? itemData.getString("char").charAt(0) : "x".charAt(0);
                     String material = itemData.getString("material");
                     String text = itemData.getString("text").replace("%player_name%", player.getName());
                     String sound = itemData.getString("sound");
@@ -89,7 +93,60 @@ public class GUIAPI {
         return new ArrayList<>();
     }
 
+    /**
+     * Get the configuration for paginated GUIs.
+     *
+     * @return {@link List<PaginationItemData>} Pagination UI configuration.
+     * @throws IOException
+     * @throws InvalidConfigurationException
+     */
+    public static List<PaginationItemData> getPaginationData(Player player) throws IOException, InvalidConfigurationException {
+        File file = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/guis/pagination.yml");
+        if (file.exists()) {
+
+            YamlConfiguration config = new YamlConfiguration();
+            config.load(file);
+
+            ConfigurationSection itemsConfig = config.getConfigurationSection("ITEMS");
+            List<PaginationItemData> data = new ArrayList<>();
+            for (String name : itemsConfig.getKeys(false)) {
+                ConfigurationSection itemData = itemsConfig.getConfigurationSection(name);
+
+                char charValue = itemData.getString("char").charAt(0);
+                String material = itemData.getString("material");
+                String texture = itemData.getString("skull");
+                String itemName = itemData.getString("name").replace("%player_name%", player.getName());
+                String sound = itemData.getString("sound");
+                int pitch = itemData.getInt("pitch");
+                String morePagesLore = itemData.getString("more_pages_lore");
+                String noPagesLore = itemData.getString("no_pages_lore");
+
+                data.add(new PaginationItemData(name, charValue, itemName, material, texture, sound, pitch, morePagesLore, noPagesLore));
+            }
+
+            return data;
+        }
+
+        return new ArrayList<>();
+    }
+
     public static ItemStack createItem(ItemData data, Player player) {
+        ItemStack stack;
+        if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
+            String texture = data.getBASE64_TEXTURE();
+            if (texture.equalsIgnoreCase("%player_skull%")) {
+                stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), player);
+            } else {
+                stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
+            }
+        } else {
+            stack = new ItemStack(Material.getMaterial(data.getMATERIAL()));
+        }
+
+        return stack;
+    }
+
+    public static ItemStack createItem(PaginationItemData data, Player player) {
         ItemStack stack;
         if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
             String texture = data.getBASE64_TEXTURE();

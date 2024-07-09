@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.gui.items.rune_submit;
+package net.skullian.torrent.skyfactions.gui.items;
 
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
@@ -14,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class RunePromptItem extends AbstractItem {
+public class GeneralPromptItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -22,7 +22,7 @@ public class RunePromptItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
 
-    public RunePromptItem(ItemData data, ItemStack stack) {
+    public GeneralPromptItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();

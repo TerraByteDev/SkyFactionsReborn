@@ -1,16 +1,11 @@
-package net.skullian.torrent.skyfactions.gui;
+package net.skullian.torrent.skyfactions.gui.obelisk;
 
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
-import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationCancelItem;
-import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationConfirmationItem;
-import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationPromptItem;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskDefencesItem;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskHeadItem;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskRuneItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.*;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -20,11 +15,11 @@ import xyz.xenondevs.invui.window.Window;
 import java.io.IOException;
 import java.util.List;
 
-public class PlayerObeliskUI {
+public class FactionObeliskUI {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/player_obelisk");
+            GUIData data = GUIAPI.getGUIData("obelisk/faction_obelisk");
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player);
 
@@ -43,20 +38,29 @@ public class PlayerObeliskUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("obelisk/player_obelisk", player);
+            List<ItemData> data = GUIAPI.getItemData("obelisk/faction_obelisk", player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 
-                    case "HEAD":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskHeadItem(itemData, GUIAPI.createItem(itemData, player), player));
+                    case "FACTION":
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskFactionOverviewItem(itemData, GUIAPI.createItem(itemData, player), player));
                         break;
 
                     case "DEFENCES":
+                        // todo probably will need to add type for when actually functioning
                         builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencesItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
 
                     case "RUNES_CONVERSION":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player), "player", player));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player), "faction", player));
+                        break;
+
+                    case "MEMBER_MANAGEMENT":
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player)));
+                        break;
+
+                    case "AUDIT_LOGS":
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskAuditLogItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
 
                     case "BORDER":

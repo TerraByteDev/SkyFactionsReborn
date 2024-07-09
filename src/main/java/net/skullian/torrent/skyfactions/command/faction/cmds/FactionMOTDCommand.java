@@ -5,8 +5,10 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.faction.AuditLogType;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class FactionMOTDCommand extends CommandTemplate {
@@ -50,13 +52,13 @@ public class FactionMOTDCommand extends CommandTemplate {
                 if (!TextUtility.hasBlacklistedWords(player, message)) {
                     Faction faction = FactionAPI.getFaction(player);
                     if (faction != null) {
+                        faction.createAuditLog(Bukkit.getOfflinePlayer(player.getUniqueId()), AuditLogType.MOTD_UPDATE, "%player_name%", player.getName(), "%new_motd%", TextUtility.color(message));
                         faction.updateMOTD(message);
                         Messages.MOTD_CHANGE_SUCCESS.send(player);
                     }
                 }
             } else {
                 Messages.PERMISSION_DENY.send(player);
-
             }
 
 

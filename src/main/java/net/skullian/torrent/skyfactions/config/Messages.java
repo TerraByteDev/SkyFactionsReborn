@@ -69,6 +69,12 @@ public enum Messages {
     FACTION_INSUFFICIENT_FUNDS("Factions.FACTION_CREATION.INSUFFICIENT_FUNDS"),
     FACTION_CREATION_SUCCESS("Factions.FACTION_CREATION.FACTION_CREATE_SUCCESS"),
 
+    FACTION_OWNER_TITLE("Factions.FACTION_TITLES.OWNER"),
+    FACTION_ADMIN_TITLE("Factions.FACTION_TITLES.ADMIN"),
+    FACTION_MODERATOR_TITLE("Factions.FACTION_TITLES.MODERATOR"),
+    FACTION_FIGHTER_TITLE("Factions.FACTION_TITLES.FIGHTER"),
+    FACTION_MEMBER_TITLE("Factions.FACTION_TITLES.MEMBER"),
+
     ALREADY_IN_FACTION("Factions.ALREADY_IN_FACTION"),
     NOT_IN_FACTION("Factions.NOT_IN_FACTION"),
     FACTION_NOT_FOUND("Factions.FACTION_NOT_FOUND"),
@@ -79,13 +85,24 @@ public enum Messages {
 
     OBELISK_ACCESS_DENY("Obelisk.ACCESS_DENY"),
     OBELISK_DESTROY_DENY("Obelisk.DESTROY_DENY"),
+    OBELISK_GUI_DENY("Obelisk.OBELISK_GUI_DENY"),
     OBELISK_ITEM_NAME("Obelisk.OBELISK_BLOCK.ITEM_NAME"),
     OBELISK_ITEM_LORE("Obelisk.OBELISK_BLOCK.ITEM_LORE"),
 
     RUNE_ENCHANT_DENY("Runes.ENCHANTS_DENY"),
     RUNE_GENERAL_DENY("Runes.GENERAL_DENY"),
     RUNE_CONVERSION_SUCCESS("Runes.CONVERSION_SUCCESS"),
-    RUNE_INSUFFICIENT_ITEMS("Runes.INSUFFICIENT_ITEMS");
+    RUNE_INSUFFICIENT_ITEMS("Runes.INSUFFICIENT_ITEMS"),
+
+    AUDIT_FACTION_CREATE_TITLE("Audit_Logs.FACTION_CREATE_TITLE"),
+    AUDIT_FACTION_CREATE_DESCRIPTION("Audit_Logs.FACTION_CREATE_DESCRIPTION"),
+    AUDIT_FACTION_JOIN_TITLE("Audit_Logs.JOIN_TITLE"),
+    AUDIT_FACTION_JOIN_DESCRIPTION("Audit_Logs.JOIN_DESCRIPTION"),
+    AUDIT_FACTION_LEAVE_TITLE("Audit_Logs.LEAVE_TITLE"),
+    AUDIT_FACTION_LEAVE_DESCRIPTION("Audit_Logs.LEAVE_DESCRIPTION"),
+    AUDIT_FACTION_MOTD_TITLE("Audit_Logs.MOTD_TITLE"),
+    AUDIT_FACTION_MOTD_DESCRIPTION("Audit_Logs.MOTD_DESCRIPTION"),
+    AUDIT_FACTION_TIMESTAMP_FORMAT("Audit_Logs.AUDIT_TIMESTAMP");
 
     @Setter
     private static FileConfiguration config;
@@ -105,19 +122,8 @@ public enum Messages {
         return TextUtility.color(replace(message, replacements));
     }
 
-    public List<String> formatToString(Object... replacements) {
-        List<String> values = config.getStringList("Messages." + this.path);
-
-        List<String> formattedValues = new ArrayList<>();
-        if (values != null) {
-            String formatted;
-            for (String value : values) {
-                formatted = TextUtility.color(value);
-                formattedValues.add(value);
-            }
-        }
-
-        return formattedValues;
+    public String getString() {
+        return config.getString("Messages." + this.path);
     }
 
     public void send(CommandSender receiver, Object... replacements) {

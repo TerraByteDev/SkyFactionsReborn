@@ -6,13 +6,12 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.ObeliskConfig;
-import net.skullian.torrent.skyfactions.gui.FactionObeliskUI;
-import net.skullian.torrent.skyfactions.gui.PlayerObeliskUI;
+import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.gui.obelisk.FactionObeliskUI;
+import net.skullian.torrent.skyfactions.gui.obelisk.PlayerObeliskUI;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
-import org.bukkit.block.TileState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -81,7 +80,8 @@ public class ObeliskInteractionListener implements Listener {
 
             return false;
         } else if (type.equals("faction")) {
-            if (FactionAPI.getFaction(player).getName().equals(owner)) {
+            Faction faction = FactionAPI.getFaction(player);
+            if (faction != null && faction.getName().equalsIgnoreCase(owner)) {
                 FactionObeliskUI.promptPlayer(player);
                 return true;
             }

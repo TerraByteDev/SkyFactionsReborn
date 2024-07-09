@@ -27,7 +27,7 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.RUNES, new ConfigHandler(plugin, "runes"));
 
         for (ExtraEnums enumEntry : ExtraEnums.values()) {
-            registerFile(ConfigTypes.EXTRA, new ConfigHandler(plugin, enumEntry.getConfigPath()));
+            new ConfigHandler(plugin, enumEntry.getConfigPath()).saveDefaultConfig();;
         }
 
         configs.values().forEach(ConfigHandler::saveDefaultConfig);
@@ -50,7 +50,7 @@ public class ConfigFileHandler {
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
 
         for (ExtraEnums enumEntry : ExtraEnums.values()) {
-            registerFile(ConfigTypes.EXTRA, new ConfigHandler(SkyFactionsReborn.getInstance(), enumEntry.getConfigPath()));
+            new ConfigHandler(SkyFactionsReborn.getInstance(), enumEntry.getConfigPath()).saveDefaultConfig();;
         }
 
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();

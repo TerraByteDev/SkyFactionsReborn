@@ -135,7 +135,9 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
     private void closeDatabase() {
         try {
-            db.closeConnection();
+            if (db != null) {
+                db.closeConnection();
+            }
         } catch (SQLException error) {
             LOGGER.error("----------------------- DATABASE EXCEPTION -----------------------");
             LOGGER.error("There was an error initialising the database.");

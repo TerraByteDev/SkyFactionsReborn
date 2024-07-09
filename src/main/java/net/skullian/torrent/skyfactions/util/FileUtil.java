@@ -18,11 +18,4 @@ public class FileUtil {
         LOGGER.error("Failed to retrieve island schematic [{}]. Is the filename correct?", name);
         return null;
     }
-
-    public static void removeSchematicFile(UUID playerUUID) {
-        File file = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/schematics/raid_saves/" + playerUUID + ".schematic");
-        if (file.exists() && file.isFile()) {
-            file.delete();
-        }
-    }
 }

@@ -234,9 +234,12 @@ Messages:
   Obelisk:
     # Sent when a player tries to access another player's or Faction's Obelisk (e.g. when visiting).
     ACCESS_DENY: "%server_name% &c&lHey!&r&7 You cannot access this Obelisk!"
-
     # Sent when the player tries to mine the block.
     DESTROY_DENY: "%server_name% &c&lHey!&r&7 You cannot mine this block!"
+    # Sent when a faction member tries to access a prohibited portion of the obelisk UI.
+    # For example, a faction member / knight / moderator tries to access the player management UI.
+    # Placeholders: %rank% - Required rank for access. Color coded according to FACTION_TITLES (above).
+    OBELISK_GUI_DENY: "%server_name% &c&lHey!&r&7 You must be at least a %rank%&r&7 to access this menu!"
 
     OBELISK_BLOCK:
       # Name of the Obelisk Block Item
@@ -264,3 +267,37 @@ Messages:
 
     # Sent when the player doesn't put enough of any item in to get any runes back.
     INSUFFICIENT_ITEMS: "%server_name%&c You did not submit enough items to receive any runes."
+
+  # Message formatting for all audit logs.
+  Audit_Logs:
+
+    # Format of the timestamp.
+    AUDIT_TIMESTAMP: "&e%time% Ago"
+
+    # Format:
+    # ACTION_TITLE - (e.g. JOIN_TITLE) The title of the audit log, when being viewed in the Audit Log obelisk GUI.
+    # ACTION_DESCRIPTION (e.g. JOIN_DESCRIPTION) Description of the audit log. Gives more information such as timestamp.
+    # Use '/' for a new lore line! This is so it is not put onto a singular line of lore!
+
+    # When the faction is first created.
+    # Placeholders: %player_name% - Name of player who created the faction.
+    # Placeholders: %faction_name% - Name of the faction.
+    FACTION_CREATE_TITLE: "&a&lFaction Created"
+    FACTION_CREATE_DESCRIPTION: "&a&l%player_name%&r&e created the /&efaction &a&l%faction_name%."
+
+    # Sent when a player joins the faction.
+    # Placeholders: %player_name% - Player who joined.
+    JOIN_TITLE: "&a&lPlayer Joined"
+    JOIN_DESCRIPTION: "&a&l%player_name%&r&e joined the faction."
+
+    # Sent when a player leaves the faction.
+    # Placeholders: %player_name% - Player who left.
+    LEAVE_TITLE: "&c&lPlayer Left"
+    LEAVE_DESCRIPTION: "&c&l%player_name%&r&e left the faction."
+
+    # Sent when a player updates the MOTD.
+    # Placeholders: %player_name% - Player who updated the MOTD.
+    # Placeholders: %new_motd% - New MOTD.
+    MOTD_TITLE: "&e&lMOTD Updated"
+    MOTD_DESCRIPTION: "&a&l%player_name% &r&eupdated the /&eFaction's MOTD to&r /%new_motd%" # Reset colors as the MOTD may contain formatting.
+

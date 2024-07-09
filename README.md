@@ -24,7 +24,7 @@ This plugin contains an abundance of smart features, including:
         - [ ] Faction Invites
         - [ ] Faction Request Join
     - [ ] Faction Levelling
-    - [ ] Faction Audit Logs
+    - [x] Faction Audit Logs
 
 - [ ] Raiding
     - [ ] Player Raiding

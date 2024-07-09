@@ -4,16 +4,14 @@ import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationCancelItem;
 import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationConfirmationItem;
-import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.window.Window;
 
@@ -54,7 +52,7 @@ public class IslandCreationConfirmationUI implements Listener {
                         builder.addIngredient(itemData.getCHARACTER(), new CreationConfirmationItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new CreationPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
                     case "BORDER":
                         builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));

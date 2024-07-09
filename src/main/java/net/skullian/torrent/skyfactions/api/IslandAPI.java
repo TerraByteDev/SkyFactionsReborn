@@ -19,11 +19,14 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import lombok.extern.log4j.Log4j2;
+import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
+import net.skullian.torrent.skyfactions.papi.PlaceholderManager;
 import net.skullian.torrent.skyfactions.util.FileUtil;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import org.bukkit.*;
@@ -113,7 +116,7 @@ public class IslandAPI {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regionManager = container.get(BukkitAdapter.adapt(world));
         BlockVector3 min = BlockVector3.at(corner1.getBlockX(), -64, corner1.getBlockZ());
-        BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 319, corner2.getBlockZ());
+        BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 320, corner2.getBlockZ());
         ProtectedRegion region = new ProtectedCuboidRegion(player.getUniqueId().toString(), min, max);
 
         DefaultDomain owners = region.getOwners();

@@ -7,7 +7,6 @@ import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.*;
 import net.skullian.torrent.skyfactions.gui.items.raid_start.RaidCancelItem;
 import net.skullian.torrent.skyfactions.gui.items.raid_start.RaidConfirmationItem;
-import net.skullian.torrent.skyfactions.gui.items.raid_start.RaidPromptItem;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -52,7 +51,7 @@ public class PlayerRaidConfirmationUI {
                         builder.addIngredient(itemData.getCHARACTER(), new RaidConfirmationItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new RaidPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
                     case "BORDER":
                         builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));

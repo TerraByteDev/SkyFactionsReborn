@@ -3,8 +3,10 @@ package net.skullian.torrent.skyfactions.faction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.db.AuditLogData;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -146,4 +148,34 @@ public class Faction {
      * @param addition Gems to add.
      */
     public void addGems(int addition) { SkyFactionsReborn.db.addGems(name, addition).join(); }
+
+    /**
+     * Kick a player from the Faction for a specific reason.
+     *
+     * @param player Player to kick.
+     * @param reason Reason for kick.
+     */
+    public void kickPlayer(OfflinePlayer player, String reason) {
+        SkyFactionsReborn.db.kickPlayer(player, name);
+    }
+
+    /**
+     * Get all audit logs (player join, kick, leave, ban, etc.) of the Faction.
+     *
+     * @return {@link List<AuditLogData>}
+     */
+    public List<AuditLogData> getAuditLogs() {
+        return SkyFactionsReborn.db.getAuditLogs(name).join();
+    }
+
+    /**
+     * Create an audit log for the Faction.
+     *
+     * @param player Player in question.
+     * @param type {@link AuditLogType} Type of audit log.
+     * @param replacements Values to replace. (e.g. '%player_name%, player.getName()').
+     */
+    public void createAuditLog(OfflinePlayer player, AuditLogType type, Object... replacements) {
+        SkyFactionsReborn.db.createAuditLog(player, type.getTitle(replacements), type.getDescription(replacements), name).join();
+    }
 }

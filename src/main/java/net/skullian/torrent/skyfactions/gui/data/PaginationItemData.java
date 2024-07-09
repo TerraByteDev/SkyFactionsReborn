@@ -2,14 +2,10 @@ package net.skullian.torrent.skyfactions.gui.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Getter
-@Setter
-public class ItemData {
+public class PaginationItemData {
 
     private String ITEM_ID;
     private char CHARACTER;
@@ -18,5 +14,6 @@ public class ItemData {
     private String BASE64_TEXTURE;
     private String SOUND;
     private int PITCH;
-    private List<String> LORE;
+    private String MORE_PAGES_LORE;
+    private String NO_PAGES_LORE;
 }

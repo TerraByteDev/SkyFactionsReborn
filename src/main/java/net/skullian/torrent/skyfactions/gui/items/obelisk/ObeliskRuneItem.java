@@ -4,7 +4,7 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.gui.RuneSubmitUI;
+import net.skullian.torrent.skyfactions.gui.obelisk.RuneSubmitUI;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;

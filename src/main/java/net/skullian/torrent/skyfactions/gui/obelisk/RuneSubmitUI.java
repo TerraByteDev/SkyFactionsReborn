@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.gui;
+package net.skullian.torrent.skyfactions.gui.obelisk;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
@@ -7,7 +7,7 @@ import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
-import net.skullian.torrent.skyfactions.gui.items.rune_submit.RunePromptItem;
+import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.rune_submit.RuneSubmitItem;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Material;
@@ -18,8 +18,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.metadata.MetadataValueAdapter;
 import xyz.xenondevs.invui.gui.AbstractGui;
 import xyz.xenondevs.invui.gui.SlotElement;
 import xyz.xenondevs.invui.gui.structure.Structure;
@@ -124,7 +122,7 @@ public class RuneSubmitUI extends AbstractGui {
                 switch (itemData.getITEM_ID()) {
 
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new RunePromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
 
                     case "BACK":

@@ -32,13 +32,15 @@ public class PlayerHandler implements Listener {
             return null;
         });
 
-        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer()).join();
-        if (island != null) {
-            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-            if (world != null) {
-                Location centerLocation = island.getCenter(world);
-                IslandAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
+        if (Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean()) {
+            PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer()).join();
+            if (island != null) {
+                World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+                if (world != null) {
+                    Location centerLocation = island.getCenter(world);
+                    IslandAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
 
+                }
             }
         }
     }

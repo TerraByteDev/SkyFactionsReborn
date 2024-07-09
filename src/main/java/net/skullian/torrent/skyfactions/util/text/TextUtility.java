@@ -3,10 +3,18 @@ package net.skullian.torrent.skyfactions.util.text;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextUtility {
@@ -125,6 +133,58 @@ public class TextUtility {
 
     public static boolean isELetter(char ch) {
         return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z';
+    }
+
+    public static String formatExtendedElapsedTime(long previousTime) {
+        long currentTime = System.currentTimeMillis();
+
+        Duration duration = Duration.ofMillis(currentTime - previousTime);
+        long days = duration.toDaysPart();
+        long hours = duration.toHoursPart();
+        long minutes = duration.toMinutesPart();
+        long seconds = duration.toSecondsPart();
+
+        StringBuilder formattedTime = new StringBuilder();
+        boolean hasContent = false;
+
+        if (days > 0) {
+            formattedTime.append(days).append(" day");
+            if (days > 1) {
+                formattedTime.append("s");
+            }
+            formattedTime.append(", ");
+            hasContent = true;
+        }
+        if (hours > 0 || hasContent) {
+            formattedTime.append(hours).append(" hour");
+            if (hours > 1) {
+                formattedTime.append("s");
+            }
+            formattedTime.append(", ");
+            hasContent = true;
+        }
+        if (minutes > 0 || hasContent) {
+            formattedTime.append(minutes).append(" minute");
+            if (minutes > 1) {
+                formattedTime.append("s");
+            }
+            formattedTime.append(", ");
+            hasContent = true;
+        }
+        if (seconds > 0 || !hasContent) {
+            formattedTime.append(seconds).append(" second");
+            if (seconds > 1) {
+                formattedTime.append("s");
+            }
+        }
+
+        return formattedTime.toString();
+    }
+
+    public static List<String> toParts(String string) {
+        String[] parts = string.split("/");
+        List<String> partsList = Arrays.asList(parts);
+        return partsList;
     }
 
 }
