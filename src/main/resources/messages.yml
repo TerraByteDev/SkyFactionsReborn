@@ -173,6 +173,9 @@ Messages:
     # Placeholders: %name% - Faction Name.
     FACTION_NOT_FOUND: "%server_name%&c Could not find faction with a name of %name%."
 
+    # Sent when a player tries to do faction-related commands that require you to have the proper permissions (e.g. kick when a member).
+    ACTION_DENY: "%server_name%&c&l Hey!&r&7 You do not have the sufficient permissions to do this."
+
     FACTION_CREATION:
       # Sent while creation of a faction is processing.
       FACTION_CREATE_PROCESSING: "%server_name% &eCreating your faction, please wait..."
@@ -235,6 +238,19 @@ Messages:
       # Placeholders: %faction_name% - Name of the faction.
       FACTION_LEAVE_SUCCESS: "%server_name% &c&oYou have successfully left %faction_name%."
 
+      # Sent when the faction owner tries to leave the faction.
+      FACTION_OWNER_LEAVE_DENY: "%server_name% &cYou cannot leave this faction because you are the owner!"
+
+    FACTION_BROADCAST:
+
+      # Model for faction broadcasts.
+      # Placeholders: %broadcast% - The broadcast message.
+      # Placeholders: %broadcaster% - The player who created the broadcast.
+      BROADCAST_MODEL:
+        - "&7╔═════════╝ &eFACTION BROADCAST &7╚═════════╗&r"
+        - "%broadcast%&7 - %broadcaster%"
+        - "&7╚═════════╗ &eFACTION BROADCAST &7╔═════════╝"
+
 
   Obelisk:
     # Sent when a player tries to access another player's or Faction's Obelisk (e.g. when visiting).
@@ -288,21 +304,26 @@ Messages:
     # Placeholders: %player_name% - Name of player who created the faction.
     # Placeholders: %faction_name% - Name of the faction.
     FACTION_CREATE_TITLE: "&a&lFaction Created"
-    FACTION_CREATE_DESCRIPTION: "&a&l%player_name%&r&e created the /&efaction &a&l%faction_name%."
+    FACTION_CREATE_DESCRIPTION: "&a%player_name%&r&e created the /&efaction &a%faction_name%."
 
     # Sent when a player joins the faction.
     # Placeholders: %player_name% - Player who joined.
     JOIN_TITLE: "&a&lPlayer Joined"
-    JOIN_DESCRIPTION: "&a&l%player_name%&r&e joined the faction."
+    JOIN_DESCRIPTION: "&a%player_name%&r&e joined the faction."
 
     # Sent when a player leaves the faction.
     # Placeholders: %player_name% - Player who left.
     LEAVE_TITLE: "&c&lPlayer Left"
-    LEAVE_DESCRIPTION: "&c&l%player_name%&r&e left the faction."
+    LEAVE_DESCRIPTION: "&c%player_name%&r&e left the faction."
 
     # Sent when a player updates the MOTD.
     # Placeholders: %player_name% - Player who updated the MOTD.
     # Placeholders: %new_motd% - New MOTD.
     MOTD_TITLE: "&e&lMOTD Updated"
-    MOTD_DESCRIPTION: "&a&l%player_name% &r&eupdated the /&eFaction's MOTD to&r /%new_motd%" # Reset colors as the MOTD may contain formatting.
+    MOTD_DESCRIPTION: "&a%player_name% &r&eupdated the /&eFaction's MOTD to&r /%new_motd%" # Reset colors as the MOTD may contain formatting.
+
+    # Sent when a player (moderator, admin or owner) creates a broadcast.
+    # Placeholders: %player_name% - Player who created the broadcast.
+    BROADCAST_TITLE: "&a&lBroadcast Created"
+    BROADCAST_DESCRIPTION: "&a%player_name% &r&ecreated a new broadcast."
 

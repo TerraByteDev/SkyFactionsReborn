@@ -31,38 +31,6 @@ import java.util.regex.Pattern;
 public class FactionAPI {
 
     /**
-     * Check if a player is a moderator in their faction.
-     *
-     * @param player Player to check.
-     * @return {@link Boolean}
-     */
-    public static boolean isModerator(Player player) {
-        Faction faction = SkyFactionsReborn.db.getFaction(player).join();
-        if (faction != null) {
-            List<OfflinePlayer> moderators = SkyFactionsReborn.db.getMembersByRank(faction.getName(), "moderator").join();
-            return moderators.contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if a player owns the faction they are in.
-     *
-     * @param player Player to check.
-     * @return {@link Boolean}
-     */
-    public static boolean isOwner(Player player) {
-        Faction faction = SkyFactionsReborn.db.getFaction(player).join();
-        if (faction != null) {
-            OfflinePlayer owner = SkyFactionsReborn.db.getFactionOwner(faction.getName()).join();
-            return owner.getPlayer().equals(player);
-        }
-
-        return false;
-    }
-
-    /**
      * Teleport the player to their faction's island.
      *
      * @param player Player to teleport.

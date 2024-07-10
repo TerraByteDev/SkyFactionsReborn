@@ -7,24 +7,23 @@ import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.faction.AuditLogType;
 import net.skullian.torrent.skyfactions.faction.Faction;
-import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class FactionMOTDCommand extends CommandTemplate {
+public class FactionBroadcastCommand extends CommandTemplate {
     @Override
     public String getName() {
-        return "motd";
+        return "broadcast";
     }
 
     @Override
     public String getDescription() {
-        return "Set your faction's MOTD (Message of the Day).";
+        return "Create a broadcast to all online Faction members.";
     }
 
     @Override
     public String getSyntax() {
-        return "/faction motd <motd>";
+        return "/faction broadcast <message>";
     }
 
     @Override
@@ -32,38 +31,43 @@ public class FactionMOTDCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        if (args.length > 1) {
-            Faction faction = FactionAPI.getFaction(player);
-            if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player);
-                return;
-            } else if (!faction.isOwner(player) || !faction.isModerator(player)) {
-                Messages.PERMISSION_DENY.send(player);
-                return;
-            }
+        if (args.length == 1) {
+            Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
+        } else if (args.length > 1) {
 
-            Messages.MOTD_CHANGE_PROCESSING.send(player);
+            Faction faction = FactionAPI.getFaction(player);
+            if (faction != null) {
+                StringBuilder msg = new StringBuilder();
+                for (int i = 1; i < args.length; i++) {
+                    msg.append(args[i]).append(" ");
+                }
+
+                if (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player)) {
+                    String message = msg.toString().trim();
+                    if (FactionAPI.hasValidName(player, message)) {
+                        faction.createAuditLog(Bukkit.getOfflinePlayer(player.getUniqueId()), AuditLogType.BROADCAST_CREATE, "%player_name%", player.getName());
+                        faction.createBroadcast(player, message);
+                    }
+
+                } else {
+                    Messages.FACTION_ACTION_DENY.send(player);
+                }
+
+            }
 
             StringBuilder msg = new StringBuilder();
             for (int i = 1; i < args.length; i++) {
                 msg.append(args[i]).append(" ");
             }
-            String message = msg.toString();
 
 
 
-            if (!TextUtility.hasBlacklistedWords(player, message)) {
-                faction.createAuditLog(Bukkit.getOfflinePlayer(player.getUniqueId()), AuditLogType.MOTD_UPDATE, "%player_name%", player.getName(), "%new_motd%", TextUtility.color(message));
-                faction.updateMOTD(message);
-                Messages.MOTD_CHANGE_SUCCESS.send(player);
-            }
-        } else if (args.length <= 1) {
-            Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
         }
+
     }
 
     @Override
     public String permission() {
-        return "skyfactions.faction.motd";
+        return "skyfactions.faction.broadcast";
     }
 }

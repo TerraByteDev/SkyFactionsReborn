@@ -8,6 +8,7 @@ import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskDefencesItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskHeadItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskRuneItem;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -31,6 +32,7 @@ public class PlayerObeliskUI {
                     .setGui(gui)
                     .build();
 
+            SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
             window.open();
         } catch (IOException | InvalidConfigurationException error) {
             error.printStackTrace();

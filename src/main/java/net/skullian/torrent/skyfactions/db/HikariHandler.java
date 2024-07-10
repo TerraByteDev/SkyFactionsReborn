@@ -1350,7 +1350,7 @@ public class HikariHandler {
     public CompletableFuture<List<AuditLogData>> getAuditLogs(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM auditLogs WHERE faction_name = ?")) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM auditLogs WHERE faction_name = ? ORDER BY timestamp DESC")) {
 
                statement.setString(1, factionName);
                ResultSet set = statement.executeQuery();

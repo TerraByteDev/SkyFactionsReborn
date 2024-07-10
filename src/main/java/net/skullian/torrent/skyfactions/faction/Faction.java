@@ -3,11 +3,15 @@ package net.skullian.torrent.skyfactions.faction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.db.AuditLogData;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
+import net.skullian.torrent.skyfactions.util.text.TextUtility;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -46,6 +50,8 @@ public class Faction {
         return SkyFactionsReborn.db.getFactionOwner(name).join();
     }
 
+    public boolean isOwner(Player player) { return getOwner().getUniqueId().equals(player.getUniqueId()); }
+
     /**
      * Get the admins of the faction.
      *
@@ -54,6 +60,8 @@ public class Faction {
     public List<OfflinePlayer> getAdmins() {
         return SkyFactionsReborn.db.getMembersByRank(name, "admin").join();
     }
+
+    public boolean isAdmin(Player player) { return getAdmins().contains(Bukkit.getOfflinePlayer(player.getUniqueId())); }
 
     /**
      * Change the rank of a player.
@@ -74,6 +82,8 @@ public class Faction {
         return SkyFactionsReborn.db.getMembersByRank(name, "moderator").join();
     }
 
+    public boolean isModerator(Player player) { return getModerators().contains(Bukkit.getOfflinePlayer(player.getUniqueId())); }
+
     /**
      * Get the fighters of the faction.
      *
@@ -82,6 +92,8 @@ public class Faction {
     public List<OfflinePlayer> getFighters() {
         return SkyFactionsReborn.db.getMembersByRank(name, "fighter").join();
     }
+
+    public boolean isFighter(Player player) { return getFighters().contains(Bukkit.getOfflinePlayer(player.getUniqueId())); }
 
     /**
      * Get the members of the faction. Does not include moderators & owner.
@@ -92,6 +104,8 @@ public class Faction {
         return SkyFactionsReborn.db.getMembersByRank(name, "member").join();
     }
 
+    public boolean isMember(Player player) { return getMembers().contains(Bukkit.getOfflinePlayer(player.getUniqueId())); }
+
     /**
      * Get the total member count of the faction. Used for the Obelisk overview UI.
      *
@@ -100,6 +114,22 @@ public class Faction {
     public int getTotalMemberCount() {
         int total = getMembers().size() + getModerators().size() + 1;
         return total;
+    }
+
+    /**
+     * Get all the members in the Faction.
+     *
+     * @return {@link Integer}
+     */
+    public List<OfflinePlayer> getAllMembers() {
+        List<OfflinePlayer> allMembers = new ArrayList<>();
+        allMembers.addAll(getMembers());
+        allMembers.addAll(getFighters());
+        allMembers.addAll(getModerators());
+        allMembers.addAll(getAdmins());
+        allMembers.add(getOwner());
+
+        return allMembers;
     }
 
     /**
@@ -119,6 +149,22 @@ public class Faction {
      */
     public void updateMOTD(String MOTD) {
         SkyFactionsReborn.db.setMOTD(name, MOTD).join();
+    }
+
+    /**
+     * Broadcast a message to the Faction's online members.
+     *
+     * @param message Message to broadcast.
+     */
+    public void createBroadcast(Player broadcaster, String message) {
+        String formatted = TextUtility.color(message).replace("%broadcaster%", broadcaster.getName());
+        List<OfflinePlayer> players = getAllMembers();
+        for (OfflinePlayer player : players) {
+            if (player.isOnline()) {
+                String model = Messages.FACTION_BROADCAST_MODEL.get("%broadcaster%", broadcaster.getName(), "%broadcast%", formatted);
+                player.getPlayer().sendMessage(model);
+            }
+        }
     }
 
     /**

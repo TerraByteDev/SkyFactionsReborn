@@ -13,6 +13,7 @@ import net.skullian.torrent.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.torrent.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.member_management.MemberPaginationItem;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -40,6 +41,7 @@ public class MemberManagementUI {
                     .setGui(gui)
                     .build();
 
+            SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
             window.open();
         } catch (IOException | InvalidConfigurationException error) {
             error.printStackTrace();

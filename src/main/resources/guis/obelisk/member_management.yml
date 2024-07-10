@@ -45,7 +45,7 @@ ITEMS:
     material: "BARRIER"
     skull: ""
     text: "&c&oBack"
-    sound: "ui.button.click"
+    sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
     lore: ""
 

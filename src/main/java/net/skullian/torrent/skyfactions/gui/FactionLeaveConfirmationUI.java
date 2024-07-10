@@ -9,6 +9,7 @@ import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.faction_leave.LeaveConfirmationItem;
 import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationCancelItem;
 import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationConfirmationItem;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -32,6 +33,7 @@ public class FactionLeaveConfirmationUI {
                     .setGui(gui)
                     .build();
 
+            SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
             window.open();
         } catch (IOException | InvalidConfigurationException error) {
             error.printStackTrace();

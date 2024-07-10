@@ -5,6 +5,8 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.gui.FactionLeaveConfirmationUI;
 import org.bukkit.entity.Player;
 
 public class FactionLeaveCommand extends CommandTemplate {
@@ -28,10 +30,16 @@ public class FactionLeaveCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        if (!FactionAPI.isInFaction(player)) {
+        Faction faction = FactionAPI.getFaction(player);
+        if (faction == null) {
             Messages.NOT_IN_FACTION.send(player);
             return;
+        } else if (faction.isOwner(player)) {
+            Messages.FACTION_OWNER_LEAVE_DENY.send(player);
+            return;
         }
+
+        FactionLeaveConfirmationUI.promptPlayer(player);
 
     }
 

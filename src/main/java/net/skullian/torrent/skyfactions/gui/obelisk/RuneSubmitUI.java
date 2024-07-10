@@ -9,6 +9,7 @@ import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.rune_submit.RuneSubmitItem;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -92,6 +93,7 @@ public class RuneSubmitUI extends AbstractGui {
                 .build();
 
         player.setMetadata("rune_ui", new FixedMetadataValue(SkyFactionsReborn.getInstance(), true));
+        SoundUtil.playSound(player, DATA.getOPEN_SOUND(), DATA.getOPEN_PITCH(), 1f);
         window.open();
     }
 
@@ -99,7 +101,6 @@ public class RuneSubmitUI extends AbstractGui {
         if (!player.hasMetadata("rune_ui")) return;
         if (INVENTORY == null) return;
 
-        List<ItemStack> stacks = new ArrayList<>();
         for (int i = 0; i < INVENTORY.getSize(); i++) {
             if (GUI.hasSlotElement(i)) continue;
             ItemStack stack = INVENTORY.getItem(i);

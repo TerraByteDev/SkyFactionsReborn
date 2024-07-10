@@ -39,6 +39,12 @@ public class FactionCommandTabCompletion implements TabCompleter {
             if (sender.hasPermission("skyfactions.faction.motd")) {
                 completions.add("motd");
             }
+            if (sender.hasPermission("skyfactions.faction.leave")) {
+                completions.add("leave");
+            }
+            if (sender.hasPermission("skyfactions.faction.broadcast")) {
+                completions.add("broadcast");
+            }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
         }

@@ -23,6 +23,8 @@ public class FactionCommandHandler implements CommandExecutor {
         subcommands.add(new FactionHelpCommand());
         subcommands.add(new FactionTeleportCommand());
         subcommands.add(new FactionMOTDCommand());
+        subcommands.add(new FactionLeaveCommand());
+        subcommands.add(new FactionBroadcastCommand());
     }
 
     @Override

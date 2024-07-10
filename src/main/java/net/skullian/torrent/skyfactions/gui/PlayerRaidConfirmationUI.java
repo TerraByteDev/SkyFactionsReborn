@@ -7,6 +7,7 @@ import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.*;
 import net.skullian.torrent.skyfactions.gui.items.raid_start.RaidCancelItem;
 import net.skullian.torrent.skyfactions.gui.items.raid_start.RaidConfirmationItem;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -31,6 +32,7 @@ public class PlayerRaidConfirmationUI {
                     .setGui(gui)
                     .build();
 
+            SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
             window.open();
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
