@@ -12,12 +12,13 @@ This plugin contains an abundance of smart features, including:
 - Much, much more
 
 # Development TODO
-- [ ] Faction Functionality
+- [ ] Faction Functionality - 15%
     - [x] Faction Create
     - [x] Faction Help
     - [ ] Faction Rename - WIP
-    - [ ] Faction Nations
     - [x] Faction Information
+    - [x] Faction Broadcast
+    - [x] Faction Leave
     - [ ] Faction Kick & Ban
     - [ ] Faction Taxes
     - [ ] Faction Joining
@@ -26,12 +27,20 @@ This plugin contains an abundance of smart features, including:
     - [ ] Faction Levelling
     - [x] Faction Audit Logs
 
-- [ ] Raiding
+- [ ] Nations - 5%
+
+- [ ] Raiding 25%
     - [ ] Player Raiding
     - [ ] Faction Raiding
         - [ ] Faction Surrender
 
-- [ ] Island
+- [ ] Discord Integration - 10%
+    - [ ] Raid notifications
+    - [ ] Tax Notifications
+    - [ ] Dedicated channels for factions
+    - [ ] Broadcast Notifications
+
+- [ ] Island - 25%
     - [x] Island Creation
     - [x] Island Trust
     - [x] Island Untrust
@@ -40,12 +49,12 @@ This plugin contains an abundance of smart features, including:
     - [ ] Island Purging
     - [ ] Island Levelling
 
-- [ ] Defences
+- [ ] Defences 10%
     - [ ] Configuration
     - [ ] Basic Functionality
     - [ ] Upgrades
 
-- [ ] Obelisk
+- [ ] Obelisk 10%
     - [x] Custom Block Data
     - [ ] Relocation - WIP
     - [ ] Faction Member Management - WIP
@@ -57,7 +66,7 @@ This plugin contains an abundance of smart features, including:
         - [x] help me
     - [ ] Audit Logs
 
-- [ ] Gems
+- [ ] Gems - 5%
     - [x] Pay
     - [x] Balance
     - [ ] Item Form
@@ -67,6 +76,7 @@ This plugin contains an abundance of smart features, including:
     - [ ] Refactor & Improve Code Quality
     - [ ] Split configs into further dedicated files.
     - [ ] Config Versioning & Update Detection
+    - [ ] Webmap
 
 ## Links
 - [Discord](https://discord.gg/Y7DVR9gpwa) - For general questions, support, and chatting about the plugin. For bug reports, use Github issues.
