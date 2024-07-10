@@ -156,7 +156,51 @@ public class Faction {
      * @param reason Reason for kick.
      */
     public void kickPlayer(OfflinePlayer player, String reason) {
-        SkyFactionsReborn.db.kickPlayer(player, name);
+        SkyFactionsReborn.db.kickPlayer(player, name).join();
+    }
+
+    /**
+     * Ban a player from the faction.
+     *
+     * @param player Player to ban.
+     */
+    public void banPlayer(OfflinePlayer player) {
+        SkyFactionsReborn.db.banPlayer(name, player).join();
+    }
+
+    /**
+     * Remove a ban from a player.
+     *
+     * @param player {@link OfflinePlayer}
+     */
+    public void unbanPlayer(OfflinePlayer player) {
+        SkyFactionsReborn.db.unbanPlayer(name, player).join();
+    }
+
+    /**
+     *
+     * @param player Player to check ban status of.
+     * @return {@link Boolean}
+     */
+    public boolean isPlayerBanned(OfflinePlayer player) {
+        return SkyFactionsReborn.db.isPlayerBanned(name, player).join();
+    }
+
+    /**
+     * Get a list of all the banned players.
+     * @return {@link List<OfflinePlayer>}
+     */
+    public List<OfflinePlayer> getBannedPlayers() {
+        return SkyFactionsReborn.db.getBannedPlayers(name).join();
+    }
+
+    /**
+     * Remove a player from the faction (willingly).
+     *
+     * @param player Player who is leaving.
+     */
+    public void leaveFaction(OfflinePlayer player) {
+        SkyFactionsReborn.db.leaveFaction(name, player).join();
     }
 
     /**

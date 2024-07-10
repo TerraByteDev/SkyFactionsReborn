@@ -63,6 +63,7 @@ permissions:
       skyfactions.faction.info: true
       skyfactions.faction.teleport: true
       skyfactions.faction.motd: true
+      skyfactions.faction.leave: true
 
   skyfactions.island:
     description: Has permission for all (GENERAL) island related features (tp, create, etc.)
@@ -85,6 +86,7 @@ permissions:
       skyfactions.faction.info: true
       skyfactions.faction.teleport: true
       skyfactions.faction.motd: true
+      skyfactions.faction.leave: true
 
   skyfactions.discord:
     description: Has permission to link and unlink their discord account (link, unlink).

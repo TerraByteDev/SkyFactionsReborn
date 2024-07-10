@@ -230,6 +230,11 @@ Messages:
       FIGHTER: "&6&lKnight"
       MEMBER: "&eSubject"
 
+    FACTION_LEAVE:
+      # Sent when a player successfully leaves a faction.
+      # Placeholders: %faction_name% - Name of the faction.
+      FACTION_LEAVE_SUCCESS: "%server_name% &c&oYou have successfully left %faction_name%."
+
 
   Obelisk:
     # Sent when a player tries to access another player's or Faction's Obelisk (e.g. when visiting).

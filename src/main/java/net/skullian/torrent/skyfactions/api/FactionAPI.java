@@ -202,6 +202,14 @@ public class FactionAPI {
         });
     }
 
+    /**
+     * Check if a player is in a certain region.
+     *
+     * @param player Player to check.
+     * @param world World where region is located.
+     * @param regionName Name of region.
+     * @return {@link Boolean}
+     */
     public static boolean isInRegion(Player player, World world, String regionName) {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         com.sk89q.worldedit.util.Location location = BukkitAdapter.adapt(player.getLocation());

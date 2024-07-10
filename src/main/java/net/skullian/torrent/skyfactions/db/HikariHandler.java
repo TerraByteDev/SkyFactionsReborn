@@ -175,6 +175,13 @@ public class HikariHandler {
                     [description] BLOB NOT NULL,
                     [timestamp] INTEGER NOT NULL
                     );
+                    """);
+
+            PreparedStatement factionBannedMembers = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS factionBans (
+                    [faction_name] STRING NOT NULL,
+                    [uuid] BLOB NOT NULL
+                    );
                     """)) {
 
             islandsTable.executeUpdate();
@@ -197,6 +204,9 @@ public class HikariHandler {
 
             auditLogTable.executeUpdate();
             auditLogTable.close();
+
+            factionBannedMembers.executeUpdate();
+            factionBannedMembers.close();
 
             connection.close();
         }
@@ -973,6 +983,25 @@ public class HikariHandler {
         });
     }
 
+    public CompletableFuture<Void> leaveFaction(String name, OfflinePlayer player) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM factionMembers WHERE faction_name = ? AND uuid = ?")) {
+
+               statement.setString(1, name);
+               statement.setString(2, player.getUniqueId().toString());
+
+               statement.executeUpdate();
+               statement.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
     public CompletableFuture<OfflinePlayer> getFactionOwner(String name) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
@@ -1204,6 +1233,96 @@ public class HikariHandler {
         });
     }
 
+    public CompletableFuture<Void> banPlayer(String factionName, OfflinePlayer player) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionBans (faction_name, uuid) VALUES (?, ?);")) {
+
+                statement.setString(1, factionName);
+                statement.setString(2, player.getUniqueId().toString());
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<List<OfflinePlayer>> getBannedPlayers(String factionName) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionBans WHERE faction_name = ?")) {
+
+                statement.setString(1, factionName);
+                ResultSet set = statement.executeQuery();
+
+                List<OfflinePlayer> players = new ArrayList<>();
+                while (set.next()) {
+                    UUID uuid = UUID.fromString(set.getString("uuid"));
+                    OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+                    if (player.hasPlayedBefore()) {
+                        players.add(player);
+                    }
+                }
+
+                statement.close();
+                connection.close();
+
+                return players;
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Boolean> isPlayerBanned(String factionName, OfflinePlayer player) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionBans WHERE faction_name = ? AND uuid = ?")) {
+
+                statement.setString(1, factionName);
+                statement.setString(2, player.getUniqueId().toString());
+
+                ResultSet set = statement.executeQuery();
+                if (set.next()) {
+                    return true;
+                }
+
+                statement.close();
+                connection.close();
+
+                return false;
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> unbanPlayer(String factionName, OfflinePlayer player) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("DELETE FROM factionBans WHERE faction_name = ? AND uuid = ?")) {
+
+                statement.setString(1, factionName);
+                statement.setString(2, player.getUniqueId().toString());
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
     // ------------------ FACTION AUDIT LOGGING ------------------ //
 
     public CompletableFuture<Void> createAuditLog(OfflinePlayer player, String type, String description, String factionName) {
@@ -1254,7 +1373,6 @@ public class HikariHandler {
            }
         });
     }
-
 
     // ------------------ MISC ------------------ //
 
