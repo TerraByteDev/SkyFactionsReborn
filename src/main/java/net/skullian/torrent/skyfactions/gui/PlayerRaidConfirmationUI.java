@@ -34,7 +34,7 @@ public class PlayerRaidConfirmationUI {
 
             SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
             window.open();
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "GUI_LOAD_EXCEPTION");
         }
@@ -62,7 +62,7 @@ public class PlayerRaidConfirmationUI {
             }
 
             return builder;
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
 

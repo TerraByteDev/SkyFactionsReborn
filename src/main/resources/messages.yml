@@ -249,7 +249,31 @@ Messages:
       BROADCAST_MODEL:
         - "&7╔═════════╝ &eFACTION BROADCAST &7╚═════════╗&r"
         - "%broadcast%&7 - %broadcaster%"
-        - "&7╚═════════╗ &eFACTION BROADCAST &7╔═════════╝"
+        - "&7╚═════════╗ &eFACTION BROADCAST &7╔═════════╝"#
+
+    FACTION_MANAGE:
+
+      # Sent when a player tries to select themselves in the management UI.
+      MANAGE_SELF_DENY: "%server_name%&c&l Hey!&r&7 You cannot manage yourself!"
+
+      # Put in the lore line of the management UI for yourself.
+      MANAGE_SELF_DENY_LORE: "&cYou cannot manage yourself!"
+
+      # Sent to the player (admin, moderator, owner) when they successfully kick a player.
+      # Placeholders: %player% - Player who was kicked.
+      KICK_SUCCESS: "%server_name% &r&7Successfully kicked &c&l%player%"
+
+      # If BROADCAST_KICKS is enabled in the config, this is what will be broadcast.
+      # Placeholders: %kicked% - Player who was kicked.
+      KICK_BROADCAST: "&c&l%kicked%&r&e has been kicked from the Faction."
+
+      # Sent to the player (admin, owner) when they successfully kick a player.
+      # Placeholders: %player% - Player who was kicked.
+      BAN_SUCCESS: "%server_name% &r&7Successfully banned &c&l%player%"
+
+      # If BROADCAST_BANS is enabled in the config, this is what will be broadcast.
+      # Placeholders: %banned% - Player who was banned.
+      BAN_BROADCAST: "&c&l%banned% &r&ehas been banned from the Faction."
 
 
   Obelisk:
@@ -326,4 +350,14 @@ Messages:
     # Placeholders: %player_name% - Player who created the broadcast.
     BROADCAST_TITLE: "&a&lBroadcast Created"
     BROADCAST_DESCRIPTION: "&a%player_name% &r&ecreated a new broadcast."
+
+    # Sent when a player (moderator, admin or owner) kicks a player.
+    # Placeholders: %kicked% - Name of player who was kicked. %player% - Player who kicked them.
+    KICK_TITLE: "&c&lPlayer Kicked"
+    KICK_DESCRIPTION: "&a%kicked% &ewas kicked from the Faction/&eby &a%player%."
+
+    # Sent when a player (admin or owner) bans a player.
+    # Placeholders: %banned% - Name of player who was banned. %player% - Player who banned them.
+    BAN_TITLE: "&r&lPlayer Banned"
+    BAN_DESCRIPTION: "&a%banned% &ewas banned from the Faction/&eby &a%player%."
 

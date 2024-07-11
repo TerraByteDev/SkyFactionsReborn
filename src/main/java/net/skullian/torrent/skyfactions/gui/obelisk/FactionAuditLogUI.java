@@ -43,7 +43,7 @@ public class FactionAuditLogUI {
 
             SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
             window.open();
-        } catch (IOException | InvalidConfigurationException error) {
+        } catch (IllegalArgumentException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "open the audit log GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
@@ -86,7 +86,7 @@ public class FactionAuditLogUI {
                         break;
                 }
             }
-        } catch (IOException | InvalidConfigurationException error) {
+        } catch (IllegalArgumentException error) {
             error.printStackTrace();
         }
 

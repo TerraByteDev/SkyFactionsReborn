@@ -1,0 +1,90 @@
+# Title of the GUI (Inventory)
+TITLE: "&cManage %player_name%"
+OPEN_SOUND: "ui.button.click"
+OPEN_PITCH: 1
+
+# This allows you to customise the shape of the GUI.
+# You can only have a maximum of 54 slots (9 x 6).
+# Each character represents an item / slot.
+# '.' represents an empty slot.
+# Any other characters are shown below under ITEMS
+# Each character corresponds to an item.
+
+# This GUI is where Faction owners / admins can manage a faction member.
+
+# THIS IS A PAGINATED GUI! This means it can have multiple pages.
+# THE LETTER 'x' CORRESPONDS TO WHERE THE PAGINATED ITEMS WILL BE!
+# YOU CANNOT CHANGE THIS!
+# PAGINATION ITEMS ARE CONFIGURED IN 'pagination.yml'!
+LAYOUT:
+  - "b # # # # # # # #"
+  - "# . . . p . . . #"
+  - "# . r . k . r . #"
+  - "# . . . . . . . #"
+  - "# # # # # # # # #"
+
+
+
+ITEMS:
+
+  # Just a general prompt for what this GUI is about.
+  # Placeholders: %player_name% - Name of player who is being managed.
+  PLAYER_HEAD:
+    char: "p" # This is the character to use in the LAYOUT!
+    material: "PLAYER_HEAD"
+    skull: "%player_skull%" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
+    text: "&c%player_name%"
+    sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
+    pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
+    lore:
+      - "&eManage this player."
+
+  # Back button, return to the main Obelisk UI
+  BACK:
+    char: "b"
+    material: "BARRIER"
+    skull: ""
+    text: "&c&oBack"
+    sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
+    pitch: 1
+    lore: ""
+
+  # Ban button, ban the player from the Faction.
+  BAN:
+    char: "r"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2U4ODFlYjgxNjVmMjYxMDYwOWEzYWUwYzRkOTNhMmUxODEwYWQ0ZmUyZDg0NzcwOTY4MDJmN2EyYTBkZTQ3YyJ9fX0="
+    text: "&c&lBan"
+    sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
+    pitch: 1
+    lore: "&cBan this player permanently."
+
+  # Back button, return to the main Obelisk UI
+  KICK:
+    char: "k"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzA3ZjQ3OTU4NGZjY2FlNjg2MDAzYTYwODAwZGRmZWU3MmFmZmUxMGU0YmIyNmE3ZDRhMDBjY2I5OTc5N2QyIn19fQ=="
+    text: "&e&lKick"
+    sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
+    pitch: 1
+    lore: "&eKick this player from the Faction."
+
+  # Manage the player's rank.
+  RANK:
+    char: "r"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDAxYWZlOTczYzU0ODJmZGM3MWU2YWExMDY5ODgzM2M3OWM0MzdmMjEzMDhlYTlhMWEwOTU3NDZlYzI3NGEwZiJ9fX0="
+    text: "&e&lPromote / Demote"
+    sound: ""
+    pitch: 1
+    lore: "&aManage this player's rank."
+
+  BORDER:
+    char: "#"
+    material: "GRAY_STAINED_GLASS_PANE"
+    skull: ""
+    text: " " # No text
+    sound: "none"
+    pitch: 1
+    lore: "" # Empty lore
+

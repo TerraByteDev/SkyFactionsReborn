@@ -70,7 +70,7 @@ public class ObeliskRuneItem extends AbstractItem {
 
             GUIData data = GUIAPI.getGUIData("runes_ui");
             new RuneSubmitUI(RuneSubmitUI.createStructure(data), data, player, TYPE).promptPlayer(player);
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             event.getInventory().close();
             Messages.ERROR.send(player, "%operation%", "open the rune UI", "%debug%", "GUI_LOAD_EXCEPTION");

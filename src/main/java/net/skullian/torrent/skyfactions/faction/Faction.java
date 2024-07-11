@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.db.AuditLogData;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
@@ -199,10 +200,12 @@ public class Faction {
      * Kick a player from the Faction for a specific reason.
      *
      * @param player Player to kick.
-     * @param reason Reason for kick.
      */
-    public void kickPlayer(OfflinePlayer player, String reason) {
+    public void kickPlayer(OfflinePlayer player, Player actor) {
         SkyFactionsReborn.db.kickPlayer(player, name).join();
+        if (Settings.FACTION_MANAGE_BROADCAST_KICKS.getBoolean()) {
+            createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST.get("%kicked%", player.getName()));
+        }
     }
 
     /**
@@ -210,8 +213,11 @@ public class Faction {
      *
      * @param player Player to ban.
      */
-    public void banPlayer(OfflinePlayer player) {
+    public void banPlayer(OfflinePlayer player, Player actor) {
         SkyFactionsReborn.db.banPlayer(name, player).join();
+        if (Settings.FACTION_MANAGE_BROADCAST_BANS.getBoolean()) {
+            createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST.get("%banned%", player.getName()));
+        }
     }
 
     /**

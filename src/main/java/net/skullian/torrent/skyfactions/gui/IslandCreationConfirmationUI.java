@@ -35,7 +35,7 @@ public class IslandCreationConfirmationUI implements Listener {
 
             SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
             window.open();
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "create your island", "%debug%", "GUI_LOAD_EXCEPTION");
         }
@@ -63,7 +63,7 @@ public class IslandCreationConfirmationUI implements Listener {
             }
 
             return builder;
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
 

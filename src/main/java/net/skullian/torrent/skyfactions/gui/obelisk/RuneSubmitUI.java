@@ -141,7 +141,7 @@ public class RuneSubmitUI extends AbstractGui {
             }
 
             return builder;
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
 

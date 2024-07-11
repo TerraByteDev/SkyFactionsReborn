@@ -26,8 +26,10 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.OBELISK, new ConfigHandler(plugin, "obelisk"));
         registerFile(ConfigTypes.RUNES, new ConfigHandler(plugin, "runes"));
 
-        for (ExtraEnums enumEntry : ExtraEnums.values()) {
-            new ConfigHandler(plugin, enumEntry.getConfigPath()).saveDefaultConfig();;
+        for (GUIEnums enumEntry : GUIEnums.values()) {
+            ConfigHandler handler = new ConfigHandler(plugin, enumEntry.getConfigPath());
+            handler.saveDefaultConfig();
+            GUIEnums.configs.put(enumEntry.getConfigPath(), handler.getConfig());
         }
 
         configs.values().forEach(ConfigHandler::saveDefaultConfig);
@@ -49,8 +51,10 @@ public class ConfigFileHandler {
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
 
-        for (ExtraEnums enumEntry : ExtraEnums.values()) {
-            new ConfigHandler(SkyFactionsReborn.getInstance(), enumEntry.getConfigPath()).saveDefaultConfig();;
+        for (GUIEnums enumEntry : GUIEnums.values()) {
+            ConfigHandler handler = new ConfigHandler(SkyFactionsReborn.getInstance(), enumEntry.getConfigPath());
+            handler.saveDefaultConfig();
+            GUIEnums.configs.put(enumEntry.getConfigPath(), handler.getConfig());
         }
 
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();

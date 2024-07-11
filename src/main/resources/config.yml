@@ -150,3 +150,11 @@ Factions:
     # The plugin will automatically run through all of these strings and check that the faction name does not contain any of these.
     # Can be regex patterns or just strings.
     BLACKLISTED_NAMES: [ cunt, retard, motherfucker, motherfuck, anus, anal, cock, dick, whore, suck, twat, shit, faggot, bitch, "butt|ass(?:hole)?", "^fag$", "nigg(?:a|er)", "tit(?:s|z|ies)?", "boob(?:s|z|ies)?"]
+
+  FACTION_MANAGE:
+
+    # Whether to broadcast kicks, and the reason for it.
+    BROADCAST_KICKS: true
+
+    # Whether to broadcast bans, and the reason for it.
+    BROADCAST_BANS: true

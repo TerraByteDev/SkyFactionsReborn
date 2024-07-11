@@ -1,13 +1,11 @@
-package net.skullian.torrent.skyfactions.gui.items.obelisk;
+package net.skullian.torrent.skyfactions.gui.items.obelisk.member_manage;
 
-import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.faction.Faction;
-import net.skullian.torrent.skyfactions.gui.obelisk.member.MemberManagementUI;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.obelisk.member.ManageMemberUI;
+import net.skullian.torrent.skyfactions.gui.obelisk.member.MemberManagementUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -20,20 +18,26 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class ObeliskMemberManagementItem extends AbstractItem {
+public class MemberPaginationItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
     private int PITCH;
     private List<String> LORE;
+    private String RANK_TITLE;
     private ItemStack STACK;
+    private OfflinePlayer SUBJECT;
+    private Player ACTOR;
 
-    public ObeliskMemberManagementItem(ItemData data, ItemStack stack) {
+    public MemberPaginationItem(ItemData data, ItemStack stack, String rankTitle, OfflinePlayer player, Player actor) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
+        this.RANK_TITLE = rankTitle;
         this.STACK = stack;
+        this.SUBJECT = player;
+        this.ACTOR = actor;
     }
 
     @Override
@@ -42,7 +46,10 @@ public class ObeliskMemberManagementItem extends AbstractItem {
                 .setDisplayName(TextUtility.color(NAME));
 
         for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine));
+            builder.addLoreLines(TextUtility.color(loreLine.replace("%player_rank%", TextUtility.color(RANK_TITLE))));
+        }
+        if (SUBJECT.getUniqueId().equals(ACTOR.getUniqueId())) {
+            builder.addLoreLines(TextUtility.color(Messages.FACTION_MANAGE_SELF_DENY_LORE.get()));
         }
 
         return builder;
@@ -56,13 +63,10 @@ public class ObeliskMemberManagementItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        Faction faction = FactionAPI.getFaction(player);
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
-        if (faction.getOwner().equals(offlinePlayer) || faction.getAdmins().contains(offlinePlayer)) {
-            MemberManagementUI.promptPlayer(player);
+        if (SUBJECT.getUniqueId().equals(player.getUniqueId())) {
+            Messages.FACTION_MANAGE_SELF_DENY.send(player);
         } else {
-            Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_ADMIN_TITLE.get());
+            ManageMemberUI.promptPlayer(player, SUBJECT);
         }
     }
-
 }

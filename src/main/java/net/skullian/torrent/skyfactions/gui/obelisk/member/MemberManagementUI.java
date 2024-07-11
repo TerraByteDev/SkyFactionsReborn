@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.gui.obelisk;
+package net.skullian.torrent.skyfactions.gui.obelisk.member;
 
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
@@ -12,7 +12,7 @@ import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.torrent.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.member_management.MemberPaginationItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.member_manage.MemberPaginationItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
@@ -43,7 +43,7 @@ public class MemberManagementUI {
 
             SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
             window.open();
-        } catch (IOException | InvalidConfigurationException error) {
+        } catch (IllegalArgumentException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "open the member management GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
@@ -88,7 +88,7 @@ public class MemberManagementUI {
             }
 
             return builder;
-        } catch (IOException | InvalidConfigurationException e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
 
@@ -106,23 +106,23 @@ public class MemberManagementUI {
         List<OfflinePlayer> members = faction.getMembers();
 
         data.setNAME(data.getNAME().replace("%player_name%", owner.getName()));
-        items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, owner.getPlayer()), Messages.FACTION_OWNER_TITLE.get()));
+        items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, owner.getPlayer()), Messages.FACTION_OWNER_TITLE.get(), owner, player));
 
         for (OfflinePlayer admin : admins) {
             data.setNAME(data.getNAME().replace("%player_name%", admin.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, admin.getPlayer()), Messages.FACTION_ADMIN_TITLE.get()));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, admin.getPlayer()), Messages.FACTION_ADMIN_TITLE.get(), admin, player));
         }
         for (OfflinePlayer moderator : moderators) {
             data.setNAME(data.getNAME().replace("%player_name%", moderator.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, moderator.getPlayer()), Messages.FACTION_MODERATOR_TITLE.get()));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, moderator.getPlayer()), Messages.FACTION_MODERATOR_TITLE.get(), moderator, player));
         }
         for (OfflinePlayer fighter : fighters) {
             data.setNAME(data.getNAME().replace("%player_name%", fighter.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, fighter.getPlayer()), Messages.FACTION_FIGHTER_TITLE.get()));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, fighter.getPlayer()), Messages.FACTION_FIGHTER_TITLE.get(), fighter, player));
         }
         for (OfflinePlayer member : members) {
             data.setNAME(data.getNAME().replace("%player_name%", member.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getPlayer()), Messages.FACTION_MEMBER_TITLE.get()));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getPlayer()), Messages.FACTION_MEMBER_TITLE.get(), member, player));
         }
 
         return items;
