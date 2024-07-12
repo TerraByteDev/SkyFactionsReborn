@@ -17,7 +17,7 @@ public class ConfigFileHandler {
     public FileConfiguration DISCORD_CONFIG;
 
     public void loadFiles(SkyFactionsReborn plugin) {
-        new File(plugin.getDataFolder(), "/schematics/raid_saves").mkdirs();
+        new File(plugin.getDataFolder(), "/schematics").mkdirs();
         new File(plugin.getDataFolder(), "/songs").mkdir();
 
         registerFile(ConfigTypes.SETTINGS, new ConfigHandler(plugin, "config"));
@@ -62,6 +62,4 @@ public class ConfigFileHandler {
     }
 
     public void registerFile(ConfigTypes type, ConfigHandler handler) { configs.put(type, handler); }
-
-    public FileConfiguration getFileConfig(File file) { return YamlConfiguration.loadConfiguration(file); }
 }

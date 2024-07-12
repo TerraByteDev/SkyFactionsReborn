@@ -13,7 +13,7 @@ OPEN_PITCH: 1
 LAYOUT:
   - "# # # # p # # # #"
   - "# . . . . . . . #"
-  - "# . . . r . . . #"
+  - "# . . . r i . . #"
   - "# . . a d m . . #"
   - "# # # # # # # # #"
 
@@ -34,6 +34,20 @@ ITEMS:
       - "&aMember Count: &e%member_count%"
       - "&aRunes: &e%rune_count%"
       - "&aGems: &e%gem_count%"
+
+  # Manage outgoing invites and invite requests.
+  INVITES:
+    char: "i"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjRiZDlkZDEyOGM5NGMxMGM5NDVlYWRhYTM0MmZjNmQ5NzY1ZjM3YjNkZjJlMzhmN2IwNTZkYzdjOTI3ZWQifX19"
+    text: "&9Invites"
+    sound: ""
+    pitch: 1
+    lore:
+      - "&eView & manage your"
+      - "&aincoming join requests"
+      - "&eand &aoutgoing invites."
+
 
   # UI to convert select blocks into runes
   RUNES_CONVERSION:

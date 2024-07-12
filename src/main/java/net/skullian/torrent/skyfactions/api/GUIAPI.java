@@ -88,7 +88,7 @@ public class GUIAPI {
      * @throws RuntimeException
      */
     public static List<PaginationItemData> getPaginationData(Player player) throws RuntimeException {
-        FileConfiguration config = GUIEnums.configs.get("guis/pagination.yml");
+        FileConfiguration config = GUIEnums.configs.get("guis/pagination");
         if (config != null) {
 
             ConfigurationSection itemsConfig = config.getConfigurationSection("ITEMS");

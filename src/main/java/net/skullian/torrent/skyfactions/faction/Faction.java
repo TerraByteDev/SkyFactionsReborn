@@ -6,6 +6,7 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.db.AuditLogData;
+import net.skullian.torrent.skyfactions.db.InviteData;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -273,5 +274,32 @@ public class Faction {
      */
     public void createAuditLog(OfflinePlayer player, AuditLogType type, Object... replacements) {
         SkyFactionsReborn.db.createAuditLog(player, type.getTitle(replacements), type.getDescription(replacements), name).join();
+    }
+
+    /**
+     * Get all incoming join requests to the Faction.
+     *
+     * @return {@link List<InviteData>}
+     */
+    public List<InviteData> getJoinRequests() {
+        return SkyFactionsReborn.db.getInvitesOfType(name, "incoming").join();
+    }
+
+    /**
+     * Get all outgoing invites from the Faction.
+     *
+     * @return {@link List<InviteData>}
+     */
+    public List<InviteData> getOutgoingInvites() {
+        return SkyFactionsReborn.db.getInvitesOfType(name, "outgoing").join();
+    }
+
+    /**
+     * Invite another player to your faction.
+     *
+     * @param player Player to invite to the faction.
+     */
+    public void createInvite(OfflinePlayer player) {
+        SkyFactionsReborn.db.createInvite(player.getPlayer(), name, "outgoing").join();
     }
 }

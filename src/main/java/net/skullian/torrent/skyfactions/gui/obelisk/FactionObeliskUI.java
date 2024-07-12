@@ -1,7 +1,10 @@
 package net.skullian.torrent.skyfactions.gui.obelisk;
 
+import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.faction.RankType;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
@@ -41,6 +44,11 @@ public class FactionObeliskUI {
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
             List<ItemData> data = GUIAPI.getItemData("obelisk/faction_obelisk", player);
+            Faction faction = FactionAPI.getFaction(player);
+            if (faction == null) {
+                Messages.ERROR.send(player, "%operation%", "open your obelisk", "%debug%", "FACTION_NOT_FOUND");
+                return null;
+            }
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 
@@ -63,6 +71,15 @@ public class FactionObeliskUI {
 
                     case "AUDIT_LOGS":
                         builder.addIngredient(itemData.getCHARACTER(), new ObeliskAuditLogItem(itemData, GUIAPI.createItem(itemData, player)));
+                        break;
+
+                    case "INVITES":
+                        // todo probably will need to add type for when actually functioning
+                        if (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player)) {
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player)));
+                        } else {
+                            Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_MODERATOR_TITLE.get());
+                        }
                         break;
 
                     case "BORDER":

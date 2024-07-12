@@ -182,6 +182,15 @@ public class HikariHandler {
                     [faction_name] STRING NOT NULL,
                     [uuid] BLOB NOT NULL
                     );
+                    """);
+
+            PreparedStatement factionInvitesTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS factionInvites (
+                    [faction_name] STRING NOT NULL,
+                    [uuid] BLOB NOT NULL,
+                    [type] STRING NOT NULL,
+                    [timestamp] INTEGER NOT NULL
+                    );
                     """)) {
 
             islandsTable.executeUpdate();
@@ -207,6 +216,9 @@ public class HikariHandler {
 
             factionBannedMembers.executeUpdate();
             factionBannedMembers.close();
+
+            factionInvitesTable.executeUpdate();
+            factionInvitesTable.close();
 
             connection.close();
         }
@@ -1373,6 +1385,80 @@ public class HikariHandler {
            }
         });
     }
+
+    // ------------------ FACTION INVITES ------------------ //
+
+    public CompletableFuture<Void> createInvite(Player player, String factionName, String type) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO factionInvites (faction_name, uuid, type, timestamp) VALUES (?, ?, ?, ?);")) {
+
+               statement.setString(1, factionName);
+               statement.setString(2, player.getUniqueId().toString());
+               statement.setString(3, type);
+               statement.setLong(4, System.currentTimeMillis());
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<List<InviteData>> getInvitesOfType(String factionName, String type) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionInvites WHERE faction_name = ? AND type = ? ORDER BY timestamp DESC")) {
+
+               statement.setString(1, factionName);
+               statement.setString(2, type);
+
+               ResultSet set = statement.executeQuery();
+               List<InviteData> data = new ArrayList<>();
+               while (set.next()) {
+                   OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(set.getString("uuid")));
+                   long timestamp = set.getLong("timestamp");
+
+                   data.add(new InviteData(offlinePlayer, factionName, type, timestamp));
+               }
+
+               statement.close();
+               connection.close();
+
+               return data;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<List<InviteData>> getInvitesOfPlayer(OfflinePlayer player) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionInvites WHERE uuid = ? ORDER BY timestamp DESC")) {
+
+               statement.setString(1, player.getUniqueId().toString());
+
+               ResultSet set = statement.executeQuery();
+               List<InviteData> data = new ArrayList<>();
+               while (set.next()) {
+                   String factionName = set.getString("faction_name");
+                   long timestamp = set.getLong("timestamp");
+
+                   data.add(new InviteData(player, factionName, "outgoing", timestamp));
+               }
+
+               statement.close();
+               connection.close();
+
+               return data;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
 
     // ------------------ MISC ------------------ //
 
