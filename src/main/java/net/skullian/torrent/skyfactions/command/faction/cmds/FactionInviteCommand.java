@@ -46,7 +46,7 @@ public class FactionInviteCommand extends CommandTemplate {
 
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
             if (!target.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
+                Messages.UNKNOWN_PLAYER.send(player, "%player%", name);
 
             } else if (faction.getAllMembers().contains(target)){
                 Messages.FACTION_INVITE_IN_SAME_FACTION.send(player);

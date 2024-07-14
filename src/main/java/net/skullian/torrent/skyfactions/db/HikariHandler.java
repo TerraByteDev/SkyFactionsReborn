@@ -188,7 +188,7 @@ public class HikariHandler {
                     CREATE TABLE IF NOT EXISTS factionInvites (
                     [faction_name] STRING NOT NULL,
                     [uuid] BLOB NOT NULL,
-                    [invter] BLOB NOT NULL,
+                    [inviter] BLOB NOT NULL,
                     [type] STRING NOT NULL,
                     [timestamp] INTEGER NOT NULL
                     );
@@ -1410,6 +1410,11 @@ public class HikariHandler {
                }
                statement.setString(4, type);
                statement.setLong(5, System.currentTimeMillis());
+
+               statement.executeUpdate();
+               statement.close();
+
+               connection.close();
            } catch (SQLException error) {
                handleError(error);
                throw new RuntimeException(error);
@@ -1507,11 +1512,11 @@ public class HikariHandler {
     public void handleError(SQLException error) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
-            LOGGER.fatal("There was an error while performing database actions.");
+            LOGGER.fatal("There was an error while performing database actions:");
+            LOGGER.fatal(error.getMessage());
             LOGGER.fatal("Please see https://docs.terrabytedev.com/skyfactions/errors-and-debugging for more information.");
             LOGGER.fatal("Please contact the devs.");
             LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
-            error.printStackTrace();
         });
     }
 }

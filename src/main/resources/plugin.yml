@@ -40,6 +40,7 @@ commands:
     usage: /<command>
 
 permissions:
+
   skyfactions.*:
     description: Access to all SkyFactions commands.
     children:

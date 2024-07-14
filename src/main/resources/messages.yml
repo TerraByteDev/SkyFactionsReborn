@@ -284,7 +284,7 @@ Messages:
 
       # Sent when the player successfully invites another player to their Faction.
       # Placeholders: %player_name% - Name of the player being invited.
-      INVITE_CREATE_SUCCESS: "%server_name% &eSuccessfully invited %a%player_name% &eto your Faction."
+      INVITE_CREATE_SUCCESS: "%server_name% &eSuccessfully invited &a%player_name% &eto your Faction."
 
       # Sent to a player when they are invited to another Faction, if online.
       INVITE_NOTIFICATION: "%server_name% &aYou have a new Faction invitation. Check your Obelisk."

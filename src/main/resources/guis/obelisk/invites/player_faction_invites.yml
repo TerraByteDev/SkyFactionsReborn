@@ -63,7 +63,7 @@ ITEMS:
       - "&a%player_name% &ewants you"
       - "&eto join &a%faction_name%.."
       - ""
-      - "&7Click me for actions."
+      - "&7Click for actions."
 
   BORDER:
     char: "#"

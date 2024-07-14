@@ -66,8 +66,12 @@ public class RunesAPI {
                 }
             }
             returnItems(remaindingItems, player);
-            SkyFactionsReborn.db.addRunes(player, total);
-            Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
+            if (total > 0) {
+              SkyFactionsReborn.db.addRunes(player, total);
+              Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
+            } else {
+                Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
+            }
         }
     }
 

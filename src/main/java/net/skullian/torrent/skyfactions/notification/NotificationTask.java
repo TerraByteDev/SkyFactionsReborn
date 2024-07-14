@@ -23,7 +23,7 @@ public class NotificationTask {
                     Faction faction = FactionAPI.getFaction(player);
                     if (NotificationHandler.factionInviteStore.containsKey(faction.getName())) {
                         int factionJoinRequestCount = NotificationHandler.factionInviteStore.get(faction.getName());
-                        if (factionJoinRequestCount > 0 && (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(PLAYER))) {
+                        if (factionJoinRequestCount > 0 && (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player))) {
                             Messages.NOTIFICATION_PENDING_JOIN_REQUESTS.send(player, "%count%", factionJoinRequestCount);
                         }
                     }
