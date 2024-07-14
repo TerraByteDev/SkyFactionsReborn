@@ -1417,6 +1417,30 @@ public class HikariHandler {
         });
     }
 
+    public CompletableFuture<Boolean> joinRequestExists(String factionName, Player player) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionInvites WHERE faction_name = ? AND uuid = ? AND type = 'incoming'")) {
+
+               statement.setString(1, factionName);
+               statement.setString(2, player.getUniqueId().toString());
+
+               ResultSet set = statement.executeQuery();
+               if (set.next()) {
+                   return true;
+               }
+
+               statement.close();
+               connection.close();
+
+               return false;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
     public CompletableFuture<List<InviteData>> getInvitesOfType(String factionName, String type) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();

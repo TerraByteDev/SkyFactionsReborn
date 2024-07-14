@@ -291,6 +291,16 @@ Messages:
 
       # Sent to all Faction moderators, admins and owner (if online) when someone requests to join their Faction.
       JOIN_REQUEST_NOTIFICATION: "%server_name% &aYou have a new Faction join request. Check your Obelisk."
+
+      # Sent to a player when they create a join request for a Faction.
+      # Placeholders: %faction_name% - Name of the Faction.
+      JOIN_REQUEST_CREATE_SUCCESS: "%server_name% &eSuccessfully created a join request for &a%faction_name%."
+
+      # Sent when a player tries to create another join request to a Faction (when they already have done so).
+      JOIN_REQUEST_DUPLICATE: "%server_name% &cYou already have a join request for that Faction!"
+
+      # Sent when a player tries to create a join request to a Faction that they are already in.
+      JOIN_REQUEST_SAME_FACTION: "%server_name% &cYou are already in that Faction!"
   Notifications:
     # Sent when a player has a pending Faction invitation in their Obelisk.
     # Placeholders: %count% - Amount of pending Faction invitations.

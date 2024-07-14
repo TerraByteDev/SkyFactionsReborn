@@ -1,5 +1,6 @@
 package net.skullian.torrent.skyfactions.command.faction;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -44,6 +45,24 @@ public class FactionCommandTabCompletion implements TabCompleter {
             }
             if (sender.hasPermission("skyfactions.faction.broadcast")) {
                 completions.add("broadcast");
+            }
+            if (sender.hasPermission("skyfactions.faction.invite")) {
+                completions.add("invite");
+            }
+            if (sender.hasPermission("skyfactions.faction.requestjoin")) {
+                completions.add("requestjoin");
+            }
+
+            return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
+        } else if (args.length == 2) {
+            String subcmd = args[0].toLowerCase(Locale.ROOT);
+            String arg = args[1].toLowerCase(Locale.ROOT);
+            List<String> completions = new ArrayList<>();
+
+            if (subcmd.equals("invite") && sender.hasPermission("skyfactions.faction.invite")) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    completions.add(player.getName());
+                }
             }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
