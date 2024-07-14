@@ -1230,7 +1230,7 @@ public class HikariHandler {
     public CompletableFuture<Void> kickPlayer(OfflinePlayer player, String factionName) {
         return CompletableFuture.runAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE uuid = ? AND faction_name = ?")) {
+                PreparedStatement statement = connection.prepareStatement("DELETE * FROM factionMembers WHERE uuid = ? AND faction_name = ?")) {
 
                statement.setString(1, player.getUniqueId().toString());
                statement.setString(2, factionName);
@@ -1249,10 +1249,17 @@ public class HikariHandler {
     public CompletableFuture<Void> banPlayer(String factionName, OfflinePlayer player) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
+                 PreparedStatement kickStatement = connection.prepareStatement("DELETE * FROM factionMembers WHERE uuid = ? AND faction_name = ?");
                  PreparedStatement statement = connection.prepareStatement("INSERT INTO factionBans (faction_name, uuid) VALUES (?, ?);")) {
+
+                kickStatement.setString(1, player.getUniqueId().toString());
+                kickStatement.setString(2, factionName);
 
                 statement.setString(1, factionName);
                 statement.setString(2, player.getUniqueId().toString());
+
+                kickStatement.executeUpdate();
+                kickStatement.close();
 
                 statement.executeUpdate();
                 statement.close();
