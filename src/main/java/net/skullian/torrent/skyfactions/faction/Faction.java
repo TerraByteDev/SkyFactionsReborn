@@ -15,6 +15,8 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Getter
@@ -299,7 +301,28 @@ public class Faction {
      *
      * @param player Player to invite to the faction.
      */
-    public void createInvite(OfflinePlayer player) {
-        SkyFactionsReborn.db.createInvite(player.getPlayer(), name, "outgoing").join();
+    public void createInvite(OfflinePlayer player, Player inviter) {
+        SkyFactionsReborn.db.createInvite(player.getPlayer(), name, "outgoing", inviter).join();
+
+        if (player.isOnline()) {
+            Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer());
+        }
+    }
+
+    /**
+     * Create a join request to this Faction.
+     *
+     * @param player Player who is requesting to join this faction.
+     */
+    public void createJoinRequest(OfflinePlayer player) {
+        SkyFactionsReborn.db.createInvite(player.getPlayer(), name, "incoming", null).join();
+        List<OfflinePlayer> users = Stream.concat(getModerators().stream(), getAdmins().stream()).collect(Collectors.toList());
+        users.add(getOwner());
+
+        for (OfflinePlayer user : users) {
+            if (user.isOnline()) {
+                Messages.JOIN_REQUEST_NOTIFICATION.send(user.getPlayer());
+            }
+        }
     }
 }

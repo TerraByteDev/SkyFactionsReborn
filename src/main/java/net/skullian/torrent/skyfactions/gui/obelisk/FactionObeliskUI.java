@@ -74,9 +74,8 @@ public class FactionObeliskUI {
                         break;
 
                     case "INVITES":
-                        // todo probably will need to add type for when actually functioning
                         if (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player)) {
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player)));
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player), "faction"));
                         } else {
                             Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_MODERATOR_TITLE.get());
                         }

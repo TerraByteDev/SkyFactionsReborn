@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 public class InviteData {
 
     private OfflinePlayer player;
+    private OfflinePlayer inviter;
     private String factionName;
     private String type;
     private long timestamp;

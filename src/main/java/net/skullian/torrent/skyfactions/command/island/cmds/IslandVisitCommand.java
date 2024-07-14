@@ -39,7 +39,7 @@ public class IslandVisitCommand extends CommandTemplate {
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
 
             if (!target.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(player);
+                Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
                 return;
             }
 

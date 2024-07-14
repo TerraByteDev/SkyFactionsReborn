@@ -1,5 +1,5 @@
 # Title of the GUI (Inventory)
-TITLE: "&eChoose Invite Ty[e"
+TITLE: "&eChoose Invite Type"
 OPEN_SOUND: "ui.button.click"
 OPEN_PITCH: 1
 
@@ -71,4 +71,3 @@ ITEMS:
     sound: "none"
     pitch: 1
     lore: "" # Empty lore
-

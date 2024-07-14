@@ -89,7 +89,7 @@ Messages:
     # Placeholders: %discord_name% - Username (tag) of the discord user you link to.
     LINK_SUCCESS_MESSAGE: "%server_name% &a&lSuccess!&r&7 You are now linked to %discord_name%"
 
-    # Message sent to the user IN DISCORD when linkng is successful. (IS AN EMBED!)
+    # Message sent to the user IN DISCORD when linking is successful. (IS AN EMBED!)
     # Placeholders: %player_name% - Name of ingame player you link to.
     DISCORD_LINK_SUCCESS_MESSAGE: "`✅` Success! You are now linked to %player_name%"
 
@@ -274,6 +274,31 @@ Messages:
       # If BROADCAST_BANS is enabled in the config, this is what will be broadcast.
       # Placeholders: %banned% - Player who was banned.
       BAN_BROADCAST: "&c&l%banned% &r&ehas been banned from the Faction."
+
+    FACTION_INVITE:
+      # Sent when the player tries to invite themselves to their Faction.
+      INVITE_SELF_DENY: "%server_name% &c&lHey!&r&7 You cannot invite yourself!"
+
+      # Sent when the player tries to invite someone in the same Faction.
+      INVITE_IN_SAME_FACTION: "%server_name% &c&lHey!&r&7 That player is already in your Faction!"
+
+      # Sent when the player successfully invites another player to their Faction.
+      # Placeholders: %player_name% - Name of the player being invited.
+      INVITE_CREATE_SUCCESS: "%server_name% &eSuccessfully invited %a%player_name% &eto your Faction."
+
+      # Sent to a player when they are invited to another Faction, if online.
+      INVITE_NOTIFICATION: "%server_name% &aYou have a new Faction invitation. Check your Obelisk."
+
+      # Sent to all Faction moderators, admins and owner (if online) when someone requests to join their Faction.
+      JOIN_REQUEST_NOTIFICATION: "%server_name% &aYou have a new Faction join request. Check your Obelisk."
+  Notifications:
+    # Sent when a player has a pending Faction invitation in their Obelisk.
+    # Placeholders: %count% - Amount of pending Faction invitations.
+    PENDING_FACTION_INVITATIONS: "%server_name% &eYou have &a&l%count%&r&e pending Faction invitations in your Obelisk!"
+
+    # Sent when a Faction has pending join requests in their Obelisk.
+    # Placeholders: %count% - Amount of pending join requests.
+    PENDING_JOIN_REQUESTS: "%server_name% &eYou have &a&l%count% &r&epending Faction join requests in your Obelisk!"
 
 
   Obelisk:

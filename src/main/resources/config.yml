@@ -158,3 +158,10 @@ Factions:
 
     # Whether to broadcast bans, and the reason for it.
     BROADCAST_BANS: true
+
+# Notifications notify the player of things like pending invites (faction join requests, or player faction invites).
+Notifications:
+
+  # Interval in which the notifications are sent.
+  # IN SECONDS!
+  INTERVAL: 60 # TODO MOVE TO 10 AFTER DEVELOPMENT

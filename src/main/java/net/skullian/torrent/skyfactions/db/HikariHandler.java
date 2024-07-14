@@ -188,6 +188,7 @@ public class HikariHandler {
                     CREATE TABLE IF NOT EXISTS factionInvites (
                     [faction_name] STRING NOT NULL,
                     [uuid] BLOB NOT NULL,
+                    [invter] BLOB NOT NULL,
                     [type] STRING NOT NULL,
                     [timestamp] INTEGER NOT NULL
                     );
@@ -1388,15 +1389,20 @@ public class HikariHandler {
 
     // ------------------ FACTION INVITES ------------------ //
 
-    public CompletableFuture<Void> createInvite(Player player, String factionName, String type) {
+    public CompletableFuture<Void> createInvite(Player player, String factionName, String type, Player inviter) {
         return CompletableFuture.runAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("INSERT INTO factionInvites (faction_name, uuid, type, timestamp) VALUES (?, ?, ?, ?);")) {
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO factionInvites (faction_name, uuid, inviter, type, timestamp) VALUES (?, ?, ?, ?, ?);")) {
 
                statement.setString(1, factionName);
                statement.setString(2, player.getUniqueId().toString());
-               statement.setString(3, type);
-               statement.setLong(4, System.currentTimeMillis());
+               if (inviter != null) {
+                   statement.setString(3, inviter.getUniqueId().toString());
+               } else {
+                   statement.setString(3, "");
+               }
+               statement.setString(4, type);
+               statement.setLong(5, System.currentTimeMillis());
            } catch (SQLException error) {
                handleError(error);
                throw new RuntimeException(error);
@@ -1417,8 +1423,9 @@ public class HikariHandler {
                while (set.next()) {
                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(set.getString("uuid")));
                    long timestamp = set.getLong("timestamp");
+                   OfflinePlayer inviter = Bukkit.getOfflinePlayer(UUID.fromString(set.getString("inviter")));
 
-                   data.add(new InviteData(offlinePlayer, factionName, type, timestamp));
+                   data.add(new InviteData(offlinePlayer, inviter, factionName, type, timestamp));
                }
 
                statement.close();
@@ -1444,8 +1451,9 @@ public class HikariHandler {
                while (set.next()) {
                    String factionName = set.getString("faction_name");
                    long timestamp = set.getLong("timestamp");
+                   OfflinePlayer inviter = Bukkit.getOfflinePlayer(UUID.fromString(set.getString("inviter")));
 
-                   data.add(new InviteData(player, factionName, "outgoing", timestamp));
+                   data.add(new InviteData(player, inviter, factionName, "outgoing", timestamp));
                }
 
                statement.close();
@@ -1458,6 +1466,9 @@ public class HikariHandler {
            }
         });
     }
+
+    // ------------------ NOTIFICATIONS ------------------ //
+
 
 
     // ------------------ MISC ------------------ //

@@ -1,11 +1,9 @@
 package net.skullian.torrent.skyfactions.gui.obelisk.invites;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.db.InviteData;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.data.PaginationItemData;
@@ -15,6 +13,7 @@ import net.skullian.torrent.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.torrent.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.JoinRequestPaginationItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.PlayerFactionInvitePaginationItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -27,11 +26,11 @@ import xyz.xenondevs.invui.window.Window;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JoinRequestsUI {
+public class PlayerIncomingInvites {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/invites/incoming_requests");
+            GUIData data = GUIAPI.getGUIData("obelisk/invites/player_faction_invites");
             PagedGui.Builder gui = registerItems(PagedGui.items()
                     .setStructure(data.getLAYOUT()), player);
 
@@ -45,14 +44,14 @@ public class JoinRequestsUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "open the faction join requests GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, "%operation%", "open the incoming faction invites GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 
     private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player) {
         try {
             builder.addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL);
-            List<ItemData> data = GUIAPI.getItemData("obelisk/invites/incoming_requests", player);
+            List<ItemData> data = GUIAPI.getItemData("obelisk/invites/player_faction_invites", player);
             List<PaginationItemData> paginationData = GUIAPI.getPaginationData(player);
 
             for (ItemData itemData : data) {
@@ -66,7 +65,7 @@ public class JoinRequestsUI {
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player), "faction"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player), "player"));
                         break;
 
                     case "BORDER":
@@ -97,17 +96,14 @@ public class JoinRequestsUI {
 
     private static List<Item> getItems(Player player, ItemData itemData) {
         List<Item> items = new ArrayList<>();
-        Faction faction = FactionAPI.getFaction(player);
-        if (faction == null) {
-            Messages.ERROR.send(player, "%operation%", "open the faction join requests GUI", "%debug%", "FACTION_NOT_FOUND");
-            return null;
-        }
-        List<InviteData> data = faction.getJoinRequests();
+
+        List<InviteData> data = SkyFactionsReborn.db.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).join();
         for (InviteData inviteData : data) {
-            itemData.setNAME(itemData.getNAME().replace("%player_name%", inviteData.getPlayer().getName()));
-            items.add(new JoinRequestPaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getPlayer()), inviteData.getPlayer(), inviteData));
+            itemData.setNAME(itemData.getNAME().replace("%faction_name%", inviteData.getFactionName()));
+            items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getPlayer()), inviteData.getPlayer(), inviteData));
         }
 
         return items;
     }
+
 }

@@ -7,6 +7,7 @@ import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskDefencesItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskHeadItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskInvitesItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskRuneItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
@@ -56,6 +57,10 @@ public class PlayerObeliskUI {
 
                     case "RUNES_CONVERSION":
                         builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player), "player", player));
+                        break;
+
+                    case "INVITES":
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player), "player"));
                         break;
 
                     case "BORDER":
