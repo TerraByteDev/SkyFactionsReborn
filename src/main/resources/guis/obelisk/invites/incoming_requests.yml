@@ -63,7 +63,7 @@ ITEMS:
       - "&a%player_name%&e wants to"
       - "&ejoin your faction."
       - ""
-      - "&7%timestamp%"
+      - "&7%timestamp% ago"
 
   BORDER:
     char: "#"

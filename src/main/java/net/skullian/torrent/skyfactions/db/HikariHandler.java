@@ -9,6 +9,7 @@ import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
+import net.skullian.torrent.skyfactions.notification.NotificationData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -192,6 +193,15 @@ public class HikariHandler {
                     [type] STRING NOT NULL,
                     [timestamp] INTEGER NOT NULL
                     );
+                    """);
+
+            PreparedStatement notificationTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS notifications (
+                    [uuid] BLOB NOT NULL,
+                    [type] BLOB NOT NULL,
+                    [description] BLOB NOT NULL,
+                    [timestamp] INTEGER NOT NULL
+                    );
                     """)) {
 
             islandsTable.executeUpdate();
@@ -220,6 +230,9 @@ public class HikariHandler {
 
             factionInvitesTable.executeUpdate();
             factionInvitesTable.close();
+
+            notificationTable.executeUpdate();
+            notificationTable.close();
 
             connection.close();
         }
@@ -791,6 +804,26 @@ public class HikariHandler {
 
                factionRegistration.executeUpdate();
                factionRegistration.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<Void> addFactionMember(OfflinePlayer player, String factionName) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO factionMembers (faction_name, uuid, rank) VALUES (?, ?, ?)")) {
+
+               statement.setString(1, factionName);
+               statement.setString(2, player.getUniqueId().toString());
+               statement.setString(3, "member");
+
+               statement.executeUpdate();
+               statement.close();
 
                connection.close();
            } catch (SQLException error) {
@@ -1457,9 +1490,11 @@ public class HikariHandler {
                ResultSet set = statement.executeQuery();
                List<InviteData> data = new ArrayList<>();
                while (set.next()) {
+
                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(set.getString("uuid")));
                    long timestamp = set.getLong("timestamp");
-                   OfflinePlayer inviter = Bukkit.getOfflinePlayer(UUID.fromString(set.getString("inviter")));
+                   String uuid = set.getString("inviter");
+                   OfflinePlayer inviter = !uuid.isEmpty() ? Bukkit.getOfflinePlayer(UUID.fromString(uuid)) : null;
 
                    data.add(new InviteData(offlinePlayer, inviter, factionName, type, timestamp));
                }
@@ -1478,7 +1513,7 @@ public class HikariHandler {
     public CompletableFuture<List<InviteData>> getInvitesOfPlayer(OfflinePlayer player) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionInvites WHERE uuid = ? ORDER BY timestamp DESC")) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionInvites WHERE uuid = ? AND type = 'outgoing' ORDER BY timestamp DESC")) {
 
                statement.setString(1, player.getUniqueId().toString());
 
@@ -1487,7 +1522,8 @@ public class HikariHandler {
                while (set.next()) {
                    String factionName = set.getString("faction_name");
                    long timestamp = set.getLong("timestamp");
-                   OfflinePlayer inviter = Bukkit.getOfflinePlayer(UUID.fromString(set.getString("inviter")));
+                   String uuid = set.getString("inviter");
+                   OfflinePlayer inviter = !uuid.isEmpty() ? Bukkit.getOfflinePlayer(UUID.fromString(uuid)) : null;
 
                    data.add(new InviteData(player, inviter, factionName, "outgoing", timestamp));
                }
@@ -1503,8 +1539,74 @@ public class HikariHandler {
         });
     }
 
+    public CompletableFuture<Void> revokeInvite(String factionName, OfflinePlayer player, String type) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM factionInvites WHERE faction_name = ? AND uuid = ? AND type = ?")) {
+
+               statement.setString(1, factionName);
+               statement.setString(2, player.getUniqueId().toString());
+               statement.setString(3, type);
+
+               statement.executeUpdate();
+               statement.close();
+
+               connection.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
     // ------------------ NOTIFICATIONS ------------------ //
 
+    public CompletableFuture<Void> createNotification(OfflinePlayer player, String type, String description) {
+        return CompletableFuture.runAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO notifications (uuid, type, description, timestamp) VALUES (?, ?, ?, ?)")) {
+
+               statement.setString(1, player.getUniqueId().toString());
+               statement.setString(2, type);
+               statement.setString(3, description);
+               statement.setLong(4, System.currentTimeMillis());
+
+               statement.executeUpdate();
+               statement.close();
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
+    public CompletableFuture<List<NotificationData>> getNotifications(OfflinePlayer player) {
+        return CompletableFuture.supplyAsync(() -> {
+           try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM notifications WHERE uuid = ? ORDER BY timestamp DESC")) {
+
+               statement.setString(1, player.getUniqueId().toString());
+               ResultSet set = statement.executeQuery();
+
+               List<NotificationData> data = new ArrayList<>();
+               while (set.next()) {
+                   String type = set.getString("type");
+                   String desc = set.getString("desc");
+                   long timestamp = set.getLong("timestamp");
+
+                   data.add(new NotificationData(player.getUniqueId(), type, desc, timestamp));
+               }
+
+               statement.close();
+               connection.close();
+
+               return data;
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
 
 
     // ------------------ MISC ------------------ //

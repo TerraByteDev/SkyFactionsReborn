@@ -86,6 +86,8 @@ This plugin contains an abundance of smart features, including:
     - [ ] Refactor & Improve Code Quality
     - [ ] Split configs into further dedicated files.
     - [ ] Config Versioning & Update Detection
+    - [ ] Move away from Lombok logger
+    - [ ] Verbose logging
 
 ## Links
 - [Discord](https://discord.gg/Y7DVR9gpwa) - For general questions, support, and chatting about the plugin. For bug reports, use Github issues.

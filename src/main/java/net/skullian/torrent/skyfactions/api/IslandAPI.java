@@ -31,6 +31,8 @@ import net.skullian.torrent.skyfactions.util.FileUtil;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,11 +41,16 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class IslandAPI {
 
     public static HashSet<UUID> awaitingDeletion = new HashSet<>();
+
+    public static void handleJoinBorder(Player player, PlayerIsland island) {
+        // TODO GET LIMITING BUILDING AND WORLDBORDER
+    }
 
     public static void createIsland(Player player) {
 

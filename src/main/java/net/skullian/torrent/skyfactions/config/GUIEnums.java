@@ -21,6 +21,8 @@ public enum GUIEnums {
     OBELISK_INVITE_INCOMING_GUI("guis/obelisk/invites/incoming_requests"),
     OBELISK_INVITE_OUTGOING_GUI("guis/obelisk/invites/outgoing_invites"),
     OBELISK_PLAYER_INCOMING_INVITES_GUI("guis/obelisk/invites/player_faction_invites"),
+    OBELISK_JOIN_REQUEST_MANAGE_GUI("guis/obelisk/invites/join_request_manage"),
+    OBELISK_PLAYER_NOTIFICATIONS_GUI("guis/obelisk/player_notifications"),
 
     PAGINATION_MODEL("guis/pagination");
 

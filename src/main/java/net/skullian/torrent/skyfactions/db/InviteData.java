@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.OfflinePlayer;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @Getter
 public class InviteData {

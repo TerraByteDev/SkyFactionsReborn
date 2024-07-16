@@ -1,8 +1,14 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.db.InviteData;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -22,15 +28,15 @@ public class OutgoingInvitePaginationItem extends AbstractItem {
     private int PITCH;
     private List<String> LORE;
     private ItemStack STACK;
-    private OfflinePlayer SUBJECT;
+    private InviteData DATA;
 
-    public OutgoingInvitePaginationItem(ItemData data, ItemStack stack, OfflinePlayer player) {
+    public OutgoingInvitePaginationItem(ItemData data, ItemStack stack, InviteData inviteData) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
-        this.SUBJECT = player;
+        this.DATA = inviteData;
     }
 
     @Override
@@ -39,7 +45,11 @@ public class OutgoingInvitePaginationItem extends AbstractItem {
                 .setDisplayName(TextUtility.color(NAME));
 
         for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine));
+            builder.addLoreLines(TextUtility.color(loreLine
+                    .replace("%inviter%", DATA.getInviter().getName())
+                    .replace("%player_name%", DATA.getPlayer().getName())
+                    .replace("%timestamp%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))
+            ));
         }
 
         return builder;
@@ -53,7 +63,17 @@ public class OutgoingInvitePaginationItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        // todo
+        if (clickType.isRightClick()) {
+            event.getInventory().close();
+
+            Faction faction = FactionAPI.getFaction(player);
+            if (faction == null) {
+                Messages.ERROR.send(player, "%operation%", "revoke a Faction invite", "%debug%", "FACTION_NOT_EXIST");
+            } else {
+                faction.revokeInvite(DATA, player);
+                Messages.FACTION_INVITE_REVOKE_SUCCESS.send(player, "%player_name%", DATA.getPlayer().getName());
+            }
+        }
     }
 
 }

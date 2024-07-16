@@ -53,8 +53,7 @@ public class FactionMOTDCommand extends CommandTemplate {
 
 
             if (!TextUtility.hasBlacklistedWords(player, message)) {
-                faction.createAuditLog(Bukkit.getOfflinePlayer(player.getUniqueId()), AuditLogType.MOTD_UPDATE, "%player_name%", player.getName(), "%new_motd%", TextUtility.color(message));
-                faction.updateMOTD(message);
+                faction.updateMOTD(message, player);
                 Messages.MOTD_CHANGE_SUCCESS.send(player);
             }
         } else if (args.length <= 1) {

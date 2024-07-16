@@ -5,10 +5,13 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.db.InviteData;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class FactionInviteCommand extends CommandTemplate {
     @Override
@@ -52,6 +55,14 @@ public class FactionInviteCommand extends CommandTemplate {
                 Messages.FACTION_INVITE_IN_SAME_FACTION.send(player);
 
             } else {
+                List<InviteData> outgoingInvites = faction.getOutgoingInvites();
+                for (InviteData invite : outgoingInvites) {
+                    if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
+                        Messages.FACTION_INVITE_DUPLICATE.send(player);
+                        return;
+                    }
+                }
+
                 faction.createInvite(target, player);
                 Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, "%player_name%", target.getName());
             }

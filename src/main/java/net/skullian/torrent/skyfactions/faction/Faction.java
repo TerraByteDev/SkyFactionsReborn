@@ -151,14 +151,15 @@ public class Faction {
      * @param MOTD New MOTD.
      * @return {@link String}
      */
-    public void updateMOTD(String MOTD) {
+    public void updateMOTD(String MOTD, Player actor) {
+        createAuditLog(Bukkit.getOfflinePlayer(actor.getUniqueId()), AuditLogType.MOTD_UPDATE, "%player_name%", actor.getName(), "%new_motd%", MOTD);
         SkyFactionsReborn.db.setMOTD(name, MOTD).join();
     }
 
     /**
      * Broadcast a message to the Faction's online members.
      *
-     * @param message Message to broadcast.
+     * @param message Message to broadcast [{@link String}]
      */
     public void createBroadcast(Player broadcaster, String message) {
         String formatted = TextUtility.color(message).replace("%broadcaster%", broadcaster.getName());
@@ -181,7 +182,7 @@ public class Faction {
     /**
      * Add to the Faction's rune count.
      *
-     * @param addition Amount of runes to add.
+     * @param addition Amount of runes to add [{@link Integer}]
      */
     public void addRunes(int addition) { SkyFactionsReborn.db.addRunes(name, addition).join(); }
 
@@ -195,14 +196,14 @@ public class Faction {
     /**
      * Add gems to the Faction's gem balance.
      *
-     * @param addition Gems to add.
+     * @param addition Gems to add [{@link Integer}]
      */
     public void addGems(int addition) { SkyFactionsReborn.db.addGems(name, addition).join(); }
 
     /**
      * Kick a player from the Faction for a specific reason.
      *
-     * @param player Player to kick.
+     * @param player Player to kick [{@link Player}]
      */
     public void kickPlayer(OfflinePlayer player, Player actor) {
         SkyFactionsReborn.db.kickPlayer(player, name).join();
@@ -214,7 +215,7 @@ public class Faction {
     /**
      * Ban a player from the faction.
      *
-     * @param player Player to ban.
+     * @param player Player to ban [{@link Player}]
      */
     public void banPlayer(OfflinePlayer player, Player actor) {
         SkyFactionsReborn.db.banPlayer(name, player).join();
@@ -234,7 +235,7 @@ public class Faction {
 
     /**
      *
-     * @param player Player to check ban status of.
+     * @param player Player to check ban status of [{@link Player}]
      * @return {@link Boolean}
      */
     public boolean isPlayerBanned(OfflinePlayer player) {
@@ -252,10 +253,19 @@ public class Faction {
     /**
      * Remove a player from the faction (willingly).
      *
-     * @param player Player who is leaving.
+     * @param player Player who is leaving [{@link Player}]
      */
     public void leaveFaction(OfflinePlayer player) {
         SkyFactionsReborn.db.leaveFaction(name, player).join();
+    }
+
+    /**
+     * Add a new member to the Faction.
+     *
+     * @param player Player to add [{@link Player}]
+     */
+    public void addFactionMember(OfflinePlayer player) {
+        SkyFactionsReborn.db.addFactionMember(player, name).join();
     }
 
     /**
@@ -270,9 +280,9 @@ public class Faction {
     /**
      * Create an audit log for the Faction.
      *
-     * @param player Player in question.
+     * @param player Player in question [{@link Player}]
      * @param type {@link AuditLogType} Type of audit log.
-     * @param replacements Values to replace. (e.g. '%player_name%, player.getName()').
+     * @param replacements Values to replace.
      */
     public void createAuditLog(OfflinePlayer player, AuditLogType type, Object... replacements) {
         SkyFactionsReborn.db.createAuditLog(player, type.getTitle(replacements), type.getDescription(replacements), name).join();
@@ -299,10 +309,11 @@ public class Faction {
     /**
      * Invite another player to your faction.
      *
-     * @param player Player to invite to the faction.
+     * @param player Player to invite to the faction [{@link Player}]
      */
     public void createInvite(OfflinePlayer player, Player inviter) {
         SkyFactionsReborn.db.createInvite(player.getPlayer(), name, "outgoing", inviter).join();
+        createAuditLog(Bukkit.getOfflinePlayer(inviter.getUniqueId()), AuditLogType.INVITE_CREATE, "%inviter%", inviter.getName(), "%player_name%", player.getName());
 
         if (player.isOnline()) {
             Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer());
@@ -312,9 +323,10 @@ public class Faction {
     /**
      * Create a join request to this Faction.
      *
-     * @param player Player who is requesting to join this faction.
+     * @param player Player who is requesting to join this faction [{@link Player}]
      */
     public void createJoinRequest(OfflinePlayer player) {
+        createAuditLog(player, AuditLogType.JOIN_REQUEST_CREATE, "%player_name%", player.getName());
         SkyFactionsReborn.db.createInvite(player.getPlayer(), name, "incoming", null).join();
         List<OfflinePlayer> users = Stream.concat(getModerators().stream(), getAdmins().stream()).collect(Collectors.toList());
         users.add(getOwner());
@@ -324,5 +336,28 @@ public class Faction {
                 Messages.JOIN_REQUEST_NOTIFICATION.send(user.getPlayer());
             }
         }
+    }
+
+    /**
+     * Revoke a Faction invite.
+     *
+     * @param data Data of the Invite [{@link InviteData}]
+     * @param actor Player who revoked the invite [{@link Player}]
+     */
+    public void revokeInvite(InviteData data, Player actor) {
+        createAuditLog(data.getPlayer(), AuditLogType.INVITE_REVOKE, "%player%", actor.getName(), "%invited%", data.getPlayer().getName());
+        SkyFactionsReborn.db.revokeInvite(data.getFactionName(), data.getPlayer(), data.getType()).join();
+    }
+
+    /**
+     * Accept a Faction join request.
+     *
+     * @param data Data of the Invite [{@link InviteData}]
+     * @param actor Player who accepted the invite [{@link Player}]
+     */
+    public void acceptJoinRequest(InviteData data, Player actor) {
+        createAuditLog(data.getPlayer(), AuditLogType.JOIN_REQUEST_ACCEPT, "%player%", data.getPlayer().getName(), "%inviter%", actor.getName());
+        addFactionMember(data.getPlayer());
+        SkyFactionsReborn.db.revokeInvite(name, data.getPlayer(), "incoming").join();
     }
 }

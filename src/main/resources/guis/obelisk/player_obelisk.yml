@@ -14,7 +14,7 @@ LAYOUT:
   - "# # # # p # # # #"
   - "# . . . . . . . #"
   - "# . . . r . . . #"
-  - "# . . . d i . . #"
+  - "# . . n d i . . #"
   - "# # # # # # # # #"
 
 ITEMS:
@@ -34,6 +34,21 @@ ITEMS:
       - "&aRunes: &e%rune_count%"
       - "&aGems: &e%gem_count%"
 
+  NOTIFICATIONS:
+    char: "n"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTdlZDY2ZjVhNzAyMDlkODIxMTY3ZDE1NmZkYmMwY2EzYmYxMWFkNTRlZDVkODZlNzVjMjY1ZjdlNTAyOWVjMSJ9fX0="
+    text: "&9&lNotifications"
+    sound: ""
+    pitch: 1
+    lore:
+      # Placeholders: %notification_count% - Current unread notification count.
+      - "&eView and Manage your"
+      - "&eunread Notifications."
+      - ""
+      - "&7You currently have %notification_count% unread"
+      - "&7Notifications."
+
   # UI to convert select blocks into runes
   RUNES_CONVERSION:
     char: "r"
@@ -48,7 +63,7 @@ ITEMS:
       - "&einto runes for purchases"
       - "&elike&c defences!"
       - ""
-      - "&eYou currently have &a&l%runes%&r&e runes"
+      - "&7You currently have &a&l%runes%&r&e runes"
 
   # Place to see & buy defences.
   DEFENCES:

@@ -276,6 +276,7 @@ Messages:
       BAN_BROADCAST: "&c&l%banned% &r&ehas been banned from the Faction."
 
     FACTION_INVITE:
+
       # Sent when the player tries to invite themselves to their Faction.
       INVITE_SELF_DENY: "%server_name% &c&lHey!&r&7 You cannot invite yourself!"
 
@@ -289,6 +290,9 @@ Messages:
       # Sent to a player when they are invited to another Faction, if online.
       INVITE_NOTIFICATION: "%server_name% &aYou have a new Faction invitation. Check your Obelisk."
 
+      # Sent when a player tries to invite a player to their Faction, when they have already been invited.
+      INVITE_DUPLICATE: "%server_name% &cYou have already invited that player!"
+
       # Sent to all Faction moderators, admins and owner (if online) when someone requests to join their Faction.
       JOIN_REQUEST_NOTIFICATION: "%server_name% &aYou have a new Faction join request. Check your Obelisk."
 
@@ -301,6 +305,27 @@ Messages:
 
       # Sent when a player tries to create a join request to a Faction that they are already in.
       JOIN_REQUEST_SAME_FACTION: "%server_name% &cYou are already in that Faction!"
+
+      # Sent when a player revokes a Faction invite.
+      # Placeholders: %player_name% - Player who the invite was going to.
+      INVITE_REVOKE_SUCCESS: "%server_name% &aSuccessfully revoked your invitation to &a%player_name%."
+
+      # Sent when a player (moderator, admin or owner) accepts a Faction join request.
+      # Placeholders: %player_name% - Player who was accepted.
+      JOIN_REQUEST_ACCEPT_SUCCESS: "%server_name% &aSuccessfully accepted &e%player_name%'s &ajoin request."
+
+      # Sent when a player (moderator, admin or owner) accepts a Faction join request.
+      # Placeholders: %player_name% - Player who was rejeted.
+      JOIN_REQUEST_REJECT_SUCCESS: "%server_name% &eSuccessfully rejected &c&l%player_name%'s &r&e join request."
+
+      # Sent to the player (if online) when their join request to a Faction is accepted.
+      # Placeholders: %faction_name% - Name of the Faction.
+      JOIN_REQUEST_ACCEPT_NOTIFICATION: "%server_name% &aYour join request to &e%faction_name% &ehas been accepted!"
+
+      # Sent to the player (if online) when their join request to a Faction is rejected.
+      # Placeholders: %faction_name% - Name of the Faction.
+      JOIN_REQUEST_REJECT_NOTIFICATION: "%server_name% &eYour join request to &c&l%faction_name%&r&e has been rejected."
+
   Notifications:
     # Sent when a player has a pending Faction invitation in their Obelisk.
     # Placeholders: %count% - Amount of pending Faction invitations.
@@ -309,6 +334,33 @@ Messages:
     # Sent when a Faction has pending join requests in their Obelisk.
     # Placeholders: %count% - Amount of pending join requests.
     PENDING_JOIN_REQUESTS: "%server_name% &eYou have &a&l%count% &r&epending Faction join requests in your Obelisk!"
+
+    # Sent to the player when they have unread notifications.
+    # Placeholders: %count% - Amount of unread notifications.
+    UNREAD_NOTIFICATIONS: "%server_name% &eYou have &a&l%count%&r&e unread notifications in your Obelisk."
+
+    # Message configuration for Notifications.
+    NOTIFICATION_TYPES:
+
+      # Format of the timestamp.
+      NOTIFICATION_TIMESTAMP: "&e%time% Ago"
+
+      # Format:
+      # NOTIFICATION_TITLE - (e.g. FACTION_INVITE_TITLE) The title of the notification, when being viewed in the Notification player obelisk GUI.
+      # NOTIFICATION_DESCRIPTION (e.g. FACTION_INVITE_DESCRIPTION) Description of the notification. Gives more information such as timestamp.
+      # Use '/' for a new lore line! This is so it is not put onto a singular line of lore!
+
+      # Notification for when the player is invited to a Faction.
+      # Placeholders: %player_name% - Player who invited you / %faction_name% - Name of the Faction in question.
+      FACTION_INVITE_TITLE: "&a&lFaction Invite"
+      FACTION_INVITE_DESCRIPTION: "&a%player_name% &ewants you /&eto join &a%faction_name%."
+
+      # Notification for when a Faction moderator / admin / owner rejects your join request.
+      # Placeholders: %player_name% - Player who rejected your join request / %faction_name% - Name of the Faction.
+      JOIN_REQUEST_REJECT_TITLE: "&c&lJoin Request Rejected"
+      JOIN_REQUEST_REJECT_DESCRIPTION: "&e%player_name% &crejected your join request to &a%faction_name%."
+
+
 
 
   Obelisk:
@@ -393,6 +445,26 @@ Messages:
 
     # Sent when a player (admin or owner) bans a player.
     # Placeholders: %banned% - Name of player who was banned. %player% - Player who banned them.
-    BAN_TITLE: "&r&lPlayer Banned"
+    BAN_TITLE: "&4&lPlayer Banned"
     BAN_DESCRIPTION: "&a%banned% &ewas banned from the Faction/&eby &a%player%."
+
+    # Sent when a player (moderator, admin or owner) creates an invitation.
+    # Placeholder: %inviter% - Name of player who created the invite / %player_name% - Invited player.
+    INVITE_CREATE_TITLE: "&a&lInvite Created"
+    INVITE_CREATE_DESCRIPTION: "&a%inviter% &einvited &a%player_name% &eto the Faction."
+
+    # Sent when a player creates a join request to the Faction.
+    # Placeholder: %player_name% - Player who created the join request.
+    JOIN_REQUEST_TITLE: "&a&lJoin Request Created"
+    JOIN_REQUEST_DESCRIPTION: "&a%player_name% &ewants to join the Faction."
+
+    # Sent when a player (moderator, admin or owner) revokes an invitation.
+    # Placeholders: %player% - Player who revoked the invite / %invited% - Player who was invited.
+    INVITE_REVOKE_TITLE: "&c&lInvite Revoked"
+    INVITE_REVOKE_DESCRIPTION: "&a%player% &erevoked a Faction invite for &a%invited%"
+
+    # Sent when a player (moderator, admin or owner) accepts a join request.
+    # Placeholders: %player% - Player who was accepted. %inviter% - Player who accepted the join request.
+    JOIN_REQUEST_ACCEPT_TITLE: "&a&lJoin Request Accepted"
+    JOIN_REQUEST_ACCEPT_DESCRIPTION: "&a%player% &ewas accepted into the Faction/&eby &a%inviter%."
 

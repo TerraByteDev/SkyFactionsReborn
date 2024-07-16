@@ -31,6 +31,11 @@ public class FactionRequestJoinCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
+        if (FactionAPI.isInFaction(player)) {
+            Messages.ALREADY_IN_FACTION.send(player);
+            return;
+        }
+
         if (args.length == 1) {
             Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
         } else if (args.length > 1) {

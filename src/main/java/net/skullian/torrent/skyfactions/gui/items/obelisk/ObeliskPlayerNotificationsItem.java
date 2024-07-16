@@ -1,11 +1,14 @@
-package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
+package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
-import net.skullian.torrent.skyfactions.db.InviteData;
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.JoinRequestManageUI;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.JoinRequestsUI;
+import net.skullian.torrent.skyfactions.gui.obelisk.FactionAuditLogUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -18,24 +21,22 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class JoinRequestPaginationItem extends AbstractItem {
+public class ObeliskPlayerNotificationsItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
     private int PITCH;
     private List<String> LORE;
     private ItemStack STACK;
-    private OfflinePlayer SUBJECT;
-    private InviteData DATA;
+    private Player PLAYER;
 
-    public JoinRequestPaginationItem(ItemData data, ItemStack stack, OfflinePlayer player, InviteData inviteData) {
+    public ObeliskPlayerNotificationsItem(ItemData data, ItemStack stack, Player player) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
-        this.SUBJECT = player;
-        this.DATA = inviteData;
+        this.PLAYER = player;
     }
 
     @Override
@@ -44,7 +45,9 @@ public class JoinRequestPaginationItem extends AbstractItem {
                 .setDisplayName(TextUtility.color(NAME));
 
         for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine));
+            builder.addLoreLines(TextUtility.color(loreLine
+                    .replace("%notification_count%", String.valueOf(SkyFactionsReborn.db.getNotifications(Bukkit.getOfflinePlayer(PLAYER.getUniqueId())).join().size()))
+            ));
         }
 
         return builder;
@@ -58,7 +61,7 @@ public class JoinRequestPaginationItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        JoinRequestManageUI.promptPlayer(player, DATA);
+        // todo
     }
 
 

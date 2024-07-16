@@ -5,12 +5,13 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.IslandAPI;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
-import net.skullian.torrent.skyfactions.notification.NotificationHandler;
+import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -34,9 +35,11 @@ public class PlayerHandler implements Listener {
             return null;
         });
 
-        if (Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean()) {
-            PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer()).join();
-            if (island != null) {
+        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer()).join();
+        if (island != null) {
+            IslandAPI.handleJoinBorder(event.getPlayer(), island);
+
+            if (Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean()) {
                 World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                 if (world != null) {
                     Location centerLocation = island.getCenter(world);
@@ -46,12 +49,12 @@ public class PlayerHandler implements Listener {
         }
 
         LOGGER.info("Initialising Notification Task for {}", event.getPlayer().getName());
-        NotificationHandler.createCycle(event.getPlayer());
+        NotificationAPI.createCycle(event.getPlayer());
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         LOGGER.info("Cancelling Notification Task for {}...", event.getPlayer().getName());
-        NotificationHandler.tasks.get(event.getPlayer().getUniqueId()).cancel();
+        NotificationAPI.tasks.get(event.getPlayer().getUniqueId()).cancel();
     }
 }

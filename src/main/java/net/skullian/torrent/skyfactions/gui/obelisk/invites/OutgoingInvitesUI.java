@@ -105,7 +105,7 @@ public class OutgoingInvitesUI {
         List<InviteData> data = faction.getOutgoingInvites();
         for (InviteData inviteData : data) {
             itemData.setNAME(itemData.getNAME().replace("%player_name%", inviteData.getPlayer().getName()));
-            items.add(new OutgoingInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getPlayer()), inviteData.getPlayer()));
+            items.add(new OutgoingInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getPlayer()), inviteData));
         }
 
         return items;
