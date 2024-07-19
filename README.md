@@ -81,6 +81,8 @@ This plugin contains an abundance of smart features, including:
         - [ ] Current Raids
         - [ ] Top Nations
     - [ ] API
+        - [ ] Events
+        - [ ] Get factions etc
 
 - [ ] Misc
     - [ ] Refactor & Improve Code Quality
