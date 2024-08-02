@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 @Log4j2(topic = "SkyFactionsReborn")
 public class PlayerHandler implements Listener {
@@ -35,7 +36,7 @@ public class PlayerHandler implements Listener {
             return null;
         });
 
-        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer()).join();
+        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).join();
         if (island != null) {
             IslandAPI.handleJoinBorder(event.getPlayer(), island);
 
@@ -56,5 +57,14 @@ public class PlayerHandler implements Listener {
     public void onPlayerLeave(PlayerQuitEvent event) {
         LOGGER.info("Cancelling Notification Task for {}...", event.getPlayer().getName());
         NotificationAPI.tasks.get(event.getPlayer().getUniqueId()).cancel();
+    }
+
+    @EventHandler
+    public void playerRespawn(PlayerRespawnEvent event) {
+        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).join();
+        World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+        if (island != null && world != null) {
+            event.getPlayer().teleport(island.getCenter(world));
+        }
     }
 }

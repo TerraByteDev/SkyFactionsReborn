@@ -1,5 +1,5 @@
 # Title of the GUI (Inventory)
-TITLE: "&9Manage Join Requests"
+TITLE: "&eChoose Invite Type"
 OPEN_SOUND: "ui.button.click"
 OPEN_PITCH: 1
 
@@ -10,34 +10,24 @@ OPEN_PITCH: 1
 # Any other characters are shown below under ITEMS
 # Each character corresponds to an item.
 
-# This GUI is where Faction owners / admins / moderators can manage incoming faction join requests.
-
-# THIS IS A PAGINATED GUI! This means it can have multiple pages.
-# THE LETTER 'x' CORRESPONDS TO WHERE THE PAGINATED ITEMS WILL BE!
-# YOU CANNOT CHANGE THIS!
-# PAGINATION ITEMS ARE CONFIGURED IN 'pagination.yml'!
 LAYOUT:
   - "b # # # # # # # #"
-  - "# x x x x x x x #"
-  - "# x x x x x x x #"
-  - "# x x x x x x x #"
-  - "# < # # p # # > #"
-
-
+  - "# . i . p . o . #"
+  - "# # # # # # # # #"
 
 ITEMS:
-
-  # Just a general prompt for what this GUI is about.
+  # Prompt to see what invite type you want to view.
   PROMPT:
     char: "p" # This is the character to use in the LAYOUT!
     material: "NETHER_STAR"
     skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
-    text: "&9Join Requests"
+    text: "&9Invite Type"
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
-      - "&eView & manage your"
-      - "&aincoming join requests."
+      - "&eView either your incoming"
+      - "&ejoin requests, or outgoing"
+      - "&einvites."
 
   # Back button, return to the main Obelisk UI
   BACK:
@@ -49,21 +39,29 @@ ITEMS:
     pitch: 1
     lore: ""
 
-  # This is the item that displays each incoming join request.
-  # By default, the item is the player's head, and you shouldn't change this unless you're... insane?
-  # You can customise the text, lore and sound though.
-  MODEL:
+  # View all your incoming invites from Factions.
+  INCOMING_INVITES:
+    char: "i"
     material: "PLAYER_HEAD"
-    skull: "%player_skull%"
-    text: "&9%player_name%" # Placeholders: %player_name% - Name of player.
-    sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTY4M2RjN2JjNmRiZGI1ZGM0MzFmYmUyOGRjNGI5YWU2MjViOWU1MzE3YTI5ZjJjNGVjZmU3YmY1YWU1NmMzOCJ9fX0="
+    text: "&bFaction Invites"
+    sound: ""
     pitch: 1
-    # Placeholders: %player_name% - Name of player / %timestamp% - Timestamp of the join request.
     lore:
-      - "&a%player_name%&e wants to"
-      - "&ejoin your faction."
-      - ""
-      - "&7%timestamp% ago"
+      - "&eView, accept and deny"
+      - "&eyour incoming Faction invites."
+
+  # View your outgoing join request to a Faction (if you have one).
+  OUTGOING_JOIN_REQUEST:
+    char: "o"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTc3YmI2NmZjNzNhOTdjZWZjYjNhNGJmZGNjYjEyMjgxZjQ0ZGQzMjZjY2QwZmYzOWQ0N2U5ODViZmVmZjM0MyJ9fX0="
+    text: "&bOutgoing Join Request"
+    sound: ""
+    pitch: 1
+    lore:
+      - "&eView and revoke your current"
+      - "&ejoin request to a Faction."
 
   BORDER:
     char: "#"

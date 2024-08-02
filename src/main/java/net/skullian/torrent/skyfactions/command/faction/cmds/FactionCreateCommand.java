@@ -44,6 +44,9 @@ public class FactionCreateCommand extends CommandTemplate {
 
             if (FactionAPI.isInFaction(player)) {
                 Messages.ALREADY_IN_FACTION.send(player);
+            } else if (FactionAPI.getFaction(name) != null) {
+                Messages.FACTION_CREATION_NAME_DUPLICATE.send(player);
+
             } else {
                 if (FactionAPI.hasValidName(player, name)) {
                     int cost = Settings.FACTION_CREATION_COST.getInt();

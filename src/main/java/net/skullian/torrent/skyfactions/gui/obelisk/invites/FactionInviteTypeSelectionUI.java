@@ -7,8 +7,8 @@ import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.*;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.JoinRequestsItem;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.OutgoingInvitesItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.JoinRequestsTypeItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.OutgoingInvitesTypeItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ import xyz.xenondevs.invui.window.Window;
 
 import java.util.List;
 
-public class InviteSelectionUI {
+public class FactionInviteTypeSelectionUI {
 
     public static void promptPlayer(Player player) {
         try {
@@ -50,11 +50,11 @@ public class InviteSelectionUI {
                         break;
 
                     case "OUTGOING_INVITES":
-                        builder.addIngredient(itemData.getCHARACTER(), new OutgoingInvitesItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new OutgoingInvitesTypeItem(itemData, GUIAPI.createItem(itemData, player)));
                         break;
 
                     case "INCOMING_INVITES":
-                        builder.addIngredient(itemData.getCHARACTER(), new JoinRequestsItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new JoinRequestsTypeItem(itemData, GUIAPI.createItem(itemData, player), "faction"));
                         break;
 
                     case "BACK":

@@ -56,7 +56,7 @@ public class FactionAPI {
     public static void createFaction(Player player, String name) {
         SkyFactionsReborn.db.registerFaction(player, name).join();
         Faction faction = FactionAPI.getFaction(name);
-        faction.createAuditLog(Bukkit.getOfflinePlayer(player.getUniqueId()), AuditLogType.FACTION_CREATE, "%player_name%", player.getName(), "%faction_name%", name);
+        faction.createAuditLog(player.getUniqueId(), AuditLogType.FACTION_CREATE, "%player_name%", player.getName(), "%faction_name%", name);
         createIsland(player, name);
     }
 

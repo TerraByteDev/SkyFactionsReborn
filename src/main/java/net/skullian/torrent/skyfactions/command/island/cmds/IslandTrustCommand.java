@@ -38,7 +38,7 @@ public class IslandTrustCommand extends CommandTemplate {
                 return;
             }
 
-            SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(is -> {
+            SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).thenAccept(is -> {
                 if (is == null) {
                     Messages.NO_ISLAND.send(player);
                 } else {

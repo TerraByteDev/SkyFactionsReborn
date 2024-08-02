@@ -60,7 +60,7 @@ public class MemberBanItem extends AbstractItem {
         Faction faction = FactionAPI.getFaction(player);
         if (faction != null) {
             if (faction.getAllMembers().contains(SUBJECT)) {
-                faction.createAuditLog(SUBJECT, AuditLogType.PLAYER_BAN, "%banned%", SUBJECT.getName(), "%player%", player.getName());
+                faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_BAN, "%banned%", SUBJECT.getName(), "%player%", player.getName());
                 faction.banPlayer(SUBJECT, player);
 
                 Messages.FACTION_MANAGE_BAN_SUCCESS.send(player, "%player%", SUBJECT.getName());

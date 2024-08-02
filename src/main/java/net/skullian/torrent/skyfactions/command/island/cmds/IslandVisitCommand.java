@@ -43,7 +43,7 @@ public class IslandVisitCommand extends CommandTemplate {
                 return;
             }
 
-            SkyFactionsReborn.db.getPlayerIsland(target.getPlayer()).thenAccept(is -> {
+            SkyFactionsReborn.db.getPlayerIsland(target.getUniqueId()).thenAccept(is -> {
                 if (is != null) {
 
                     if (RaidAPI.currentRaids.containsValue(player.getUniqueId()) || RaidAPI.processingRaid.containsValue(player.getUniqueId())) {

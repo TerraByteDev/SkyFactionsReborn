@@ -33,6 +33,9 @@ public class GemsCommandTabCompletion implements TabCompleter {
             if (sender.hasPermission("skyfactions.gems.balance")) {
                 completions.add("balance");
             }
+            if (sender.hasPermission("skyfactions.gems.give")) {
+                completions.add("give");
+            }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
         }else if (args.length == 2) {
@@ -41,6 +44,11 @@ public class GemsCommandTabCompletion implements TabCompleter {
             List<String> completions = new ArrayList<>();
 
             if (sender.hasPermission("skyfactions.gems.pay") && subcmd.equals("pay")) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    completions.add(player.getName());
+                }
+            }
+            if (sender.hasPermission("skyfactions.gems.give") && subcmd.equals("give")) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     completions.add(player.getName());
                 }

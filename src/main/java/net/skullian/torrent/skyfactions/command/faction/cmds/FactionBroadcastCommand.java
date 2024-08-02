@@ -45,7 +45,7 @@ public class FactionBroadcastCommand extends CommandTemplate {
                 if (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player)) {
                     String message = msg.toString().trim();
                     if (FactionAPI.hasValidName(player, message)) {
-                        faction.createAuditLog(Bukkit.getOfflinePlayer(player.getUniqueId()), AuditLogType.BROADCAST_CREATE, "%player_name%", player.getName());
+                        faction.createAuditLog(player.getUniqueId(), AuditLogType.BROADCAST_CREATE, "%player_name%", player.getName());
                         faction.createBroadcast(player, message);
                     }
 
@@ -54,14 +54,6 @@ public class FactionBroadcastCommand extends CommandTemplate {
                 }
 
             }
-
-            StringBuilder msg = new StringBuilder();
-            for (int i = 1; i < args.length; i++) {
-                msg.append(args[i]).append(" ");
-            }
-
-
-
         }
 
     }

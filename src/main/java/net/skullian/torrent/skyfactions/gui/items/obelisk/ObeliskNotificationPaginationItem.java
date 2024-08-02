@@ -1,9 +1,11 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
+import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.db.InviteData;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.FactionInviteTypeSelectionUI;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerIncomingInvites;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerInviteTypeSelectionUI;
+import net.skullian.torrent.skyfactions.notification.NotificationData;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -17,22 +19,22 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class ObeliskInvitesItem extends AbstractItem {
+public class ObeliskNotificationPaginationItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
     private int PITCH;
     private List<String> LORE;
     private ItemStack STACK;
-    private String TYPE;
+    private NotificationData DATA;
 
-    public ObeliskInvitesItem(ItemData data, ItemStack stack, String type) {
+    public ObeliskNotificationPaginationItem(ItemData data, ItemStack stack, NotificationData inviteData) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
-        this.TYPE = type;
+        this.DATA = inviteData;
     }
 
     @Override
@@ -41,7 +43,17 @@ public class ObeliskInvitesItem extends AbstractItem {
                 .setDisplayName(TextUtility.color(NAME));
 
         for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine));
+            if (loreLine.contains("%notification_description%")) {
+                for (String part : TextUtility.toParts(DATA.getDescription())) {
+                    builder.addLoreLines(part);
+                }
+
+                continue;
+            }
+
+            builder.addLoreLines(TextUtility.color(loreLine
+                    .replace("%timestamp%", Messages.NOTIFICATION_TIMESTAMP_FORMAT.get("%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp())))
+            ));
         }
 
         return builder;
@@ -54,11 +66,13 @@ public class ObeliskInvitesItem extends AbstractItem {
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
-        if (TYPE.equals("faction")) {
-            FactionInviteTypeSelectionUI.promptPlayer(player);
-        } else if (TYPE.equals("player")) {
-            PlayerInviteTypeSelectionUI.promptPlayer(player);
+
+        if (clickType.isRightClick()) {
+            // todo
         }
+
+
+
     }
 
 

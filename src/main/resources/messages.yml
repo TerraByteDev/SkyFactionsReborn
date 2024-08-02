@@ -191,6 +191,8 @@ Messages:
       NAME_NO_SYMBOLS: "%server_name%&c&l Hey!&r&7 You cannot use symbols in your name."
       # Sent when a player tries to create a faction that contains prohibited words.
       NAME_PROHIBITED: "%server_name%&c Your name contains prohibited words."
+      # Sent when a player tries to create a faction that already exists with the same name.
+      DUPLICATE_NAME: "%server_name% &cA Faction already exists with that name!"
 
 
       # Sent when a player tries to create a faction but does not have enough money.
@@ -300,8 +302,11 @@ Messages:
       # Placeholders: %faction_name% - Name of the Faction.
       JOIN_REQUEST_CREATE_SUCCESS: "%server_name% &eSuccessfully created a join request for &a%faction_name%."
 
-      # Sent when a player tries to create another join request to a Faction (when they already have done so).
-      JOIN_REQUEST_DUPLICATE: "%server_name% &cYou already have a join request for that Faction!"
+      # Sent when a player tries to create another join request when they already have an outgoing one.
+      JOIN_REQUEST_ALREADY_EXISTS: "%server_name% &cYou already have a join request for that Faction!"
+
+      # Sent when a player tries to view their outgoing join request when they don't have one.
+      JOIN_REQUEST_NOT_EXIST: "%server_name% &cYou do not have an outgoing Join Request!"
 
       # Sent when a player tries to create a join request to a Faction that they are already in.
       JOIN_REQUEST_SAME_FACTION: "%server_name% &cYou are already in that Faction!"
@@ -317,6 +322,18 @@ Messages:
       # Sent when a player (moderator, admin or owner) accepts a Faction join request.
       # Placeholders: %player_name% - Player who was rejeted.
       JOIN_REQUEST_REJECT_SUCCESS: "%server_name% &eSuccessfully rejected &c&l%player_name%'s &r&e join request."
+
+      # Sent when a player revokes their outgoing join request.
+      # Placeholders: %faction_name% - Name of the Faction your join request WAS going to.
+      JOIN_REQUEST_REVOKE_SUCCESS: "%server_name% &aYour join request to &e%faction_name% &ahas been revoked."
+
+      # Sent when a player confirms the acceptance of their join request.
+      # Placeholders: %faction_name% - Name of the Faction you are now part of.
+      PLAYER_JOIN_REQUEST_ACCEPT_SUCCESS: "%server_name% &eYou are now part of the Faction &a%faction_name%!"
+
+      # Sent when a player, after their join request is accepted by the Faction, rejects it.
+      # Placeholders: %faction_name% - Name of the Faction your join request was going to.
+      JOIN_REQUEST_DENY_SUCCESS: "%server_name% &cYou have rejected &e%faction_name%'s join request acceptance."
 
       # Sent to the player (if online) when their join request to a Faction is accepted.
       # Placeholders: %faction_name% - Name of the Faction.
@@ -360,6 +377,10 @@ Messages:
       JOIN_REQUEST_REJECT_TITLE: "&c&lJoin Request Rejected"
       JOIN_REQUEST_REJECT_DESCRIPTION: "&e%player_name% &crejected your join request to &a%faction_name%."
 
+      # Notification for when a Faction moderator / admin / owner accepts your join request.
+      # Placeholders: %player_name% - Player who accepted your join request / %faction_name% - Name of the Faction.
+      JOIN_REQUEST_ACCEPT_TITLE: "&a&lJoin Request Accepted"
+      JOIN_REQUEST_ACCEPT_DESCRIPTION: "&a%player_name% &eaccepted your join/request to &a%faction_name%./&7See the invite section of your/Obelisk for more info."
 
 
 
@@ -467,4 +488,19 @@ Messages:
     # Placeholders: %player% - Player who was accepted. %inviter% - Player who accepted the join request.
     JOIN_REQUEST_ACCEPT_TITLE: "&a&lJoin Request Accepted"
     JOIN_REQUEST_ACCEPT_DESCRIPTION: "&a%player% &ewas accepted into the Faction/&eby &a%inviter%."
+
+    # Sent when a player (moderator, admin or owner) rejects a join request.
+    # Placeholders: %faction_player% - Faction member who rejected the join request / %player% - Player who made the join request in the first place.
+    JOIN_REQUEST_REJECT_TITLE: "&c&lJoin Request Rejected"
+    JOIN_REQUEST_REJECT_DESCRIPTION: "&a%faction_player% &erejected &a%player%'s/&ejoin request."
+
+    # Sent when a player revokes their outgoing join request to join your Faction.
+    # Placeholders: %player_name% - Owner of the join request.
+    PLAYER_JOIN_REQUEST_REVOKE_TITLE: "&c&lJoin Request Revoked"
+    PLAYER_JOIN_REQUEST_REVOKE_DESCRIPTION: "&a%player_name% &erevoked their/join request to the Faction."
+
+    # Sent when, after you accept a player's join request, they deny your acceptance.
+    # Placeholders: %player_name% - Owner of the join request.
+    PLAYER_JOIN_REQUEST_DENY_TITLE: "&c&lJoin Request Denied"
+    PLAYER_JOIN_REQUEST_DENY_DESCRIPTION: "&a%player_name% &edenied your acceptance/of their join request."
 

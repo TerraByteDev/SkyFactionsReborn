@@ -3,11 +3,13 @@ package net.skullian.torrent.skyfactions.faction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.db.AuditLogData;
 import net.skullian.torrent.skyfactions.db.InviteData;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
+import net.skullian.torrent.skyfactions.notification.NotificationType;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -15,6 +17,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -152,7 +155,7 @@ public class Faction {
      * @return {@link String}
      */
     public void updateMOTD(String MOTD, Player actor) {
-        createAuditLog(Bukkit.getOfflinePlayer(actor.getUniqueId()), AuditLogType.MOTD_UPDATE, "%player_name%", actor.getName(), "%new_motd%", MOTD);
+        createAuditLog(actor.getUniqueId(), AuditLogType.MOTD_UPDATE, "%player_name%", actor.getName(), "%new_motd%", MOTD);
         SkyFactionsReborn.db.setMOTD(name, MOTD).join();
     }
 
@@ -262,10 +265,11 @@ public class Faction {
     /**
      * Add a new member to the Faction.
      *
-     * @param player Player to add [{@link Player}]
+     * @param playerUUID UUID of the player to add [{@link Player}]
      */
-    public void addFactionMember(OfflinePlayer player) {
-        SkyFactionsReborn.db.addFactionMember(player, name).join();
+    public void addFactionMember(UUID playerUUID) {
+        SkyFactionsReborn.db.addFactionMember(playerUUID, name).join();
+        createBroadcast(Bukkit.getPlayer(playerUUID).getPlayer(), "player joined the faction temporary message");
     }
 
     /**
@@ -280,12 +284,12 @@ public class Faction {
     /**
      * Create an audit log for the Faction.
      *
-     * @param player Player in question [{@link Player}]
+     * @param playerUUID UUID of the player in question [{@link UUID}]
      * @param type {@link AuditLogType} Type of audit log.
      * @param replacements Values to replace.
      */
-    public void createAuditLog(OfflinePlayer player, AuditLogType type, Object... replacements) {
-        SkyFactionsReborn.db.createAuditLog(player, type.getTitle(replacements), type.getDescription(replacements), name).join();
+    public void createAuditLog(UUID playerUUID, AuditLogType type, Object... replacements) {
+        SkyFactionsReborn.db.createAuditLog(playerUUID, type.getTitle(replacements), type.getDescription(replacements), name).join();
     }
 
     /**
@@ -312,11 +316,13 @@ public class Faction {
      * @param player Player to invite to the faction [{@link Player}]
      */
     public void createInvite(OfflinePlayer player, Player inviter) {
-        SkyFactionsReborn.db.createInvite(player.getPlayer(), name, "outgoing", inviter).join();
-        createAuditLog(Bukkit.getOfflinePlayer(inviter.getUniqueId()), AuditLogType.INVITE_CREATE, "%inviter%", inviter.getName(), "%player_name%", player.getName());
+        SkyFactionsReborn.db.createInvite(player.getUniqueId(), name, "outgoing", inviter).join();
+        createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "%inviter%", inviter.getName(), "%player_name%", player.getName());
 
         if (player.isOnline()) {
             Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer());
+        } else {
+            NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "%player_name%", inviter.getName(), "%faction_name%", name);
         }
     }
 
@@ -326,8 +332,8 @@ public class Faction {
      * @param player Player who is requesting to join this faction [{@link Player}]
      */
     public void createJoinRequest(OfflinePlayer player) {
-        createAuditLog(player, AuditLogType.JOIN_REQUEST_CREATE, "%player_name%", player.getName());
-        SkyFactionsReborn.db.createInvite(player.getPlayer(), name, "incoming", null).join();
+        createAuditLog(player.getUniqueId(), AuditLogType.JOIN_REQUEST_CREATE, "%player_name%", player.getName());
+        SkyFactionsReborn.db.createInvite(player.getUniqueId(), name, "incoming", null).join();
         List<OfflinePlayer> users = Stream.concat(getModerators().stream(), getAdmins().stream()).collect(Collectors.toList());
         users.add(getOwner());
 
@@ -345,8 +351,8 @@ public class Faction {
      * @param actor Player who revoked the invite [{@link Player}]
      */
     public void revokeInvite(InviteData data, Player actor) {
-        createAuditLog(data.getPlayer(), AuditLogType.INVITE_REVOKE, "%player%", actor.getName(), "%invited%", data.getPlayer().getName());
-        SkyFactionsReborn.db.revokeInvite(data.getFactionName(), data.getPlayer(), data.getType()).join();
+        createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.INVITE_REVOKE, "%player%", actor.getName(), "%invited%", data.getPlayer().getName());
+        SkyFactionsReborn.db.revokeInvite(data.getFactionName(), data.getPlayer().getUniqueId(), "outgoing").join();
     }
 
     /**
@@ -356,8 +362,19 @@ public class Faction {
      * @param actor Player who accepted the invite [{@link Player}]
      */
     public void acceptJoinRequest(InviteData data, Player actor) {
-        createAuditLog(data.getPlayer(), AuditLogType.JOIN_REQUEST_ACCEPT, "%player%", data.getPlayer().getName(), "%inviter%", actor.getName());
-        addFactionMember(data.getPlayer());
-        SkyFactionsReborn.db.revokeInvite(name, data.getPlayer(), "incoming").join();
+        createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_ACCEPT, "%player%", data.getPlayer().getName(), "%inviter%", actor.getName());
+        SkyFactionsReborn.db.acceptJoinRequest(name, data.getPlayer().getUniqueId()).join();
+    }
+
+    /**
+     * Reject a Player's join request to your Faction.
+     *
+     * @param data Data of the invite [{@link InviteData}]
+     * @param actor Player who rejected the invite [{@link Player}]
+     */
+    public void rejectJoinRequest(InviteData data, Player actor) {
+        createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "%faction_player%", actor.getName(), "%player%", data.getPlayer().getName());
+        SkyFactionsReborn.db.revokeInvite(name, data.getPlayer().getUniqueId(), "incoming").join();
+        NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "%player_name%", actor.getName(), "%faction_name%", name);
     }
 }

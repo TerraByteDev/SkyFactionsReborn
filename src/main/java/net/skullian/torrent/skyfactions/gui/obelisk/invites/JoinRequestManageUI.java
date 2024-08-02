@@ -8,7 +8,8 @@ import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.JoinRequestAcceptItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.FactionJoinRequestAcceptItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.FactionJoinRequestRejectItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -55,9 +56,14 @@ public class JoinRequestManageUI {
 
                     case "BORDER":
                         builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        break;
+
+                    case "REJECT":
+                        builder.addIngredient(itemData.getCHARACTER(), new FactionJoinRequestRejectItem(itemData, GUIAPI.createItem(itemData, player), inviteData));
+                        break;
 
                     case "ACCEPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new JoinRequestAcceptItem(itemData, GUIAPI.createItem(itemData, player), inviteData));
+                        builder.addIngredient(itemData.getCHARACTER(), new FactionJoinRequestAcceptItem(itemData, GUIAPI.createItem(itemData, player), inviteData));
                         break;
                 }
             }

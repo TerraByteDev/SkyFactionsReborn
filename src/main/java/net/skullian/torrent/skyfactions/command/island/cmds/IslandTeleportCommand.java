@@ -32,7 +32,7 @@ public class IslandTeleportCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
+        SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).thenAccept(island -> {
             if (island == null) {
                 Messages.NO_ISLAND.send(player);
             } else {

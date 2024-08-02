@@ -99,7 +99,7 @@ public class RaidAPI {
             alertPlayer(def, attacker);
             teleportToPreparationArea(def);
 
-            SkyFactionsReborn.db.getPlayerIsland(def).thenAccept(is -> SkyFactionsReborn.db.setIslandCooldown(is, System.currentTimeMillis())).exceptionally(ex -> {
+            SkyFactionsReborn.db.getPlayerIsland(def.getUniqueId()).thenAccept(is -> SkyFactionsReborn.db.setIslandCooldown(is, System.currentTimeMillis())).exceptionally(ex -> {
                 cancel.set(true);
 
                 ex.printStackTrace();
@@ -113,7 +113,7 @@ public class RaidAPI {
 
             Bukkit.getScheduler().runTaskLater(SkyFactionsReborn.getInstance(), () -> {
                 if (!def.isOnline()) return;
-                SkyFactionsReborn.db.getPlayerIsland(def).thenAccept(island -> {
+                SkyFactionsReborn.db.getPlayerIsland(def.getUniqueId()).thenAccept(island -> {
                     World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                     if (islandWorld != null && island != null) {
                         Location returnLoc = island.getCenter(islandWorld);
@@ -257,7 +257,7 @@ public class RaidAPI {
         SkyFactionsReborn.db.addGems(player, Settings.RAIDING_COST.getInt()).join();
 
         if (isDefendant) {
-            SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> SkyFactionsReborn.db.setIslandCooldown(island, 0).exceptionally(ex -> {
+            SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).thenAccept(island -> SkyFactionsReborn.db.setIslandCooldown(island, 0).exceptionally(ex -> {
                 ex.printStackTrace();
                 Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_ISLAND_COOLDOWN");
                 return null;

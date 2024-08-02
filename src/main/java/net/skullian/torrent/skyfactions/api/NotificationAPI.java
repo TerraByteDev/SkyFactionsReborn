@@ -34,12 +34,12 @@ public class NotificationAPI {
     /**
      * Create a notification for a Player.
      *
-     * @param player Player who the notification should be sent to [{@link Player}]
+     * @param playerUUID UUID of the player who the notification should be sent to [{@link UUID}]
      * @param type Type of notification [{@link net.skullian.torrent.skyfactions.faction.AuditLogType}]
      * @param replacements Replacements for the notification title / desc.
      */
-    public static void createNotification(OfflinePlayer player, NotificationType type, Object... replacements) {
-        SkyFactionsReborn.db.createNotification(player, type.getTitle(replacements), type.getDescription(replacements)).join();
+    public static void createNotification(UUID playerUUID, NotificationType type, Object... replacements) {
+        SkyFactionsReborn.db.createNotification(playerUUID, type.getTitle(replacements), type.getDescription(replacements)).join();
     }
 
     /**

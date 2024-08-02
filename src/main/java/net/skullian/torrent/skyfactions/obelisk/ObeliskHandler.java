@@ -9,15 +9,12 @@ import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.TileState;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ObeliskHandler {
 
@@ -31,7 +28,7 @@ public class ObeliskHandler {
                 Location offsetLocation = islandCenter.add(offset.get(0), offset.get(1), offset.get(2));
 
                 if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() > 0) {
-                    SkyFactionsReborn.obeliskBlockManager.addBlock(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
+                    new ObeliskBlockEntity(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
                 } else {
                     offsetLocation.getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
                 }
@@ -50,7 +47,7 @@ public class ObeliskHandler {
                Location offsetLocation = islandCenter.add(offset.get(0), offset.get(1), offset.get(2));
 
                if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() > 0)  {
-                   SkyFactionsReborn.obeliskBlockManager.addBlock(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
+                   new ObeliskBlockEntity(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
                } else {
                    offsetLocation.getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
                }

@@ -63,7 +63,7 @@ public class MemberKickItem extends AbstractItem {
         if (faction != null) {
             if (faction.getAllMembers().contains(SUBJECT)) {
                 // todo discord support & or announce in chat?
-                faction.createAuditLog(SUBJECT, AuditLogType.PLAYER_KICK, "%kicked%", SUBJECT.getName(), "%player%", player.getName());
+                faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_KICK, "%kicked%", SUBJECT.getName(), "%player%", player.getName());
                 faction.kickPlayer(SUBJECT, player);
 
                 Messages.FACTION_MANAGE_KICK_SUCCESS.send(player, "%player%", SUBJECT.getName());

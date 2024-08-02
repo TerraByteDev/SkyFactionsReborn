@@ -63,6 +63,12 @@ public class IslandAPI {
 
         SkyFactionsReborn.db.createIsland(player, island).join();
         pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").thenAccept(ac -> {
+            if (!ac) {
+                Messages.ERROR.send(player, "%operation%", "create your island", "%debug%", "SCHEMATIC_NOT_EXIST");
+                SkyFactionsReborn.db.removeIsland(player);
+                return;
+            }
+
             teleportPlayerToLocation(player, island.getCenter(world));
 
             ObeliskHandler.spawnPlayerObelisk(player, island);
@@ -71,8 +77,8 @@ public class IslandAPI {
         });
     }
 
-    public static CompletableFuture<Void> pasteIslandSchematic(Player player, Location location, String worldName, String type) {
-        return CompletableFuture.runAsync(() -> {
+    public static CompletableFuture<Boolean> pasteIslandSchematic(Player player, Location location, String worldName, String type) {
+        return CompletableFuture.supplyAsync(() -> {
             try {
                 World world = Bukkit.getWorld(worldName);
                 if (world == null) {
@@ -85,6 +91,7 @@ public class IslandAPI {
                     } else if (type.equals("faction")) {
                         schemFile = FileUtil.getSchematicFile(Settings.ISLAND_FACTION_SCHEMATIC.getString());
                     }
+                    if (schemFile == null) return false;
 
                     com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(world);
                     Clipboard clipboard;
@@ -104,6 +111,8 @@ public class IslandAPI {
 
                         Thread.sleep(750);
                     } catch (InterruptedException ignored) {}
+
+                    return true;
                 }
             } catch (IOException e) {
                 LOGGER.error("Error pasting island schematic", e);
@@ -134,7 +143,7 @@ public class IslandAPI {
     }
 
     public static void removePlayerIsland(Player player) {
-        SkyFactionsReborn.db.getPlayerIsland(player).thenAccept(island -> {
+        SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).thenAccept(island -> {
             World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
             if (world != null) {
                 try {

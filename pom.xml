@@ -33,12 +33,21 @@
             <artifactId>maven-shade-plugin</artifactId>
             <version>3.6.0</version>
             <configuration>
-                <relocations>
-                    <relocation>
-                        <pattern>com.jeff_media.customblockdata</pattern>
-                        <shadedPattern>YOUR.PACKAGE.NAME.customblockdata</shadedPattern>
-                    </relocation>
-                </relocations>
+                <artifactSet>
+                    <excludes>
+                        <exclude>com.zaxxer:HikariCP</exclude>
+                        <exclude>org.xerial:sqlite-jdbc</exclude>
+                        <exclude>net.dv8tion:JDA</exclude>
+                        <exclude>com.fasterxml.jackson.core:jackson-databind</exclude>
+                        <exclude>org.jetbrains.kotlin:kotlin-stdlib-common</exclude>
+                        <exclude>org.jetbrains.kotlin:kotlin-stdlib-jdk8</exclude>
+                        <exclude>org.jetbrains.kotlin:kotlin-stdlib</exclude>
+                        <exclude>org.jetbrains.kotlin:kotlin-stdlib-jdk7</exclude>
+                        <exclude>org.apache.commons:commons-collections4</exclude>
+                        <exclude>org.slf4j:slf4j-api</exclude>
+                        <exclude>org.jetbrains:annotations</exclude>
+                    </excludes>
+                </artifactSet>
             </configuration>
             <executions>
                 <execution>
@@ -51,15 +60,22 @@
         </plugin>
 
         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.4.2</version>
-            <configuration>
-                <outputDirectory>D:\Code\Torrent\SkyFactionsReborn\Server\plugins</outputDirectory>
-            </configuration>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.4.2</version>
+          <configuration>
+            <outputDirectory>D:\Code\Torrent\SkyFactionsReborn\Server\plugins</outputDirectory>
+          </configuration>
         </plugin>
     </plugins>
     <resources>
+        <resource>
+            <directory>.</directory>
+            <filtering>false</filtering>
+            <includes>
+                <include>LICENSE</include>
+            </includes>
+        </resource>
       <resource>
         <directory>src/main/resources</directory>
         <filtering>true</filtering>

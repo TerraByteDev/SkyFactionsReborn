@@ -12,7 +12,6 @@ import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.torrent.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.JoinRequestPaginationItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.PlayerFactionInvitePaginationItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;

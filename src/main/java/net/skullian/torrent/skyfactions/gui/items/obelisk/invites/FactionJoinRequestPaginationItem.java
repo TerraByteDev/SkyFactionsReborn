@@ -3,7 +3,6 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 import net.skullian.torrent.skyfactions.db.InviteData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.obelisk.invites.JoinRequestManageUI;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.JoinRequestsUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
@@ -18,7 +17,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class JoinRequestPaginationItem extends AbstractItem {
+public class FactionJoinRequestPaginationItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -28,7 +27,7 @@ public class JoinRequestPaginationItem extends AbstractItem {
     private OfflinePlayer SUBJECT;
     private InviteData DATA;
 
-    public JoinRequestPaginationItem(ItemData data, ItemStack stack, OfflinePlayer player, InviteData inviteData) {
+    public FactionJoinRequestPaginationItem(ItemData data, ItemStack stack, OfflinePlayer player, InviteData inviteData) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();

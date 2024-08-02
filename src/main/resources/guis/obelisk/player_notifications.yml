@@ -63,8 +63,9 @@ ITEMS:
     # Placeholders: %timestamp% - Timestamp of the audit log.
     lore:
       - "%notification_description%"
-      - ""
       - "&7%timestamp%"
+      - ""
+      - "&cRight click to dismiss."
 
   BORDER:
     char: "#"

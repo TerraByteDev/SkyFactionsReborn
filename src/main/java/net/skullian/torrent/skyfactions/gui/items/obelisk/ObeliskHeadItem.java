@@ -37,7 +37,7 @@ public class ObeliskHeadItem extends AbstractItem {
     @Override
     public ItemProvider getItemProvider() {
         // TODO: MIGRATE EVERYTHING TO ISLANDAPI / API PACKAGE AREA
-        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(PLAYER).join();
+        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(PLAYER.getUniqueId()).join();
         ItemBuilder builder = new ItemBuilder(STACK)
                 .setDisplayName(TextUtility.color(NAME));
 

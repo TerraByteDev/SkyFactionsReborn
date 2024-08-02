@@ -47,8 +47,8 @@ public class FactionRequestJoinCommand extends CommandTemplate {
             } else if (faction.getAllMembers().contains(Bukkit.getOfflinePlayer(player.getUniqueId()))) {
                 Messages.JOIN_REQUEST_SAME_FACTION.send(player);
                 return;
-            } else if (SkyFactionsReborn.db.joinRequestExists(factionName, player).join()) {
-                Messages.JOIN_REQUEST_DUPLICATE.send(player);
+            } else if (SkyFactionsReborn.db.hasJoinRequest(player).join()) {
+                Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player);
                 return;
             }
 

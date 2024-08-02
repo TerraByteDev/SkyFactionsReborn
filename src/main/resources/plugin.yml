@@ -98,3 +98,20 @@ permissions:
     children:
       skyfactions.command.link: true
       skyfactions.command.unlink: true
+
+libraries:
+  - "com.zaxxer:HikariCP:5.1.0"
+  - "org.xerial:sqlite-jdbc:3.46.0.0"
+  - "net.dv8tion:JDA:5.0.1"
+  - "com.fasterxml.jackson.core:jackson-databind:2.17.2"
+  - "com.jeff-media:custom-block-data:2.2.2"
+  - "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.10"
+  - "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21"
+  - "org.jetbrains.kotlin:kotlin-stdlib:1.8.21"
+  - "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21"
+  - "org.apache.commons:commons-collections4:4.4"
+  - "net.sf.trove4j:core:3.1.0"
+  - "com.fasterxml.jackson.core:jackson-core:2.17.0"
+  - "com.fasterxml.jackson.core:jackson-annotations:2.17.2"
+  - "org.slf4j:slf4j-api:2.0.9"
+  - "org.jetbrains:annotations:23.0.0"

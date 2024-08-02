@@ -46,7 +46,6 @@ public class IslandCreateCommand extends CommandTemplate {
                 return;
             } else {
                 IslandCreationConfirmationUI.promptPlayer(player);
-                SoundUtil.playSound(player, "ui.button.click", 1f, 1f);
             }
         } catch (InterruptedException | ExecutionException error) {
             error.printStackTrace();

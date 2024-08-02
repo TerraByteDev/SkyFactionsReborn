@@ -63,7 +63,8 @@ ITEMS:
       - "&einto runes for purchases"
       - "&elike&c defences!"
       - ""
-      - "&7You currently have &a&l%runes%&r&e runes"
+      - "&7You currently have &a&l%runes%"
+      - "&r&7runes."
 
   # Place to see & buy defences.
   DEFENCES:
@@ -87,7 +88,9 @@ ITEMS:
     pitch: 1
     lore:
       - "&eView and manage your"
-      - "&eincoming Faction invites."
+      - "&eincoming Faction invites"
+      - "&eand manage your outgoing"
+      - "&eFaction join request."
 
   BORDER:
     char: "#"

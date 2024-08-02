@@ -1,9 +1,11 @@
-package net.skullian.torrent.skyfactions.gui.items.obelisk;
+package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.faction.JoinRequestData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.FactionInviteTypeSelectionUI;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerIncomingInvites;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerInviteTypeSelectionUI;
+import net.skullian.torrent.skyfactions.gui.obelisk.invites.JoinRequestsUI;
+import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerOutgoingRequestManageUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -17,7 +19,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class ObeliskInvitesItem extends AbstractItem {
+public class JoinRequestsTypeItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -26,7 +28,7 @@ public class ObeliskInvitesItem extends AbstractItem {
     private ItemStack STACK;
     private String TYPE;
 
-    public ObeliskInvitesItem(ItemData data, ItemStack stack, String type) {
+    public JoinRequestsTypeItem(ItemData data, ItemStack stack, String type) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
@@ -54,12 +56,17 @@ public class ObeliskInvitesItem extends AbstractItem {
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
+
         if (TYPE.equals("faction")) {
-            FactionInviteTypeSelectionUI.promptPlayer(player);
+            JoinRequestsUI.promptPlayer(player);
         } else if (TYPE.equals("player")) {
-            PlayerInviteTypeSelectionUI.promptPlayer(player);
+            JoinRequestData joinRequest = SkyFactionsReborn.db.getPlayerOutgoingJoinRequest(player).join();
+            if (joinRequest == null) {
+                Messages.FACTION_JOIN_REQUEST_NOT_EXIST.send(player);
+            } else {
+                PlayerOutgoingRequestManageUI.promptPlayer(player, joinRequest);
+            }
         }
     }
-
 
 }

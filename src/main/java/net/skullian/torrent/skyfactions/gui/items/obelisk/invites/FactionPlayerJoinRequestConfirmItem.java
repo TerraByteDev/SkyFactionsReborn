@@ -1,9 +1,10 @@
-package net.skullian.torrent.skyfactions.gui.items.obelisk;
+package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.faction.JoinRequestData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.FactionInviteTypeSelectionUI;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerIncomingInvites;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerInviteTypeSelectionUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -17,22 +18,22 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class ObeliskInvitesItem extends AbstractItem {
+public class FactionPlayerJoinRequestConfirmItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
     private int PITCH;
     private List<String> LORE;
     private ItemStack STACK;
-    private String TYPE;
+    private JoinRequestData DATA;
 
-    public ObeliskInvitesItem(ItemData data, ItemStack stack, String type) {
+    public FactionPlayerJoinRequestConfirmItem(ItemData data, ItemStack stack, JoinRequestData joinRequestData) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
-        this.TYPE = type;
+        this.DATA = joinRequestData;
     }
 
     @Override
@@ -47,6 +48,7 @@ public class ObeliskInvitesItem extends AbstractItem {
         return builder;
     }
 
+
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.setCancelled(true);
@@ -54,12 +56,11 @@ public class ObeliskInvitesItem extends AbstractItem {
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
-        if (TYPE.equals("faction")) {
-            FactionInviteTypeSelectionUI.promptPlayer(player);
-        } else if (TYPE.equals("player")) {
-            PlayerInviteTypeSelectionUI.promptPlayer(player);
-        }
-    }
+        event.getInventory().close();
 
+        FactionAPI.getFaction(DATA.getFactionName()).addFactionMember(player.getUniqueId());
+        SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming").join();
+        Messages.FACTION_PLAYER_JOIN_REQUEST_ACCEPT.send(player, "%faction_name%", DATA.getFactionName());
+    }
 
 }

@@ -20,7 +20,6 @@ import net.skullian.torrent.skyfactions.db.HikariHandler;
 import net.skullian.torrent.skyfactions.discord.DiscordHandler;
 import net.skullian.torrent.skyfactions.event.ObeliskInteractionListener;
 import net.skullian.torrent.skyfactions.event.PlayerHandler;
-import net.skullian.torrent.skyfactions.obelisk.ObeliskBlockManager;
 import net.skullian.torrent.skyfactions.util.DependencyHandler;
 import net.skullian.torrent.skyfactions.util.EconomyHandler;
 import org.bukkit.Bukkit;
@@ -36,7 +35,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static HikariHandler db;
     public static DiscordHandler dc;
     public static EconomyHandler ec;
-    public static ObeliskBlockManager obeliskBlockManager;
 
     String text = """
             
@@ -49,9 +47,11 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public void onEnable() {
         LOGGER.info(text);
 
+        // Store an instance of the ConfigHandler class in case it is needed.
+        // Primarily used for the discord integration.
         LOGGER.info("Initialising Configs.");
         configHandler = new ConfigFileHandler();
-        configHandler.loadFiles(this);
+        configHandler.loadFiles(this); // Load all files (and create them if they don't exist already).
 
         LOGGER.info("Initialising Economy.");
         ec = new EconomyHandler();
@@ -61,6 +61,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
         getCommand("island").setExecutor(new IslandCommandHandler());
         getCommand("island").setTabCompleter(new IslandCommandTabCompletion());
 
+        // There is the option to disable the discord integration if you don't want it.
+        // To avoid later confusion, we only register the discord related commands if it is enabled.
         boolean discordEnabled = SkyFactionsReborn.configHandler.DISCORD_CONFIG.getBoolean("Discord.ENABLED");
         if (discordEnabled) {
             getCommand("link").setExecutor(new LinkCommand());
@@ -79,31 +81,36 @@ public final class SkyFactionsReborn extends JavaPlugin {
         getCommand("faction").setExecutor(new FactionCommandHandler());
         getCommand("faction").setTabCompleter(new FactionCommandTabCompletion());
 
-
         LOGGER.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
         getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
 
+        // We store an instance of the DiscordHandler class as that is how other internals
+        // access methods related to Discord (e.g. raid notifications).
         LOGGER.info("Initialising JDA / Discord.");
         dc = new DiscordHandler();
         dc.initialiseBot();
 
-        LOGGER.info("Handling Obelisk BlockEntities.");
-        obeliskBlockManager = new ObeliskBlockManager();
-
+        // This is kind of pointless.
+        // Just a class for handling dependencies and optional dependencies.
+        // Majorly incomplete.
         LOGGER.info("Handling optional dependencies.");
         DependencyHandler.init();
 
+        // Player Data Container (CustomBlockData API) listener.
         LOGGER.info("Handling PDC Listener.");
         CustomBlockData.registerListener(this);
 
+        // Initialise the database last.
         initialiseDatabaseConnection();
     }
 
     @Override
     public void onDisable() {
+        LOGGER.info("Closing Database connection.");
         closeDatabase();
         dc.disconnect();
+
         LOGGER.info(text);
         LOGGER.info("SkyFactions has been disabled.");
     }

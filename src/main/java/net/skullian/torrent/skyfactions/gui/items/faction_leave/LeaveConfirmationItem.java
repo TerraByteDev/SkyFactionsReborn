@@ -68,7 +68,7 @@ public class LeaveConfirmationItem extends AbstractItem {
             if (world != null) {
                 if (FactionAPI.isInRegion(player, world, faction.getName())) {
 
-                    PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(player).join();
+                    PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).join();
                     World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                     if (island != null && islandWorld != null) {
                         IslandAPI.teleportPlayerToLocation(player, island.getCenter(islandWorld));

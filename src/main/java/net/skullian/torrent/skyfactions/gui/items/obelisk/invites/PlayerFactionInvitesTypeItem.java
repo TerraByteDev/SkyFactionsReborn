@@ -1,7 +1,8 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.JoinRequestsUI;
+import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerIncomingInvites;
+import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerInviteTypeSelectionUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -15,7 +16,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class JoinRequestsItem extends AbstractItem {
+public class PlayerFactionInvitesTypeItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
@@ -23,7 +24,7 @@ public class JoinRequestsItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
 
-    public JoinRequestsItem(ItemData data, ItemStack stack) {
+    public PlayerFactionInvitesTypeItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
@@ -51,7 +52,6 @@ public class JoinRequestsItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        JoinRequestsUI.promptPlayer(player);
+        PlayerIncomingInvites.promptPlayer(player);
     }
-
 }
