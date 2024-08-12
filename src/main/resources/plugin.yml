@@ -101,7 +101,6 @@ permissions:
 
 libraries:
   - "com.zaxxer:HikariCP:5.1.0"
-  - "org.xerial:sqlite-jdbc:3.46.0.0"
   - "net.dv8tion:JDA:5.0.1"
   - "com.fasterxml.jackson.core:jackson-databind:2.17.2"
   - "com.jeff-media:custom-block-data:2.2.2"
