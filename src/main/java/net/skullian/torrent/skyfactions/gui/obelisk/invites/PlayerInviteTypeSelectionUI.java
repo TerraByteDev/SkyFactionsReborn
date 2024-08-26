@@ -49,23 +49,23 @@ public class PlayerInviteTypeSelectionUI {
                 switch (itemData.getITEM_ID()) {
 
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "OUTGOING_JOIN_REQUEST":
-                        builder.addIngredient(itemData.getCHARACTER(), new JoinRequestsTypeItem(itemData, GUIAPI.createItem(itemData, player), "player"));
+                        builder.addIngredient(itemData.getCHARACTER(), new JoinRequestsTypeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player"));
                         break;
 
                     case "INCOMING_INVITES":
-                        builder.addIngredient(itemData.getCHARACTER(), new PlayerFactionInvitesTypeItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new PlayerFactionInvitesTypeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player), "player"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player"));
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }

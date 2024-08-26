@@ -60,11 +60,11 @@ public class PlayerObeliskNotificationUI {
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player), "player"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player"));
                         break;
 
                     case "MODEL":
@@ -72,7 +72,7 @@ public class PlayerObeliskNotificationUI {
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }
@@ -80,11 +80,11 @@ public class PlayerObeliskNotificationUI {
                 switch (paginationItem.getITEM_ID()) {
 
                     case "FORWARD_BUTTON":
-                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationForwardItem(paginationItem, GUIAPI.createItem(paginationItem, player)));
+                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationForwardItem(paginationItem, GUIAPI.createItem(paginationItem, player.getUniqueId())));
                         break;
 
                     case "BACK_BUTTON":
-                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationBackItem(paginationItem, GUIAPI.createItem(paginationItem, player)));
+                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationBackItem(paginationItem, GUIAPI.createItem(paginationItem, player.getUniqueId())));
                         break;
                 }
             }
@@ -100,7 +100,7 @@ public class PlayerObeliskNotificationUI {
         List<NotificationData> notifications = NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(player.getUniqueId()));
 
         for (NotificationData notification : notifications) {
-            items.add(new ObeliskNotificationPaginationItem(data, GUIAPI.createItem(data, player), notification));
+            items.add(new ObeliskNotificationPaginationItem(data, GUIAPI.createItem(data, player.getUniqueId()), notification));
         }
 
         return items;

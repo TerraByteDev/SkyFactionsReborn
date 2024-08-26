@@ -2,7 +2,9 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.faction.JoinRequestData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
@@ -58,9 +60,11 @@ public class FactionPlayerJoinRequestConfirmItem extends AbstractItem {
         }
         event.getInventory().close();
 
-        FactionAPI.getFaction(DATA.getFactionName()).addFactionMember(player.getUniqueId());
+        Faction faction = FactionAPI.getFaction(DATA.getFactionName());
+        faction.addFactionMember(player.getUniqueId());
         SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming").join();
-        Messages.FACTION_PLAYER_JOIN_REQUEST_ACCEPT.send(player, "%faction_name%", DATA.getFactionName());
+        Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, "%faction_name%", DATA.getFactionName());
+        NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
     }
 
 }

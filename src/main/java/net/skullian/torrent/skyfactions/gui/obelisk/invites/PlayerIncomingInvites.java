@@ -56,7 +56,7 @@ public class PlayerIncomingInvites {
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "MODEL":
@@ -64,11 +64,11 @@ public class PlayerIncomingInvites {
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player), "player"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player"));
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }
@@ -76,11 +76,11 @@ public class PlayerIncomingInvites {
                 switch (paginationItem.getITEM_ID()) {
 
                     case "FORWARD_BUTTON":
-                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationForwardItem(paginationItem, GUIAPI.createItem(paginationItem, player)));
+                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationForwardItem(paginationItem, GUIAPI.createItem(paginationItem, player.getUniqueId())));
                         break;
 
                     case "BACK_BUTTON":
-                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationBackItem(paginationItem, GUIAPI.createItem(paginationItem, player)));
+                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationBackItem(paginationItem, GUIAPI.createItem(paginationItem, player.getUniqueId())));
                         break;
                 }
             }
@@ -99,7 +99,7 @@ public class PlayerIncomingInvites {
         List<InviteData> data = SkyFactionsReborn.db.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).join();
         for (InviteData inviteData : data) {
             itemData.setNAME(itemData.getNAME().replace("%faction_name%", inviteData.getFactionName()));
-            items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getPlayer()), inviteData.getPlayer(), inviteData));
+            items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getUniqueId()), inviteData.getPlayer(), inviteData));
         }
 
         return items;

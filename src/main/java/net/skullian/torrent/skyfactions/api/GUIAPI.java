@@ -114,12 +114,12 @@ public class GUIAPI {
         }
     }
 
-    public static ItemStack createItem(ItemData data, Player player) {
+    public static ItemStack createItem(ItemData data, UUID playerUUID) {
         ItemStack stack;
         if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
             String texture = data.getBASE64_TEXTURE();
             if (texture.equalsIgnoreCase("%player_skull%")) {
-                stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), player);
+                stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), playerUUID);
             } else {
                 stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
             }
@@ -130,28 +130,12 @@ public class GUIAPI {
         return stack;
     }
 
-    public static ItemStack createItem(ItemData data, OfflinePlayer player) {
+    public static ItemStack createItem(PaginationItemData data, UUID playerUUID) {
         ItemStack stack;
         if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
             String texture = data.getBASE64_TEXTURE();
             if (texture.equalsIgnoreCase("%player_skull%")) {
-                stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), player.getPlayer());
-            } else {
-                stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
-            }
-        } else {
-            stack = new ItemStack(Material.getMaterial(data.getMATERIAL()));
-        }
-
-        return stack;
-    }
-
-    public static ItemStack createItem(PaginationItemData data, Player player) {
-        ItemStack stack;
-        if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
-            String texture = data.getBASE64_TEXTURE();
-            if (texture.equalsIgnoreCase("%player_skull%")) {
-                stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), player);
+                stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), playerUUID);
             } else {
                 stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
             }

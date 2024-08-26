@@ -1,11 +1,10 @@
 package net.skullian.torrent.skyfactions.util.text;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
@@ -16,8 +15,6 @@ public class TextUtility {
     public static String color (final String string) {
         return ColorAPI.process(string);
     }
-
-    public static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String fromList(List<?> list) {
         if (list == null || list.isEmpty()) return null;
@@ -32,7 +29,7 @@ public class TextUtility {
         return builder.toString();
     }
 
-    public static boolean isEnglish(@Nullable CharSequence seq) {
+    public static boolean isEnglish(@NotNull CharSequence seq) {
         if (seq == null) {
             return false;
         } else {
@@ -80,7 +77,7 @@ public class TextUtility {
         }
     }
 
-    public static boolean hasSymbols(@Nullable CharSequence seq) {
+    public static boolean hasSymbols(@NotNull CharSequence seq) {
         if (seq == null) {
             return false;
         } else {
@@ -99,7 +96,7 @@ public class TextUtility {
         }
     }
 
-    public static boolean containsNumbers(@Nullable CharSequence seq) {
+    public static boolean containsNumbers(@NotNull CharSequence seq) {
         if (seq == null) {
             return false;
         } else {

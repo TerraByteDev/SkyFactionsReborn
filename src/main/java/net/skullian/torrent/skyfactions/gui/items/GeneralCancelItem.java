@@ -1,11 +1,9 @@
-package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
+package net.skullian.torrent.skyfactions.gui.items;
 
-import net.skullian.torrent.skyfactions.db.InviteData;
-import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.JoinRequestManageUI;
+
 import net.skullian.torrent.skyfactions.util.SoundUtil;
+import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,24 +15,20 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class FactionJoinRequestPaginationItem extends AbstractItem {
+public class GeneralCancelItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
     private int PITCH;
     private List<String> LORE;
     private ItemStack STACK;
-    private OfflinePlayer SUBJECT;
-    private InviteData DATA;
 
-    public FactionJoinRequestPaginationItem(ItemData data, ItemStack stack, OfflinePlayer player, InviteData inviteData) {
+    public GeneralCancelItem(ItemData data, ItemStack stack) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
-        this.SUBJECT = player;
-        this.DATA = inviteData;
     }
 
     @Override
@@ -43,10 +37,7 @@ public class FactionJoinRequestPaginationItem extends AbstractItem {
                 .setDisplayName(TextUtility.color(NAME));
 
         for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%player_name%", DATA.getPlayer().getName()))
-                    .replace("%timestamp%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))
-            );
+            builder.addLoreLines(TextUtility.color(loreLine));
         }
 
         return builder;
@@ -54,14 +45,13 @@ public class FactionJoinRequestPaginationItem extends AbstractItem {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+
         event.setCancelled(true);
+        event.getInventory().close();
 
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
-
-        JoinRequestManageUI.promptPlayer(player, DATA);
     }
-
 
 }

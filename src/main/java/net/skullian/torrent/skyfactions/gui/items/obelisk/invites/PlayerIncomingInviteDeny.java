@@ -1,11 +1,15 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.db.InviteData;
+import net.skullian.torrent.skyfactions.faction.AuditLogType;
+import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.faction.JoinRequestData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.JoinRequestManageUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,23 +21,21 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class FactionJoinRequestPaginationItem extends AbstractItem {
+public class PlayerIncomingInviteDeny extends AbstractItem {
 
     private String NAME;
     private String SOUND;
     private int PITCH;
     private List<String> LORE;
     private ItemStack STACK;
-    private OfflinePlayer SUBJECT;
     private InviteData DATA;
 
-    public FactionJoinRequestPaginationItem(ItemData data, ItemStack stack, OfflinePlayer player, InviteData inviteData) {
+    public PlayerIncomingInviteDeny(ItemData data, ItemStack stack, InviteData inviteData) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
-        this.SUBJECT = player;
         this.DATA = inviteData;
     }
 
@@ -43,10 +45,7 @@ public class FactionJoinRequestPaginationItem extends AbstractItem {
                 .setDisplayName(TextUtility.color(NAME));
 
         for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%player_name%", DATA.getPlayer().getName()))
-                    .replace("%timestamp%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))
-            );
+            builder.addLoreLines(TextUtility.color(loreLine));
         }
 
         return builder;
@@ -60,8 +59,11 @@ public class FactionJoinRequestPaginationItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        JoinRequestManageUI.promptPlayer(player, DATA);
+        event.getInventory().close();
+        Faction faction = FactionAPI.getFaction(DATA.getFactionName());
+        faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_DENY, "%player_name%", player.getName());
+        SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing").join();
+        Messages.FACTION_INVITE_DENY_SUCCESS.send(player, "%faction_name%", faction.getName());
     }
-
 
 }

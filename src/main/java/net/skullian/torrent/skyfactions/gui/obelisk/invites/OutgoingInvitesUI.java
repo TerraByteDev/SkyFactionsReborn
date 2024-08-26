@@ -56,7 +56,7 @@ public class OutgoingInvitesUI {
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "MODEL":
@@ -64,11 +64,11 @@ public class OutgoingInvitesUI {
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player), "faction"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }
@@ -76,11 +76,11 @@ public class OutgoingInvitesUI {
                 switch (paginationItem.getITEM_ID()) {
 
                     case "FORWARD_BUTTON":
-                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationForwardItem(paginationItem, GUIAPI.createItem(paginationItem, player)));
+                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationForwardItem(paginationItem, GUIAPI.createItem(paginationItem, player.getUniqueId())));
                         break;
 
                     case "BACK_BUTTON":
-                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationBackItem(paginationItem, GUIAPI.createItem(paginationItem, player)));
+                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationBackItem(paginationItem, GUIAPI.createItem(paginationItem, player.getUniqueId())));
                         break;
                 }
             }
@@ -104,7 +104,7 @@ public class OutgoingInvitesUI {
         List<InviteData> data = faction.getOutgoingInvites();
         for (InviteData inviteData : data) {
             itemData.setNAME(itemData.getNAME().replace("%player_name%", inviteData.getPlayer().getName()));
-            items.add(new OutgoingInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getPlayer()), inviteData));
+            items.add(new OutgoingInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getUniqueId()), inviteData));
         }
 
         return items;

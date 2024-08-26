@@ -28,10 +28,10 @@ public class SkullAPI {
         return item;
     }
 
-    public static ItemStack getPlayerSkull(ItemStack item, Player player) {
+    public static ItemStack getPlayerSkull(ItemStack item, UUID playerUUID) {
         if (item.getType() == Material.PLAYER_HEAD) {
             SkullMeta meta = (SkullMeta) item.getItemMeta();
-            meta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()));
+            meta.setOwningPlayer(Bukkit.getOfflinePlayer(playerUUID));
             item.setItemMeta(meta);
         }
 

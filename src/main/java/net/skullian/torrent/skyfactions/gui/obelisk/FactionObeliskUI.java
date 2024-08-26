@@ -53,36 +53,36 @@ public class FactionObeliskUI {
                 switch (itemData.getITEM_ID()) {
 
                     case "FACTION":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskFactionOverviewItem(itemData, GUIAPI.createItem(itemData, player), player));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskFactionOverviewItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
                     case "DEFENCES":
                         // todo probably will need to add type for when actually functioning
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencesItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "RUNES_CONVERSION":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player), "faction", player));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player));
                         break;
 
                     case "MEMBER_MANAGEMENT":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "AUDIT_LOGS":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskAuditLogItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskAuditLogItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "INVITES":
                         if (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player)) {
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player), "faction"));
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
                         } else {
                             Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_MODERATOR_TITLE.get());
                         }
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }

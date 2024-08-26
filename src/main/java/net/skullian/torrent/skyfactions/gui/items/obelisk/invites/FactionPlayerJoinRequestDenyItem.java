@@ -2,6 +2,7 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.faction.AuditLogType;
 import net.skullian.torrent.skyfactions.faction.Faction;
@@ -62,6 +63,7 @@ public class FactionPlayerJoinRequestDenyItem extends AbstractItem {
         Faction faction = FactionAPI.getFaction(DATA.getFactionName());
         faction.createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_JOIN_REQUEST_REVOKE, "%player_name%", player.getName());
         SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming").join();
+        NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
 
         Messages.FACTION_JOIN_REQUEST_DENY_SUCCESS.send(player, "%faction_name%", DATA.getFactionName());
     }

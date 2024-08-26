@@ -1,9 +1,9 @@
-package net.skullian.torrent.skyfactions.gui.items.island_creation;
+package net.skullian.torrent.skyfactions.gui.items.obelisk.member_manage;
 
-
-import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -15,26 +15,28 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class CreationCancelItem extends AbstractItem {
+public class MemberPromptItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
     private int PITCH;
     private List<String> LORE;
     private ItemStack STACK;
+    private OfflinePlayer SUBJECT;
 
-    public CreationCancelItem(ItemData data, ItemStack stack) {
+    public MemberPromptItem(ItemData data, ItemStack stack, OfflinePlayer player) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
+        this.SUBJECT = player;
     }
 
     @Override
     public ItemProvider getItemProvider() {
         ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME));
+                .setDisplayName(TextUtility.color(NAME.replace("%player_name%", SUBJECT.getName())));
 
         for (String loreLine : LORE) {
             builder.addLoreLines(TextUtility.color(loreLine));
@@ -45,13 +47,12 @@ public class CreationCancelItem extends AbstractItem {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-
         event.setCancelled(true);
-        event.getInventory().close();
 
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
     }
+
 
 }

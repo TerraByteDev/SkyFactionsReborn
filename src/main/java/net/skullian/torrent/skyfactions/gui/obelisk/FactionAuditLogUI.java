@@ -58,11 +58,11 @@ public class FactionAuditLogUI {
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player), "faction"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
                         break;
 
                     case "MODEL":
@@ -70,7 +70,7 @@ public class FactionAuditLogUI {
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }
@@ -78,11 +78,11 @@ public class FactionAuditLogUI {
                 switch (paginationItem.getITEM_ID()) {
 
                     case "FORWARD_BUTTON":
-                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationForwardItem(paginationItem, GUIAPI.createItem(paginationItem, player)));
+                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationForwardItem(paginationItem, GUIAPI.createItem(paginationItem, player.getUniqueId())));
                         break;
 
                     case "BACK_BUTTON":
-                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationBackItem(paginationItem, GUIAPI.createItem(paginationItem, player)));
+                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationBackItem(paginationItem, GUIAPI.createItem(paginationItem, player.getUniqueId())));
                         break;
                 }
             }
@@ -99,7 +99,7 @@ public class FactionAuditLogUI {
         List<AuditLogData> auditLogData = faction.getAuditLogs();
 
         for (AuditLogData auditLog : auditLogData) {
-            items.add(new AuditPaginationItem(data, GUIAPI.createItem(data, auditLog.getPlayer().getPlayer()), auditLog));
+            items.add(new AuditPaginationItem(data, GUIAPI.createItem(data, auditLog.getPlayer().getUniqueId()), auditLog));
         }
 
         return items;

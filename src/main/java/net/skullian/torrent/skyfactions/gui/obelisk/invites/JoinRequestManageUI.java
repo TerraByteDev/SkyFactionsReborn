@@ -47,23 +47,23 @@ public class JoinRequestManageUI {
                 switch (itemData.getITEM_ID()) {
 
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player), "faction"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "REJECT":
-                        builder.addIngredient(itemData.getCHARACTER(), new FactionJoinRequestRejectItem(itemData, GUIAPI.createItem(itemData, player), inviteData));
+                        builder.addIngredient(itemData.getCHARACTER(), new FactionJoinRequestRejectItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData));
                         break;
 
                     case "ACCEPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new FactionJoinRequestAcceptItem(itemData, GUIAPI.createItem(itemData, player), inviteData));
+                        builder.addIngredient(itemData.getCHARACTER(), new FactionJoinRequestAcceptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData));
                         break;
                 }
             }

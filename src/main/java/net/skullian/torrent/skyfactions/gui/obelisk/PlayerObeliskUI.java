@@ -45,27 +45,27 @@ public class PlayerObeliskUI {
                 switch (itemData.getITEM_ID()) {
 
                     case "HEAD":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskHeadItem(itemData, GUIAPI.createItem(itemData, player), player));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskHeadItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
                     case "DEFENCES":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencesItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "RUNES_CONVERSION":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player), "player", player));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", player));
                         break;
 
                     case "INVITES":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player), "player"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player"));
                         break;
 
                     case "NOTIFICATIONS":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskPlayerNotificationsItem(itemData, GUIAPI.createItem(itemData, player), player));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskPlayerNotificationsItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }

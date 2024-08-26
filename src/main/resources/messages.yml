@@ -238,7 +238,7 @@ Messages:
     FACTION_LEAVE:
       # Sent when a player successfully leaves a faction.
       # Placeholders: %faction_name% - Name of the faction.
-      FACTION_LEAVE_SUCCESS: "%server_name% &c&oYou have successfully left %faction_name%."
+      FACTION_LEAVE_SUCCESS: "%server_name% &aYou have successfully left &e%faction_name%."
 
       # Sent when the faction owner tries to leave the faction.
       FACTION_OWNER_LEAVE_DENY: "%server_name% &cYou cannot leave this faction because you are the owner!"
@@ -327,9 +327,9 @@ Messages:
       # Placeholders: %faction_name% - Name of the Faction your join request WAS going to.
       JOIN_REQUEST_REVOKE_SUCCESS: "%server_name% &aYour join request to &e%faction_name% &ahas been revoked."
 
-      # Sent when a player confirms the acceptance of their join request.
+      # Sent when a player confirms the acceptance of their join request, or accepted a Faction invite.
       # Placeholders: %faction_name% - Name of the Faction you are now part of.
-      PLAYER_JOIN_REQUEST_ACCEPT_SUCCESS: "%server_name% &eYou are now part of the Faction &a%faction_name%!"
+      PLAYER_FACTION_JOIN_SUCCESS: "%server_name% &eYou are now part of the Faction &a%faction_name%!"
 
       # Sent when a player, after their join request is accepted by the Faction, rejects it.
       # Placeholders: %faction_name% - Name of the Faction your join request was going to.
@@ -342,6 +342,10 @@ Messages:
       # Sent to the player (if online) when their join request to a Faction is rejected.
       # Placeholders: %faction_name% - Name of the Faction.
       JOIN_REQUEST_REJECT_NOTIFICATION: "%server_name% &eYour join request to &c&l%faction_name%&r&e has been rejected."
+
+      # Sent to the player when they denied a Faction's invite.
+      # Placeholders: %faction_name% - Name of the Faction.
+      FACTION_INVITE_DENY_SUCCESS: "%server_name% &eYou successfully denied &a%faction_name%'s &einvite."
 
   Notifications:
     # Sent when a player has a pending Faction invitation in their Obelisk.
@@ -503,4 +507,14 @@ Messages:
     # Placeholders: %player_name% - Owner of the join request.
     PLAYER_JOIN_REQUEST_DENY_TITLE: "&c&lJoin Request Denied"
     PLAYER_JOIN_REQUEST_DENY_DESCRIPTION: "&a%player_name% &edenied your acceptance/of their join request."
+
+    # Sent when a player accepts a Faction's invite.
+    # Placeholders: %player_name% - Player who accepted the invite.
+    INVITE_ACCEPT_TITLE: "&a&lInvite Accepted"
+    INVITE_ACCEPT_DESCRIPTION: "&a%player_name% &eaccepted your Faction invite."
+
+    # Sent when a player denies a Faction's invite.
+    # Placeholders: %player_name% - Player who denied the invite.
+    INVITE_DENY_TITLE: "&c&lInvite Denied"
+    INVITE_DENY_DESCRIPTION: "&a%player_name% &edenied your Faction invite."
 

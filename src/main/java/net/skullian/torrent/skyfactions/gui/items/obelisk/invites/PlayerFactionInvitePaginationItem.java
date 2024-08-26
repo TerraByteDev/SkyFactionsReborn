@@ -2,6 +2,7 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 
 import net.skullian.torrent.skyfactions.db.InviteData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerManageIncomingInviteUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
@@ -56,7 +57,7 @@ public class PlayerFactionInvitePaginationItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        // todo
+        PlayerManageIncomingInviteUI.promptPlayer(player, DATA);
     }
 
 }

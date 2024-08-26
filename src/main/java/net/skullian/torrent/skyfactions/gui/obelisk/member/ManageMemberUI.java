@@ -54,25 +54,25 @@ public class ManageMemberUI {
                 switch (itemData.getITEM_ID()) {
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "PLAYER_HEAD":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "KICK":
-                        builder.addIngredient(itemData.getCHARACTER(), new MemberKickItem(itemData, GUIAPI.createItem(itemData, player), player));
+                        builder.addIngredient(itemData.getCHARACTER(), new MemberKickItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
                     case "BAN":
                         if (faction.isOwner(actor) || faction.isAdmin(actor)) {
-                            builder.addIngredient(itemData.getCHARACTER(), new MemberBanItem(itemData, GUIAPI.createItem(itemData, player), player));
+                            builder.addIngredient(itemData.getCHARACTER(), new MemberBanItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         }
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player), "faction"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
                         break;
                 }
             }

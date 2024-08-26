@@ -87,7 +87,7 @@ public class LeaveConfirmationItem extends AbstractItem {
                 }
 
                 faction.leaveFaction(Bukkit.getOfflinePlayer(player.getUniqueId()));
-                Messages.FACTION_LEAVE_SUCCESS.send(player);
+                Messages.FACTION_LEAVE_SUCCESS.send(player, "%faction_name%", faction.getName());
             } else {
                 Messages.ERROR.send(player, "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
 

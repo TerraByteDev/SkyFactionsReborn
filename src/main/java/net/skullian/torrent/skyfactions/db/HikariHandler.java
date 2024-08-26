@@ -115,7 +115,7 @@ public class HikariHandler {
              PreparedStatement islandsTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS islands (
                      [id] INTEGER PRIMARY KEY,
-                     [uuid] BLOB NOT NULL,
+                     [uuid] TEXT NOT NULL,
                      [level] INTEGER NOT NULL,
                      [gems] INTEGER NOT NULL,
                      [runes] INTEGER NOT NULL,
@@ -125,7 +125,7 @@ public class HikariHandler {
 
             PreparedStatement playerDataTable = connection.prepareStatement("""
                     CREATE TABLE IF NOT EXISTS playerData (
-                    [uuid] BLOB PRIMARY KEY UNIQUE NOT NULL,
+                    [uuid] TEXT PRIMARY KEY UNIQUE NOT NULL,
                     [faction] TEXT NOT NULL,
                     [discord_id] TEXT NOT NULL,
                     [last_raid] INTEGER NOT NULL
@@ -135,7 +135,7 @@ public class HikariHandler {
             PreparedStatement factionIslandTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS factionIslands (
                      [id] INTEGER PRIMARY KEY,
-                     [faction_name] BLOB NOT NULL,
+                     [faction_name] TEXT NOT NULL,
                      [runes] INTEGER NOT NULL,
                      [gems] INTEGER NOT NULL,
                      [last_raided] INTEGER NOT NULL
@@ -153,8 +153,8 @@ public class HikariHandler {
 
             PreparedStatement factionMemberTable = connection.prepareStatement("""
                     CREATE TABLE IF NOT EXISTS factionMembers (
-                    [faction_name] TEXT PRIMARY KEY NOT NULL,
-                    [uuid] BLOB NOT NULL,
+                    [faction_name] TEXT NOT NULL,
+                    [uuid] TEXT PRIMARY KEY NOT NULL,
                     [rank] TEXT NOT NULL
                     ) STRICT;
                     """);
@@ -162,7 +162,7 @@ public class HikariHandler {
             PreparedStatement trustedPlayerTable = connection.prepareStatement("""
                     CREATE TABLE IF NOT EXISTS trustedPlayers (
                     [island_id] INTEGER PRIMARY KEY NOT NULL,
-                    [uuid] BLOB NOT NULL
+                    [uuid] TEXT NOT NULL
                     ) STRICT;
                     """);
 
@@ -170,8 +170,8 @@ public class HikariHandler {
                     CREATE TABLE IF NOT EXISTS auditLogs (
                     [faction_name] TEXT NOT NULL,
                     [type] TEXT NOT NULL,
-                    [uuid] BLOB NOT NULL,
-                    [description] BLOB NOT NULL,
+                    [uuid] TEXT NOT NULL,
+                    [description] TEXT NOT NULL,
                     [timestamp] INTEGER NOT NULL
                     ) STRICT;
                     """);
@@ -179,26 +179,26 @@ public class HikariHandler {
             PreparedStatement factionBannedMembers = connection.prepareStatement("""
                     CREATE TABLE IF NOT EXISTS factionBans (
                     [faction_name] TEXT NOT NULL,
-                    [uuid] BLOB NOT NULL
+                    [uuid] TEXT NOT NULL
                     ) STRICT;
                     """);
 
             PreparedStatement factionInvitesTable = connection.prepareStatement("""
                     CREATE TABLE IF NOT EXISTS factionInvites (
                     [faction_name] TEXT NOT NULL,
-                    [uuid] BLOB NOT NULL,
-                    [inviter] BLOB NOT NULL,
+                    [uuid] TEXT NOT NULL,
+                    [inviter] TEXT NOT NULL,
                     [type] TEXT NOT NULL,
-                    [accepted] BOOLEAN NOT NULL,
+                    [accepted] INTEGER NOT NULL,
                     [timestamp] INTEGER NOT NULL
                     ) STRICT;
                     """);
 
             PreparedStatement notificationTable = connection.prepareStatement("""
                     CREATE TABLE IF NOT EXISTS notifications (
-                    [uuid] BLOB NOT NULL,
-                    [type] BLOB NOT NULL,
-                    [description] BLOB NOT NULL,
+                    [uuid] TEXT NOT NULL,
+                    [type] TEXT NOT NULL,
+                    [description] TEXT NOT NULL,
                     [timestamp] INTEGER NOT NULL
                     ) STRICT;
                     """)) {
@@ -1490,7 +1490,7 @@ public class HikariHandler {
                ResultSet set = statement.executeQuery();
 
                if (set.next()) {
-                   String factionName = set.getString("faction+name");
+                   String factionName = set.getString("faction_name");
                    long timestamp = set.getLong("timestamp");
                    boolean accepted = set.getBoolean("accepted");
 

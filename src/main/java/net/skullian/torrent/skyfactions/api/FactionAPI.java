@@ -58,6 +58,7 @@ public class FactionAPI {
         Faction faction = FactionAPI.getFaction(name);
         faction.createAuditLog(player.getUniqueId(), AuditLogType.FACTION_CREATE, "%player_name%", player.getName(), "%faction_name%", name);
         createIsland(player, name);
+        NotificationAPI.factionInviteStore.put(faction.getName(), 0);
     }
 
     /**

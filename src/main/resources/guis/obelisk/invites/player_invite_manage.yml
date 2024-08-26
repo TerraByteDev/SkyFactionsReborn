@@ -1,5 +1,5 @@
 # Title of the GUI (Inventory)
-TITLE: "&9View Join Request"
+TITLE: "&9View Faction Invite"
 OPEN_SOUND: "ui.button.click"
 OPEN_PITCH: 1
 
@@ -17,11 +17,10 @@ OPEN_PITCH: 1
 LAYOUT:
   - "b # # # # # # # #"
   - "# . . . p . . . #"
-  - "# . a . r . d . #"
+  - "# . a . . . d . #"
   - "# # # # # # # # #"
 
 ITEMS:
-  # Prompt to see what invite type you want to view.
   PROMPT:
     char: "p" # This is the character to use in the LAYOUT!
     material: "PLAYER_HEAD"
@@ -42,9 +41,7 @@ ITEMS:
     pitch: 1
     lore: ""
 
-  # If the join request was accepted by the Faction in question, this item will display.
-  # It is almost like 'finalising' the join request.
-  # Clicking this make you join the Faction.
+  # Accept the invite.
   ACCEPT:
     char: "a"
     material: "PLAYER_HEAD"
@@ -53,24 +50,10 @@ ITEMS:
     sound: ""
     pitch: 1
     lore:
-      - "&aYour join request was accepted!"
+      - "&eClick me to accept the invite."
       - ""
-      - "&eClick me to confirm your join"
-      - "&erequest and join the Faction."
-
-  # Revoke the join request altogether.
-  REVOKE:
-    char: "r"
-    material: "PLAYER_HEAD"
-    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTVlZmZjZTEwOWRlNTBmNTg1M2IwYzMyZGNjMWEyOGNmNjJhNTA0YjYxMGU3MWUyMmYxZmRlNmZjMWE0YjkzZCJ9fX0="
-    text: "&4Revoke"
-    sound: ""
-    pitch: 1
-    lore:
-      - "&eRevoke this join request."
-      - "&7This allows you to make another"
-      - "&7join request. This action is"
-      - "&7permanent and irreversible."
+      - "&7You will immediately join"
+      - "&7the Faction."
 
   # If the join request was accepted by the Faction in question, you can choose to deny it instead.
   DENY:
@@ -81,12 +64,10 @@ ITEMS:
     sound: ""
     pitch: 1
     lore:
-      - "&aYour join request was accepted."
+      - "&cClick me to deny the invite."
       - ""
-      - "&eIf you would like to deny the"
-      - "&eacceptance, click here."
-      - "&7This action is permanent and"
-      - "&7irreversible."
+      - "&7This is a permanent and"
+      - "&7irreversible action."
 
   BORDER:
     char: "#"

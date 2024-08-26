@@ -2,6 +2,7 @@ package net.skullian.torrent.skyfactions.command.faction.cmds;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
@@ -54,6 +55,8 @@ public class FactionRequestJoinCommand extends CommandTemplate {
 
             faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId()));
             Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, "%faction_name%", factionName);
+            NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
+
         }
     }
 

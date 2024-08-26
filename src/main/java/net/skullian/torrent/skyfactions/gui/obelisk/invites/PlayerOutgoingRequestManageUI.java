@@ -5,10 +5,12 @@ import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.faction.JoinRequestData;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestConfirmItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestDenyItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestRevoke;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.PlayerJoinRequestPromptItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -46,28 +48,28 @@ public class PlayerOutgoingRequestManageUI {
             switch (itemData.getITEM_ID()) {
 
                 case "PROMPT":
-                    builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                    builder.addIngredient(itemData.getCHARACTER(), new PlayerJoinRequestPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest));
                     break;
 
                 case "ACCEPT":
                     if (joinRequest.isAccepted()) {
-                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestConfirmItem(itemData, GUIAPI.createItem(itemData, player), joinRequest));
+                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestConfirmItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest));
                     }
                     break;
 
                 case "DENY":
                     if (joinRequest.isAccepted()) {
-                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestDenyItem(itemData, GUIAPI.createItem(itemData, player), joinRequest));
+                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestDenyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest));
                     }
                     break;
 
                 case "REVOKE":
-                    if (!joinRequest.isAccepted()) {
-                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestRevoke(itemData, GUIAPI.createItem(itemData, player), joinRequest));
-                    }
+                    builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestRevoke(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest));
                     break;
 
-
+                case "BORDER":
+                    builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                    break;
             }
         }
 

@@ -56,7 +56,7 @@ public class MemberManagementUI {
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "MODEL":
@@ -64,11 +64,11 @@ public class MemberManagementUI {
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player), "faction"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player)));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }
@@ -76,11 +76,11 @@ public class MemberManagementUI {
                 switch (paginationItem.getITEM_ID()) {
 
                     case "FORWARD_BUTTON":
-                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationForwardItem(paginationItem, GUIAPI.createItem(paginationItem, player)));
+                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationForwardItem(paginationItem, GUIAPI.createItem(paginationItem, player.getUniqueId())));
                         break;
 
                     case "BACK_BUTTON":
-                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationBackItem(paginationItem, GUIAPI.createItem(paginationItem, player)));
+                        builder.addIngredient(paginationItem.getCHARACTER(), new PaginationBackItem(paginationItem, GUIAPI.createItem(paginationItem, player.getUniqueId())));
                         break;
                 }
             }
@@ -104,23 +104,23 @@ public class MemberManagementUI {
         List<OfflinePlayer> members = faction.getMembers();
 
         data.setNAME(data.getNAME().replace("%player_name%", owner.getName()));
-        items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, owner.getPlayer()), Messages.FACTION_OWNER_TITLE.get(), owner, player));
+        items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, owner.getUniqueId()), Messages.FACTION_OWNER_TITLE.get(), owner, player));
 
         for (OfflinePlayer admin : admins) {
             data.setNAME(data.getNAME().replace("%player_name%", admin.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, admin.getPlayer()), Messages.FACTION_ADMIN_TITLE.get(), admin, player));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, admin.getUniqueId()), Messages.FACTION_ADMIN_TITLE.get(), admin, player));
         }
         for (OfflinePlayer moderator : moderators) {
             data.setNAME(data.getNAME().replace("%player_name%", moderator.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, moderator.getPlayer()), Messages.FACTION_MODERATOR_TITLE.get(), moderator, player));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, moderator.getUniqueId()), Messages.FACTION_MODERATOR_TITLE.get(), moderator, player));
         }
         for (OfflinePlayer fighter : fighters) {
             data.setNAME(data.getNAME().replace("%player_name%", fighter.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, fighter.getPlayer()), Messages.FACTION_FIGHTER_TITLE.get(), fighter, player));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, fighter.getUniqueId()), Messages.FACTION_FIGHTER_TITLE.get(), fighter, player));
         }
         for (OfflinePlayer member : members) {
             data.setNAME(data.getNAME().replace("%player_name%", member.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getPlayer()), Messages.FACTION_MEMBER_TITLE.get(), member, player));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), Messages.FACTION_MEMBER_TITLE.get(), member, player));
         }
 
         return items;
