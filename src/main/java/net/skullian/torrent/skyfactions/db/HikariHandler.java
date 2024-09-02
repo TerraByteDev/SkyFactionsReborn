@@ -41,74 +41,80 @@ public class HikariHandler {
         LOGGER.info("Setting up Database.");
 
         createDataSource(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data/data.sqlite3"), type);
-        setupTables();
     }
 
     private void createDataSource(
             @NotNull File file, @NotNull String type) {
-        if (type.equals("sqlite")) {
+        try {
+            if (type.equals("sqlite")) {
 
-            HikariConfig sqliteConfig = new HikariConfig();
-            sqliteConfig.setDataSourceClassName("org.sqlite.SQLiteDataSource");
-            sqliteConfig.addDataSourceProperty("url", JDBC.PREFIX + file.getAbsolutePath());
-            sqliteConfig.addDataSourceProperty("encoding", "UTF-8");
-            sqliteConfig.addDataSourceProperty("enforceForeignKeys", "true");
-            sqliteConfig.addDataSourceProperty("synchronous", "NORMAL");
-            sqliteConfig.addDataSourceProperty("journalMode", "WAL");
-            sqliteConfig.setPoolName("SQLite");
-            sqliteConfig.setMaximumPoolSize(1);
+                HikariConfig sqliteConfig = new HikariConfig();
+                sqliteConfig.setDataSourceClassName("org.sqlite.SQLiteDataSource");
+                sqliteConfig.addDataSourceProperty("url", JDBC.PREFIX + file.getAbsolutePath());
+                sqliteConfig.addDataSourceProperty("encoding", "UTF-8");
+                sqliteConfig.addDataSourceProperty("enforceForeignKeys", "true");
+                sqliteConfig.addDataSourceProperty("synchronous", "NORMAL");
+                sqliteConfig.addDataSourceProperty("journalMode", "WAL");
+                sqliteConfig.setPoolName("SQLite");
+                sqliteConfig.setMaximumPoolSize(1);
 
-            dataSource = new HikariDataSource(sqliteConfig);
+                dataSource = new HikariDataSource(sqliteConfig);
 
-            LOGGER.info("Using SQLite Database.");
-        } else if (type.equals("sql")) {
+                LOGGER.info("Using SQLite Database.");
+                setupSQLiteTables();
+            } else if (type.equals("sql")) {
 
-            String rawHost = Settings.DATABASE_HOST.getString();
-            String databaseName = Settings.DATABASE_NAME.getString();
-            String username = Settings.DATABASE_USERNAME.getString();
-            String password = Settings.DATABASE_PASSWORD.getString();
+                String rawHost = Settings.DATABASE_HOST.getString();
+                String databaseName = Settings.DATABASE_NAME.getString();
+                String username = Settings.DATABASE_USERNAME.getString();
+                String password = Settings.DATABASE_PASSWORD.getString();
 
-            List<String> missingProperties = new ArrayList<>();
+                List<String> missingProperties = new ArrayList<>();
 
-            if (rawHost == null || rawHost.isBlank()) {
-                missingProperties.add("DATABASE_HOST");
+                if (rawHost == null || rawHost.isBlank()) {
+                    missingProperties.add("DATABASE_HOST");
+                }
+
+                if (databaseName == null || databaseName.isBlank()) {
+                    missingProperties.add("DATABASE_NAME");
+                }
+
+                if (username == null || username.isBlank()) {
+                    missingProperties.add("DATABASE_USERNAME");
+                }
+
+                if (password == null || password.isBlank()) {
+                    missingProperties.add("DATABASE_PASSWORD");
+                }
+
+                if (!missingProperties.isEmpty()) {
+                    throw new IllegalStateException("Missing MySQL Configuration Properties: " + missingProperties);
+                }
+
+                HostAndPort host = HostAndPort.fromHost(rawHost);
+                HikariConfig mysqlConfig = new HikariConfig();
+                mysqlConfig.setPoolName("SkyFactions");
+                mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s",
+                        host.getHost(), host.getPortOrDefault(3306), databaseName));
+                mysqlConfig.setMaxLifetime(TimeUnit.MINUTES.toMillis(Settings.DATABASE_MAX_LIFETIME.getInt()));
+                mysqlConfig.setUsername(username);
+                mysqlConfig.setPassword(password);
+                mysqlConfig.setMaximumPoolSize(2);
+
+                LOGGER.info("Using MySQL database '{}' on: {}:{}.",
+                        databaseName, host.getHost(), host.getPortOrDefault(3306));
+                dataSource = new HikariDataSource(mysqlConfig);
+                setupMySQLTables();
+            } else {
+                throw new IllegalStateException("Unknown database type: " + type);
             }
-
-            if (databaseName == null || databaseName.isBlank()) {
-                missingProperties.add("DATABASE_NAME");
-            }
-
-            if (username == null || username.isBlank()) {
-                missingProperties.add("DATABASE_USERNAME");
-            }
-
-            if (password == null || password.isBlank()) {
-                missingProperties.add("DATABASE_PASSWORD");
-            }
-
-            if (!missingProperties.isEmpty()) {
-                throw new IllegalStateException("Missing MySQL Configuration Properties: " + missingProperties);
-            }
-
-            HostAndPort host = HostAndPort.fromHost(rawHost);
-            HikariConfig mysqlConfig = new HikariConfig();
-            mysqlConfig.setPoolName("SkyFactions");
-            mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s",
-                    host.getHost(), host.getPortOrDefault(3306), databaseName));
-            mysqlConfig.setMaxLifetime(TimeUnit.MINUTES.toMillis(Settings.DATABASE_MAX_LIFETIME.getInt()));
-            mysqlConfig.setUsername(username);
-            mysqlConfig.setPassword(password);
-            mysqlConfig.setMaximumPoolSize(2);
-
-            LOGGER.info("Using MySQL database '{}' on: {}:{}.",
-                    databaseName, host.getHost(), host.getPortOrDefault(3306));
-            dataSource = new HikariDataSource(mysqlConfig);
-        } else {
-            throw new IllegalStateException("Unknown database type: " + type);
+        } catch (SQLException error) {
+            handleError(error);
+            Bukkit.getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
         }
     }
 
-    private void setupTables() throws SQLException {
+    private void setupSQLiteTables() throws SQLException {
         LOGGER.info("Registering SQL Tables.");
 
         try (Connection connection = dataSource.getConnection();
@@ -201,6 +207,135 @@ public class HikariHandler {
                     [description] TEXT NOT NULL,
                     [timestamp] INTEGER NOT NULL
                     ) STRICT;
+                    """)) {
+
+            islandsTable.executeUpdate();
+            islandsTable.close();
+
+            playerDataTable.executeUpdate();
+            playerDataTable.close();
+
+            factionIslandTable.executeUpdate();
+            factionIslandTable.close();
+
+            factionTable.executeUpdate();
+            factionTable.close();
+
+            factionMemberTable.executeUpdate();
+            factionMemberTable.close();
+
+            trustedPlayerTable.executeUpdate();
+            trustedPlayerTable.close();
+
+            auditLogTable.executeUpdate();
+            auditLogTable.close();
+
+            factionBannedMembers.executeUpdate();
+            factionBannedMembers.close();
+
+            factionInvitesTable.executeUpdate();
+            factionInvitesTable.close();
+
+            notificationTable.executeUpdate();
+            notificationTable.close();
+
+            connection.close();
+        }
+    }
+
+    private void setupMySQLTables() throws SQLException {
+        LOGGER.info("Registering SQL Tables.");
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement islandsTable = connection.prepareStatement("""
+                     CREATE TABLE IF NOT EXISTS islands (
+                     `id` INT PRIMARY KEY,
+                     `uuid` VARCHAR(255) NOT NULL,
+                     `level` INT NOT NULL,
+                     `gems` INT NOT NULL,
+                     `runes` INT NOT NULL,
+                     `last_raided` INT NOT NULL
+                     );
+                     """);
+
+             PreparedStatement playerDataTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS playerData (
+                    `uuid` VARCHAR(255) PRIMARY KEY NOT NULL,
+                    `faction` VARCHAR(255) NOT NULL,
+                    `discord_id` VARCHAR(255) NOT NULL,
+                    `last_raid` INT NOT NULL
+                    );
+                    """);
+
+             PreparedStatement factionIslandTable = connection.prepareStatement("""
+                     CREATE TABLE IF NOT EXISTS factionIslands (
+                     `id` INT PRIMARY KEY,
+                     `faction_name` VARCHAR(255) NOT NULL,
+                     `runes` INT NOT NULL,
+                     `gems` INT NOT NULL,
+                     `last_raided` INT NOT NULL
+                     );
+                    """);
+
+             PreparedStatement factionTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS factions(
+                    `name` VARCHAR(255) PRIMARY KEY UNIQUE NOT NULL,
+                    `motd` VARCHAR(255) NOT NULL,
+                    `level` INT NOT NULL,
+                    `last_raid` INT NOT NULL
+                    );
+                    """);
+
+             PreparedStatement factionMemberTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS factionMembers (
+                    `faction_name` VARCHAR(255) NOT NULL,
+                    `uuid` VARCHAR(255) PRIMARY KEY NOT NULL,
+                    `rank` VARCHAR(255) NOT NULL
+                    );
+                    """);
+
+             PreparedStatement trustedPlayerTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS trustedPlayers (
+                    `island_id` INT PRIMARY KEY NOT NULL,
+                    `uuid` VARCHAR(255) NOT NULL
+                    );
+                    """);
+
+             PreparedStatement auditLogTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS auditLogs (
+                    `faction_name` VARCHAR(255) NOT NULL,
+                    `type` VARCHAR(255) NOT NULL,
+                    `uuid` VARCHAR(255) NOT NULL,
+                    `description` VARCHAR(255) NOT NULL,
+                    `timestamp` INT NOT NULL
+                    );
+                    """);
+
+             PreparedStatement factionBannedMembers = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS factionBans (
+                    `faction_name` VARCHAR(255) NOT NULL,
+                    `uuid` VARCHAR(255) NOT NULL
+                    );
+                    """);
+
+             PreparedStatement factionInvitesTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS factionInvites (
+                    `faction_name` VARCHAR(255) NOT NULL,
+                    `uuid` VARCHAR(255) NOT NULL,
+                    `inviter` VARCHAR(255) NOT NULL,
+                    `type` VARCHAR(255) NOT NULL,
+                    `accepted` INT NOT NULL,
+                    `timestamp` INT NOT NULL
+                    );
+                    """);
+
+             PreparedStatement notificationTable = connection.prepareStatement("""
+                    CREATE TABLE IF NOT EXISTS notifications (
+                    `uuid` VARCHAR(255) NOT NULL,
+                    `type` VARCHAR(255) NOT NULL,
+                    `description` VARCHAR(255) NOT NULL,
+                    `timestamp` INT NOT NULL
+                    );
                     """)) {
 
             islandsTable.executeUpdate();
