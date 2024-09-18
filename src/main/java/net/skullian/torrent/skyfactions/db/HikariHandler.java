@@ -249,12 +249,12 @@ public class HikariHandler {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement islandsTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS islands (
-                     `id` INT PRIMARY KEY,
+                     `id` BIGINT PRIMARY KEY,
                      `uuid` VARCHAR(255) NOT NULL,
-                     `level` INT NOT NULL,
-                     `gems` INT NOT NULL,
-                     `runes` INT NOT NULL,
-                     `last_raided` INT NOT NULL
+                     `level` BIGINT NOT NULL,
+                     `gems` BIGINT NOT NULL,
+                     `runes` BIGINT NOT NULL,
+                     `last_raided` BIGINT NOT NULL
                      );
                      """);
 
@@ -263,17 +263,17 @@ public class HikariHandler {
                     `uuid` VARCHAR(255) PRIMARY KEY NOT NULL,
                     `faction` VARCHAR(255) NOT NULL,
                     `discord_id` VARCHAR(255) NOT NULL,
-                    `last_raid` INT NOT NULL
+                    `last_raid` BIGINT NOT NULL
                     );
                     """);
 
              PreparedStatement factionIslandTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS factionIslands (
-                     `id` INT PRIMARY KEY,
+                     `id` BIGINT PRIMARY KEY,
                      `faction_name` VARCHAR(255) NOT NULL,
-                     `runes` INT NOT NULL,
-                     `gems` INT NOT NULL,
-                     `last_raided` INT NOT NULL
+                     `runes` BIGINT NOT NULL,
+                     `gems` BIGINT NOT NULL,
+                     `last_raided` BIGINT NOT NULL
                      );
                     """);
 
@@ -281,8 +281,8 @@ public class HikariHandler {
                     CREATE TABLE IF NOT EXISTS factions(
                     `name` VARCHAR(255) PRIMARY KEY UNIQUE NOT NULL,
                     `motd` VARCHAR(255) NOT NULL,
-                    `level` INT NOT NULL,
-                    `last_raid` INT NOT NULL
+                    `level` BIGINT NOT NULL,
+                    `last_raid` BIGINT NOT NULL
                     );
                     """);
 
@@ -296,7 +296,7 @@ public class HikariHandler {
 
              PreparedStatement trustedPlayerTable = connection.prepareStatement("""
                     CREATE TABLE IF NOT EXISTS trustedPlayers (
-                    `island_id` INT PRIMARY KEY NOT NULL,
+                    `island_id` BIGINT PRIMARY KEY NOT NULL,
                     `uuid` VARCHAR(255) NOT NULL
                     );
                     """);
@@ -307,7 +307,7 @@ public class HikariHandler {
                     `type` VARCHAR(255) NOT NULL,
                     `uuid` VARCHAR(255) NOT NULL,
                     `description` VARCHAR(255) NOT NULL,
-                    `timestamp` INT NOT NULL
+                    `timestamp` BIGINT NOT NULL
                     );
                     """);
 
@@ -324,8 +324,8 @@ public class HikariHandler {
                     `uuid` VARCHAR(255) NOT NULL,
                     `inviter` VARCHAR(255) NOT NULL,
                     `type` VARCHAR(255) NOT NULL,
-                    `accepted` INT NOT NULL,
-                    `timestamp` INT NOT NULL
+                    `accepted` BIGINT NOT NULL,
+                    `timestamp` BIGINT NOT NULL
                     );
                     """);
 
@@ -334,7 +334,7 @@ public class HikariHandler {
                     `uuid` VARCHAR(255) NOT NULL,
                     `type` VARCHAR(255) NOT NULL,
                     `description` VARCHAR(255) NOT NULL,
-                    `timestamp` INT NOT NULL
+                    `timestamp` BIGINT NOT NULL
                     );
                     """)) {
 
@@ -1796,7 +1796,7 @@ public class HikariHandler {
                List<NotificationData> data = new ArrayList<>();
                while (set.next()) {
                    String type = set.getString("type");
-                   String desc = set.getString("desc");
+                   String desc = set.getString("description");
                    long timestamp = set.getLong("timestamp");
 
                    data.add(new NotificationData(player.getUniqueId(), type, desc, timestamp));

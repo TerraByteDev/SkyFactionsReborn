@@ -76,6 +76,7 @@ public class DiscordHandler {
     }
 
     public void disconnect() {
+        if (!SkyFactionsReborn.configHandler.DISCORD_CONFIG.getBoolean("Discord.ENABLED")) return;
         try {
             JDA.shutdown();
             if (!JDA.awaitShutdown(Duration.ofSeconds(10))) {

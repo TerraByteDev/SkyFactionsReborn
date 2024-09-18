@@ -40,7 +40,7 @@ public class ObeliskNotificationPaginationItem extends AbstractItem {
     @Override
     public ItemProvider getItemProvider() {
         ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME));
+                .setDisplayName(TextUtility.color(NAME.replace("%notification_title%", DATA.getTitle())));
 
         for (String loreLine : LORE) {
             if (loreLine.contains("%notification_description%")) {
