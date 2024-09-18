@@ -9,8 +9,6 @@ public class PermissionsHandler {
 
     public static boolean hasPerm(Player player, List<String> node, boolean sendDeny) {
         for (String perm : node) {
-            System.out.println(perm);
-            System.out.println(player.hasPermission(perm));
             if (player.hasPermission(perm)) return true;
         }
 
