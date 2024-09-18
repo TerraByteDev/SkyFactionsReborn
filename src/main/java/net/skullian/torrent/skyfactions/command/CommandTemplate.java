@@ -2,6 +2,8 @@ package net.skullian.torrent.skyfactions.command;
 
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public abstract class CommandTemplate {
 
     public abstract String getName();
@@ -12,6 +14,6 @@ public abstract class CommandTemplate {
 
     public abstract void perform(Player player, String args[]);
 
-    public abstract String permission();
+    public abstract List<String> permission();
 
 }

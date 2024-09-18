@@ -8,6 +8,8 @@ import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class FactionTeleportCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -37,7 +39,7 @@ public class FactionTeleportCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.faction.teleport";
+    public List<String> permission() {
+        return List.of("skyfactions.faction.teleport", "skyfactions.faction", "skyfactions.player");
     }
 }

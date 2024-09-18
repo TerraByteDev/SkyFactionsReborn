@@ -8,6 +8,8 @@ import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class SFInfoCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -39,7 +41,7 @@ public class SFInfoCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.command.info";
+    public List<String> permission() {
+        return List.of("skyfactions.command.info");
     }
 }

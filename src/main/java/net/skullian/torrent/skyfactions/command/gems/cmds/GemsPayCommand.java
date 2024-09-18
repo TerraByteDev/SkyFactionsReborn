@@ -9,6 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class GemsPayCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -57,7 +59,7 @@ public class GemsPayCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.gems.pay";
+    public List<String> permission() {
+        return List.of("skyfactions.gems.pay", "skyfactions.gems", "skyfactions.player");
     }
 }

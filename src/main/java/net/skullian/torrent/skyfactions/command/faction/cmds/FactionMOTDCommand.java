@@ -11,6 +11,8 @@ import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class FactionMOTDCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -62,7 +64,7 @@ public class FactionMOTDCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.faction.motd";
+    public List<String> permission() {
+        return List.of( "skyfactions.faction.motd", "skyfactions.faction", "skyfactions.player");
     }
 }

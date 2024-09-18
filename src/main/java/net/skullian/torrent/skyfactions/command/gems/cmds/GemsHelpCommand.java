@@ -8,6 +8,8 @@ import net.skullian.torrent.skyfactions.command.island.IslandCommandHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class GemsHelpCommand extends CommandTemplate {
 
     @Override
@@ -42,8 +44,8 @@ public class GemsHelpCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.gems.help";
+    public List<String> permission() {
+        return List.of("skyfactions.gems.help", "skyfactions.gems", "skyfactions.player");
     }
 
 }

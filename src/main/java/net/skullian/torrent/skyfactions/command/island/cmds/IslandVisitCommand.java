@@ -13,6 +13,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class IslandVisitCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -83,7 +85,7 @@ public class IslandVisitCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.island.visit";
+    public List<String> permission() {
+        return List.of("skyfactions.island.visit", "skyfactions.island", "skyfactions.player");
     }
 }

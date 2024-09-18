@@ -9,6 +9,8 @@ import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.gui.PlayerRaidConfirmationUI;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class RaidStartCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -44,7 +46,7 @@ public class RaidStartCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.raid.start";
+    public List<String> permission() {
+        return List.of("skyfactions.raid.start", "skyfactions.raid", "skyfactions.player");
     }
 }

@@ -9,6 +9,8 @@ import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.FactionLeaveConfirmationUI;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class FactionLeaveCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -44,7 +46,7 @@ public class FactionLeaveCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.faction.leave";
+    public List<String> permission() {
+        return List.of( "skyfactions.faction.leave", "skyfactions.faction", "skyfactions.player");
     }
 }

@@ -7,6 +7,8 @@ import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class RaidResetCooldown extends CommandTemplate {
     @Override
     public String getName() {
@@ -37,7 +39,7 @@ public class RaidResetCooldown extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.raid.resetcooldown";
+    public List<String> permission() {
+        return List.of("skyfactions.raid.resetcooldown");
     }
 }

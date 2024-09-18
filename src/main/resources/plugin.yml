@@ -68,12 +68,45 @@ permissions:
       skyfactions.faction.broadcast: true
       skyfactions.faction.invite: true
 
+  skyfactions.player:
+    description: Has permissions for all general commands (raiding, island, factions etc).
+    children:
+      skyfactions.island.create: true
+      skyfactions.island.help: true
+      skyfactions.island.teleport: true
+      skyfactions.raid.help: true
+      skyfactions.raid.start: true
+      skyfactions.faction.help: true
+      skyfactions.faction.create: true
+      skyfactions.faction.info: true
+      skyfactions.faction.teleport: true
+      skyfactions.faction.motd: true
+      skyfactions.faction.leave: true
+      skyfactions.faction.broadcast: true
+      skyfactions.faction.invite: true
+      skyfactions.command.link: true
+      skyfactions.command.unlink: true
+      skyfactions.gems.pay: true
+      skyfactions.gems.help: true
+      skyfactions.gems.balance: true
+
+  skyfactions.gems:
+    description: Access to general gem related commands.
+    children:
+      skyfactions.gems.pay: true
+      skyfactions.gems.help: true
+      skyfactions.gems.balance: true
+
   skyfactions.island:
     description: Has permission for all (GENERAL) island related features (tp, create, etc.)
     children:
       skyfactions.island.create: true
       skyfactions.island.help: true
       skyfactions.island.teleport: true
+      skyfactions.island.delete: true
+      skyfactions.island.trust: true
+      skyfactions.island.untrust: true
+      skyfactions.island.visit: true
 
   skyfactions.raid:
     description: Has permission for all (GENERAL) raid related features (start, etc.)

@@ -1778,6 +1778,8 @@ public class HikariHandler {
 
                statement.executeUpdate();
                statement.close();
+
+               connection.close();
            } catch (SQLException error) {
                handleError(error);
                throw new RuntimeException(error);
@@ -1794,7 +1796,7 @@ public class HikariHandler {
                     statement.setString(1, player.getUniqueId().toString());
                     statement.setLong(2, data.getTimestamp());
 
-                    statement.executeQuery();
+                    statement.executeUpdate();
                     statement.close();
 
                     connection.close();

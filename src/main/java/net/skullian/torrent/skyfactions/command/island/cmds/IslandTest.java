@@ -3,6 +3,8 @@ package net.skullian.torrent.skyfactions.command.island.cmds;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class IslandTest extends CommandTemplate {
 
     @Override
@@ -26,7 +28,7 @@ public class IslandTest extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "";
+    public List<String> permission() {
+        return List.of("skyfactions.admin.superomegatemporaryadminpermission");
     }
 }

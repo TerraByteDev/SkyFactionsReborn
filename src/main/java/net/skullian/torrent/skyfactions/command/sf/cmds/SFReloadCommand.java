@@ -8,6 +8,8 @@ import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 @Log4j2(topic = "SkyFactionsReborn")
 public class SFReloadCommand extends CommandTemplate {
     @Override
@@ -39,7 +41,7 @@ public class SFReloadCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.reload";
+    public List<String> permission() {
+        return List.of("skyfactions.reload");
     }
 }

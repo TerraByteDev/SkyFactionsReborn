@@ -10,6 +10,8 @@ import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.Settings;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class FactionCreateCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -66,7 +68,7 @@ public class FactionCreateCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.faction.create";
+    public List<String> permission() {
+        return List.of("skyfactions.faction.create", "skyfactions.faction", "skyfactions.player");
     }
 }

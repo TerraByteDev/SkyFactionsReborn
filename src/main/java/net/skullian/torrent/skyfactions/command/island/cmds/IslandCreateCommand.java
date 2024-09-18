@@ -9,6 +9,7 @@ import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.gui.IslandCreationConfirmationUI;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -54,7 +55,7 @@ public class IslandCreateCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.island.create";
+    public List<String> permission() {
+        return List.of("skyfactions.island.create", "skyfactions.player", "skyfactions.island");
     }
 }

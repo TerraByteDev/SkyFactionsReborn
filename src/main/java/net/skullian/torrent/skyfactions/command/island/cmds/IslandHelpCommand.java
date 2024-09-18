@@ -7,6 +7,8 @@ import net.skullian.torrent.skyfactions.command.island.IslandCommandHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class IslandHelpCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -40,7 +42,7 @@ public class IslandHelpCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.island.help";
+    public List<String> permission() {
+        return List.of("skyfactions.island.help", "skyfactions.player", "skyfactions.island");
     }
 }

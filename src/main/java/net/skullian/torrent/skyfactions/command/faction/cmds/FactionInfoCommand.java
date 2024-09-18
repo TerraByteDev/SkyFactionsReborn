@@ -82,7 +82,7 @@ public class FactionInfoCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.faction.info";
+    public List<String> permission() {
+        return List.of("skyfactions.faction.info", "skyfactions.faction", "skyfactions.player");
     }
 }

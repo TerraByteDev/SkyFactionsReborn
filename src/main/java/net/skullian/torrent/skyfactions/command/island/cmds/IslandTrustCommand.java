@@ -9,6 +9,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class IslandTrustCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -68,7 +70,7 @@ public class IslandTrustCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.island.trust";
+    public List<String> permission() {
+        return List.of( "skyfactions.island.trust", "skyfactions.island", "skyfactions.player");
     }
 }

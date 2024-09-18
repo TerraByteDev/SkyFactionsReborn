@@ -8,6 +8,8 @@ import net.skullian.torrent.skyfactions.command.raid.RaidCommandHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class FactionHelpCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -41,7 +43,7 @@ public class FactionHelpCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.faction.help";
+    public List<String> permission() {
+        return List.of( "skyfactions.faction.help", "skyfactions.faction", "skyfactions.player");
     }
 }

@@ -7,6 +7,8 @@ import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class GemsBalanceCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -38,7 +40,7 @@ public class GemsBalanceCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.gems.balance";
+    public List<String> permission() {
+        return List.of("skyfactions.gems.balance", "skyfactions.gems", "skyfactions.player");
     }
 }

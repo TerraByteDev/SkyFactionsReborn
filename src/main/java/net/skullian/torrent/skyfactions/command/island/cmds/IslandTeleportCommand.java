@@ -11,6 +11,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class IslandTeleportCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -51,7 +53,7 @@ public class IslandTeleportCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.island.teleport";
+    public List<String> permission() {
+        return List.of("skyfactions.island.teleport", "skyfactions.island", "skyfactions.player");
     }
 }

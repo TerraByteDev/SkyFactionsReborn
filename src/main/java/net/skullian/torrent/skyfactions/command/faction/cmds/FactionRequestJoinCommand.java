@@ -11,6 +11,8 @@ import net.skullian.torrent.skyfactions.faction.Faction;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class FactionRequestJoinCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -61,7 +63,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
     }
 
     @Override
-    public String permission() {
-        return "skyfactions.faction.requestjoin";
+    public List<String> permission() {
+        return List.of( "skyfactions.faction.requestjoin", "skyfactions.faction", "skyfactions.player");
     }
 }
