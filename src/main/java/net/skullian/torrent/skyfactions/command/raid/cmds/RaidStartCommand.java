@@ -45,8 +45,10 @@ public class RaidStartCommand extends CommandTemplate {
         }
     }
 
+    public static List<String> permissions = List.of("skyfactions.raid.start", "skyfactions.raid", "skyfactions.player");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.raid.start", "skyfactions.raid", "skyfactions.player");
+        return permissions;
     }
 }

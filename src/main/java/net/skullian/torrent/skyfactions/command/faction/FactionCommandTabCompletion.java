@@ -1,5 +1,7 @@
 package net.skullian.torrent.skyfactions.command.faction;
 
+import net.skullian.torrent.skyfactions.command.PermissionsHandler;
+import net.skullian.torrent.skyfactions.command.faction.cmds.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -25,31 +27,31 @@ public class FactionCommandTabCompletion implements TabCompleter {
             String arg = args[0].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (sender.hasPermission("skyfactions.faction.help")) {
+            if (PermissionsHandler.hasPerm((Player)  sender, FactionHelpCommand.permissions, false)) {
                 completions.add("help");
             }
-            if (sender.hasPermission("skyfactions.faction.create")) {
+            if (PermissionsHandler.hasPerm((Player) sender, FactionCreateCommand.permissions, false)) {
                 completions.add("create");
             }
-            if (sender.hasPermission("skyfactions.faction.info")) {
+            if (PermissionsHandler.hasPerm((Player) sender, FactionInfoCommand.permissions, false)) {
                 completions.add("info");
             }
-            if (sender.hasPermission("skyfactions.faction.teleport")) {
+            if (PermissionsHandler.hasPerm((Player) sender, FactionTeleportCommand.permissions, false)) {
                 completions.add("teleport");
             }
-            if (sender.hasPermission("skyfactions.faction.motd")) {
+            if (PermissionsHandler.hasPerm((Player) sender, FactionMOTDCommand.permissions, false)) {
                 completions.add("motd");
             }
-            if (sender.hasPermission("skyfactions.faction.leave")) {
+            if (PermissionsHandler.hasPerm((Player) sender, FactionLeaveCommand.permissions, false)) {
                 completions.add("leave");
             }
-            if (sender.hasPermission("skyfactions.faction.broadcast")) {
+            if (PermissionsHandler.hasPerm((Player) sender, FactionBroadcastCommand.permissions, false)) {
                 completions.add("broadcast");
             }
-            if (sender.hasPermission("skyfactions.faction.invite")) {
+            if (PermissionsHandler.hasPerm((Player) sender, FactionInviteCommand.permissions, false)) {
                 completions.add("invite");
             }
-            if (sender.hasPermission("skyfactions.faction.requestjoin")) {
+            if (PermissionsHandler.hasPerm((Player) sender, FactionRequestJoinCommand.permissions, false)) {
                 completions.add("requestjoin");
             }
 
@@ -59,7 +61,7 @@ public class FactionCommandTabCompletion implements TabCompleter {
             String arg = args[1].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (subcmd.equals("invite") && sender.hasPermission("skyfactions.faction.invite")) {
+            if (subcmd.equals("invite") && PermissionsHandler.hasPerm((Player) sender, FactionInviteCommand.permissions, false)) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     completions.add(player.getName());
                 }

@@ -38,8 +38,10 @@ public class RaidResetCooldown extends CommandTemplate {
         });
     }
 
+    public static List<String> permissions = List.of("skyfactions.raid.resetcooldown");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.raid.resetcooldown");
+        return permissions;
     }
 }

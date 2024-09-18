@@ -41,8 +41,10 @@ public class IslandHelpCommand extends CommandTemplate {
         Messages.COMMAND_HEAD.send(player);
     }
 
+    public static List<String> permissions = List.of("skyfactions.island.help", "skyfactions.player", "skyfactions.island");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.island.help", "skyfactions.player", "skyfactions.island");
+        return permissions;
     }
 }

@@ -38,8 +38,10 @@ public class FactionTeleportCommand extends CommandTemplate {
         FactionAPI.teleportToFactionIsland(player);
     }
 
+    public static List<String> permissions = List.of("skyfactions.faction.teleport", "skyfactions.faction", "skyfactions.player");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.faction.teleport", "skyfactions.faction", "skyfactions.player");
+        return permissions;
     }
 }

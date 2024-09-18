@@ -58,8 +58,10 @@ public class GemsPayCommand extends CommandTemplate {
         }
     }
 
+    public static List<String> permissions = List.of("skyfactions.gems.pay", "skyfactions.gems", "skyfactions.player");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.gems.pay", "skyfactions.gems", "skyfactions.player");
+        return permissions;
     }
 }

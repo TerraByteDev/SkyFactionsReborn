@@ -40,8 +40,10 @@ public class SFInfoCommand extends CommandTemplate {
         Messages.COMMAND_HEAD.send(player);
     }
 
+    public static List<String> permissions = List.of("skyfactions.command.info");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.command.info");
+        return permissions;
     }
 }

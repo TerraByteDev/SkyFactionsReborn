@@ -1,5 +1,9 @@
 package net.skullian.torrent.skyfactions.command.sf;
 
+import net.skullian.torrent.skyfactions.command.PermissionsHandler;
+import net.skullian.torrent.skyfactions.command.sf.cmds.SFHelpCommand;
+import net.skullian.torrent.skyfactions.command.sf.cmds.SFInfoCommand;
+import net.skullian.torrent.skyfactions.command.sf.cmds.SFReloadCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -24,13 +28,13 @@ public class SFCommandTabCompletion implements TabCompleter {
             String arg = args[0].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (sender.hasPermission("skyfactions.sf.help")) {
+            if (PermissionsHandler.hasPerm((Player) sender, SFHelpCommand.permissions, false)) {
                 completions.add("help");
             }
-            if (sender.hasPermission("skyfactions.reload")) {
+            if (PermissionsHandler.hasPerm((Player) sender, SFReloadCommand.permissions, false)) {
                 completions.add("reload");
             }
-            if (sender.hasPermission("skyfactions.info")) {
+            if (PermissionsHandler.hasPerm((Player) sender, SFInfoCommand.permissions, false)) {
                 completions.add("info");
             }
 

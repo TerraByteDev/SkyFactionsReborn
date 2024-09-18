@@ -72,8 +72,10 @@ public class IslandDeleteCommand extends CommandTemplate {
         });
     }
 
+    public static List<String> permissions = List.of("skyfactions.island.delete", "skyfactions.player", "skyfactions.island");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.island.delete", "skyfactions.player", "skyfactions.island");
+        return permissions;
     }
 }

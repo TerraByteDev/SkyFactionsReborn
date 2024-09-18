@@ -42,8 +42,10 @@ public class FactionHelpCommand extends CommandTemplate {
         Messages.COMMAND_HEAD.send(player);
     }
 
+    public static List<String> permissions = List.of( "skyfactions.faction.help", "skyfactions.faction", "skyfactions.player");
+
     @Override
     public List<String> permission() {
-        return List.of( "skyfactions.faction.help", "skyfactions.faction", "skyfactions.player");
+        return permissions;
     }
 }

@@ -1,5 +1,10 @@
 package net.skullian.torrent.skyfactions.command.gems;
 
+import net.skullian.torrent.skyfactions.command.PermissionsHandler;
+import net.skullian.torrent.skyfactions.command.gems.cmds.GemsBalanceCommand;
+import net.skullian.torrent.skyfactions.command.gems.cmds.GemsGiveCommand;
+import net.skullian.torrent.skyfactions.command.gems.cmds.GemsHelpCommand;
+import net.skullian.torrent.skyfactions.command.gems.cmds.GemsPayCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,16 +29,16 @@ public class GemsCommandTabCompletion implements TabCompleter {
             String arg = args[0].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (sender.hasPermission("skyfactions.gems.help")) {
+            if (PermissionsHandler.hasPerm((Player) sender, GemsHelpCommand.permissions, false)) {
                 completions.add("help");
             }
-            if (sender.hasPermission("skyfactions.gems.pay")) {
+            if (PermissionsHandler.hasPerm((Player) sender, GemsPayCommand.permissions, false)) {
                 completions.add("pay");
             }
-            if (sender.hasPermission("skyfactions.gems.balance")) {
+            if (PermissionsHandler.hasPerm((Player) sender, GemsBalanceCommand.permissions, false)) {
                 completions.add("balance");
             }
-            if (sender.hasPermission("skyfactions.gems.give")) {
+            if (PermissionsHandler.hasPerm((Player) sender, GemsGiveCommand.permissions, false)) {
                 completions.add("give");
             }
 
@@ -43,12 +48,12 @@ public class GemsCommandTabCompletion implements TabCompleter {
             String arg = args[1].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (sender.hasPermission("skyfactions.gems.pay") && subcmd.equals("pay")) {
+            if (PermissionsHandler.hasPerm((Player) sender, GemsPayCommand.permissions, false) && subcmd.equals("pay")) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     completions.add(player.getName());
                 }
             }
-            if (sender.hasPermission("skyfactions.gems.give") && subcmd.equals("give")) {
+            if (PermissionsHandler.hasPerm((Player) sender, GemsGiveCommand.permissions, false) && subcmd.equals("give")) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     completions.add(player.getName());
                 }

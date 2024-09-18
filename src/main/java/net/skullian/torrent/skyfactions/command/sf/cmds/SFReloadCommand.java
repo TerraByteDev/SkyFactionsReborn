@@ -40,8 +40,10 @@ public class SFReloadCommand extends CommandTemplate {
         LOGGER.warn("SkyFactionsReborn reloaded.");
     }
 
+    public static List<String> permissions = List.of("skyfactions.reload");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.reload");
+        return permissions;
     }
 }

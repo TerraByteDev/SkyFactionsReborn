@@ -1,5 +1,9 @@
 package net.skullian.torrent.skyfactions.command.raid;
 
+import net.skullian.torrent.skyfactions.command.PermissionsHandler;
+import net.skullian.torrent.skyfactions.command.raid.cmds.RaidHelpCommand;
+import net.skullian.torrent.skyfactions.command.raid.cmds.RaidResetCooldown;
+import net.skullian.torrent.skyfactions.command.raid.cmds.RaidStartCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -24,13 +28,13 @@ public class RaidCommandTabCompletion implements TabCompleter {
             String arg = args[0].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (sender.hasPermission("skyfactions.raid.help")) {
+            if (PermissionsHandler.hasPerm((Player) sender, RaidHelpCommand.permissions, false)) {
                 completions.add("help");
             }
-            if (sender.hasPermission("skyfactions.raid.start")) {
+            if (PermissionsHandler.hasPerm((Player) sender, RaidStartCommand.permissions, false)) {
                 completions.add("start");
             }
-            if (sender.hasPermission("skyfactions.raid.resetcooldown")) {
+            if (PermissionsHandler.hasPerm((Player) sender, RaidResetCooldown.permissions, false)) {
                 completions.add("resetcooldown");
             }
 

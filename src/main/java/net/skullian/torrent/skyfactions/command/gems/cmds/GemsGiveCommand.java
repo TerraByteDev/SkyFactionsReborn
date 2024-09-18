@@ -46,8 +46,10 @@ public class GemsGiveCommand extends CommandTemplate {
         }
     }
 
+    public static List<String> permissions = List.of("skyfactions.gems.give");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.gems.give");
+        return permissions;
     }
 }

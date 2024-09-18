@@ -81,8 +81,10 @@ public class FactionInfoCommand extends CommandTemplate {
         return "&aNone";
     }
 
+    public static List<String> permissions = List.of("skyfactions.faction.info", "skyfactions.faction", "skyfactions.player");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.faction.info", "skyfactions.faction", "skyfactions.player");
+        return permissions;
     }
 }

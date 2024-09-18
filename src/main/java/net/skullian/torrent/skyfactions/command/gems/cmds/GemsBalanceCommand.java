@@ -39,8 +39,10 @@ public class GemsBalanceCommand extends CommandTemplate {
         });
     }
 
+    public static List<String> permissions = List.of("skyfactions.gems.balance", "skyfactions.gems", "skyfactions.player");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.gems.balance", "skyfactions.gems", "skyfactions.player");
+        return permissions;
     }
 }

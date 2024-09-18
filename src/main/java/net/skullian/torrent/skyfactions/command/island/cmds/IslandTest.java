@@ -27,8 +27,10 @@ public class IslandTest extends CommandTemplate {
 
     }
 
+    public static List<String> permissions = List.of("skyfactions.admin.superomegatemporaryadminpermission");
+
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.admin.superomegatemporaryadminpermission");
+        return permissions;
     }
 }
