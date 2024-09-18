@@ -57,6 +57,9 @@ permissions:
       skyfactions.gems.help: true
       skyfactions.gems.balance: true
       skyfactions.cooldown.bypass: true
+      skyfactions.island.trust: true
+      skyfactions.island.untrust: true
+      skyfactions.island.visit: true
       skyfactions.command.link: true
       skyfactions.command.unlink: true
       skyfactions.faction.help: true
@@ -70,6 +73,7 @@ permissions:
 
   skyfactions.player:
     description: Has permissions for all general commands (raiding, island, factions etc).
+    default-permission: true
     children:
       skyfactions.island.create: true
       skyfactions.island.help: true
@@ -92,6 +96,7 @@ permissions:
 
   skyfactions.gems:
     description: Access to general gem related commands.
+    default-permission: true
     children:
       skyfactions.gems.pay: true
       skyfactions.gems.help: true
@@ -99,6 +104,7 @@ permissions:
 
   skyfactions.island:
     description: Has permission for all (GENERAL) island related features (tp, create, etc.)
+    default-permission: true
     children:
       skyfactions.island.create: true
       skyfactions.island.help: true
@@ -110,12 +116,14 @@ permissions:
 
   skyfactions.raid:
     description: Has permission for all (GENERAL) raid related features (start, etc.)
+    default-permission: true
     children:
       skyfactions.raid.help: true
       skyfactions.raid.start: true
 
   skyfactions.faction:
     description: Has permission for all (GENERAL) faction related features (create, etc.)
+    default-permission: true
     children:
       skyfactions.faction.help: true
       skyfactions.faction.create: true
@@ -128,9 +136,115 @@ permissions:
 
   skyfactions.discord:
     description: Has permission to link and unlink their discord account (link, unlink).
+    default-permission: true
     children:
       skyfactions.command.link: true
       skyfactions.command.unlink: true
+
+  skyfactions.reload:
+    description: Reload the entire plugin.
+    default-permission: true
+
+  skyfactions.island.create:
+    description: Create an island.
+    default-permission: true
+
+  skyfactions.island.help:
+    description: Get help on the /islands command.
+    default-permission: true
+
+  skyfactions.island.teleport:
+    description: Teleport to your island.
+    default-permission: true
+
+  skyfactions.island.visit:
+    description: Visit someone else's island.
+    default-permission: true
+
+  skyfactions.island.trust:
+    description: Trust someone to visit your island.
+    default-permission: true
+
+  skyfactions.island.untrust:
+    description: Untrust a person from visiting your island.
+    default-permission: true
+
+  skyfactions.command.info:
+    description: Get info about the plugin.
+    default-permission: true
+
+  skyfactions.raid.resetcooldown:
+    description: Reset your raid cooldown.
+    default-permission: op
+
+  skyfactions.raid.start:
+    description: Start a raid.
+    default-permission: true
+
+  skyfactions.raid.help:
+    description: Help concerning the /raid command.
+    default-permission: true
+
+  skyfactions.sf.help:
+    description: Help concerning the /sf command.
+    default-permission: op
+
+  skyfactions.gems.pay:
+    description: Pay someone your gems.
+    default-permission: true
+
+  skyfactions.gems.help:
+    description: Help concerning the /gems command
+    default-permission: true
+
+  skyfactions.gems.balance:
+    description: View your gems balance.
+    default-permission: true
+
+  skyfactions.cooldown.bypass:
+    description: Bypass the raid cooldown.
+    default-permission: true
+
+  skyfactions.command.link:
+    description: Link your Discord to your Minecraft account.
+    default-permission: true
+
+  skyfactions.command.unlink:
+    description: Unlink your Discord account.
+    default-permission: true
+
+  skyfactions.faction.help:
+    description: Help concerning the /faction command.
+    default-permission: true
+
+  skyfactions.faction.create:
+    description: Create a Faction.
+    default-permission: true
+
+  skyfactions.faction.info:
+    description: Receive an overview of your Faction.
+    default-permission: true
+
+  skyfactions.faction.teleport:
+    description: Teleport to your Faction island.
+    default-permission: true
+
+  skyfactions.faction.motd:
+    description: Set the Message of The Day for your Faction.
+    default-permission: true
+
+  skyfactions.faction.leave:
+    description: Leave the Faction you are in.
+    default-permission: true
+
+  skyfactions.faction.broadcast:
+    description: Make a broadcast to all online members of your Faction.
+    default-permission: true
+
+  skyfactions.faction.invite:
+    description: Invite someone to your Faction.
+    default-permission: true
+
 
 libraries:
   - "com.zaxxer:HikariCP:5.1.0"
@@ -148,3 +262,6 @@ libraries:
   - "com.fasterxml.jackson.core:jackson-annotations:2.17.2"
   - "org.slf4j:slf4j-api:2.0.9"
   - "org.jetbrains:annotations:23.0.0"
+  - "com.google.code.findbugs:jsr305:3.0.2"
+  - "com.google.crypto.tink:tink:1.14.1"
+  - "com.google.protobuf:protobuf-java:3.25.3"

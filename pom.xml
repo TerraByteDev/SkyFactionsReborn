@@ -54,6 +54,9 @@
                         <exclude>com.fasterxml.jackson.core:jackson-core</exclude>
                         <exclude>com.fasterxml.jackson.core:jackson-annotations</exclude>
                         <exclude>com.jeff-media:custom-block-data</exclude>
+                        <exclude>com.google.code.findbugs:jsr305</exclude>
+                        <exclude>com.google.crypto.tink:tink</exclude>
+                        <exclude>com.google.protobuf:protobuf-java</exclude>
                     </excludes>
                 </artifactSet>
             </configuration>
