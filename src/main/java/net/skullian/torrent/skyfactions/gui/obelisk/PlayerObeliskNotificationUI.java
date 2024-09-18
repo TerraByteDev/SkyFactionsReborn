@@ -15,7 +15,6 @@ import net.skullian.torrent.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.torrent.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskNotificationPaginationItem;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.audit_log.AuditPaginationItem;
 import net.skullian.torrent.skyfactions.notification.NotificationData;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;

@@ -1,5 +1,6 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.db.InviteData;
@@ -68,11 +69,11 @@ public class ObeliskNotificationPaginationItem extends AbstractItem {
         }
 
         if (clickType.isRightClick()) {
-            // todo
+            SkyFactionsReborn.db.removeNotification(player, DATA).join();
+
+            player.closeInventory();
+            Messages.NOTIFICATION_DISMISS_SUCCESS.send(player);
         }
-
-
-
     }
 
 

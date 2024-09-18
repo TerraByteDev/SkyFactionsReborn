@@ -1785,6 +1785,27 @@ public class HikariHandler {
         });
     }
 
+    public CompletableFuture<Void> removeNotification(OfflinePlayer player, NotificationData data) {
+        return CompletableFuture.runAsync(() -> {
+           try {
+                try (Connection connection = dataSource.getConnection();
+                    PreparedStatement statement = connection.prepareStatement("DELETE FROM notifications WHERE uuid = ? AND timestamp = ?")) {
+
+                    statement.setString(1, player.getUniqueId().toString());
+                    statement.setLong(2, data.getTimestamp());
+
+                    statement.executeQuery();
+                    statement.close();
+
+                    connection.close();
+                }
+           } catch (SQLException error) {
+               handleError(error);
+               throw new RuntimeException(error);
+           }
+        });
+    }
+
     public CompletableFuture<List<NotificationData>> getNotifications(OfflinePlayer player) {
         return CompletableFuture.supplyAsync(() -> {
            try (Connection connection = dataSource.getConnection();

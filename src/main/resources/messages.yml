@@ -360,6 +360,9 @@ Messages:
     # Placeholders: %count% - Amount of unread notifications.
     UNREAD_NOTIFICATIONS: "%server_name% &eYou have &a&l%count%&r&e unread notifications in your Obelisk."
 
+    # Sent when a notification is dismissed while right-clicking.
+    NOTIFICATION_DISMISS_SUCCESS: "%server_name% &aSuccessfully dismissed notification."
+
     # Message configuration for Notifications.
     NOTIFICATION_TYPES:
 
