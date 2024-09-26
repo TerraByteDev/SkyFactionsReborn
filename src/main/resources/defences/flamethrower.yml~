@@ -3,63 +3,63 @@ NAME: "&cArrow"
 
 # Type of the defence.
 # Possible defence types: HEALING, ARROW, SOUL, FLAMETHROWER, POTION, SPRING, LANDMINE
-TYPE: "ARROW"
+TYPE: "FLAMETHROWER"
 
 # Runes cost when buying from the Obelisk
 COST:
-  BUY: 80
-  SELL: 40
+  BUY: 160
+  SELL: 70
 
 # Maximum level this defence can be upgraded to.
-MAX_LEVEL: 4
+MAX_LEVEL: 5
 
 # Sounds related to the defence.
 SOUNDS:
-  PLACE: "entity.arrow.shoot" # On defence placement.
+  PLACE: "item.firecharge.use" # On defence placement.
   PLACE_PITCH: 1 # Pitch of the place sound.
-  BREAK: "entity.item.break" # On defence removal.
+  BREAK: "entity.dragon_fireball.explode" # On defence removal.
   BREAK_PITCH: 1 # Pitch of the break sound.
 
 # Upon death, one of these messages will be broadcasted at random.
 # Placeholders: %player_name% - Player who died / %defender% - Defender (player or faction name).
 DEATH_MESSAGES:
-  - "&e%player_name% &cwas shot when trying to fight &e%defender%&c."
+  - "&e%player_name% &cburnt to death while trying to fight &e%defender%&c."
 
 # All attributes related to the defence.
 # PLACEHOLDERS: %level% - The turret level.
 ATTRIBUTES:
-  RANGE: 4 + %level% # How far the defence's range is.
-  COOLDOWN: 12 - %level% # Cooldown.
+  RANGE: 3 + %level% # How far the defence's range is.
+  COOLDOWN: 10 - %level% # Cooldown.
   TARGET_MAX: 1 + %level% # Max targets for the defence at once.
   MAX_AMMO: 1500 * %level% # Highest ammo count.
   UPGRADE_COST: 40 * %level% # Cost of upgrading the defence.
-  DAMAGE: 2 + %level% # The damage dealt by the defence.
+  DAMAGE: 5 + %level% # The damage dealt by the defence.
 
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:
-  ZOMBIE: randInt(1, 4)
-  SKELETON: randInt(3, 5)
-  SLIME: randInt(2, 3)
+  ZOMBIE: randInt(2, 4)
+  SKELETON: randInt(4, 6)
+  SLIME: randInt(3, 4)
 
-PROJECTILE: "ARROW"
+PROJECTILE: "SMALL_FIREBALL"
 
 # Block Configuration
 # SKULL only applies if material is PLAYER_HEAD
 BLOCK:
   MATERIAL: "PLAYER_HEAD"
-  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzVmZDc1MTZkZGJjODFhOWM4MWMxZDllMWMyYzk4ODBkMjNhZTE2M2IzZmIyMTZlZTBjYzQzOTE3YTg4MjgifX19"
+  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDg4YTcxZjFjOTJmN2QwODE3MjQ1YTczZTkwMWIxMTA2YTIxNjRkMTFhMjI2YjZjOTY5YTIwYTZjMTMzZDM2YiJ9fX0="
 
 # Item (when in hotbar) Configuration.
 # SKULL only applies if material is PLAYER_HEAD
 ITEM:
   MATERIAL: "PLAYER_HEAD"
-  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzVmZDc1MTZkZGJjODFhOWM4MWMxZDllMWMyYzk4ODBkMjNhZTE2M2IzZmIyMTZlZTBjYzQzOTE3YTg4MjgifX19"
+  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDg4YTcxZjFjOTJmN2QwODE3MjQ1YTczZTkwMWIxMTA2YTIxNjRkMTFhMjI2YjZjOTY5YTIwYTZjMTMzZDM2YiJ9fX0="
 
   # Every new line is a new line of lore.
   # Follows message formatting.
   LORE:
-    - "&aA basic defence that shoots"
-    - "arrows at mobs and enemies."
+    - "&aAn advanced defence that will"
+    - "make your enemies meet a fiery death."
     - ""
     - "&c&lStats:"
     - "&7○ &9Level:&6 %level%"

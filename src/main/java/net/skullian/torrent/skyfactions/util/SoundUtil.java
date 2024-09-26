@@ -6,19 +6,18 @@ import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
 import fr.skytasul.music.JukeBox;
 import fr.skytasul.music.PlayerData;
-import lombok.extern.log4j.Log4j2;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Settings;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@Log4j2(topic = "SkyFactionsReborn")
+
 public class SoundUtil {
 
     public static void playSound(Player player, String identifier, float pitch, float volume) {
@@ -43,7 +42,7 @@ public class SoundUtil {
                 if (nbsSong != null) {
                     nbsSongs.add(nbsSong);
                 } else {
-                    LOGGER.error("Failed to find NBS Song [{}]!", song);
+                    SLogger.fatal("Failed to find NBS Song [{}]!", song);
                 }
             }
 

@@ -46,9 +46,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        // Yes, it's ugly.
-        // Move on and complain later.
-        // Same goes for everything!
         SLogger.LOGGER.info(text);
 
         // Store an instance of the ConfigHandler class in case it is needed.

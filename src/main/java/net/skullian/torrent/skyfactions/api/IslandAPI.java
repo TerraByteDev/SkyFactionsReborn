@@ -4,7 +4,9 @@ import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.*;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -18,21 +20,18 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
-import lombok.extern.log4j.Log4j2;
-import me.clip.placeholderapi.PlaceholderAPI;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
-import net.skullian.torrent.skyfactions.papi.PlaceholderManager;
 import net.skullian.torrent.skyfactions.util.FileUtil;
+import net.skullian.torrent.skyfactions.util.SLogger;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,9 +40,8 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
-@Log4j2(topic = "SkyFactionsReborn")
+
 public class IslandAPI {
 
     public static HashSet<UUID> awaitingDeletion = new HashSet<>();
@@ -59,7 +57,7 @@ public class IslandAPI {
 
         World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
         Messages.ISLAND_CREATING.send(player);
-        createRegion(player, island, world) ;
+        createRegion(player, island, world);
 
         SkyFactionsReborn.db.createIsland(player, island).join();
         pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").thenAccept(ac -> {
@@ -82,7 +80,7 @@ public class IslandAPI {
             try {
                 World world = Bukkit.getWorld(worldName);
                 if (world == null) {
-                    LOGGER.error("Could not find world: {}", worldName);
+                    SLogger.fatal("Could not find world: {}", worldName);
                     throw new RuntimeException("Could not find world " + worldName);
                 } else {
                     File schemFile = null;
@@ -105,17 +103,18 @@ public class IslandAPI {
                                 .createPaste(editSession)
                                 .to(BukkitAdapter.adapt(location).toBlockPoint())
                                 .build();
-                        LOGGER.warn("Pasting schematic [{}] in world [{}] for player [{}].", schemFile.getName(), world.getName(), player.getName());
+                        SLogger.warn("Pasting schematic [{}] in world [{}] for player [{}].", schemFile.getName(), world.getName(), player.getName());
 
                         Operations.complete(operation);
 
                         Thread.sleep(750);
-                    } catch (InterruptedException ignored) {}
+                    } catch (InterruptedException ignored) {
+                    }
 
                     return true;
                 }
             } catch (IOException e) {
-                LOGGER.error("Error pasting island schematic", e);
+                SLogger.fatal("Error pasting island schematic", e);
                 throw new RuntimeException(e);
             }
         });

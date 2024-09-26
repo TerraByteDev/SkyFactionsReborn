@@ -1,7 +1,7 @@
 package net.skullian.torrent.skyfactions.config;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 
-@Log4j2(topic = "SkyFactionsReborn")
+
 public class ConfigHandler {
 
     private final JavaPlugin plugin;
@@ -35,11 +35,11 @@ public class ConfigHandler {
         try {
             config.load(file);
         } catch (InvalidConfigurationException | IOException error) {
-            LOGGER.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
-            LOGGER.fatal("There was an error loading config {}", name);
-            LOGGER.fatal("Please check that config for any configuration mistakes.");
-            LOGGER.fatal("Plugin will now disable.");
-            LOGGER.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+            SLogger.fatal("There was an error loading config {}", name);
+            SLogger.fatal("Please check that config for any configuration mistakes.");
+            SLogger.fatal("Plugin will now disable.");
+            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
             error.printStackTrace();
             plugin.getServer().getPluginManager().disablePlugin(plugin);
         }
@@ -54,6 +54,8 @@ public class ConfigHandler {
         }
     }
 
-    public void reload() { config = YamlConfiguration.loadConfiguration(file); }
+    public void reload() {
+        config = YamlConfiguration.loadConfiguration(file);
+    }
 
 }
