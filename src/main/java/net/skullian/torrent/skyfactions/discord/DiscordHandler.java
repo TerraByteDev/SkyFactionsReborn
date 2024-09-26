@@ -1,5 +1,6 @@
 package net.skullian.torrent.skyfactions.discord;
 
+import lombok.extern.log4j.Log4j2;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -11,7 +12,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-
+@Log4j2(topic = "SkyFactionsReborn")
 public class DiscordHandler {
 
     public JDA JDA;
@@ -56,10 +56,10 @@ public class DiscordHandler {
                 throw new NullPointerException("Invalid notification channel ID. Check your config.");
             }
         } catch (InterruptedException error) {
-            SLogger.fatal("----------------------- DISCORD EXCEPTION -----------------------");
-            SLogger.fatal("There was an error while initialising the bot.");
-            SLogger.fatal("Please contact the devs.");
-            SLogger.fatal("----------------------- DISCORD EXCEPTION -----------------------");
+            LOGGER.fatal("----------------------- DISCORD EXCEPTION -----------------------");
+            LOGGER.fatal("There was an error while initialising the bot.");
+            LOGGER.fatal("Please contact the devs.");
+            LOGGER.fatal("----------------------- DISCORD EXCEPTION -----------------------");
             error.printStackTrace();
         }
     }
@@ -83,26 +83,26 @@ public class DiscordHandler {
                 JDA.shutdownNow();
             }
         } catch (InterruptedException error) {
-            SLogger.fatal("----------------------- DISCORD EXCEPTION -----------------------");
-            SLogger.fatal("There was an error while stopping the bot.");
-            SLogger.fatal("Please contact the devs.");
-            SLogger.fatal("----------------------- DISCORD EXCEPTION -----------------------");
+            LOGGER.fatal("----------------------- DISCORD EXCEPTION -----------------------");
+            LOGGER.fatal("There was an error while stopping the bot.");
+            LOGGER.fatal("Please contact the devs.");
+            LOGGER.fatal("----------------------- DISCORD EXCEPTION -----------------------");
             error.printStackTrace();
         }
     }
 
     public void pingRaid(Player attacker, Player victim) {
-        SkyFactionsReborn.db.getDiscordLink(victim).thenAccept(id -> {
-            if (id != null && !id.equals("none")) {
-                EmbedBuilder embedBuilder = new EmbedBuilder()
-                        .setDescription(SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getString("Messages.Discord.DISCORD_RAID_MESSAGE").replace("%attacker%", attacker.getName()))
-                        .setThumbnail(SkyFactionsReborn.configHandler.DISCORD_CONFIG.getString("Discord.AVATAR_API").replace("%player%", attacker.getUniqueId().toString()));
+            SkyFactionsReborn.db.getDiscordLink(victim).thenAccept(id -> {
+                if (id != null && !id.equals("none")) {
+                    EmbedBuilder embedBuilder = new EmbedBuilder()
+                            .setDescription(SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getString("Messages.Discord.DISCORD_RAID_MESSAGE").replace("%attacker%", attacker.getName()))
+                            .setThumbnail(SkyFactionsReborn.configHandler.DISCORD_CONFIG.getString("Discord.AVATAR_API").replace("%player%", attacker.getUniqueId().toString()));
 
-                RAID_NOTIFICATION_CHANNEL.sendMessage("<@" + id + ">").setEmbeds(embedBuilder.build()).queue();
-            }
-        }).exceptionally(ex -> {
-            ex.printStackTrace();
-            return null;
-        });
+                    RAID_NOTIFICATION_CHANNEL.sendMessage("<@" + id + ">").setEmbeds(embedBuilder.build()).queue();
+                }
+            }).exceptionally(ex -> {
+                ex.printStackTrace();
+                return null;
+            });
     }
 }

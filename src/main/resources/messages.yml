@@ -77,7 +77,6 @@ Messages:
 
 
   Discord:
-
     # Sent to the player when they request to link (runs /link).
     # Placeholders: %code% - Code to run in the discord.
     LINK_PROMPT: "%server_name% &r&e Run '&c&l/link-mc %code%&r&e' in the discord to link your account!"

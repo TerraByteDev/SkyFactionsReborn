@@ -2,10 +2,10 @@
 NAME: "&cArrow"
 
 # Type of the defence.
-# Possible defence types: HEALING, ARROW, SOUL, FLAMETHROWER, POTION, SPRING, LANDMINE
+# Possible defence types: HEALING, ARROW, SOUL
 TYPE: "ARROW"
 
-# Runes cost when buying from the Obelisk
+# Resource Points cost when buying from the Obelisk
 COST:
   BUY: 80
   SELL: 40
@@ -16,9 +16,7 @@ MAX_LEVEL: 4
 # Sounds related to the defence.
 SOUNDS:
   PLACE: "entity.arrow.shoot" # On defence placement.
-  PLACE_PITCH: 1 # Pitch of the place sound.
   BREAK: "entity.item.break" # On defence removal.
-  BREAK_PITCH: 1 # Pitch of the break sound.
 
 # Upon death, one of these messages will be broadcasted at random.
 # Placeholders: %player_name% - Player who died / %defender% - Defender (player or faction name).
@@ -30,16 +28,10 @@ DEATH_MESSAGES:
 ATTRIBUTES:
   RANGE: 4 + %level% # How far the defence's range is.
   COOLDOWN: 12 - %level% # Cooldown.
-  TARGET_MAX: 1 + %level% # Max targets for the defence at once.
+  TARGET_MAX: 2 # Max targets for the defence at once.
   MAX_AMMO: 1500 * %level% # Highest ammo count.
   UPGRADE_COST: 40 * %level% # Cost of upgrading the defence.
   DAMAGE: 2 + %level% # The damage dealt by the defence.
-
-# XP Orb drops when the defence kills a certain mob. Must be a valid mob!
-EXPERIENCE_DROPS:
-  ZOMBIE: randInt(1, 4)
-  SKELETON: randInt(3, 5)
-  SLIME: randInt(2, 3)
 
 PROJECTILE: "ARROW"
 
@@ -58,7 +50,7 @@ ITEM:
   # Every new line is a new line of lore.
   # Follows message formatting.
   LORE:
-    - "&aA basic defence that shoots"
+    - "&aA basic turret that shoots"
     - "arrows at mobs and enemies."
     - ""
     - "&c&lStats:"

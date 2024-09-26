@@ -1,37 +1,38 @@
 package net.skullian.torrent.skyfactions.event;
 
+import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.IslandAPI;
-import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
-import net.skullian.torrent.skyfactions.util.SLogger;
+import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-
+@Log4j2(topic = "SkyFactionsReborn")
 public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         SkyFactionsReborn.db.playerIsRegistered(event.getPlayer()).thenAccept(isRegistered -> {
             if (!isRegistered) {
-                SLogger.info("Player [{}] has not joined before. Syncing with database.", event.getPlayer().getName());
+                LOGGER.info("Player [{}] has not joined before. Syncing with database.", event.getPlayer().getName());
                 SkyFactionsReborn.db.registerPlayer(event.getPlayer()).exceptionally(ex -> {
                     ex.printStackTrace();
-                    SLogger.fatal("Failed to sync player [{}] with database!", event.getPlayer().getName());
+                    LOGGER.fatal("Failed to sync player [{}] with database!", event.getPlayer().getName());
                     return null;
                 });
             }
         }).exceptionally(ex -> {
             ex.printStackTrace();
-            SLogger.fatal("Failed to check if player [{}] was registered with SkyFactionsReborn!", event.getPlayer().getName());
+            LOGGER.fatal("Failed to check if player [{}] was registered with SkyFactionsReborn!", event.getPlayer().getName());
             return null;
         });
 
@@ -48,13 +49,13 @@ public class PlayerHandler implements Listener {
             }
         }
 
-        SLogger.info("Initialising Notification Task for {}", event.getPlayer().getName());
+        LOGGER.info("Initialising Notification Task for {}", event.getPlayer().getName());
         NotificationAPI.createCycle(event.getPlayer());
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
-        SLogger.info("Cancelling Notification Task for {}...", event.getPlayer().getName());
+        LOGGER.info("Cancelling Notification Task for {}...", event.getPlayer().getName());
         NotificationAPI.tasks.get(event.getPlayer().getUniqueId()).cancel();
     }
 

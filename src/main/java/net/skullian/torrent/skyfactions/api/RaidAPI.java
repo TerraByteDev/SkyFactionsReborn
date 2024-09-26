@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-
+@Log4j2(topic = "SkyFactionsReborn")
 public class RaidAPI {
 
     // attacker, victim
