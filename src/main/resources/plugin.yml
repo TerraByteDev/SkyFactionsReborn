@@ -2,13 +2,13 @@ name: SkyFactionsReborn
 version: '${project.version}'
 main: net.skullian.torrent.skyfactions.SkyFactionsReborn
 api-version: '1.20'
-authors: [Skullians, nouish]
+authors: [ Skullians, nouish ]
 website: https://www.torrentsmp.com/
 load: POSTWORLD
 
-loadbefore: ["JukeBox", "NoteBlockAPI", "EssentialsX"]
-depend: ["FastAsyncWorldEdit", "WorldGuard", "Vault"]
-softdepend: ["JukeBox", "PlaceholderAPI", "NoteBlockAPI"]
+loadbefore: [ "JukeBox", "NoteBlockAPI", "EssentialsX" ]
+depend: [ "FastAsyncWorldEdit", "WorldGuard", "Vault" ]
+softdepend: [ "JukeBox", "PlaceholderAPI", "NoteBlockAPI" ]
 
 commands:
   island:
@@ -165,3 +165,5 @@ libraries:
   - "com.google.code.findbugs:jsr305:3.0.2"
   - "com.google.crypto.tink:tink:1.14.1"
   - "com.google.protobuf:protobuf-java:3.25.3"
+  - "com.google.errorprone:error_prone_annotations:2.18.0"
+  - "com.google.code.gson:gson:2.10.1"
