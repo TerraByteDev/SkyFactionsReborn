@@ -1,0 +1,92 @@
+# Name of the defence.
+# Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
+NAME: "{#3F4043}&lSoul{/#A9A9A9}"
+
+# Type of the defence.
+# Possible defence types: HEALING, ARROW, SOUL, FLAMETHROWER, POTION, SPRING, LANDMINE
+TYPE: "SOUL"
+
+# Runes cost when buying from the Obelisk
+COST:
+  BUY: 120
+  SELL: 80
+
+# Maximum level this defence can be upgraded to.
+MAX_LEVEL: 4
+
+# Sounds related to the defence.
+SOUNDS:
+  PLACE: "block.soul_soil.place" # On defence placement.
+  PLACE_PITCH: 1 # Pitch of the place sound.
+  BREAK: "block.soul_soil.break" # On defence removal.
+  BREAK_PITCH: 1 # Pitch of the break sound.
+
+# Upon death, one of these messages will be broadcasted at random.
+# Placeholders: %player_name% - Player who died / %defender% - Defender (player or faction name).
+DEATH_MESSAGES:
+  - "&e%player_name% &cwithered away whilst trying to fight &e%defender%&c."
+
+# All attributes related to the defence.
+# PLACEHOLDERS: %level% - The turret level.
+ATTRIBUTES:
+  RANGE: 3 # How far the defence's range is.
+  COOLDOWN: 25 - (%level% * 2) # Cooldown.
+  TARGET_MAX: 1  # Max targets for the defence at once.
+  MAX_AMMO: 10 * %level% # Highest ammo count.
+  UPGRADE_COST: 65 * %level% # Cost of upgrading the defence.
+  EFFECT_LEVEL: 1 + %level% # The effect level of the defence.
+  DURATION: 1 + %level% # The damage dealt by the defence.
+
+  # The SOUL defence has the option to slow down the player. This config will only work on the SOUL type.
+  SLOWNESS_UPGRADE_LEVEL: 3 # You can specify what upgrade level this slowness effect is applied (on top of the wither effect)!
+
+# XP Orb drops when the defence kills a certain mob. Must be a valid mob!
+EXPERIENCE_DROPS:
+  ZOMBIE: randInt(2, 4)
+  SKELETON: randInt(4, 6)
+  SLIME: randInt(3, 4)
+
+# Projectile that it "shoots". NONE for no projectile.
+PROJECTILE: "NONE"
+# Use a particle instead of a projectile. This will only override if PROJECTILE is set to NONE.
+PARTICLE: "SOUL"
+
+# Block Configuration
+# SKULL only applies if material is PLAYER_HEAD
+BLOCK:
+  MATERIAL: "PLAYER_HEAD"
+  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTUwMjkyNTc0NjVjNWVhYmZkM2QxOTQwOTcxZTNmZDZlNzYxZWEzYjMxNDlmNmQ5MWM4YzY3NmYwYTVmODgzIn19fQ=="
+
+# Item (when in hotbar) Configuration.
+# SKULL only applies if material is PLAYER_HEAD
+ITEM:
+  MATERIAL: "PLAYER_HEAD"
+  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTUwMjkyNTc0NjVjNWVhYmZkM2QxOTQwOTcxZTNmZDZlNzYxZWEzYjMxNDlmNmQ5MWM4YzY3NmYwYTVmODgzIn19fQ=="
+
+  # Every new line is a new line of lore.
+  # Follows message formatting.
+  LORE:
+    - "&aAn intimidating effect that"
+    - "&awill leave your enemies withering away."
+    - ""
+    - "&7Upgrading this defence will add slowness"
+    - "&7at &aLevel 3&7."
+    - ""
+    - "&c&lStats:"
+    - "&7○ &9Level:&6 %level%"
+    - "&7○ &9Range:&6 %range%"
+    - "&7○ &9Ammo:&6 %ammo%"
+    - "&7○ &9Max Targets:&6 %target_max%"
+    - "&7○ &9Damage:&6 %damage%"
+    - "&7○ &9Cooldown:&6 %cooldown%"
+
+  # Lore description of the item when upgrading.
+  UPGRADE_LORE:
+    - "&aUpgrading this defence will introduce the new statistics:"
+    - ""
+    - "&7○ &9Range:&a %old_range% &e>&a %new_range%"
+    - "&7○ &9Ammo:&a %old_ammo% &e>&a %new_ammo%"
+    - "&7○ &9Max Targets:&a %old_target_max% &e>&a %new_target_max%"
+    - "&7○ &9Damage:&a %old_damage% &e>&a %new_damage%"
+    - "&7○ &9Cooldown:&a %old_cooldown% &e>&a %new_damage%"
+    - "&7○ &9Extra Effects: &a%new_effects%" # SOUL SPECIFIC!
