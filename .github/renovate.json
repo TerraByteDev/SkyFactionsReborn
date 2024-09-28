@@ -7,11 +7,14 @@
 		"workarounds:all"
 	],
 	"reviewersFromCodeOwners": true,
-	"automerge": true,
+	"automerge": false,
 	"automergeType": "pr",
 	"automergeStrategy": "squash",
 	"platformAutomerge": true,
 	"prConcurrentLimit": 10000,
 	"branchConcurrentLimit": 10000,
-	"dependencyDashboard": true
+	"dependencyDashboard": true,
+	"vulnerabilityAlerts": {
+                 "enabled": true
+        }
 }
