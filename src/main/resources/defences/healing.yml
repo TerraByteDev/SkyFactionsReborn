@@ -33,7 +33,7 @@ SOUNDS:
 # In a Healing defence type, this would be used for healing notifications.
 # Placeholders: %health_increase% - Health they were healed for.
 MESSAGES:
-  - "&cYou were healed for &a%health_increase%&c health!"
+  - "&c ❤ &7| {#E9C055}You were healed for &a%health_increase%{#E9C055} health!"
 
 # All attributes related to the defence.
 # PLACEHOLDERS: %level% - The turret level.
@@ -52,8 +52,10 @@ EXPERIENCE_DROPS:
   SLIME: randInt(3, 4)
 
 # Projectile that it "shoots". NONE for no projectile.
+# See https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
 PROJECTILE: "SMALL_FIREBALL"
 # Use a particle instead of a projectile. This will only override if PROJECTILE is set to NONE.
+# See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
 PARTICLE: "NONE"
 
 # Block Configuration

@@ -40,7 +40,7 @@ public class IslandCommandHandler implements CommandExecutor {
                 }
             } else if (strings.length == 0) {
                 if (CooldownHandler.manageCooldown(player)) return true;
-                if ( !player.hasPermission("skyfactions.island.help")) {
+                if (!player.hasPermission("skyfactions.island.help")) {
                     Messages.PERMISSION_DENY.send(player);
                     return true;
                 }

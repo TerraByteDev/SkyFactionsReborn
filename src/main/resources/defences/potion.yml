@@ -1,29 +1,63 @@
 # Name of the defence.
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
-NAME: "{#3F4043}&lSoul Reaper{/#A9A9A9}"
+NAME: "{#7E00D9}&lElixir Cannon{/#2371FF}"
 
 # Type of the defence.
 # Possible defence types: HEALING, ARROW, SOUL, FLAMETHROWER, POTION, SPRING, LANDMINE
-TYPE: "SOUL"
+TYPE: "POTION"
 
 # Runes cost when buying from the Obelisk
 COST:
-  BUY: 120
-  SELL: 80
+  BUY: 145
+  SELL: 100
 
 # Maximum level this defence can be upgraded to.
-MAX_LEVEL: 4
+MAX_LEVEL: 5
 
 # Sounds related to the defence.
 SOUNDS:
-  PLACE: "block.soul_soil.place" # On defence placement.
+  PLACE: "block.amethyst_block.resonate" # On defence placement.
   PLACE_PITCH: 1 # Pitch of the place sound.
 
-  BREAK: "block.soul_soil.break" # On defence removal.
+  BREAK: "entity.splash_potion.break" # On defence removal.
   BREAK_PITCH: 1 # Pitch of the break sound.
 
   ACTIVATE: "entity.splash_potion.throw" # On defence activation (shoot, etc).
   ACTIVATE_PITCH: 1 # Pitch of the activation sound
+
+# This is POTION specific.
+# You can specify what effects you get at what level.
+# See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionType.html
+EFFECTS:
+  WEAKNESS:
+    EFFECT: "WEAKNESS"
+    DEFENCE_LEVEL: 1 # What level should you get this effect? 1 = Default
+    EFFECT_LEVEL: 1 # Level of the effect
+    DURATION: 10 # Duration of the effect
+
+  HARMING:
+    EFFECT: "HARMING"
+    DEFENCE_LEVEL: 3
+    EFFECT_LEVEL: 1
+    DURATION: 1
+
+  # You can have the same effect for different levels!
+  # It will override previous effects of the same type.
+  # This allows you to get different effects at different levels
+  # when you upgrade the defence.
+  HARMING_2:
+    EFFECT: "HARMING"
+    DEFENCE_LEVEL: 4
+    EFFECT_LEVEL: 2
+    DURATION: 2
+
+  NAUSEA:
+    EFFECT: "NAUSEA"
+    DEFENCE_LEVEL: 5
+    EFFECT_LEVEL: 1
+    DURATION: 15
+
+
 
 # For FLAMETHROWER / ARROW / SOUL / POTION / SPRING / LANDMINE defence types, these message configs will be
 # randomly broadcasted on death from these defences.
@@ -33,21 +67,17 @@ SOUNDS:
 # In a Healing defence type, this would be used for healing notifications.
 # Placeholders: %health_increase% - Health they were healed for.
 MESSAGES:
-  - "{#E9C055}%player_name% &7withered away whilst trying to fight {#E9C055}%defender%&7."
+  - "{#E9C055}%player_name% &7was splashed into oblivion by {#E9C055}%defender%'s&7 Elixir Cannon."
 
 # All attributes related to the defence.
 # PLACEHOLDERS: %level% - The turret level.
 ATTRIBUTES:
-  RANGE: 3 # How far the defence's range is.
+  RANGE: 4 + %level% # How far the defence's range is.
   COOLDOWN: 25 - (%level% * 2) # Cooldown.
   TARGET_MAX: 1  # Max targets for the defence at once.
   MAX_AMMO: 10 * %level% # Highest ammo count.
   UPGRADE_COST: 65 * %level% # Cost of upgrading the defence.
-  EFFECT_LEVEL: 1 + %level% # The effect level of the defence.
-  DURATION: 1 + %level% # The damage dealt by the defence.
-
-  # The SOUL defence has the option to slow down the player. This config will only work on the SOUL type.
-  SLOWNESS_UPGRADE_LEVEL: 3 # You can specify what upgrade level this slowness effect is applied (on top of the wither effect)!
+  DAMAGE: 1 + %level% # The damage dealt by the defence.
 
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:
@@ -57,31 +87,33 @@ EXPERIENCE_DROPS:
 
 # Projectile that it "shoots". NONE for no projectile.
 # See https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
-PROJECTILE: "NONE"
+PROJECTILE: "POTION"
 # Use a particle instead of a projectile. This will only override if PROJECTILE is set to NONE.
 # See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
-PARTICLE: "SOUL"
+PARTICLE: "NONE"
 
 # Block Configuration
 # SKULL only applies if material is PLAYER_HEAD
 BLOCK:
   MATERIAL: "PLAYER_HEAD"
-  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTUwMjkyNTc0NjVjNWVhYmZkM2QxOTQwOTcxZTNmZDZlNzYxZWEzYjMxNDlmNmQ5MWM4YzY3NmYwYTVmODgzIn19fQ=="
+  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTAzMjdmYjM0MzE5Zjg5YWM1YWI0OGI0ZDc5MjUxZjEzZjA2N2ViZWE3ZGE1Zjg4Yjc1ZjQ3OWE3Mzg5OTI0ZSJ9fX0="
 
 # Item (when in hotbar) Configuration.
 # SKULL only applies if material is PLAYER_HEAD
 ITEM:
   MATERIAL: "PLAYER_HEAD"
-  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTUwMjkyNTc0NjVjNWVhYmZkM2QxOTQwOTcxZTNmZDZlNzYxZWEzYjMxNDlmNmQ5MWM4YzY3NmYwYTVmODgzIn19fQ=="
+  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTAzMjdmYjM0MzE5Zjg5YWM1YWI0OGI0ZDc5MjUxZjEzZjA2N2ViZWE3ZGE1Zjg4Yjc1ZjQ3OWE3Mzg5OTI0ZSJ9fX0="
 
   # Every new line is a new line of lore.
   # Follows message formatting.
   LORE:
-    - "&aAn intimidating effect that"
-    - "&awill leave your enemies withering away."
+    - "&aRepel your enemies with"
+    - "&aall sorts of effects."
     - ""
-    - "&7Upgrading this defence will add slowness"
-    - "&7at &aLevel 3&7."
+    - "&7Upgrading this defence will add:"
+    - "&6Harming &7at &aLevel 3&7."
+    - "&6Harming II &7at &aLevel 4&7."
+    - "&7Nausea &7at &aLevel 5&7."
     - ""
     - "&c&lStats:"
     - "&7○ &9Level:&6 %level%"

@@ -12,7 +12,7 @@ COST:
   SELL: 65
 
 # Maximum level this defence can be upgraded to.
-MAX_LEVEL: 4
+MAX_LEVEL: 6
 
 # Sounds related to the defence.
 SOUNDS:
@@ -30,7 +30,7 @@ SOUNDS:
 # In a Healing defence type, this would be used for healing notifications.
 # Placeholders: %health_increase% - Health they were healed for.
 MESSAGES:
-  - "&e%player_name%&c discovered their fear of heights when fighting &e%defender%&c."
+  - "{#E9C055}%player_name%&7 discovered their fear of heights when fighting {#E9C055}%defender%&7."
 
 # All attributes related to the defence.
 # PLACEHOLDERS: %level% - The turret level.
@@ -43,9 +43,6 @@ ATTRIBUTES:
   DURATION: 1 + %level% # The damage dealt by the defence.
   DISTANCE: 3 + %level% # SPRING SPECIFIC! How far the enemy is launched.
 
-  # The SOUL defence has the option to slow down the player. This config will only work on the SOUL type.
-  SLOWNESS_UPGRADE_LEVEL: 3 # You can specify what upgrade level this slowness effect is applied (on top of the wither effect)!
-
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:
   ZOMBIE: randInt(2, 4)
@@ -53,9 +50,11 @@ EXPERIENCE_DROPS:
   SLIME: randInt(3, 4)
 
 # Projectile that it "shoots". NONE for no projectile.
+# See https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
 PROJECTILE: "NONE"
 # Use a particle instead of a projectile. This will only override if PROJECTILE is set to NONE.
-PARTICLE: "SOUL"
+# See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+PARTICLE: "CLOUD"
 
 # Block Configuration
 # SKULL only applies if material is PLAYER_HEAD
