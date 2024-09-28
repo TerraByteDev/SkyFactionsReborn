@@ -3,7 +3,7 @@
 NAME: "&cArrow"
 
 # Type of the defence.
-# Possible defence types: HEALING, ARROW, SOUL
+# Possible defence types: HEALING, ARROW, SOUL, FLAMETHROWER, POTION, SPRING, LANDMINE
 TYPE: "ARROW"
 
 # Resource Points cost when buying from the Obelisk
