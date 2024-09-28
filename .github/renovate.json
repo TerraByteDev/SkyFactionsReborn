@@ -7,7 +7,7 @@
 		"workarounds:all"
 	],
 	"reviewersFromCodeOwners": true,
-	"automerge": true,
+	"automerge": false,
 	"automergeType": "pr",
 	"automergeStrategy": "squash",
 	"platformAutomerge": true,
