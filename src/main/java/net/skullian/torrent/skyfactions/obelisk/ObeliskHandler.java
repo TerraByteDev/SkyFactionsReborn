@@ -40,20 +40,20 @@ public class ObeliskHandler {
 
     public static void spawnFactionObelisk(Faction faction, FactionIsland island) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-           World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
-           if (world != null) {
-               Location islandCenter = island.getCenter(world);
-               List<Integer> offset = ObeliskConfig.OBELISK_SPAWN_OFFSET.getIntegerList();
-               Location offsetLocation = islandCenter.add(offset.get(0), offset.get(1), offset.get(2));
+            World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
+            if (world != null) {
+                Location islandCenter = island.getCenter(world);
+                List<Integer> offset = ObeliskConfig.OBELISK_SPAWN_OFFSET.getIntegerList();
+                Location offsetLocation = islandCenter.add(offset.get(0), offset.get(1), offset.get(2));
 
-               if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() > 0)  {
-                   new ObeliskBlockEntity(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
-               } else {
-                   offsetLocation.getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
-               }
+                if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() > 0) {
+                    new ObeliskBlockEntity(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
+                } else {
+                    offsetLocation.getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
+                }
 
-               applyPDC(faction.getName(), offsetLocation.getBlock(), "faction");
-           }
+                applyPDC(faction.getName(), offsetLocation.getBlock(), "faction");
+            }
         });
     }
 

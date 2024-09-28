@@ -24,7 +24,7 @@ ITEMS:
     material: "LIME_TERRACOTTA"
     skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
     text: "&a&lConfirm" # Supported placeholders: %player_name% - Player's Name
-    sound: "ui.button.click" # Sound played when the item is clicked. Set to 'none' to disable.
+    sound: "ambient.cave" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
       - "&cClick to leave your Faction."

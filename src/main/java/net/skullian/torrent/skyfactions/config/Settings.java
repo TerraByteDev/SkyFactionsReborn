@@ -35,6 +35,7 @@ public enum Settings {
     ISLAND_PLAYER_SCHEMATIC("Island.NORMAL_ISLAND_SCHEMATIC"),
     ISLAND_FACTION_SCHEMATIC("Island.FACTION_ISLAND_SCHEMATIC"),
     ISLAND_TELEPORT_ON_JOIN("Island.TELEPORT_ON_JOIN"),
+    ISLAND_TELEPORT_ON_DEATH("Island.TELEPORT_ON_DEATH"),
 
     GEN_PLAYER_REGION_SIZE("Generation.PLAYER_ISLANDS.REGION_SIZE"),
     GEN_PLAYER_REGION_PADDING("Generation.PLAYER_ISLANDS.REGION_PADDING"),
@@ -74,7 +75,9 @@ public enum Settings {
     private static FileConfiguration config;
     private final String path;
 
-    Settings(String path) { this.path = path; }
+    Settings(String path) {
+        this.path = path;
+    }
 
     public List<String> getList() {
         return config.getStringList(this.path);

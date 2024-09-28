@@ -1,15 +1,14 @@
 package net.skullian.torrent.skyfactions.command.island.cmds;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.IslandAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.Messages;
 import net.skullian.torrent.skyfactions.config.Settings;
-import net.skullian.torrent.skyfactions.api.IslandAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -48,7 +47,7 @@ public class IslandDeleteCommand extends CommandTemplate {
 
                         if (IslandAPI.awaitingDeletion.contains(player.getUniqueId())) {
                             World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
-
+                            // todo migrate to gui command conf
                             if (hubWorld != null) {
                                 Messages.DELETION_PROCESSING.send(player);
 

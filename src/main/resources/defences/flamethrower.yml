@@ -18,12 +18,21 @@ MAX_LEVEL: 5
 SOUNDS:
   PLACE: "item.firecharge.use" # On defence placement.
   PLACE_PITCH: 1 # Pitch of the place sound.
+
   BREAK: "entity.dragon_fireball.explode" # On defence removal.
   BREAK_PITCH: 1 # Pitch of the break sound.
 
+  ACTIVATE: "item.firecharge.use" # On defence activation (shoot, etc).
+  ACTIVATE_PITCH: 1 # Pitch of the activation sound
+
+# For FLAMETHROWER / ARROW / SOUL / POTION / SPRING / LANDMINE defence types, these message configs will be
+# randomly broadcasted on death from these defences.
 # Upon death, one of these messages will be broadcasted at random.
 # Placeholders: %player_name% - Player who died / %defender% - Defender (player or faction name).
-DEATH_MESSAGES:
+
+# In a Healing defence type, this would be used for healing notifications.
+# Placeholders: %health_increase% - Health they were healed for.
+MESSAGES:
   - "&e%player_name% &cburnt to death while trying to fight &e%defender%&c."
 
 # All attributes related to the defence.

@@ -3,15 +3,14 @@ package net.skullian.torrent.skyfactions.event;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.IslandAPI;
+import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import net.skullian.torrent.skyfactions.config.Settings;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
-import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -61,10 +60,12 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void playerRespawn(PlayerRespawnEvent event) {
-        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).join();
-        World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-        if (island != null && world != null) {
-            event.getPlayer().teleport(island.getCenter(world));
+        if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
+            PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).join();
+            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+            if (island != null && world != null) {
+                event.getPlayer().teleport(island.getCenter(world));
+            }
         }
     }
 }

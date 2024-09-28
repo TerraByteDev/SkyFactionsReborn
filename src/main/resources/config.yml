@@ -32,7 +32,7 @@ Hub:
 
   # This is where players will spawn when they first join the server (you'd have to do that by setworldspawn or whatever).
   # Also where players are teleported when they do /hub or their island is deleted.
-  HUB_LOCATION: [0, 64, 0]
+  HUB_LOCATION: [ 0, 64, 0 ]
 
 
 # Configuration for commands.
@@ -72,6 +72,9 @@ Island:
 
   # Whether to teleport the player to their island when they join.
   TELEPORT_ON_JOIN: true
+
+  # Whether to teleport the player to their island on death / respawn.
+  TELEPORT_ON_DEATH: true
 
 
 # Island grid generation algorithm configuration
@@ -124,7 +127,7 @@ Raiding:
   RAID_PREPARATION_WORLD: "world"
   # Position where raid defenders are spawned to be prepared for the raid.
   # [x, y, z]
-  RAID_PREPARATION_POS: [0, 64, 0]
+  RAID_PREPARATION_POS: [ 0, 64, 0 ]
   # Time in seconds that they are in the preparation area before being teleported back to their island.
   RAID_PREPARATION_TIME: 30
 
@@ -149,7 +152,7 @@ Factions:
 
     # The plugin will automatically run through all of these strings and check that the faction name does not contain any of these.
     # Can be regex patterns or just strings.
-    BLACKLISTED_NAMES: [ cunt, retard, motherfucker, motherfuck, anus, anal, cock, dick, whore, suck, twat, shit, faggot, bitch, "butt|ass(?:hole)?", "^fag$", "nigg(?:a|er)", "tit(?:s|z|ies)?", "boob(?:s|z|ies)?"]
+    BLACKLISTED_NAMES: [ cunt, retard, motherfucker, motherfuck, anus, anal, cock, dick, whore, suck, twat, shit, faggot, bitch, "butt|ass(?:hole)?", "^fag$", "nigg(?:a|er)", "tit(?:s|z|ies)?", "boob(?:s|z|ies)?" ]
 
   FACTION_MANAGE:
 
