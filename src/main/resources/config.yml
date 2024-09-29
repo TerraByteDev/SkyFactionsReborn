@@ -129,6 +129,13 @@ Raiding:
   # Time in seconds that they are in the preparation area before being teleported back to their island.
   RAID_PREPARATION_TIME: 30
 
+Defences:
+  # Maximum amount of defences a player island can have.
+  MAX_PLAYER_DEFENCES: 10
+
+  # Maximum amount of defences a faction island can have.
+  MAX_FACTION_DEFENCES: 20
+
 Factions:
   # All configurations related to creation factions.
   FACTION_CREATION:
