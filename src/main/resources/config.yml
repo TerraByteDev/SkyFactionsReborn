@@ -95,8 +95,6 @@ Generation:
     # The center point where all islands start. [X, Y, Z]
     GRID_ORIGIN: [ 0, 64, 0 ]
 
-
-
 Raiding:
   # Cost of raiding a user in Gems.
   RAIDING_COST: 2

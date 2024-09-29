@@ -12,22 +12,20 @@ public class DependencyHandler {
 
     public static void init() {
         if (isPluginEnabled("PlaceholderAPI")) {
-            SLogger.info("Syncing with PAPI.");
+            SLogger.info("Found {} installed on the server - Registering expansion.", "\u001B[33mPlaceholderAPI\u001B[34m");
             new PlaceholderManager(SkyFactionsReborn.getInstance()).register();
             papi = true;
-        } else {
-            alert("PlaceholderAPI");
-        }
+        } else alert("PlaceholderAPI");
 
         if (isPluginEnabled("JukeBox")) {
-            SLogger.info("Found JukeBox installed on the server.");
+            SLogger.info("Found {} installed on the server.", "\u001B[33mJukeBox\u001B[34m");
             jukebox = true;
-        }
+        } else alert("JukeBox");
 
         if (isPluginEnabled("NoteBlockAPI")) {
-            SLogger.info("Found NoteBlockAPI installed on the server.");
+            SLogger.info("Found {} installed on the server.", "\u001B[33mNoteBlockAPI\u001B[34m");
             nbapi = true;
-        }
+        } else alert("NoteBlockAPI");
     }
 
     private static boolean isPluginEnabled(String name) {
@@ -35,7 +33,7 @@ public class DependencyHandler {
     }
 
     private static void alert(String name) {
-        SLogger.warn("Could not find {} on the server!", name);
-        SLogger.warn("If you have {} installed, this is a bug!", name);
+        SLogger.fatal("Could not find {} on the server!", "\u001B[33m" + name + "\u001B[31m");
+        SLogger.fatal("If you have this plugin installed, this is a bug!");
     }
 }

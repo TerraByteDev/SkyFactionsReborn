@@ -3,21 +3,22 @@ package net.skullian.torrent.skyfactions.defence.struct;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Setter
 @Getter
 public class DefenceStruct {
 
+    private String FILE_NAME;
     private String NAME;
     private String TYPE;
 
-    private String BUY_COST;
-    private String SELL_COST;
-    private String AMMO_COST;
+    private int BUY_COST;
+    private int SELL_COST;
+    private int AMMO_COST;
 
     private int MAX_LEVEL;
 
@@ -28,11 +29,14 @@ public class DefenceStruct {
     private String ACTIVATE_SOUND;
     private int ACTIVATE_PITCH;
 
-    private ConfigurationSection EFFECTS;
+    private List<DefenceEffectStruct> EFFECTS;
 
     private List<String> MESSAGES;
 
-    private ConfigurationSection ATTRIBUTES;
+    private DefenceAttributeStruct ATTRIBUTES;
+
+    // Mob Name / Expression
+    private Map<String, String> EXPERIENCE_DROPS;
 
     private String PROJECTILE;
     private String PARTICLE;

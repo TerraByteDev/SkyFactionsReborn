@@ -58,7 +58,7 @@
                             <exclude>com.google.crypto.tink:tink</exclude>
                             <exclude>com.google.protobuf:protobuf-java</exclude>
                             <exclude>com.google.errorprone:error_prone_annotations</exclude>
-                            <exclude>com.google:gson</exclude>
+                            <exclude>com.google.code.gson:gson</exclude>
                         </excludes>
                     </artifactSet>
                 </configuration>

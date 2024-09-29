@@ -63,7 +63,6 @@ ATTRIBUTES:
   TARGET_MAX: 1  # Max targets for the defence at once.
   MAX_AMMO: 10 * level # Highest ammo count.
   UPGRADE_COST: 65 * level # Cost of upgrading the defence.
-  DURATION: 1 + level # The damage dealt by the defence.
 
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:

@@ -49,6 +49,12 @@ ATTRIBUTES:
   UPGRADE_COST: 40 * level # Cost of upgrading the defence.
   DAMAGE: 2 + level # The damage dealt by the defence.
 
+# XP Orb drops when the defence kills a certain mob. Must be a valid mob!
+EXPERIENCE_DROPS:
+  ZOMBIE: randInt(1, 3)
+  SKELETON: randInt(2, 3)
+  SLIME: randInt(2, 4)
+
 # Projectile that it "shoots". NONE for no projectile.
 # See https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
 PROJECTILE: "ARROW"

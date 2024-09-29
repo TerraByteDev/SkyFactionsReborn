@@ -1,6 +1,11 @@
 package net.skullian.torrent.skyfactions;
 
 import com.jeff_media.customblockdata.CustomBlockData;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.skullian.torrent.skyfactions.command.discord.LinkCommand;
 import net.skullian.torrent.skyfactions.command.discord.UnlinkCommand;
 import net.skullian.torrent.skyfactions.command.faction.FactionCommandHandler;
@@ -36,17 +41,23 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static DiscordHandler dc;
     public static EconomyHandler ec;
 
-    String text = """
-            
-            ____ _  _ _   _ ____ ____ ____ ___ _ ____ _  _ ____\s
-            [__  |_/   \\_/  |___ |__| |     |  | |  | |\\ | [__ \s
-            ___] | \\_   |   |    |  | |___  |  | |__| | \\| ___]\s
-            
-            """;
+    private void print() {
+        ComponentLogger LOGGER = ComponentLogger.logger("\u001B[32mSkyFactionsReborn\u001B[0m");
+
+        Style style = Style.style(TextColor.color(25, 100, 230), TextDecoration.BOLD);
+        LOGGER.info(Component.text("╭────────────────────────────────────────────────────────────╮").style(style));
+        LOGGER.info(Component.text("│                                                            │").style(style));
+        LOGGER.info(Component.text("│    ____ _  _ _   _ ____ ____ ____ ___ _ ____ _  _ ____     │").style(style));
+        LOGGER.info(Component.text("│    [__  |_/   \\_/  |___ |__| |     |  | |  | |\\ | [__      │").style(style));
+        LOGGER.info(Component.text("│    ___] | \\_   |   |    |  | |___  |  | |__| | \\| ___]     │").style(style));
+        LOGGER.info(Component.text("│                                                            │").style(style));
+        LOGGER.info(Component.text("╰────────────────────────────────────────────────────────────╯").style(style));
+    }
 
     @Override
     public void onEnable() {
-        SLogger.LOGGER.info("\u001B[34m" + text + "\u001B[0m");
+
+        print();
 
         // Store an instance of the ConfigHandler class in case it is needed.
         // Primarily used for the discord integration.
@@ -112,7 +123,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
         closeDatabase();
         dc.disconnect();
 
-        SLogger.info(text);
+        print();
         SLogger.info("SkyFactions has been disabled.");
     }
 

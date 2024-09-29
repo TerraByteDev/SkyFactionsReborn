@@ -1,10 +1,11 @@
 package net.skullian.torrent.skyfactions.api;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -20,9 +21,13 @@ public class SkullAPI {
 
     public static ItemStack convertToSkull(ItemStack item, String skullValue) {
         if (item.getType() == Material.PLAYER_HEAD) {
-            SkullMeta meta = (SkullMeta) item.getItemMeta();
-            mutateItemMeta(meta, skullValue);
-            item.setItemMeta(meta);
+            item.editMeta(SkullMeta.class, skullMeta -> {
+                final UUID uuid = UUID.randomUUID();
+                final PlayerProfile playerProfile = Bukkit.createProfile(uuid, uuid.toString().substring(0, 16));
+                playerProfile.setProperty(new ProfileProperty("textures", skullValue));
+
+                skullMeta.setPlayerProfile(playerProfile);
+            });
         }
 
         return item;
