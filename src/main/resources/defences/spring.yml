@@ -79,7 +79,7 @@ ITEM:
     - "&aaway from your precious valuables."
     - ""
     - "&c&lStats:"
-    - "&7○ &9Level:&6 level"
+    - "&7○ &9Max Level:&6 %max_level%"
     - "&7○ &9Range:&6 %range%"
     - "&7○ &9Ammo:&6 %ammo%"
     - "&7○ &9Max Targets:&6 %target_max%"
@@ -90,8 +90,10 @@ ITEM:
   UPGRADE_LORE:
     - "&aUpgrading this defence will introduce the new statistics:"
     - ""
+    - "&7○ &9Level:&a %old_level% &e>&a %new_level%"
     - "&7○ &9Range:&a %old_range% &e>&a %new_range%"
     - "&7○ &9Ammo:&a %old_ammo% &e>&a %new_ammo%"
     - "&7○ &9Max Targets:&a %old_target_max% &e>&a %new_target_max%"
     - "&7○ &9Damage:&a %old_damage% &e>&a %new_damage%"
     - "&7○ &9Cooldown:&a %old_cooldown% &e>&a %new_damage%"
+    - "&7○ &9Distance:&a %old_distance% &e>&a %new_distance%" # Spring specific.
