@@ -4,12 +4,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.awt.*;
-import java.sql.SQLException;
 import java.util.UUID;
 
 public class DiscordLinkHandler extends ListenerAdapter {

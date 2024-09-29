@@ -1,6 +1,6 @@
 package net.skullian.torrent.skyfactions.command;
 
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import org.bukkit.entity.Player;
 
 import java.util.List;

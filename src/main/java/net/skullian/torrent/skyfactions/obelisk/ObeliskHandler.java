@@ -2,8 +2,8 @@ package net.skullian.torrent.skyfactions.obelisk;
 
 import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.ObeliskConfig;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.ObeliskConfig;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;

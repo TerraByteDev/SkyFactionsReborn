@@ -5,7 +5,7 @@ import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.command.raid.RaidCommandHandler;
 import net.skullian.torrent.skyfactions.command.sf.SFCommandHandler;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -36,7 +36,8 @@ public class SFHelpCommand extends CommandTemplate {
             Messages.NO_COMMANDS_FOUND.send(player);
         }
         for (int i = 0; i < RaidCommandHandler.getSubCommands().size(); i++) {
-            if (!PermissionsHandler.hasPerm(player, RaidCommandHandler.getSubCommands().get(i).permission(), false)) continue;
+            if (!PermissionsHandler.hasPerm(player, RaidCommandHandler.getSubCommands().get(i).permission(), false))
+                continue;
             Messages.COMMAND_INFO.send(player, "%command_syntax%", RaidCommandHandler.getSubCommands().get(i).getSyntax(), "%command_name%", SFCommandHandler.getSubCommands().get(i).getName(), "%command_description%", RaidCommandHandler.getSubCommands().get(i).getDescription());
         }
         Messages.COMMAND_HEAD.send(player);

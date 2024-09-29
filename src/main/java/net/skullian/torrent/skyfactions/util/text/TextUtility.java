@@ -1,7 +1,7 @@
 package net.skullian.torrent.skyfactions.util.text;
 
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class TextUtility {
 
-    public static String color (final String string) {
+    public static String color(final String string) {
         return ColorAPI.process(string);
     }
 
@@ -55,7 +55,7 @@ public class TextUtility {
      * Blacklisted words (regex) are configured in config.yml.
      *
      * @param player Player to check
-     * @param name String to check.
+     * @param name   String to check.
      * @return {@link Boolean}
      */
     public static boolean hasBlacklistedWords(Player player, String name) {

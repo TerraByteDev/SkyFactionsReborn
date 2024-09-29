@@ -1,9 +1,7 @@
 package net.skullian.torrent.skyfactions.command;
 
-import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.ConfigTypes;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

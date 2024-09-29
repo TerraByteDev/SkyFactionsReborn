@@ -1,13 +1,13 @@
 package net.skullian.torrent.skyfactions.gui;
 
 import net.skullian.torrent.skyfactions.api.GUIAPI;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
+import net.skullian.torrent.skyfactions.gui.items.GeneralCancelItem;
 import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.faction_leave.LeaveConfirmationItem;
-import net.skullian.torrent.skyfactions.gui.items.GeneralCancelItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;

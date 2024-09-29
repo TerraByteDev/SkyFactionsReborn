@@ -1,12 +1,11 @@
 package net.skullian.torrent.skyfactions.gui.obelisk.invites;
 
 import net.skullian.torrent.skyfactions.api.GUIAPI;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.faction.JoinRequestData;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
-import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestConfirmItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestDenyItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestRevoke;

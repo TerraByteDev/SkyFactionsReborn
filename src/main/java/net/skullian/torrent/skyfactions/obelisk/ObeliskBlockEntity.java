@@ -1,7 +1,6 @@
 package net.skullian.torrent.skyfactions.obelisk;
 
 import lombok.Getter;
-import net.skullian.torrent.skyfactions.config.ObeliskConfig;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -45,11 +44,11 @@ public class ObeliskBlockEntity {
         world.setBlockData(this.location, BROKEN_MATERIAL.createBlockData());
     }
 
-    private Location getLocationFromBlock (Location location) {
+    private Location getLocationFromBlock(Location location) {
         Location entityLocation = location.clone();
-        entityLocation.setX( location.getX() + 0.5 );
-        entityLocation.setY( location.getY() + 0.5 );
-        entityLocation.setZ( location.getZ() + 0.5 );
+        entityLocation.setX(location.getX() + 0.5);
+        entityLocation.setY(location.getY() + 0.5);
+        entityLocation.setZ(location.getZ() + 0.5);
 
         return entityLocation;
     }

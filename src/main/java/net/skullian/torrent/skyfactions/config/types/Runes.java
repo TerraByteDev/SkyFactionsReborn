@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.config;
+package net.skullian.torrent.skyfactions.config.types;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +26,9 @@ public enum Runes {
     private static FileConfiguration config;
     private final String path;
 
-    Runes(String path) { this.path = path; }
+    Runes(String path) {
+        this.path = path;
+    }
 
     public List<String> getList() {
         return config.getStringList(this.path);

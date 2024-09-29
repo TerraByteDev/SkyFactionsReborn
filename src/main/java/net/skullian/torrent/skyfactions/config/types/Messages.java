@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.config;
+package net.skullian.torrent.skyfactions.config.types;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,6 @@ import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -179,7 +178,9 @@ public enum Messages {
     private static FileConfiguration config;
     private final String path;
 
-    Messages(String path) { this.path = path; }
+    Messages(String path) {
+        this.path = path;
+    }
 
     public String get(Object... replacements) {
         Object value = config.get("Messages." + this.path);

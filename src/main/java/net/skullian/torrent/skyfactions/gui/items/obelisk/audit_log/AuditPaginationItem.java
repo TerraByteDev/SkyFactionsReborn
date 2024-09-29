@@ -1,6 +1,6 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk.audit_log;
 
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.db.AuditLogData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.util.SoundUtil;

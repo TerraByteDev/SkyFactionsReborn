@@ -11,8 +11,8 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.faction.AuditLogType;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
@@ -21,7 +21,6 @@ import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -51,7 +50,7 @@ public class FactionAPI {
      * Create a new faction.
      *
      * @param player Owner of the faction.
-     * @param name Name of the faction.
+     * @param name   Name of the faction.
      */
     public static void createFaction(Player player, String name) {
         SkyFactionsReborn.db.registerFaction(player, name).join();
@@ -93,9 +92,8 @@ public class FactionAPI {
     }
 
     /**
-     *
      * @param player Player corresponded to string. Set to null if not needed.
-     * @param name String to check.
+     * @param name   String to check.
      * @return {@link Boolean}
      */
     public static boolean hasValidName(Player player, String name) {
@@ -174,8 +172,8 @@ public class FactionAPI {
     /**
      * Check if a player is in a certain region.
      *
-     * @param player Player to check.
-     * @param world World where region is located.
+     * @param player     Player to check.
+     * @param world      World where region is located.
      * @param regionName Name of region.
      * @return {@link Boolean}
      */

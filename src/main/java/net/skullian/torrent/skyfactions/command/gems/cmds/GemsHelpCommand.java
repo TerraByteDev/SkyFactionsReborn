@@ -4,7 +4,7 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.command.gems.GemsCommandHandler;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import org.bukkit.entity.Player;
 
 import java.util.List;

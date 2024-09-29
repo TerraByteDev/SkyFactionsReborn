@@ -4,8 +4,8 @@ import com.jeff_media.customblockdata.CustomBlockData;
 import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.config.ObeliskConfig;
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.ObeliskConfig;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.obelisk.FactionObeliskUI;
 import net.skullian.torrent.skyfactions.gui.obelisk.PlayerObeliskUI;
@@ -22,7 +22,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-@Log4j2(topic = "SkyFactionsReborn")
+
 public class ObeliskInteractionListener implements Listener {
 
     @EventHandler

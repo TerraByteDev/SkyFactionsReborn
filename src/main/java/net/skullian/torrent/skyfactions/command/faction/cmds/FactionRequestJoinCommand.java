@@ -6,7 +6,7 @@ import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -62,7 +62,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
         }
     }
 
-    public static List<String> permissions = List.of( "skyfactions.faction.requestjoin", "skyfactions.faction", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.faction.requestjoin", "skyfactions.faction", "skyfactions.player");
 
     @Override
     public List<String> permission() {

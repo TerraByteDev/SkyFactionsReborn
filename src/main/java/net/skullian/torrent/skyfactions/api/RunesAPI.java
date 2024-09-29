@@ -1,8 +1,8 @@
 package net.skullian.torrent.skyfactions.api;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.config.Runes;
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.Runes;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ public class RunesAPI {
     /**
      * See whether an item is allowed for rune conversion.
      *
-     * @param stack ItemStack in question/
+     * @param stack  ItemStack in question/
      * @param player Player related to the ItemStack.
      * @return {@link Boolean}
      */
@@ -67,8 +67,8 @@ public class RunesAPI {
             }
             returnItems(remaindingItems, player);
             if (total > 0) {
-              SkyFactionsReborn.db.addRunes(player, total);
-              Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
+                SkyFactionsReborn.db.addRunes(player, total);
+                Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
             } else {
                 Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
             }
@@ -141,7 +141,7 @@ public class RunesAPI {
 
         if (isBlacklist && list.contains(stack.getType().name())) {
             return false;
-        } else if (!isBlacklist && !list.contains(stack.getType().name())){
+        } else if (!isBlacklist && !list.contains(stack.getType().name())) {
             return false;
         } else {
             return true;

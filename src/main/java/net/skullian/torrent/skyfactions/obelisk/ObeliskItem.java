@@ -1,8 +1,7 @@
 package net.skullian.torrent.skyfactions.obelisk;
 
 import lombok.Getter;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.config.ObeliskConfig;
+import net.skullian.torrent.skyfactions.config.types.ObeliskConfig;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -40,8 +39,6 @@ public class ObeliskItem {
 
         return item;
     }
-
-
 
 
 }

@@ -1,6 +1,6 @@
 package net.skullian.torrent.skyfactions.faction;
 
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 
 public enum AuditLogType {
 
@@ -23,6 +23,7 @@ public enum AuditLogType {
 
     private final Messages title;
     private final Messages description;
+
     AuditLogType(Messages title, Messages description) {
         this.title = title;
         this.description = description;

@@ -1,13 +1,12 @@
 package net.skullian.torrent.skyfactions.command.faction.cmds;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.api.IslandAPI;
+import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.api.FactionAPI;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -58,7 +57,8 @@ public class FactionCreateCommand extends CommandTemplate {
                             return;
                         }
 
-                        SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);;
+                        SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);
+                        ;
                     }
 
                     FactionAPI.createFaction(player, name);

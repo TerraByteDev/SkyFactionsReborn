@@ -29,6 +29,22 @@ SOUNDS:
   ACTIVATE: "entity.splash_potion.throw" # On defence activation (shoot, etc).
   ACTIVATE_PITCH: 1 # Pitch of the activation sound
 
+# This is POTION and SOUL specific.
+# You can specify what effects you get at what level.
+# See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
+EFFECTS:
+  WITHER:
+    EFFECT: "WITHER"
+    DEFENCE_LEVEL: 1 # What level should you get this effect? 1 = Default
+    EFFECT_LEVEL: 1 # Level of the effect
+    DURATION: 10 + level # Duration of the effect
+
+  SLOWNESS:
+    EFFECT: "SLOWNESS"
+    DEFENCE_LEVEL: 3
+    EFFECT_LEVEL: 1
+    DURATION: 5 * level
+
 # For FLAMETHROWER / ARROW / SOUL / POTION / SPRING / LANDMINE defence types, these message configs will be
 # randomly broadcasted on death from these defences.
 # Upon death, one of these messages will be broadcasted at random.
@@ -47,11 +63,7 @@ ATTRIBUTES:
   TARGET_MAX: 1  # Max targets for the defence at once.
   MAX_AMMO: 10 * level # Highest ammo count.
   UPGRADE_COST: 65 * level # Cost of upgrading the defence.
-  EFFECT_LEVEL: 1 + level # The effect level of the defence.
   DURATION: 1 + level # The damage dealt by the defence.
-
-  # The SOUL defence has the option to slow down the player. This config will only work on the SOUL type.
-  SLOWNESS_UPGRADE_LEVEL: 3 # You can specify what upgrade level this slowness effect is applied (on top of the wither effect)!
 
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:

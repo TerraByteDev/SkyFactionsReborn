@@ -1,11 +1,8 @@
 package net.skullian.torrent.skyfactions.gui.obelisk;
 
-import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.api.NotificationAPI;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.db.AuditLogData;
-import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.data.PaginationItemData;

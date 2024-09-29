@@ -1,7 +1,7 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 
 import net.skullian.torrent.skyfactions.api.FactionAPI;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.db.InviteData;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;

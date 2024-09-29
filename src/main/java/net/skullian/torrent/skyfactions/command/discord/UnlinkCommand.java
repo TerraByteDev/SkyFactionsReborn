@@ -3,7 +3,7 @@ package net.skullian.torrent.skyfactions.command.discord;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +17,8 @@ public class UnlinkCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
 
         if (commandSender instanceof Player player) {
-            if (!PermissionsHandler.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord", "skyfactions.player"), true)) return true;
+            if (!PermissionsHandler.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord", "skyfactions.player"), true))
+                return true;
             if (CooldownHandler.manageCooldown(player)) return true;
 
             SkyFactionsReborn.db.getDiscordLink(player).thenAccept(linkedID -> {

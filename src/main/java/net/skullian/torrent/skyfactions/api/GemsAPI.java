@@ -1,7 +1,7 @@
 package net.skullian.torrent.skyfactions.api;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletionException;
@@ -28,7 +28,7 @@ public class GemsAPI {
     /**
      * Add gems to a player.
      *
-     * @param player Player to give gems to.
+     * @param player   Player to give gems to.
      * @param addition Amount of gems to add.
      */
     public static void addGems(Player player, int addition) {
@@ -43,7 +43,7 @@ public class GemsAPI {
     /**
      * Subtract gems from a player.
      *
-     * @param player Player to subtract gems from.
+     * @param player      Player to subtract gems from.
      * @param subtraction Amount of gems to remove.
      */
     public static void subtractGems(Player player, int subtraction) {

@@ -1,7 +1,7 @@
 package net.skullian.torrent.skyfactions.api;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.notification.NotificationData;
 import net.skullian.torrent.skyfactions.notification.NotificationTask;
@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class NotificationAPI {
 
@@ -34,8 +33,8 @@ public class NotificationAPI {
     /**
      * Create a notification for a Player.
      *
-     * @param playerUUID UUID of the player who the notification should be sent to [{@link UUID}]
-     * @param type Type of notification [{@link net.skullian.torrent.skyfactions.faction.AuditLogType}]
+     * @param playerUUID   UUID of the player who the notification should be sent to [{@link UUID}]
+     * @param type         Type of notification [{@link net.skullian.torrent.skyfactions.faction.AuditLogType}]
      * @param replacements Replacements for the notification title / desc.
      */
     public static void createNotification(UUID playerUUID, NotificationType type, Object... replacements) {

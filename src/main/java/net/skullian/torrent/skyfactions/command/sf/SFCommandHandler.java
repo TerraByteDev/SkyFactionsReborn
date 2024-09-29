@@ -6,7 +6,7 @@ import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.command.sf.cmds.SFHelpCommand;
 import net.skullian.torrent.skyfactions.command.sf.cmds.SFInfoCommand;
 import net.skullian.torrent.skyfactions.command.sf.cmds.SFReloadCommand;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

@@ -1,8 +1,7 @@
 package net.skullian.torrent.skyfactions.island;
 
 import lombok.Getter;
-import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -19,39 +18,39 @@ public class PlayerIsland {
 
     public Location getCenter(World world) {
         List<Integer> origin = Settings.GEN_PLAYER_GRID_ORIGIN.getIntegerList();
-            if (id == 1) return new Location(world, origin.get(0), origin.get(1), origin.get(2));
+        if (id == 1) return new Location(world, origin.get(0), origin.get(1), origin.get(2));
 
-            int pos = id - 1;
-            int radius = (int) (Math.floor((Math.sqrt(pos) - 1) / 2) + 1);
-            int diameter = radius * 2;
-            int perimeter = diameter * 4;
+        int pos = id - 1;
+        int radius = (int) (Math.floor((Math.sqrt(pos) - 1) / 2) + 1);
+        int diameter = radius * 2;
+        int perimeter = diameter * 4;
 
-            int lastCompletePosition = (perimeter * (radius - 1)) / 2;
+        int lastCompletePosition = (perimeter * (radius - 1)) / 2;
 
-            int currentIndexInPerimeter = (pos - lastCompletePosition) % perimeter;
+        int currentIndexInPerimeter = (pos - lastCompletePosition) % perimeter;
 
-            Location location;
+        Location location;
 
-            switch (currentIndexInPerimeter / diameter) {
-                case 0:
-                    location = new Location(world, (currentIndexInPerimeter - radius), 0, -radius);
-                    break;
-                case 1:
-                    location = new Location(world, radius, 0, (currentIndexInPerimeter % diameter) - radius);
-                    break;
-                case 2:
-                    location = new Location(world, radius - (currentIndexInPerimeter % diameter), 0, radius);
-                    break;
-                case 3:
-                    location = new Location(world, -radius, 0, radius - (currentIndexInPerimeter % diameter));
-                    break;
-                default:
-                    throw new IllegalStateException("Could not find island location with ID: " + id);
-            }
+        switch (currentIndexInPerimeter / diameter) {
+            case 0:
+                location = new Location(world, (currentIndexInPerimeter - radius), 0, -radius);
+                break;
+            case 1:
+                location = new Location(world, radius, 0, (currentIndexInPerimeter % diameter) - radius);
+                break;
+            case 2:
+                location = new Location(world, radius - (currentIndexInPerimeter % diameter), 0, radius);
+                break;
+            case 3:
+                location = new Location(world, -radius, 0, radius - (currentIndexInPerimeter % diameter));
+                break;
+            default:
+                throw new IllegalStateException("Could not find island location with ID: " + id);
+        }
 
-            Location newLocation = location.multiply((Settings.GEN_PLAYER_REGION_SIZE.getInt() + Settings.GEN_PLAYER_REGION_PADDING.getInt()));
+        Location newLocation = location.multiply((Settings.GEN_PLAYER_REGION_SIZE.getInt() + Settings.GEN_PLAYER_REGION_PADDING.getInt()));
 
-            return newLocation;
+        return newLocation;
     }
 
     public Location getPosition1(World world) {

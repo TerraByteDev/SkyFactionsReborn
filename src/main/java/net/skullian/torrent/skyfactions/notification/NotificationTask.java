@@ -2,7 +2,7 @@ package net.skullian.torrent.skyfactions.notification;
 
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.NotificationAPI;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

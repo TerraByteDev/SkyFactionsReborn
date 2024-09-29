@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.config;
+package net.skullian.torrent.skyfactions.config.types;
 
 public enum ConfigTypes {
 

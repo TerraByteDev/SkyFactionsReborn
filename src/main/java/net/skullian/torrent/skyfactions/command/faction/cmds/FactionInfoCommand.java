@@ -4,13 +4,12 @@ import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +67,7 @@ public class FactionInfoCommand extends CommandTemplate {
                 "%moderators%", buildString(faction.getModerators()),
                 "%fighters%", buildString(faction.getFighters()),
                 "%members%", buildString(faction.getMembers())
-                );
+        );
     }
 
     private String buildString(List<OfflinePlayer> list) {

@@ -1,9 +1,8 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk.member_manage;
 
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.obelisk.member.ManageMemberUI;
-import net.skullian.torrent.skyfactions.gui.obelisk.member.MemberManagementUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;

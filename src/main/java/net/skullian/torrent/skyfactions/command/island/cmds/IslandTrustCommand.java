@@ -4,7 +4,7 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -69,7 +69,7 @@ public class IslandTrustCommand extends CommandTemplate {
         }
     }
 
-    public static List<String> permissions = List.of( "skyfactions.island.trust", "skyfactions.island", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.island.trust", "skyfactions.island", "skyfactions.player");
 
     @Override
     public List<String> permission() {

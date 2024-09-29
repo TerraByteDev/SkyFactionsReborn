@@ -5,10 +5,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.db.IslandRaidData;
-import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.apache.commons.lang3.time.DurationFormatUtils;
@@ -19,7 +18,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.*;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-@Log4j2(topic = "SkyFactionsReborn")
+
 public class RaidAPI {
 
     // attacker, victim

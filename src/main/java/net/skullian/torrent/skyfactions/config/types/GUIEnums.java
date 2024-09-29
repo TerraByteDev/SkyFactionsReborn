@@ -1,4 +1,4 @@
-package net.skullian.torrent.skyfactions.config;
+package net.skullian.torrent.skyfactions.config.types;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -28,7 +28,6 @@ public enum GUIEnums {
     OBELISK_PLAYER_NOTIFICATIONS_GUI("guis/obelisk/player_notifications"),
 
     PAGINATION_MODEL("guis/pagination");
-
 
 
     private final String path;

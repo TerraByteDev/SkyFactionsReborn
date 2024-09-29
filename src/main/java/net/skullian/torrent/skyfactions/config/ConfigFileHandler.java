@@ -1,8 +1,9 @@
 package net.skullian.torrent.skyfactions.config;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.config.types.*;
+import net.skullian.torrent.skyfactions.defence.DefencesRegistry;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.HashMap;
@@ -11,7 +12,10 @@ import java.util.Map;
 public class ConfigFileHandler {
 
     private Map<ConfigTypes, ConfigHandler> configs;
-    public ConfigFileHandler() { configs = new HashMap<>(); }
+
+    public ConfigFileHandler() {
+        configs = new HashMap<>();
+    }
 
     public FileConfiguration MESSAGES_CONFIG;
     public FileConfiguration DISCORD_CONFIG;
@@ -26,11 +30,8 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.OBELISK, new ConfigHandler(plugin, "obelisk"));
         registerFile(ConfigTypes.RUNES, new ConfigHandler(plugin, "runes"));
 
-        for (GUIEnums enumEntry : GUIEnums.values()) {
-            ConfigHandler handler = new ConfigHandler(plugin, enumEntry.getConfigPath());
-            handler.saveDefaultConfig();
-            GUIEnums.configs.put(enumEntry.getConfigPath(), handler.getConfig());
-        }
+        loadGUIs();
+        DefencesRegistry.register();
 
         configs.values().forEach(ConfigHandler::saveDefaultConfig);
         Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
@@ -42,7 +43,9 @@ public class ConfigFileHandler {
         DISCORD_CONFIG = getFile(ConfigTypes.DISCORD).getConfig();
     }
 
-    public ConfigHandler getFile(ConfigTypes type) { return configs.get(type); }
+    public ConfigHandler getFile(ConfigTypes type) {
+        return configs.get(type);
+    }
 
     public void reloadFiles() {
         configs.values().forEach(ConfigHandler::reload);
@@ -51,15 +54,23 @@ public class ConfigFileHandler {
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
 
-        for (GUIEnums enumEntry : GUIEnums.values()) {
-            ConfigHandler handler = new ConfigHandler(SkyFactionsReborn.getInstance(), enumEntry.getConfigPath());
-            handler.saveDefaultConfig();
-            GUIEnums.configs.put(enumEntry.getConfigPath(), handler.getConfig());
-        }
+        loadGUIs();
+        DefencesRegistry.register();
 
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();
         DISCORD_CONFIG = getFile(ConfigTypes.DISCORD).getConfig();
     }
 
-    public void registerFile(ConfigTypes type, ConfigHandler handler) { configs.put(type, handler); }
+    private void loadGUIs() {
+        for (GUIEnums enumEntry : GUIEnums.values()) {
+            ConfigHandler handler = new ConfigHandler(SkyFactionsReborn.getInstance(), enumEntry.getConfigPath());
+            handler.saveDefaultConfig();
+            GUIEnums.configs.put(enumEntry.getConfigPath(), handler.getConfig());
+
+        }
+    }
+
+    public void registerFile(ConfigTypes type, ConfigHandler handler) {
+        configs.put(type, handler);
+    }
 }

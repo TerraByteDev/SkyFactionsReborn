@@ -2,13 +2,12 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.util.SoundUtil;
-import net.skullian.torrent.skyfactions.gui.obelisk.RuneSubmitUI;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.obelisk.RuneSubmitUI;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -18,7 +17,6 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ObeliskRuneItem extends AbstractItem {

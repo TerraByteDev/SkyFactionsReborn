@@ -4,7 +4,7 @@ import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.db.InviteData;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import org.bukkit.Bukkit;
@@ -51,7 +51,7 @@ public class FactionInviteCommand extends CommandTemplate {
             if (!target.hasPlayedBefore()) {
                 Messages.UNKNOWN_PLAYER.send(player, "%player%", name);
 
-            } else if (faction.getAllMembers().contains(target)){
+            } else if (faction.getAllMembers().contains(target)) {
                 Messages.FACTION_INVITE_IN_SAME_FACTION.send(player);
 
             } else {

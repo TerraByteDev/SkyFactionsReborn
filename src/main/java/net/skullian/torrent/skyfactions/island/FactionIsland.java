@@ -1,8 +1,7 @@
 package net.skullian.torrent.skyfactions.island;
 
 import lombok.Getter;
-import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -14,7 +13,10 @@ public class FactionIsland {
     private int id;
     private int last_raided;
 
-    public FactionIsland(int id, int last_raided) { this.id = id; this.last_raided = last_raided; }
+    public FactionIsland(int id, int last_raided) {
+        this.id = id;
+        this.last_raided = last_raided;
+    }
 
     public Location getCenter(World world) {
         List<Integer> origin = Settings.GEN_FACTION_GRID_ORIGIN.getIntegerList();

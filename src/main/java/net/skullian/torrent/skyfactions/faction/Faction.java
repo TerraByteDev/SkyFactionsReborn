@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.NotificationAPI;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.db.AuditLogData;
 import net.skullian.torrent.skyfactions.db.InviteData;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
@@ -31,18 +31,18 @@ public class Faction {
     private int level;
 
     /**
-        Get the Faction's island.
-
-        @return {@link FactionIsland}
-    **/
+     * Get the Faction's island.
+     *
+     * @return {@link FactionIsland}
+     **/
     public FactionIsland getIsland() {
         return SkyFactionsReborn.db.getFactionIsland(name).join();
     }
 
     /**
-        Update the name of the faction.
-
-        @param newName New name of the faction.
+     * Update the name of the faction.
+     *
+     * @param newName New name of the faction.
      **/
     public void updateName(String newName) {
         SkyFactionsReborn.db.updateFactionName(newName, name).join();
@@ -57,7 +57,9 @@ public class Faction {
         return SkyFactionsReborn.db.getFactionOwner(name).join();
     }
 
-    public boolean isOwner(Player player) { return getOwner().getUniqueId().equals(player.getUniqueId()); }
+    public boolean isOwner(Player player) {
+        return getOwner().getUniqueId().equals(player.getUniqueId());
+    }
 
     /**
      * Get the admins of the faction.
@@ -68,12 +70,14 @@ public class Faction {
         return SkyFactionsReborn.db.getMembersByRank(name, "admin").join();
     }
 
-    public boolean isAdmin(Player player) { return getAdmins().contains(Bukkit.getOfflinePlayer(player.getUniqueId())); }
+    public boolean isAdmin(Player player) {
+        return getAdmins().contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
+    }
 
     /**
      * Change the rank of a player.
      *
-     * @param player Player in question.
+     * @param player  Player in question.
      * @param newRank {@link RankType} New Rank of the player.
      */
     public void modifyPlayerRank(OfflinePlayer player, RankType newRank) {
@@ -89,7 +93,9 @@ public class Faction {
         return SkyFactionsReborn.db.getMembersByRank(name, "moderator").join();
     }
 
-    public boolean isModerator(Player player) { return getModerators().contains(Bukkit.getOfflinePlayer(player.getUniqueId())); }
+    public boolean isModerator(Player player) {
+        return getModerators().contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
+    }
 
     /**
      * Get the fighters of the faction.
@@ -100,7 +106,9 @@ public class Faction {
         return SkyFactionsReborn.db.getMembersByRank(name, "fighter").join();
     }
 
-    public boolean isFighter(Player player) { return getFighters().contains(Bukkit.getOfflinePlayer(player.getUniqueId())); }
+    public boolean isFighter(Player player) {
+        return getFighters().contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
+    }
 
     /**
      * Get the members of the faction. Does not include moderators & owner.
@@ -111,7 +119,9 @@ public class Faction {
         return SkyFactionsReborn.db.getMembersByRank(name, "member").join();
     }
 
-    public boolean isMember(Player player) { return getMembers().contains(Bukkit.getOfflinePlayer(player.getUniqueId())); }
+    public boolean isMember(Player player) {
+        return getMembers().contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
+    }
 
     /**
      * Get the total member count of the faction. Used for the Obelisk overview UI.
@@ -180,28 +190,36 @@ public class Faction {
      *
      * @return {@link Integer}
      */
-    public int getRunes() { return SkyFactionsReborn.db.getRunes(getName()).join(); }
+    public int getRunes() {
+        return SkyFactionsReborn.db.getRunes(getName()).join();
+    }
 
     /**
      * Add to the Faction's rune count.
      *
      * @param addition Amount of runes to add [{@link Integer}]
      */
-    public void addRunes(int addition) { SkyFactionsReborn.db.addRunes(name, addition).join(); }
+    public void addRunes(int addition) {
+        SkyFactionsReborn.db.addRunes(name, addition).join();
+    }
 
     /**
      * Get the Faction's gem count.
      *
      * @return {@link Integer}
      */
-    public int getGems() { return SkyFactionsReborn.db.getGems(name).join(); }
+    public int getGems() {
+        return SkyFactionsReborn.db.getGems(name).join();
+    }
 
     /**
      * Add gems to the Faction's gem balance.
      *
      * @param addition Gems to add [{@link Integer}]
      */
-    public void addGems(int addition) { SkyFactionsReborn.db.addGems(name, addition).join(); }
+    public void addGems(int addition) {
+        SkyFactionsReborn.db.addGems(name, addition).join();
+    }
 
     /**
      * Kick a player from the Faction for a specific reason.
@@ -237,7 +255,6 @@ public class Faction {
     }
 
     /**
-     *
      * @param player Player to check ban status of [{@link Player}]
      * @return {@link Boolean}
      */
@@ -247,6 +264,7 @@ public class Faction {
 
     /**
      * Get a list of all the banned players.
+     *
      * @return {@link List<OfflinePlayer>}
      */
     public List<OfflinePlayer> getBannedPlayers() {
@@ -284,8 +302,8 @@ public class Faction {
     /**
      * Create an audit log for the Faction.
      *
-     * @param playerUUID UUID of the player in question [{@link UUID}]
-     * @param type {@link AuditLogType} Type of audit log.
+     * @param playerUUID   UUID of the player in question [{@link UUID}]
+     * @param type         {@link AuditLogType} Type of audit log.
      * @param replacements Values to replace.
      */
     public void createAuditLog(UUID playerUUID, AuditLogType type, Object... replacements) {
@@ -347,7 +365,7 @@ public class Faction {
     /**
      * Revoke a Faction invite.
      *
-     * @param data Data of the Invite [{@link InviteData}]
+     * @param data  Data of the Invite [{@link InviteData}]
      * @param actor Player who revoked the invite [{@link Player}]
      */
     public void revokeInvite(InviteData data, Player actor) {
@@ -358,7 +376,7 @@ public class Faction {
     /**
      * Accept a Faction join request.
      *
-     * @param data Data of the Invite [{@link InviteData}]
+     * @param data  Data of the Invite [{@link InviteData}]
      * @param actor Player who accepted the invite [{@link Player}]
      */
     public void acceptJoinRequest(InviteData data, Player actor) {
@@ -369,7 +387,7 @@ public class Faction {
     /**
      * Reject a Player's join request to your Faction.
      *
-     * @param data Data of the invite [{@link InviteData}]
+     * @param data  Data of the invite [{@link InviteData}]
      * @param actor Player who rejected the invite [{@link Player}]
      */
     public void rejectJoinRequest(InviteData data, Player actor) {

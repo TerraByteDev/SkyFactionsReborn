@@ -1,12 +1,12 @@
 package net.skullian.torrent.skyfactions.gui.obelisk.invites;
 
 import net.skullian.torrent.skyfactions.api.GUIAPI;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.*;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.JoinRequestsTypeItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.OutgoingInvitesTypeItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;

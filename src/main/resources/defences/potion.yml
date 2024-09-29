@@ -29,9 +29,9 @@ SOUNDS:
   ACTIVATE: "entity.splash_potion.throw" # On defence activation (shoot, etc).
   ACTIVATE_PITCH: 1 # Pitch of the activation sound
 
-# This is POTION specific.
+# This is POTION and SOUL specific.
 # You can specify what effects you get at what level.
-# See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionType.html
+# See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
 EFFECTS:
   WEAKNESS:
     EFFECT: "WEAKNESS"

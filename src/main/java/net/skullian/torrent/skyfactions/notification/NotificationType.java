@@ -1,6 +1,6 @@
 package net.skullian.torrent.skyfactions.notification;
 
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 
 public enum NotificationType {
 
@@ -10,6 +10,7 @@ public enum NotificationType {
 
     private final Messages title;
     private final Messages description;
+
     NotificationType(Messages title, Messages description) {
         this.title = title;
         this.description = description;

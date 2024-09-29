@@ -1,7 +1,6 @@
 package net.skullian.torrent.skyfactions;
 
 import com.jeff_media.customblockdata.CustomBlockData;
-import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.command.discord.LinkCommand;
 import net.skullian.torrent.skyfactions.command.discord.UnlinkCommand;
 import net.skullian.torrent.skyfactions.command.faction.FactionCommandHandler;
@@ -15,20 +14,21 @@ import net.skullian.torrent.skyfactions.command.raid.RaidCommandTabCompletion;
 import net.skullian.torrent.skyfactions.command.sf.SFCommandHandler;
 import net.skullian.torrent.skyfactions.command.sf.SFCommandTabCompletion;
 import net.skullian.torrent.skyfactions.config.ConfigFileHandler;
-import net.skullian.torrent.skyfactions.config.Settings;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.db.HikariHandler;
 import net.skullian.torrent.skyfactions.discord.DiscordHandler;
 import net.skullian.torrent.skyfactions.event.ObeliskInteractionListener;
 import net.skullian.torrent.skyfactions.event.PlayerHandler;
 import net.skullian.torrent.skyfactions.util.DependencyHandler;
 import net.skullian.torrent.skyfactions.util.EconomyHandler;
+import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.sql.SQLException;
 
-@Log4j2(topic = "SkyFactionsReborn")
+
 public final class SkyFactionsReborn extends JavaPlugin {
 
     public static ConfigFileHandler configHandler;
@@ -46,19 +46,19 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        LOGGER.info(text);
+        SLogger.LOGGER.info("\u001B[34m" + text + "\u001B[0m");
 
         // Store an instance of the ConfigHandler class in case it is needed.
         // Primarily used for the discord integration.
-        LOGGER.info("Initialising Configs.");
+        SLogger.info("Initialising Configs.");
         configHandler = new ConfigFileHandler();
         configHandler.loadFiles(this); // Load all files (and create them if they don't exist already).
 
-        LOGGER.info("Initialising Economy.");
+        SLogger.info("Initialising Economy.");
         ec = new EconomyHandler();
         ec.init(this);
 
-        LOGGER.info("Registering Commands.");
+        SLogger.info("Registering Commands.");
         getCommand("island").setExecutor(new IslandCommandHandler());
         getCommand("island").setTabCompleter(new IslandCommandTabCompletion());
 
@@ -82,24 +82,24 @@ public final class SkyFactionsReborn extends JavaPlugin {
         getCommand("faction").setExecutor(new FactionCommandHandler());
         getCommand("faction").setTabCompleter(new FactionCommandTabCompletion());
 
-        LOGGER.info("Registering Events.");
+        SLogger.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
         getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
 
         // We store an instance of the DiscordHandler class as that is how other internals
         // access methods related to Discord (e.g. raid notifications).
-        LOGGER.info("Initialising JDA / Discord.");
+        SLogger.info("Initialising JDA / Discord.");
         dc = new DiscordHandler();
         dc.initialiseBot();
 
         // This is kind of pointless.
         // Just a class for handling dependencies and optional dependencies.
         // Majorly incomplete.
-        LOGGER.info("Handling optional dependencies.");
+        SLogger.info("Handling optional dependencies.");
         DependencyHandler.init();
 
         // Player Data Container (CustomBlockData API) listener.
-        LOGGER.info("Handling PDC Listener.");
+        SLogger.info("Handling PDC Listener.");
         CustomBlockData.registerListener(this);
 
         // Initialise the database last.
@@ -108,12 +108,12 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        LOGGER.info("Closing Database connection.");
+        SLogger.info("Closing Database connection.");
         closeDatabase();
         dc.disconnect();
 
-        LOGGER.info(text);
-        LOGGER.info("SkyFactions has been disabled.");
+        SLogger.info(text);
+        SLogger.info("SkyFactions has been disabled.");
     }
 
     private void initialiseDatabaseConnection() {
@@ -131,11 +131,11 @@ public final class SkyFactionsReborn extends JavaPlugin {
             db.setIslandCachedNextID();
             db.setFactionCachedNextID();
         } catch (SQLException error) {
-            LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
-            LOGGER.fatal("There was an error initialising the database.");
-            LOGGER.fatal("Please check the database for any configuration mistakes.");
-            LOGGER.fatal("Plugin will now disable.");
-            LOGGER.fatal("----------------------- DATABASE EXCEPTION -----------------------");
+            SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
+            SLogger.fatal("There was an error initialising the database.");
+            SLogger.fatal("Please check the database for any configuration mistakes.");
+            SLogger.fatal("Plugin will now disable.");
+            SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             error.printStackTrace();
             Bukkit.getPluginManager().disablePlugin(this);
         }
@@ -147,13 +147,15 @@ public final class SkyFactionsReborn extends JavaPlugin {
                 db.closeConnection();
             }
         } catch (SQLException error) {
-            LOGGER.error("----------------------- DATABASE EXCEPTION -----------------------");
-            LOGGER.error("There was an error initialising the database.");
-            LOGGER.error("Please check the database for any configuration mistakes.");
-            LOGGER.error("----------------------- DATABASE EXCEPTION -----------------------");
+            SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
+            SLogger.fatal("There was an error initialising the database.");
+            SLogger.fatal("Please check the database for any configuration mistakes.");
+            SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             error.printStackTrace();
         }
     }
 
-    public static SkyFactionsReborn getInstance() { return getPlugin(SkyFactionsReborn.class); }
+    public static SkyFactionsReborn getInstance() {
+        return getPlugin(SkyFactionsReborn.class);
+    }
 }

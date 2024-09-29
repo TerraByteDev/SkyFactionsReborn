@@ -45,7 +45,7 @@ ATTRIBUTES:
   RANGE: 4 + level # How far the defence's range is.
   COOLDOWN: 12 - level # Cooldown.
   TARGET_MAX: 2 # Max targets for the defence at once.
-  MAX_AMMO: 1500 * level # Highest ammo count.
+  MAX_AMMO: 350 * level # Highest ammo count.
   UPGRADE_COST: 40 * level # Cost of upgrading the defence.
   DAMAGE: 2 + level # The damage dealt by the defence.
 

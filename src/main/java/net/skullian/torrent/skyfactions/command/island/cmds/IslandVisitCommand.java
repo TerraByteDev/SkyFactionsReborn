@@ -1,13 +1,13 @@
 package net.skullian.torrent.skyfactions.command.island.cmds;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.IslandAPI;
+import net.skullian.torrent.skyfactions.api.RaidAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.config.Messages;
-import net.skullian.torrent.skyfactions.config.Settings;
-import net.skullian.torrent.skyfactions.api.IslandAPI;
-import net.skullian.torrent.skyfactions.api.RaidAPI;
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;

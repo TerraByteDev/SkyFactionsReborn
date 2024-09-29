@@ -4,7 +4,7 @@ import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.FactionLeaveConfirmationUI;
 import org.bukkit.entity.Player;
@@ -45,7 +45,7 @@ public class FactionLeaveCommand extends CommandTemplate {
 
     }
 
-    public static List<String> permissions = List.of( "skyfactions.faction.leave", "skyfactions.faction", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.faction.leave", "skyfactions.faction", "skyfactions.player");
 
     @Override
     public List<String> permission() {

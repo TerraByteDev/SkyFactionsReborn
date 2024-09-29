@@ -45,9 +45,10 @@ ATTRIBUTES:
   RANGE: 3 + level # How far the defence's range is.
   COOLDOWN: 10 - level # Cooldown.
   TARGET_MAX: 1 + level # Max targets for the defence at once.
-  MAX_AMMO: 1500 * level # Highest ammo count.
+  MAX_AMMO: 150 * level # Highest ammo count.
   UPGRADE_COST: 40 * level # Cost of upgrading the defence.
-  DAMAGE: 5 + level # The damage dealt by the defence.
+  DAMAGE: 0 # The damage dealt by the defence.
+  HEALING: 4 # How much HP to heal the player by
 
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:
@@ -87,6 +88,7 @@ ITEM:
     - "&7○ &9Max Targets:&6 %target_max%"
     - "&7○ &9Damage:&6 %damage%"
     - "&7○ &9Cooldown:&6 %cooldown%"
+    - "&7○ &9Healing: &a%healing%" # Healing Specific
 
   # Lore description of the item when upgrading.
   UPGRADE_LORE:
@@ -98,3 +100,4 @@ ITEM:
     - "&7○ &9Max Targets:&a %old_target_max% &e>&a %new_target_max%"
     - "&7○ &9Damage:&a %old_damage% &e>&a %new_damage%"
     - "&7○ &9Cooldown:&a %old_cooldown% &e>&a %new_damage%"
+    - "&7○ &9Healing: &a%old_healing% &e>&a %new_healing%" # Healing Specific

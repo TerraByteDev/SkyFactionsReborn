@@ -2,7 +2,7 @@ package net.skullian.torrent.skyfactions.gui.obelisk;
 
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
-import net.skullian.torrent.skyfactions.config.Messages;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.db.AuditLogData;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
@@ -16,14 +16,12 @@ import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.audit_log.AuditPaginationItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import xyz.xenondevs.invui.gui.PagedGui;
 import xyz.xenondevs.invui.gui.structure.Markers;
 import xyz.xenondevs.invui.item.Item;
 import xyz.xenondevs.invui.window.Window;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
