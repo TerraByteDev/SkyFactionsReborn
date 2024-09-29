@@ -11,6 +11,10 @@ COST:
   BUY: 95
   SELL: 65
 
+  # How many runes to purchase ONE ammo.
+  # This supports level scaling!
+  AMMO_COST: 2
+
 # Maximum level this defence can be upgraded to.
 MAX_LEVEL: 6
 
@@ -33,15 +37,15 @@ MESSAGES:
   - "{#E9C055}%player_name%&7 discovered their fear of heights when fighting {#E9C055}%defender%&7."
 
 # All attributes related to the defence.
-# PLACEHOLDERS: %level% - The turret level.
+# PLACEHOLDERS: level - The turret level.
 ATTRIBUTES:
   RANGE: 1 # How far the defence's range is.
-  COOLDOWN: 35 - (%level% * 2) # Cooldown.
+  COOLDOWN: 35 - (level * 2) # Cooldown.
   TARGET_MAX: 1  # Max targets for the defence at once.
-  MAX_AMMO: 10 * %level% # Highest ammo count.
-  UPGRADE_COST: 65 * %level% # Cost of upgrading the defence.
-  DURATION: 1 + %level% # The damage dealt by the defence.
-  DISTANCE: 3 + %level% # SPRING SPECIFIC! How far the enemy is launched.
+  MAX_AMMO: 10 * level # Highest ammo count.
+  UPGRADE_COST: 65 * level # Cost of upgrading the defence.
+  DURATION: 1 + level # The damage dealt by the defence.
+  DISTANCE: 3 + level # SPRING SPECIFIC! How far the enemy is launched.
 
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:
@@ -75,7 +79,7 @@ ITEM:
     - "&aaway from your precious valuables."
     - ""
     - "&c&lStats:"
-    - "&7○ &9Level:&6 %level%"
+    - "&7○ &9Level:&6 level"
     - "&7○ &9Range:&6 %range%"
     - "&7○ &9Ammo:&6 %ammo%"
     - "&7○ &9Max Targets:&6 %target_max%"

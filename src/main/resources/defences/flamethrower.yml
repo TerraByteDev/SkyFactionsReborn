@@ -11,6 +11,10 @@ COST:
   BUY: 160
   SELL: 70
 
+  # How many runes to purchase ONE ammo.
+  # This supports level scaling!
+  AMMO_COST: 3
+
 # Maximum level this defence can be upgraded to.
 MAX_LEVEL: 5
 
@@ -36,14 +40,14 @@ MESSAGES:
   - "{#E9C055}%player_name% &7burnt to death while trying to fight {#E9C055}%defender%&7."
 
 # All attributes related to the defence.
-# PLACEHOLDERS: %level% - The turret level.
+# PLACEHOLDERS: level - The turret level.
 ATTRIBUTES:
-  RANGE: 3 + %level% # How far the defence's range is.
-  COOLDOWN: 10 - %level% # Cooldown.
-  TARGET_MAX: 1 + %level% # Max targets for the defence at once.
-  MAX_AMMO: 1500 * %level% # Highest ammo count.
-  UPGRADE_COST: 40 * %level% # Cost of upgrading the defence.
-  DAMAGE: 5 + %level% # The damage dealt by the defence.
+  RANGE: 3 + level # How far the defence's range is.
+  COOLDOWN: 10 - level # Cooldown.
+  TARGET_MAX: 1 + level # Max targets for the defence at once.
+  MAX_AMMO: 1500 * level # Highest ammo count.
+  UPGRADE_COST: 40 * level # Cost of upgrading the defence.
+  DAMAGE: 5 + level # The damage dealt by the defence.
 
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:
@@ -77,7 +81,7 @@ ITEM:
     - "&amake your enemies meet a fiery ending."
     - ""
     - "&c&lStats:"
-    - "&7○ &9Level:&6 %level%"
+    - "&7○ &9Level:&6 level"
     - "&7○ &9Range:&6 %range%"
     - "&7○ &9Ammo:&6 %ammo%"
     - "&7○ &9Max Targets:&6 %target_max%"

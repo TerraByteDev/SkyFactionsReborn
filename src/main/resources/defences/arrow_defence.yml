@@ -11,6 +11,10 @@ COST:
   BUY: 80
   SELL: 40
 
+  # How many runes to purchase ONE ammo.
+  # This supports level scaling!
+  AMMO_COST: 2
+
 # Maximum level this defence can be upgraded to.
 MAX_LEVEL: 4
 
@@ -36,14 +40,14 @@ MESSAGES:
   - "{#E9C055}%player_name% &7took an arrow to the knee while fighting {#E9C055}%defender%&7."
 
 # All attributes related to the defence.
-# PLACEHOLDERS: %level% - The turret level.
+# PLACEHOLDERS: level - The turret level.
 ATTRIBUTES:
-  RANGE: 4 + %level% # How far the defence's range is.
-  COOLDOWN: 12 - %level% # Cooldown.
+  RANGE: 4 + level # How far the defence's range is.
+  COOLDOWN: 12 - level # Cooldown.
   TARGET_MAX: 2 # Max targets for the defence at once.
-  MAX_AMMO: 1500 * %level% # Highest ammo count.
-  UPGRADE_COST: 40 * %level% # Cost of upgrading the defence.
-  DAMAGE: 2 + %level% # The damage dealt by the defence.
+  MAX_AMMO: 1500 * level # Highest ammo count.
+  UPGRADE_COST: 40 * level # Cost of upgrading the defence.
+  DAMAGE: 2 + level # The damage dealt by the defence.
 
 # Projectile that it "shoots". NONE for no projectile.
 # See https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
@@ -71,7 +75,7 @@ ITEM:
     - "&aarrows at mobs and enemies."
     - ""
     - "&c&lStats:"
-    - "&7○ &9Level:&6 %level%"
+    - "&7○ &9Level:&6 level"
     - "&7○ &9Range:&6 %range%"
     - "&7○ &9Ammo:&6 %ammo%"
     - "&7○ &9Max Targets:&6 %target_max%"

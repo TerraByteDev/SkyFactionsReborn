@@ -11,6 +11,10 @@ COST:
   BUY: 120
   SELL: 80
 
+  # How many runes to purchase ONE ammo.
+  # This supports level scaling!
+  AMMO_COST: 5
+
 # Maximum level this defence can be upgraded to.
 MAX_LEVEL: 4
 
@@ -36,15 +40,15 @@ MESSAGES:
   - "{#E9C055}%player_name% &7withered away whilst trying to fight {#E9C055}%defender%&7."
 
 # All attributes related to the defence.
-# PLACEHOLDERS: %level% - The turret level.
+# PLACEHOLDERS: level - The turret level.
 ATTRIBUTES:
   RANGE: 3 # How far the defence's range is.
-  COOLDOWN: 25 - (%level% * 2) # Cooldown.
+  COOLDOWN: 25 - (level * 2) # Cooldown.
   TARGET_MAX: 1  # Max targets for the defence at once.
-  MAX_AMMO: 10 * %level% # Highest ammo count.
-  UPGRADE_COST: 65 * %level% # Cost of upgrading the defence.
-  EFFECT_LEVEL: 1 + %level% # The effect level of the defence.
-  DURATION: 1 + %level% # The damage dealt by the defence.
+  MAX_AMMO: 10 * level # Highest ammo count.
+  UPGRADE_COST: 65 * level # Cost of upgrading the defence.
+  EFFECT_LEVEL: 1 + level # The effect level of the defence.
+  DURATION: 1 + level # The damage dealt by the defence.
 
   # The SOUL defence has the option to slow down the player. This config will only work on the SOUL type.
   SLOWNESS_UPGRADE_LEVEL: 3 # You can specify what upgrade level this slowness effect is applied (on top of the wither effect)!
@@ -84,7 +88,7 @@ ITEM:
     - "&7at &aLevel 3&7."
     - ""
     - "&c&lStats:"
-    - "&7○ &9Level:&6 %level%"
+    - "&7○ &9Level:&6 level"
     - "&7○ &9Range:&6 %range%"
     - "&7○ &9Ammo:&6 %ammo%"
     - "&7○ &9Max Targets:&6 %target_max%"
