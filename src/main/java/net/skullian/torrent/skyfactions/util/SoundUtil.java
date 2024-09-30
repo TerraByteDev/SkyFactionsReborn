@@ -27,13 +27,13 @@ public class SoundUtil {
 
     public static void playMusic(Player def, Player att) {
 
-        if (DependencyHandler.jukebox) {
+        if (DependencyHandler.enabledDeps.contains("JukeBox")) {
             PlayerData data = JukeBox.getInstance().datas.getDatas(def);
             PlayerData attData = JukeBox.getInstance().datas.getDatas(att);
             data.stopPlaying(true);
             attData.stopPlaying(true);
         }
-        if (DependencyHandler.nbapi) {
+        if (DependencyHandler.enabledDeps.contains("NoteBlockAPI")) {
             List<String> songs = Settings.RAIDING_MUSIC_FILES.getList();
             List<Song> nbsSongs = new ArrayList<>();
 

@@ -16,6 +16,8 @@ import net.skullian.torrent.skyfactions.command.island.IslandCommandHandler;
 import net.skullian.torrent.skyfactions.command.island.IslandCommandTabCompletion;
 import net.skullian.torrent.skyfactions.command.raid.RaidCommandHandler;
 import net.skullian.torrent.skyfactions.command.raid.RaidCommandTabCompletion;
+import net.skullian.torrent.skyfactions.command.runes.RunesCommandHandler;
+import net.skullian.torrent.skyfactions.command.runes.RunesCommandTabCompletion;
 import net.skullian.torrent.skyfactions.command.sf.SFCommandHandler;
 import net.skullian.torrent.skyfactions.command.sf.SFCommandTabCompletion;
 import net.skullian.torrent.skyfactions.config.ConfigFileHandler;
@@ -92,6 +94,9 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
         getCommand("faction").setExecutor(new FactionCommandHandler());
         getCommand("faction").setTabCompleter(new FactionCommandTabCompletion());
+
+        getCommand("runes").setExecutor(new RunesCommandHandler());
+        getCommand("runes").setTabCompleter(new RunesCommandTabCompletion());
 
         SLogger.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);

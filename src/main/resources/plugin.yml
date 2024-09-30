@@ -4,11 +4,15 @@ main: net.skullian.torrent.skyfactions.SkyFactionsReborn
 api-version: '1.20'
 authors: [ Skullians, nouish ]
 website: https://www.torrentsmp.com/
-load: POSTWORLD
 
-loadbefore: [ "JukeBox", "NoteBlockAPI", "EssentialsX" ]
 depend: [ "FastAsyncWorldEdit", "WorldGuard", "Vault" ]
-softdepend: [ "JukeBox", "PlaceholderAPI", "NoteBlockAPI" ]
+softdepend:
+  - JukeBox
+  - PlaceholderAPI
+  - NoteBlockAPI
+  - MythicMobs
+  - Citizens
+  - ZNPCsPlus
 
 commands:
   island:
@@ -37,6 +41,10 @@ commands:
 
   faction:
     description: All faction related commands.
+    usage: /<command>
+
+  runes:
+    description: All rune related commands.
     usage: /<command>
 
 permissions:
@@ -75,75 +83,63 @@ permissions:
 
   skyfactions.raid.resetcooldown:
     description: Reset your raid cooldown.
-    default-permission: op
+    default: op
 
   skyfactions.raid.start:
     description: Start a raid.
-    default-permission: true
 
   skyfactions.raid.help:
     description: Help concerning the /raid command.
-    default-permission: true
 
   skyfactions.sf.help:
     description: Help concerning the /sf command.
-    default-permission: op
+    default: op
 
   skyfactions.gems.pay:
     description: Pay someone your gems.
-    default-permission: true
 
   skyfactions.gems.help:
     description: Help concerning the /gems command
-    default-permission: true
 
   skyfactions.gems.balance:
     description: View your gems balance.
-    default-permission: true
 
   skyfactions.cooldown.bypass:
     description: Bypass the raid cooldown.
-    default-permission: true
+    default: op
 
   skyfactions.command.link:
     description: Link your Discord to your Minecraft account.
-    default-permission: true
 
   skyfactions.command.unlink:
     description: Unlink your Discord account.
-    default-permission: true
 
   skyfactions.faction.help:
     description: Help concerning the /faction command.
-    default-permission: true
 
   skyfactions.faction.create:
     description: Create a Faction.
-    default-permission: true
 
   skyfactions.faction.info:
     description: Receive an overview of your Faction.
-    default-permission: true
 
   skyfactions.faction.teleport:
     description: Teleport to your Faction island.
-    default-permission: true
 
   skyfactions.faction.motd:
     description: Set the Message of The Day for your Faction.
-    default-permission: true
 
   skyfactions.faction.leave:
     description: Leave the Faction you are in.
-    default-permission: true
 
   skyfactions.faction.broadcast:
     description: Make a broadcast to all online members of your Faction.
-    default-permission: true
 
   skyfactions.faction.invite:
     description: Invite someone to your Faction.
-    default-permission: true
+
+  skyfactions.runes.help:
+    description: Get help concerning the runes command.
 
 
 libraries:

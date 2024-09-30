@@ -8,6 +8,7 @@ import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.*;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.defence.ObeliskDefencePurchaseItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -54,8 +55,7 @@ public class FactionObeliskUI {
                         break;
 
                     case "DEFENCES":
-                        // todo probably will need to add type for when actually functioning
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
                         break;
 
                     case "RUNES_CONVERSION":

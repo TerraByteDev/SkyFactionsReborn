@@ -45,7 +45,7 @@ public class FactionLeaveCommand extends CommandTemplate {
 
     }
 
-    public static List<String> permissions = List.of("skyfactions.faction.leave", "skyfactions.faction", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.faction.leave", "skyfactions.faction");
 
     @Override
     public List<String> permission() {

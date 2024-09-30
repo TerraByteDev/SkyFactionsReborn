@@ -2,7 +2,6 @@ package net.skullian.torrent.skyfactions.api;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.types.Settings;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.notification.NotificationData;
 import net.skullian.torrent.skyfactions.notification.NotificationTask;
 import net.skullian.torrent.skyfactions.notification.NotificationType;
@@ -14,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class NotificationAPI {
 
@@ -21,13 +21,26 @@ public class NotificationAPI {
     public static Map<UUID, BukkitTask> tasks = new HashMap<>();
 
     public static void createCycle(Player player) {
-        Faction faction = FactionAPI.getFaction(player);
-        if (faction != null && !factionInviteStore.containsKey(faction.getName())) {
-            factionInviteStore.put(faction.getName(), faction.getJoinRequests().size());
-        }
+        FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return;
+            }
 
-        BukkitTask task = NotificationTask.initialise(player, FactionAPI.isInFaction(player)).runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), 0L, (Settings.NOTIFICATIONS_INTERVAL.getInt() * 20L));
-        tasks.put(player.getUniqueId(), task);
+            if (faction != null && !factionInviteStore.containsKey(faction.getName())) {
+                faction.getJoinRequests().whenCompleteAsync((requests, exc) -> {
+                    if (exc != null) {
+                        exc.printStackTrace();
+                        return;
+                    }
+
+                    factionInviteStore.put(faction.getName(), requests.size());
+
+                    BukkitTask task = NotificationTask.initialise(player, true).runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), 0L, (Settings.NOTIFICATIONS_INTERVAL.getInt() * 20L));
+                    tasks.put(player.getUniqueId(), task);
+                });
+            }
+        });
     }
 
     /**
@@ -37,8 +50,8 @@ public class NotificationAPI {
      * @param type         Type of notification [{@link net.skullian.torrent.skyfactions.faction.AuditLogType}]
      * @param replacements Replacements for the notification title / desc.
      */
-    public static void createNotification(UUID playerUUID, NotificationType type, Object... replacements) {
-        SkyFactionsReborn.db.createNotification(playerUUID, type.getTitle(replacements), type.getDescription(replacements)).join();
+    public static CompletableFuture<Void> createNotification(UUID playerUUID, NotificationType type, Object... replacements) {
+        return SkyFactionsReborn.db.createNotification(playerUUID, type.getTitle(replacements), type.getDescription(replacements));
     }
 
     /**

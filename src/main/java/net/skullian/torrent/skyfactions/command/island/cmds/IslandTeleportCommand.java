@@ -52,7 +52,7 @@ public class IslandTeleportCommand extends CommandTemplate {
         });
     }
 
-    public static List<String> permissions = List.of("skyfactions.island.teleport", "skyfactions.island", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.island.teleport", "skyfactions.island");
 
     @Override
     public List<String> permission() {

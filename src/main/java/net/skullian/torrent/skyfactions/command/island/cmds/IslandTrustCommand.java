@@ -69,7 +69,7 @@ public class IslandTrustCommand extends CommandTemplate {
         }
     }
 
-    public static List<String> permissions = List.of("skyfactions.island.trust", "skyfactions.island", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.island.trust", "skyfactions.island");
 
     @Override
     public List<String> permission() {

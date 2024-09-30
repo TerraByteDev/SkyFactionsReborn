@@ -128,6 +128,7 @@ public class HikariHandler {
                      [level] INTEGER NOT NULL,
                      [gems] INTEGER NOT NULL,
                      [runes] INTEGER NOT NULL,
+                     [defenceCount] INTEGER NOT NULL,
                      [last_raided] INTEGER NOT NULL
                      ) STRICT;
                      """);
@@ -146,6 +147,7 @@ public class HikariHandler {
                       [id] INTEGER PRIMARY KEY,
                       [faction_name] TEXT NOT NULL,
                       [runes] INTEGER NOT NULL,
+                      [defenceCount] INTEGER NOT NULL,
                       [gems] INTEGER NOT NULL,
                       [last_raided] INTEGER NOT NULL
                       ) STRICT;
@@ -257,6 +259,7 @@ public class HikariHandler {
                      `level` BIGINT NOT NULL,
                      `gems` BIGINT NOT NULL,
                      `runes` BIGINT NOT NULL,
+                     `defenceCount` BIGINT NOT NULL,
                      `last_raided` BIGINT NOT NULL
                      );
                      """);
@@ -275,6 +278,7 @@ public class HikariHandler {
                       `id` BIGINT PRIMARY KEY,
                       `faction_name` VARCHAR(255) NOT NULL,
                       `runes` BIGINT NOT NULL,
+                      `defenceCount` BIGINT NOT NULL,
                       `gems` BIGINT NOT NULL,
                       `last_raided` BIGINT NOT NULL
                       );
@@ -408,7 +412,7 @@ public class HikariHandler {
     public CompletableFuture<Void> createIsland(Player player, PlayerIsland island) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, level, gems, runes, last_raided) VALUES (?, ?, ?, ?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, level, gems, runes, defenceCount, last_raided) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 
                 statement.setInt(1, island.getId());
                 statement.setString(2, player.getUniqueId().toString());
@@ -416,6 +420,7 @@ public class HikariHandler {
                 statement.setInt(4, 0);
                 statement.setInt(5, 0);
                 statement.setInt(6, 0);
+                statement.setInt(7, 0);
 
                 statement.executeUpdate();
                 statement.close();
@@ -998,13 +1003,14 @@ public class HikariHandler {
     public CompletableFuture<Void> createFactionIsland(String name, FactionIsland island) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionIslands (id, faction_name, runes, gems, last_raided) VALUES (?, ?, ?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionIslands (id, faction_name, runes, defenceCount, gems, last_raided) VALUES (?, ?, ?, ?, ?, ?)")) {
 
                 statement.setInt(1, island.getId());
                 statement.setString(2, name);
                 statement.setInt(3, 0);
                 statement.setInt(4, 0);
-                statement.setInt(5, island.getLast_raided());
+                statement.setInt(5, 0);
+                statement.setInt(6, island.getLast_raided());
 
                 statement.executeUpdate();
                 statement.close();
@@ -1243,23 +1249,35 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<Void> updateMemberRank(String factionName, Player player, String rank) {
-        return CompletableFuture.runAsync(() -> {
+    public CompletableFuture<String> updateMemberRank(String factionName, Player player, String rank) {
+        return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
+                 PreparedStatement oldRankStatement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND uuid = ?");
                  PreparedStatement statement = connection.prepareStatement("UPDATE factionMembers SET rank = ? WHERE faction_name = ? AND uuid = ?")) {
+
+                oldRankStatement.setString(1, factionName);
+                oldRankStatement.setString(2, player.getUniqueId().toString());
 
                 statement.setString(1, rank);
                 statement.setString(2, factionName);
                 statement.setString(3, player.getUniqueId().toString());
 
                 statement.executeUpdate();
+                ResultSet set = oldRankStatement.executeQuery();
+                if (set.next()) {
+                    return set.getString("rank");
+                }
+
                 statement.close();
+                oldRankStatement.close();
 
                 connection.close();
             } catch (SQLException error) {
                 handleError(error);
                 throw new RuntimeException(error);
             }
+
+            return null;
         });
     }
 
@@ -1310,12 +1328,12 @@ public class HikariHandler {
 
     // ------------------ RUNES  ------------------ //
 
-    public CompletableFuture<Integer> getRunes(Player player) {
+    public CompletableFuture<Integer> getRunes(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE uuid = ?")) {
 
-                statement.setString(1, player.getUniqueId().toString());
+                statement.setString(1, playerUUID.toString());
                 ResultSet set = statement.executeQuery();
 
                 if (set.next()) {
@@ -1356,15 +1374,15 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<Void> addRunes(Player player, int addition) {
+    public CompletableFuture<Void> addRunes(UUID playerUUID, int addition) {
         return CompletableFuture.runAsync(() -> {
-            int currentRunes = getRunes(player).join();
+            int currentRunes = getRunes(playerUUID).join();
             int newCount = currentRunes + addition;
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("UPDATE islands SET runes = ? WHERE uuid = ?")) {
 
                 statement.setInt(1, newCount);
-                statement.setString(2, player.getUniqueId().toString());
+                statement.setString(2, playerUUID.toString());
 
                 statement.executeUpdate();
                 statement.close();
@@ -1381,6 +1399,53 @@ public class HikariHandler {
         return CompletableFuture.runAsync(() -> {
             int currentRunes = getRunes(factionName).join();
             int newCount = currentRunes + addition;
+
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET runes = ? WHERE faction_name = ?")) {
+
+                statement.setInt(1, newCount);
+                statement.setString(2, factionName);
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> removeRunes(UUID playerUUID, int removal) {
+        return CompletableFuture.runAsync(() -> {
+            int currentRunes = getRunes(playerUUID).join();
+            int newCount = currentRunes - removal;
+            if (newCount < 0) throw new IllegalArgumentException("Attempted to remove more runes than the player had!");
+
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("UPDATE islands SET runes = ? WHERE uuid = ?")) {
+
+                statement.setInt(1, newCount);
+                statement.setString(2, playerUUID.toString());
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> removeRunes(String factionName, int removal) {
+        return CompletableFuture.runAsync(() -> {
+            int currentRunes = getRunes(factionName).join();
+            int newCount = currentRunes - removal;
+            if (newCount < 0)
+                throw new IllegalArgumentException("Attempted to remove more runes than the Faction had!");
 
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET runes = ? WHERE faction_name = ?")) {

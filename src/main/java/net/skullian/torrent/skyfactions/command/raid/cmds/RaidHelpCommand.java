@@ -42,7 +42,7 @@ public class RaidHelpCommand extends CommandTemplate {
         Messages.COMMAND_HEAD.send(player);
     }
 
-    public static List<String> permissions = List.of("skyfactions.raid.help", "skyfactions.raid", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.raid.help", "skyfactions.raid");
 
     @Override
     public List<String> permission() {

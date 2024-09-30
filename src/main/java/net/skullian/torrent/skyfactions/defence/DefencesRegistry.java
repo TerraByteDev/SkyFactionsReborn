@@ -1,5 +1,7 @@
 package net.skullian.torrent.skyfactions.defence;
 
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.ConfigHandler;
 import net.skullian.torrent.skyfactions.defence.struct.DefenceAttributeStruct;
@@ -7,8 +9,11 @@ import net.skullian.torrent.skyfactions.defence.struct.DefenceEffectStruct;
 import net.skullian.torrent.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,18 +21,16 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class DefencesRegistry {
 
-    private static final Map<String, DefenceStruct> defences = new HashMap<>();
+    public static final Map<String, DefenceStruct> defences = new HashMap<>();
 
-    public static void register() {
+    public static void registerDefaultDefences() {
         try {
+            SLogger.info("Saving default defence configs.");
             URI defencesFolder = SkyFactionsReborn.class.getResource("/defences").toURI();
             FileSystem fileSystem = FileSystems.newFileSystem(defencesFolder, new HashMap());
             for (Path yamlPath : fileSystem.getRootDirectories()) {
@@ -35,16 +38,36 @@ public class DefencesRegistry {
                 stream.forEach(path -> {
                     String fullPathName = path.getFileName().toString();
                     String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
-                    SLogger.info("Registering Defence: \u001B[32m{}", defenceName);
 
                     ConfigHandler handler = new ConfigHandler(SkyFactionsReborn.getInstance(), "defences/" + defenceName);
                     handler.saveDefaultConfig();
-
-                    DefenceStruct struct = createStruct(handler.getConfig(), defenceName);
-                    defences.put(defenceName, struct);
                 });
             }
         } catch (URISyntaxException | IOException error) {
+            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+            SLogger.fatal("There was an error loading defences.");
+            SLogger.fatal("Please check the below error and proceed accordingly.");
+            SLogger.fatal("Plugin will now disable.");
+            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+            error.printStackTrace();
+            SkyFactionsReborn.getInstance().getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
+        }
+    }
+
+    public static void register() {
+        try {
+            File dir = new File(SkyFactionsReborn.getInstance().getDataFolder() + "/defences");
+            for (File defenceFile : Objects.requireNonNull(dir.listFiles())) {
+                String fullPathName = defenceFile.getName();
+                String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
+                SLogger.info("Registering Defence: \u001B[32m{}", defenceName);
+
+                YamlConfiguration config = new YamlConfiguration();
+                config.load(defenceFile);
+                DefenceStruct struct = createStruct(config, defenceName);
+                defences.put(defenceName, struct);
+            }
+        } catch (InvalidConfigurationException | IOException error) {
             SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
             SLogger.fatal("There was an error loading defences.");
             SLogger.fatal("Please check the below error and proceed accordingly.");
@@ -140,5 +163,24 @@ public class DefencesRegistry {
         }
 
         return formulas;
+    }
+
+    public static String solveFormula(String formula, int level) {
+        if (formula == null) return "N/A";
+        try {
+            Expression expression = new ExpressionBuilder(formula)
+                    .variable("level")
+                    .build()
+                    .setVariable("level", level);
+
+            if (!expression.validate().isValid()) return "N/A";
+
+            return String.valueOf(Math.round(expression.evaluate()));
+        } catch (Exception e) {
+            SLogger.fatal("Encountered an error when trying to evaluate defence formulas: {}", e.getMessage());
+            e.printStackTrace();
+        }
+
+        return "N/A";
     }
 }

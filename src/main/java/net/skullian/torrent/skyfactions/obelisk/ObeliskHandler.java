@@ -4,7 +4,6 @@ import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.types.ObeliskConfig;
 import net.skullian.torrent.skyfactions.config.types.Settings;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import org.bukkit.*;
@@ -38,7 +37,7 @@ public class ObeliskHandler {
         });
     }
 
-    public static void spawnFactionObelisk(Faction faction, FactionIsland island) {
+    public static void spawnFactionObelisk(String faction, FactionIsland island) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
             if (world != null) {
@@ -52,7 +51,7 @@ public class ObeliskHandler {
                     offsetLocation.getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
                 }
 
-                applyPDC(faction.getName(), offsetLocation.getBlock(), "faction");
+                applyPDC(faction, offsetLocation.getBlock(), "faction");
             }
         });
     }

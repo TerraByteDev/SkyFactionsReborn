@@ -4,6 +4,7 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,26 +18,21 @@ public class UnlinkCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
 
         if (commandSender instanceof Player player) {
-            if (!PermissionsHandler.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord", "skyfactions.player"), true))
+            if (!PermissionsHandler.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord"), true))
                 return true;
             if (CooldownHandler.manageCooldown(player)) return true;
 
-            SkyFactionsReborn.db.getDiscordLink(player).thenAccept(linkedID -> {
-                if (linkedID == null) {
+            SkyFactionsReborn.db.getDiscordLink(player).whenCompleteAsync((id, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "unlink your Discord", "SQL_DISCORD_UNLINK", ex);
+                    return;
+                }
+
+                if (id == null) {
                     Messages.DISCORD_NOT_LINKED.send(player);
                 } else {
-                    SkyFactionsReborn.db.registerDiscordLink(player.getUniqueId(), "none").thenAccept(result -> {
-                        Messages.DISCORD_UNLINK_SUCCESS.send(player);
-                    }).exceptionally(error -> {
-                        error.printStackTrace();
-                        Messages.ERROR.send(player, "%operation%", "unlink your Discord.", "%debug%", "SQL_DISCORD_UNLINK");
-                        return null;
-                    });
+                    Messages.DISCORD_UNLINK_SUCCESS.send(player);
                 }
-            }).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "unlink your Discord.", "%debug%", "SQL_GET_DISCORD");
-                return null;
             });
         }
         return true;

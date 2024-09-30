@@ -1,7 +1,8 @@
-package net.skullian.torrent.skyfactions.gui.items.obelisk;
+package net.skullian.torrent.skyfactions.gui.items.obelisk.defence;
 
-import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.obelisk.ObeliskDefencePurchaseUI;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -14,21 +15,24 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class ObeliskDefencesItem extends AbstractItem {
+public class ObeliskDefencePurchaseItem extends AbstractItem {
 
     private String NAME;
     private String SOUND;
     private int PITCH;
     private List<String> LORE;
     private ItemStack STACK;
+    private String TYPE;
 
-    public ObeliskDefencesItem(ItemData data, ItemStack stack) {
+    public ObeliskDefencePurchaseItem(ItemData data, ItemStack stack, String type) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
+        this.TYPE = type;
     }
+
 
     @Override
     public ItemProvider getItemProvider() {
@@ -49,5 +53,9 @@ public class ObeliskDefencesItem extends AbstractItem {
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
+
+        ObeliskDefencePurchaseUI.promptPlayer(player, TYPE);
+
+
     }
 }

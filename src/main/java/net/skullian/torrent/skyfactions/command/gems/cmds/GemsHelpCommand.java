@@ -43,7 +43,7 @@ public class GemsHelpCommand extends CommandTemplate {
         Messages.COMMAND_HEAD.send(player);
     }
 
-    public static List<String> permissions = List.of("skyfactions.gems.help", "skyfactions.gems", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.gems.help", "skyfactions.gems");
 
     @Override
     public List<String> permission() {

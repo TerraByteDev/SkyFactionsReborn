@@ -37,7 +37,7 @@ public class FactionTeleportCommand extends CommandTemplate {
         FactionAPI.teleportToFactionIsland(player);
     }
 
-    public static List<String> permissions = List.of("skyfactions.faction.teleport", "skyfactions.faction", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.faction.teleport", "skyfactions.faction");
 
     @Override
     public List<String> permission() {

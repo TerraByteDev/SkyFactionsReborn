@@ -5,7 +5,11 @@ import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
-import net.skullian.torrent.skyfactions.gui.items.obelisk.*;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskHeadItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskInvitesItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskPlayerNotificationsItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskRuneItem;
+import net.skullian.torrent.skyfactions.gui.items.obelisk.defence.ObeliskDefencePurchaseItem;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -47,7 +51,7 @@ public class PlayerObeliskUI {
                         break;
 
                     case "DEFENCES":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player"));
                         break;
 
                     case "RUNES_CONVERSION":

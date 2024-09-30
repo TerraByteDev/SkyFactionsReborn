@@ -17,6 +17,7 @@ import net.skullian.torrent.skyfactions.faction.AuditLogType;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
 import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -24,10 +25,17 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
 public class FactionAPI {
+
+    private static Map<UUID, Faction> factionCache = new HashMap<>();
+    private static Map<String, Faction> factionNameCache = new HashMap<>();
 
     /**
      * Teleport the player to their faction's island.
@@ -54,10 +62,17 @@ public class FactionAPI {
      */
     public static void createFaction(Player player, String name) {
         SkyFactionsReborn.db.registerFaction(player, name).join();
-        Faction faction = FactionAPI.getFaction(name);
-        faction.createAuditLog(player.getUniqueId(), AuditLogType.FACTION_CREATE, "%player_name%", player.getName(), "%faction_name%", name);
-        createIsland(player, name);
-        NotificationAPI.factionInviteStore.put(faction.getName(), 0);
+        FactionAPI.getFaction(name).whenCompleteAsync((faction, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "create a new Faction", "SQL_FACTION_CREATE", ex);
+                // todo disband faction?
+                return;
+            }
+
+            faction.createAuditLog(player.getUniqueId(), AuditLogType.FACTION_CREATE, "%player_name%", player.getName(), "%faction_name%", name);
+            createIsland(player, name);
+            NotificationAPI.factionInviteStore.put(faction.getName(), 0);
+        });
     }
 
     /**
@@ -67,8 +82,9 @@ public class FactionAPI {
      * @param player Player to check.
      * @return {@link Boolean}
      */
-    public static boolean isInFaction(Player player) {
-        return SkyFactionsReborn.db.isInFaction(player).join();
+    public static CompletableFuture<Boolean> isInFaction(Player player) {
+        if (factionCache.containsKey(player.getUniqueId())) return CompletableFuture.completedFuture(true);
+        return SkyFactionsReborn.db.isInFaction(player);
     }
 
     /**
@@ -77,8 +93,15 @@ public class FactionAPI {
      * @param player Member of faction (Owner, Moderator, whatever).
      * @return {@link Faction}
      */
-    public static Faction getFaction(Player player) {
-        return SkyFactionsReborn.db.getFaction(player).join();
+    public static CompletableFuture<Faction> getFaction(Player player) {
+        if (factionCache.containsKey(player.getUniqueId()))
+            return CompletableFuture.completedFuture(factionCache.get(player.getUniqueId()));
+
+
+        return SkyFactionsReborn.db.getFaction(player).whenCompleteAsync((faction, ex) -> {
+            factionCache.put(player.getUniqueId(), faction);
+            factionNameCache.put(faction.getName(), faction);
+        });
     }
 
     /**
@@ -87,8 +110,9 @@ public class FactionAPI {
      * @param name Name of the faction.
      * @return {@link Faction}
      */
-    public static Faction getFaction(String name) {
-        return SkyFactionsReborn.db.getFaction(name).join();
+    public static CompletableFuture<Faction> getFaction(String name) {
+        if (factionNameCache.containsKey(name)) return CompletableFuture.completedFuture(factionNameCache.get(name));
+        return SkyFactionsReborn.db.getFaction(name);
     }
 
     /**
@@ -159,12 +183,16 @@ public class FactionAPI {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
         createRegion(player, island, world, faction_name);
 
-        SkyFactionsReborn.db.createFactionIsland(faction_name, island).join();
-        IslandAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction").thenAccept(ac -> {
+        CompletableFuture.allOf(SkyFactionsReborn.db.createFactionIsland(faction_name, island), IslandAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction")).whenCompleteAsync((unused, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return;
+            }
+
+            ObeliskHandler.spawnFactionObelisk(faction_name, island);
+
             IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
-
-            ObeliskHandler.spawnFactionObelisk(SkyFactionsReborn.db.getFaction(faction_name).join(), island);
             Messages.FACTION_CREATION_SUCCESS.send(player);
         });
     }

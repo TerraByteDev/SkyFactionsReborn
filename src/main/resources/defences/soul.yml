@@ -59,7 +59,7 @@ MESSAGES:
 # PLACEHOLDERS: level - The turret level.
 ATTRIBUTES:
   RANGE: 3 # How far the defence's range is.
-  COOLDOWN: 25 - (level * 2) # Cooldown.
+  COOLDOWN: "25 - (level * 2)" # Cooldown.
   TARGET_MAX: 1  # Max targets for the defence at once.
   MAX_AMMO: 10 * level # Highest ammo count.
   UPGRADE_COST: 65 * level # Cost of upgrading the defence.

@@ -60,7 +60,7 @@ public class FactionMOTDCommand extends CommandTemplate {
         }
     }
 
-    public static List<String> permissions = List.of("skyfactions.faction.motd", "skyfactions.faction", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.faction.motd", "skyfactions.faction");
 
     @Override
     public List<String> permission() {

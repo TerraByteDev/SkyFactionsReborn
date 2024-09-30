@@ -84,7 +84,7 @@ public class IslandVisitCommand extends CommandTemplate {
         }
     }
 
-    public static List<String> permissions = List.of("skyfactions.island.visit", "skyfactions.island", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.island.visit", "skyfactions.island");
 
     @Override
     public List<String> permission() {

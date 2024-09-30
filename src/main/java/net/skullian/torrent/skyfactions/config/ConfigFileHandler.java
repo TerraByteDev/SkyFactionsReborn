@@ -6,6 +6,8 @@ import net.skullian.torrent.skyfactions.defence.DefencesRegistry;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +33,9 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.RUNES, new ConfigHandler(plugin, "runes"));
 
         loadGUIs();
+        if (!Files.exists(Paths.get(plugin.getDataFolder() + "/defences"))) {
+            DefencesRegistry.registerDefaultDefences();
+        }
         DefencesRegistry.register();
 
         configs.values().forEach(ConfigHandler::saveDefaultConfig);

@@ -1,15 +1,16 @@
-package net.skullian.torrent.skyfactions.command.gems.cmds;
+package net.skullian.torrent.skyfactions.command.runes.subcommands;
 
-import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.RunesAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public class GemsBalanceCommand extends CommandTemplate {
+public class RunesBalanceCommand extends CommandTemplate {
     @Override
     public String getName() {
         return "balance";
@@ -17,12 +18,12 @@ public class GemsBalanceCommand extends CommandTemplate {
 
     @Override
     public String getDescription() {
-        return "Get your gems balance.";
+        return "Get your runes balance.";
     }
 
     @Override
     public String getSyntax() {
-        return "/gems balance";
+        return "/runes balance";
     }
 
     @Override
@@ -30,16 +31,19 @@ public class GemsBalanceCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        SkyFactionsReborn.db.getGems(player).thenAccept(count -> {
-            Messages.GEMS_COUNT_MESSAGE.send(player, "%count%", count);
-        }).exceptionally(ex -> {
-            ex.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "get your gems balance", "%debug%", "SQL_GEMS_GET");
-            return null;
+        RunesAPI.getRunes(player.getUniqueId()).whenCompleteAsync((runes, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                ErrorHandler.handleError(player, "get your runes balance", "SQL_RUNES_MODIFY");
+
+                return;
+            }
+
+            Messages.RUNES_BALANCE_MESSAGE.send(player, "%count%", runes);
         });
     }
 
-    public static List<String> permissions = List.of("skyfactions.gems.balance", "skyfactions.gems");
+    public static List<String> permissions = List.of("skyfactions.runes.balance", "skyfactions.runes");
 
     @Override
     public List<String> permission() {

@@ -62,7 +62,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
         }
     }
 
-    public static List<String> permissions = List.of("skyfactions.faction.requestjoin", "skyfactions.faction", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.faction.requestjoin", "skyfactions.faction");
 
     @Override
     public List<String> permission() {

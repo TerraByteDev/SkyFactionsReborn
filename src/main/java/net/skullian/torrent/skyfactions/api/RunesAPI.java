@@ -11,6 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class RunesAPI {
 
@@ -67,7 +69,7 @@ public class RunesAPI {
             }
             returnItems(remaindingItems, player);
             if (total > 0) {
-                SkyFactionsReborn.db.addRunes(player, total);
+                SkyFactionsReborn.db.addRunes(player.getUniqueId(), total);
                 Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
             } else {
                 Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
@@ -121,6 +123,38 @@ public class RunesAPI {
                 }
             }
         }
+    }
+
+    /**
+     * Remove runes from a player.
+     *
+     * @param playerUUID UUID of the Player {@link UUID}
+     * @param amount     Amount of runes to remove {@link Integer}
+     * @return {@link CompletableFuture<Void>}
+     */
+    public static CompletableFuture<Void> removeRunes(UUID playerUUID, int amount) {
+        return SkyFactionsReborn.db.removeRunes(playerUUID, amount);
+    }
+
+    /**
+     * Add runes to a player's rune balance.
+     *
+     * @param playerUUID UUID of the Player {@link UUID}
+     * @param amount     Amount of runes to add {@link Integer}
+     * @return {@link CompletableFuture<Void>}
+     */
+    public static CompletableFuture<Void> addRunes(UUID playerUUID, int amount) {
+        return SkyFactionsReborn.db.addRunes(playerUUID, amount);
+    }
+
+    /**
+     * Get a player's rune count.
+     *
+     * @param playerUUID UUID of the Player {@link UUID}
+     * @return {@link CompletableFuture<Integer>}
+     */
+    public static CompletableFuture<Integer> getRunes(UUID playerUUID) {
+        return SkyFactionsReborn.db.getRunes(playerUUID);
     }
 
     private static boolean hasEnchants(ItemStack stack) {

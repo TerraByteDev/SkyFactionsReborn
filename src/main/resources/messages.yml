@@ -148,7 +148,9 @@ Messages:
       - "&e&oGet back to your island and defend thy honour!"
       - "&c&l---------------------------------------"
 
-
+  Defences:
+    # Displayed underneath a defence's lore in the defence shop GUI when they do not have sufficient runes to purchase the defence.
+    INSUFFICIENT_RUNES: "&c&oYou do not have enough runs to purchase this item!"
 
   Gems:
     # Sent when the player runs /gems or /gems balance
@@ -421,6 +423,14 @@ Messages:
 
     # Sent when a player tries to convert an item with lore, or is blacklisted / not whitelisted.
     GENERAL_DENY: "%server_name% &cYou cannot convert this item."
+
+    # Sent when a player runs /runes balance.
+    # Placeholders: %count% - Amount of Runes they have.
+    RUNES_BALANCE: "&eYou have: &a&l%count%&r&e Runes."
+
+    # Sent when an admin runs /runes give <player> <amount> (Admin Command!)
+    # Placeholders: %amount% - Amount of additional runes given / %player% - Player affected.
+    RUNES_GIVE_SUCCESS: "%server_name%&r&a Successfully paid&r&e %amount%&r&a Runes to &r&e%player%."
 
     # Sent when they successfully convert their items to runes.
     CONVERSION_SUCCESS: "%server_name%&a&l Success!&r&7 You have gained &a&l%added%&r&7 runes!"

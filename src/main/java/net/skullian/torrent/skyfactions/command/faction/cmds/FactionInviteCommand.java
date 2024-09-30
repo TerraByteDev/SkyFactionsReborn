@@ -69,7 +69,7 @@ public class FactionInviteCommand extends CommandTemplate {
         }
     }
 
-    public static List<String> permissions = List.of("skyfactions.faction.invite", "skyfactions.faction", "skyfactions.player");
+    public static List<String> permissions = List.of("skyfactions.faction.invite", "skyfactions.faction");
 
     @Override
     public List<String> permission() {
