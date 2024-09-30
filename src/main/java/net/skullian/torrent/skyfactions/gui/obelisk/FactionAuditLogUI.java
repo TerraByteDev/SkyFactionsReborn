@@ -24,6 +24,7 @@ import xyz.xenondevs.invui.window.Window;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class FactionAuditLogUI {
 
@@ -93,12 +94,15 @@ public class FactionAuditLogUI {
 
     private static List<Item> getItems(Player player, ItemData data) {
         List<Item> items = new ArrayList<>();
-        Faction faction = FactionAPI.getFaction(player);
-        List<AuditLogData> auditLogData = faction.getAuditLogs();
 
-        for (AuditLogData auditLog : auditLogData) {
-            items.add(new AuditPaginationItem(data, GUIAPI.createItem(data, auditLog.getPlayer().getUniqueId()), auditLog));
-        }
+        CompletableFuture.runAsync(() -> {
+            Faction faction = FactionAPI.getFaction(player).join();
+            List<AuditLogData> auditLogData = faction.getAuditLogs().join();
+
+            for (AuditLogData auditLog : auditLogData) {
+                items.add(new AuditPaginationItem(data, GUIAPI.createItem(data, auditLog.getPlayer().getUniqueId()), auditLog));
+            }
+        });
 
         return items;
     }

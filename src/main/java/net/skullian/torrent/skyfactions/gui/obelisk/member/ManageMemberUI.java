@@ -3,7 +3,6 @@ package net.skullian.torrent.skyfactions.gui.obelisk.member;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
@@ -11,6 +10,7 @@ import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.member_manage.MemberBanItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.member_manage.MemberKickItem;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
@@ -44,38 +44,44 @@ public class ManageMemberUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, OfflinePlayer player, Player actor) {
         try {
-            Faction faction = FactionAPI.getFaction(actor);
-            if (faction == null) {
-                Messages.ERROR.send(actor, "%operation%", "manage a member", "%debug%", "FACTION_NOT_FOUND");
-            }
-
-            List<ItemData> data = GUIAPI.getItemData("obelisk/manage_member", player.getPlayer());
-            for (ItemData itemData : data) {
-                switch (itemData.getITEM_ID()) {
-
-                    case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
-                        break;
-
-                    case "PLAYER_HEAD":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
-                        break;
-
-                    case "KICK":
-                        builder.addIngredient(itemData.getCHARACTER(), new MemberKickItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
-                        break;
-
-                    case "BAN":
-                        if (faction.isOwner(actor) || faction.isAdmin(actor)) {
-                            builder.addIngredient(itemData.getCHARACTER(), new MemberBanItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
-                        }
-                        break;
-
-                    case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
-                        break;
+            FactionAPI.getFaction(actor).whenCompleteAsync((faction, exc) -> {
+                if (exc != null) {
+                    ErrorHandler.handleError(actor, "manage a member", "GUI_LOAD_EXCEPTION", exc);
+                    return;
                 }
-            }
+
+                if (faction == null) {
+                    Messages.ERROR.send(actor, "%operation%", "manage a member", "%debug%", "FACTION_NOT_FOUND");
+                }
+
+                List<ItemData> data = GUIAPI.getItemData("obelisk/manage_member", player.getPlayer());
+                for (ItemData itemData : data) {
+                    switch (itemData.getITEM_ID()) {
+
+                        case "BORDER":
+                            builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                            break;
+
+                        case "PLAYER_HEAD":
+                            builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                            break;
+
+                        case "KICK":
+                            builder.addIngredient(itemData.getCHARACTER(), new MemberKickItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
+                            break;
+
+                        case "BAN":
+                            if (faction.isOwner(actor) || faction.isAdmin(actor)) {
+                                builder.addIngredient(itemData.getCHARACTER(), new MemberBanItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
+                            }
+                            break;
+
+                        case "BACK":
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
+                            break;
+                    }
+                }
+            });
 
             return builder;
         } catch (IllegalArgumentException e) {

@@ -3,12 +3,12 @@ package net.skullian.torrent.skyfactions.gui.obelisk;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.*;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.defence.ObeliskDefencePurchaseItem;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -42,48 +42,53 @@ public class FactionObeliskUI {
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
             List<ItemData> data = GUIAPI.getItemData("obelisk/faction_obelisk", player);
-            Faction faction = FactionAPI.getFaction(player);
-            if (faction == null) {
-                Messages.ERROR.send(player, "%operation%", "open your obelisk", "%debug%", "FACTION_NOT_FOUND");
-                return null;
-            }
-            for (ItemData itemData : data) {
-                switch (itemData.getITEM_ID()) {
-
-                    case "FACTION":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskFactionOverviewItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
-                        break;
-
-                    case "DEFENCES":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
-                        break;
-
-                    case "RUNES_CONVERSION":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player));
-                        break;
-
-                    case "MEMBER_MANAGEMENT":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
-                        break;
-
-                    case "AUDIT_LOGS":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskAuditLogItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
-                        break;
-
-                    case "INVITES":
-                        if (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player)) {
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
-                        } else {
-                            Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_MODERATOR_TITLE.get());
-                        }
-                        break;
-
-                    case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
-                        break;
+            FactionAPI.getFaction(player).whenCompleteAsync((faction, exc) -> {
+                if (exc != null) {
+                    ErrorHandler.handleError(player, "open your obelisk", "GUI_LOAD_EXCEPTION", exc);
+                    return;
                 }
-            }
 
+                if (faction == null) {
+                    Messages.ERROR.send(player, "%operation%", "open your obelisk", "%debug%", "FACTION_NOT_FOUND");
+                    return;
+                }
+                for (ItemData itemData : data) {
+                    switch (itemData.getITEM_ID()) {
+
+                        case "FACTION":
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskFactionOverviewItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
+                            break;
+
+                        case "DEFENCES":
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
+                            break;
+
+                        case "RUNES_CONVERSION":
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player));
+                            break;
+
+                        case "MEMBER_MANAGEMENT":
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                            break;
+
+                        case "AUDIT_LOGS":
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskAuditLogItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                            break;
+
+                        case "INVITES":
+                            if (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player)) {
+                                builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
+                            } else {
+                                Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_MODERATOR_TITLE.get());
+                            }
+                            break;
+
+                        case "BORDER":
+                            builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                            break;
+                    }
+                }
+            });
             return builder;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

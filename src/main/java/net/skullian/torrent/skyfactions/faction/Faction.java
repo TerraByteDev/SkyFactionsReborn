@@ -302,6 +302,18 @@ public class Faction {
         });
     }
 
+    public boolean isOwner(Player player) {
+        return getOwner().equals(Bukkit.getOfflinePlayer(player.getUniqueId()));
+    }
+
+    public boolean isModerator(Player player) {
+        return getModerators().contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
+    }
+
+    public boolean isAdmin(Player player) {
+        return getAdmins().contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
+    }
+
     /**
      * Revoke a Faction invite.
      *

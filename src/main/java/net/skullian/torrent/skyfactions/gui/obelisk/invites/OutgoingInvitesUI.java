@@ -4,7 +4,6 @@ import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.db.InviteData;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.data.PaginationItemData;
@@ -14,6 +13,7 @@ import net.skullian.torrent.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.torrent.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.OutgoingInvitePaginationItem;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -95,17 +95,29 @@ public class OutgoingInvitesUI {
 
     private static List<Item> getItems(Player player, ItemData itemData) {
         List<Item> items = new ArrayList<>();
-        Faction faction = FactionAPI.getFaction(player);
-        if (faction == null) {
-            Messages.ERROR.send(player, "%operation%", "open the outgoing invutes GUI", "%debug%", "FACTION_NOT_FOUND");
-            return null;
-        }
+        FactionAPI.getFaction(player).whenCompleteAsync((faction, exc) -> {
+            if (exc != null) {
+                ErrorHandler.handleError(player, "open the outgoing invites GUI", "GUI_LOAD_EXCEPTION", exc);
+                return;
+            }
 
-        List<InviteData> data = faction.getOutgoingInvites();
-        for (InviteData inviteData : data) {
-            itemData.setNAME(itemData.getNAME().replace("%player_name%", inviteData.getPlayer().getName()));
-            items.add(new OutgoingInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getUniqueId()), inviteData));
-        }
+            if (faction == null) {
+                Messages.ERROR.send(player, "%operation%", "open the outgoing invutes GUI", "%debug%", "FACTION_NOT_FOUND");
+                return;
+            }
+
+            faction.getOutgoingInvites().whenCompleteAsync((data, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "open the outgoing invites GUI", "GUI_LOAD_EXCEPTION", exc);
+                    return;
+                }
+
+                for (InviteData inviteData : data) {
+                    itemData.setNAME(itemData.getNAME().replace("%player_name%", inviteData.getPlayer().getName()));
+                    items.add(new OutgoingInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getUniqueId()), inviteData));
+                }
+            });
+        });
 
         return items;
     }

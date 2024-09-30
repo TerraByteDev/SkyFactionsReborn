@@ -3,8 +3,8 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk.member_manage;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.faction.AuditLogType;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
@@ -57,21 +57,27 @@ public class MemberBanItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        Faction faction = FactionAPI.getFaction(player);
-        if (faction != null) {
-            if (faction.getAllMembers().contains(SUBJECT)) {
-                faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_BAN, "%banned%", SUBJECT.getName(), "%player%", player.getName());
-                faction.banPlayer(SUBJECT, player);
+        FactionAPI.getFaction(player).whenCompleteAsync((faction, exc) -> {
+            if (exc != null) {
+                ErrorHandler.handleError(player, "ban a player", "SQL_FACTION_GET", exc);
+                return;
+            }
 
-                Messages.FACTION_MANAGE_BAN_SUCCESS.send(player, "%player%", SUBJECT.getName());
+            if (faction != null) {
+                if (faction.getAllMembers().contains(SUBJECT)) {
+                    faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_BAN, "%banned%", SUBJECT.getName(), "%player%", player.getName());
+                    faction.banPlayer(SUBJECT, player);
+
+                    Messages.FACTION_MANAGE_BAN_SUCCESS.send(player, "%player%", SUBJECT.getName());
+                } else {
+                    Messages.ERROR.send(player, "%operation%", "ban a player", "%debug%", "FACTION_MEMBER_UNKNOWN");
+                    event.getInventory().close();
+                }
             } else {
-                Messages.ERROR.send(player, "%operation%", "kick a player", "%debug%", "FACTION_MEMBER_UNKNOWN");
+                Messages.ERROR.send(player, "%operation%", "ban a player", "%debug%", "FACTION_NOT_EXIST");
                 event.getInventory().close();
             }
-        } else {
-            Messages.ERROR.send(player, "%operation%", "kick a player", "%debug%", "FACTION_NOT_EXIST");
-            event.getInventory().close();
-        }
+        });
 
     }
 
