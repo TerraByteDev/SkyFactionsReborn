@@ -4,7 +4,6 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.IslandAPI;
 import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import net.skullian.torrent.skyfactions.config.types.Settings;
-import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -35,18 +34,25 @@ public class PlayerHandler implements Listener {
             return null;
         });
 
-        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).join();
-        if (island != null) {
-            IslandAPI.handleJoinBorder(event.getPlayer(), island);
+        SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
+            if (ex != null) {
+                SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
+                ex.printStackTrace();
+                return;
+            }
 
-            if (Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean()) {
-                World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-                if (world != null) {
-                    Location centerLocation = island.getCenter(world);
-                    IslandAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
+            if (island != null) {
+                IslandAPI.handleJoinBorder(event.getPlayer(), island);
+
+                if (Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean()) {
+                    World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+                    if (world != null) {
+                        Location centerLocation = island.getCenter(world);
+                        IslandAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
+                    }
                 }
             }
-        }
+        });
 
         SLogger.info("Initialising Notification Task for {}", event.getPlayer().getName());
         NotificationAPI.createCycle(event.getPlayer());
@@ -61,11 +67,18 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void playerRespawn(PlayerRespawnEvent event) {
         if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
-            PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).join();
-            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-            if (island != null && world != null) {
-                event.getPlayer().teleport(island.getCenter(world));
-            }
+            SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
+                if (ex != null) {
+                    SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
+                    ex.printStackTrace();
+                    return;
+                }
+
+                World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+                if (island != null && world != null) {
+                    event.getPlayer().teleport(island.getCenter(world));
+                }
+            });
         }
     }
 }

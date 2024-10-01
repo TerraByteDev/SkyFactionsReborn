@@ -58,14 +58,29 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                 } else if (faction.getAllMembers().contains(Bukkit.getOfflinePlayer(player.getUniqueId()))) {
                     Messages.JOIN_REQUEST_SAME_FACTION.send(player);
                     return;
-                } else if (SkyFactionsReborn.db.hasJoinRequest(player).join()) {
-                    Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player);
-                    return;
+                } else {
+                    SkyFactionsReborn.db.hasJoinRequest(player).whenComplete((hasJoinRequest, exc) -> {
+                        if (exc != null) {
+                            ErrorHandler.handleError(player, "check if you have a join request", "SQL_JOIN_REQUEST_GET", exc);
+                            return;
+                        }
+
+                        if (hasJoinRequest) {
+                            Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player);
+                            return;
+                        }
+                    });
                 }
 
-                faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId()));
-                Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, "%faction_name%", factionName);
-                NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
+                faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((ignored, exc) -> {
+                    if (exc != null) {
+                        ErrorHandler.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc);
+                        return;
+                    }
+
+                    Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, "%faction_name%", factionName);
+                    NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
+                });
             });
         });
 

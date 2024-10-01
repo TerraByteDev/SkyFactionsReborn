@@ -357,7 +357,7 @@ public class Faction {
      * @param actor Player who rejected the invite [{@link Player}]
      */
     public CompletableFuture<Void> rejectJoinRequest(InviteData data, Player actor) {
-        CompletableFuture.allOf(
+        return CompletableFuture.allOf(
                 createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "%faction_player%", actor.getName(), "%player%", data.getPlayer().getName()),
                 SkyFactionsReborn.db.revokeInvite(name, data.getPlayer().getUniqueId(), "incoming"),
                 NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "%player_name%", actor.getName(), "%faction_name%", name)

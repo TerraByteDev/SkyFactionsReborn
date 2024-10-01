@@ -19,6 +19,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class PlayerIncomingInviteAccept extends AbstractItem {
 
@@ -74,10 +75,18 @@ public class PlayerIncomingInviteAccept extends AbstractItem {
                     return;
                 }
 
-                SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing").join();
-                faction.addFactionMember(player.getUniqueId());
-                faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_ACCEPT, "%player_name%", player.getName());
-                Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, "%faction_name%", player.getName());
+                CompletableFuture.allOf(
+                        SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing"),
+                        faction.addFactionMember(player.getUniqueId()),
+                        faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_ACCEPT, "%player_name%", player.getName())
+                ).whenComplete((ignored, exce) -> {
+                    if (exce != null) {
+                        ErrorHandler.handleError(player, "accept an invite", "SQL_INVITE_ACEPT", exce);
+                        return;
+                    }
+
+                    Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, "%faction_name%", player.getName());
+                });
             });
         });
     }

@@ -7,7 +7,7 @@
 
 # Database config. Requires a restart to apply.
 Database:
-  # You can either use 'sqlite' or 'sql' (MySQL). Default: H2.
+  # You can either use 'sqlite' or 'sql' (MySQL). Default: sqlite.
   TYPE: 'sqlite'
 
   # Connection values for MySQL if you decide to use it.
@@ -172,4 +172,4 @@ Notifications:
 
   # Interval in which the notifications are sent.
   # IN SECONDS!
-  INTERVAL: 60 # TODO MOVE TO 10 AFTER DEVELOPMENT
+  INTERVAL: 60 # TODO MOVE TO 10m AFTER DEVELOPMENT

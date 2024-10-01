@@ -5,6 +5,7 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -44,19 +45,25 @@ public class IslandTrustCommand extends CommandTemplate {
                 if (is == null) {
                     Messages.NO_ISLAND.send(player);
                 } else {
-                    boolean isTrusted = SkyFactionsReborn.db.isPlayerTrusted(target.getPlayer(), is.getId()).join();
-                    if (isTrusted) {
-                        Messages.PLAYER_ALREADY_TRUSTED.send(player);
-                    } else {
-                        SkyFactionsReborn.db.trustPlayer(target.getPlayer(), is.getId()).thenAccept(result -> {
-                            Messages.TRUST_SUCCESS.send(player, "%player%", target.getName());
-                        }).exceptionally(ex -> {
-                            ex.printStackTrace();
-                            Messages.ERROR.send(player, "%operation%", "trust a player", "%debug%", "SQL_TRUST_ADD");
-                            return null;
-                        });
+                    SkyFactionsReborn.db.isPlayerTrusted(target.getPlayer(), is.getId()).whenComplete((isTrusted, ex) -> {
+                        if (ex != null) {
+                            ErrorHandler.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", ex);
+                            return;
+                        }
 
-                    }
+                        if (isTrusted) {
+                            Messages.PLAYER_ALREADY_TRUSTED.send(player);
+                        } else {
+                            SkyFactionsReborn.db.trustPlayer(target.getPlayer(), is.getId()).whenComplete((result, exc) -> {
+                                if (exc != null) {
+                                    ErrorHandler.handleError(player, "trust a player", "SQL_TRUST_ADD", exc);
+                                    return;
+                                }
+
+                                Messages.TRUST_SUCCESS.send(player, "%player%", target.getName());
+                            });
+                        }
+                    });
                 }
             }).exceptionally(ex -> {
                 ex.printStackTrace();

@@ -13,6 +13,7 @@ import net.skullian.torrent.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskNotificationPaginationItem;
 import net.skullian.torrent.skyfactions.notification.NotificationData;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -93,11 +94,18 @@ public class PlayerObeliskNotificationUI {
 
     private static List<Item> getItems(Player player, ItemData data) {
         List<Item> items = new ArrayList<>();
-        List<NotificationData> notifications = NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(player.getUniqueId()));
+        NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(player.getUniqueId())).handle((notifications, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "open the notifications GUI", "SQL_NOTIFICATION_GET", ex);
+                return items;
+            }
+            
+            for (NotificationData notification : notifications) {
+                items.add(new ObeliskNotificationPaginationItem(data, GUIAPI.createItem(data, player.getUniqueId()), notification));
+            }
 
-        for (NotificationData notification : notifications) {
-            items.add(new ObeliskNotificationPaginationItem(data, GUIAPI.createItem(data, player.getUniqueId()), notification));
-        }
+            return items;
+        });
 
         return items;
     }

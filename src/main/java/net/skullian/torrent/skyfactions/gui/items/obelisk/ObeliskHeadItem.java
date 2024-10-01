@@ -1,8 +1,8 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.IslandAPI;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -36,18 +36,19 @@ public class ObeliskHeadItem extends AbstractItem {
 
     @Override
     public ItemProvider getItemProvider() {
-        // TODO: MIGRATE EVERYTHING TO ISLANDAPI / API PACKAGE AREA
-        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(PLAYER.getUniqueId()).join();
         ItemBuilder builder = new ItemBuilder(STACK)
                 .setDisplayName(TextUtility.color(NAME));
+        IslandAPI.getPlayerIsland(PLAYER.getUniqueId()).handleAsync((island, ex) -> {
+            for (String loreLine : LORE) {
+                builder.addLoreLines(TextUtility.color(loreLine
+                        .replace("%level%", String.valueOf(SkyFactionsReborn.db.getIslandLevel(island).join()))
+                        .replace("%rune_count%", String.valueOf(SkyFactionsReborn.db.getRunes(PLAYER.getUniqueId()).join()))
+                        .replace("%gem_count%", String.valueOf(SkyFactionsReborn.db.getGems(PLAYER).join()))
+                ));
+            }
 
-        for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%level%", String.valueOf(SkyFactionsReborn.db.getIslandLevel(island).join()))
-                    .replace("%rune_count%", String.valueOf(SkyFactionsReborn.db.getRunes(PLAYER.getUniqueId()).join()))
-                    .replace("%gem_count%", String.valueOf(SkyFactionsReborn.db.getGems(PLAYER).join()))
-            ));
-        }
+            return builder;
+        });
 
         return builder;
     }

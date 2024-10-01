@@ -1,6 +1,5 @@
 package net.skullian.torrent.skyfactions.api;
 
-import lombok.extern.log4j.Log4j2;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
@@ -58,13 +57,13 @@ public class RaidAPI {
 
             Messages.RAID_PROCESSING.send(player);
 
-            SkyFactionsReborn.db.updateLastRaid(player, System.currentTimeMillis()).thenAccept(result -> SkyFactionsReborn.db.getGems(player).thenAccept(count -> SkyFactionsReborn.db.subtractGems(player, count, Settings.RAIDING_COST.getInt()))).exceptionally(ex -> {
+            /*SkyFactionsReborn.db.updateLastRaid(player, System.currentTimeMillis()).thenAccept(result -> SkyFactionsReborn.db.getGems(player).thenAccept(count -> SkyFactionsReborn.db.subtractGems(player, count, Settings.RAIDING_COST.getInt()))).exceptionally(ex -> {
                 ex.printStackTrace();
                 cancel.set(true);
                 Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "SQL_RAID_START");
                 handleRaidExecutionError(player, false);
                 return null;
-            }).get();
+            }).get();*/
 
             if (cancel.get()) return;
             IslandRaidData island = getRandomRaidable(player);
@@ -78,7 +77,7 @@ public class RaidAPI {
                 Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "ISLAND_RETURNED_NULL");
             }
 
-        } catch (InterruptedException | ExecutionException error) {
+        } catch (Exception error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "MAIN_RAID_START");
             handleRaidExecutionError(player, false);

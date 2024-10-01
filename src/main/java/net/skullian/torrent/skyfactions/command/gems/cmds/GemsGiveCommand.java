@@ -5,6 +5,7 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -39,8 +40,14 @@ public class GemsGiveCommand extends CommandTemplate {
             if (!offlinePlayer.hasPlayedBefore()) {
                 Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
             } else {
-                SkyFactionsReborn.db.addGems(offlinePlayer.getPlayer(), Integer.parseInt(args[2])).join();
-                Messages.GEM_ADD_SUCCESS.send(player, "%amount%", args[2], "%player%", offlinePlayer.getName());
+                SkyFactionsReborn.db.addGems(offlinePlayer.getPlayer(), Integer.parseInt(args[2])).whenComplete((ignored, exc) -> {
+                    if (exc != null) {
+                        ErrorHandler.handleError(player, "give someone gems", "SQL_GEMS_MODIFY", exc);
+                        return;
+                    }
+
+                    Messages.GEM_ADD_SUCCESS.send(player, "%amount%", args[2], "%player%", offlinePlayer.getName());
+                });
             }
 
         }

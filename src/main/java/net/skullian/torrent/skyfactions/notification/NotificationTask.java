@@ -3,11 +3,10 @@ package net.skullian.torrent.skyfactions.notification;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.List;
 
 public class NotificationTask {
 
@@ -15,10 +14,17 @@ public class NotificationTask {
         return new BukkitRunnable() {
             @Override
             public void run() {
-                List<NotificationData> data = NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(player.getUniqueId()));
-                if (!data.isEmpty()) {
-                    Messages.UNREAD_NOTIFICATIONS.send(player, "%count%", data.size());
-                }
+                NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(player.getUniqueId())).whenCompleteAsync((data, ex) -> {
+                    if (ex != null) {
+                        SLogger.fatal("Failed to fetch notifications of player {} - {}", player.getName(), ex.getMessage());
+                        ex.printStackTrace();
+                        return;
+                    }
+
+                    if (!data.isEmpty()) {
+                        Messages.UNREAD_NOTIFICATIONS.send(player, "%count%", data.size());
+                    }
+                });
 
                 if (isInFaction) {
                     FactionAPI.getFaction(player).thenAccept((faction) -> {

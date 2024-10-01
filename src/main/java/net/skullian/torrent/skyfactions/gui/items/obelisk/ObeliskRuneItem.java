@@ -3,7 +3,6 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.obelisk.RuneSubmitUI;
@@ -62,15 +61,20 @@ public class ObeliskRuneItem extends AbstractItem {
                     return;
                 });
             } else if (TYPE.equals("faction")) {
-                Faction faction = SkyFactionsReborn.db.getFaction(PLAYER).join();
-
-                SkyFactionsReborn.db.getRunes(faction.getName()).whenCompleteAsync((count, ex) -> {
+                SkyFactionsReborn.db.getFaction(PLAYER).whenComplete((faction, ex) -> {
                     if (ex != null) {
-                        ErrorHandler.handleError(PLAYER, "get your runes", "SQL_RUNES_GET", ex);
+                        ErrorHandler.handleError(PLAYER, "get your faction", "SQL_FACTION_GET", ex);
                         return;
-                    } else {
-                        runes.set(count);
                     }
+
+                    SkyFactionsReborn.db.getRunes(faction.getName()).whenCompleteAsync((count, exc) -> {
+                        if (exc != null) {
+                            ErrorHandler.handleError(PLAYER, "get your runes", "SQL_RUNES_GET", exc);
+                            return;
+                        } else {
+                            runes.set(count);
+                        }
+                    });
                 });
             }
         }).thenApply(ignored -> {

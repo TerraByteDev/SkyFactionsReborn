@@ -40,12 +40,15 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 
 public class IslandAPI {
 
     public static HashSet<UUID> awaitingDeletion = new HashSet<>();
+
+    public static CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
+        return SkyFactionsReborn.db.getPlayerIsland(playerUUID);
+    }
 
     public static void handleJoinBorder(Player player, PlayerIsland island) {
         // TODO GET LIMITING BUILDING AND WORLDBORDER
@@ -145,34 +148,35 @@ public class IslandAPI {
     }
 
     public static void removePlayerIsland(Player player) {
-        SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).thenAccept(island -> {
+        SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
+                return;
+            }
+
             World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
             if (world != null) {
-                try {
-                    BlockVector3 bottom = BukkitAdapter.asBlockVector(island.getPosition1(null));
-                    BlockVector3 top = BukkitAdapter.asBlockVector(island.getPosition2(null));
+                BlockVector3 bottom = BukkitAdapter.asBlockVector(island.getPosition1(null));
+                BlockVector3 top = BukkitAdapter.asBlockVector(island.getPosition2(null));
 
-                    Region region = new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
-                    cutRegion(region).get();
+                Region region = new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
+                cutRegion(region);
 
-                    SkyFactionsReborn.db.removeIsland(player).thenAccept(res -> {
-                        SkyFactionsReborn.db.removeAllTrustedPlayers(island.getId());
-                        Messages.ISLAND_DELETION_SUCCESS.send(player);
-                    }).exceptionally(ex -> {
-                        ex.printStackTrace();
-                        Messages.ERROR.send(player, "%operation%", "delete your island", "%debug%", "SQL_ISLAND_DELETE");
-                        return null;
-                    });
-                } catch (InterruptedException | ExecutionException error) {
-                    error.printStackTrace();
-                    Messages.ERROR.send(player, "%operation%", "delete your island", "%debug%", "FAWE_ISLAND_CUT");
-                }
+                CompletableFuture.allOf(
+                        cutRegion(region),
+                        SkyFactionsReborn.db.removeIsland(player),
+                        SkyFactionsReborn.db.removeAllTrustedPlayers(island.getId())
+                ).whenComplete((ignored, throwable) -> {
+                    if (throwable != null) {
+                        throwable.printStackTrace();
+                        return;
+                    }
+
+                    Messages.ISLAND_DELETION_SUCCESS.send(player);
+                });
             } else {
                 Messages.ERROR.send(player, "%operation%", "delete your island", "%debug%", "WORLD_NOT_EXIST");
             }
-        }).exceptionally(ex -> {
-            ex.printStackTrace();
-            return null;
         });
     }
 

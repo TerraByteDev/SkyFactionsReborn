@@ -6,7 +6,6 @@ import net.skullian.torrent.skyfactions.api.IslandAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
@@ -73,21 +72,26 @@ public class LeaveConfirmationItem extends AbstractItem {
                 if (world != null) {
                     if (FactionAPI.isInRegion(player, world, faction.getName())) {
 
-                        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).join();
-                        World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-                        if (island != null && islandWorld != null) {
-                            IslandAPI.teleportPlayerToLocation(player, island.getCenter(islandWorld));
-                        } else {
-                            World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
-                            if (hubWorld != null) {
-                                List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
-                                Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
-                                IslandAPI.teleportPlayerToLocation(player, location);
-                            } else {
-                                Messages.ERROR.send(player, "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
+                        SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).whenComplete((island, exc) -> {
+                            if (exc != null) {
+                                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", exc);
                                 return;
                             }
-                        }
+
+                            World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+                            if (island != null && islandWorld != null) {
+                                IslandAPI.teleportPlayerToLocation(player, island.getCenter(islandWorld));
+                            } else {
+                                World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
+                                if (hubWorld != null) {
+                                    List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
+                                    Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
+                                    IslandAPI.teleportPlayerToLocation(player, location);
+                                } else {
+                                    Messages.ERROR.send(player, "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
+                                }
+                            }
+                        });
 
                     }
 

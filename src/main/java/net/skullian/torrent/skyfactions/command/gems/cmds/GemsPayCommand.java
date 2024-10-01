@@ -5,6 +5,7 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -41,16 +42,21 @@ public class GemsPayCommand extends CommandTemplate {
             } else {
 
                 int toPay = Integer.parseInt(args[2]);
-                int playerGemCount = GemsAPI.getGems(player);
+                GemsAPI.getGems(player).whenCompleteAsync((playerGemCount, ex) -> {
+                    if (ex != null) {
+                        ErrorHandler.handleError(player, "pay gems to another player", "SQL_GEMS_GET", ex);
+                        return;
+                    }
 
-                if (playerGemCount >= toPay) {
-                    GemsAPI.subtractGems(player, toPay);
-                    GemsAPI.addGems(offlinePlayer.getPlayer(), toPay);
+                    if (playerGemCount >= toPay) {
+                        GemsAPI.subtractGems(player, toPay);
+                        GemsAPI.addGems(offlinePlayer.getPlayer(), toPay);
 
-                    Messages.GEM_ADD_SUCCESS.send(player, "%amount%", toPay, "%player%", offlinePlayer.getName());
-                } else {
-                    Messages.INSUFFICIENT_GEMS_COUNT.send(player);
-                }
+                        Messages.GEM_ADD_SUCCESS.send(player, "%amount%", toPay, "%player%", offlinePlayer.getName());
+                    } else {
+                        Messages.INSUFFICIENT_GEMS_COUNT.send(player);
+                    }
+                });
 
 
             }
