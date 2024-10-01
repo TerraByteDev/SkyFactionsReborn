@@ -13,6 +13,7 @@ import net.skullian.torrent.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.torrent.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.invites.PlayerFactionInvitePaginationItem;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -95,13 +96,17 @@ public class PlayerIncomingInvites {
 
     private static List<Item> getItems(Player player, ItemData itemData) {
         List<Item> items = new ArrayList<>();
+        SkyFactionsReborn.db.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).whenCompleteAsync((data, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get your invites", "SQL_INVITE_GET", ex);
+                return;
+            }
 
-        List<InviteData> data = SkyFactionsReborn.db.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).join();
-        for (InviteData inviteData : data) {
-            itemData.setNAME(itemData.getNAME().replace("%faction_name%", inviteData.getFactionName()));
-            items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getUniqueId()), inviteData.getPlayer(), inviteData));
-        }
-
+            for (InviteData inviteData : data) {
+                itemData.setNAME(itemData.getNAME().replace("%faction_name%", inviteData.getFactionName()));
+                items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getUniqueId()), inviteData.getPlayer(), inviteData));
+            }
+        });
         return items;
     }
 

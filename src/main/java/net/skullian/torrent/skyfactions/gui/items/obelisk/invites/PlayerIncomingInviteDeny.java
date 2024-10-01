@@ -19,6 +19,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class PlayerIncomingInviteDeny extends AbstractItem {
 
@@ -68,9 +69,17 @@ public class PlayerIncomingInviteDeny extends AbstractItem {
                 return;
             }
 
-            faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_DENY, "%player_name%", player.getName());
-            SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing").join();
-            Messages.FACTION_INVITE_DENY_SUCCESS.send(player, "%faction_name%", faction.getName());
+            CompletableFuture.allOf(
+                    faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_DENY, "%player_name%", player.getName()),
+                    SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing")
+            ).whenCompleteAsync((ignored, throwable) -> {
+                if (throwable != null) {
+                    ErrorHandler.handleError(player, "deny an invite", "SQL_INVITE_DENY", throwable);
+                    return;
+                }
+
+                Messages.FACTION_INVITE_DENY_SUCCESS.send(player, "%faction_name%", faction.getName());
+            });
         });
     }
 

@@ -56,7 +56,7 @@ MESSAGES:
   - "{#E9C055}%player_name% &7withered away whilst trying to fight {#E9C055}%defender%&7."
 
 # All attributes related to the defence.
-# PLACEHOLDERS: level - The turret level.
+# PLACEHOLDERS: level - The defence level.
 ATTRIBUTES:
   RANGE: 3 # How far the defence's range is.
   COOLDOWN: "25 - (level * 2)" # Cooldown.

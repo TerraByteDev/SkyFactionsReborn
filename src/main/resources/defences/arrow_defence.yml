@@ -6,7 +6,7 @@ NAME: "&cArrow"
 # Possible defence types: HEALING, ARROW, SOUL, FLAMETHROWER, POTION, SPRING, LANDMINE
 TYPE: "ARROW"
 
-# Resource Points cost when buying from the Obelisk
+# Resource Points cost when buying from the Obelisk (among other things)
 COST:
   BUY: 80
   SELL: 40
@@ -40,7 +40,7 @@ MESSAGES:
   - "{#E9C055}%player_name% &7took an arrow to the knee while fighting {#E9C055}%defender%&7."
 
 # All attributes related to the defence.
-# PLACEHOLDERS: level - The turret level.
+# PLACEHOLDERS: level - The defence level.
 ATTRIBUTES:
   RANGE: 4 + level # How far the defence's range is.
   COOLDOWN: 12 - level # Cooldown.
@@ -77,7 +77,7 @@ ITEM:
   # Every new line is a new line of lore.
   # Follows message formatting.
   LORE:
-    - "&aA basic turret that shoots"
+    - "&aA basic defence that shoots"
     - "&aarrows at mobs and enemies."
     - ""
     - "&c&lStats:"

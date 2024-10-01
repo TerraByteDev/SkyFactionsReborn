@@ -1,8 +1,8 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -36,21 +36,29 @@ public class ObeliskFactionOverviewItem extends AbstractItem {
 
     @Override
     public ItemProvider getItemProvider() {
-        Faction faction = SkyFactionsReborn.db.getFaction(PLAYER).join();
+        SkyFactionsReborn.db.getFaction(PLAYER).handle((faction, throwable) -> {
+            if (throwable != null) {
+                ErrorHandler.handleError(PLAYER, "get Faction data", "SQL_FACTION_GET", throwable);
+            } else {
+                ItemBuilder builder = new ItemBuilder(STACK)
+                        .setDisplayName(TextUtility.color(NAME.replace("%faction_name%", faction.getName())));
 
-        ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME.replace("%faction_name%", faction.getName())));
+                for (String loreLine : LORE) {
+                    builder.addLoreLines(TextUtility.color(loreLine
+                            .replace("%level%", String.valueOf(faction.getLevel()))
+                            .replace("%member_count%", String.valueOf(faction.getTotalMemberCount()))
+                            .replace("%rune_count%", String.valueOf(faction.getRunes()))
+                            .replace("%gem_count%", String.valueOf(faction.getGems()))
+                    ));
+                }
 
-        for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%level%", String.valueOf(faction.getLevel()))
-                    .replace("%member_count%", String.valueOf(faction.getTotalMemberCount()))
-                    .replace("%rune_count%", String.valueOf(faction.getRunes()))
-                    .replace("%gem_count%", String.valueOf(faction.getGems()))
-            ));
-        }
+                return builder;
+            }
 
-        return builder;
+            return null;
+        });
+
+        return null;
     }
 
     @Override

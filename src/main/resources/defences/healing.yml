@@ -40,7 +40,7 @@ MESSAGES:
   - "&c ❤ &7| {#E9C055}You were healed for &a%health_increase%{#E9C055} health!"
 
 # All attributes related to the defence.
-# PLACEHOLDERS: level - The turret level.
+# PLACEHOLDERS: level - The defence level.
 ATTRIBUTES:
   RANGE: 3 + level # How far the defence's range is.
   COOLDOWN: 10 - level # Cooldown.

@@ -25,6 +25,7 @@ import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.FileUtil;
 import net.skullian.torrent.skyfactions.util.SLogger;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
@@ -59,11 +60,13 @@ public class IslandAPI {
         Messages.ISLAND_CREATING.send(player);
         createRegion(player, island, world);
 
-        SkyFactionsReborn.db.createIsland(player, island).join();
-        pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").thenAccept(ac -> {
-            if (!ac) {
-                Messages.ERROR.send(player, "%operation%", "create your island", "%debug%", "SCHEMATIC_NOT_EXIST");
-                SkyFactionsReborn.db.removeIsland(player);
+        CompletableFuture.allOf(
+                SkyFactionsReborn.db.createIsland(player, island),
+                pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player")
+        ).whenCompleteAsync((ignored, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
+                removePlayerIsland(player);
                 return;
             }
 

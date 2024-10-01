@@ -72,7 +72,7 @@ MESSAGES:
   - "{#E9C055}%player_name% &7was splashed into oblivion by {#E9C055}%defender%'s&7 Elixir Cannon."
 
 # All attributes related to the defence.
-# PLACEHOLDERS: level - The turret level.
+# PLACEHOLDERS: level - The defence level.
 ATTRIBUTES:
   RANGE: 4 + level # How far the defence's range is.
   COOLDOWN: 25 - (level * 2) # Cooldown.

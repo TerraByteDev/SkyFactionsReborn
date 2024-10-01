@@ -4,6 +4,7 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.notification.NotificationData;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -66,10 +67,16 @@ public class ObeliskNotificationPaginationItem extends AbstractItem {
         }
 
         if (clickType.isRightClick()) {
-            SkyFactionsReborn.db.removeNotification(player, DATA).join();
+            SkyFactionsReborn.db.removeNotification(player, DATA).whenCompleteAsync((ignored, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "remove a notification", "SQL_NOTIFICATION_REMOVE", ex);
+                    player.closeInventory();
+                    return;
+                }
 
-            player.closeInventory();
-            Messages.NOTIFICATION_DISMISS_SUCCESS.send(player);
+                player.closeInventory();
+                Messages.NOTIFICATION_DISMISS_SUCCESS.send(player);
+            });
         }
     }
 

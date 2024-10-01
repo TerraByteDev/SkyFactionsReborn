@@ -3,6 +3,7 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.obelisk.PlayerObeliskNotificationUI;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -37,16 +38,26 @@ public class ObeliskPlayerNotificationsItem extends AbstractItem {
 
     @Override
     public ItemProvider getItemProvider() {
-        ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME));
+        SkyFactionsReborn.db.getNotifications(Bukkit.getOfflinePlayer(PLAYER.getUniqueId())).handle((notifications, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(PLAYER, "to get notifications", "SQL_NOTIFICATION_GET", ex);
+            } else {
+                ItemBuilder builder = new ItemBuilder(STACK)
+                        .setDisplayName(TextUtility.color(NAME));
 
-        for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%notification_count%", String.valueOf(SkyFactionsReborn.db.getNotifications(Bukkit.getOfflinePlayer(PLAYER.getUniqueId())).join().size()))
-            ));
-        }
+                for (String loreLine : LORE) {
+                    builder.addLoreLines(TextUtility.color(loreLine
+                            .replace("%notification_count%", String.valueOf(notifications.size()))
+                    ));
+                }
 
-        return builder;
+                return builder;
+            }
+
+            return null;
+        });
+
+        return null;
     }
 
     @Override

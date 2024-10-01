@@ -60,7 +60,7 @@ public class NotificationAPI {
      * @param player Player who the notifications should be fetched from [{@link Player}]
      * @return {@link List<NotificationData>}
      */
-    public static List<NotificationData> getNotifications(OfflinePlayer player) {
-        return SkyFactionsReborn.db.getNotifications(player).join();
+    public static CompletableFuture<List<NotificationData>> getNotifications(OfflinePlayer player) {
+        return SkyFactionsReborn.db.getNotifications(player);
     }
 }

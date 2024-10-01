@@ -40,7 +40,7 @@ MESSAGES:
   - "{#E9C055}%player_name% &7met an explosive end while trying to fight [#E9C055}%defender%&7."
 
 # All attributes related to the defence.
-# PLACEHOLDERS: level - The turret level.
+# PLACEHOLDERS: level - The defence level.
 ATTRIBUTES:
   RANGE: 1 # How far the defence's range is.
   COOLDOWN: 60 - (level * 1.5) # Cooldown.

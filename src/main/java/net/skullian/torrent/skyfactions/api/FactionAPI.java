@@ -59,17 +59,24 @@ public class FactionAPI {
      * @param name   Name of the faction.
      */
     public static void createFaction(Player player, String name) {
-        SkyFactionsReborn.db.registerFaction(player, name).join();
-        FactionAPI.getFaction(name).whenCompleteAsync((faction, ex) -> {
+        SkyFactionsReborn.db.registerFaction(player, name).whenCompleteAsync((ignored, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "create a new Faction", "SQL_FACTION_CREATE", ex);
                 // todo disband faction?
                 return;
             }
 
-            faction.createAuditLog(player.getUniqueId(), AuditLogType.FACTION_CREATE, "%player_name%", player.getName(), "%faction_name%", name);
-            createIsland(player, name);
-            NotificationAPI.factionInviteStore.put(faction.getName(), 0);
+            FactionAPI.getFaction(name).whenCompleteAsync((faction, exc) -> {
+                if (exc != null) {
+                    ErrorHandler.handleError(player, "create a new Faction", "SQL_FACTION_CREATE", exc);
+                    // todo disband faction?
+                    return;
+                }
+
+                faction.createAuditLog(player.getUniqueId(), AuditLogType.FACTION_CREATE, "%player_name%", player.getName(), "%faction_name%", name);
+                createIsland(player, name);
+                NotificationAPI.factionInviteStore.put(faction.getName(), 0);
+            });
         });
     }
 

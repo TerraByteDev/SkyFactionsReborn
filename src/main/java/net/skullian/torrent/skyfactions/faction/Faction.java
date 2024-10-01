@@ -221,7 +221,8 @@ public class Faction {
      */
     public CompletableFuture<Void> addFactionMember(UUID playerUUID) {
         return SkyFactionsReborn.db.addFactionMember(playerUUID, name).thenAccept((ignored) -> {
-            createBroadcast(Bukkit.getPlayer(playerUUID), "player joined the faction temporary message");
+            members.add(Bukkit.getOfflinePlayer(playerUUID));
+            createAuditLog(playerUUID, AuditLogType.PLAYER_JOIN, "player joined the faction temporary message");
         });
     }
 
@@ -355,10 +356,12 @@ public class Faction {
      * @param data  Data of the invite [{@link InviteData}]
      * @param actor Player who rejected the invite [{@link Player}]
      */
-    public void rejectJoinRequest(InviteData data, Player actor) {
-        createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "%faction_player%", actor.getName(), "%player%", data.getPlayer().getName());
-        SkyFactionsReborn.db.revokeInvite(name, data.getPlayer().getUniqueId(), "incoming").join();
-        NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "%player_name%", actor.getName(), "%faction_name%", name);
+    public CompletableFuture<Void> rejectJoinRequest(InviteData data, Player actor) {
+        CompletableFuture.allOf(
+                createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "%faction_player%", actor.getName(), "%player%", data.getPlayer().getName()),
+                SkyFactionsReborn.db.revokeInvite(name, data.getPlayer().getUniqueId(), "incoming"),
+                NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "%player_name%", actor.getName(), "%faction_name%", name)
+        );
     }
 
     private void cache(OfflinePlayer player, String oldRank, RankType newType) {

@@ -20,6 +20,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class FactionPlayerJoinRequestDenyItem extends AbstractItem {
 
@@ -69,11 +70,18 @@ public class FactionPlayerJoinRequestDenyItem extends AbstractItem {
                 return;
             }
 
-            faction.createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_JOIN_REQUEST_REVOKE, "%player_name%", player.getName());
-            SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming").join();
-            NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
+            CompletableFuture.allOf(
+                    faction.createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_JOIN_REQUEST_REVOKE, "%player_name%", player.getName()),
+                    SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming")
+            ).whenCompleteAsync((ignored, exc) -> {
+                if (exc != null) {
+                    ErrorHandler.handleError(player, "deny a join request", "SQL_JOIN_REQUEST_REVOKE", exc);
+                    return;
+                }
 
-            Messages.FACTION_JOIN_REQUEST_DENY_SUCCESS.send(player, "%faction_name%", DATA.getFactionName());
+                NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
+                Messages.FACTION_JOIN_REQUEST_DENY_SUCCESS.send(player, "%faction_name%", DATA.getFactionName());
+            });
         });
     }
 

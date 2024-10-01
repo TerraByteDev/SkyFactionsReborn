@@ -2,10 +2,10 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.types.Messages;
-import net.skullian.torrent.skyfactions.faction.JoinRequestData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.obelisk.invites.JoinRequestsUI;
 import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerOutgoingRequestManageUI;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -60,12 +60,18 @@ public class JoinRequestsTypeItem extends AbstractItem {
         if (TYPE.equals("faction")) {
             JoinRequestsUI.promptPlayer(player);
         } else if (TYPE.equals("player")) {
-            JoinRequestData joinRequest = SkyFactionsReborn.db.getPlayerOutgoingJoinRequest(player).join();
-            if (joinRequest == null) {
-                Messages.FACTION_JOIN_REQUEST_NOT_EXIST.send(player);
-            } else {
-                PlayerOutgoingRequestManageUI.promptPlayer(player, joinRequest);
-            }
+            SkyFactionsReborn.db.getPlayerOutgoingJoinRequest(player).whenCompleteAsync((joinRequest, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "get your outgoing join request", "SQL_JOIN_REQUEST_GET", ex);
+                    return;
+                }
+
+                if (joinRequest == null) {
+                    Messages.FACTION_JOIN_REQUEST_NOT_EXIST.send(player);
+                } else {
+                    PlayerOutgoingRequestManageUI.promptPlayer(player, joinRequest);
+                }
+            });
         }
     }
 

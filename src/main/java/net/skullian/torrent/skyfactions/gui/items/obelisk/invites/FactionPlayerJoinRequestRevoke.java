@@ -5,6 +5,7 @@ import net.skullian.torrent.skyfactions.api.NotificationAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.faction.JoinRequestData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -57,8 +58,14 @@ public class FactionPlayerJoinRequestRevoke extends AbstractItem {
         }
         event.getInventory().close();
 
-        SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming").join();
-        Messages.FACTION_JOIN_REQUEST_REVOKE_SUCCESS.send(player, "%faction_name%", DATA.getFactionName());
-        NotificationAPI.factionInviteStore.replace(DATA.getFactionName(), (NotificationAPI.factionInviteStore.get(DATA.getFactionName()) - 1));
+        SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming").whenCompleteAsync((ignored, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "revoke a Faction join request", "SQL_JOIN_REQUEST_REJECT", ex);
+                return;
+            }
+
+            Messages.FACTION_JOIN_REQUEST_REVOKE_SUCCESS.send(player, "%faction_name%", DATA.getFactionName());
+            NotificationAPI.factionInviteStore.replace(DATA.getFactionName(), (NotificationAPI.factionInviteStore.get(DATA.getFactionName()) - 1));
+        });
     }
 }

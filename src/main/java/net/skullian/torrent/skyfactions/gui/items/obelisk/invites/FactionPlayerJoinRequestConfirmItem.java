@@ -19,6 +19,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class FactionPlayerJoinRequestConfirmItem extends AbstractItem {
 
@@ -69,10 +70,18 @@ public class FactionPlayerJoinRequestConfirmItem extends AbstractItem {
                 return;
             }
 
-            faction.addFactionMember(player.getUniqueId());
-            SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming").join();
-            Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, "%faction_name%", DATA.getFactionName());
-            NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
+            CompletableFuture.allOf(
+                    faction.addFactionMember(player.getUniqueId()),
+                    SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming")
+            ).whenCompleteAsync((ignored, exc) -> {
+                if (exc != null) {
+                    ErrorHandler.handleError(player, "accept a join request", "SQL_FACTION_GET", exc);
+                    return;
+                }
+
+                Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, "%faction_name%", DATA.getFactionName());
+                NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
+            });
         });
     }
 

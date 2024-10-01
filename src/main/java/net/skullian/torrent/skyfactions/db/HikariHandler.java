@@ -773,8 +773,9 @@ public class HikariHandler {
         });
     }
 
-    public CompletableFuture<Void> subtractGems(Player player, int current, int amount) {
+    public CompletableFuture<Void> subtractGems(Player player, int amount) {
         return CompletableFuture.runAsync(() -> {
+            int current = getGems(player).join();
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("UPDATE islands set gems = ? WHERE uuid = ?")) {
 
@@ -793,9 +794,10 @@ public class HikariHandler {
     }
 
     public CompletableFuture<Void> addGems(Player player, int amount) {
-        int currentCount = getGems(player).join();
-        int newCount = currentCount + amount;
         return CompletableFuture.runAsync(() -> {
+            int currentCount = getGems(player).join();
+            int newCount = currentCount + amount;
+
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("UPDATE islands set gems = ? WHERE uuid = ?")) {
 
