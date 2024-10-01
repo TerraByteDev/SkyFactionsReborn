@@ -28,39 +28,16 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-          
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.6.0</version>
                 <configuration>
                     <artifactSet>
-                        <excludes>
-                            <exclude>com.zaxxer:HikariCP</exclude>
-                            <exclude>org.xerial:sqlite-jdbc</exclude>
-                            <exclude>net.dv8tion:JDA</exclude>
-                            <exclude>com.fasterxml.jackson.core:jackson-databind</exclude>
-                            <exclude>org.jetbrains.kotlin:kotlin-stdlib-common</exclude>
-                            <exclude>org.jetbrains.kotlin:kotlin-stdlib-jdk8</exclude>
-                            <exclude>org.jetbrains.kotlin:kotlin-stdlib</exclude>
-                            <exclude>org.jetbrains.kotlin:kotlin-stdlib-jdk7</exclude>
-                            <exclude>org.apache.commons:commons-collections4</exclude>
-                            <exclude>org.slf4j:slf4j-api</exclude>
-                            <exclude>org.jetbrains:annotations</exclude>
-                            <exclude>com.neovisionaries:nv-websocket-client</exclude>
-                            <exclude>com.squareup.okhttp3:okhttp</exclude>
-                            <exclude>com.squareup.okio:okio</exclude>
-                            <exclude>com.squareup.okio:okio-jvm</exclude>
-                            <exclude>net.sf.trove4j:core</exclude>
-                            <exclude>com.fasterxml.jackson.core:jackson-core</exclude>
-                            <exclude>com.fasterxml.jackson.core:jackson-annotations</exclude>
-                            <exclude>com.jeff-media:custom-block-data</exclude>
-                            <exclude>com.google.code.findbugs:jsr305</exclude>
-                            <exclude>com.google.crypto.tink:tink</exclude>
-                            <exclude>com.google.protobuf:protobuf-java</exclude>
-                            <exclude>com.google.errorprone:error_prone_annotations</exclude>
-                            <exclude>com.google.code.gson:gson</exclude>
-                        </excludes>
+                        <includes>
+                            <include>xyz.xenondevs.invui:*</include>
+                        </includes>
                     </artifactSet>
                 </configuration>
                 <executions>
