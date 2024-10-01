@@ -5,8 +5,8 @@ import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.db.InviteData;
 import net.skullian.torrent.skyfactions.faction.AuditLogType;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -59,14 +59,26 @@ public class PlayerIncomingInviteAccept extends AbstractItem {
         }
         event.getInventory().close();
 
-        if (FactionAPI.isInFaction(player)) {
-            Messages.ALREADY_IN_FACTION.send(player);
-        } else {
-            Faction faction = FactionAPI.getFaction(DATA.getFactionName());
-            SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing").join();
-            faction.addFactionMember(player.getUniqueId());
-            faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_ACCEPT, "%player_name%", player.getName());
-            Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, "%faction_name%", player.getName());
-        }
+        FactionAPI.isInFaction(player).whenCompleteAsync((isInFaction, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                return;
+            } else if (isInFaction) {
+                Messages.ALREADY_IN_FACTION.send(player);
+                return;
+            }
+
+            FactionAPI.getFaction(DATA.getFactionName()).whenCompleteAsync((faction, throwable) -> {
+                if (throwable != null) {
+                    ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", throwable);
+                    return;
+                }
+
+                SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing").join();
+                faction.addFactionMember(player.getUniqueId());
+                faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_ACCEPT, "%player_name%", player.getName());
+                Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, "%faction_name%", player.getName());
+            });
+        });
     }
 }

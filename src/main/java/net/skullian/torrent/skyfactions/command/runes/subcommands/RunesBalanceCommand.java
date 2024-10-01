@@ -34,7 +34,7 @@ public class RunesBalanceCommand extends CommandTemplate {
         RunesAPI.getRunes(player.getUniqueId()).whenCompleteAsync((runes, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
-                ErrorHandler.handleError(player, "get your runes balance", "SQL_RUNES_MODIFY");
+                ErrorHandler.handleError(player, "get your runes balance", "SQL_RUNES_MODIFY", ex);
 
                 return;
             }

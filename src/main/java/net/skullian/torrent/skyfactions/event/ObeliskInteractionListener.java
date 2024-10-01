@@ -1,14 +1,13 @@
 package net.skullian.torrent.skyfactions.event;
 
 import com.jeff_media.customblockdata.CustomBlockData;
-import lombok.extern.log4j.Log4j2;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.config.types.ObeliskConfig;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.obelisk.FactionObeliskUI;
 import net.skullian.torrent.skyfactions.gui.obelisk.PlayerObeliskUI;
+import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -22,12 +21,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.concurrent.CompletableFuture;
+
 
 public class ObeliskInteractionListener implements Listener {
 
     @EventHandler
     public void onBlockExplode(BlockExplodeEvent event) {
-        if (!event.getBlock().getType().equals(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString())) && !event.getBlock().getType().equals(Material.BARRIER))
+        SLogger.fatal("EXPLODED: " + event.getBlock());
+        if (!event.getBlock().getType().equals(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString())) || !event.getBlock().getType().equals(Material.BARRIER))
             return;
 
         Block block = event.getBlock();
@@ -80,29 +82,34 @@ public class ObeliskInteractionListener implements Listener {
         String type = container.get(typeKey, PersistentDataType.STRING);
         String owner = container.get(ownerKey, PersistentDataType.STRING);
 
-        if (!hasPermissions(player, type, owner)) {
-            Messages.OBELISK_ACCESS_DENY.send(player);
-        }
+        hasPermissions(player, type, owner).thenAccept((has) -> {
+            if (!has) {
+                Messages.OBELISK_ACCESS_DENY.send(player);
+            }
+        });
     }
 
-    private boolean hasPermissions(Player player, String type, String owner) {
+    private CompletableFuture<Boolean> hasPermissions(Player player, String type, String owner) {
         if (type.equals("player")) {
             if (owner.equals(player.getUniqueId().toString())) {
                 PlayerObeliskUI.promptPlayer(player);
-                return true;
+                return CompletableFuture.completedFuture(true);
             }
 
-            return false;
+            return CompletableFuture.completedFuture(false);
         } else if (type.equals("faction")) {
-            Faction faction = FactionAPI.getFaction(player);
-            if (faction != null && faction.getName().equalsIgnoreCase(owner)) {
-                FactionObeliskUI.promptPlayer(player);
-                return true;
-            }
-
-            return false;
+            return FactionAPI.getFaction(player).thenApplyAsync(faction -> {
+                if (faction == null) {
+                    return false;
+                }
+                if (faction.getName().equalsIgnoreCase(owner)) {
+                    FactionObeliskUI.promptPlayer(player);
+                    return true;
+                }
+                return false;
+            });
         }
 
-        return false;
+        return CompletableFuture.completedFuture(false);
     }
 }

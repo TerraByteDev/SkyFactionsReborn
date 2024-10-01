@@ -3,9 +3,9 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk.invites;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.db.InviteData;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.obelisk.invites.JoinRequestsUI;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -58,11 +58,18 @@ public class FactionJoinRequestAcceptItem extends AbstractItem {
         }
         event.getInventory().close();
 
-        Faction faction = FactionAPI.getFaction(player);
-        faction.acceptJoinRequest(DATA, player);
-        JoinRequestsUI.promptPlayer(player);
+        FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
+            if (faction == null) Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                return;
+            }
 
-        Messages.FACTION_JOIN_REQUEST_ACCEPT_SUCCESS.send(player, "%player_name%", DATA.getPlayer().getName());
+            faction.acceptJoinRequest(DATA, player);
+            JoinRequestsUI.promptPlayer(player);
+
+            Messages.FACTION_JOIN_REQUEST_ACCEPT_SUCCESS.send(player, "%player_name%", DATA.getPlayer().getName());
+        });
     }
 
 

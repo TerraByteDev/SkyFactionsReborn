@@ -5,8 +5,8 @@ import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.db.InviteData;
 import net.skullian.torrent.skyfactions.faction.AuditLogType;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -59,10 +59,19 @@ public class PlayerIncomingInviteDeny extends AbstractItem {
         }
 
         event.getInventory().close();
-        Faction faction = FactionAPI.getFaction(DATA.getFactionName());
-        faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_DENY, "%player_name%", player.getName());
-        SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing").join();
-        Messages.FACTION_INVITE_DENY_SUCCESS.send(player, "%faction_name%", faction.getName());
+        FactionAPI.getFaction(DATA.getFactionName()).whenCompleteAsync((faction, ex) -> {
+            if (faction == null) {
+                Messages.ERROR.send(player, "%operation%", "get the Faction", "FACTION_NOT_FOUND");
+                return;
+            } else if (ex != null) {
+                ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);
+                return;
+            }
+
+            faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_DENY, "%player_name%", player.getName());
+            SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing").join();
+            Messages.FACTION_INVITE_DENY_SUCCESS.send(player, "%faction_name%", faction.getName());
+        });
     }
 
 }

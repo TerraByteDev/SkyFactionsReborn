@@ -5,8 +5,8 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.types.Messages;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.FactionLeaveConfirmationUI;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -32,16 +32,22 @@ public class FactionLeaveCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        Faction faction = FactionAPI.getFaction(player);
-        if (faction == null) {
-            Messages.NOT_IN_FACTION.send(player);
-            return;
-        } else if (faction.isOwner(player)) {
-            Messages.FACTION_OWNER_LEAVE_DENY.send(player);
-            return;
-        }
+        FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                return;
+            }
 
-        FactionLeaveConfirmationUI.promptPlayer(player);
+            if (faction == null) {
+                Messages.NOT_IN_FACTION.send(player);
+                return;
+            } else if (faction.isOwner(player)) {
+                Messages.FACTION_OWNER_LEAVE_DENY.send(player);
+                return;
+            }
+
+            FactionLeaveConfirmationUI.promptPlayer(player);
+        });
 
     }
 

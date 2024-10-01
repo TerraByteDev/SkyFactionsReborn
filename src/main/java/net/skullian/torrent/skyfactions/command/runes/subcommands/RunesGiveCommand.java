@@ -43,7 +43,7 @@ public class RunesGiveCommand extends CommandTemplate {
                 RunesAPI.addRunes(offlinePlayer.getUniqueId(), Integer.parseInt(args[2])).whenCompleteAsync((ignored, throwable) -> {
                     if (throwable != null) {
                         throwable.printStackTrace();
-                        ErrorHandler.handleError(player, "give runes to another player", "SQL_RUNES_GIVE");
+                        ErrorHandler.handleError(player, "give runes to another player", "SQL_RUNES_GIVE", throwable);
                         return;
                     }
 

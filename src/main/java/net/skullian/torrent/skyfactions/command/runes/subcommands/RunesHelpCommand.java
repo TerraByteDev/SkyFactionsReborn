@@ -37,7 +37,7 @@ public class RunesHelpCommand extends CommandTemplate {
         for (int i = 0; i < RunesCommandHandler.getSubCommands().size(); i++) {
             if (!PermissionsHandler.hasPerm(player, RunesCommandHandler.getSubCommands().get(i).permission(), false))
                 continue;
-            Messages.COMMAND_INFO.send(player, "%command_syntax%", RunesCommandHandler.getSubCommands().get(i).getSyntax(), "%command_name%", GemsCommandHandler.getSubCommands().get(i).getName(), "%command_description%", GemsCommandHandler.getSubCommands().get(i).getDescription());
+            Messages.COMMAND_INFO.send(player, "%command_syntax%", RunesCommandHandler.getSubCommands().get(i).getSyntax(), "%command_name%", RunesCommandHandler.getSubCommands().get(i).getName(), "%command_description%", RunesCommandHandler.getSubCommands().get(i).getDescription());
         }
         Messages.COMMAND_HEAD.send(player);
     }

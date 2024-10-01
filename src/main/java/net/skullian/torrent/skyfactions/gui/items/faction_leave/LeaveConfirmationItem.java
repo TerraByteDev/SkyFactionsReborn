@@ -5,9 +5,9 @@ import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.IslandAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.config.types.Settings;
-import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -62,39 +62,45 @@ public class LeaveConfirmationItem extends AbstractItem {
         }
 
         // We do this again in case they get kicked before the confirmation.
-        Faction faction = FactionAPI.getFaction(player);
-        if (faction != null) {
-            World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
-            if (world != null) {
-                if (FactionAPI.isInRegion(player, world, faction.getName())) {
+        FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                return;
+            }
 
-                    PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).join();
-                    World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-                    if (island != null && islandWorld != null) {
-                        IslandAPI.teleportPlayerToLocation(player, island.getCenter(islandWorld));
-                    } else {
-                        World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
-                        if (hubWorld != null) {
-                            List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
-                            Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
-                            IslandAPI.teleportPlayerToLocation(player, location);
+            if (faction != null) {
+                World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
+                if (world != null) {
+                    if (FactionAPI.isInRegion(player, world, faction.getName())) {
+
+                        PlayerIsland island = SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).join();
+                        World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+                        if (island != null && islandWorld != null) {
+                            IslandAPI.teleportPlayerToLocation(player, island.getCenter(islandWorld));
                         } else {
-                            Messages.ERROR.send(player, "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
-                            return;
+                            World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
+                            if (hubWorld != null) {
+                                List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
+                                Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
+                                IslandAPI.teleportPlayerToLocation(player, location);
+                            } else {
+                                Messages.ERROR.send(player, "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
+                                return;
+                            }
                         }
+
                     }
 
+                    faction.leaveFaction(Bukkit.getOfflinePlayer(player.getUniqueId()));
+                    Messages.FACTION_LEAVE_SUCCESS.send(player, "%faction_name%", faction.getName());
+                } else {
+                    Messages.ERROR.send(player, "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
+
                 }
-
-                faction.leaveFaction(Bukkit.getOfflinePlayer(player.getUniqueId()));
-                Messages.FACTION_LEAVE_SUCCESS.send(player, "%faction_name%", faction.getName());
             } else {
-                Messages.ERROR.send(player, "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
-
+                Messages.NOT_IN_FACTION.send(player);
             }
-        } else {
-            Messages.NOT_IN_FACTION.send(player);
-        }
+        });
 
     }
 

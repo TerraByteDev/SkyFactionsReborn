@@ -42,12 +42,10 @@ public class FactionAPI {
      *
      * @param player Player to teleport.
      */
-    public static void teleportToFactionIsland(Player player) {
+    public static void teleportToFactionIsland(Player player, Faction faction) {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
 
         if (world != null) {
-            Faction faction = SkyFactionsReborn.db.getFaction(player).join();
-
             IslandAPI.teleportPlayerToLocation(player, faction.getIsland().getCenter(world));
         } else {
             Messages.ERROR.send(player, "%operation%", "teleport to your faction's island", "%debug%", "WORLD_NOT_EXIST");

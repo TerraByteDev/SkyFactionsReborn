@@ -6,6 +6,7 @@ import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -35,24 +36,44 @@ public class FactionInfoCommand extends CommandTemplate {
         if (CooldownHandler.manageCooldown(player)) return;
 
         if (args.length == 1) {
-            if (!FactionAPI.isInFaction(player)) {
-                Messages.NOT_IN_FACTION.send(player);
-                return;
-            }
+            FactionAPI.isInFaction(player).whenCompleteAsync((isInFaction, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                    return;
+                }
 
-            Faction faction = FactionAPI.getFaction(player);
-            if (faction != null) {
-                sendInfo(player, faction);
-            }
+                if (!isInFaction) {
+                    Messages.NOT_IN_FACTION.send(player);
+                } else {
+
+                    FactionAPI.getFaction(player).whenCompleteAsync((faction, throwable) -> {
+                        if (throwable != null) {
+                            ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
+                            return;
+                        }
+
+                        if (faction != null) {
+                            sendInfo(player, faction);
+                        }
+                    });
+                }
+            });
         } else if (args.length > 1) {
             String name = args[1];
 
-            Faction faction = FactionAPI.getFaction(name);
-            if (faction != null) {
-                sendInfo(player, faction);
-            } else {
-                Messages.FACTION_NOT_FOUND.send(player, "%name%", name);
-            }
+
+            FactionAPI.getFaction(name).whenCompleteAsync((faction, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);
+                    return;
+                }
+
+                if (faction != null) {
+                    sendInfo(player, faction);
+                } else {
+                    Messages.FACTION_NOT_FOUND.send(player, "%name%", name);
+                }
+            });
         }
     }
 

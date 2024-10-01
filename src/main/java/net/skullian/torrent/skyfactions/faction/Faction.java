@@ -341,6 +341,15 @@ public class Faction {
     }
 
     /**
+     * Get the total amount of members in the Faction.
+     *
+     * @return Amount of members {@link Integer}
+     */
+    public int getTotalMemberCount() {
+        return getMembers().size() + getFighters().size() + getModerators().size() + getAdmins().size() + 1;
+    }
+
+    /**
      * Reject a Player's join request to your Faction.
      *
      * @param data  Data of the invite [{@link InviteData}]

@@ -7,6 +7,7 @@ import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.config.types.Settings;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -43,27 +44,33 @@ public class FactionCreateCommand extends CommandTemplate {
             }
             String name = msg.toString().trim();
 
-            if (FactionAPI.isInFaction(player)) {
-                Messages.ALREADY_IN_FACTION.send(player);
-            } else if (FactionAPI.getFaction(name) != null) {
-                Messages.FACTION_CREATION_NAME_DUPLICATE.send(player);
+            FactionAPI.isInFaction(player).whenCompleteAsync((isInFaction, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                    return;
+                }
 
-            } else {
-                if (FactionAPI.hasValidName(player, name)) {
-                    int cost = Settings.FACTION_CREATION_COST.getInt();
-                    if (cost > 0) {
-                        if (!SkyFactionsReborn.ec.hasEnoughMoney(player, cost)) {
-                            Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
-                            return;
+                if (isInFaction) {
+                    Messages.ALREADY_IN_FACTION.send(player);
+                } else if (FactionAPI.getFaction(name) != null) {
+                    Messages.FACTION_CREATION_NAME_DUPLICATE.send(player);
+                } else {
+                    if (FactionAPI.hasValidName(player, name)) {
+                        int cost = Settings.FACTION_CREATION_COST.getInt();
+                        if (cost > 0) {
+                            if (!SkyFactionsReborn.ec.hasEnoughMoney(player, cost)) {
+                                Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
+                                return;
+                            }
+
+                            SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);
+                            ;
                         }
 
-                        SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);
-                        ;
+                        FactionAPI.createFaction(player, name);
                     }
-
-                    FactionAPI.createFaction(player, name);
                 }
-            }
+            });
         }
     }
 

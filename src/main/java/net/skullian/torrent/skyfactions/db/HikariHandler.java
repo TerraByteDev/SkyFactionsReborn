@@ -1065,7 +1065,20 @@ public class HikariHandler {
 
                     FactionIsland island = getFactionIsland(name).get();
 
-                    return new Faction(island, name, last_raid, level);
+                    return new Faction(
+                            island,
+                            name,
+                            last_raid,
+                            level,
+                            getFactionOwner(name).join(),
+                            getMembersByRank(name, "admin").join(),
+                            getMembersByRank(name, "moderator").join(),
+                            getMembersByRank(name, "fighter").join(),
+                            getMembersByRank(name, "member").join(),
+                            getMOTD(name).join(),
+                            getRunes(name).join(),
+                            getGems(name).join()
+                    );
                 }
 
                 statement.close();

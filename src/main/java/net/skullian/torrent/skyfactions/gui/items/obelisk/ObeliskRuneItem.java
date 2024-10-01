@@ -45,7 +45,7 @@ public class ObeliskRuneItem extends AbstractItem {
                 .setDisplayName(TextUtility.color(NAME));
         int runes = 0;
         if (TYPE.equals("player")) {
-            runes = SkyFactionsReborn.db.getRunes(PLAYER).join();
+            runes = SkyFactionsReborn.db.getRunes(PLAYER.getUniqueId()).join();
         } else if (TYPE.equals("faction")) {
             runes = SkyFactionsReborn.db.getRunes(SkyFactionsReborn.db.getFaction(PLAYER).join().getName()).join();
         }

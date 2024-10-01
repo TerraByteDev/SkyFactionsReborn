@@ -7,7 +7,7 @@ import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.types.Messages;
-import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -33,33 +33,42 @@ public class FactionRequestJoinCommand extends CommandTemplate {
     public void perform(Player player, String[] args) {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
-
-        if (FactionAPI.isInFaction(player)) {
-            Messages.ALREADY_IN_FACTION.send(player);
+        if (args.length <= 1) {
+            Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
             return;
         }
 
-        if (args.length == 1) {
-            Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
-        } else if (args.length > 1) {
-            String factionName = args[1];
-            Faction faction = FactionAPI.getFaction(factionName);
-            if (faction == null) {
-                Messages.FACTION_NOT_FOUND.send(player, "%name%", factionName);
+        FactionAPI.isInFaction(player).whenCompleteAsync((isInFaction, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "check if you were in a Faction", "SQL_FACTION_GET", ex);
                 return;
-            } else if (faction.getAllMembers().contains(Bukkit.getOfflinePlayer(player.getUniqueId()))) {
-                Messages.JOIN_REQUEST_SAME_FACTION.send(player);
-                return;
-            } else if (SkyFactionsReborn.db.hasJoinRequest(player).join()) {
-                Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player);
+            } else if (isInFaction) {
+                Messages.ALREADY_IN_FACTION.send(player);
                 return;
             }
 
-            faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId()));
-            Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, "%faction_name%", factionName);
-            NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
+            String factionName = args[1];
+            FactionAPI.getFaction(factionName).whenCompleteAsync((faction, throwable) -> {
+                if (throwable != null) {
+                    ErrorHandler.handleError(player, "check the Faction", "SQL_FACTION_GET", throwable);
+                    return;
+                } else if (faction == null) {
+                    Messages.FACTION_NOT_FOUND.send(player, "%name%", factionName);
+                    return;
+                } else if (faction.getAllMembers().contains(Bukkit.getOfflinePlayer(player.getUniqueId()))) {
+                    Messages.JOIN_REQUEST_SAME_FACTION.send(player);
+                    return;
+                } else if (SkyFactionsReborn.db.hasJoinRequest(player).join()) {
+                    Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player);
+                    return;
+                }
 
-        }
+                faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId()));
+                Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, "%faction_name%", factionName);
+                NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
+            });
+        });
+
     }
 
     public static List<String> permissions = List.of("skyfactions.faction.requestjoin", "skyfactions.faction");
