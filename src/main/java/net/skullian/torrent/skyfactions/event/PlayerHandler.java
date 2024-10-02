@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.scheduler.BukkitTask;
 
 
 public class PlayerHandler implements Listener {
@@ -61,7 +62,8 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         SLogger.info("Cancelling Notification Task for {}...", event.getPlayer().getName());
-        NotificationAPI.tasks.get(event.getPlayer().getUniqueId()).cancel();
+        BukkitTask task = NotificationAPI.tasks.get(event.getPlayer().getUniqueId());
+        if (task != null) task.cancel();
     }
 
     @EventHandler

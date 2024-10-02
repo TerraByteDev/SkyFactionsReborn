@@ -22,6 +22,7 @@ import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -103,7 +104,9 @@ public class FactionAPI {
             return CompletableFuture.completedFuture(factionCache.get(player.getUniqueId()));
 
 
-        return SkyFactionsReborn.db.getFaction(player).whenCompleteAsync((faction, ex) -> {
+        return SkyFactionsReborn.db.getFaction(player).whenComplete((faction, ex) -> {
+            if (ex != null) ex.printStackTrace();
+            if (faction == null) return;
             factionCache.put(player.getUniqueId(), faction);
             factionNameCache.put(faction.getName(), faction);
         });
@@ -117,7 +120,16 @@ public class FactionAPI {
      */
     public static CompletableFuture<Faction> getFaction(String name) {
         if (factionNameCache.containsKey(name)) return CompletableFuture.completedFuture(factionNameCache.get(name));
-        return SkyFactionsReborn.db.getFaction(name);
+        return SkyFactionsReborn.db.getFaction(name).whenComplete((faction, ex) -> {
+            if (ex != null) ex.printStackTrace();
+            if (faction == null) return;
+
+            factionNameCache.put(faction.getName(), faction);
+            for (OfflinePlayer player : faction.getAllMembers()) {
+                if (!player.isOnline()) return;
+                factionCache.put(player.getUniqueId(), faction);
+            }
+        });
     }
 
     /**

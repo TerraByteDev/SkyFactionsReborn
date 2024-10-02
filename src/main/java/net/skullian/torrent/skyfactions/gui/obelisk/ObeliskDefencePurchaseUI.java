@@ -29,7 +29,7 @@ public class ObeliskDefencePurchaseUI {
 
     public static void promptPlayer(Player player, String obeliskType) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/defences/defence_purchase");
+            GUIData data = GUIAPI.getGUIData("obelisk/defences/defence_purchase_overview");
             PagedGui.Builder gui = registerItems(PagedGui.items()
                     .setStructure(data.getLAYOUT()), player, obeliskType);
 
@@ -50,7 +50,7 @@ public class ObeliskDefencePurchaseUI {
     private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player, String obeliskType) {
         try {
             builder.addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL);
-            List<ItemData> data = GUIAPI.getItemData("obelisk/defences/defence_purchase", player);
+            List<ItemData> data = GUIAPI.getItemData("obelisk/defences/defence_purchase_overview", player);
             List<PaginationItemData> paginationData = GUIAPI.getPaginationData(player);
 
             for (ItemData itemData : data) {
