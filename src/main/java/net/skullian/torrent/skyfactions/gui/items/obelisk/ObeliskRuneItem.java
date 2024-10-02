@@ -85,7 +85,7 @@ public class ObeliskRuneItem extends AbstractItem {
             return builder;
         });
 
-        return null;
+        return builder;
     }
 
     @Override

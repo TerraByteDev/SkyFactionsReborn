@@ -107,6 +107,7 @@ public class FactionAPI {
         return SkyFactionsReborn.db.getFaction(player).whenComplete((faction, ex) -> {
             if (ex != null) ex.printStackTrace();
             if (faction == null) return;
+
             factionCache.put(player.getUniqueId(), faction);
             factionNameCache.put(faction.getName(), faction);
         });

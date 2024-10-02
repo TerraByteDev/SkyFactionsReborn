@@ -17,6 +17,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ObeliskPlayerNotificationsItem extends AbstractItem {
 
@@ -38,26 +39,22 @@ public class ObeliskPlayerNotificationsItem extends AbstractItem {
 
     @Override
     public ItemProvider getItemProvider() {
-        SkyFactionsReborn.db.getNotifications(Bukkit.getOfflinePlayer(PLAYER.getUniqueId())).handle((notifications, ex) -> {
+        ItemBuilder builder = new ItemBuilder(STACK)
+                .setDisplayName(TextUtility.color(NAME));
+        CompletableFuture.runAsync(() -> SkyFactionsReborn.db.getNotifications(Bukkit.getOfflinePlayer(PLAYER.getUniqueId())).whenComplete((notifications, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(PLAYER, "to get notifications", "SQL_NOTIFICATION_GET", ex);
             } else {
-                ItemBuilder builder = new ItemBuilder(STACK)
-                        .setDisplayName(TextUtility.color(NAME));
 
                 for (String loreLine : LORE) {
                     builder.addLoreLines(TextUtility.color(loreLine
                             .replace("%notification_count%", String.valueOf(notifications.size()))
                     ));
                 }
-
-                return builder;
             }
+        })).thenApply(ignored -> builder);
 
-            return null;
-        });
-
-        return null;
+        return builder;
     }
 
     @Override

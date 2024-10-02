@@ -15,6 +15,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ObeliskHeadItem extends AbstractItem {
 
@@ -38,17 +39,21 @@ public class ObeliskHeadItem extends AbstractItem {
     public ItemProvider getItemProvider() {
         ItemBuilder builder = new ItemBuilder(STACK)
                 .setDisplayName(TextUtility.color(NAME));
-        IslandAPI.getPlayerIsland(PLAYER.getUniqueId()).handleAsync((island, ex) -> {
-            for (String loreLine : LORE) {
-                builder.addLoreLines(TextUtility.color(loreLine
-                        .replace("%level%", String.valueOf(SkyFactionsReborn.db.getIslandLevel(island).join()))
-                        .replace("%rune_count%", String.valueOf(SkyFactionsReborn.db.getRunes(PLAYER.getUniqueId()).join()))
-                        .replace("%gem_count%", String.valueOf(SkyFactionsReborn.db.getGems(PLAYER).join()))
-                ));
-            }
 
-            return builder;
-        });
+        CompletableFuture.runAsync(() -> {
+            IslandAPI.getPlayerIsland(PLAYER.getUniqueId()).whenComplete((island, ex) -> {
+                if (ex != null) {
+                    ex.printStackTrace();
+                }
+                for (String loreLine : LORE) {
+                    builder.addLoreLines(TextUtility.color(loreLine
+                            .replace("%level%", String.valueOf(SkyFactionsReborn.db.getIslandLevel(island).join()))
+                            .replace("%rune_count%", String.valueOf(SkyFactionsReborn.db.getRunes(PLAYER.getUniqueId()).join()))
+                            .replace("%gem_count%", String.valueOf(SkyFactionsReborn.db.getGems(PLAYER).join()))
+                    ));
+                }
+            });
+        }).thenApply((unused) -> builder);
 
         return builder;
     }
