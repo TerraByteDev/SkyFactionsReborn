@@ -27,7 +27,7 @@ public enum GUIEnums {
     OBELISK_JOIN_REQUEST_MANAGE_GUI("guis/obelisk/invites/join_request_manage"),
     OBELISK_PLAYER_NOTIFICATIONS_GUI("guis/obelisk/player_notifications"),
     OBELISK_DEFENCE_PURCHASE_OVERVIEW_GUI("guis/obelisk/defences/defence_purchase_overview"),
-    OBELISK_PURCHASE_DEFENCE_GUI("guis/obelisk/defence/purchase_defence");
+    OBELISK_PURCHASE_DEFENCE_GUI("guis/obelisk/defence/purchase_defence"),
 
     PAGINATION_MODEL("guis/pagination");
 
