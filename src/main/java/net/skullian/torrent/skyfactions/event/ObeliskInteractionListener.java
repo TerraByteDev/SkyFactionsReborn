@@ -7,7 +7,6 @@ import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.config.types.ObeliskConfig;
 import net.skullian.torrent.skyfactions.gui.obelisk.FactionObeliskUI;
 import net.skullian.torrent.skyfactions.gui.obelisk.PlayerObeliskUI;
-import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -28,18 +27,18 @@ public class ObeliskInteractionListener implements Listener {
 
     @EventHandler
     public void onBlockExplode(BlockExplodeEvent event) {
-        SLogger.fatal("EXPLODED: " + event.getBlock());
-        if (!event.getBlock().getType().equals(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString())) || !event.getBlock().getType().equals(Material.BARRIER))
-            return;
+        for (Block block : event.blockList()) {
+            if (!block.getType().equals(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString())) && !block.getType().equals(Material.BARRIER))
+                continue;
 
-        Block block = event.getBlock();
-        PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
-        NamespacedKey typeKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_type");
-        NamespacedKey ownerKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_owner");
-        if (!container.has(typeKey, PersistentDataType.STRING) || !container.has(ownerKey, PersistentDataType.STRING))
-            return;
+            PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
+            NamespacedKey typeKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_type");
+            NamespacedKey ownerKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_owner");
+            if (!container.has(typeKey, PersistentDataType.STRING) || !container.has(ownerKey, PersistentDataType.STRING))
+                return;
 
-        event.setCancelled(true);
+            event.blockList().remove(block);
+        }
     }
 
     @EventHandler

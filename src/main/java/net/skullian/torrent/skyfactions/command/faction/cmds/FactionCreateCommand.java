@@ -55,20 +55,31 @@ public class FactionCreateCommand extends CommandTemplate {
                 } else if (FactionAPI.getFaction(name) != null) {
                     Messages.FACTION_CREATION_NAME_DUPLICATE.send(player);
                 } else {
-                    if (FactionAPI.hasValidName(player, name)) {
-                        int cost = Settings.FACTION_CREATION_COST.getInt();
-                        if (cost > 0) {
-                            if (!SkyFactionsReborn.ec.hasEnoughMoney(player, cost)) {
-                                Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
-                                return;
-                            }
-
-                            SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);
-                            ;
+                    FactionAPI.getFaction(name).whenComplete((faction, exc) -> {
+                        if (exc != null) {
+                            ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", exc);
+                            return;
                         }
 
-                        FactionAPI.createFaction(player, name);
-                    }
+                        if (faction != null) {
+                            Messages.FACTION_CREATION_NAME_DUPLICATE.send(player);
+                        } else {
+                            if (FactionAPI.hasValidName(player, name)) {
+                                int cost = Settings.FACTION_CREATION_COST.getInt();
+                                if (cost > 0) {
+                                    if (!SkyFactionsReborn.ec.hasEnoughMoney(player, cost)) {
+                                        Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
+                                        return;
+                                    }
+
+                                    SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);
+                                    ;
+                                }
+
+                                FactionAPI.createFaction(player, name);
+                            }
+                        }
+                    });
                 }
             });
         }
