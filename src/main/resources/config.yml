@@ -34,20 +34,17 @@ Hub:
   # Also where players are teleported when they do /hub or their island is deleted.
   HUB_LOCATION: [ 0, 64, 0 ]
 
-
 # Configuration for commands.
 Commands:
   # You do NOT want this to be too low, definitely not 0. This will avoid database spam and anything else.
   COOLDOWN: 5000
 
+# Configuration for all sounds (apart from GUI item clicks, they are configured in their respective GUI config files)
+# Set the sound to "NONE" to disable it.
 Sounds:
   # Sent when an island is successfully created.
   ISLAND_CREATE_SUCCESS: "ui.toast.challenge_complete"
   ISLAND_CREATE_SUCCESS_PITCH: 1
-
-  # Sent when any command is run that opens a gui (e.g. /raid start).
-  GUI_OPEN: "ui.button.click"
-  GUI_OPEN_PITCH: 1
 
   # Sound played when an ONLINE player is about to be raided. Repeats quickly for 5s.
   ALARM_SOUND: "block.note_block.bell"
@@ -56,6 +53,14 @@ Sounds:
   # Sound when counting down for the start.
   COUNTDOWN_SOUND: "block.note_block.hat"
   COUNTDOWN_PITCH: 1
+
+  # Generally used in GUIs, when something goes wrong
+  ERROR_SOUND: "block.note_block.bass"
+  ERROR_SOUND_PITCH: 1
+
+  # Sent when a player purchases a defence successfully.
+  DEFENCE_PURCHASE_SUCCESS_SOUND: "ui.toast.challenge_complete"
+  DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH: 1
 
 
 # General island config.

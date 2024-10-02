@@ -19,6 +19,7 @@ public enum Messages {
     ERROR("ERROR"),
     INCORRECT_USAGE("INCORRECT_USAGE"),
     UNKNOWN_PLAYER("UNKNOWN_PLAYER"),
+    PLEASE_WAIT("PLEASE_WAIT"),
 
     COMMAND_HEAD("Commands.COMMAND_HEAD"),
     COMMAND_INFO("Commands.COMMAND_INFO"),
@@ -46,7 +47,8 @@ public enum Messages {
     RAID_NO_PLAYERS("Raiding.NO_PLAYERS"),
     RAID_PROCESSING("Raiding.RAID_PROCESSING"),
 
-    DEFENCE_INSUFFICIENT_RUNES("Defences.INSUFFICIENT_RUNES"),
+    DEFENCE_INSUFFICIENT_RUNES_LORE("Defences.INSUFFICIENT_RUNES_LORE"),
+    DEFENCE_INSUFFICIENT_INVENTORY_LORE("Defences.INSUFFICIENT_INVENTORY_LORE"),
 
     GEMS_COUNT_MESSAGE("Gems.GEM_COUNT"),
     GEM_ADD_SUCCESS("Gems.GEM_ADD_SUCCESS"),
@@ -200,6 +202,17 @@ public enum Messages {
 
     public String getString() {
         return config.getString("Messages." + this.path);
+    }
+
+    public List<String> getStringList() {
+        Object val = config.get("Messages." + this.path);
+
+        if (val == null) {
+            // we don't auto color this as this is only used for item lore which is handled already
+            val = SERVER_NAME.get() + "&r&7 Message not found: " + this.path;
+        }
+
+        return (List<String>) val;
     }
 
     public void send(CommandSender receiver, Object... replacements) {

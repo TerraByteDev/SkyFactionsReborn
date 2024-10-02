@@ -2,6 +2,7 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.obelisk.member.MemberManagementUI;
 import net.skullian.torrent.skyfactions.util.ErrorHandler;
@@ -27,13 +28,15 @@ public class ObeliskMemberManagementItem extends AbstractItem {
     private int PITCH;
     private List<String> LORE;
     private ItemStack STACK;
+    private Faction FACTION;
 
-    public ObeliskMemberManagementItem(ItemData data, ItemStack stack) {
+    public ObeliskMemberManagementItem(ItemData data, ItemStack stack, Faction faction) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
+        this.FACTION = faction;
     }
 
     @Override
@@ -55,23 +58,27 @@ public class ObeliskMemberManagementItem extends AbstractItem {
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
+        if (FACTION.isOwner(player) || FACTION.isAdmin(player) || FACTION.isModerator(player)) {
 
-        FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
-            if (faction == null) {
-                Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
-                return;
-            } else if (ex != null) {
-                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
-                return;
-            }
+            FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
+                if (faction == null) {
+                    Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
+                    return;
+                } else if (ex != null) {
+                    ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                    return;
+                }
 
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
-            if (faction.getOwner().equals(offlinePlayer) || faction.getAdmins().contains(offlinePlayer)) {
-                MemberManagementUI.promptPlayer(player);
-            } else {
-                Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_ADMIN_TITLE.get());
-            }
-        });
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
+                if (faction.getOwner().equals(offlinePlayer) || faction.getAdmins().contains(offlinePlayer)) {
+                    MemberManagementUI.promptPlayer(player);
+                } else {
+                    Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_ADMIN_TITLE.get());
+                }
+            });
+        } else {
+            Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_MODERATOR_TITLE.get());
+        }
     }
 
 }

@@ -1,7 +1,8 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk.defence;
 
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.gui.obelisk.ObeliskDefencePurchaseUI;
+import net.skullian.torrent.skyfactions.gui.obelisk.defence.ObeliskDefencePurchaseOverviewUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -23,14 +24,16 @@ public class ObeliskDefencePurchaseItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
     private String TYPE;
+    private Faction FACTION;
 
-    public ObeliskDefencePurchaseItem(ItemData data, ItemStack stack, String type) {
+    public ObeliskDefencePurchaseItem(ItemData data, ItemStack stack, String type, Faction faction) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
         this.TYPE = type;
+        this.FACTION = faction;
     }
 
 
@@ -54,8 +57,10 @@ public class ObeliskDefencePurchaseItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        ObeliskDefencePurchaseUI.promptPlayer(player, TYPE);
+        if (FACTION.isOwner(player) || FACTION.isModerator(player) || FACTION.isAdmin(player)) {
+            ObeliskDefencePurchaseOverviewUI.promptPlayer(player, TYPE, FACTION);
 
+        }
 
     }
 }

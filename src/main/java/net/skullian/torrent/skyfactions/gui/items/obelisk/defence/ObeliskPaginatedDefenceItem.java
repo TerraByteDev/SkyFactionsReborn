@@ -2,7 +2,9 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk.defence;
 
 import net.skullian.torrent.skyfactions.defence.DefencesRegistry;
 import net.skullian.torrent.skyfactions.defence.struct.DefenceStruct;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
+import net.skullian.torrent.skyfactions.gui.obelisk.defence.ObeliskPurchaseDefenceUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -24,14 +26,20 @@ public class ObeliskPaginatedDefenceItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
     private DefenceStruct STRUCT;
+    private boolean SHOULD_REDIRECT;
+    private String TYPE;
+    private Faction FACTION;
 
-    public ObeliskPaginatedDefenceItem(ItemData data, ItemStack stack, DefenceStruct struct) {
+    public ObeliskPaginatedDefenceItem(ItemData data, ItemStack stack, DefenceStruct struct, boolean shouldRedirect, String type, Faction faction) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
         this.STRUCT = struct;
+        this.SHOULD_REDIRECT = shouldRedirect;
+        this.TYPE = type;
+        this.FACTION = faction;
     }
 
     @Override
@@ -62,6 +70,8 @@ public class ObeliskPaginatedDefenceItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        // todo
+        if (SHOULD_REDIRECT) {
+            ObeliskPurchaseDefenceUI.promptPlayer(player, TYPE, STRUCT, FACTION);
+        }
     }
 }

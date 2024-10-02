@@ -16,6 +16,7 @@ Messages:
   COOLDOWN: '%server_name%&r&7 You must wait &c&l%cooldown%&r&7 seconds to use this command.' # When the player tries to use a command that is on cooldown (configured in config.yml!).
   INCORRECT_USAGE: '%server_name%&r&7 Incorrect usage of command. Usage: &c&l%usage%' # Sent when the player uses a command with improper syntax.
   UNKNOWN_PLAYER: "%server_name%&r&7 Unknown player: &c&l%player%" # Sent when a command is ran on an unknown player (when applicable).
+  PLEASE_WAIT: "%server_name%&r&7 %operation%, please wait..." # Sent when the plugin is processing a request. Everything is fully async so responses aren't guaranteed to be immediate.
 
   # Sent when an error occurs when trying to execute a command or task.
   # Placeholders: %operation% - what was happening / %debug% - Debug code to be used in accordance to https://docs.terrabytedev.com/skyfactions/errors-and-debugging.
@@ -149,8 +150,16 @@ Messages:
       - "&c&l---------------------------------------"
 
   Defences:
-    # Displayed underneath a defence's lore in the defence shop GUI when they do not have sufficient runes to purchase the defence.
-    INSUFFICIENT_RUNES: "&c&oYou do not have enough runs to purchase this item!"
+    # Appended to the end of the defence purchase confirmation item if the player does not have enough Runes.
+    INSUFFICIENT_RUNES_LORE:
+      - ""
+      - "&c&oYou do not have enough"
+      - "&c&oRunes to purchase this defence!"
+    # Appened to the end of the defence purchase confirmation item if the player doesn't have enough space in their inventory.
+    INSUFFICIENT_INVENTORY_LORE:
+      - ""
+      - "&c&oYou do not have enough"
+      - "&c&ospace in your inventory!"
 
   Gems:
     # Sent when the player runs /gems or /gems balance

@@ -1,9 +1,10 @@
-package net.skullian.torrent.skyfactions.gui.obelisk;
+package net.skullian.torrent.skyfactions.gui.obelisk.defence;
 
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.defence.DefencesRegistry;
 import net.skullian.torrent.skyfactions.defence.struct.DefenceStruct;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.data.PaginationItemData;
@@ -25,13 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ObeliskDefencePurchaseUI {
+public class ObeliskDefencePurchaseOverviewUI {
 
-    public static void promptPlayer(Player player, String obeliskType) {
+    public static void promptPlayer(Player player, String obeliskType, Faction faction) {
         try {
             GUIData data = GUIAPI.getGUIData("obelisk/defences/defence_purchase_overview");
             PagedGui.Builder gui = registerItems(PagedGui.items()
-                    .setStructure(data.getLAYOUT()), player, obeliskType);
+                    .setStructure(data.getLAYOUT()), player, obeliskType, faction);
 
             Window window = Window.single()
                     .setViewer(player)
@@ -47,7 +48,7 @@ public class ObeliskDefencePurchaseUI {
         }
     }
 
-    private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player, String obeliskType) {
+    private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player, String obeliskType, Faction faction) {
         try {
             builder.addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL);
             List<ItemData> data = GUIAPI.getItemData("obelisk/defences/defence_purchase_overview", player);
@@ -64,7 +65,7 @@ public class ObeliskDefencePurchaseUI {
                         break;
 
                     case "MODEL":
-                        builder.setContent(getItems(player, itemData));
+                        builder.setContent(getItems(player, itemData, obeliskType, faction));
                         break;
 
                     case "BORDER":
@@ -91,7 +92,7 @@ public class ObeliskDefencePurchaseUI {
         return builder;
     }
 
-    private static List<Item> getItems(Player player, ItemData data) {
+    private static List<Item> getItems(Player player, ItemData data, String obeliskType, Faction faction) {
         List<Item> items = new ArrayList<>();
 
 
@@ -102,7 +103,7 @@ public class ObeliskDefencePurchaseUI {
             data.setMATERIAL(struct.getITEM_MATERIAL());
             data.setLORE(struct.getITEM_LORE());
 
-            items.add(new ObeliskPaginatedDefenceItem(data, GUIAPI.createItem(data, player.getUniqueId()), defence.getValue()));
+            items.add(new ObeliskPaginatedDefenceItem(data, GUIAPI.createItem(data, player.getUniqueId()), defence.getValue(), true, obeliskType, faction));
         }
         return items;
     }

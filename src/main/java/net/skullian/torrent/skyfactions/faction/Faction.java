@@ -121,11 +121,27 @@ public class Faction {
      * @param addition Amount of runes to add [{@link Integer}]
      */
     public CompletableFuture<Void> addRunes(int addition) {
-        runes += addition;
-        return SkyFactionsReborn.db.addRunes(name, addition).exceptionally((ex) -> {
-            ex.printStackTrace();
-            runes -= addition;
-            return null;
+        return SkyFactionsReborn.db.addRunes(name, addition).whenComplete((ignored, ex) -> {
+            if (ex != null) {
+                throw new RuntimeException(ex);
+            }
+
+            runes += addition;
+        });
+    }
+
+    /**
+     * Remove runes from a Faction.
+     *
+     * @param subtraction Amount of runes to remove [{@link Integer}]
+     */
+    public CompletableFuture<Void> subtractRunes(int subtraction) {
+        return SkyFactionsReborn.db.removeRunes(name, subtraction).whenComplete((ignored, ex) -> {
+            if (ex != null) {
+                throw new RuntimeException(ex);
+            }
+
+            runes -= subtraction;
         });
     }
 

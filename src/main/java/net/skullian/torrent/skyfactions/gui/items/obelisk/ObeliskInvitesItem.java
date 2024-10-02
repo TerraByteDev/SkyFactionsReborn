@@ -1,8 +1,9 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.obelisk.invites.FactionInviteTypeSelectionUI;
-import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerIncomingInvites;
 import net.skullian.torrent.skyfactions.gui.obelisk.invites.PlayerInviteTypeSelectionUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
@@ -25,14 +26,16 @@ public class ObeliskInvitesItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
     private String TYPE;
+    private Faction FACTION;
 
-    public ObeliskInvitesItem(ItemData data, ItemStack stack, String type) {
+    public ObeliskInvitesItem(ItemData data, ItemStack stack, String type, Faction faction) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
         this.TYPE = type;
+        this.FACTION = faction;
     }
 
     @Override
@@ -55,7 +58,11 @@ public class ObeliskInvitesItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
         if (TYPE.equals("faction")) {
-            FactionInviteTypeSelectionUI.promptPlayer(player);
+            if (FACTION.isOwner(player) || FACTION.isAdmin(player) || FACTION.isModerator(player)) {
+                FactionInviteTypeSelectionUI.promptPlayer(player);
+            } else {
+                Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_MODERATOR_TITLE.get());
+            }
         } else if (TYPE.equals("player")) {
             PlayerInviteTypeSelectionUI.promptPlayer(player);
         }

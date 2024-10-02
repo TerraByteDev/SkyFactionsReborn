@@ -60,7 +60,7 @@ public class FactionObeliskUI {
                             break;
 
                         case "DEFENCES":
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction));
                             break;
 
                         case "RUNES_CONVERSION":
@@ -68,7 +68,7 @@ public class FactionObeliskUI {
                             break;
 
                         case "MEMBER_MANAGEMENT":
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), faction));
                             break;
 
                         case "AUDIT_LOGS":
@@ -76,11 +76,7 @@ public class FactionObeliskUI {
                             break;
 
                         case "INVITES":
-                            if (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player)) {
-                                builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
-                            } else {
-                                Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_MODERATOR_TITLE.get());
-                            }
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction));
                             break;
 
                         case "BORDER":

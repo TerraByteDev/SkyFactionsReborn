@@ -68,7 +68,7 @@ ITEMS:
     material: "RED_TERRACOTTA"
     skull: ""
     text: "&c&lCancel"
-    sound: "ui.button.click"
+    sound: "block.note_block.bass"
     pitch: 1
     lore: ""
   

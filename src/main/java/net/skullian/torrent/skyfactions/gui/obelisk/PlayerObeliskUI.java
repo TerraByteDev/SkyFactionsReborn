@@ -51,7 +51,7 @@ public class PlayerObeliskUI {
                         break;
 
                     case "DEFENCES":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", null));
                         break;
 
                     case "RUNES_CONVERSION":
@@ -59,7 +59,7 @@ public class PlayerObeliskUI {
                         break;
 
                     case "INVITES":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player"));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", null));
                         break;
 
                     case "NOTIFICATIONS":

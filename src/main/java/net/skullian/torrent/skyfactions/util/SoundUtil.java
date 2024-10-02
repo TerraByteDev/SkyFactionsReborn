@@ -21,7 +21,12 @@ import java.util.concurrent.CompletableFuture;
 public class SoundUtil {
 
     public static void playSound(Player player, String identifier, float pitch, float volume) {
+        if (identifier == null || identifier.equalsIgnoreCase("NONE")) return;
         Sound sound = Sound.sound(Key.key(identifier), Sound.Source.MASTER, volume, pitch);
+        if (sound == null) {
+            SLogger.warn("Attempted to play a sound of {} when it returned null!", identifier);
+            return;
+        }
         player.playSound(sound, Sound.Emitter.self());
     }
 
