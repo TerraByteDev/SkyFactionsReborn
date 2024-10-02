@@ -1,91 +1,65 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.obelisk.RuneSubmitUI;
-import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
+import xyz.xenondevs.invui.item.impl.AsyncItem;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
+public class ObeliskRuneItem extends AsyncItem {
 
-public class ObeliskRuneItem extends AbstractItem {
-
-    private String NAME;
     private String SOUND;
     private int PITCH;
-    private List<String> LORE;
-    private ItemStack STACK;
     private String TYPE;
-    private Player PLAYER;
 
     public ObeliskRuneItem(ItemData data, ItemStack stack, String type, Player player) {
-        this.NAME = data.getNAME();
+        super(
+                new ItemBuilder(Material.COMPASS).setDisplayName(TextUtility.color("&eLoading...")),
+                () -> {
+                    return new ItemProvider() {
+                        @Override
+                        public @NotNull ItemStack get(@Nullable String s) {
+                            ItemBuilder builder = new ItemBuilder(stack)
+                                    .setDisplayName(TextUtility.color(data.getNAME()));
+
+                            int runes = 0;
+                            if (type.equals("player")) {
+                                runes = SkyFactionsReborn.db.getRunes(player.getUniqueId()).join();
+                            } else if (type.equals("faction")) {
+                                Faction faction = FactionAPI.getFaction(player).join();
+                                if (faction != null) {
+                                    runes = faction.getRunes();
+                                }
+                            }
+
+                            for (String loreLine : data.getLORE()) {
+                                builder.addLoreLines(TextUtility.color(loreLine.replace("%runes%", String.valueOf(runes))));
+                            }
+
+                            return builder.get();
+                        }
+                    };
+                }
+        );
+
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
-        this.LORE = data.getLORE();
-        this.STACK = stack;
         this.TYPE = type;
-        this.PLAYER = player;
-    }
-
-    @Override
-    public ItemProvider getItemProvider() {
-        ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME));
-        AtomicInteger runes = new AtomicInteger(0);
-
-        CompletableFuture.runAsync(() -> {
-            if (TYPE.equals("player")) {
-                SkyFactionsReborn.db.getRunes(PLAYER.getUniqueId()).whenCompleteAsync((count, ex) -> {
-                    if (ex != null) {
-                        ErrorHandler.handleError(PLAYER, "get your runes", "SQL_RUNES_GET", ex);
-                        return;
-                    } else {
-                        runes.set(count);
-                    }
-
-                    return;
-                });
-            } else if (TYPE.equals("faction")) {
-                SkyFactionsReborn.db.getFaction(PLAYER).whenComplete((faction, ex) -> {
-                    if (ex != null) {
-                        ErrorHandler.handleError(PLAYER, "get your faction", "SQL_FACTION_GET", ex);
-                        return;
-                    }
-
-                    SkyFactionsReborn.db.getRunes(faction.getName()).whenCompleteAsync((count, exc) -> {
-                        if (exc != null) {
-                            ErrorHandler.handleError(PLAYER, "get your runes", "SQL_RUNES_GET", exc);
-                            return;
-                        } else {
-                            runes.set(count);
-                        }
-                    });
-                });
-            }
-        }).thenApply(ignored -> {
-            for (String loreLine : LORE) {
-                builder.addLoreLines(TextUtility.color(loreLine.replace("%runes%", String.valueOf(runes))));
-            }
-
-            return builder;
-        });
-
-        return builder;
     }
 
     @Override
