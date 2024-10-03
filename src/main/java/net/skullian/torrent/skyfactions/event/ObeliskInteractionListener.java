@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -25,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ObeliskInteractionListener implements Listener {
 
-    @EventHandler
+    @EventHandler()
     public void onBlockExplode(BlockExplodeEvent event) {
         for (Block block : event.blockList()) {
             if (!block.getType().equals(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString())) && !block.getType().equals(Material.BARRIER))
@@ -35,9 +36,28 @@ public class ObeliskInteractionListener implements Listener {
             NamespacedKey typeKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_type");
             NamespacedKey ownerKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_owner");
             if (!container.has(typeKey, PersistentDataType.STRING) || !container.has(ownerKey, PersistentDataType.STRING))
-                return;
+                continue;
 
             event.blockList().remove(block);
+            break;
+        }
+    }
+
+    @EventHandler()
+    public void onEntityExplode(EntityExplodeEvent event) {
+        for (Block block : event.blockList()) {
+            System.out.println(block.getType());
+            if (!block.getType().equals(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString())) && !block.getType().equals(Material.BARRIER))
+                continue;
+
+            PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
+            NamespacedKey typeKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_type");
+            NamespacedKey ownerKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_owner");
+            if (!container.has(typeKey, PersistentDataType.STRING) || !container.has(ownerKey, PersistentDataType.STRING))
+                continue;
+
+            event.blockList().remove(block);
+            break;
         }
     }
 
