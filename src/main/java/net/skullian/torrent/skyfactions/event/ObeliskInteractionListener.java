@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ObeliskInteractionListener implements Listener {
 
-    @EventHandler()
+    @EventHandler
     public void onBlockExplode(BlockExplodeEvent event) {
         for (Block block : event.blockList()) {
             if (!block.getType().equals(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString())) && !block.getType().equals(Material.BARRIER))
@@ -43,7 +43,7 @@ public class ObeliskInteractionListener implements Listener {
         }
     }
 
-    @EventHandler()
+    @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
         for (Block block : event.blockList()) {
             System.out.println(block.getType());
