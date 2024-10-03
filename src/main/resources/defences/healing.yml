@@ -89,6 +89,8 @@ ITEM:
     - "&7○ &9Damage:&6 %damage%"
     - "&7○ &9Cooldown:&6 %cooldown%"
     - "&7○ &9Healing:&6 %healing%" # Healing Specific
+    - ""
+    - "&7○ &9Cost:&6 %cost%"
 
   # Lore description of the item when upgrading.
   UPGRADE_LORE:
@@ -101,3 +103,5 @@ ITEM:
     - "&7○ &9Damage:&a %old_damage% &e>&a %new_damage%"
     - "&7○ &9Cooldown:&a %old_cooldown% &e>&a %new_damage%"
     - "&7○ &9Healing: &a%old_healing% &e>&a %new_healing%" # Healing Specific
+    - ""
+    - "&7○ &9Upgrade Cost:&6 %cost%"

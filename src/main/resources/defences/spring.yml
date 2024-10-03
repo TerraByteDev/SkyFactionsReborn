@@ -84,6 +84,8 @@ ITEM:
     - "&7○ &9Max Targets:&6 %target_max%"
     - "&7○ &9Damage:&6 %damage%"
     - "&7○ &9Cooldown:&6 %cooldown%"
+    - ""
+    - "&7○ &9Cost:&6 %cost%"
 
   # Lore description of the item when upgrading.
   UPGRADE_LORE:
@@ -96,3 +98,5 @@ ITEM:
     - "&7○ &9Damage:&a %old_damage% &e>&a %new_damage%"
     - "&7○ &9Cooldown:&a %old_cooldown% &e>&a %new_damage%"
     - "&7○ &9Distance:&a %old_distance% &e>&a %new_distance%" # Spring specific.
+    - ""
+    - "&7○ &9Upgrade Cost:&6 %cost%"

@@ -155,11 +155,16 @@ Messages:
       - ""
       - "&c&oYou do not have enough"
       - "&c&oRunes to purchase this defence!"
-    # Appened to the end of the defence purchase confirmation item if the player doesn't have enough space in their inventory.
+      -
+      # Appended to the end of the defence purchase confirmation item if the player doesn't have enough space in their inventory.
     INSUFFICIENT_INVENTORY_LORE:
       - ""
       - "&c&oYou do not have enough"
       - "&c&ospace in your inventory!"
+
+    # Sent when a player successfully purchases a defence.
+    # Placeholders: %defence_name% - Name of the defence purchased
+    DEFENCE_PURCHASE_SUCCESS: "%server_name% &eSuccessfully purchased &r%defence_name%&e!"
 
   Gems:
     # Sent when the player runs /gems or /gems balance
@@ -539,4 +544,9 @@ Messages:
     # Placeholders: %player_name% - Player who denied the invite.
     INVITE_DENY_TITLE: "&c&lInvite Denied"
     INVITE_DENY_DESCRIPTION: "&a%player_name% &edenied your Faction invite."
+
+    # Sent when a player (moderator, admin or owner) purchases a defence.
+    # Placeholders: %player_name% - Name of the player / %defence_name% - Configured name of the defence bought.
+    DEFENCE_PURCHASE_TITLE: "&eDefence Purchased"
+    DEFENCE_PURCHASE_DESCRIPTION: "&a%player_name% &epurchased the &r%defence_name%&e defence."
 

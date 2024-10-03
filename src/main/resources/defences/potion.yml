@@ -115,7 +115,7 @@ ITEM:
     - "&7Upgrading this defence will add:"
     - "&6Harming &7at &aLevel 3&7."
     - "&6Harming II &7at &aLevel 4&7."
-    - "&7Nausea &7at &aLevel 5&7."
+    - "&6Nausea &7at &aLevel 5&7."
     - ""
     - "&c&lStats:"
     - "&7○ &9Max Level:&6 %max_level%"
@@ -124,6 +124,8 @@ ITEM:
     - "&7○ &9Max Targets:&6 %target_max%"
     - "&7○ &9Damage:&6 %damage%"
     - "&7○ &9Cooldown:&6 %cooldown%"
+    - ""
+    - "&7○ &9Cost:&6 %cost%"
 
   # Lore description of the item when upgrading.
   UPGRADE_LORE:
@@ -136,3 +138,5 @@ ITEM:
     - "&7○ &9Damage:&a %old_damage% &e>&a %new_damage%"
     - "&7○ &9Cooldown:&a %old_cooldown% &e>&a %new_damage%"
     - "&7○ &9Extra Effects: &a%new_effects%" # SOUL SPECIFIC!
+    - ""
+    - "&7○ &9Upgrade Cost:&6 %cost%"

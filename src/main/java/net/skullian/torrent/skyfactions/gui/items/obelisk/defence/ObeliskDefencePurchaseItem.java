@@ -57,10 +57,11 @@ public class ObeliskDefencePurchaseItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        if (FACTION.isOwner(player) || FACTION.isModerator(player) || FACTION.isAdmin(player)) {
-            ObeliskDefencePurchaseOverviewUI.promptPlayer(player, TYPE, FACTION);
-
-        }
+        if (TYPE.equals("faction")) {
+            if (FACTION.isOwner(player) || FACTION.isModerator(player) || FACTION.isAdmin(player)) {
+                ObeliskDefencePurchaseOverviewUI.promptPlayer(player, TYPE, FACTION);
+            }
+        } else if (TYPE.equals("player")) ObeliskDefencePurchaseOverviewUI.promptPlayer(player, TYPE, FACTION);
 
     }
 }

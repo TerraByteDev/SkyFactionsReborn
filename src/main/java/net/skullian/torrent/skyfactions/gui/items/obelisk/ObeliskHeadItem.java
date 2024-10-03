@@ -2,11 +2,11 @@ package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.IslandAPI;
+import net.skullian.torrent.skyfactions.config.types.ObeliskConfig;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -24,7 +24,7 @@ public class ObeliskHeadItem extends AsyncItem {
 
     public ObeliskHeadItem(ItemData data, ItemStack stack, Player player) {
         super(
-                new ItemBuilder(Material.COMPASS).setDisplayName(TextUtility.color("&eLoading...")),
+                ObeliskConfig.getLoadingItem(),
                 () -> {
                     return new ItemProvider() {
                         @Override

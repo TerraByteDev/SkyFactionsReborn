@@ -4,13 +4,13 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.ObeliskConfig;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
 import net.skullian.torrent.skyfactions.gui.obelisk.RuneSubmitUI;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -29,7 +29,7 @@ public class ObeliskRuneItem extends AsyncItem {
 
     public ObeliskRuneItem(ItemData data, ItemStack stack, String type, Player player) {
         super(
-                new ItemBuilder(Material.COMPASS).setDisplayName(TextUtility.color("&eLoading...")),
+                ObeliskConfig.getLoadingItem(),
                 () -> {
                     return new ItemProvider() {
                         @Override

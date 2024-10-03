@@ -1,6 +1,6 @@
 # Title of the GUI (Inventory)
-TITLE: "&cManage %player_name%"
-OPEN_SOUND: "ui.button.click"
+TITLE: "&aPurchase Defence"
+OPEN_SOUND: "" # Already played in the overview config
 OPEN_PITCH: 1
 
 # This allows you to customise the shape of the GUI.
@@ -20,17 +20,14 @@ LAYOUT:
   - "b # # # # # # # #"
   - "# . . . d . . . #"
   - "# . a . . . c . #"
-  - "# . . . . . . . #"
   - "# # # # # # # # #"
-
-
 
 ITEMS:
 
   # Just a general prompt for what this GUI is about.
   # Placeholders: %player_name% - Name of player who is being managed.
   DEFENCE:
-    char: "p" # This is the character to use in the LAYOUT!
+    char: "d" # This is the character to use in the LAYOUT!
     material: "%defence_material%" # Placeholders: %defence_material% - Configured item material of the defence.
     skull: "%defence_skull%" # Placeholders: %defence_skull% - Skull texture of the defence, assuming the configured item material is a player head.
     text: "%defence_name%"# Placeholders: %defence_name% - Name of the defence
@@ -57,7 +54,7 @@ ITEMS:
     material: "LIME_TERRACOTTA"
     skull: ""
     text: "&a&lConfirm"
-    sound: "ui.button.click"
+    sound: "" # Different sound configured in the config.yml under Sounds
     pitch: 1
     lore: # Placeholders: %defence_cost% - Cost of defence in Runes.
       - "&7This will cost you"

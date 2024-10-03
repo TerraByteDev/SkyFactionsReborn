@@ -11,6 +11,7 @@ import net.skullian.torrent.skyfactions.gui.items.GeneralCancelItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.defence.ObeliskConfirmPurchaseItem;
 import net.skullian.torrent.skyfactions.gui.items.obelisk.defence.ObeliskPaginatedDefenceItem;
+import net.skullian.torrent.skyfactions.util.SLogger;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -43,18 +44,12 @@ public class ObeliskPurchaseDefenceUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, String obeliskType, DefenceStruct struct, Faction faction) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("confirmations/create_island", player);
+            List<ItemData> data = GUIAPI.getItemData("obelisk/defences/purchase_defence", player);
             for (ItemData itemData : data) {
+                SLogger.info(itemData.getITEM_ID());
+
+                SLogger.info(itemData.getCHARACTER());
                 switch (itemData.getITEM_ID()) {
-
-                    case "DEFENCE":
-                        itemData.setNAME(struct.getNAME());
-                        itemData.setBASE64_TEXTURE(struct.getITEM_SKULL());
-                        itemData.setMATERIAL(struct.getITEM_MATERIAL());
-                        itemData.setLORE(struct.getITEM_LORE());
-
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskPaginatedDefenceItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), struct, false, obeliskType, faction));
-                        break;
 
                     case "BACK":
                         builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), obeliskType));
@@ -72,10 +67,19 @@ public class ObeliskPurchaseDefenceUI {
                         builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
-                }
+                    case "DEFENCE":
+                        itemData.setNAME(struct.getNAME());
+                        itemData.setBASE64_TEXTURE(struct.getITEM_SKULL());
+                        itemData.setMATERIAL(struct.getITEM_MATERIAL());
+                        itemData.setLORE(struct.getITEM_LORE());
 
-                return builder;
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskPaginatedDefenceItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), struct, false, obeliskType, faction));
+                        break;
+
+                }
             }
+
+            return builder;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }

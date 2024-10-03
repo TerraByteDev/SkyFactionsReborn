@@ -1,6 +1,7 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk.defence;
 
-import net.skullian.torrent.skyfactions.defence.DefencesRegistry;
+import net.skullian.torrent.skyfactions.config.types.ObeliskConfig;
+import net.skullian.torrent.skyfactions.defence.DefencesFactory;
 import net.skullian.torrent.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
@@ -12,54 +13,64 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
+import xyz.xenondevs.invui.item.impl.AsyncItem;
 
-import java.util.List;
+public class ObeliskPaginatedDefenceItem extends AsyncItem {
 
-public class ObeliskPaginatedDefenceItem extends AbstractItem {
-
-    private String NAME;
     private String SOUND;
     private int PITCH;
-    private List<String> LORE;
-    private ItemStack STACK;
     private DefenceStruct STRUCT;
     private boolean SHOULD_REDIRECT;
     private String TYPE;
     private Faction FACTION;
 
     public ObeliskPaginatedDefenceItem(ItemData data, ItemStack stack, DefenceStruct struct, boolean shouldRedirect, String type, Faction faction) {
-        this.NAME = data.getNAME();
+        super(
+                ObeliskConfig.getLoadingItem(),
+                () -> {
+                    return new ItemProvider() {
+                        @Override
+                        public @NotNull ItemStack get(@Nullable String s) {
+                            ItemBuilder builder = new ItemBuilder(stack)
+                                    .setDisplayName(TextUtility.color(struct.getNAME()));
+
+                            String maxLevel = String.valueOf(struct.getMAX_LEVEL());
+                            String range = DefencesFactory.solveFormula(struct.getATTRIBUTES().getRANGE(), 1);
+                            String ammo = DefencesFactory.solveFormula(struct.getATTRIBUTES().getMAX_AMMO(), 1);
+                            String targetMax = DefencesFactory.solveFormula(struct.getATTRIBUTES().getMAX_TARGETS(), 1);
+                            String damage = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDAMAGE(), 1);
+                            String cooldown = DefencesFactory.solveFormula(struct.getATTRIBUTES().getCOOLDOWN(), 1);
+                            String healing = DefencesFactory.solveFormula(struct.getATTRIBUTES().getHEALING(), 1);
+                            String distance = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDISTANCE(), 1);
+
+                            for (String loreLine : struct.getITEM_LORE()) {
+                                builder.addLoreLines(TextUtility.color(loreLine
+                                        .replace("%max_level%", maxLevel)
+                                        .replace("%range%", range)
+                                        .replace("%ammo%", ammo)
+                                        .replace("%target_max%", targetMax)
+                                        .replace("%damage%", damage)
+                                        .replace("%cooldown%", cooldown)
+                                        .replace("%healing%", healing)
+                                        .replace("%distance%", distance)
+                                        .replace("%cost%", String.valueOf(struct.getBUY_COST()))));
+                            }
+
+                            return builder.get();
+                        }
+                    };
+                }
+        );
+
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
-        this.LORE = data.getLORE();
-        this.STACK = stack;
         this.STRUCT = struct;
         this.SHOULD_REDIRECT = shouldRedirect;
         this.TYPE = type;
         this.FACTION = faction;
-    }
-
-    @Override
-    public ItemProvider getItemProvider() {
-        ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME));
-
-        for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%max_level%", String.valueOf(STRUCT.getMAX_LEVEL()))
-                    .replace("%range%", DefencesRegistry.solveFormula(STRUCT.getATTRIBUTES().getRANGE(), 1))
-                    .replace("%ammo%", DefencesRegistry.solveFormula(STRUCT.getATTRIBUTES().getMAX_AMMO(), 1))
-                    .replace("%target_max%", DefencesRegistry.solveFormula(STRUCT.getATTRIBUTES().getMAX_TARGETS(), 1))
-                    .replace("%damage%", DefencesRegistry.solveFormula(STRUCT.getATTRIBUTES().getDAMAGE(), 1))
-                    .replace("%cooldown%", DefencesRegistry.solveFormula(STRUCT.getATTRIBUTES().getDAMAGE(), 1))
-                    .replace("%healing%", DefencesRegistry.solveFormula(STRUCT.getATTRIBUTES().getHEALING(), 1))
-                    .replace("%distance%", DefencesRegistry.solveFormula(STRUCT.getATTRIBUTES().getDISTANCE(), 1))));
-        }
-
-        return builder;
     }
 
     @Override

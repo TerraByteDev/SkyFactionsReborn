@@ -2,7 +2,7 @@ package net.skullian.torrent.skyfactions.config;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.types.*;
-import net.skullian.torrent.skyfactions.defence.DefencesRegistry;
+import net.skullian.torrent.skyfactions.defence.DefencesFactory;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
@@ -34,9 +34,9 @@ public class ConfigFileHandler {
 
         loadGUIs();
         if (!Files.exists(Paths.get(plugin.getDataFolder() + "/defences"))) {
-            DefencesRegistry.registerDefaultDefences();
+            DefencesFactory.registerDefaultDefences();
         }
-        DefencesRegistry.register();
+        DefencesFactory.register();
 
         configs.values().forEach(ConfigHandler::saveDefaultConfig);
         Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
@@ -60,7 +60,7 @@ public class ConfigFileHandler {
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
 
         loadGUIs();
-        DefencesRegistry.register();
+        DefencesFactory.register();
 
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();
         DISCORD_CONFIG = getFile(ConfigTypes.DISCORD).getConfig();

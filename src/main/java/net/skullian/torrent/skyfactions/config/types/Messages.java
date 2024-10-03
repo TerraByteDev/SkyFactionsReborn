@@ -49,6 +49,7 @@ public enum Messages {
 
     DEFENCE_INSUFFICIENT_RUNES_LORE("Defences.INSUFFICIENT_RUNES_LORE"),
     DEFENCE_INSUFFICIENT_INVENTORY_LORE("Defences.INSUFFICIENT_INVENTORY_LORE"),
+    DEFENCE_PURCHASE_SUCCESS("Defences.DEFENCE_PURCHASE_SUCCESS"),
 
     GEMS_COUNT_MESSAGE("Gems.GEM_COUNT"),
     GEM_ADD_SUCCESS("Gems.GEM_ADD_SUCCESS"),
@@ -170,6 +171,8 @@ public enum Messages {
     AUDIT_FACTION_PLAYER_INVITE_ACCEPT_DESCRIPTION("Audit_Logs.INVITE_ACCEPT_TITLE"),
     AUDIT_FACTION_PLAYER_INVITE_DENY_TITLE("Audit_Logs.INVITE_DENY_TITLE"),
     AUDIT_FACTION_PLAYER_INVITE_DENY_DESCRIPTION("Audit_Logs.INVITE_DENY_DESCRIPTION"),
+    AUDIT_FACTION_DEFENCE_PURCHASE_TITLE("Audit_Logs.DEFENCE_PURCHASE_TITLE"),
+    AUDIT_FACTION_DEFENCE_PURCHASE_DESCRIPTION("Audit_Logs.DEFENCE_PURCHASE_DESCRIPTION"),
 
     NOTIFICATION_TIMESTAMP_FORMAT("Notifications.NOTIFICATION_TYPES.NOTIFICATION_TIMESTAMP"),
     NOTIFICATION_FACTION_INVITE_TITLE("Notifications.NOTIFICATION_TYPES.FACTION_INVITE_TITLE"),
@@ -205,14 +208,14 @@ public enum Messages {
     }
 
     public List<String> getStringList() {
-        Object val = config.get("Messages." + this.path);
+        List<String> val = config.getStringList("Messages." + this.path);
 
         if (val == null) {
             // we don't auto color this as this is only used for item lore which is handled already
-            val = SERVER_NAME.get() + "&r&7 Message not found: " + this.path;
+            val = List.of(SERVER_NAME.get() + "&r&7 Message not found: " + this.path);
         }
 
-        return (List<String>) val;
+        return val;
     }
 
     public void send(CommandSender receiver, Object... replacements) {

@@ -3,15 +3,30 @@ package net.skullian.torrent.skyfactions.defence;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.RunesAPI;
+import net.skullian.torrent.skyfactions.api.SkullAPI;
 import net.skullian.torrent.skyfactions.config.ConfigHandler;
+import net.skullian.torrent.skyfactions.config.types.Messages;
+import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.defence.struct.DefenceAttributeStruct;
 import net.skullian.torrent.skyfactions.defence.struct.DefenceEffectStruct;
 import net.skullian.torrent.skyfactions.defence.struct.DefenceStruct;
+import net.skullian.torrent.skyfactions.faction.AuditLogType;
+import net.skullian.torrent.skyfactions.faction.Faction;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SLogger;
+import net.skullian.torrent.skyfactions.util.SoundUtil;
+import net.skullian.torrent.skyfactions.util.text.TextUtility;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +39,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class DefencesRegistry {
+public class DefencesFactory {
 
     public static final Map<String, DefenceStruct> defences = new HashMap<>();
 
@@ -182,5 +197,72 @@ public class DefencesRegistry {
         }
 
         return "N/A";
+    }
+
+    public static void addDefence(Player player, DefenceStruct defence, Faction faction) {
+        ItemStack stack = SkullAPI.convertToSkull(new ItemStack(Material.getMaterial(defence.getITEM_MATERIAL())), defence.getITEM_SKULL());
+        NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-name");
+
+        ItemMeta meta = stack.getItemMeta();
+        meta.setDisplayName(TextUtility.color(defence.getNAME()));
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, defence.getNAME());
+
+        meta.setLore(getFormattedLore(defence, defence.getITEM_LORE()));
+        stack.setItemMeta(meta);
+
+
+        if (faction != null) {
+            // assume faction type
+            faction.subtractRunes(defence.getBUY_COST()).whenComplete((ignored, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "purchase a defence", "SQL_GEMS_MODIFY", ex);
+                    return;
+                }
+
+                player.getInventory().addItem(stack);
+                SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
+                Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME()));
+
+                faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_PURCHASE, "%player_name%", player.getName(), "%defence_name%", TextUtility.color(defence.getNAME()));
+            });
+        } else {
+            RunesAPI.removeRunes(player.getUniqueId(), defence.getBUY_COST()).whenComplete((ignored, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "purchase a defence", "SQL_GEMS_MODIFY", ex);
+                    return;
+                }
+
+                player.getInventory().addItem(stack);
+                SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
+                Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME()));
+            });
+        }
+    }
+
+    private static List<String> getFormattedLore(DefenceStruct struct, List<String> lore) {
+        String maxLevel = String.valueOf(struct.getMAX_LEVEL());
+        String range = DefencesFactory.solveFormula(struct.getATTRIBUTES().getRANGE(), 1);
+        String ammo = DefencesFactory.solveFormula(struct.getATTRIBUTES().getMAX_AMMO(), 1);
+        String targetMax = DefencesFactory.solveFormula(struct.getATTRIBUTES().getMAX_TARGETS(), 1);
+        String damage = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDAMAGE(), 1);
+        String cooldown = DefencesFactory.solveFormula(struct.getATTRIBUTES().getCOOLDOWN(), 1);
+        String healing = DefencesFactory.solveFormula(struct.getATTRIBUTES().getHEALING(), 1);
+        String distance = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDISTANCE(), 1);
+        List<String> newLore = new ArrayList<>();
+
+        for (String str : lore) {
+            newLore.add(TextUtility.color(str
+                    .replace("%max_level%", maxLevel)
+                    .replace("%range%", range)
+                    .replace("%ammo%", ammo)
+                    .replace("%target_max%", targetMax)
+                    .replace("%damage%", damage)
+                    .replace("%cooldown%", cooldown)
+                    .replace("%healing%", healing)
+                    .replace("%distance%", distance)
+                    .replace("%cost%", String.valueOf(struct.getBUY_COST()))));
+        }
+
+        return newLore;
     }
 }

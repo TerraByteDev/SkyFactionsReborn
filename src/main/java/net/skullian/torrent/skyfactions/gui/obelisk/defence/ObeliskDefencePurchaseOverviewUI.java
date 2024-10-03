@@ -2,7 +2,7 @@ package net.skullian.torrent.skyfactions.gui.obelisk.defence;
 
 import net.skullian.torrent.skyfactions.api.GUIAPI;
 import net.skullian.torrent.skyfactions.config.types.Messages;
-import net.skullian.torrent.skyfactions.defence.DefencesRegistry;
+import net.skullian.torrent.skyfactions.defence.DefencesFactory;
 import net.skullian.torrent.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.GUIData;
@@ -95,15 +95,14 @@ public class ObeliskDefencePurchaseOverviewUI {
     private static List<Item> getItems(Player player, ItemData data, String obeliskType, Faction faction) {
         List<Item> items = new ArrayList<>();
 
-
-        for (Map.Entry<String, DefenceStruct> defence : DefencesRegistry.defences.entrySet()) {
+        for (Map.Entry<String, DefenceStruct> defence : DefencesFactory.defences.entrySet()) {
             DefenceStruct struct = defence.getValue();
             data.setNAME(struct.getNAME());
             data.setBASE64_TEXTURE(struct.getITEM_SKULL());
             data.setMATERIAL(struct.getITEM_MATERIAL());
             data.setLORE(struct.getITEM_LORE());
 
-            items.add(new ObeliskPaginatedDefenceItem(data, GUIAPI.createItem(data, player.getUniqueId()), defence.getValue(), true, obeliskType, faction));
+            items.add(new ObeliskPaginatedDefenceItem(data, GUIAPI.createItem(data, player.getUniqueId()), struct, true, obeliskType, faction));
         }
         return items;
     }
