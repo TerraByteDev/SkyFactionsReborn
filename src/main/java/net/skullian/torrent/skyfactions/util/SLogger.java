@@ -9,7 +9,7 @@ public class SLogger {
 
     public static void info(Object message, Object... args) {
         synchronized (SkyFactionsReborn.class) {
-            LOGGEE.info("\u001B[34m" + message + "\u001B[0m", args);
+            LOGGER.info("\u001B[34m" + message + "\u001B[0m", args);
         }
     }
 
