@@ -5,17 +5,17 @@ import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 
 public class SLogger {
 
-    public static final ComponentLogger LOGGER = ComponentLogger.logger("");
+    public static final ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
 
     public static void info(Object message, Object... args) {
         synchronized (SkyFactionsReborn.class) {
-            LOGGER.info("\u001B[32m[SkyFactionsReborn]\u001B[34m " + message + "\u001B[0m", args);
+            LOGGEE.info("\u001B[34m" + message + "\u001B[0m", args);
         }
     }
 
     public static void warn(Object message, Object... args) {
         synchronized (SkyFactionsReborn.class) {
-            LOGGER.warn("\u001B[33m[\u001B[32mSkyFactionsReborn\u001B[33m] " + message + "\u001B[0m", args);
+            LOGGER.warn(message + "\u001B[0m", args);
         }
     }
 
