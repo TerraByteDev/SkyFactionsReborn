@@ -21,7 +21,7 @@ public class SLogger {
 
     public static void fatal(Object message, Object... args) {
         synchronized (SkyFactionsReborn.class) {
-            LOGGER.error("\u001B[31m[SkyFactionsReborn] " + message + "\u001B[0m", args);
+            LOGGER.error(message + "\u001B[0m", args);
         }
     }
 }
