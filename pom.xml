@@ -6,7 +6,7 @@
 
     <groupId>net.skullian.torrent</groupId>
     <artifactId>SkyFactionsReborn</artifactId>
-    <version>0.0.1-1.21-ALPHA</version>
+    <version>0.0.1-1.21-BETA</version>
     <packaging>jar</packaging>
 
     <name>SkyFactionsReborn</name>
