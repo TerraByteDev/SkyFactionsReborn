@@ -44,7 +44,7 @@ public class PlayerHandler implements Listener {
             }
 
             if (island != null) {
-                IslandAPI.handleJoinBorder(event.getPlayer(), island);
+                IslandAPI.handlePlayerJoinBorder(event.getPlayer(), island);
 
                 if (Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean()) {
                     World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());

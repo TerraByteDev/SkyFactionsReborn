@@ -50,8 +50,11 @@ public class IslandAPI {
         return SkyFactionsReborn.db.getPlayerIsland(playerUUID);
     }
 
-    public static void handleJoinBorder(Player player, PlayerIsland island) {
-        // TODO GET LIMITING BUILDING AND WORLDBORDER
+    public static void handlePlayerJoinBorder(Player player, PlayerIsland island) {
+        World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+        if (islandWorld == null) return;
+
+        SkyFactionsReborn.worldBorderApi.setBorder(player, (island.getSize() * 2), island.getCenter(islandWorld));
     }
 
     public static void createIsland(Player player) {
@@ -73,6 +76,7 @@ public class IslandAPI {
                 return;
             }
 
+            IslandAPI.handlePlayerJoinBorder(player, island); // shift join border
             teleportPlayerToLocation(player, island.getCenter(world));
 
             ObeliskHandler.spawnPlayerObelisk(player, island);

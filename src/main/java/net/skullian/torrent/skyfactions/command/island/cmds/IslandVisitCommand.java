@@ -58,6 +58,7 @@ public class IslandVisitCommand extends CommandTemplate {
                             } else {
                                 if (isTrusted) {
                                     Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+                                        IslandAPI.handlePlayerJoinBorder(player, is); // shift the worldborder
                                         IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
                                     });
                                 } else {

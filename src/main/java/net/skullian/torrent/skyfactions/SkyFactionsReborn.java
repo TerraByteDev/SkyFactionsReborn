@@ -1,5 +1,7 @@
 package net.skullian.torrent.skyfactions;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.jeff_media.customblockdata.CustomBlockData;
 import net.kyori.adventure.text.Component;
@@ -24,7 +26,9 @@ import net.skullian.torrent.skyfactions.command.sf.SFCommandTabCompletion;
 import net.skullian.torrent.skyfactions.config.ConfigFileHandler;
 import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.db.HikariHandler;
+import net.skullian.torrent.skyfactions.defence.DefenceDestructionManager;
 import net.skullian.torrent.skyfactions.discord.DiscordHandler;
+import net.skullian.torrent.skyfactions.event.DefenceHandler;
 import net.skullian.torrent.skyfactions.event.ObeliskInteractionListener;
 import net.skullian.torrent.skyfactions.event.PlayerHandler;
 import net.skullian.torrent.skyfactions.util.DependencyHandler;
@@ -63,7 +67,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public void onEnable() {
 
         print();
-
         // Store an instance of the ConfigHandler class in case it is needed.
         // Primarily used for the discord integration.
         SLogger.info("Initialising Configs.");
@@ -104,6 +107,13 @@ public final class SkyFactionsReborn extends JavaPlugin {
         SLogger.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
         getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
+        getServer().getPluginManager().registerEvents(new DefenceHandler(), this);
+
+        SLogger.info("Registering PacketEvents Listener.");
+        PacketEvents.getAPI().getEventManager().registerListener(
+                new DefenceDestructionManager(), PacketListenerPriority.NORMAL
+        );
+        PacketEvents.getAPI().init();
 
         // We store an instance of the DiscordHandler class as that is how other internals
         // access methods related to Discord (e.g. raid notifications).

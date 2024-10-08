@@ -40,6 +40,7 @@ public class FactionTeleportCommand extends CommandTemplate {
                 return;
             }
 
+            FactionAPI.handleFactionWorldBorder(player, faction.getIsland());
             FactionAPI.teleportToFactionIsland(player, faction);
         });
     }

@@ -70,7 +70,7 @@ public class LeaveConfirmationItem extends AbstractItem {
             if (faction != null) {
                 World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
                 if (world != null) {
-                    if (FactionAPI.isInRegion(player, world, faction.getName())) {
+                    if (FactionAPI.isInRegion(player, faction.getName())) {
 
                         SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).whenComplete((island, exc) -> {
                             if (exc != null) {

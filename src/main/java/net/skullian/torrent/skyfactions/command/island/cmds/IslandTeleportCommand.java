@@ -40,6 +40,7 @@ public class IslandTeleportCommand extends CommandTemplate {
             } else {
                 World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                 if (world != null) {
+                    IslandAPI.handlePlayerJoinBorder(player, island); // shift join border
                     IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
                 } else {
                     Messages.ERROR.send(player, "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");

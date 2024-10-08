@@ -38,6 +38,13 @@ public class FactionAPI {
     private static Map<UUID, Faction> factionCache = new HashMap<>();
     private static Map<String, Faction> factionNameCache = new HashMap<>();
 
+    public static void handleFactionWorldBorder(Player player, FactionIsland island) {
+        World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
+        if (world == null) return;
+
+        SkyFactionsReborn.worldBorderApi.setBorder(player, (island.getSize() * 2), island.getCenter(world));
+    }
+
     /**
      * Teleport the player to their faction's island.
      *
@@ -209,6 +216,7 @@ public class FactionAPI {
 
             ObeliskHandler.spawnFactionObelisk(faction_name, island);
 
+            handleFactionWorldBorder(player, island);
             IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
             Messages.FACTION_CREATION_SUCCESS.send(player);
@@ -219,11 +227,10 @@ public class FactionAPI {
      * Check if a player is in a certain region.
      *
      * @param player     Player to check.
-     * @param world      World where region is located.
      * @param regionName Name of region.
      * @return {@link Boolean}
      */
-    public static boolean isInRegion(Player player, World world, String regionName) {
+    public static boolean isInRegion(Player player, String regionName) {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         com.sk89q.worldedit.util.Location location = BukkitAdapter.adapt(player.getLocation());
         RegionQuery query = container.createQuery();
