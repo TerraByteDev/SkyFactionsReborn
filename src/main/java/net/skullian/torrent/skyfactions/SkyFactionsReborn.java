@@ -1,7 +1,5 @@
 package net.skullian.torrent.skyfactions;
 
-import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.jeff_media.customblockdata.CustomBlockData;
 import net.kyori.adventure.text.Component;
@@ -26,7 +24,6 @@ import net.skullian.torrent.skyfactions.command.sf.SFCommandTabCompletion;
 import net.skullian.torrent.skyfactions.config.ConfigFileHandler;
 import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.db.HikariHandler;
-import net.skullian.torrent.skyfactions.defence.DefenceDestructionManager;
 import net.skullian.torrent.skyfactions.discord.DiscordHandler;
 import net.skullian.torrent.skyfactions.event.DefenceHandler;
 import net.skullian.torrent.skyfactions.event.ObeliskInteractionListener;
@@ -110,10 +107,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DefenceHandler(), this);
 
         SLogger.info("Registering PacketEvents Listener.");
-        PacketEvents.getAPI().getEventManager().registerListener(
-                new DefenceDestructionManager(), PacketListenerPriority.NORMAL
-        );
-        PacketEvents.getAPI().init();
 
         // We store an instance of the DiscordHandler class as that is how other internals
         // access methods related to Discord (e.g. raid notifications).

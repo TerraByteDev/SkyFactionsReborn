@@ -3,31 +3,28 @@ package net.skullian.torrent.skyfactions.event;
 import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.types.Messages;
-import net.skullian.torrent.skyfactions.defence.DefenceDestructionManager;
 import net.skullian.torrent.skyfactions.defence.DefencesFactory;
 import net.skullian.torrent.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerAnimationEvent;
-import org.bukkit.event.player.PlayerAnimationType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DefenceHandler implements Listener {
 
-    public DefenceDestructionManager manager;
-
-    public DefenceHandler() {
-        this.manager = new DefenceDestructionManager();
-    }
+    public List<Location> placedDefences = new ArrayList<>();
 
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {
@@ -68,26 +65,6 @@ public class DefenceHandler implements Listener {
         PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
         if (container.has(defenceKey, PersistentDataType.STRING)) {
             event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onMine(PlayerAnimationEvent event) {
-        Player player = event.getPlayer();
-        if (!event.getAnimationType().equals(PlayerAnimationType.ARM_SWING)) return;
-        if (!player.getGameMode().equals(GameMode.SURVIVAL)) return;
-
-        Block block = player.getTargetBlockExact(4, FluidCollisionMode.NEVER);
-        if (block == null) return;
-        if (block.getType().equals(Material.AIR)) return;
-        manager.updateAndNextPhase(player);
-
-        int blockStage = manager.getBlockStage(block.getLocation());
-        manager.sendBlockDamage(player, block.getLocation());
-        blockStage = ((blockStage + 1) % 10);
-        manager.setBlockStage(block.getLocation(), blockStage);
-        if (blockStage == 0) {
-            manager.removeBlockStage(block.getLocation());
         }
     }
 
