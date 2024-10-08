@@ -2,7 +2,8 @@
 
 ![Discord](https://img.shields.io/discord/1252801398601420852)
 ![CodeFactor](https://www.codefactor.io/repository/github/terrabytedev/skyfactionsreborn/badge)
-![GitHub Repo stars](https://img.shields.io/github/stars/TerraByteDev/SkyFactionsReborn)\
+![GitHub Repo stars](https://img.shields.io/github/stars/TerraByteDev/SkyFactionsReborn)
+![Build Status](https://ci.terrabytedev.com/job/SkyFactionsReborn/lastSuccessfulBuild/badge/icon)\
 \
 This plugin elegantly merges features from Skyblock and Factions. Skyblock, even when played on a big network, can get
 quite lonely. That's why we combined it with Factions and expanded on the gamemode tenfold. This seemed like an obvious
