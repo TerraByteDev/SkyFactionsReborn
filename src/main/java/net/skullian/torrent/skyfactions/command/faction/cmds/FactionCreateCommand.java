@@ -52,8 +52,6 @@ public class FactionCreateCommand extends CommandTemplate {
 
                 if (isInFaction) {
                     Messages.ALREADY_IN_FACTION.send(player);
-                } else if (FactionAPI.getFaction(name) != null) {
-                    Messages.FACTION_CREATION_NAME_DUPLICATE.send(player);
                 } else {
                     FactionAPI.getFaction(name).whenComplete((faction, exc) -> {
                         if (exc != null) {
