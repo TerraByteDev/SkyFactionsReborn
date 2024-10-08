@@ -1,4 +1,4 @@
-![ ](SkyFactionsReborn.png)
+![ ](SkyFactionsReborn 2.png)
 
 ![Discord](https://img.shields.io/discord/1252801398601420852)
 ![CodeFactor](https://www.codefactor.io/repository/github/terrabytedev/skyfactionsreborn/badge)
