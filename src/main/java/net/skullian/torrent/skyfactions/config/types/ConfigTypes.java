@@ -7,6 +7,7 @@ public enum ConfigTypes {
     DISCORD,
     EXTRA,
     OBELISK,
-    RUNES
+    RUNES,
+    DEFENCES
 
 }

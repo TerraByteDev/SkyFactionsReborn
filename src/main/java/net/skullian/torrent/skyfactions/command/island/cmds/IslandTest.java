@@ -1,6 +1,9 @@
 package net.skullian.torrent.skyfactions.command.island.cmds;
 
+import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
+import net.skullian.torrent.skyfactions.util.SLogger;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -24,7 +27,9 @@ public class IslandTest extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-
+        SLogger.fatal("PERFORMING");
+        SkyFactionsReborn.worldBorderApi.setBorder(player, 100, new Location(player.getWorld(), 0, 100, 0));
+        SLogger.fatal("AAAA");
     }
 
     public static List<String> permissions = List.of("skyfactions.admin.superomegatemporaryadminpermission");

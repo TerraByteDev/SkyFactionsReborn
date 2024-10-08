@@ -1,5 +1,6 @@
 package net.skullian.torrent.skyfactions;
 
+import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.jeff_media.customblockdata.CustomBlockData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -30,6 +31,7 @@ import net.skullian.torrent.skyfactions.util.DependencyHandler;
 import net.skullian.torrent.skyfactions.util.EconomyHandler;
 import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -42,6 +44,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static HikariHandler db;
     public static DiscordHandler dc;
     public static EconomyHandler ec;
+    public static WorldBorderApi worldBorderApi;
 
     private void print() {
         ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
@@ -107,6 +110,16 @@ public final class SkyFactionsReborn extends JavaPlugin {
         SLogger.info("Initialising JDA / Discord.");
         dc = new DiscordHandler();
         dc.initialiseBot();
+
+        RegisteredServiceProvider<WorldBorderApi> worldBorderApiRegisteredServiceProvider = getServer().getServicesManager().getRegistration(WorldBorderApi.class);
+
+        if (worldBorderApiRegisteredServiceProvider == null) {
+            getLogger().info("API not found");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        worldBorderApi = worldBorderApiRegisteredServiceProvider.getProvider();
 
         // This is kind of pointless.
         // Just a class for handling dependencies and optional dependencies.

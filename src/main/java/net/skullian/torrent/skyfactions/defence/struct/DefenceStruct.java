@@ -3,6 +3,7 @@ package net.skullian.torrent.skyfactions.defence.struct;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Material;
 
 import java.util.List;
 import java.util.Map;
@@ -48,4 +49,8 @@ public class DefenceStruct {
     private String ITEM_SKULL;
     private List<String> ITEM_LORE;
     private List<String> UPGRADE_LORE;
+
+    private String PLACEMENT_BLOCKED_MESSAGE;
+    private boolean IS_WHITELIST;
+    private List<Material> PLACEMENT_LIST;
 }

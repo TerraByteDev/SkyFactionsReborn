@@ -46,6 +46,20 @@ ATTRIBUTES:
   UPGRADE_COST: 65 * level # Cost of upgrading the defence.
   DISTANCE: 3 + level # SPRING SPECIFIC! How far the enemy is launched.
 
+# Configuration for limiting where this defence can be placed.
+PLACEMENT:
+  # Sent when a player attempts to place a defence on a disallowed block.
+  # These blocks (whitelist or blacklist) is specified in the defences.yml.
+  DEFENCE_INCORRECT_BLOCK: "%server_name%&c&l Hey!&r&7 You can only place this defence on &eFences, Walls and End Rods!"
+
+  # Whether the BLOCK list is a whitelist of what the defence can be placed on, or a blacklist.
+  WHITELIST: true
+  # What blocks can this defence be placed on / not placed on (see above)?
+  BLOCKS:
+    - "*FENCE" # Using '*' before equates to CONTAINS, so any block that contains the word "FENCE" will apply.
+    - "*WALL"
+    - "END_ROD"
+
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:
   ZOMBIE: randInt(2, 4)

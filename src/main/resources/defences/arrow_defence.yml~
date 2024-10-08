@@ -1,32 +1,32 @@
 # Name of the defence.
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
-NAME: "{#FF0034}&lLandmine{/#FF5300}"
+NAME: "&cArrow"
 
 # Type of the defence.
 # Possible defence types: HEALING, ARROW, SOUL, FLAMETHROWER, POTION, SPRING, LANDMINE
-TYPE: "LANDMINE"
+TYPE: "ARROW"
 
-# Runes cost when buying from the Obelisk
+# Resource Points cost when buying from the Obelisk (among other things)
 COST:
-  BUY: 100
-  SELL: 55
+  BUY: 80
+  SELL: 40
 
   # How many runes to purchase ONE ammo.
   # This supports level scaling!
-  AMMO_COST: 4
+  AMMO_COST: 2
 
 # Maximum level this defence can be upgraded to.
-MAX_LEVEL: 3
+MAX_LEVEL: 4
 
 # Sounds related to the defence.
 SOUNDS:
-  PLACE: "entity.dragon_fireball.explode" # On defence placement.
+  PLACE: "entity.arrow.shoot" # On defence placement.
   PLACE_PITCH: 1 # Pitch of the place sound.
 
-  BREAK: "entity.dragon_fireball.explode" # On defence removal.
+  BREAK: "entity.item.break" # On defence removal.
   BREAK_PITCH: 1 # Pitch of the break sound.
 
-  ACTIVATE: "entity.dragon_fireball.explode" # On defence activation (shoot, etc).
+  ACTIVATE: "entity.arrow.shoot" # On defence activation (shoot, etc).
   ACTIVATE_PITCH: 1 # Pitch of the activation sound
 
 # For FLAMETHROWER / ARROW / SOUL / POTION / SPRING / LANDMINE defence types, these message configs will be
@@ -37,20 +37,21 @@ SOUNDS:
 # In a Healing defence type, this would be used for healing notifications.
 # Placeholders: %health_increase% - Health they were healed for.
 MESSAGES:
-  - "{#E9C055}%player_name% &7met an explosive end while trying to fight [#E9C055}%defender%&7."
+  - "{#E9C055}%player_name% &7took an arrow to the knee while fighting {#E9C055}%defender%&7."
 
 # All attributes related to the defence.
 # PLACEHOLDERS: level - The defence level.
 ATTRIBUTES:
-  RANGE: 1 # How far the defence's range is.
-  COOLDOWN: 60 - (level * 1.5) # Cooldown.
-  TARGET_MAX: 1  # Max targets for the defence at once.
-  MAX_AMMO: 10 * level # Highest ammo count.
-  UPGRADE_COST: 65 * level # Cost of upgrading the defence.
-  DAMAGE: 1 + level # The damage dealt by the defence.
+  RANGE: 4 + level # How far the defence's range is.
+  COOLDOWN: 12 - level # Cooldown.
+  TARGET_MAX: 2 # Max targets for the defence at once.
+  MAX_AMMO: 350 * level # Highest ammo count.
+  UPGRADE_COST: 40 * level # Cost of upgrading the defence.
+  DAMAGE: 2 + level # The damage dealt by the defence.
 
 # Configuration for limiting where this defence can be placed.
 PLACEMENT:
+
   # Sent when a player attempts to place a defence on a disallowed block.
   # These blocks (whitelist or blacklist) is specified in the defences.yml.
   DEFENCE_INCORRECT_BLOCK: "%server_name%&c&l Hey!&r&7 You can only place this defence on &eFences, Walls and End Rods!"
@@ -65,13 +66,13 @@ PLACEMENT:
 
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:
-  ZOMBIE: randInt(2, 4)
-  SKELETON: randInt(4, 6)
-  SLIME: randInt(3, 4)
+  ZOMBIE: randInt(1, 3)
+  SKELETON: randInt(2, 3)
+  SLIME: randInt(2, 4)
 
 # Projectile that it "shoots". NONE for no projectile.
 # See https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
-PROJECTILE: "NONE"
+PROJECTILE: "ARROW"
 # Use a particle instead of a projectile. This will only override if PROJECTILE is set to NONE.
 # See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
 PARTICLE: "NONE"
@@ -80,19 +81,19 @@ PARTICLE: "NONE"
 # SKULL only applies if material is PLAYER_HEAD
 BLOCK:
   MATERIAL: "PLAYER_HEAD"
-  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWIyMGZmMTczYmQxN2IyYzRmMmViMjFmM2M0YjQzODQxYTE0YjMxZGZiZmQzNTRhM2JlYzgyNjNhZjU2MmIifX19"
+  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzVmZDc1MTZkZGJjODFhOWM4MWMxZDllMWMyYzk4ODBkMjNhZTE2M2IzZmIyMTZlZTBjYzQzOTE3YTg4MjgifX19"
 
 # Item (when in hotbar) Configuration.
 # SKULL only applies if material is PLAYER_HEAD
 ITEM:
   MATERIAL: "PLAYER_HEAD"
-  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWIyMGZmMTczYmQxN2IyYzRmMmViMjFmM2M0YjQzODQxYTE0YjMxZGZiZmQzNTRhM2JlYzgyNjNhZjU2MmIifX19"
+  SKULL: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzVmZDc1MTZkZGJjODFhOWM4MWMxZDllMWMyYzk4ODBkMjNhZTE2M2IzZmIyMTZlZTBjYzQzOTE3YTg4MjgifX19"
 
   # Every new line is a new line of lore.
   # Follows message formatting.
   LORE:
-    - "&aA sneaky defence that will"
-    - "&asurprise your enemies with a bang."
+    - "&aA basic defence that shoots"
+    - "&aarrows at mobs and enemies."
     - ""
     - "&c&lStats:"
     - "&7○ &9Max Level:&6 %max_level%"
@@ -103,6 +104,7 @@ ITEM:
     - "&7○ &9Cooldown:&6 %cooldown%"
     - ""
     - "&7○ &9Cost:&6 %cost%"
+
 
   # Lore description of the item when upgrading.
   UPGRADE_LORE:

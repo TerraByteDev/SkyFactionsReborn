@@ -129,9 +129,14 @@ public class DefencesFactory {
         List<String> ITEM_LORE = config.getStringList("ITEM.LORE");
         List<String> UPGRADE_LORE = config.getStringList("UPGRADE.LORE");
 
+        String PLACEMENT_BLOCKED_MESSAGE = config.getString("PLACEMENT.PLACEMENT_BLOCKED_MESSAGE");
+        boolean IS_WHITELIST = config.getBoolean("PLACEMENT.WHITELIST");
+        List<Material> BLOCKS_LIST = getPlacementBlocks(config, fileName);
+
         return new DefenceStruct(fileName, COLOR_NAME, TYPE, BUY_COST, SELL_COST, AMMO_COST, MAX_LEVEL,
                 PLACE_SOUND, PLACE_PITCH, BREAK_SOUND, BREAK_PITCH, ACTIVATE_SOUND, ACTIVATE_PITCH, EFFECTS, MESSAGES,
-                ATTRIBUTES, EXPERIENCE_DROPS, PROJECTILE, PARTICLE, BLOCK_MATERIAL, BLOCK_SKULL, ITEM_MATERIAL, ITEM_SKULL, ITEM_LORE, UPGRADE_LORE);
+                ATTRIBUTES, EXPERIENCE_DROPS, PROJECTILE, PARTICLE, BLOCK_MATERIAL, BLOCK_SKULL, ITEM_MATERIAL, ITEM_SKULL, ITEM_LORE, UPGRADE_LORE,
+                PLACEMENT_BLOCKED_MESSAGE, IS_WHITELIST, BLOCKS_LIST);
     }
 
     private static List<DefenceEffectStruct> getEffects(FileConfiguration config) {
@@ -201,11 +206,11 @@ public class DefencesFactory {
 
     public static void addDefence(Player player, DefenceStruct defence, Faction faction) {
         ItemStack stack = SkullAPI.convertToSkull(new ItemStack(Material.getMaterial(defence.getITEM_MATERIAL())), defence.getITEM_SKULL());
-        NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-name");
+        NamespacedKey nameKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-name");
 
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(TextUtility.color(defence.getNAME()));
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, defence.getNAME());
+        meta.getPersistentDataContainer().set(nameKey, PersistentDataType.STRING, defence.getFILE_NAME());
 
         meta.setLore(getFormattedLore(defence, defence.getITEM_LORE()));
         stack.setItemMeta(meta);
@@ -264,5 +269,23 @@ public class DefencesFactory {
         }
 
         return newLore;
+    }
+
+    private static List<Material> getPlacementBlocks(FileConfiguration config, String fName) {
+        List<Material> matchingMaterials = new ArrayList<>();
+        List<String> list = config.getStringList("PLACEMENT.BLOCKS");
+
+        for (String block : list) {
+            boolean isWildCard = block.startsWith("*");
+            String cleaned = isWildCard ? block.substring(1) : block;
+
+            Material match = Material.matchMaterial(cleaned);
+            if (match != null) {
+                matchingMaterials.add(match);
+            } else
+                SLogger.warn("Could not find any matching materials by the name of: {} in Defence {}", cleaned, fName);
+        }
+
+        return matchingMaterials;
     }
 }

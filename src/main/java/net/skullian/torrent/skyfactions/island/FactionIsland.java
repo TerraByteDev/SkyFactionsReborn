@@ -11,9 +11,9 @@ import java.util.List;
 public class FactionIsland {
 
     private int id;
-    private int last_raided;
+    private long last_raided;
 
-    public FactionIsland(int id, int last_raided) {
+    public FactionIsland(int id, long last_raided) {
         this.id = id;
         this.last_raided = last_raided;
     }

@@ -1,0 +1,20 @@
+#      ____       ____
+#    / __ \___  / __/__  ____  ________  _____
+#   / / / / _ \/ /_/ _ \/ __ \/ ___/ _ \/ ___/
+#  / /_/ /  __/ __/  __/ / / / /__/  __(__  )
+# /_____/\___/_/  \___/_/ /_/\___/\___/____/
+#
+
+# =============== DEFENCES CONFIG =============== #
+
+# Defences are one of the key features of SkyFactions.
+# It allows players and Factions to defend their islands in different ways.
+
+# This is the configuration for limits surrounding defences.
+Limits:
+  # Maximum amount of defences a player island can have.
+  MAX_PLAYER_DEFENCES: 10
+
+  # Maximum amount of defences a faction island can have.
+  MAX_FACTION_DEFENCES: 20
+

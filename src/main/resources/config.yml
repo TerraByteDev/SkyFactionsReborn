@@ -1,7 +1,9 @@
-# ____ ____ ___ ___ _ _  _ ____ ____
-# [__  |___  |   |  | |\ | | __ [__
-# ___] |___  |   |  | | \| |__] ___]
-#
+#     _____      __  __  _
+#   / ___/___  / /_/ /_(_)___  ____ ______
+#   \__ \/ _ \/ __/ __/ / __ \/ __ `/ ___/
+#  ___/ /  __/ /_/ /_/ / / / / /_/ (__  )
+# /____/\___/\__/\__/_/_/ /_/\__, /____/
+#                           /____/
 
 # =============== SKYFACTIONS CONFIG =============== #
 
@@ -65,6 +67,7 @@ Sounds:
 
 # General island config.
 Island:
+
   # Name of the WORLD where faction islands will be located.
   FACTION_WORLD_NAME: "faction_islands"
   # Name of the WORLD where player islands will be located.
@@ -116,6 +119,11 @@ Raiding:
   # Cooldown for being raided (in milliseconds).
   RAIDED_COOLDOWN: 86400000 # 24 Hours
 
+  # After a player has created their island, they will be immune to being raided for this specified amount of time (in milliseconds).
+  PLAYER_RAID_IMMUNITY: 21600000 # 6 Hours
+  # After a Faction has created their island, they will be immune to being raided for this specified amount of time (in milliseconds).
+  FACTION_RAID_IMMUNITY: 21600000 # 6 Hours
+
   # Height of where the attackers of a raid will spawn
   SPAWN_HEIGHT: 250
 
@@ -141,12 +149,6 @@ Raiding:
   # Time in seconds that they are in the preparation area before being teleported back to their island.
   RAID_PREPARATION_TIME: 30
 
-Defences:
-  # Maximum amount of defences a player island can have.
-  MAX_PLAYER_DEFENCES: 10
-
-  # Maximum amount of defences a faction island can have.
-  MAX_FACTION_DEFENCES: 20
 
 Factions:
   # All configurations related to creation factions.

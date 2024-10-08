@@ -5,7 +5,7 @@ api-version: 1.21
 authors: [ Skullians, nouish ]
 website: https://www.torrentsmp.com/
 
-depend: [ "FastAsyncWorldEdit", "WorldGuard", "Vault" ]
+depend: [ "FastAsyncWorldEdit", "WorldGuard", "Vault", "WorldBorderAPI" ]
 softdepend:
   - JukeBox
   - PlaceholderAPI

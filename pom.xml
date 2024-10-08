@@ -275,6 +275,13 @@
             <version>2.0.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.yannicklamprecht</groupId>
+            <artifactId>worldborderapi</artifactId>
+            <version>1.211.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

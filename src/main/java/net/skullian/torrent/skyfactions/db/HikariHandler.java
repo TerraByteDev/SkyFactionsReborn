@@ -420,7 +420,7 @@ public class HikariHandler {
                 statement.setInt(4, 0);
                 statement.setInt(5, 0);
                 statement.setInt(6, 0);
-                statement.setInt(7, 0);
+                statement.setLong(7, System.currentTimeMillis() + Settings.RAIDING_PLAYER_IMMUNITY.getInt());
 
                 statement.executeUpdate();
                 statement.close();
@@ -929,8 +929,6 @@ public class HikariHandler {
 
     // ------------------ FACTIONS ------------------ //
 
-    // TODO - Make all players / factions unraidable for CONFIGURABLE AMOUNT OF TIME!
-
     public CompletableFuture<Void> registerFaction(Player owner, String name) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
@@ -940,7 +938,7 @@ public class HikariHandler {
                 factionRegistration.setString(1, name);
                 factionRegistration.setString(2, "&aNone");
                 factionRegistration.setInt(3, 1);
-                factionRegistration.setInt(4, 0);
+                factionRegistration.setLong(4, 0);
 
                 factionOwnerRegistration.setString(1, name);
                 factionOwnerRegistration.setString(2, owner.getUniqueId().toString());
@@ -1012,7 +1010,7 @@ public class HikariHandler {
                 statement.setInt(3, 0);
                 statement.setInt(4, 0);
                 statement.setInt(5, 0);
-                statement.setInt(6, island.getLast_raided());
+                statement.setLong(6, island.getLast_raided());
 
                 statement.executeUpdate();
                 statement.close();
@@ -1302,7 +1300,6 @@ public class HikariHandler {
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM factions WHERE name = ?")) {
 
                 statement.setString(1, name);
-                ;
                 ResultSet set = statement.executeQuery();
 
                 if (set.next()) {

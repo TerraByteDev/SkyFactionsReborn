@@ -195,7 +195,7 @@ public class FactionAPI {
     }
 
     private static void createIsland(Player player, String faction_name) {
-        FactionIsland island = new FactionIsland(SkyFactionsReborn.db.cachedFactionIslandID, 0);
+        FactionIsland island = new FactionIsland(SkyFactionsReborn.db.cachedFactionIslandID, System.currentTimeMillis() + Settings.RAIDING_FACTION_IMMUNITY.getInt());
         SkyFactionsReborn.db.cachedFactionIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());

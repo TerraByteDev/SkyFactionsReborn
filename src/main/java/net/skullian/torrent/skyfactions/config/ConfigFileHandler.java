@@ -31,6 +31,7 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.DISCORD, new ConfigHandler(plugin, "discord"));
         registerFile(ConfigTypes.OBELISK, new ConfigHandler(plugin, "obelisk"));
         registerFile(ConfigTypes.RUNES, new ConfigHandler(plugin, "runes"));
+        registerFile(ConfigTypes.DEFENCES, new ConfigHandler(plugin, "defences"));
 
         loadGUIs();
         if (!Files.exists(Paths.get(plugin.getDataFolder() + "/defences"))) {
@@ -43,6 +44,7 @@ public class ConfigFileHandler {
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
+        DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
 
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();
         DISCORD_CONFIG = getFile(ConfigTypes.DISCORD).getConfig();
@@ -58,6 +60,7 @@ public class ConfigFileHandler {
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
+        DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
 
         loadGUIs();
         DefencesFactory.register();
@@ -71,7 +74,6 @@ public class ConfigFileHandler {
             ConfigHandler handler = new ConfigHandler(SkyFactionsReborn.getInstance(), enumEntry.getConfigPath());
             handler.saveDefaultConfig();
             GUIEnums.configs.put(enumEntry.getConfigPath(), handler.getConfig());
-
         }
     }
 
