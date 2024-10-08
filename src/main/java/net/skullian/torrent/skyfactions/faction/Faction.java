@@ -165,7 +165,7 @@ public class Faction {
      * @param player Player to kick [{@link Player}]
      */
     public CompletableFuture<Void> kickPlayer(OfflinePlayer player, Player actor) {
-        return SkyFactionsReborn.db.kickPlayer(player, name).whenCompleteAsync((ignored, ex) -> {
+        return SkyFactionsReborn.db.kickPlayer(player, name).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(actor, "kick a member from the Faction", "SQL_FACTION_KICK", ex);
                 return;
@@ -182,7 +182,7 @@ public class Faction {
      * @param player Player to ban [{@link Player}]
      */
     public CompletableFuture<Void> banPlayer(OfflinePlayer player, Player actor) {
-        return SkyFactionsReborn.db.banPlayer(name, player).whenCompleteAsync((ignored, ex) -> {
+        return SkyFactionsReborn.db.banPlayer(name, player).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(actor, "ban a member from the Faction", "SQL_FACTION_BAN", ex);
                 return;
@@ -289,7 +289,7 @@ public class Faction {
         return CompletableFuture.allOf(
                 SkyFactionsReborn.db.createInvite(player.getUniqueId(), name, "outgoing", inviter),
                 createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "%inviter%", inviter.getName(), "%player_name%", player.getName())
-        ).whenCompleteAsync((ignored, ex) -> {
+        ).whenComplete((ignored, ex) -> {
             if (player.isOnline()) {
                 Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer());
             } else {

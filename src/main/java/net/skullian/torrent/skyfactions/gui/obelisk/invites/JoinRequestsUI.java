@@ -95,7 +95,7 @@ public class JoinRequestsUI {
 
     private static List<Item> getItems(Player player, ItemData itemData) {
         List<Item> items = new ArrayList<>();
-        FactionAPI.getFaction(player).whenCompleteAsync((faction, exc) -> {
+        FactionAPI.getFaction(player).whenComplete((faction, exc) -> {
             if (exc != null) {
                 ErrorHandler.handleError(player, "open the faction join requests GUI", "FACTION_NOT_FOUND", exc);
                 return;
@@ -105,7 +105,7 @@ public class JoinRequestsUI {
                 Messages.ERROR.send(player, "%operation%", "open the faction join requests GUI", "%debug%", "FACTION_NOT_FOUND");
                 return;
             }
-            faction.getJoinRequests().whenCompleteAsync((data, ex) -> {
+            faction.getJoinRequests().whenComplete((data, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "open the faction join requests GUI", "FACTION_NOT_FOUND", exc);
                     return;

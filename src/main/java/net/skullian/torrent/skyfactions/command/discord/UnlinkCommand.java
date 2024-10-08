@@ -22,7 +22,7 @@ public class UnlinkCommand implements CommandExecutor {
                 return true;
             if (CooldownHandler.manageCooldown(player)) return true;
 
-            SkyFactionsReborn.db.getDiscordLink(player).whenCompleteAsync((id, ex) -> {
+            SkyFactionsReborn.db.getDiscordLink(player).whenComplete((id, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "unlink your Discord", "SQL_DISCORD_UNLINK", ex);
                     return;

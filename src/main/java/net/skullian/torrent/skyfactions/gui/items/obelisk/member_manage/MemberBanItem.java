@@ -57,7 +57,7 @@ public class MemberBanItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        FactionAPI.getFaction(player).whenCompleteAsync((faction, exc) -> {
+        FactionAPI.getFaction(player).whenComplete((faction, exc) -> {
             if (exc != null) {
                 ErrorHandler.handleError(player, "ban a player", "SQL_FACTION_GET", exc);
                 return;

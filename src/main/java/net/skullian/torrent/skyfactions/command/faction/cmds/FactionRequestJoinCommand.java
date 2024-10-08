@@ -38,7 +38,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
             return;
         }
 
-        FactionAPI.isInFaction(player).whenCompleteAsync((isInFaction, ex) -> {
+        FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "check if you were in a Faction", "SQL_FACTION_GET", ex);
                 return;
@@ -48,7 +48,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
             }
 
             String factionName = args[1];
-            FactionAPI.getFaction(factionName).whenCompleteAsync((faction, throwable) -> {
+            FactionAPI.getFaction(factionName).whenComplete((faction, throwable) -> {
                 if (throwable != null) {
                     ErrorHandler.handleError(player, "check the Faction", "SQL_FACTION_GET", throwable);
                     return;

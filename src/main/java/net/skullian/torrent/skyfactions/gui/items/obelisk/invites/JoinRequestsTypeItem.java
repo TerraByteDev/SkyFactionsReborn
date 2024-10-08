@@ -60,7 +60,7 @@ public class JoinRequestsTypeItem extends AbstractItem {
         if (TYPE.equals("faction")) {
             JoinRequestsUI.promptPlayer(player);
         } else if (TYPE.equals("player")) {
-            SkyFactionsReborn.db.getPlayerOutgoingJoinRequest(player).whenCompleteAsync((joinRequest, ex) -> {
+            SkyFactionsReborn.db.getPlayerOutgoingJoinRequest(player).whenComplete((joinRequest, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "get your outgoing join request", "SQL_JOIN_REQUEST_GET", ex);
                     return;

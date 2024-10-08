@@ -61,7 +61,7 @@ public class FactionPlayerJoinRequestConfirmItem extends AbstractItem {
         }
         event.getInventory().close();
 
-        FactionAPI.getFaction(DATA.getFactionName()).whenCompleteAsync((faction, ex) -> {
+        FactionAPI.getFaction(DATA.getFactionName()).whenComplete((faction, ex) -> {
             if (faction == null) {
                 Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
                 return;
@@ -73,7 +73,7 @@ public class FactionPlayerJoinRequestConfirmItem extends AbstractItem {
             CompletableFuture.allOf(
                     faction.addFactionMember(player.getUniqueId()),
                     SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming")
-            ).whenCompleteAsync((ignored, exc) -> {
+            ).whenComplete((ignored, exc) -> {
                 if (exc != null) {
                     ErrorHandler.handleError(player, "accept a join request", "SQL_FACTION_GET", exc);
                     return;

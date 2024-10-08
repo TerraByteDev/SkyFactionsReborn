@@ -44,7 +44,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static EconomyHandler ec;
 
     private void print() {
-        ComponentLogger LOGGER = ComponentLogger.logger("\u001B[32mSkyFactionsReborn\u001B[0m");
+        ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
 
         Style style = Style.style(TextColor.color(25, 100, 230), TextDecoration.BOLD);
         LOGGER.info(Component.text("╭────────────────────────────────────────────────────────────╮").style(style));

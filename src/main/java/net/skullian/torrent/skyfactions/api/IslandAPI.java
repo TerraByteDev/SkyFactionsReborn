@@ -66,7 +66,7 @@ public class IslandAPI {
         CompletableFuture.allOf(
                 SkyFactionsReborn.db.createIsland(player, island),
                 pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player")
-        ).whenCompleteAsync((ignored, ex) -> {
+        ).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
                 removePlayerIsland(player);

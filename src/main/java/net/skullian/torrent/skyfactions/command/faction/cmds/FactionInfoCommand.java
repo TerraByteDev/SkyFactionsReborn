@@ -36,7 +36,7 @@ public class FactionInfoCommand extends CommandTemplate {
         if (CooldownHandler.manageCooldown(player)) return;
 
         if (args.length == 1) {
-            FactionAPI.isInFaction(player).whenCompleteAsync((isInFaction, ex) -> {
+            FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                     return;
@@ -46,7 +46,7 @@ public class FactionInfoCommand extends CommandTemplate {
                     Messages.NOT_IN_FACTION.send(player);
                 } else {
 
-                    FactionAPI.getFaction(player).whenCompleteAsync((faction, throwable) -> {
+                    FactionAPI.getFaction(player).whenComplete((faction, throwable) -> {
                         if (throwable != null) {
                             ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                             return;
@@ -62,7 +62,7 @@ public class FactionInfoCommand extends CommandTemplate {
             String name = args[1];
 
 
-            FactionAPI.getFaction(name).whenCompleteAsync((faction, ex) -> {
+            FactionAPI.getFaction(name).whenComplete((faction, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);
                     return;

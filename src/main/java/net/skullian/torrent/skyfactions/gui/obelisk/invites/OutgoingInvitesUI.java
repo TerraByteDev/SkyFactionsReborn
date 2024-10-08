@@ -95,7 +95,7 @@ public class OutgoingInvitesUI {
 
     private static List<Item> getItems(Player player, ItemData itemData) {
         List<Item> items = new ArrayList<>();
-        FactionAPI.getFaction(player).whenCompleteAsync((faction, exc) -> {
+        FactionAPI.getFaction(player).whenComplete((faction, exc) -> {
             if (exc != null) {
                 ErrorHandler.handleError(player, "open the outgoing invites GUI", "GUI_LOAD_EXCEPTION", exc);
                 return;
@@ -106,7 +106,7 @@ public class OutgoingInvitesUI {
                 return;
             }
 
-            faction.getOutgoingInvites().whenCompleteAsync((data, ex) -> {
+            faction.getOutgoingInvites().whenComplete((data, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "open the outgoing invites GUI", "GUI_LOAD_EXCEPTION", exc);
                     return;

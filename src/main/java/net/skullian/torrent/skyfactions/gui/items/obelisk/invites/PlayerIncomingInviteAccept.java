@@ -60,7 +60,7 @@ public class PlayerIncomingInviteAccept extends AbstractItem {
         }
         event.getInventory().close();
 
-        FactionAPI.isInFaction(player).whenCompleteAsync((isInFaction, ex) -> {
+        FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
@@ -69,7 +69,7 @@ public class PlayerIncomingInviteAccept extends AbstractItem {
                 return;
             }
 
-            FactionAPI.getFaction(DATA.getFactionName()).whenCompleteAsync((faction, throwable) -> {
+            FactionAPI.getFaction(DATA.getFactionName()).whenComplete((faction, throwable) -> {
                 if (throwable != null) {
                     ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", throwable);
                     return;

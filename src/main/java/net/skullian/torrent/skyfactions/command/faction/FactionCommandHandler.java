@@ -31,7 +31,6 @@ public class FactionCommandHandler implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-
         if (commandSender instanceof Player player) {
             if (strings.length > 0) {
                 for (int i = 0; i < getSubCommands().size(); i++) {

@@ -95,7 +95,7 @@ public class MemberManagementUI {
 
     private static List<Item> getItems(Player player, ItemData data) {
         List<Item> items = new ArrayList<>();
-        FactionAPI.getFaction(player).whenCompleteAsync((faction, exc) -> {
+        FactionAPI.getFaction(player).whenComplete((faction, exc) -> {
             if (exc != null) {
                 ErrorHandler.handleError(player, "open the member management GUI", "GUI_LOAD_EXCEPTION", exc);
                 return;

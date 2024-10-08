@@ -1,8 +1,9 @@
 package net.skullian.torrent.skyfactions.gui.items.obelisk;
 
-import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.config.types.ObeliskConfig;
+import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.gui.data.ItemData;
-import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -10,55 +11,44 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
+import xyz.xenondevs.invui.item.impl.AsyncItem;
 
-import java.util.List;
+public class ObeliskFactionOverviewItem extends AsyncItem {
 
-public class ObeliskFactionOverviewItem extends AbstractItem {
-
-    private String NAME;
     private String SOUND;
     private int PITCH;
-    private List<String> LORE;
-    private ItemStack STACK;
-    private Player PLAYER;
 
     public ObeliskFactionOverviewItem(ItemData data, ItemStack stack, Player player) {
-        this.NAME = data.getNAME();
+        super(
+                ObeliskConfig.getLoadingItem(),
+                () -> {
+                    return new ItemProvider() {
+                        @Override
+                        public @NotNull ItemStack get(@Nullable String s) {
+                            Faction faction = FactionAPI.getFaction(player).join();
+                            ItemBuilder builder = new ItemBuilder(stack)
+                                    .setDisplayName(TextUtility.color(data.getNAME().replace("%faction_name%", faction.getName())));
+
+                            for (String loreLine : data.getLORE()) {
+                                builder.addLoreLines(TextUtility.color(loreLine
+                                        .replace("%level%", String.valueOf(faction.getLevel()))
+                                        .replace("%member_count%", String.valueOf(faction.getTotalMemberCount()))
+                                        .replace("%rune_count%", String.valueOf(faction.getRunes()))
+                                        .replace("%gem_count%", String.valueOf(faction.getGems()))
+                                ));
+                            }
+
+                            return builder.get();
+                        }
+                    };
+                }
+        );
+
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
-        this.LORE = data.getLORE();
-        this.STACK = stack;
-        this.PLAYER = player;
-    }
-
-    @Override
-    public ItemProvider getItemProvider() {
-        SkyFactionsReborn.db.getFaction(PLAYER).handle((faction, throwable) -> {
-            if (throwable != null) {
-                ErrorHandler.handleError(PLAYER, "get Faction data", "SQL_FACTION_GET", throwable);
-            } else {
-                ItemBuilder builder = new ItemBuilder(STACK)
-                        .setDisplayName(TextUtility.color(NAME.replace("%faction_name%", faction.getName())));
-
-                for (String loreLine : LORE) {
-                    builder.addLoreLines(TextUtility.color(loreLine
-                            .replace("%level%", String.valueOf(faction.getLevel()))
-                            .replace("%member_count%", String.valueOf(faction.getTotalMemberCount()))
-                            .replace("%rune_count%", String.valueOf(faction.getRunes()))
-                            .replace("%gem_count%", String.valueOf(faction.getGems()))
-                    ));
-                }
-
-                return builder;
-            }
-
-            return null;
-        });
-
-        return null;
     }
 
     @Override

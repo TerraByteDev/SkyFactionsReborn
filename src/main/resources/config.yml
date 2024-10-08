@@ -81,6 +81,13 @@ Island:
   # Whether to teleport the player to their island on death / respawn.
   TELEPORT_ON_DEATH: true
 
+  # Prevent players from entering nether portals in the overworld and nether. (and any other dimensions).
+  # This is so players can't get into other islands, and cause havoc.
+  PREVENT_NETHER_PORTALS: true
+  # Assuming PREVENT_NETHER_PORTALS is set to true, you can specify dimensions where players CAN enter nether portals.
+  ALLOWED_DIMENSIONS:
+    - "my_world_name"
+
 
 # Island grid generation algorithm configuration
 Generation:

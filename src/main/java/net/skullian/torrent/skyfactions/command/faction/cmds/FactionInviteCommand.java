@@ -38,7 +38,7 @@ public class FactionInviteCommand extends CommandTemplate {
             Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
         } else if (args.length > 1) {
             String name = args[1];
-            FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
+            FactionAPI.getFaction(player).whenComplete((faction, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                     return;
@@ -60,7 +60,7 @@ public class FactionInviteCommand extends CommandTemplate {
                     Messages.FACTION_INVITE_IN_SAME_FACTION.send(player);
 
                 } else {
-                    faction.getOutgoingInvites().whenCompleteAsync((invites, throwable) -> {
+                    faction.getOutgoingInvites().whenComplete((invites, throwable) -> {
                         if (throwable != null) {
                             ErrorHandler.handleError(player, "get Faction invites", "SQL_FACTION_GET", throwable);
                             return;

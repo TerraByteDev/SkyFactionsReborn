@@ -61,7 +61,7 @@ public class LeaveConfirmationItem extends AbstractItem {
         }
 
         // We do this again in case they get kicked before the confirmation.
-        FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
+        FactionAPI.getFaction(player).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;

@@ -31,7 +31,7 @@ public class RunesBalanceCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        RunesAPI.getRunes(player.getUniqueId()).whenCompleteAsync((runes, ex) -> {
+        RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 ErrorHandler.handleError(player, "get your runes balance", "SQL_RUNES_MODIFY", ex);

@@ -42,7 +42,7 @@ public class GemsPayCommand extends CommandTemplate {
             } else {
 
                 int toPay = Integer.parseInt(args[2]);
-                GemsAPI.getGems(player).whenCompleteAsync((playerGemCount, ex) -> {
+                GemsAPI.getGems(player).whenComplete((playerGemCount, ex) -> {
                     if (ex != null) {
                         ErrorHandler.handleError(player, "pay gems to another player", "SQL_GEMS_GET", ex);
                         return;

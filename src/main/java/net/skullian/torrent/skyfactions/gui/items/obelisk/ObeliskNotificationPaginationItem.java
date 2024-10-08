@@ -67,7 +67,7 @@ public class ObeliskNotificationPaginationItem extends AbstractItem {
         }
 
         if (clickType.isRightClick()) {
-            SkyFactionsReborn.db.removeNotification(player, DATA).whenCompleteAsync((ignored, ex) -> {
+            SkyFactionsReborn.db.removeNotification(player, DATA).whenComplete((ignored, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "remove a notification", "SQL_NOTIFICATION_REMOVE", ex);
                     player.closeInventory();

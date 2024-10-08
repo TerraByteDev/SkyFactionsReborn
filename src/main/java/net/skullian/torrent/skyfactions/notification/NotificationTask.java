@@ -14,7 +14,7 @@ public class NotificationTask {
         return new BukkitRunnable() {
             @Override
             public void run() {
-                NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(player.getUniqueId())).whenCompleteAsync((data, ex) -> {
+                NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((data, ex) -> {
                     if (ex != null) {
                         SLogger.fatal("Failed to fetch notifications of player {} - {}", player.getName(), ex.getMessage());
                         ex.printStackTrace();

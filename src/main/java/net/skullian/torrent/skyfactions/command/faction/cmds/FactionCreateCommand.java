@@ -44,7 +44,7 @@ public class FactionCreateCommand extends CommandTemplate {
             }
             String name = msg.toString().trim();
 
-            FactionAPI.isInFaction(player).whenCompleteAsync((isInFaction, ex) -> {
+            FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                     return;

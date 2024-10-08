@@ -60,14 +60,14 @@ public class FactionAPI {
      * @param name   Name of the faction.
      */
     public static void createFaction(Player player, String name) {
-        SkyFactionsReborn.db.registerFaction(player, name).whenCompleteAsync((ignored, ex) -> {
+        SkyFactionsReborn.db.registerFaction(player, name).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "create a new Faction", "SQL_FACTION_CREATE", ex);
                 // todo disband faction?
                 return;
             }
 
-            FactionAPI.getFaction(name).whenCompleteAsync((faction, exc) -> {
+            FactionAPI.getFaction(name).whenComplete((faction, exc) -> {
                 if (exc != null) {
                     ErrorHandler.handleError(player, "create a new Faction", "SQL_FACTION_CREATE", exc);
                     // todo disband faction?
@@ -201,7 +201,7 @@ public class FactionAPI {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
         createRegion(player, island, world, faction_name);
 
-        CompletableFuture.allOf(SkyFactionsReborn.db.createFactionIsland(faction_name, island), IslandAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction")).whenCompleteAsync((unused, ex) -> {
+        CompletableFuture.allOf(SkyFactionsReborn.db.createFactionIsland(faction_name, island), IslandAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction")).whenComplete((unused, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;

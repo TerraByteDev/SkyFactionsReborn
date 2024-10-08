@@ -117,7 +117,7 @@ public class ObeliskInteractionListener implements Listener {
 
             return CompletableFuture.completedFuture(false);
         } else if (type.equals("faction")) {
-            return FactionAPI.getFaction(player).thenApplyAsync(faction -> {
+            return FactionAPI.getFaction(player).thenApply(faction -> {
                 if (faction == null) {
                     return false;
                 }

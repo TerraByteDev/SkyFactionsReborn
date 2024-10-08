@@ -57,7 +57,7 @@ public class FactionJoinRequestRejectItem extends AbstractItem {
         }
         event.getInventory().close();
 
-        FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
+        FactionAPI.getFaction(player).whenComplete((faction, ex) -> {
             if (faction == null) {
                 Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
                 return;

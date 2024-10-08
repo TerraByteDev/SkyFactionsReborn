@@ -21,14 +21,14 @@ public class NotificationAPI {
     public static Map<UUID, BukkitTask> tasks = new HashMap<>();
 
     public static void createCycle(Player player) {
-        FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
+        FactionAPI.getFaction(player).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
             }
 
             if (faction != null && !factionInviteStore.containsKey(faction.getName())) {
-                faction.getJoinRequests().whenCompleteAsync((requests, exc) -> {
+                faction.getJoinRequests().whenComplete((requests, exc) -> {
                     if (exc != null) {
                         exc.printStackTrace();
                         return;

@@ -61,7 +61,7 @@ public class FactionPlayerJoinRequestDenyItem extends AbstractItem {
         }
         event.getInventory().close();
 
-        FactionAPI.getFaction(DATA.getFactionName()).whenCompleteAsync((faction, ex) -> {
+        FactionAPI.getFaction(DATA.getFactionName()).whenComplete((faction, ex) -> {
             if (faction == null) {
                 Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
                 return;
@@ -73,7 +73,7 @@ public class FactionPlayerJoinRequestDenyItem extends AbstractItem {
             CompletableFuture.allOf(
                     faction.createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_JOIN_REQUEST_REVOKE, "%player_name%", player.getName()),
                     SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming")
-            ).whenCompleteAsync((ignored, exc) -> {
+            ).whenComplete((ignored, exc) -> {
                 if (exc != null) {
                     ErrorHandler.handleError(player, "deny a join request", "SQL_JOIN_REQUEST_REVOKE", exc);
                     return;

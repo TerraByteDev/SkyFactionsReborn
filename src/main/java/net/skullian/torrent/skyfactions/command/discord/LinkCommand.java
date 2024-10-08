@@ -23,7 +23,7 @@ public class LinkCommand implements CommandExecutor {
                 return true;
             if (CooldownHandler.manageCooldown(player)) return true;
 
-            SkyFactionsReborn.db.getDiscordLink(player).whenCompleteAsync((id, ex) -> {
+            SkyFactionsReborn.db.getDiscordLink(player).whenComplete((id, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "link your Discord", "SQL_GET_DISCORD", ex);
                     return;

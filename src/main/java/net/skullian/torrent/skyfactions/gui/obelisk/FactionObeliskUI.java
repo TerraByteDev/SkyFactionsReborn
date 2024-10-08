@@ -42,16 +42,15 @@ public class FactionObeliskUI {
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
             List<ItemData> data = GUIAPI.getItemData("obelisk/faction_obelisk", player);
-            FactionAPI.getFaction(player).whenCompleteAsync((faction, exc) -> {
+            FactionAPI.getFaction(player).whenComplete((faction, exc) -> {
                 if (exc != null) {
                     ErrorHandler.handleError(player, "open your obelisk", "GUI_LOAD_EXCEPTION", exc);
                     return;
-                }
-
-                if (faction == null) {
+                } else if (faction == null) {
                     Messages.ERROR.send(player, "%operation%", "open your obelisk", "%debug%", "FACTION_NOT_FOUND");
                     return;
                 }
+
                 for (ItemData itemData : data) {
                     switch (itemData.getITEM_ID()) {
 
@@ -85,6 +84,7 @@ public class FactionObeliskUI {
                     }
                 }
             });
+
             return builder;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

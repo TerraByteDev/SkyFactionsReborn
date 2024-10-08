@@ -76,6 +76,9 @@ Messages:
     # Sent when a player tries to visit a player that is participating in a raid.
     VISIT_IN_RAID: "%server_name%&c&l Hey!&r&7 That player is raiding/being raided."
 
+    # Sent if the player tries to use nether portals (when disabled).
+    NETHER_PORTALS_BLOCKED: "%server_name%&c&l Hey!&r&7 You cannot use nether portals here!"
+
 
   Discord:
     # Sent to the player when they request to link (runs /link).

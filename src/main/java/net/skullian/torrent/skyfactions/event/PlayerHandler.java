@@ -3,6 +3,7 @@ package net.skullian.torrent.skyfactions.event;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.IslandAPI;
 import net.skullian.torrent.skyfactions.api.NotificationAPI;
+import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.config.types.Settings;
 import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
@@ -11,28 +12,28 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.List;
 
 
 public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        SkyFactionsReborn.db.playerIsRegistered(event.getPlayer()).thenAccept(isRegistered -> {
+        SkyFactionsReborn.db.playerIsRegistered(event.getPlayer()).whenComplete((isRegistered, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return;
+            }
+
             if (!isRegistered) {
                 SLogger.info("Player [{}] has not joined before. Syncing with database.", event.getPlayer().getName());
-                SkyFactionsReborn.db.registerPlayer(event.getPlayer()).exceptionally(ex -> {
-                    ex.printStackTrace();
-                    SLogger.fatal("Failed to sync player [{}] with database!", event.getPlayer().getName());
-                    return null;
-                });
+                SkyFactionsReborn.db.registerPlayer(event.getPlayer());
             }
-        }).exceptionally(ex -> {
-            ex.printStackTrace();
-            SLogger.fatal("Failed to check if player [{}] was registered with SkyFactionsReborn!", event.getPlayer().getName());
-            return null;
         });
 
         SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
@@ -81,6 +82,17 @@ public class PlayerHandler implements Listener {
                     event.getPlayer().teleport(island.getCenter(world));
                 }
             });
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDimensionChange(PlayerPortalEvent event) {
+        if (Settings.ISLAND_PREVENT_NETHER_PORTALS.getBoolean()) {
+            List<String> allowedDims = Settings.ISLAND_ALLOWED_DIMENSIONS.getList();
+            if (!allowedDims.contains(event.getFrom().getWorld().getName())) {
+                Messages.NETHER_PORTALS_BLOCKED.send(event.getPlayer());
+                event.setCancelled(true);
+            }
         }
     }
 }

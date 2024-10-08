@@ -78,7 +78,7 @@ public class RunesAPI {
     }
 
     public static void handleRuneFactionConversion(List<ItemStack> stacks, Player player) {
-        FactionAPI.getFaction(player).whenCompleteAsync((faction, ex) -> {
+        FactionAPI.getFaction(player).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "convert your items to runes", "SQL_FACTION_GET", ex);
                 return;

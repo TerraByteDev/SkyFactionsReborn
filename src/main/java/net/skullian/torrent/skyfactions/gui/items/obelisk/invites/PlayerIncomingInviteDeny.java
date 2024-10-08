@@ -60,7 +60,7 @@ public class PlayerIncomingInviteDeny extends AbstractItem {
         }
 
         event.getInventory().close();
-        FactionAPI.getFaction(DATA.getFactionName()).whenCompleteAsync((faction, ex) -> {
+        FactionAPI.getFaction(DATA.getFactionName()).whenComplete((faction, ex) -> {
             if (faction == null) {
                 Messages.ERROR.send(player, "%operation%", "get the Faction", "FACTION_NOT_FOUND");
                 return;
@@ -72,7 +72,7 @@ public class PlayerIncomingInviteDeny extends AbstractItem {
             CompletableFuture.allOf(
                     faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_DENY, "%player_name%", player.getName()),
                     SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing")
-            ).whenCompleteAsync((ignored, throwable) -> {
+            ).whenComplete((ignored, throwable) -> {
                 if (throwable != null) {
                     ErrorHandler.handleError(player, "deny an invite", "SQL_INVITE_DENY", throwable);
                     return;
