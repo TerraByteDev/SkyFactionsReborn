@@ -1,4 +1,4 @@
-![Logo](https://socialify.git.ci/TerraByteDev/SkyFactionsReborn/image?description=1&font=Raleway&forks=1&issues=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2FTerraByteDev%2FTerraByteDocs%2Frefs%2Fheads%2Fmain%2Fskyfactions%2F.gitbook%2Fassets%2FSkyFactions2.png&name=1&owner=1&pattern=Plus&stargazers=1&theme=Dark/)
+![Logo](https://socialify.git.ci/TerraByteDev/SkyFactionsReborn/image?description=1&font=Raleway&forks=1&name=1&owner=1&pattern=Floating%20Cogs&pulls=1&stargazers=1&theme=Dark/)
 
 ![Discord](https://img.shields.io/discord/1252801398601420852)
 ![CodeFactor](https://www.codefactor.io/repository/github/terrabytedev/skyfactionsreborn/badge)
