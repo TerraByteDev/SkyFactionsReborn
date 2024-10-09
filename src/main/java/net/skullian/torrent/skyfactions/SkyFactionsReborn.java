@@ -29,7 +29,6 @@ import net.skullian.torrent.skyfactions.event.DefenceHandler;
 import net.skullian.torrent.skyfactions.event.ObeliskInteractionListener;
 import net.skullian.torrent.skyfactions.event.PlayerHandler;
 import net.skullian.torrent.skyfactions.util.DependencyHandler;
-import net.skullian.torrent.skyfactions.util.EconomyHandler;
 import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -44,7 +43,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static ConfigFileHandler configHandler;
     public static HikariHandler db;
     public static DiscordHandler dc;
-    public static EconomyHandler ec;
     public static WorldBorderApi worldBorderApi;
 
     private void print() {
@@ -69,10 +67,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
         SLogger.info("Initialising Configs.");
         configHandler = new ConfigFileHandler();
         configHandler.loadFiles(this); // Load all files (and create them if they don't exist already).
-
-        SLogger.info("Initialising Economy.");
-        ec = new EconomyHandler();
-        ec.init(this);
 
         SLogger.info("Registering Commands.");
         getCommand("island").setExecutor(new IslandCommandHandler());
@@ -115,13 +109,12 @@ public final class SkyFactionsReborn extends JavaPlugin {
         dc.initialiseBot();
 
         RegisteredServiceProvider<WorldBorderApi> worldBorderApiRegisteredServiceProvider = getServer().getServicesManager().getRegistration(WorldBorderApi.class);
-
         if (worldBorderApiRegisteredServiceProvider == null) {
-            getLogger().info("API not found");
+            DependencyHandler.alert("WorldBorderAPI");
+            SLogger.fatal("Disabling plugin.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-
         worldBorderApi = worldBorderApiRegisteredServiceProvider.getProvider();
 
         // This is kind of pointless.

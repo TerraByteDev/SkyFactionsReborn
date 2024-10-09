@@ -40,14 +40,13 @@ public class DependencyHandler {
             SLogger.info("Found {} installed on the server.", "\u001B[33mZNPCsPlus\u001B[34m");
             enabledDeps.add("ZNPCsPlus");
         } else alert("ZNPCsPlus");
-
     }
 
     private static boolean isPluginEnabled(String name) {
         return SkyFactionsReborn.getInstance().getServer().getPluginManager().isPluginEnabled(name);
     }
 
-    private static void alert(String name) {
+    public static void alert(String name) {
         SLogger.fatal("Could not find {} on the server! If you have this plugin installed, this is a bug!", "\u001B[33m" + name + "\u001B[31m");
     }
 }

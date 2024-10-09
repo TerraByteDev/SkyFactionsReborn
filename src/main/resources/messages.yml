@@ -216,9 +216,9 @@ Messages:
       DUPLICATE_NAME: "%server_name% &cA Faction already exists with that name!"
 
 
-      # Sent when a player tries to create a faction but does not have enough money.
+      # Sent when a player tries to create a faction but does not have enough runes.
       # Placeholders: %creation_cost% - Cost of faction creation.
-      INSUFFICIENT_FUNDS: "%server_name%&c&l Hey!&r&7 You do not have enough money to create a faction. You need &a&l$%creation_cost%&r&7 to create a faction."
+      INSUFFICIENT_FUNDS: "%server_name%&c&l Hey!&r&7 You do not have enough runes to create a faction. You need &a&l$%creation_cost% Runes&r&7 to create a faction."
 
       # Sent when a player successfully creates a new faction.
       FACTION_CREATE_SUCCESS: "%server_name%&a Successfully created your faction!"

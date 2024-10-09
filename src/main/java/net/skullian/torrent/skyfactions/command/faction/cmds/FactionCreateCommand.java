@@ -1,7 +1,7 @@
 package net.skullian.torrent.skyfactions.command.faction.cmds;
 
-import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.api.FactionAPI;
+import net.skullian.torrent.skyfactions.api.RunesAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
@@ -65,16 +65,22 @@ public class FactionCreateCommand extends CommandTemplate {
                             if (FactionAPI.hasValidName(player, name)) {
                                 int cost = Settings.FACTION_CREATION_COST.getInt();
                                 if (cost > 0) {
-                                    if (!SkyFactionsReborn.ec.hasEnoughMoney(player, cost)) {
-                                        Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
-                                        return;
-                                    }
+                                    RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, throwable) -> {
+                                        if (throwable != null) {
+                                            ErrorHandler.handleError(player, "get your Runes count", "SQL_RUNES_GET", throwable);
+                                            return;
+                                        }
 
-                                    SkyFactionsReborn.ec.economy.withdrawPlayer(player, cost);
-                                    ;
+                                        if (runes < cost) {
+                                            Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
+                                        } else {
+                                            RunesAPI.removeRunes(player.getUniqueId(), cost).whenComplete((ignored, exce) -> {
+                                                if (exce == null) FactionAPI.createFaction(player, name);
+                                                else exce.printStackTrace();
+                                            });
+                                        }
+                                    });
                                 }
-
-                                FactionAPI.createFaction(player, name);
                             }
                         }
                     });

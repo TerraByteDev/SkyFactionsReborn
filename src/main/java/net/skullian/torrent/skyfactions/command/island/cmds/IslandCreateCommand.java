@@ -1,16 +1,15 @@
 package net.skullian.torrent.skyfactions.command.island.cmds;
 
-import net.skullian.torrent.skyfactions.SkyFactionsReborn;
+import net.skullian.torrent.skyfactions.api.IslandAPI;
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
 import net.skullian.torrent.skyfactions.command.CooldownHandler;
 import net.skullian.torrent.skyfactions.command.PermissionsHandler;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.gui.IslandCreationConfirmationUI;
+import net.skullian.torrent.skyfactions.util.ErrorHandler;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class IslandCreateCommand extends CommandTemplate {
     @Override
@@ -33,24 +32,19 @@ public class IslandCreateCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        try {
-            AtomicBoolean has = new AtomicBoolean(false);
-            SkyFactionsReborn.db.hasIsland(player).thenAccept(has::set).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "create an island", "%debug%", "SQL_ISLAND_CHECK");
-                return null;
-            }).get();
-
-            if (has.get()) {
-                Messages.ISLAND_CREATION_DENY.send(player);
+        IslandAPI.hasIsland(player).whenComplete((hasIsland, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "create an island", "SQL_ISLAND_CHECK", ex);
                 return;
+            }
+
+            if (hasIsland) {
+                Messages.ISLAND_CREATION_DENY.send(player);
             } else {
                 IslandCreationConfirmationUI.promptPlayer(player);
             }
-        } catch (InterruptedException | ExecutionException error) {
-            error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "create an island", "%debug%", "SQL_ISLAND_CHECK");
-        }
+        });
+        
     }
 
     public static List<String> permissions = List.of("skyfactions.island.create", "skyfactions.island");

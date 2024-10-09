@@ -153,7 +153,7 @@ Raiding:
 Factions:
   # All configurations related to creation factions.
   FACTION_CREATION:
-    # Cost of creating a faction in money.
+    # Cost of creating a faction in player runes.
     # Set this to 0 if you wish it to be free.
     CREATION_COST: 100
 

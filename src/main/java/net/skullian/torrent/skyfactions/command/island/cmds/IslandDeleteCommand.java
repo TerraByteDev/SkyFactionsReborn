@@ -51,6 +51,7 @@ public class IslandDeleteCommand extends CommandTemplate {
                             if (hubWorld != null) {
                                 Messages.DELETION_PROCESSING.send(player);
 
+                                SkyFactionsReborn.worldBorderApi.resetWorldBorderToGlobal(player); // reset the world border
                                 List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
                                 Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
                                 IslandAPI.teleportPlayerToLocation(player, location);

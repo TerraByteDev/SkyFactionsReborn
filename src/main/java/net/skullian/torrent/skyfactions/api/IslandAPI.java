@@ -85,6 +85,10 @@ public class IslandAPI {
         });
     }
 
+    public static CompletableFuture<Boolean> hasIsland(Player player) {
+        return SkyFactionsReborn.db.hasIsland(player);
+    }
+
     public static CompletableFuture<Boolean> pasteIslandSchematic(Player player, Location location, String worldName, String type) {
         return CompletableFuture.supplyAsync(() -> {
             try {
