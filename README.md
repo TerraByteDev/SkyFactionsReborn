@@ -1,7 +1,10 @@
-![ ](SkyFactionsReborn.png)
+![ ](assets/SkyFactionsReborn.png)
 <div align="center">
-      <img src="https://img.shields.io/discord/1252801398601420852" alt="Discord">
+      <a href="https://discord.gg/SwxXMrFdjp">
+        <img alt="Discord" src="https://img.shields.io/discord/1252801398601420852?style=flat&color=blue"></a>
       <img src="https://www.codefactor.io/repository/github/terrabytedev/skyfactionsreborn/badge" alt="CodeFactor">
+      <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/TerraByteDev/SkyFactionsReborn?style=flat&color=blue">
+      <img src="https://www.aschey.tech/tokei/github.com/TerraByteDev/SkyFactionsReborn?color=blue" alt="Lines of Code">
 </div>
 This plugin elegantly merges features from Skyblock and Factions. Skyblock, even when played on a big network, can get
 quite lonely. That's why we combined it with Factions and expanded on the gamemode tenfold. This seemed like an obvious
