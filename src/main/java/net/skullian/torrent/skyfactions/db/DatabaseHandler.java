@@ -12,7 +12,9 @@ import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.notification.NotificationData;
 import net.skullian.torrent.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.sqlite.JDBC;
@@ -30,7 +32,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
-public class HikariHandler {
+public class DatabaseHandler {
 
     private transient HikariDataSource dataSource;
     public int cachedPlayerIslandID;
@@ -177,6 +179,17 @@ public class HikariHandler {
                      ) STRICT;
                      """);
 
+             PreparedStatement defenceLocationsTable = connection.prepareStatement("""
+                     CREATE TABLE IF NOT EXISTS defenceLocations (
+                     [uuid] TEXT NOT NULL,
+                     [type] TEXT NOT NULL,
+                     [faction_name] TEXT NOT NULL,
+                     [x] INTEGER NOT NULL,
+                     [y] INTEGER NOT NULL,
+                     [z] INTEGER NOT NULL
+                     ) STRICT;
+                     """);
+
              PreparedStatement auditLogTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS auditLogs (
                      [faction_name] TEXT NOT NULL,
@@ -231,6 +244,9 @@ public class HikariHandler {
 
             trustedPlayerTable.executeUpdate();
             trustedPlayerTable.close();
+
+            defenceLocationsTable.executeUpdate();
+            defenceLocationsTable.close();
 
             auditLogTable.executeUpdate();
             auditLogTable.close();
@@ -308,6 +324,17 @@ public class HikariHandler {
                      );
                      """);
 
+             PreparedStatement defenceLocationsTable = connection.prepareStatement("""
+                     CREATE TABLE IF NOT EXISTS defenceLocations (
+                     `uuid` BIGINT NOT NULL,
+                     `type` VARCHAR(255) NOT NULL,
+                     `faction_name` VARCHAR(255) NOT NULL,
+                     `x` BIGINT NOT NULL,
+                     `y` BIGINT NOT NULL,
+                     `z` BIGINT NOT NULL
+                     );
+                     """);
+
              PreparedStatement auditLogTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS auditLogs (
                      `faction_name` VARCHAR(255) NOT NULL,
@@ -362,6 +389,9 @@ public class HikariHandler {
 
             trustedPlayerTable.executeUpdate();
             trustedPlayerTable.close();
+
+            defenceLocationsTable.executeUpdate();
+            defenceLocationsTable.close();
 
             auditLogTable.executeUpdate();
             auditLogTable.close();
@@ -1910,6 +1940,116 @@ public class HikariHandler {
                 connection.close();
 
                 return data;
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    // ------------------ DEFENCES ------------------ //
+
+    public CompletableFuture<List<Location>> getDefenceLocations(String factionName) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM defenceLocations WHERE type = 'faction' AND faction_name = ?")) {
+
+                List<Location> locs = new ArrayList<>();
+                World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
+                if (world == null)
+                    throw new RuntimeException("Could not find configured world: " + Settings.ISLAND_FACTION_WORLD.getString());
+
+                statement.setString(1, factionName);
+                ResultSet set = statement.executeQuery();
+                while (set.next()) {
+                    int x = set.getInt("x");
+                    int y = set.getInt("y");
+                    int z = set.getInt("z");
+
+                    locs.add(new Location(world, x, y, z));
+                }
+
+                statement.close();
+                connection.close();
+
+                return locs;
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<List<Location>> getDefenceLocations(UUID playerUUID) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM defenceLocations WHERE type = 'player' AND uuid = ?")) {
+
+                List<Location> locs = new ArrayList<>();
+                World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+                if (world == null)
+                    throw new RuntimeException("Could not find configured world: " + Settings.ISLAND_PLAYER_WORLD.getString());
+
+                statement.setString(1, playerUUID.toString());
+                ResultSet set = statement.executeQuery();
+                while (set.next()) {
+                    int x = set.getInt("x");
+                    int y = set.getInt("y");
+                    int z = set.getInt("z");
+
+                    locs.add(new Location(world, x, y, z));
+                }
+
+                statement.close();
+                connection.close();
+
+                return locs;
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> registerDefenceLocation(String factionName, Location location) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO defenceLocations(uuid, type, faction_name, x, y, z) VALUES (?, ?, ?, ?, ?, ?)")) {
+
+                statement.setString(1, "N/A");
+                statement.setString(2, "faction");
+                statement.setString(3, factionName);
+                statement.setInt(4, location.getBlockX());
+                statement.setInt(5, location.getBlockY());
+                statement.setInt(6, location.getBlockZ());
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> registerDefenceLocation(UUID playerUUID, Location location) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO defenceLocations(uuid, type, faction_name, x, y, z) VALUES (?, ?, ?, ?, ?, ?)")) {
+
+                statement.setString(1, playerUUID.toString());
+                statement.setString(2, "player");
+                statement.setString(3, "N/A");
+                statement.setInt(4, location.getBlockX());
+                statement.setInt(5, location.getBlockY());
+                statement.setInt(6, location.getBlockZ());
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
             } catch (SQLException error) {
                 handleError(error);
                 throw new RuntimeException(error);

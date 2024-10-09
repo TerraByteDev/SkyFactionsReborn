@@ -48,6 +48,7 @@
                     <artifactSet>
                         <includes>
                             <include>xyz.xenondevs.invui:*</include>
+                            <include>me.tofaa.entitylib:*</include>
                         </includes>
                     </artifactSet>
                 </configuration>
@@ -130,6 +131,10 @@
             <id>pyr-snapshots</id>
             <name>Pyr's Repo</name>
             <url>https://repo.pyr.lol/snapshots</url>
+        </repository>
+        <repository>
+            <id>evokegames-snapshots</id>
+            <url>https://maven.evokegames.gg/snapshots</url>
         </repository>
     </repositories>
 
@@ -292,6 +297,19 @@
             <artifactId>worldborderapi</artifactId>
             <version>1.211.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.retrooper</groupId>
+            <artifactId>packetevents-spigot</artifactId>
+            <version>2.5.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>me.tofaa.entitylib</groupId>
+            <artifactId>spigot</artifactId>
+            <version>2.4.10-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

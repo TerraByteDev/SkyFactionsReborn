@@ -22,4 +22,6 @@ public abstract class Defence {
     public abstract Collection<Entity> getNearbyEntities(World defenceWorld);
 
     public abstract void enable();
+
+    public abstract void disable();
 }

@@ -60,6 +60,20 @@ PLACEMENT:
     - "*WALL"
     - "END_ROD"
 
+HOLOGRAMS:
+  # Hologram that appears above the defence.
+  # Placeholders: %defence_name% - Name of the defence (specified in NAME variable at the top!)
+  # You can have multiple entries, each is a new line.
+  # Lowest line will be the lowest hologram (closest to the top of the defence)
+  TITLE_HOLOGRAM:
+    - "⌞%defence_name%⌝"
+
+  # Appended to the bottom (or top if configured) of the hologram stack if the defence is out of stock.
+  OUT_OF_STOCK_LINE: "&cOut of Stock!"
+
+  # Append the OUT_OF_STOCK_LINE to the top of the hologram stack.
+  STOCK_AT_TOP: false
+
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:
   ZOMBIE: randInt(2, 4)

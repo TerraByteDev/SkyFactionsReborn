@@ -1,7 +1,12 @@
 package net.skullian.torrent.skyfactions;
 
+import com.github.retrooper.packetevents.PacketEvents;
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
 import com.jeff_media.customblockdata.CustomBlockData;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
+import me.tofaa.entitylib.APIConfig;
+import me.tofaa.entitylib.EntityLib;
+import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
@@ -23,7 +28,7 @@ import net.skullian.torrent.skyfactions.command.sf.SFCommandHandler;
 import net.skullian.torrent.skyfactions.command.sf.SFCommandTabCompletion;
 import net.skullian.torrent.skyfactions.config.ConfigFileHandler;
 import net.skullian.torrent.skyfactions.config.types.Settings;
-import net.skullian.torrent.skyfactions.db.HikariHandler;
+import net.skullian.torrent.skyfactions.db.DatabaseHandler;
 import net.skullian.torrent.skyfactions.discord.DiscordHandler;
 import net.skullian.torrent.skyfactions.event.DefenceHandler;
 import net.skullian.torrent.skyfactions.event.ObeliskInteractionListener;
@@ -41,7 +46,7 @@ import java.sql.SQLException;
 public final class SkyFactionsReborn extends JavaPlugin {
 
     public static ConfigFileHandler configHandler;
-    public static HikariHandler db;
+    public static DatabaseHandler db;
     public static DiscordHandler dc;
     public static WorldBorderApi worldBorderApi;
 
@@ -56,6 +61,14 @@ public final class SkyFactionsReborn extends JavaPlugin {
         LOGGER.info(Component.text("│    ___] | \\_   |   |    |  | |___  |  | |__| | \\| ___]     │").style(style));
         LOGGER.info(Component.text("│                                                            │").style(style));
         LOGGER.info(Component.text("╰────────────────────────────────────────────────────────────╯").style(style));
+    }
+
+    @Override
+    public void onLoad() {
+        SLogger.info("Initialising PacketEvents.");
+
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+        PacketEvents.getAPI().load();
     }
 
     @Override
@@ -117,6 +130,16 @@ public final class SkyFactionsReborn extends JavaPlugin {
         }
         worldBorderApi = worldBorderApiRegisteredServiceProvider.getProvider();
 
+        SLogger.info("Creating PacketEvents Instance.");
+        PacketEvents.getAPI().init();
+
+        SLogger.info("Initialising EntityLib.");
+        SpigotEntityLibPlatform platform = new SpigotEntityLibPlatform(this);
+        APIConfig settings = new APIConfig(PacketEvents.getAPI())
+                .usePlatformLogger();
+
+        EntityLib.init(platform, settings);
+
         // This is kind of pointless.
         // Just a class for handling dependencies and optional dependencies.
         // Majorly incomplete.
@@ -137,6 +160,9 @@ public final class SkyFactionsReborn extends JavaPlugin {
         closeDatabase();
         dc.disconnect();
 
+        SLogger.info("Terminating PacketEvents.");
+        PacketEvents.getAPI().terminate();
+
         print();
         SLogger.info("SkyFactions has been disabled.");
     }
@@ -149,7 +175,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
             new File(getDataFolder(), "/data").mkdir();
 
             // Initialise the database.
-            db = new HikariHandler();
+            db = new DatabaseHandler();
             db.initialise(Settings.DATABASE_TYPE.getString());
 
             // Cache the most recent ID.

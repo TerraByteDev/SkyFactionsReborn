@@ -53,4 +53,8 @@ public class DefenceStruct {
     private String PLACEMENT_BLOCKED_MESSAGE;
     private boolean IS_WHITELIST;
     private List<Material> PLACEMENT_LIST;
+
+    private List<String> HOLOGRAM_LIST;
+    private String OUT_OF_STOCK_HOLOGRAM;
+    private boolean APPEND_TO_TOP;
 }

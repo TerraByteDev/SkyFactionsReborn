@@ -133,10 +133,14 @@ public class DefencesFactory {
         boolean IS_WHITELIST = config.getBoolean("PLACEMENT.WHITELIST");
         List<Material> BLOCKS_LIST = getPlacementBlocks(config, fileName);
 
+        List<String> HOLOGRAM_STACK = config.getStringList("HOLOGRAMS.LINES");
+        String OUT_OF_STOCK_LINE = config.getString("HOLOGRAMS.OUT_OF_STOCK_LINE");
+        boolean APPEND_TO_TOP = config.getBoolean("HOLOGRAMS.STOCK_AT_TOP");
+
         return new DefenceStruct(fileName, COLOR_NAME, TYPE, BUY_COST, SELL_COST, AMMO_COST, MAX_LEVEL,
                 PLACE_SOUND, PLACE_PITCH, BREAK_SOUND, BREAK_PITCH, ACTIVATE_SOUND, ACTIVATE_PITCH, EFFECTS, MESSAGES,
                 ATTRIBUTES, EXPERIENCE_DROPS, PROJECTILE, PARTICLE, BLOCK_MATERIAL, BLOCK_SKULL, ITEM_MATERIAL, ITEM_SKULL, ITEM_LORE, UPGRADE_LORE,
-                PLACEMENT_BLOCKED_MESSAGE, IS_WHITELIST, BLOCKS_LIST);
+                PLACEMENT_BLOCKED_MESSAGE, IS_WHITELIST, BLOCKS_LIST, HOLOGRAM_STACK, OUT_OF_STOCK_LINE, APPEND_TO_TOP);
     }
 
     private static List<DefenceEffectStruct> getEffects(FileConfiguration config) {
