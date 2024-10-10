@@ -33,9 +33,7 @@ public class IslandCreateCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        SLogger.fatal("finding");
         IslandAPI.hasIsland(player).whenComplete((hasIsland, ex) -> {
-            SLogger.fatal("finding");
             if (ex != null) {
                 ErrorHandler.handleError(player, "create an island", "SQL_ISLAND_CHECK", ex);
                 return;
@@ -44,7 +42,6 @@ public class IslandCreateCommand extends CommandTemplate {
             if (hasIsland) {
                 Messages.ISLAND_CREATION_DENY.send(player);
             } else {
-                SLogger.fatal("finding2");
                 IslandCreationConfirmationUI.promptPlayer(player);
             }
         });
