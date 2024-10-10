@@ -24,31 +24,17 @@ import java.util.List;
 public class IslandCreationConfirmationUI {
 
     public static void promptPlayer(Player player) {
-        SLogger.warn("hm");
         try {
-            SLogger.info("AAAAA");
             GUIData data = GUIAPI.getGUIData("confirmations/create_island");
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player);
 
-            SLogger.info("aaaa");
-            Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
-            Gui guii = Gui.normal()
-                    .setStructure(
-                            "# # # # # # # # #",
-                            "# . . . . . . . #",
-                            "# . . . . . . . #",
-                            "# # # # # # # # #")
-                    .addIngredient('#', border)
-                    .build();
-
             Window window = Window.single()
                     .setViewer(player)
                     .setTitle(TextUtility.color(data.getTITLE()))
-                    .setGui(guii)
+                    .setGui(gui)
                     .build();
 
-            SLogger.info("opening");
             SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
             window.open();
         } catch (IllegalArgumentException e) {
