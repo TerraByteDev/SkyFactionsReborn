@@ -169,7 +169,7 @@
         <dependency>
             <groupId>xyz.xenondevs.invui</groupId>
             <artifactId>invui</artifactId>
-            <version>1.37</version>
+            <version>1.38</version>
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
