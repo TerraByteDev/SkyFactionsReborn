@@ -171,6 +171,10 @@ Messages:
     # Placeholders: %defence_name% - Name of the defence purchased
     DEFENCE_PURCHASE_SUCCESS: "%server_name% &eSuccessfully purchased &r%defence_name%&e!"
 
+    # Sent when a player successfully places a defence.
+    # Placeholders: %defence_name% - Name of the defence placed
+    DEFENCE_PLACE_SUCCESS: "%server_name% &7Successfully placed &r%defence_name%&7!"
+
     # Sent when the player tries to mine the defence.
     DEFENCE_DESTROY_DENY: "%server_name% &c&lHey! &r&7You must remove the defence from the management GUI!"
 

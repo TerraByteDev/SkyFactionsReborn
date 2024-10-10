@@ -42,6 +42,7 @@ import java.util.stream.Stream;
 public class DefencesFactory {
 
     public static final Map<String, DefenceStruct> defences = new HashMap<>();
+    public static final Map<String, Class<? extends Defence>> defenceTypes = new HashMap<>();
 
     public static void registerDefaultDefences() {
         try {
@@ -80,7 +81,7 @@ public class DefencesFactory {
                 YamlConfiguration config = new YamlConfiguration();
                 config.load(defenceFile);
                 DefenceStruct struct = createStruct(config, defenceName);
-                defences.put(defenceName, struct);
+                defences.put(struct.getIDENTIFIER(), struct);
             }
         } catch (InvalidConfigurationException | IOException error) {
             SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
@@ -96,6 +97,7 @@ public class DefencesFactory {
     private static DefenceStruct createStruct(FileConfiguration config, String fileName) {
         String COLOR_NAME = config.getString("NAME");
         String TYPE = config.getString("TYPE");
+        String IDENTIFIER = config.getString("IDENTIFIER");
 
         int BUY_COST = config.getInt("COST.BUY");
         int SELL_COST = config.getInt("COST.SELL");
@@ -137,7 +139,7 @@ public class DefencesFactory {
         String OUT_OF_STOCK_LINE = config.getString("HOLOGRAMS.OUT_OF_STOCK_LINE");
         boolean APPEND_TO_TOP = config.getBoolean("HOLOGRAMS.STOCK_AT_TOP");
 
-        return new DefenceStruct(fileName, COLOR_NAME, TYPE, BUY_COST, SELL_COST, AMMO_COST, MAX_LEVEL,
+        return new DefenceStruct(fileName, COLOR_NAME, TYPE, IDENTIFIER, BUY_COST, SELL_COST, AMMO_COST, MAX_LEVEL,
                 PLACE_SOUND, PLACE_PITCH, BREAK_SOUND, BREAK_PITCH, ACTIVATE_SOUND, ACTIVATE_PITCH, EFFECTS, MESSAGES,
                 ATTRIBUTES, EXPERIENCE_DROPS, PROJECTILE, PARTICLE, BLOCK_MATERIAL, BLOCK_SKULL, ITEM_MATERIAL, ITEM_SKULL, ITEM_LORE, UPGRADE_LORE,
                 PLACEMENT_BLOCKED_MESSAGE, IS_WHITELIST, BLOCKS_LIST, HOLOGRAM_STACK, OUT_OF_STOCK_LINE, APPEND_TO_TOP);
@@ -210,7 +212,8 @@ public class DefencesFactory {
 
     public static void addDefence(Player player, DefenceStruct defence, Faction faction) {
         ItemStack stack = SkullAPI.convertToSkull(new ItemStack(Material.getMaterial(defence.getITEM_MATERIAL())), defence.getITEM_SKULL());
-        NamespacedKey nameKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-name");
+        NamespacedKey nameKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
+        NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
 
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(TextUtility.color(defence.getNAME()));

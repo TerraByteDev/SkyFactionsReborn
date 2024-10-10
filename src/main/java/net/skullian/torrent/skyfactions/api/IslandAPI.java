@@ -23,6 +23,8 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.config.types.Settings;
+import net.skullian.torrent.skyfactions.defence.Defence;
+import net.skullian.torrent.skyfactions.event.DefenceHandler;
 import net.skullian.torrent.skyfactions.island.PlayerIsland;
 import net.skullian.torrent.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.torrent.skyfactions.util.ErrorHandler;
@@ -38,6 +40,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -194,5 +197,23 @@ public class IslandAPI {
                 editSession.setBlocks(region, BlockType.REGISTRY.get("air"));
             }
         });
+    }
+
+    public static void enableDefencesOnEntry(Player player) {
+        List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(player.getUniqueId());
+        if (defences != null && !defences.isEmpty()) {
+            for (Defence defence : defences) {
+                defence.enable();
+            }
+        }
+    }
+
+    public static void disableDefencesOnExit(Player player) {
+        List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(player.getUniqueId());
+        if (defences != null && !defences.isEmpty()) {
+            for (Defence defence : defences) {
+                defence.disable();
+            }
+        }
     }
 }

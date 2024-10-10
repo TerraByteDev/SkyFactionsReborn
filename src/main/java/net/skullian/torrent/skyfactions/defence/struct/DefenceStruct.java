@@ -16,6 +16,7 @@ public class DefenceStruct {
     private String FILE_NAME;
     private String NAME;
     private String TYPE;
+    private String IDENTIFIER;
 
     private int BUY_COST;
     private int SELL_COST;

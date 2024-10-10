@@ -8,29 +8,47 @@ import net.skullian.torrent.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.torrent.skyfactions.gui.items.GeneralCancelItem;
 import net.skullian.torrent.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.torrent.skyfactions.gui.items.island_creation.CreationConfirmationItem;
+import net.skullian.torrent.skyfactions.util.SLogger;
 import net.skullian.torrent.skyfactions.util.SoundUtil;
 import net.skullian.torrent.skyfactions.util.text.TextUtility;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import xyz.xenondevs.invui.gui.Gui;
+import xyz.xenondevs.invui.item.Item;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.item.impl.SimpleItem;
 import xyz.xenondevs.invui.window.Window;
 
 import java.util.List;
 
-public class IslandCreationConfirmationUI implements Listener {
+public class IslandCreationConfirmationUI {
 
     public static void promptPlayer(Player player) {
+        SLogger.warn("hm");
         try {
+            SLogger.info("AAAAA");
             GUIData data = GUIAPI.getGUIData("confirmations/create_island");
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player);
 
+            SLogger.info("aaaa");
+            Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
+            Gui guii = Gui.normal()
+                    .setStructure(
+                            "# # # # # # # # #",
+                            "# . . . . . . . #",
+                            "# . . . . . . . #",
+                            "# # # # # # # # #")
+                    .addIngredient('#', border)
+                    .build();
+
             Window window = Window.single()
                     .setViewer(player)
                     .setTitle(TextUtility.color(data.getTITLE()))
-                    .setGui(gui)
+                    .setGui(guii)
                     .build();
 
+            SLogger.info("opening");
             SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
             window.open();
         } catch (IllegalArgumentException e) {

@@ -131,7 +131,8 @@ public class DatabaseHandler {
                      [gems] INTEGER NOT NULL,
                      [runes] INTEGER NOT NULL,
                      [defenceCount] INTEGER NOT NULL,
-                     [last_raided] INTEGER NOT NULL
+                     [last_raided] INTEGER NOT NULL,
+                     [last_raider] TEXT NOT NULL
                      ) STRICT;
                      """);
 
@@ -151,7 +152,8 @@ public class DatabaseHandler {
                       [runes] INTEGER NOT NULL,
                       [defenceCount] INTEGER NOT NULL,
                       [gems] INTEGER NOT NULL,
-                      [last_raided] INTEGER NOT NULL
+                      [last_raided] INTEGER NOT NULL,
+                      [last_raider] TEXT NOT NULL
                       ) STRICT;
                      """);
 
@@ -276,7 +278,8 @@ public class DatabaseHandler {
                      `gems` BIGINT NOT NULL,
                      `runes` BIGINT NOT NULL,
                      `defenceCount` BIGINT NOT NULL,
-                     `last_raided` BIGINT NOT NULL
+                     `last_raided` BIGINT NOT NULL,
+                     `last_raider` VARCHAR(255) NOT NULL
                      );
                      """);
 
@@ -296,7 +299,8 @@ public class DatabaseHandler {
                       `runes` BIGINT NOT NULL,
                       `defenceCount` BIGINT NOT NULL,
                       `gems` BIGINT NOT NULL,
-                      `last_raided` BIGINT NOT NULL
+                      `last_raided` BIGINT NOT NULL,
+                      `last_raider` VARCHAR(255) NOT NULL
                       );
                      """);
 
@@ -442,7 +446,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> createIsland(Player player, PlayerIsland island) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, level, gems, runes, defenceCount, last_raided) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO islands (id, uuid, level, gems, runes, defenceCount, last_raided, last_raider) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
 
                 statement.setInt(1, island.getId());
                 statement.setString(2, player.getUniqueId().toString());
@@ -451,6 +455,7 @@ public class DatabaseHandler {
                 statement.setInt(5, 0);
                 statement.setInt(6, 0);
                 statement.setLong(7, System.currentTimeMillis() + Settings.RAIDING_PLAYER_IMMUNITY.getInt());
+                statement.setString(8, "N/A");
 
                 statement.executeUpdate();
                 statement.close();
@@ -962,13 +967,14 @@ public class DatabaseHandler {
     public CompletableFuture<Void> registerFaction(Player owner, String name) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, level, last_raid) VALUES (?, ?, ?, ?)");
+                 PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, level, last_raid, last_raider) VALUES (?, ?, ?, ?, ?)");
                  PreparedStatement factionOwnerRegistration = connection.prepareStatement("INSERT INTO factionMembers (faction_name, uuid, rank) VALUES (?, ?, ?)")) {
 
                 factionRegistration.setString(1, name);
                 factionRegistration.setString(2, "&aNone");
                 factionRegistration.setInt(3, 1);
                 factionRegistration.setLong(4, 0);
+                factionRegistration.setString(5, "N/A");
 
                 factionOwnerRegistration.setString(1, name);
                 factionOwnerRegistration.setString(2, owner.getUniqueId().toString());

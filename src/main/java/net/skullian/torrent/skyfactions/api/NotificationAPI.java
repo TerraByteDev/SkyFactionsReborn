@@ -2,6 +2,7 @@ package net.skullian.torrent.skyfactions.api;
 
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.types.Settings;
+import net.skullian.torrent.skyfactions.event.DefenceHandler;
 import net.skullian.torrent.skyfactions.notification.NotificationData;
 import net.skullian.torrent.skyfactions.notification.NotificationTask;
 import net.skullian.torrent.skyfactions.notification.NotificationType;
@@ -26,8 +27,8 @@ public class NotificationAPI {
                 ex.printStackTrace();
                 return;
             }
-
             if (faction != null && !factionInviteStore.containsKey(faction.getName())) {
+                DefenceHandler.addPlacedDefences(faction.getName());
                 faction.getJoinRequests().whenComplete((requests, exc) -> {
                     if (exc != null) {
                         exc.printStackTrace();

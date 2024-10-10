@@ -1,10 +1,7 @@
 package net.skullian.torrent.skyfactions.command.island.cmds;
 
 import net.skullian.torrent.skyfactions.command.CommandTemplate;
-import net.skullian.torrent.skyfactions.event.DefenceHandler;
-import net.skullian.torrent.skyfactions.util.hologram.TextHologram;
-import net.skullian.torrent.skyfactions.util.text.TextUtility;
-import org.bukkit.entity.Display;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -28,7 +25,7 @@ public class IslandTest extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        TextHologram hologram = new TextHologram(player.getName())
+        /*TextHologram hologram = new TextHologram(player.getName())
                 .setText(TextUtility.color("aaa\naaaaaaa"))
                 .setSeeThroughBlocks(true)
                 .setBillboard(Display.Billboard.VERTICAL)
@@ -37,14 +34,9 @@ public class IslandTest extends CommandTemplate {
                 .setScale(1.0F, 1.0F, 1.0F);
 
         hologram.spawn(player.getLocation().add(0, 1, 0));
-        DefenceHandler.hologramsMap.put(hologram.getId(), hologram);
+        DefenceHandler.hologramsMap.put(hologram.getId(), hologram);*/
 
-        /*ItemStack stack = player.getInventory().getItemInMainHand();
-        ItemMeta meta = stack.getItemMeta();
-
-        player.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).setBaseValue(0.2);
-
-        stack.setItemMeta(meta);*/
+        player.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).setBaseValue(1);
     }
 
     public static List<String> permissions = List.of("skyfactions.admin.superomegatemporaryadminpermission");

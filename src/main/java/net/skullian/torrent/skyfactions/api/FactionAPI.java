@@ -13,6 +13,8 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.skullian.torrent.skyfactions.SkyFactionsReborn;
 import net.skullian.torrent.skyfactions.config.types.Messages;
 import net.skullian.torrent.skyfactions.config.types.Settings;
+import net.skullian.torrent.skyfactions.defence.Defence;
+import net.skullian.torrent.skyfactions.event.DefenceHandler;
 import net.skullian.torrent.skyfactions.faction.AuditLogType;
 import net.skullian.torrent.skyfactions.faction.Faction;
 import net.skullian.torrent.skyfactions.island.FactionIsland;
@@ -243,5 +245,45 @@ public class FactionAPI {
         }
 
         return false;
+    }
+
+    /**
+     * Check if a location is in a certain region.
+     *
+     * @param bukkitLoc  Location to check.
+     * @param regionName Name of region.
+     * @return {@link Boolean}
+     */
+    public static boolean isLocationInRegion(Location bukkitLoc, String regionName) {
+        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        com.sk89q.worldedit.util.Location location = BukkitAdapter.adapt(bukkitLoc);
+        RegionQuery query = container.createQuery();
+        ApplicableRegionSet set = query.getApplicableRegions(location);
+
+        for (ProtectedRegion region : set) {
+            if (region.getId().equalsIgnoreCase(regionName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void enableDefencesOnEntry(String factionName) {
+        List<Defence> defences = DefenceHandler.loadedFactionDefences.get(factionName);
+        if (defences != null && !defences.isEmpty()) {
+            for (Defence defence : defences) {
+                defence.enable();
+            }
+        }
+    }
+
+    public static void disableDefencesOnExit(String factionName) {
+        List<Defence> defences = DefenceHandler.loadedFactionDefences.get(factionName);
+        if (defences != null && !defences.isEmpty()) {
+            for (Defence defence : defences) {
+                defence.disable();
+            }
+        }
     }
 }
