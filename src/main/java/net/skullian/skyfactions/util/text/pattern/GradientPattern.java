@@ -2,6 +2,7 @@ package net.skullian.skyfactions.util.text.pattern;
 
 import net.skullian.skyfactions.util.text.ColorAPI;
 
+import java.awt.*;
 import java.util.regex.Matcher;
 
 public class GradientPattern implements MainPattern {

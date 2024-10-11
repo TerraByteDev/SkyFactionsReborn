@@ -6,6 +6,7 @@ import net.skullian.skyfactions.util.text.pattern.GradientPattern;
 import net.skullian.skyfactions.util.text.pattern.MainPattern;
 import net.skullian.skyfactions.util.text.pattern.SolidPattern;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +36,6 @@ public class ColorAPI {
             .put(new Color(16733695), ChatColor.getByChar('d'))
             .put(new Color(16777045), ChatColor.getByChar('e'))
             .put(new Color(16777215), ChatColor.getByChar('f')).build();
-
-
 
 
     public static String process(String string) {

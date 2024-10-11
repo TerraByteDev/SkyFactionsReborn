@@ -8,6 +8,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
+import java.awt.*;
 import java.util.UUID;
 
 public class DiscordLinkHandler extends ListenerAdapter {
