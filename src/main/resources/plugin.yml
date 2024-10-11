@@ -1,6 +1,6 @@
 name: SkyFactionsReborn
 version: '${project.version}'
-main: net.skullian.torrent.skyfactions.SkyFactionsReborn
+main: net.skullian.skyfactions.SkyFactionsReborn
 api-version: 1.21
 authors: [ Skullians, nouish ]
 website: https://www.torrentsmp.com/
