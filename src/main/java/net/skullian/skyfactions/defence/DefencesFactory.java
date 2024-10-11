@@ -289,8 +289,17 @@ public class DefencesFactory {
             Material match = Material.matchMaterial(cleaned);
             if (match != null) {
                 matchingMaterials.add(match);
-            } else
-                SLogger.warn("Could not find any matching materials by the name of: {} in Defence {}", cleaned, fName);
+            } else {
+                for (Material material : Material.values()) {
+                    if (material.name().toLowerCase().contains(cleaned.toLowerCase())) {
+                        match = material;
+                    }
+                }
+
+                if (match == null) {
+                    SLogger.warn("Could not find any matching materials by the name of: {} in Defence {}", cleaned, fName);
+                } else matchingMaterials.add(match);
+            }
         }
 
         return matchingMaterials;
