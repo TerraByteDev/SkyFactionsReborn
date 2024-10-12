@@ -112,9 +112,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
         getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
         getServer().getPluginManager().registerEvents(new DefenceHandler(), this);
-
-        SLogger.info("Registering PacketEvents Listener.");
-
+        
         // We store an instance of the DiscordHandler class as that is how other internals
         // access methods related to Discord (e.g. raid notifications).
         SLogger.info("Initialising JDA / Discord.");

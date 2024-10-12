@@ -67,7 +67,6 @@ public class IslandCreationConfirmationUI {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-
         return builder;
     }
 
