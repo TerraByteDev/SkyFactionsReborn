@@ -148,7 +148,7 @@ public class DatabaseHandler {
              PreparedStatement factionIslandTable = connection.prepareStatement("""
                       CREATE TABLE IF NOT EXISTS factionIslands (
                       [id] INTEGER PRIMARY KEY,
-                      [faction_name] TEXT NOT NULL,
+                      [factionName] TEXT NOT NULL,
                       [runes] INTEGER NOT NULL,
                       [defenceCount] INTEGER NOT NULL,
                       [gems] INTEGER NOT NULL,
@@ -168,7 +168,7 @@ public class DatabaseHandler {
 
              PreparedStatement factionMemberTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS factionMembers (
-                     [faction_name] TEXT NOT NULL,
+                     [factionName] TEXT NOT NULL,
                      [uuid] TEXT PRIMARY KEY NOT NULL,
                      [rank] TEXT NOT NULL
                      ) STRICT;
@@ -185,7 +185,7 @@ public class DatabaseHandler {
                      CREATE TABLE IF NOT EXISTS defenceLocations (
                      [uuid] TEXT NOT NULL,
                      [type] TEXT NOT NULL,
-                     [faction_name] TEXT NOT NULL,
+                     [factionName] TEXT NOT NULL,
                      [x] INTEGER NOT NULL,
                      [y] INTEGER NOT NULL,
                      [z] INTEGER NOT NULL
@@ -194,7 +194,7 @@ public class DatabaseHandler {
 
              PreparedStatement auditLogTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS auditLogs (
-                     [faction_name] TEXT NOT NULL,
+                     [factionName] TEXT NOT NULL,
                      [type] TEXT NOT NULL,
                      [uuid] TEXT NOT NULL,
                      [description] TEXT NOT NULL,
@@ -204,14 +204,14 @@ public class DatabaseHandler {
 
              PreparedStatement factionBannedMembers = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS factionBans (
-                     [faction_name] TEXT NOT NULL,
+                     [factionName] TEXT NOT NULL,
                      [uuid] TEXT NOT NULL
                      ) STRICT;
                      """);
 
              PreparedStatement factionInvitesTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS factionInvites (
-                     [faction_name] TEXT NOT NULL,
+                     [factionName] TEXT NOT NULL,
                      [uuid] TEXT NOT NULL,
                      [inviter] TEXT NOT NULL,
                      [type] TEXT NOT NULL,
@@ -295,7 +295,7 @@ public class DatabaseHandler {
              PreparedStatement factionIslandTable = connection.prepareStatement("""
                       CREATE TABLE IF NOT EXISTS factionIslands (
                       `id` BIGINT PRIMARY KEY,
-                      `faction_name` VARCHAR(255) NOT NULL,
+                      `factionName` VARCHAR(255) NOT NULL,
                       `runes` BIGINT NOT NULL,
                       `defenceCount` BIGINT NOT NULL,
                       `gems` BIGINT NOT NULL,
@@ -315,7 +315,7 @@ public class DatabaseHandler {
 
              PreparedStatement factionMemberTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS factionMembers (
-                     `faction_name` VARCHAR(255) NOT NULL,
+                     `factionName` VARCHAR(255) NOT NULL,
                      `uuid` VARCHAR(255) PRIMARY KEY NOT NULL,
                      `rank` VARCHAR(255) NOT NULL
                      );
@@ -332,7 +332,7 @@ public class DatabaseHandler {
                      CREATE TABLE IF NOT EXISTS defenceLocations (
                      `uuid` BIGINT NOT NULL,
                      `type` VARCHAR(255) NOT NULL,
-                     `faction_name` VARCHAR(255) NOT NULL,
+                     `factionName` VARCHAR(255) NOT NULL,
                      `x` BIGINT NOT NULL,
                      `y` BIGINT NOT NULL,
                      `z` BIGINT NOT NULL
@@ -341,7 +341,7 @@ public class DatabaseHandler {
 
              PreparedStatement auditLogTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS auditLogs (
-                     `faction_name` VARCHAR(255) NOT NULL,
+                     `factionName` VARCHAR(255) NOT NULL,
                      `type` VARCHAR(255) NOT NULL,
                      `uuid` VARCHAR(255) NOT NULL,
                      `description` VARCHAR(255) NOT NULL,
@@ -351,14 +351,14 @@ public class DatabaseHandler {
 
              PreparedStatement factionBannedMembers = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS factionBans (
-                     `faction_name` VARCHAR(255) NOT NULL,
+                     `factionName` VARCHAR(255) NOT NULL,
                      `uuid` VARCHAR(255) NOT NULL
                      );
                      """);
 
              PreparedStatement factionInvitesTable = connection.prepareStatement("""
                      CREATE TABLE IF NOT EXISTS factionInvites (
-                     `faction_name` VARCHAR(255) NOT NULL,
+                     `factionName` VARCHAR(255) NOT NULL,
                      `uuid` VARCHAR(255) NOT NULL,
                      `inviter` VARCHAR(255) NOT NULL,
                      `type` VARCHAR(255) NOT NULL,
@@ -970,7 +970,7 @@ public class DatabaseHandler {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, level, last_raid, last_raider) VALUES (?, ?, ?, ?, ?)");
-                 PreparedStatement factionOwnerRegistration = connection.prepareStatement("INSERT INTO factionMembers (faction_name, uuid, rank) VALUES (?, ?, ?)")) {
+                 PreparedStatement factionOwnerRegistration = connection.prepareStatement("INSERT INTO factionMembers (factionName, uuid, rank) VALUES (?, ?, ?)")) {
 
                 factionRegistration.setString(1, name);
                 factionRegistration.setString(2, "&aNone");
@@ -999,7 +999,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> addFactionMember(UUID playerUUID, String factionName) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionMembers (faction_name, uuid, rank) VALUES (?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionMembers (factionName, uuid, rank) VALUES (?, ?, ?)")) {
 
                 statement.setString(1, factionName);
                 statement.setString(2, playerUUID.toString());
@@ -1041,7 +1041,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> createFactionIsland(String name, FactionIsland island) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionIslands (id, faction_name, runes, defenceCount, gems, last_raided) VALUES (?, ?, ?, ?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionIslands (id, factionName, runes, defenceCount, gems, last_raided) VALUES (?, ?, ?, ?, ?, ?)")) {
 
                 statement.setInt(1, island.getId());
                 statement.setString(2, name);
@@ -1064,7 +1064,7 @@ public class DatabaseHandler {
     public CompletableFuture<FactionIsland> getFactionIsland(String name) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE faction_name = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE factionName = ?")) {
 
                 statement.setString(1, name);
                 ResultSet set = statement.executeQuery();
@@ -1144,7 +1144,7 @@ public class DatabaseHandler {
                 ResultSet set = memberStatement.executeQuery();
 
                 if (set.next()) {
-                    String name = set.getString("faction_name");
+                    String name = set.getString("factionName");
 
                     memberStatement.close();
                     connection.close();
@@ -1166,7 +1166,7 @@ public class DatabaseHandler {
     public CompletableFuture<Integer> getGems(String name) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE faction_name = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE factionName = ?")) {
 
                 statement.setString(1, name);
                 ResultSet set = statement.executeQuery();
@@ -1192,7 +1192,7 @@ public class DatabaseHandler {
             int gemCount = getGems(name).join();
             int newCount = gemCount + addition;
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET gems = ? WHERE faction_name = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET gems = ? WHERE factionName = ?")) {
 
                 statement.setInt(1, newCount);
                 statement.setString(2, name);
@@ -1229,7 +1229,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> leaveFaction(String name, OfflinePlayer player) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("DELETE FROM factionMembers WHERE faction_name = ? AND uuid = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("DELETE FROM factionMembers WHERE factionName = ? AND uuid = ?")) {
 
                 statement.setString(1, name);
                 statement.setString(2, player.getUniqueId().toString());
@@ -1248,7 +1248,7 @@ public class DatabaseHandler {
     public CompletableFuture<OfflinePlayer> getFactionOwner(String name) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND rank = 'owner'")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE factionName = ? AND rank = 'owner'")) {
 
                 statement.setString(1, name);
                 ResultSet set = statement.executeQuery();
@@ -1273,7 +1273,7 @@ public class DatabaseHandler {
     public CompletableFuture<List<OfflinePlayer>> getMembersByRank(String name, String rank) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND rank = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionMembers WHERE factionName = ? AND rank = ?")) {
 
                 statement.setString(1, name);
                 statement.setString(2, rank);
@@ -1303,8 +1303,8 @@ public class DatabaseHandler {
     public CompletableFuture<String> updateMemberRank(String factionName, Player player, String rank) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement oldRankStatement = connection.prepareStatement("SELECT * FROM factionMembers WHERE faction_name = ? AND uuid = ?");
-                 PreparedStatement statement = connection.prepareStatement("UPDATE factionMembers SET rank = ? WHERE faction_name = ? AND uuid = ?")) {
+                 PreparedStatement oldRankStatement = connection.prepareStatement("SELECT * FROM factionMembers WHERE factionName = ? AND uuid = ?");
+                 PreparedStatement statement = connection.prepareStatement("UPDATE factionMembers SET rank = ? WHERE factionName = ? AND uuid = ?")) {
 
                 oldRankStatement.setString(1, factionName);
                 oldRankStatement.setString(2, player.getUniqueId().toString());
@@ -1404,7 +1404,7 @@ public class DatabaseHandler {
     public CompletableFuture<Integer> getRunes(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE faction_name = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands WHERE factionName = ?")) {
 
                 statement.setString(1, factionName);
                 ResultSet set = statement.executeQuery();
@@ -1451,7 +1451,7 @@ public class DatabaseHandler {
             int newCount = currentRunes + addition;
 
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET runes = ? WHERE faction_name = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET runes = ? WHERE factionName = ?")) {
 
                 statement.setInt(1, newCount);
                 statement.setString(2, factionName);
@@ -1498,7 +1498,7 @@ public class DatabaseHandler {
                 throw new IllegalArgumentException("Attempted to remove more runes than the Faction had!");
 
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET runes = ? WHERE faction_name = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET runes = ? WHERE factionName = ?")) {
 
                 statement.setInt(1, newCount);
                 statement.setString(2, factionName);
@@ -1519,7 +1519,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> kickPlayer(OfflinePlayer player, String factionName) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("DELETE * FROM factionMembers WHERE uuid = ? AND faction_name = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("DELETE * FROM factionMembers WHERE uuid = ? AND factionName = ?")) {
 
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setString(2, factionName);
@@ -1538,8 +1538,8 @@ public class DatabaseHandler {
     public CompletableFuture<Void> banPlayer(String factionName, OfflinePlayer player) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement kickStatement = connection.prepareStatement("DELETE * FROM factionMembers WHERE uuid = ? AND faction_name = ?");
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionBans (faction_name, uuid) VALUES (?, ?);")) {
+                 PreparedStatement kickStatement = connection.prepareStatement("DELETE * FROM factionMembers WHERE uuid = ? AND factionName = ?");
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionBans (factionName, uuid) VALUES (?, ?);")) {
 
                 kickStatement.setString(1, player.getUniqueId().toString());
                 kickStatement.setString(2, factionName);
@@ -1564,7 +1564,7 @@ public class DatabaseHandler {
     public CompletableFuture<List<OfflinePlayer>> getBannedPlayers(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionBans WHERE faction_name = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionBans WHERE factionName = ?")) {
 
                 statement.setString(1, factionName);
                 ResultSet set = statement.executeQuery();
@@ -1592,7 +1592,7 @@ public class DatabaseHandler {
     public CompletableFuture<Boolean> isPlayerBanned(String factionName, OfflinePlayer player) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionBans WHERE faction_name = ? AND uuid = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionBans WHERE factionName = ? AND uuid = ?")) {
 
                 statement.setString(1, factionName);
                 statement.setString(2, player.getUniqueId().toString());
@@ -1616,7 +1616,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> unbanPlayer(String factionName, OfflinePlayer player) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("DELETE FROM factionBans WHERE faction_name = ? AND uuid = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("DELETE FROM factionBans WHERE factionName = ? AND uuid = ?")) {
 
                 statement.setString(1, factionName);
                 statement.setString(2, player.getUniqueId().toString());
@@ -1637,7 +1637,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> createAuditLog(UUID playerUUID, String type, String description, String factionName) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO auditLogs (faction_name, type, uuid, description, timestamp) VALUES (?, ?, ?, ?, ?);")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO auditLogs (factionName, type, uuid, description, timestamp) VALUES (?, ?, ?, ?, ?);")) {
 
                 statement.setString(1, factionName);
                 statement.setString(2, type);
@@ -1659,20 +1659,19 @@ public class DatabaseHandler {
     public CompletableFuture<List<AuditLogData>> getAuditLogs(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM auditLogs WHERE faction_name = ? ORDER BY timestamp DESC")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM auditLogs WHERE factionName = ? ORDER BY timestamp DESC")) {
 
                 statement.setString(1, factionName);
                 ResultSet set = statement.executeQuery();
 
                 List<AuditLogData> data = new ArrayList<>();
                 while (set.next()) {
-                    String faction_name = set.getString("faction_name");
                     UUID uuid = UUID.fromString(set.getString("uuid"));
                     String type = set.getString("type");
                     String description = set.getString("description");
                     long timestamp = set.getLong("timestamp");
 
-                    data.add(new AuditLogData(Bukkit.getOfflinePlayer(uuid), faction_name, type, description, timestamp));
+                    data.add(new AuditLogData(Bukkit.getOfflinePlayer(uuid), factionName, type, description, timestamp));
                 }
 
                 return data;
@@ -1688,7 +1687,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> createInvite(UUID invitedPlayerUUID, String factionName, String type, Player inviter) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionInvites (faction_name, uuid, inviter, type, accepted, timestamp) VALUES (?, ?, ?, ?, ?, ?);")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionInvites (factionName, uuid, inviter, type, accepted, timestamp) VALUES (?, ?, ?, ?, ?, ?);")) {
 
                 statement.setString(1, factionName);
                 statement.setString(2, invitedPlayerUUID.toString());
@@ -1744,7 +1743,7 @@ public class DatabaseHandler {
                 ResultSet set = statement.executeQuery();
 
                 if (set.next()) {
-                    String factionName = set.getString("faction_name");
+                    String factionName = set.getString("factionName");
                     long timestamp = set.getLong("timestamp");
                     boolean accepted = set.getBoolean("accepted");
 
@@ -1765,7 +1764,7 @@ public class DatabaseHandler {
     public CompletableFuture<Boolean> joinRequestExists(String factionName, Player player) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionInvites WHERE faction_name = ? AND uuid = ? AND type = 'incoming'")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionInvites WHERE factionName = ? AND uuid = ? AND type = 'incoming'")) {
 
                 statement.setString(1, factionName);
                 statement.setString(2, player.getUniqueId().toString());
@@ -1789,7 +1788,7 @@ public class DatabaseHandler {
     public CompletableFuture<List<InviteData>> getInvitesOfType(String factionName, String type) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionInvites WHERE faction_name = ? AND type = ? ORDER BY timestamp DESC")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionInvites WHERE factionName = ? AND type = ? ORDER BY timestamp DESC")) {
 
                 statement.setString(1, factionName);
                 statement.setString(2, type);
@@ -1827,7 +1826,7 @@ public class DatabaseHandler {
                 ResultSet set = statement.executeQuery();
                 List<InviteData> data = new ArrayList<>();
                 while (set.next()) {
-                    String factionName = set.getString("faction_name");
+                    String factionName = set.getString("factionName");
                     long timestamp = set.getLong("timestamp");
                     String uuid = set.getString("inviter");
                     OfflinePlayer inviter = !uuid.isEmpty() ? Bukkit.getOfflinePlayer(UUID.fromString(uuid)) : null;
@@ -1849,7 +1848,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> acceptJoinRequest(String factionName, UUID playerUUID) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("UPDATE factionInvites SET accepted = true WHERE faction_name = ? AND uuid = ? AND type = 'incoming'")) {
+                 PreparedStatement statement = connection.prepareStatement("UPDATE factionInvites SET accepted = true WHERE factionName = ? AND uuid = ? AND type = 'incoming'")) {
 
                 statement.setString(1, factionName);
                 statement.setString(2, playerUUID.toString());
@@ -1866,7 +1865,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> revokeInvite(String factionName, UUID playerUUID, String type) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("DELETE FROM factionInvites WHERE faction_name = ? AND uuid = ? AND type = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("DELETE FROM factionInvites WHERE factionName = ? AND uuid = ? AND type = ?")) {
 
                 statement.setString(1, factionName);
                 statement.setString(2, playerUUID.toString());
@@ -1960,7 +1959,7 @@ public class DatabaseHandler {
     public CompletableFuture<List<Location>> getDefenceLocations(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM defenceLocations WHERE type = 'faction' AND faction_name = ?")) {
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM defenceLocations WHERE type = 'faction' AND factionName = ?")) {
 
                 List<Location> locs = new ArrayList<>();
                 World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
@@ -2022,7 +2021,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> registerDefenceLocation(String factionName, Location location) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO defenceLocations(uuid, type, faction_name, x, y, z) VALUES (?, ?, ?, ?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO defenceLocations(uuid, type, factionName, x, y, z) VALUES (?, ?, ?, ?, ?, ?)")) {
 
                 statement.setString(1, "N/A");
                 statement.setString(2, "faction");
@@ -2045,7 +2044,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> registerDefenceLocation(UUID playerUUID, Location location) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO defenceLocations(uuid, type, faction_name, x, y, z) VALUES (?, ?, ?, ?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO defenceLocations(uuid, type, factionName, x, y, z) VALUES (?, ?, ?, ?, ?, ?)")) {
 
                 statement.setString(1, playerUUID.toString());
                 statement.setString(2, "player");
