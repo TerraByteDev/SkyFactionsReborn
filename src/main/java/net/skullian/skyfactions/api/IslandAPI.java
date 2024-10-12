@@ -95,8 +95,8 @@ public class IslandAPI {
         });
     }
 
-    public static CompletableFuture<Boolean> hasIsland(Player player) {
-        return SkyFactionsReborn.databaseHandler.hasIsland(player);
+    public static CompletableFuture<Boolean> hasIsland(UUID playerUUID) {
+        return SkyFactionsReborn.databaseHandler.hasIsland(playerUUID);
     }
 
     public static CompletableFuture<Boolean> pasteIslandSchematic(Player player, Location location, String worldName, String type) {

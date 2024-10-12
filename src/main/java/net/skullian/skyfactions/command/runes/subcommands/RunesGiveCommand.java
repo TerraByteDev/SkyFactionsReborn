@@ -43,7 +43,7 @@ public class RunesGiveCommand extends CommandTemplate {
                 if (!offlinePlayer.hasPlayedBefore()) {
                     Messages.UNKNOWN_PLAYER.send(player, "%player%", args[2]);
                 } else {
-                    IslandAPI.hasIsland(player).whenComplete((hasIsland, ex) -> {
+                    IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
                         if (ex != null) {
                             ErrorHandler.handleError(player, "check if you had an island", "SQL_ISLAND_GET", ex);
                             return;

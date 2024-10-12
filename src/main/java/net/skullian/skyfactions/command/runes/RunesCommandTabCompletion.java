@@ -59,15 +59,15 @@ public class RunesCommandTabCompletion implements TabCompleter {
 
             if (PermissionsHandler.hasPerm((Player) sender, RunesGiveCommand.permissions, false) && subcmd.equals("give")) {
                 if (type.equalsIgnoreCase("faction")) {
-                    for (String name : FactionAPI.factionNameCache.keySet()) {
-                        completions.add(name);
-                    }
+                    completions.addAll(FactionAPI.factionNameCache.keySet());
                 } else if (type.equalsIgnoreCase("player")) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         completions.add(player.getName());
                     }
                 }
             }
+
+            return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
         }
 
         return Arrays.asList("");

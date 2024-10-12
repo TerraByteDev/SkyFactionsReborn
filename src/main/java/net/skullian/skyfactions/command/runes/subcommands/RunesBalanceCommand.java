@@ -32,7 +32,7 @@ public class RunesBalanceCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        IslandAPI.hasIsland(player).whenComplete((hasIsland, ex) -> {
+        IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;

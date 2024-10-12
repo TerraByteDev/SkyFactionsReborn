@@ -142,7 +142,7 @@ public class RaidAPI {
         try {
             int required = Settings.RAIDING_COST.getInt();
             AtomicInteger currentGems = new AtomicInteger();
-            SkyFactionsReborn.databaseHandler.getGems(player).thenAccept(currentGems::set).exceptionally(ex -> {
+            SkyFactionsReborn.databaseHandler.getGems(player.getUniqueId()).thenAccept(currentGems::set).exceptionally(ex -> {
                 ex.printStackTrace();
                 Messages.ERROR.send(player, "%operation%", "check your gem count", "%debug%", "SQL_GEMS_GET");
                 return null;
@@ -251,7 +251,7 @@ public class RaidAPI {
             Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_RAID_UPDATE");
             return null;
         });
-        SkyFactionsReborn.databaseHandler.addGems(player, Settings.RAIDING_COST.getInt()).join();
+        SkyFactionsReborn.databaseHandler.addGems(player.getUniqueId(), Settings.RAIDING_COST.getInt()).join();
 
         if (isDefendant) {
             SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).thenAccept(island -> SkyFactionsReborn.databaseHandler.setIslandCooldown(island, 0).exceptionally(ex -> {

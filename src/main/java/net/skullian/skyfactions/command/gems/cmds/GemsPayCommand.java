@@ -49,8 +49,8 @@ public class GemsPayCommand extends CommandTemplate {
                     }
 
                     if (playerGemCount >= toPay) {
-                        GemsAPI.subtractGems(player, toPay);
-                        GemsAPI.addGems(offlinePlayer.getPlayer(), toPay);
+                        GemsAPI.subtractGems(player.getUniqueId(), toPay);
+                        GemsAPI.addGems(offlinePlayer.getUniqueId(), toPay);
 
                         Messages.GEM_ADD_SUCCESS.send(player, "%amount%", toPay, "%player%", offlinePlayer.getName());
                     } else {

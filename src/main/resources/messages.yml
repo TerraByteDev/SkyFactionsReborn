@@ -186,6 +186,10 @@ Messages:
     # Placeholders: %amount% - Amount of gems given / %player% - Player affected.
     GEM_ADD_SUCCESS: "%server_name%&r&a Successfully paid&r&e %amount%&r&a Gems to &r&e%player%."
 
+    # Sent after an admin successfully /gems give a player / faction gems.
+    # Placeholders: %amount% - Amount of gems given / %name% - Name of Player / Faction affected.
+    GEM_GIVE_SUCCESS: "%server_name%&r&a Successfully gave&r&e %amount%&r&a Gems to&r&e %name%."
+
     # Sent when a player tries to pay another player more gems than they have in their balance.
     INSUFFICIENT_GEM_COUNT: "%server_name%&c&lHey!&r&7 You do not have enough gems for that!"
 

@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.command.gems;
 
+import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.PermissionsHandler;
 import net.skullian.skyfactions.command.gems.cmds.GemsBalanceCommand;
 import net.skullian.skyfactions.command.gems.cmds.GemsGiveCommand;
@@ -43,7 +44,7 @@ public class GemsCommandTabCompletion implements TabCompleter {
             }
 
             return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
-        }else if (args.length == 2) {
+        } else if (args.length == 2) {
             String subcmd = args[0].toLowerCase(Locale.ROOT);
             String arg = args[1].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
@@ -54,8 +55,24 @@ public class GemsCommandTabCompletion implements TabCompleter {
                 }
             }
             if (PermissionsHandler.hasPerm((Player) sender, GemsGiveCommand.permissions, false) && subcmd.equals("give")) {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    completions.add(player.getName());
+                completions.add("faction");
+                completions.add("player");
+            }
+
+            return StringUtil.copyPartialMatches(arg, completions, new ArrayList<>(completions.size()));
+        } else if (args.length == 3) {
+            String subcmd = args[0].toLowerCase(Locale.ROOT);
+            String type = args[1].toLowerCase(Locale.ROOT);
+            String arg = args[2].toLowerCase(Locale.ROOT);
+            List<String> completions = new ArrayList<>();
+
+            if (PermissionsHandler.hasPerm((Player) sender, GemsGiveCommand.permissions, false) && subcmd.equals("give")) {
+                if (type.equalsIgnoreCase("faction")) {
+                    completions.addAll(FactionAPI.factionNameCache.keySet());
+                } else if (type.equalsIgnoreCase("player")) {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        completions.add(player.getName());
+                    }
                 }
             }
 

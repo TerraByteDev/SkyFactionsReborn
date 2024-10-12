@@ -1,6 +1,8 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.GemsAPI;
+import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CooldownHandler;
 import net.skullian.skyfactions.command.PermissionsHandler;
@@ -32,24 +34,58 @@ public class GemsGiveCommand extends CommandTemplate {
     public void perform(Player player, String[] args) {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
-        if (args.length < 2) {
+        if (args.length < 4) {
             Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
         } else {
 
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
-            if (!offlinePlayer.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
-            } else {
-                SkyFactionsReborn.databaseHandler.addGems(offlinePlayer.getPlayer(), Integer.parseInt(args[2])).whenComplete((ignored, exc) -> {
-                    if (exc != null) {
-                        ErrorHandler.handleError(player, "give someone gems", "SQL_GEMS_MODIFY", exc);
+            if (args[1].equalsIgnoreCase("player")) {
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[2]);
+                if (!offlinePlayer.hasPlayedBefore()) {
+                    Messages.UNKNOWN_PLAYER.send(player, "%player%", args[2]);
+                } else {
+                    IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, throwable) -> {
+                        if (throwable != null) {
+                            ErrorHandler.handleError(player, "check if the specified player had an island", "SQL_ISLAND_GET", throwable);
+                            return;
+                        } else if (!hasIsland) {
+                            Messages.NO_ISLAND.send(player);
+                            return;
+                        }
+
+                        GemsAPI.addGems(offlinePlayer.getUniqueId(), Integer.parseInt(args[3])).whenComplete((ignored, exc) -> {
+                            if (exc != null) {
+                                ErrorHandler.handleError(player, "give someone gems", "SQL_GEMS_MODIFY", exc);
+                                return;
+                            }
+
+                            Messages.GEM_GIVE_SUCCESS.send(player, "%amount%", args[3], "%name%", offlinePlayer.getName());
+                        });
+                    });
+                }
+            } else if (args[1].equalsIgnoreCase("faction")) {
+                String factionName = args[2];
+
+                FactionAPI.getFaction(factionName).whenComplete((faction, throwable) -> {
+                    if (throwable != null) {
+                        ErrorHandler.handleError(player, "get the specified Faction", "SQL_FACTION_GET", throwable);
+                        return;
+                    } else if (faction == null) {
+                        Messages.FACTION_NOT_FOUND.send(player, "%name%", factionName);
                         return;
                     }
 
-                    Messages.GEM_ADD_SUCCESS.send(player, "%amount%", args[2], "%player%", offlinePlayer.getName());
-                });
-            }
+                    faction.addGems(Integer.parseInt(args[3])).whenComplete((ignored, ex) -> {
+                        if (ex != null) {
+                            ErrorHandler.handleError(player, "give Gems to the specified Faction", "SQL_GEMS_MODIFY", ex);
+                            return;
+                        }
 
+                        Messages.GEM_GIVE_SUCCESS.send(player, "%amount%", args[3], "%name%", factionName);
+                    });
+                });
+            } else {
+                Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
+            }
         }
     }
 

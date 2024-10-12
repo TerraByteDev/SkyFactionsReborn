@@ -40,7 +40,7 @@ public class ObeliskHeadItem extends AsyncItem {
                                 builder.addLoreLines(TextUtility.color(loreLine
                                         .replace("%level%", String.valueOf(SkyFactionsReborn.databaseHandler.getIslandLevel(island).join()))
                                         .replace("%rune_count%", String.valueOf(SkyFactionsReborn.databaseHandler.getRunes(player.getUniqueId()).join()))
-                                        .replace("%gem_count%", String.valueOf(SkyFactionsReborn.databaseHandler.getGems(player).join()))
+                                        .replace("%gem_count%", String.valueOf(SkyFactionsReborn.databaseHandler.getGems(player.getUniqueId()).join()))
                                 ));
                             }
 

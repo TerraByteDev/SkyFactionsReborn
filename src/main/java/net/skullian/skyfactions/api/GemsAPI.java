@@ -4,6 +4,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
@@ -17,7 +18,7 @@ public class GemsAPI {
      */
     public static CompletableFuture<Integer> getGems(Player player) {
         try {
-            return SkyFactionsReborn.databaseHandler.getGems(player);
+            return SkyFactionsReborn.databaseHandler.getGems(player.getUniqueId());
         } catch (CompletionException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "get your gems count", "%debug%", "SQL_GEMS_GET");
@@ -29,31 +30,20 @@ public class GemsAPI {
     /**
      * Add gems to a player.
      *
-     * @param player   Player to give gems to.
-     * @param addition Amount of gems to add.
+     * @param playerUUID UUID of player to give gems to.
+     * @param addition   Amount of gems to add.
      */
-    public static CompletableFuture<Void> addGems(Player player, int addition) {
-        return SkyFactionsReborn.databaseHandler.addGems(player, addition).exceptionally(ex -> {
-            ex.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "add gems", "%debug%", "SQL_GEMS_ADD");
-            return null;
-        });
+    public static CompletableFuture<Void> addGems(UUID playerUUID, int addition) {
+        return SkyFactionsReborn.databaseHandler.addGems(playerUUID, addition);
     }
 
     /**
      * Subtract gems from a player.
      *
-     * @param player      Player to subtract gems from.
+     * @param playerUUID  UUID of player to subtract gems from.
      * @param subtraction Amount of gems to remove.
      */
-    public static CompletableFuture<Void> subtractGems(Player player, int subtraction) {
-        try {
-            return SkyFactionsReborn.databaseHandler.subtractGems(player, subtraction);
-        } catch (CompletionException error) {
-            error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "decrease your gems count", "%debug%", "SQL_GEMS_SUBTRACT");
-
-            return null;
-        }
+    public static CompletableFuture<Void> subtractGems(UUID playerUUID, int subtraction) {
+        return SkyFactionsReborn.databaseHandler.subtractGems(playerUUID, subtraction);
     }
 }

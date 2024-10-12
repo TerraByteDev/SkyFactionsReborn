@@ -421,12 +421,12 @@ public class DatabaseHandler {
 
     // ------------------ ISLAND ------------------ //
 
-    public CompletableFuture<Boolean> hasIsland(Player player) {
+    public CompletableFuture<Boolean> hasIsland(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE uuid = ?")) {
 
-                statement.setString(1, player.getUniqueId().toString());
+                statement.setString(1, playerUUID.toString());
                 ResultSet set = statement.executeQuery();
                 if (set.next()) {
                     return true;
@@ -787,12 +787,12 @@ public class DatabaseHandler {
 
     // ------------------ CURRENCY ------------------ //
 
-    public CompletableFuture<Integer> getGems(Player player) {
+    public CompletableFuture<Integer> getGems(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands WHERE uuid = ?")) {
 
-                statement.setString(1, player.getUniqueId().toString());
+                statement.setString(1, playerUUID.toString());
 
                 ResultSet set = statement.executeQuery();
                 if (set.next()) {
@@ -810,14 +810,14 @@ public class DatabaseHandler {
         });
     }
 
-    public CompletableFuture<Void> subtractGems(Player player, int amount) {
+    public CompletableFuture<Void> subtractGems(UUID playerUUID, int amount) {
         return CompletableFuture.runAsync(() -> {
-            int current = getGems(player).join();
+            int current = getGems(playerUUID).join();
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("UPDATE islands set gems = ? WHERE uuid = ?")) {
 
                 statement.setInt(1, (current - amount));
-                statement.setString(2, player.getUniqueId().toString());
+                statement.setString(2, playerUUID.toString());
 
                 statement.executeUpdate();
                 statement.close();
@@ -830,16 +830,16 @@ public class DatabaseHandler {
         });
     }
 
-    public CompletableFuture<Void> addGems(Player player, int amount) {
+    public CompletableFuture<Void> addGems(UUID playerUUID, int amount) {
         return CompletableFuture.runAsync(() -> {
-            int currentCount = getGems(player).join();
+            int currentCount = getGems(playerUUID).join();
             int newCount = currentCount + amount;
 
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("UPDATE islands set gems = ? WHERE uuid = ?")) {
 
                 statement.setInt(1, newCount);
-                statement.setString(2, player.getUniqueId().toString());
+                statement.setString(2, playerUUID.toString());
 
                 statement.executeUpdate();
                 statement.close();
