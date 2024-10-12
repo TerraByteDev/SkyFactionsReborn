@@ -127,7 +127,6 @@ ITEM:
     - "&7○ &9Range:&a %old_range% &e>&a %new_range%"
     - "&7○ &9Ammo:&a %old_ammo% &e>&a %new_ammo%"
     - "&7○ &9Max Targets:&a %old_target_max% &e>&a %new_target_max%"
-    - "&7○ &9Damage:&a %old_damage% &e>&a %new_damage%"
     - "&7○ &9Cooldown:&a %old_cooldown% &e>&a %new_damage%"
     - "&7○ &9Distance:&a %old_distance% &e>&a %new_distance%" # Spring specific.
     - ""

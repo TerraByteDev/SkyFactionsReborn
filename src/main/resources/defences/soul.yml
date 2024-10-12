@@ -136,7 +136,6 @@ ITEM:
     - "&7○ &9Range:&6 %range%"
     - "&7○ &9Ammo:&6 %ammo%"
     - "&7○ &9Max Targets:&6 %target_max%"
-    - "&7○ &9Damage:&6 %damage%"
     - "&7○ &9Cooldown:&6 %cooldown%"
     - ""
     - "&7○ &9Cost:&6 %cost%"
@@ -149,7 +148,6 @@ ITEM:
     - "&7○ &9Range:&a %old_range% &e>&a %new_range%"
     - "&7○ &9Ammo:&a %old_ammo% &e>&a %new_ammo%"
     - "&7○ &9Max Targets:&a %old_target_max% &e>&a %new_target_max%"
-    - "&7○ &9Damage:&a %old_damage% &e>&a %new_damage%"
     - "&7○ &9Cooldown:&a %old_cooldown% &e>&a %new_damage%"
     - "&7○ &9Extra Effects: &a%new_effects%" # SOUL SPECIFIC!
     - ""

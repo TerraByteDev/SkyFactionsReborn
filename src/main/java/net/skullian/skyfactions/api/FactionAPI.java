@@ -41,10 +41,12 @@ public class FactionAPI {
     public static Map<String, Faction> factionNameCache = new HashMap<>();
 
     public static void handleFactionWorldBorder(Player player, FactionIsland island) {
-        World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
-        if (world == null) return;
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+            World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
+            if (world == null) return;
 
-        SkyFactionsReborn.worldBorderApi.setBorder(player, (island.getSize() * 2), island.getCenter(world));
+            SkyFactionsReborn.worldBorderApi.setBorder(player, (island.getSize() * 2), island.getCenter(world));
+        });
     }
 
     /**
@@ -75,17 +77,21 @@ public class FactionAPI {
                 // todo disband faction?
                 return;
             }
+            // Creating & Registering the island in the database before getting the Faction.
+            // This stops the Faction retrieval returning null for the island, and causing issues, seeing as the Faction
+            // is immediately cached.
+            createIsland(player, name);
 
             FactionAPI.getFaction(name).whenComplete((faction, exc) -> {
                 if (exc != null) {
                     ErrorHandler.handleError(player, "create a new Faction", "SQL_FACTION_CREATE", exc);
-                    // todo disband faction?
                     return;
                 }
 
                 faction.createAuditLog(player.getUniqueId(), AuditLogType.FACTION_CREATE, "%player_name%", player.getName(), "%faction_name%", name);
-                createIsland(player, name);
                 NotificationAPI.factionInviteStore.put(faction.getName(), 0);
+                factionCache.put(player.getUniqueId(), faction);
+                factionNameCache.put(faction.getName(), faction);
             });
         });
     }
