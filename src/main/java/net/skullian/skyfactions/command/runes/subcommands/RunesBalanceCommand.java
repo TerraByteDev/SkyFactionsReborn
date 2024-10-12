@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.command.runes.subcommands;
 
+import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CooldownHandler;
@@ -31,15 +32,24 @@ public class RunesBalanceCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, ex) -> {
+        IslandAPI.hasIsland(player).whenComplete((hasIsland, ex) -> {
             if (ex != null) {
-                ex.printStackTrace();
-                ErrorHandler.handleError(player, "get your runes balance", "SQL_RUNES_MODIFY", ex);
-
+                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             }
 
-            Messages.RUNES_BALANCE_MESSAGE.send(player, "%count%", runes);
+            if (!hasIsland) {
+                Messages.NO_ISLAND.send(player);
+                return;
+            }
+            RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, exc) -> {
+                if (exc != null) {
+                    ErrorHandler.handleError(player, "get your runes balance", "SQL_RUNES_MODIFY", exc);
+                    return;
+                }
+
+                Messages.RUNES_BALANCE_MESSAGE.send(player, "%count%", runes);
+            });
         });
     }
 
