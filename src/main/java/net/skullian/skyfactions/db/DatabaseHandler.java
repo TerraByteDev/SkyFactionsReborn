@@ -969,14 +969,13 @@ public class DatabaseHandler {
     public CompletableFuture<Void> registerFaction(Player owner, String name) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, level, last_raid, last_raider) VALUES (?, ?, ?, ?, ?)");
+                 PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, level, last_raid) VALUES (?, ?, ?, ?)");
                  PreparedStatement factionOwnerRegistration = connection.prepareStatement("INSERT INTO factionMembers (factionName, uuid, rank) VALUES (?, ?, ?)")) {
 
                 factionRegistration.setString(1, name);
                 factionRegistration.setString(2, "&aNone");
                 factionRegistration.setInt(3, 1);
                 factionRegistration.setLong(4, 0);
-                factionRegistration.setString(5, "N/A");
 
                 factionOwnerRegistration.setString(1, name);
                 factionOwnerRegistration.setString(2, owner.getUniqueId().toString());
@@ -1041,7 +1040,7 @@ public class DatabaseHandler {
     public CompletableFuture<Void> createFactionIsland(String name, FactionIsland island) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionIslands (id, factionName, runes, defenceCount, gems, last_raided) VALUES (?, ?, ?, ?, ?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO factionIslands (id, factionName, runes, defenceCount, gems, last_raided, last_raider) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 
                 statement.setInt(1, island.getId());
                 statement.setString(2, name);
@@ -1049,6 +1048,7 @@ public class DatabaseHandler {
                 statement.setInt(4, 0);
                 statement.setInt(5, 0);
                 statement.setLong(6, island.getLast_raided());
+                statement.setString(7, "N/A");
 
                 statement.executeUpdate();
                 statement.close();
@@ -2068,7 +2068,6 @@ public class DatabaseHandler {
     // ------------------ MISC ------------------ //
 
     public void handleError(SQLException error) {
-        error.printStackTrace();
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             SLogger.fatal("There was an error while performing database actions:");
