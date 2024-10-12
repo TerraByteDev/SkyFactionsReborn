@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.command.runes.subcommands;
 
+import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CooldownHandler;
@@ -40,14 +41,24 @@ public class RunesGiveCommand extends CommandTemplate {
             if (!offlinePlayer.hasPlayedBefore()) {
                 Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
             } else {
-                RunesAPI.addRunes(offlinePlayer.getUniqueId(), Integer.parseInt(args[2])).whenComplete((ignored, throwable) -> {
-                    if (throwable != null) {
-                        throwable.printStackTrace();
-                        ErrorHandler.handleError(player, "give runes to another player", "SQL_RUNES_GIVE", throwable);
+                IslandAPI.hasIsland(player).whenComplete((hasIsland, ex) -> {
+                    if (ex != null) {
+                        ErrorHandler.handleError(player, "check if you had an island", "SQL_ISLAND_GET", ex);
+                        return;
+                    } else if (!hasIsland) {
+                        Messages.NO_ISLAND.send(player);
                         return;
                     }
+                    
+                    RunesAPI.addRunes(offlinePlayer.getUniqueId(), Integer.parseInt(args[2])).whenComplete((ignored, throwable) -> {
+                        if (throwable != null) {
+                            throwable.printStackTrace();
+                            ErrorHandler.handleError(player, "give runes to another player", "SQL_RUNES_GIVE", throwable);
+                            return;
+                        }
 
-                    Messages.RUNES_GIVE_SUCCESS.send(player, "%amount%", args[2], "%player%", offlinePlayer.getName());
+                        Messages.RUNES_GIVE_SUCCESS.send(player, "%amount%", args[2], "%player%", offlinePlayer.getName());
+                    });
                 });
             }
 
