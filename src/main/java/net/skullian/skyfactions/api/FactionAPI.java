@@ -269,21 +269,21 @@ public class FactionAPI {
         return false;
     }
 
-    public static void enableDefencesOnEntry(String factionName) {
+    public static void modifyDefenceOperation(String factionName, DefenceOperation operation) {
         List<Defence> defences = DefenceHandler.loadedFactionDefences.get(factionName);
         if (defences != null && !defences.isEmpty()) {
             for (Defence defence : defences) {
-                defence.enable();
+                if (operation == DefenceOperation.ENABLE) {
+                    defence.enable();
+                } else if (operation == DefenceOperation.DISABLE) {
+                    defence.disable();
+                }
             }
         }
     }
 
-    public static void disableDefencesOnExit(String factionName) {
-        List<Defence> defences = DefenceHandler.loadedFactionDefences.get(factionName);
-        if (defences != null && !defences.isEmpty()) {
-            for (Defence defence : defences) {
-                defence.disable();
-            }
-        }
+    public enum DefenceOperation {
+        ENABLE,
+        DISABLE
     }
 }

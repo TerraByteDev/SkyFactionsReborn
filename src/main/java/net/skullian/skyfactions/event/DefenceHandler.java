@@ -265,7 +265,7 @@ public class DefenceHandler implements Listener {
                 } else if (faction == null) return;
                 else if (!FactionAPI.isLocationInRegion(event.getFrom(), faction.getName())) return;
 
-                FactionAPI.disableDefencesOnExit(faction.getName());
+                FactionAPI.modifyDefenceOperation(faction.getName(), FactionAPI.DefenceOperation.DISABLE);
             });
         } else if (toWasFaction) {
             FactionAPI.getFaction(player).whenComplete((faction, throwable) -> {
@@ -275,7 +275,7 @@ public class DefenceHandler implements Listener {
                 } else if (faction == null) return;
                 else if (!FactionAPI.isLocationInRegion(event.getTo(), faction.getName())) return;
 
-                FactionAPI.enableDefencesOnEntry(faction.getName());
+                FactionAPI.modifyDefenceOperation(faction.getName(), FactionAPI.DefenceOperation.ENABLE);
             });
         } else if (fromWasPlayer) {
             IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, throwable) -> {
@@ -287,7 +287,7 @@ public class DefenceHandler implements Listener {
 
                 IslandAPI.disableDefencesOnExit(player);
             });
-        } else if (toWasFaction) {
+        } else if (toWasPlayer) {
             IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, throwable) -> {
                 if (throwable != null) {
                     throwable.printStackTrace();

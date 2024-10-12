@@ -169,7 +169,6 @@
             <artifactId>invui</artifactId>
             <version>1.38</version>
             <type>pom</type>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

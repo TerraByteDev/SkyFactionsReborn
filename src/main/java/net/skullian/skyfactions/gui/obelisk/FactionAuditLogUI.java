@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.gui.obelisk;
 
+import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
@@ -16,6 +17,7 @@ import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.audit_log.AuditPaginationItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.xenondevs.invui.gui.PagedGui;
 import xyz.xenondevs.invui.gui.structure.Markers;
@@ -29,23 +31,25 @@ import java.util.concurrent.CompletableFuture;
 public class FactionAuditLogUI {
 
     public static void promptPlayer(Player player) {
-        try {
-            GUIData data = GUIAPI.getGUIData("obelisk/audit_log");
-            PagedGui.Builder gui = registerItems(PagedGui.items()
-                    .setStructure(data.getLAYOUT()), player);
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+            try {
+                GUIData data = GUIAPI.getGUIData("obelisk/audit_log");
+                PagedGui.Builder gui = registerItems(PagedGui.items()
+                        .setStructure(data.getLAYOUT()), player);
 
-            Window window = Window.single()
-                    .setViewer(player)
-                    .setTitle(TextUtility.color(data.getTITLE()))
-                    .setGui(gui)
-                    .build();
+                Window window = Window.single()
+                        .setViewer(player)
+                        .setTitle(TextUtility.color(data.getTITLE()))
+                        .setGui(gui)
+                        .build();
 
-            SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
-            window.open();
-        } catch (IllegalArgumentException error) {
-            error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "open the audit log GUI", "%debug%", "GUI_LOAD_EXCEPTION");
-        }
+                SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
+                window.open();
+            } catch (IllegalArgumentException error) {
+                error.printStackTrace();
+                Messages.ERROR.send(player, "%operation%", "open the audit log GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            }
+        });
     }
 
     private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player) {

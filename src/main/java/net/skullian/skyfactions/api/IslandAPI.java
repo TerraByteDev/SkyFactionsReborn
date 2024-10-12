@@ -66,6 +66,11 @@ public class IslandAPI {
         SkyFactionsReborn.db.cachedPlayerIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+        if (world == null) {
+            ErrorHandler.handleError(player, "create an island", "WORLD_NOT_EXIST", new IllegalArgumentException("Unknown World: " + Settings.ISLAND_PLAYER_WORLD.getString()));
+            return;
+        }
+
         Messages.ISLAND_CREATING.send(player);
         createRegion(player, island, world);
 
