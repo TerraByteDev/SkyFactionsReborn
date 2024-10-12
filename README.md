@@ -5,6 +5,7 @@
       <img src="https://www.codefactor.io/repository/github/terrabytedev/skyfactionsreborn/badge?style=for-the-badge" alt="CodeFactor">
       <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/TerraByteDev/SkyFactionsReborn?style=for-the-badge&color=blue">
       <img src="https://www.aschey.tech/tokei/github.com/TerraByteDev/SkyFactionsReborn?color=blue&style=for-the-badge" alt="Lines of Code">
+      <img src="https://wakatime.com/badge/github/TerraByteDev/SkyFactionsReborn.svg?style=for-the-badge alt="Project Hours">
 </div>
 This plugin elegantly merges features from Skyblock and Factions. Skyblock, even when played on a big network, can get
 quite lonely. That's why we combined it with Factions and expanded on the gamemode tenfold. This seemed like an obvious
