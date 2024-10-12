@@ -216,7 +216,7 @@ public class DefencesFactory {
 
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(TextUtility.color(defence.getNAME()));
-        meta.getPersistentDataContainer().set(nameKey, PersistentDataType.STRING, defence.getFILE_NAME());
+        meta.getPersistentDataContainer().set(nameKey, PersistentDataType.STRING, defence.getIDENTIFIER());
 
         meta.setLore(getFormattedLore(defence, defence.getITEM_LORE()));
         stack.setItemMeta(meta);
