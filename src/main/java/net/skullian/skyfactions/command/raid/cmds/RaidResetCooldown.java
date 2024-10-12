@@ -30,7 +30,7 @@ public class RaidResetCooldown extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
         
-        SkyFactionsReborn.db.updateLastRaid(player, 0).thenAccept(result -> {
+        SkyFactionsReborn.databaseHandler.updateLastRaid(player, 0).thenAccept(result -> {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aSuccessfully reset your raid cooldown."));
         }).exceptionally(ex -> {
             ex.printStackTrace();

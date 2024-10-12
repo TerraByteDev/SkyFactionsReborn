@@ -58,7 +58,7 @@ public class FactionPlayerJoinRequestRevoke extends AbstractItem {
         }
         event.getInventory().close();
 
-        SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming").whenComplete((ignored, ex) -> {
+        SkyFactionsReborn.databaseHandler.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming").whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "revoke a Faction join request", "SQL_JOIN_REQUEST_REJECT", ex);
                 return;

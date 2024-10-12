@@ -41,11 +41,11 @@ public class IslandTrustCommand extends CommandTemplate {
                 return;
             }
 
-            SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).thenAccept(is -> {
+            SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).thenAccept(is -> {
                 if (is == null) {
                     Messages.NO_ISLAND.send(player);
                 } else {
-                    SkyFactionsReborn.db.isPlayerTrusted(target.getPlayer(), is.getId()).whenComplete((isTrusted, ex) -> {
+                    SkyFactionsReborn.databaseHandler.isPlayerTrusted(target.getPlayer(), is.getId()).whenComplete((isTrusted, ex) -> {
                         if (ex != null) {
                             ErrorHandler.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", ex);
                             return;
@@ -54,7 +54,7 @@ public class IslandTrustCommand extends CommandTemplate {
                         if (isTrusted) {
                             Messages.PLAYER_ALREADY_TRUSTED.send(player);
                         } else {
-                            SkyFactionsReborn.db.trustPlayer(target.getPlayer(), is.getId()).whenComplete((result, exc) -> {
+                            SkyFactionsReborn.databaseHandler.trustPlayer(target.getPlayer(), is.getId()).whenComplete((result, exc) -> {
                                 if (exc != null) {
                                     ErrorHandler.handleError(player, "trust a player", "SQL_TRUST_ADD", exc);
                                     return;

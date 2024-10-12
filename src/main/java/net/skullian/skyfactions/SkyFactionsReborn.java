@@ -46,8 +46,8 @@ import java.sql.SQLException;
 public final class SkyFactionsReborn extends JavaPlugin {
 
     public static ConfigFileHandler configHandler;
-    public static DatabaseHandler db;
-    public static DiscordHandler dc;
+    public static DatabaseHandler databaseHandler;
+    public static DiscordHandler discordHandler;
     public static WorldBorderApi worldBorderApi;
 
     private void print() {
@@ -112,12 +112,12 @@ public final class SkyFactionsReborn extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
         getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
         getServer().getPluginManager().registerEvents(new DefenceHandler(), this);
-        
+
         // We store an instance of the DiscordHandler class as that is how other internals
         // access methods related to Discord (e.g. raid notifications).
         SLogger.info("Initialising JDA / Discord.");
-        dc = new DiscordHandler();
-        dc.initialiseBot();
+        discordHandler = new DiscordHandler();
+        discordHandler.initialiseBot();
 
         RegisteredServiceProvider<WorldBorderApi> worldBorderApiRegisteredServiceProvider = getServer().getServicesManager().getRegistration(WorldBorderApi.class);
         if (worldBorderApiRegisteredServiceProvider == null) {
@@ -156,7 +156,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public void onDisable() {
         SLogger.info("Closing Database connection.");
         closeDatabase();
-        dc.disconnect();
+        discordHandler.disconnect();
 
         SLogger.info("Terminating PacketEvents.");
         PacketEvents.getAPI().terminate();
@@ -173,12 +173,12 @@ public final class SkyFactionsReborn extends JavaPlugin {
             new File(getDataFolder(), "/data").mkdir();
 
             // Initialise the database.
-            db = new DatabaseHandler();
-            db.initialise(Settings.DATABASE_TYPE.getString());
+            databaseHandler = new DatabaseHandler();
+            databaseHandler.initialise(Settings.DATABASE_TYPE.getString());
 
             // Cache the most recent ID.
-            db.setIslandCachedNextID();
-            db.setFactionCachedNextID();
+            databaseHandler.setIslandCachedNextID();
+            databaseHandler.setFactionCachedNextID();
         } catch (SQLException error) {
             SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             SLogger.fatal("There was an error initialising the database.");
@@ -192,8 +192,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
     private void closeDatabase() {
         try {
-            if (db != null) {
-                db.closeConnection();
+            if (databaseHandler != null) {
+                databaseHandler.closeConnection();
             }
         } catch (SQLException error) {
             SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");

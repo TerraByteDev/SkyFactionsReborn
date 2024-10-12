@@ -17,7 +17,7 @@ public class GemsAPI {
      */
     public static CompletableFuture<Integer> getGems(Player player) {
         try {
-            return SkyFactionsReborn.db.getGems(player);
+            return SkyFactionsReborn.databaseHandler.getGems(player);
         } catch (CompletionException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "get your gems count", "%debug%", "SQL_GEMS_GET");
@@ -33,7 +33,7 @@ public class GemsAPI {
      * @param addition Amount of gems to add.
      */
     public static CompletableFuture<Void> addGems(Player player, int addition) {
-        return SkyFactionsReborn.db.addGems(player, addition).exceptionally(ex -> {
+        return SkyFactionsReborn.databaseHandler.addGems(player, addition).exceptionally(ex -> {
             ex.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "add gems", "%debug%", "SQL_GEMS_ADD");
             return null;
@@ -48,7 +48,7 @@ public class GemsAPI {
      */
     public static CompletableFuture<Void> subtractGems(Player player, int subtraction) {
         try {
-            return SkyFactionsReborn.db.subtractGems(player, subtraction);
+            return SkyFactionsReborn.databaseHandler.subtractGems(player, subtraction);
         } catch (CompletionException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, "%operation%", "decrease your gems count", "%debug%", "SQL_GEMS_SUBTRACT");

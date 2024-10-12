@@ -24,7 +24,7 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        SkyFactionsReborn.db.playerIsRegistered(event.getPlayer()).whenComplete((isRegistered, ex) -> {
+        SkyFactionsReborn.databaseHandler.playerIsRegistered(event.getPlayer()).whenComplete((isRegistered, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -32,11 +32,11 @@ public class PlayerHandler implements Listener {
 
             if (!isRegistered) {
                 SLogger.info("Player [{}] has not joined before. Syncing with database.", event.getPlayer().getName());
-                SkyFactionsReborn.db.registerPlayer(event.getPlayer());
+                SkyFactionsReborn.databaseHandler.registerPlayer(event.getPlayer());
             }
         });
 
-        SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
+        SkyFactionsReborn.databaseHandler.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
                 SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
                 ex.printStackTrace();
@@ -71,7 +71,7 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void playerRespawn(PlayerRespawnEvent event) {
         if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
-            SkyFactionsReborn.db.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
+            SkyFactionsReborn.databaseHandler.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
                 if (ex != null) {
                     SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
                     ex.printStackTrace();

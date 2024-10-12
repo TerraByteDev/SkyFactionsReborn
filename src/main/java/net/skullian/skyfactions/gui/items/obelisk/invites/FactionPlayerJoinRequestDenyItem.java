@@ -72,7 +72,7 @@ public class FactionPlayerJoinRequestDenyItem extends AbstractItem {
 
             CompletableFuture.allOf(
                     faction.createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_JOIN_REQUEST_REVOKE, "%player_name%", player.getName()),
-                    SkyFactionsReborn.db.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming")
+                    SkyFactionsReborn.databaseHandler.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming")
             ).whenComplete((ignored, exc) -> {
                 if (exc != null) {
                     ErrorHandler.handleError(player, "deny a join request", "SQL_JOIN_REQUEST_REVOKE", exc);

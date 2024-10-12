@@ -30,7 +30,7 @@ public class GemsBalanceCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        SkyFactionsReborn.db.getGems(player).thenAccept(count -> {
+        SkyFactionsReborn.databaseHandler.getGems(player).thenAccept(count -> {
             Messages.GEMS_COUNT_MESSAGE.send(player, "%count%", count);
         }).exceptionally(ex -> {
             ex.printStackTrace();

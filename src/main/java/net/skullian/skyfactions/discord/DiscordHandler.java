@@ -92,7 +92,7 @@ public class DiscordHandler {
     }
 
     public void pingRaid(Player attacker, Player victim) {
-        SkyFactionsReborn.db.getDiscordLink(victim).thenAccept(id -> {
+        SkyFactionsReborn.databaseHandler.getDiscordLink(victim).thenAccept(id -> {
             if (id != null && !id.equals("none")) {
                 EmbedBuilder embedBuilder = new EmbedBuilder()
                         .setDescription(SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getString("Messages.Discord.DISCORD_RAID_MESSAGE").replace("%attacker%", attacker.getName()))

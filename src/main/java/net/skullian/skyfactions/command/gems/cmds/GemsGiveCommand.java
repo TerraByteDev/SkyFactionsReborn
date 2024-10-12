@@ -40,7 +40,7 @@ public class GemsGiveCommand extends CommandTemplate {
             if (!offlinePlayer.hasPlayedBefore()) {
                 Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
             } else {
-                SkyFactionsReborn.db.addGems(offlinePlayer.getPlayer(), Integer.parseInt(args[2])).whenComplete((ignored, exc) -> {
+                SkyFactionsReborn.databaseHandler.addGems(offlinePlayer.getPlayer(), Integer.parseInt(args[2])).whenComplete((ignored, exc) -> {
                     if (exc != null) {
                         ErrorHandler.handleError(player, "give someone gems", "SQL_GEMS_MODIFY", exc);
                         return;

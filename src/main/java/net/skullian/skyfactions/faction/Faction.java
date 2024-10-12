@@ -47,7 +47,7 @@ public class Faction {
      **/
     public CompletableFuture<Void> updateName(String newName) {
         name = newName;
-        return SkyFactionsReborn.db.updateFactionName(newName, name);
+        return SkyFactionsReborn.databaseHandler.updateFactionName(newName, name);
     }
 
     /**
@@ -57,7 +57,7 @@ public class Faction {
      * @param newRank {@link RankType} New Rank of the player.
      */
     public CompletableFuture<String> modifyPlayerRank(OfflinePlayer player, RankType newRank) {
-        return SkyFactionsReborn.db.updateMemberRank(name, player.getPlayer(), newRank.getRankValue()).thenApply((oldRank) -> {
+        return SkyFactionsReborn.databaseHandler.updateMemberRank(name, player.getPlayer(), newRank.getRankValue()).thenApply((oldRank) -> {
             cache(player, oldRank, newRank);
             return newRank.getRankValue(); // or some other string value
         });
@@ -96,7 +96,7 @@ public class Faction {
      */
     public CompletableFuture<Void> updateMOTD(String MOTD, Player actor) {
         motd = MOTD;
-        return CompletableFuture.allOf(createAuditLog(actor.getUniqueId(), AuditLogType.MOTD_UPDATE, "%player_name%", actor.getName(), "%new_motd%", MOTD), SkyFactionsReborn.db.setMOTD(name, MOTD));
+        return CompletableFuture.allOf(createAuditLog(actor.getUniqueId(), AuditLogType.MOTD_UPDATE, "%player_name%", actor.getName(), "%new_motd%", MOTD), SkyFactionsReborn.databaseHandler.setMOTD(name, MOTD));
     }
 
     /**
@@ -121,7 +121,7 @@ public class Faction {
      * @param addition Amount of runes to add [{@link Integer}]
      */
     public CompletableFuture<Void> addRunes(int addition) {
-        return SkyFactionsReborn.db.addRunes(name, addition).whenComplete((ignored, ex) -> {
+        return SkyFactionsReborn.databaseHandler.addRunes(name, addition).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 throw new RuntimeException(ex);
             }
@@ -136,7 +136,7 @@ public class Faction {
      * @param subtraction Amount of runes to remove [{@link Integer}]
      */
     public CompletableFuture<Void> subtractRunes(int subtraction) {
-        return SkyFactionsReborn.db.removeRunes(name, subtraction).whenComplete((ignored, ex) -> {
+        return SkyFactionsReborn.databaseHandler.removeRunes(name, subtraction).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 throw new RuntimeException(ex);
             }
@@ -152,7 +152,7 @@ public class Faction {
      */
     public CompletableFuture<Void> addGems(int addition) {
         gems += addition;
-        return SkyFactionsReborn.db.addGems(name, addition).exceptionally((ex) -> {
+        return SkyFactionsReborn.databaseHandler.addGems(name, addition).exceptionally((ex) -> {
             ex.printStackTrace();
             gems -= addition;
             return null;
@@ -165,7 +165,7 @@ public class Faction {
      * @param player Player to kick [{@link Player}]
      */
     public CompletableFuture<Void> kickPlayer(OfflinePlayer player, Player actor) {
-        return SkyFactionsReborn.db.kickPlayer(player, name).whenComplete((ignored, ex) -> {
+        return SkyFactionsReborn.databaseHandler.kickPlayer(player, name).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(actor, "kick a member from the Faction", "SQL_FACTION_KICK", ex);
                 return;
@@ -182,7 +182,7 @@ public class Faction {
      * @param player Player to ban [{@link Player}]
      */
     public CompletableFuture<Void> banPlayer(OfflinePlayer player, Player actor) {
-        return SkyFactionsReborn.db.banPlayer(name, player).whenComplete((ignored, ex) -> {
+        return SkyFactionsReborn.databaseHandler.banPlayer(name, player).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(actor, "ban a member from the Faction", "SQL_FACTION_BAN", ex);
                 return;
@@ -200,7 +200,7 @@ public class Faction {
      * @param player {@link OfflinePlayer}
      */
     public CompletableFuture<Void> unbanPlayer(OfflinePlayer player) {
-        return SkyFactionsReborn.db.unbanPlayer(name, player);
+        return SkyFactionsReborn.databaseHandler.unbanPlayer(name, player);
     }
 
     /**
@@ -208,7 +208,7 @@ public class Faction {
      * @return {@link Boolean}
      */
     public CompletableFuture<Boolean> isPlayerBanned(OfflinePlayer player) {
-        return SkyFactionsReborn.db.isPlayerBanned(name, player);
+        return SkyFactionsReborn.databaseHandler.isPlayerBanned(name, player);
     }
 
     /**
@@ -217,7 +217,7 @@ public class Faction {
      * @return {@link List<OfflinePlayer>}
      */
     public CompletableFuture<List<OfflinePlayer>> getBannedPlayers() {
-        return SkyFactionsReborn.db.getBannedPlayers(name);
+        return SkyFactionsReborn.databaseHandler.getBannedPlayers(name);
     }
 
     /**
@@ -227,7 +227,7 @@ public class Faction {
      */
     public CompletableFuture<Void> leaveFaction(OfflinePlayer player) {
         // todo rem
-        return SkyFactionsReborn.db.leaveFaction(name, player);
+        return SkyFactionsReborn.databaseHandler.leaveFaction(name, player);
     }
 
     /**
@@ -236,7 +236,7 @@ public class Faction {
      * @param playerUUID UUID of the player to add [{@link Player}]
      */
     public CompletableFuture<Void> addFactionMember(UUID playerUUID) {
-        return SkyFactionsReborn.db.addFactionMember(playerUUID, name).thenAccept((ignored) -> {
+        return SkyFactionsReborn.databaseHandler.addFactionMember(playerUUID, name).thenAccept((ignored) -> {
             members.add(Bukkit.getOfflinePlayer(playerUUID));
             createAuditLog(playerUUID, AuditLogType.PLAYER_JOIN, "player joined the faction temporary message");
         });
@@ -248,7 +248,7 @@ public class Faction {
      * @return {@link List<AuditLogData>}
      */
     public CompletableFuture<List<AuditLogData>> getAuditLogs() {
-        return SkyFactionsReborn.db.getAuditLogs(name);
+        return SkyFactionsReborn.databaseHandler.getAuditLogs(name);
     }
 
     /**
@@ -259,7 +259,7 @@ public class Faction {
      * @param replacements Values to replace.
      */
     public CompletableFuture<Void> createAuditLog(UUID playerUUID, AuditLogType type, Object... replacements) {
-        return SkyFactionsReborn.db.createAuditLog(playerUUID, type.getTitle(replacements), type.getDescription(replacements), name);
+        return SkyFactionsReborn.databaseHandler.createAuditLog(playerUUID, type.getTitle(replacements), type.getDescription(replacements), name);
     }
 
     /**
@@ -268,7 +268,7 @@ public class Faction {
      * @return {@link List<InviteData>}
      */
     public CompletableFuture<List<InviteData>> getJoinRequests() {
-        return SkyFactionsReborn.db.getInvitesOfType(name, "incoming");
+        return SkyFactionsReborn.databaseHandler.getInvitesOfType(name, "incoming");
     }
 
     /**
@@ -277,7 +277,7 @@ public class Faction {
      * @return {@link List<InviteData>}
      */
     public CompletableFuture<List<InviteData>> getOutgoingInvites() {
-        return SkyFactionsReborn.db.getInvitesOfType(name, "outgoing");
+        return SkyFactionsReborn.databaseHandler.getInvitesOfType(name, "outgoing");
     }
 
     /**
@@ -287,7 +287,7 @@ public class Faction {
      */
     public CompletableFuture<Void> createInvite(OfflinePlayer player, Player inviter) {
         return CompletableFuture.allOf(
-                SkyFactionsReborn.db.createInvite(player.getUniqueId(), name, "outgoing", inviter),
+                SkyFactionsReborn.databaseHandler.createInvite(player.getUniqueId(), name, "outgoing", inviter),
                 createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "%inviter%", inviter.getName(), "%player_name%", player.getName())
         ).whenComplete((ignored, ex) -> {
             if (player.isOnline()) {
@@ -306,7 +306,7 @@ public class Faction {
     public CompletableFuture<Void> createJoinRequest(OfflinePlayer player) {
         return CompletableFuture.allOf(
                 createAuditLog(player.getUniqueId(), AuditLogType.JOIN_REQUEST_CREATE, "%player_name%", player.getName()),
-                SkyFactionsReborn.db.createInvite(player.getUniqueId(), name, "incoming", null)
+                SkyFactionsReborn.databaseHandler.createInvite(player.getUniqueId(), name, "incoming", null)
         ).thenAccept((ignored) -> {
             List<OfflinePlayer> users = Stream.concat(getModerators().stream(), getAdmins().stream()).collect(Collectors.toList());
             users.add(getOwner());
@@ -340,7 +340,7 @@ public class Faction {
     public CompletableFuture<Void> revokeInvite(InviteData data, Player actor) {
         return CompletableFuture.allOf(
                 createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.INVITE_REVOKE, "%player%", actor.getName(), "%invited%", data.getPlayer().getName()),
-                SkyFactionsReborn.db.revokeInvite(data.getFactionName(), data.getPlayer().getUniqueId(), "outgoing")
+                SkyFactionsReborn.databaseHandler.revokeInvite(data.getFactionName(), data.getPlayer().getUniqueId(), "outgoing")
         );
     }
 
@@ -353,7 +353,7 @@ public class Faction {
     public CompletableFuture<Void> acceptJoinRequest(InviteData data, Player actor) {
         return CompletableFuture.allOf(
                 createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_ACCEPT, "%player%", data.getPlayer().getName(), "%inviter%", actor.getName()),
-                SkyFactionsReborn.db.acceptJoinRequest(name, data.getPlayer().getUniqueId())
+                SkyFactionsReborn.databaseHandler.acceptJoinRequest(name, data.getPlayer().getUniqueId())
         );
     }
 
@@ -375,7 +375,7 @@ public class Faction {
     public CompletableFuture<Void> rejectJoinRequest(InviteData data, Player actor) {
         return CompletableFuture.allOf(
                 createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "%faction_player%", actor.getName(), "%player%", data.getPlayer().getName()),
-                SkyFactionsReborn.db.revokeInvite(name, data.getPlayer().getUniqueId(), "incoming"),
+                SkyFactionsReborn.databaseHandler.revokeInvite(name, data.getPlayer().getUniqueId(), "incoming"),
                 NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "%player_name%", actor.getName(), "%faction_name%", name)
         );
     }

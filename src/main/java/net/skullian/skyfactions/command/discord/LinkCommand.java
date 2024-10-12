@@ -23,17 +23,17 @@ public class LinkCommand implements CommandExecutor {
                 return true;
             if (CooldownHandler.manageCooldown(player)) return true;
 
-            SkyFactionsReborn.db.getDiscordLink(player).whenComplete((id, ex) -> {
+            SkyFactionsReborn.databaseHandler.getDiscordLink(player).whenComplete((id, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "link your Discord", "SQL_GET_DISCORD", ex);
                     return;
                 }
 
                 if (id == null) {
-                    String generatedCode = SkyFactionsReborn.dc.createLinkCode(player);
+                    String generatedCode = SkyFactionsReborn.discordHandler.createLinkCode(player);
                     Messages.DISCORD_LINK_PROMPT.send(player, "%code%", generatedCode);
                 } else {
-                    User retrivedUser = SkyFactionsReborn.dc.JDA.getUserById(id);
+                    User retrivedUser = SkyFactionsReborn.discordHandler.JDA.getUserById(id);
                     Messages.DISCORD_ALREADY_LINKED.send(player, "%discord_name%", retrivedUser.getName());
                 }
             });

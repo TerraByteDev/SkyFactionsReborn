@@ -50,7 +50,7 @@ public class IslandAPI {
     public static HashSet<UUID> awaitingDeletion = new HashSet<>();
 
     public static CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
-        return SkyFactionsReborn.db.getPlayerIsland(playerUUID);
+        return SkyFactionsReborn.databaseHandler.getPlayerIsland(playerUUID);
     }
 
     public static void handlePlayerJoinBorder(Player player, PlayerIsland island) {
@@ -62,8 +62,8 @@ public class IslandAPI {
 
     public static void createIsland(Player player) {
 
-        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.db.cachedPlayerIslandID);
-        SkyFactionsReborn.db.cachedPlayerIslandID++;
+        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.databaseHandler.cachedPlayerIslandID);
+        SkyFactionsReborn.databaseHandler.cachedPlayerIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
         if (world == null) {
@@ -75,7 +75,7 @@ public class IslandAPI {
         createRegion(player, island, world);
 
         CompletableFuture.allOf(
-                SkyFactionsReborn.db.createIsland(player, island),
+                SkyFactionsReborn.databaseHandler.createIsland(player, island),
                 pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player")
         ).whenComplete((ignored, ex) -> {
             if (ex != null) {
@@ -94,7 +94,7 @@ public class IslandAPI {
     }
 
     public static CompletableFuture<Boolean> hasIsland(Player player) {
-        return SkyFactionsReborn.db.hasIsland(player);
+        return SkyFactionsReborn.databaseHandler.hasIsland(player);
     }
 
     public static CompletableFuture<Boolean> pasteIslandSchematic(Player player, Location location, String worldName, String type) {
@@ -164,7 +164,7 @@ public class IslandAPI {
     }
 
     public static void removePlayerIsland(Player player) {
-        SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
+        SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
@@ -180,8 +180,8 @@ public class IslandAPI {
 
                 CompletableFuture.allOf(
                         cutRegion(region),
-                        SkyFactionsReborn.db.removeIsland(player),
-                        SkyFactionsReborn.db.removeAllTrustedPlayers(island.getId())
+                        SkyFactionsReborn.databaseHandler.removeIsland(player),
+                        SkyFactionsReborn.databaseHandler.removeAllTrustedPlayers(island.getId())
                 ).whenComplete((ignored, throwable) -> {
                     if (throwable != null) {
                         throwable.printStackTrace();

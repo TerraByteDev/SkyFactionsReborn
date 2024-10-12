@@ -40,14 +40,14 @@ public class IslandUntrustCommand extends CommandTemplate {
                 return;
             }
 
-            SkyFactionsReborn.db.getPlayerIsland(player.getUniqueId()).thenAccept(is -> {
+            SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).thenAccept(is -> {
                 if (is == null) {
                     Messages.NO_ISLAND.send(player);
                 } else {
-                    SkyFactionsReborn.db.isPlayerTrusted(target.getPlayer(), is.getId()).thenAccept(isTrusted -> {
+                    SkyFactionsReborn.databaseHandler.isPlayerTrusted(target.getPlayer(), is.getId()).thenAccept(isTrusted -> {
 
                         if (isTrusted) {
-                            SkyFactionsReborn.db.removeTrust(target.getPlayer(), is.getId()).thenAccept(result -> {
+                            SkyFactionsReborn.databaseHandler.removeTrust(target.getPlayer(), is.getId()).thenAccept(result -> {
                                 Messages.UNTRUST_SUCCESS.send(player, "%player%", target.getName());
                             }).exceptionally(ex -> {
                                 ex.printStackTrace();

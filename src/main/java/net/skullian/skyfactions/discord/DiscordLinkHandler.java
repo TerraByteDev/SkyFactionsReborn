@@ -17,19 +17,19 @@ public class DiscordLinkHandler extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getName().equals("link-mc")) {
             String code = event.getOption("code").getAsString();
-            UUID playerUUID = SkyFactionsReborn.dc.codes.get(code);
+            UUID playerUUID = SkyFactionsReborn.discordHandler.codes.get(code);
             if (playerUUID != null) {
 
                 OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
 
 
-                SkyFactionsReborn.db.registerDiscordLink(playerUUID, event.getUser().getId()).thenAccept(result -> {
+                SkyFactionsReborn.databaseHandler.registerDiscordLink(playerUUID, event.getUser().getId()).thenAccept(result -> {
                     if (player.isOnline()) {
                         Messages.DISCORD_LINK_SUCCESS.send(player.getPlayer(), "%discord_name%", event.getUser().getName());
                     }
 
                     event.reply("").setEmbeds(buildEmbed(Color.GREEN, SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getString("Messages.Discord.DISCORD_LINK_SUCCESS_MESSAGE").replace("%player_name%", player.getName())).build()).queue();
-                    SkyFactionsReborn.dc.codes.remove(code);
+                    SkyFactionsReborn.discordHandler.codes.remove(code);
                 });
             } else {
                 event.reply("").setEmbeds(buildEmbed(Color.RED, SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getString("Messages.Discord.LINK_FAILED")).build()).queue();

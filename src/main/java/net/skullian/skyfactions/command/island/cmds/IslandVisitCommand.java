@@ -45,13 +45,13 @@ public class IslandVisitCommand extends CommandTemplate {
                 return;
             }
 
-            SkyFactionsReborn.db.getPlayerIsland(target.getUniqueId()).thenAccept(is -> {
+            SkyFactionsReborn.databaseHandler.getPlayerIsland(target.getUniqueId()).thenAccept(is -> {
                 if (is != null) {
 
                     if (RaidAPI.currentRaids.containsValue(player.getUniqueId()) || RaidAPI.processingRaid.containsValue(player.getUniqueId())) {
                         Messages.VISIT_IN_RAID.send(player);
                     } else {
-                        SkyFactionsReborn.db.isPlayerTrusted(player, is.getId()).thenAccept(isTrusted -> {
+                        SkyFactionsReborn.databaseHandler.isPlayerTrusted(player, is.getId()).thenAccept(isTrusted -> {
                             World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                             if (world == null) {
                                 Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "WORLD_NOT_EXIST");

@@ -59,7 +59,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     Messages.JOIN_REQUEST_SAME_FACTION.send(player);
                     return;
                 } else {
-                    SkyFactionsReborn.db.hasJoinRequest(player).whenComplete((hasJoinRequest, exc) -> {
+                    SkyFactionsReborn.databaseHandler.hasJoinRequest(player).whenComplete((hasJoinRequest, exc) -> {
                         if (exc != null) {
                             ErrorHandler.handleError(player, "check if you have a join request", "SQL_JOIN_REQUEST_GET", exc);
                             return;

@@ -69,7 +69,7 @@ public class RunesAPI {
             }
             returnItems(remaindingItems, player);
             if (total > 0) {
-                SkyFactionsReborn.db.addRunes(player.getUniqueId(), total);
+                SkyFactionsReborn.databaseHandler.addRunes(player.getUniqueId(), total);
                 Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
             } else {
                 Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
@@ -138,7 +138,7 @@ public class RunesAPI {
      * @return {@link CompletableFuture<Void>}
      */
     public static CompletableFuture<Void> removeRunes(UUID playerUUID, int amount) {
-        return SkyFactionsReborn.db.removeRunes(playerUUID, amount);
+        return SkyFactionsReborn.databaseHandler.removeRunes(playerUUID, amount);
     }
 
     /**
@@ -149,7 +149,7 @@ public class RunesAPI {
      * @return {@link CompletableFuture<Void>}
      */
     public static CompletableFuture<Void> addRunes(UUID playerUUID, int amount) {
-        return SkyFactionsReborn.db.addRunes(playerUUID, amount);
+        return SkyFactionsReborn.databaseHandler.addRunes(playerUUID, amount);
     }
 
     /**
@@ -159,7 +159,7 @@ public class RunesAPI {
      * @return {@link CompletableFuture<Integer>}
      */
     public static CompletableFuture<Integer> getRunes(UUID playerUUID) {
-        return SkyFactionsReborn.db.getRunes(playerUUID);
+        return SkyFactionsReborn.databaseHandler.getRunes(playerUUID);
     }
 
     private static boolean hasEnchants(ItemStack stack) {

@@ -164,7 +164,7 @@ public class DefenceHandler implements Listener {
 
     public static void addPlacedDefences(String factionName) {
         if (loadedFactionDefences.get(factionName) != null) return;
-        SkyFactionsReborn.db.getDefenceLocations(factionName).whenComplete((locations, ex) -> {
+        SkyFactionsReborn.databaseHandler.getDefenceLocations(factionName).whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -206,7 +206,7 @@ public class DefenceHandler implements Listener {
 
     public static void addPlacedDefences(Player player) {
         if (loadedPlayerDefences.get(player.getUniqueId()) != null) return;
-        SkyFactionsReborn.db.getDefenceLocations(player.getUniqueId()).whenComplete((locations, ex) -> {
+        SkyFactionsReborn.databaseHandler.getDefenceLocations(player.getUniqueId()).whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;

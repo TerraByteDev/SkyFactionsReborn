@@ -39,7 +39,7 @@ public class ObeliskRuneItem extends AsyncItem {
 
                             int runes = 0;
                             if (type.equals("player")) {
-                                runes = SkyFactionsReborn.db.getRunes(player.getUniqueId()).join();
+                                runes = SkyFactionsReborn.databaseHandler.getRunes(player.getUniqueId()).join();
                             } else if (type.equals("faction")) {
                                 Faction faction = FactionAPI.getFaction(player).join();
                                 if (faction != null) {
