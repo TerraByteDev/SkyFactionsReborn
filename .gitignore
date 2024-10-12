@@ -27,5 +27,4 @@ replay_pid*
 dependency-reduced-pom.xml
 SkyFactionsReborn.iml
 target
-Server
-*.java~
+build
