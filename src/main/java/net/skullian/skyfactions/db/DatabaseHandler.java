@@ -460,6 +460,8 @@ public class DatabaseHandler {
                 statement.executeUpdate();
                 statement.close();
 
+                SLogger.info("Finished Creating Island");
+
                 connection.close();
             } catch (SQLException error) {
                 handleError(error);

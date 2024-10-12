@@ -2,6 +2,11 @@
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
 NAME: "{#3F4043}&lSoul Reaper{/#A9A9A9}"
 
+# This is the unique identifier for the defence.
+# ONCE SPECIFIED, DO NOT CHANGE!
+# Changing this will break existing defences of this type.
+IDENTIFIER: "SOUL_REAPER"
+
 # Type of the defence.
 # Possible defence types: HEALING, ARROW, SOUL, FLAMETHROWER, POTION, SPRING, LANDMINE
 TYPE: "SOUL"

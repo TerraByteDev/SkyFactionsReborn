@@ -2,6 +2,11 @@
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
 NAME: "{#B5B5B5}&lSpring{/#808080}"
 
+# This is the unique identifier for the defence.
+# ONCE SPECIFIED, DO NOT CHANGE!
+# Changing this will break existing defences of this type.
+IDENTIFIER: "SPRING"
+
 # Type of the defence.
 # Possible defence types: HEALING, ARROW, SOUL, FLAMETHROWER, POTION, SPRING, LANDMINE
 TYPE: "SPRING"
@@ -110,7 +115,6 @@ ITEM:
     - "&7○ &9Range:&6 %range%"
     - "&7○ &9Ammo:&6 %ammo%"
     - "&7○ &9Max Targets:&6 %target_max%"
-    - "&7○ &9Damage:&6 %damage%"
     - "&7○ &9Cooldown:&6 %cooldown%"
     - ""
     - "&7○ &9Cost:&6 %cost%"

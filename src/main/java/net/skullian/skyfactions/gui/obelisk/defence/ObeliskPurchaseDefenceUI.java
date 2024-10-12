@@ -11,7 +11,6 @@ import net.skullian.skyfactions.gui.items.GeneralCancelItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.defence.ObeliskConfirmPurchaseItem;
 import net.skullian.skyfactions.gui.items.obelisk.defence.ObeliskPaginatedDefenceItem;
-import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -46,9 +45,6 @@ public class ObeliskPurchaseDefenceUI {
         try {
             List<ItemData> data = GUIAPI.getItemData("obelisk/defences/purchase_defence", player);
             for (ItemData itemData : data) {
-                SLogger.info(itemData.getITEM_ID());
-
-                SLogger.info(itemData.getCHARACTER());
                 switch (itemData.getITEM_ID()) {
 
                     case "BACK":
@@ -75,7 +71,6 @@ public class ObeliskPurchaseDefenceUI {
 
                         builder.addIngredient(itemData.getCHARACTER(), new ObeliskPaginatedDefenceItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), struct, false, obeliskType, faction));
                         break;
-
                 }
             }
 

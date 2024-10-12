@@ -54,10 +54,12 @@ public class IslandAPI {
     }
 
     public static void handlePlayerJoinBorder(Player player, PlayerIsland island) {
-        World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-        if (islandWorld == null) return;
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+            World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+            if (islandWorld == null) return;
 
-        SkyFactionsReborn.worldBorderApi.setBorder(player, (island.getSize() * 2), island.getCenter(islandWorld));
+            SkyFactionsReborn.worldBorderApi.setBorder(player, (island.getSize() * 2), island.getCenter(islandWorld));
+        });
     }
 
     public static void createIsland(Player player) {
@@ -111,7 +113,8 @@ public class IslandAPI {
                     } else if (type.equals("faction")) {
                         schemFile = FileUtil.getSchematicFile(Settings.ISLAND_FACTION_SCHEMATIC.getString());
                     }
-                    if (schemFile == null) return false;
+                    if (schemFile == null)
+                        throw new RuntimeException("Could not find schematic file when attempting to paste island schematic!");
 
                     com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(world);
                     Clipboard clipboard;
@@ -128,9 +131,6 @@ public class IslandAPI {
                         SLogger.warn("Pasting schematic [{}] in world [{}] for player [{}].", schemFile.getName(), world.getName(), player.getName());
 
                         Operations.complete(operation);
-
-                        Thread.sleep(750);
-                    } catch (InterruptedException ignored) {
                     }
 
                     return true;

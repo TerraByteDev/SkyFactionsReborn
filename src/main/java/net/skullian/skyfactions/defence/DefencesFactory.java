@@ -213,7 +213,6 @@ public class DefencesFactory {
     public static void addDefence(Player player, DefenceStruct defence, Faction faction) {
         ItemStack stack = SkullAPI.convertToSkull(new ItemStack(Material.getMaterial(defence.getITEM_MATERIAL())), defence.getITEM_SKULL());
         NamespacedKey nameKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
-        NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
 
         ItemMeta meta = stack.getItemMeta();
         meta.setDisplayName(TextUtility.color(defence.getNAME()));
