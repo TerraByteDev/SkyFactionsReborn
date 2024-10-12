@@ -37,8 +37,8 @@ import java.util.regex.Pattern;
 
 public class FactionAPI {
 
-    private static Map<UUID, Faction> factionCache = new HashMap<>();
-    private static Map<String, Faction> factionNameCache = new HashMap<>();
+    public static Map<UUID, Faction> factionCache = new HashMap<>();
+    public static Map<String, Faction> factionNameCache = new HashMap<>();
 
     public static void handleFactionWorldBorder(Player player, FactionIsland island) {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());

@@ -25,7 +25,7 @@ public class GemsGiveCommand extends CommandTemplate {
 
     @Override
     public String getSyntax() {
-        return "/gems give <player> <amount>";
+        return "/gems give <type> <Player name / Faction name> <amount>";
     }
 
     @Override
