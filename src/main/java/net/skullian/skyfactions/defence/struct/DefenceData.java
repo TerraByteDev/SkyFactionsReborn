@@ -21,4 +21,7 @@ public class DefenceData {
     private String UUIDFactionName; // either uuid or faction name
     private boolean IS_FACTION;
 
+    private boolean TARGET_HOSTILES;
+    private boolean TARGET_PASSIVE;
+
 }
