@@ -48,6 +48,7 @@ public class DefenceHandler implements Listener {
         PersistentDataContainer container = stack.getItemMeta().getPersistentDataContainer();
         if (container.has(defenceKey, PersistentDataType.STRING)) {
             String defenceIdentifier = container.get(defenceKey, PersistentDataType.STRING);
+            System.out.println(defenceIdentifier);
 
             DefenceStruct defence = DefencesFactory.defences.get(defenceIdentifier);
             if (defence != null) {
@@ -74,7 +75,7 @@ public class DefenceHandler implements Listener {
 
 
                         boolean isFaction = isFaction(owner);
-                        DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation(), owner, isFaction);
+                        DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation().getWorld().getName(), placed.getLocation().getBlockX(), placed.getLocation().getBlockY(), placed.getLocation().getBlockZ(), owner, isFaction);
                         ObjectMapper mapper = new ObjectMapper();
 
                         PersistentDataContainer blockContainer = new CustomBlockData(placed, SkyFactionsReborn.getInstance());
@@ -84,6 +85,7 @@ public class DefenceHandler implements Listener {
                         blockContainer.set(dataKey, PersistentDataType.STRING, mapper.writeValueAsString(data));
 
                         Class<? extends Defence> defenceClass = DefencesFactory.defenceTypes.get(defenceIdentifier);
+                        System.out.println(defenceClass);
                         Defence instance = defenceClass.getDeclaredConstructor().newInstance(data);
 
                         instance.enable();
@@ -141,7 +143,7 @@ public class DefenceHandler implements Listener {
             });
         }
 
-        return null;
+        return CompletableFuture.completedFuture(null);
     }
 
     @EventHandler
@@ -158,8 +160,9 @@ public class DefenceHandler implements Listener {
 
     private boolean isAllowedBlock(Block block, DefenceStruct defenceStruct) {
         boolean isWhitelist = defenceStruct.isIS_WHITELIST();
-        if (isWhitelist) return defenceStruct.getPLACEMENT_LIST().contains(block.getType());
-        else return !defenceStruct.getPLACEMENT_LIST().contains(block.getType());
+
+        if (isWhitelist) return defenceStruct.getPLACEMENT_LIST().contains(block.getType().name());
+        else return !defenceStruct.getPLACEMENT_LIST().contains(block.getType().name());
     }
 
     public static void addPlacedDefences(String factionName) {

@@ -3,7 +3,6 @@ package net.skullian.skyfactions.defence.struct;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Material;
 
 import java.util.List;
 import java.util.Map;
@@ -53,7 +52,7 @@ public class DefenceStruct {
 
     private String PLACEMENT_BLOCKED_MESSAGE;
     private boolean IS_WHITELIST;
-    private List<Material> PLACEMENT_LIST;
+    private List<String> PLACEMENT_LIST;
 
     private List<String> HOLOGRAM_LIST;
     private String OUT_OF_STOCK_HOLOGRAM;

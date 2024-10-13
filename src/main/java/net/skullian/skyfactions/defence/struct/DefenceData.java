@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bukkit.Location;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +14,10 @@ public class DefenceData {
     private int LEVEL;
     private String TYPE;
     private int AMMO;
-    private Location LOCATION;
+    private String WORLD_LOC;
+    private int X;
+    private int Y;
+    private int Z;
     private String UUIDFactionName; // either uuid or faction name
     private boolean IS_FACTION;
 

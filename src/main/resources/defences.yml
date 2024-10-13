@@ -18,3 +18,17 @@ Limits:
   # Maximum amount of defences a faction island can have.
   MAX_FACTION_DEFENCES: 20
 
+# This is the global configuration for all defences.
+# This will apply to all defences (unless they override it in per-defence configs), combined with the per-defence config.
+Global:
+  # Global configuration for entities.
+  ENTITIES:
+    # Whether the ENTITY_LIST is a whitelist of entities that can be targeted.
+    # Setting this to true will override the above booleans and you would have to add in the entities yourself.
+    WHITELIST: false
+    # What entities should be blacklisted or whitelisted?
+    # See https://jd.papermc.io/paper/1.21.1/org/bukkit/entity/EntityType.html
+    # Read https://docs.terrabytedev.com/skyfactions/mechanics/defences/managing_entities.html for more detail into integrations
+    ENTITY_LIST:
+      - "ENDER_DRAGON"
+      - "NPC"

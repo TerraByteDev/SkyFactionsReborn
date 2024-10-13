@@ -18,4 +18,7 @@ public class DefenceAttributeStruct {
     private String DISTANCE;
     private String HEALING;
 
+    private int HOSTILE_MOBS_TARGET_LEVEL;
+    private int PASSIVE_MOBS_TARGET_LEVEL;
+
 }

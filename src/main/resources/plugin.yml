@@ -11,8 +11,6 @@ softdepend:
   - PlaceholderAPI
   - NoteBlockAPI
   - MythicMobs
-  - Citizens
-  - ZNPCsPlus
 
 commands:
   island:

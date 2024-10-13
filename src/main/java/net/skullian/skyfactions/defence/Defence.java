@@ -56,7 +56,7 @@ public abstract class Defence {
         return this.task != null;
     }
 
-    private static void createHologram(Location location, DefenceStruct defence, String playerName) {
+    public void createHologram(Location location, DefenceStruct defence, String playerName) {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
 
         TextHologram hologram = new TextHologram(playerName + "_" + defence.getFILE_NAME() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ())

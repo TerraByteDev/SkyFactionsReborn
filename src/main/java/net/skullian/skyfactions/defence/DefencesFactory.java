@@ -131,9 +131,9 @@ public class DefencesFactory {
         List<String> ITEM_LORE = config.getStringList("ITEM.LORE");
         List<String> UPGRADE_LORE = config.getStringList("UPGRADE.LORE");
 
-        String PLACEMENT_BLOCKED_MESSAGE = config.getString("PLACEMENT.PLACEMENT_BLOCKED_MESSAGE");
+        String PLACEMENT_BLOCKED_MESSAGE = config.getString("PLACEMENT.DEFENCE_INCORRECT_BLOCK");
         boolean IS_WHITELIST = config.getBoolean("PLACEMENT.WHITELIST");
-        List<Material> BLOCKS_LIST = getPlacementBlocks(config, fileName);
+        List<String> BLOCKS_LIST = getPlacementBlocks(config, fileName);
 
         List<String> HOLOGRAM_STACK = config.getStringList("HOLOGRAMS.LINES");
         String OUT_OF_STOCK_LINE = config.getString("HOLOGRAMS.OUT_OF_STOCK_LINE");
@@ -173,7 +173,10 @@ public class DefencesFactory {
         String DISTANCE = config.getString("ATTRIBUTES.DISTANCE");
         String HEALING = config.getString("ATTRIBUTES.HEALING");
 
-        return new DefenceAttributeStruct(RANGE, COOLDOWN, TARGET_MAX, MAX_AMMO, UPGRADE_COST, DAMAGE, DISTANCE, HEALING);
+        int HOSTILE_MOBS_TARGET_LEVEL = config.getInt("ATTRIBUTES.TARGET_HOSTILE_MOBS_LEVEL");
+        int PASSIVE_MOBS_TARGET_LEVEL = config.getInt("ATTRIBUTES.TARGET_PASSIVE_MOBS_LEVEL");
+
+        return new DefenceAttributeStruct(RANGE, COOLDOWN, TARGET_MAX, MAX_AMMO, UPGRADE_COST, DAMAGE, DISTANCE, HEALING, HOSTILE_MOBS_TARGET_LEVEL, PASSIVE_MOBS_TARGET_LEVEL);
     }
 
     private static Map<String, String> getXPFormulas(FileConfiguration config) {
@@ -277,8 +280,8 @@ public class DefencesFactory {
         return newLore;
     }
 
-    private static List<Material> getPlacementBlocks(FileConfiguration config, String fName) {
-        List<Material> matchingMaterials = new ArrayList<>();
+    private static List<String> getPlacementBlocks(FileConfiguration config, String fName) {
+        List<String> matchingMaterials = new ArrayList<>();
         List<String> list = config.getStringList("PLACEMENT.BLOCKS");
 
         for (String block : list) {
@@ -287,17 +290,13 @@ public class DefencesFactory {
 
             Material match = Material.matchMaterial(cleaned);
             if (match != null) {
-                matchingMaterials.add(match);
+                matchingMaterials.add(match.name());
             } else {
                 for (Material material : Material.values()) {
                     if (material.name().toLowerCase().contains(cleaned.toLowerCase())) {
-                        match = material;
+                        matchingMaterials.add(material.name());
                     }
                 }
-
-                if (match == null) {
-                    SLogger.warn("Could not find any matching materials by the name of: {} in Defence {}", cleaned, fName);
-                } else matchingMaterials.add(match);
             }
         }
 
