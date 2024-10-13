@@ -105,16 +105,16 @@ ENTITIES:
   # Target passive entities by default when first placed down.
   TARGET_PASSIVE_ON_DEFAULT: false
 
+  # Allows the defence to attack players (who are raiding you only!)
+  ALLOW_ATTACK_PLAYERS: true
+
   # Whether the ENTITY_LIST is a whitelist of entities that can be targeted.
   # Setting this to true will override the above booleans and you would have to add in the entities yourself.
   WHITELIST: false
   # What entities should be blacklisted or whitelisted?
   # See https://jd.papermc.io/paper/1.21.1/org/bukkit/entity/EntityType.html
   # Read https://docs.terrabytedev.com/skyfactions/mechanics/defences/managing_entities.html for more detail into integrations
-  ENTITY_LIST:
-    - "ENDER_DRAGON"
-    - "NPC"
-
+  ENTITY_LIST: [ ]
 
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:

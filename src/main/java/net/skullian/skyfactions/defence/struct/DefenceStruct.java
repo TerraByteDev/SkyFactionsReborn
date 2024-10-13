@@ -57,4 +57,6 @@ public class DefenceStruct {
     private List<String> HOLOGRAM_LIST;
     private String OUT_OF_STOCK_HOLOGRAM;
     private boolean APPEND_TO_TOP;
+
+    private DefenceEntityStruct ENTITY_CONFIG;
 }

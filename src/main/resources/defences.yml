@@ -14,15 +14,103 @@
 Limits:
   # Maximum amount of defences a player island can have.
   MAX_PLAYER_DEFENCES: 10
-
   # Maximum amount of defences a faction island can have.
   MAX_FACTION_DEFENCES: 20
+
+  # Allow placement of defences in worlds other than the configured island and faction worlds.
+  ALLOW_PLACEMENTS_IN_OTHER_WORLDS: false
+  # Assuming the above boolean is true, what worlds is this allowed in?
+  ALLOWED_WORLDS: [ ]
 
 # This is the global configuration for all defences.
 # This will apply to all defences (unless they override it in per-defence configs), combined with the per-defence config.
 Global:
   # Global configuration for entities.
   ENTITIES:
+    # You can edit what entities are deemed as "passive".
+    PASSIVE_ENTITIES:
+      - "ALLAY"
+      - "ARMADILLO"
+      - "AXOLOTL"
+      - "BEE"
+      - "CAMEL"
+      - "CAT"
+      - "CHICKEN"
+      - "COD"
+      - "COW"
+      - "DONKEY"
+      - "DOLPHIN"
+      - "FOX"
+      - "FROG"
+      - "GLOW_SQUID"
+      - "GOAT"
+      - "HORSE"
+      - "IRON_GOLEM"
+      - "LLAMA"
+      - "MOOSHROOM"
+      - "MULE"
+      - "OCELOT"
+      - "PANDA"
+      - "PARROT"
+      - "PIG"
+      - "POLAR_BEAR"
+      - "PUFFERFISH"
+      - "RABBIT"
+      - "SALMON"
+      - "SHEEP"
+      - "SNIFFER"
+      - "SNOW_GOLEM"
+      - "SKELETON_HORSE"
+      - "SQUID"
+      - "STRIDER"
+      - "TADPOLE"
+      - "TRADER_LLAMA"
+      - "TROPICAL_FISH"
+      - "TURTLE"
+      - "VILLAGER"
+      - "WOLF"
+      - "ZOMBIE_HORSE"
+      -
+      # You can edit what entities are deemed as "hostile".
+    HOSTILE_ENTITIES:
+      - "BAT"
+      - "BLAZE"
+      - "BOGGED"
+      - "CAVE_SPIDER"
+      - "CREEPER"
+      - "ENDERMAN"
+      - "ENDERMITE"
+      - "EVOKER"
+      - "ELDER_GUARDIAN"
+      - "GHAST"
+      - "GIANT"
+      - "GUARDIAN"
+      - "HOGLIN"
+      - "HUSK"
+      - "ILLUSIONER"
+      - "MAGMA_CUBE"
+      - "PHANTOM"
+      - "PIGLIN"
+      - "PIGLIN_BRUTE"
+      - "PILLAGER"
+      - "RAVAGER"
+      - "SHULKER"
+      - "SILVERFISH"
+      - "SKELETON"
+      - "SLIME"
+      - "SPIDER"
+      - "STRAY"
+      - "VEX"
+      - "VINDICATOR"
+      - "WARDEN"
+      - "WITHER_SKELETON"
+      - "WITHER"
+      - "WITCH"
+      - "ZOGLIN"
+      - "ZOMBIE"
+      - "ZOMBIE_VILLAGER"
+      - "ZOMBIFIED_PIGLIN"
+
     # Whether the ENTITY_LIST is a whitelist of entities that can be targeted.
     # Setting this to true will override the above booleans and you would have to add in the entities yourself.
     WHITELIST: false
@@ -30,5 +118,51 @@ Global:
     # See https://jd.papermc.io/paper/1.21.1/org/bukkit/entity/EntityType.html
     # Read https://docs.terrabytedev.com/skyfactions/mechanics/defences/managing_entities.html for more detail into integrations
     ENTITY_LIST:
-      - "ENDER_DRAGON"
-      - "NPC"
+      - "AREA_EFFECT_CLOUD"
+      - "ARMOR_STAND"
+      - "ARROW"
+      - "BLOCK_DISPLAY"
+      - "BOAT"
+      - "BREEZE"
+      - "BREEZE_WIND_CHARGE"
+      - "CHEST_BOAT"
+      - "CHEST_MINECART"
+      - "COMMAND_BLOCK_MINECART"
+      - "DRAGON_FIREBALL"
+      - "EGG"
+      - "ENDER_PEARL"
+      - "EVOKER_FANGS"
+      - "EXPERIENCE_BOTTLE"
+      - "EXPERIENCE_ORB"
+      - "EYE_OF_ENDER"
+      - "FALLING_BLOCK"
+      - "FIREBALL"
+      - "FIREWORK_ROCKET"
+      - "FISHING_BOBBER"
+      - "FURNACE_MINECART"
+      - "GLOW_ITEM_FRAME"
+      - "HOPPER_MINECART"
+      - "INTERACTION"
+      - "ITEM"
+      - "ITEM_DISPLAY"
+      - "ITEM_FRAME"
+      - "LEASH_KNOT"
+      - "LIGHTNING_BOLT"
+      - "LLAMA_SPIT"
+      - "MARKER"
+      - "MINECART"
+      - "OMINOUS_ITEM_SPAWNER"
+      - "PAINTING"
+      - "POTION"
+      - "SHULKER_BULLET"
+      - "SMALL_FIREBALL"
+      - "SNOWBALL"
+      - "SPAWNER_MINECART"
+      - "SPECTRAL_ARROW"
+      - "TEXT_DISPLAY"
+      - "TNT"
+      - "TNT_MINECART"
+      - "TRIDENT"
+      - "UNKNOWN"
+      - "WIND_CHARGE"
+      - "WITHER_SKULL"

@@ -16,10 +16,14 @@ import java.util.Collection;
 public abstract class Defence {
 
     private DefenceData data;
+    private DefenceStruct struct;
     private BukkitTask task;
 
     public Defence(DefenceData data) {
         this.data = data;
+        if (struct == null)
+            throw new IllegalArgumentException("Could not find defence with the type of " + data.getTYPE());
+        this.struct = struct;
     }
 
     public DefenceData getData() {
@@ -34,19 +38,44 @@ public abstract class Defence {
         this.task = task;
     }
 
-    public abstract String getType();
+    public DefenceStruct getStruct() {
+        return this.struct;
+    }
 
-    public abstract int getRadius();
+    public String getType() {
+        return this.struct.getTYPE();
+    }
 
-    public abstract int getDamage();
+    public int getRadius() {
+        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getDISTANCE(), this.data.getLEVEL());
+        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+    }
 
-    public abstract int getMaxSimEntities();
+    public int getDamage() {
+        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getDAMAGE(), this.data.getLEVEL());
+        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+    }
 
-    public abstract int getRate();
+    public int getMaxSimEntities() {
+        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getMAX_TARGETS(), this.data.getLEVEL());
+        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+    }
 
-    public abstract int getLevel();
+    public int getRate() {
+        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getCOOLDOWN(), this.data.getLEVEL());
+        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+    }
 
-    public abstract Collection<Entity> getNearbyEntities(World defenceWorld);
+    public int getLevel() {
+        return this.data.getLEVEL();
+    }
+
+    public Collection<Entity> getNearbyEntities(World defenceWorld) {
+        Location location = new Location(defenceWorld, data.getX(), data.getY(), data.getZ());
+        int radius = getRadius();
+        Collection<Entity> nearbyEntities = defenceWorld.getNearbyEntities(location, radius, radius, radius);
+        return nearbyEntities; // todo
+    }
 
     public abstract void enable();
 

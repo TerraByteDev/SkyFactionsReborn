@@ -10,6 +10,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.struct.DefenceAttributeStruct;
 import net.skullian.skyfactions.defence.struct.DefenceEffectStruct;
+import net.skullian.skyfactions.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.Faction;
@@ -161,6 +162,24 @@ public class DefencesFactory {
         }
 
         return effectStructs;
+    }
+
+    private static DefenceEntityStruct getEntityConfiguration(FileConfiguration config) {
+        boolean OVERRIDE = config.getBoolean("ENTITIES.OVERRIDE_GLOBAL_CONFIG");
+
+        boolean ALLOW_HOSTILE = config.getBoolean("ENTITIES.ALLOW_HOSTILE_TARGETING");
+        boolean ALLOW_TOGGLE_HOSTILE = config.getBoolean("ENTITIES.ALLOW_TOGGLE_HOSTILE_TARGETING");
+        boolean TARGET_HOSTILE = config.getBoolean("ENTITIES.TARGET_HOSTILE_ON_DEFAULT");
+
+        boolean ALLOW_PASSIVE = config.getBoolean("ENTITIES.ALLOW_PASSIVE_TARGETING");
+        boolean ALLOW_TOGGLE_PASSIVE = config.getBoolean("ENTITIES.ALLOW_TOGGLE_PASSIVE_TARGETING");
+        boolean TARGET_PASSIVE = config.getBoolean("ENTITIES.TARGET_PASSIVE_ON_DEFAULT");
+
+        boolean ALLOW_ATTACK_PLAYERS = config.getBoolean("ENTITIES.ALLOW_ATTACK_PLAYERS");
+
+        boolean IS_WHITELIST = config.getBoolean("ENTITIES.WHITELIST");
+g
+        return null;
     }
 
     private static DefenceAttributeStruct getAttributes(FileConfiguration config) {
