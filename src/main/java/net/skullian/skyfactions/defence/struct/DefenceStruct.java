@@ -32,7 +32,8 @@ public class DefenceStruct {
 
     private List<DefenceEffectStruct> EFFECTS;
 
-    private List<String> MESSAGES;
+    private List<String> DEATH_MESSAGES;
+    private List<String> EFFECT_MESSAGES;
 
     private DefenceAttributeStruct ATTRIBUTES;
 

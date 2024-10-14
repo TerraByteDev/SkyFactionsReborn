@@ -6,6 +6,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.api.SkullAPI;
 import net.skullian.skyfactions.config.ConfigHandler;
+import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.struct.DefenceAttributeStruct;
@@ -115,7 +116,8 @@ public class DefencesFactory {
 
         List<DefenceEffectStruct> EFFECTS = getEffects(config);
 
-        List<String> MESSAGES = config.getStringList("MESSAGES");
+        List<String> DEATH_MESSAGES = config.getStringList("MESSAGES.DEATH");
+        List<String> EFFECT_MESSAGES = config.getStringList("MESSAGES.DAMAGE"); // can be healing, etc
 
         DefenceAttributeStruct ATTRIBUTES = getAttributes(config);
 
@@ -140,10 +142,12 @@ public class DefencesFactory {
         String OUT_OF_STOCK_LINE = config.getString("HOLOGRAMS.OUT_OF_STOCK_LINE");
         boolean APPEND_TO_TOP = config.getBoolean("HOLOGRAMS.STOCK_AT_TOP");
 
+        DefenceEntityStruct ENTITY_DATA = getEntityConfiguration(config);
+
         return new DefenceStruct(fileName, COLOR_NAME, TYPE, IDENTIFIER, BUY_COST, SELL_COST, AMMO_COST, MAX_LEVEL,
-                PLACE_SOUND, PLACE_PITCH, BREAK_SOUND, BREAK_PITCH, ACTIVATE_SOUND, ACTIVATE_PITCH, EFFECTS, MESSAGES,
+                PLACE_SOUND, PLACE_PITCH, BREAK_SOUND, BREAK_PITCH, ACTIVATE_SOUND, ACTIVATE_PITCH, EFFECTS, DEATH_MESSAGES, EFFECT_MESSAGES,
                 ATTRIBUTES, EXPERIENCE_DROPS, PROJECTILE, PARTICLE, BLOCK_MATERIAL, BLOCK_SKULL, ITEM_MATERIAL, ITEM_SKULL, ITEM_LORE, UPGRADE_LORE,
-                PLACEMENT_BLOCKED_MESSAGE, IS_WHITELIST, BLOCKS_LIST, HOLOGRAM_STACK, OUT_OF_STOCK_LINE, APPEND_TO_TOP);
+                PLACEMENT_BLOCKED_MESSAGE, IS_WHITELIST, BLOCKS_LIST, HOLOGRAM_STACK, OUT_OF_STOCK_LINE, APPEND_TO_TOP, ENTITY_DATA);
     }
 
     private static List<DefenceEffectStruct> getEffects(FileConfiguration config) {
@@ -178,8 +182,18 @@ public class DefencesFactory {
         boolean ALLOW_ATTACK_PLAYERS = config.getBoolean("ENTITIES.ALLOW_ATTACK_PLAYERS");
 
         boolean IS_WHITELIST = config.getBoolean("ENTITIES.WHITELIST");
-g
-        return null;
+
+        List<String> ENTITY_LIST = new ArrayList<>();
+        if (!OVERRIDE && ALLOW_HOSTILE && !IS_WHITELIST)
+            ENTITY_LIST.addAll(DefencesConfig.GLOBAL_HOSTILE_ENTITIES.getList());
+        if (!OVERRIDE && ALLOW_PASSIVE && !IS_WHITELIST)
+            ENTITY_LIST.addAll(DefencesConfig.GLOBAL_PASSIVE_ENTITIES.getList());
+        if (!OVERRIDE && !IS_WHITELIST) ENTITY_LIST.addAll(DefencesConfig.GLOBAL_ENTITIES_ENTITY_LIST.getList());
+
+        ENTITY_LIST.addAll(config.getStringList("ENTITIES.ENTITY_LIST"));
+
+        return new DefenceEntityStruct(OVERRIDE, ALLOW_HOSTILE, ALLOW_TOGGLE_HOSTILE, TARGET_HOSTILE, ALLOW_PASSIVE, ALLOW_TOGGLE_PASSIVE, TARGET_PASSIVE,
+                ALLOW_ATTACK_PLAYERS, IS_WHITELIST, ENTITY_LIST);
     }
 
     private static DefenceAttributeStruct getAttributes(FileConfiguration config) {

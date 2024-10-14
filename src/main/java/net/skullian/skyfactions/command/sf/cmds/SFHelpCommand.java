@@ -31,7 +31,7 @@ public class SFHelpCommand extends CommandTemplate {
         if (CooldownHandler.manageCooldown(player)) return;
 
         Messages.COMMAND_HEAD.send(player);
-        if (RaidCommandHandler.getSubCommands().size() <= 0) {
+        if (SFCommandHandler.getSubCommands().size() <= 0) {
             Messages.NO_COMMANDS_FOUND.send(player);
         }
         for (int i = 0; i < SFCommandHandler.getSubCommands().size(); i++) {

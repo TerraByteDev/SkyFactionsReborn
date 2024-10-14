@@ -42,7 +42,15 @@ SOUNDS:
 # In a Healing defence type, this would be used for healing notifications.
 # Placeholders: %health_increase% - Health they were healed for.
 MESSAGES:
-  - "{#E9C055}%player_name% &7burnt to death while trying to fight {#E9C055}%defender%&7."
+  # Messages (randomly) broadcasted upon death.
+  # Placeholders: %player_name% - Player who died / %defender% - Owner of the defence / island.
+  DEATH:
+    - "{#E9C055}%player_name% &7burnt to death while trying to fight {#E9C055}%defender%&7."
+
+  # Sent to the player who was set on fire.
+  # Placeholders: %defence_name% - Name of the defence
+  DAMAGE:
+    - "&4You were ignited for by a &c%defence_name%!"
 
 # All attributes related to the defence.
 # PLACEHOLDERS: level - The defence level.
@@ -82,6 +90,38 @@ HOLOGRAMS:
 
   # Append the OUT_OF_STOCK_LINE to the top of the hologram stack.
   STOCK_AT_TOP: false
+
+# This allows you to configure what entities will be targeted by the defence.
+ENTITIES:
+  # This stops the global entities config in defences.yml from being applied (additionally) to the below configs.
+  # See https://docs.terrabytedev.com/skyfactions/mechanics/defences/managing_entities.html#global-config
+  OVERRIDE_GLOBAL_CONFIG: false
+
+  # The below booleans for hostile and passive mobs only apply if you are not overriding the global config (above).
+  # Lets the defence target hostile entities (e.g. zombies)
+  ALLOW_HOSTILE_TARGETING: true
+  # Lets the player toggle hostile entity targeting.
+  ALLOW_TOGGLE_HOSTILE_TARGETING: true
+  # Target hostile entities by default when first placed down.
+  TARGET_HOSTILE_ON_DEFAULT: true
+
+  # Lets the defence target passive entities (e.g. cows)
+  ALLOW_PASSIVE_TARGETING: true
+  # Lets the player toggle passive entity targeting.
+  ALLOW_TOGGLE_PASSIVE_TARGETING: true
+  # Target passive entities by default when first placed down.
+  TARGET_PASSIVE_ON_DEFAULT: false
+
+  # Allows the defence to attack players (who are raiding you only!)
+  ALLOW_ATTACK_PLAYERS: true
+
+  # Whether the ENTITY_LIST is a whitelist of entities that can be targeted.
+  # Setting this to true will override the above booleans and you would have to add in the entities yourself.
+  WHITELIST: false
+  # What entities should be blacklisted or whitelisted?
+  # See https://jd.papermc.io/paper/1.21.1/org/bukkit/entity/EntityType.html
+  # Read https://docs.terrabytedev.com/skyfactions/mechanics/defences/managing_entities.html for more detail into integrations
+  ENTITY_LIST: [ ]
 
 # XP Orb drops when the defence kills a certain mob. Must be a valid mob!
 EXPERIENCE_DROPS:

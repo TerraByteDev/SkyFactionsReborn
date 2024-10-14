@@ -42,7 +42,15 @@ SOUNDS:
 # In a Healing defence type, this would be used for healing notifications.
 # Placeholders: %health_increase% - Health they were healed for.
 MESSAGES:
-  - "{#E9C055}%player_name% &7took an arrow to the knee while fighting {#E9C055}%defender%&7."
+  # Messages (randomly) broadcasted upon death.
+  # Placeholders: %player_name% - Player who died / %defender% - Owner of the defence / island.
+  DEATH:
+    - "{#E9C055}%player_name% &7took an arrow to the knee while fighting {#E9C055}%defender%&7."
+
+  # Sent to the player who was damaged.
+  # Placeholders: %damage% - Amount of damage dealt / %defence_name% - Name of the defence
+  DAMAGE:
+    - "&4You were hit for &c%damage% damage&c by an &c%defence_name% defence!"
 
 # All attributes related to the defence.
 # PLACEHOLDERS: level - The defence level.
@@ -91,6 +99,7 @@ ENTITIES:
   # See https://docs.terrabytedev.com/skyfactions/mechanics/defences/managing_entities.html#global-config
   OVERRIDE_GLOBAL_CONFIG: false
 
+  # The below booleans for hostile and passive mobs only apply if you are not overriding the global config (above).
   # Lets the defence target hostile entities (e.g. zombies)
   ALLOW_HOSTILE_TARGETING: true
   # Lets the player toggle hostile entity targeting.

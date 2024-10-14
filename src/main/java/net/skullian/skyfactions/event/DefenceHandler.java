@@ -75,7 +75,7 @@ public class DefenceHandler implements Listener {
 
 
                         boolean isFaction = isFaction(owner);
-                        DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation().getWorld().getName(), placed.getLocation().getBlockX(), placed.getLocation().getBlockY(), placed.getLocation().getBlockZ(), owner, isFaction);
+                        DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation().getWorld().getName(), placed.getLocation().getBlockX(), placed.getLocation().getBlockY(), placed.getLocation().getBlockZ(), owner, isFaction, defence.getENTITY_CONFIG().isTARGET_HOSTILE_DEFAULT(), defence.getENTITY_CONFIG().isTARGET_PASSIVE_DEFAULT());
                         ObjectMapper mapper = new ObjectMapper();
 
                         PersistentDataContainer blockContainer = new CustomBlockData(placed, SkyFactionsReborn.getInstance());
