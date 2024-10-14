@@ -88,7 +88,7 @@ public class DefenceHandler implements Listener {
                         System.out.println(defenceClass);
                         Defence instance = defenceClass.getDeclaredConstructor().newInstance(data);
 
-                        instance.enable();
+                        instance.onLoad(owner);
                         addIntoMap(owner, isFaction, instance);
                     } catch (Exception error) {
                         event.setCancelled(true);
@@ -194,7 +194,7 @@ public class DefenceHandler implements Listener {
                             Class<? extends Defence> defenceClass = DefencesFactory.defenceTypes.get(name);
                             Defence instance = defenceClass.getDeclaredConstructor().newInstance(defenceData);
 
-                            instance.enable();
+                            instance.onLoad(factionName);
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
                     } catch (Exception error) {
@@ -236,7 +236,7 @@ public class DefenceHandler implements Listener {
                             Class<? extends Defence> defenceClass = DefencesFactory.defenceTypes.get(name);
                             Defence instance = defenceClass.getDeclaredConstructor().newInstance(defenceData);
 
-                            instance.enable();
+                            instance.onLoad(player.getUniqueId().toString());
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
                     } catch (Exception error) {

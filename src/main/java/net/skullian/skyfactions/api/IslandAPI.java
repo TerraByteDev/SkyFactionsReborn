@@ -208,7 +208,7 @@ public class IslandAPI {
         List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(player.getUniqueId());
         if (defences != null && !defences.isEmpty()) {
             for (Defence defence : defences) {
-                defence.enable();
+                defence.onLoad(player.getUniqueId().toString());
             }
         }
     }

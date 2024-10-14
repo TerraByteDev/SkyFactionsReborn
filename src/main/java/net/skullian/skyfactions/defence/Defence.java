@@ -7,10 +7,10 @@ import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.event.DefenceHandler;
 import net.skullian.skyfactions.util.hologram.TextHologram;
 import net.skullian.skyfactions.util.text.TextUtility;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -88,22 +88,41 @@ public abstract class Defence {
         return CompletableFuture.completedFuture(chosenEntities);
     }
 
+    public void onLoad(String playerUUIDorFactionName) {
+        if (!DefenceHandler.hologramsMap.containsKey(getHologramID(playerUUIDorFactionName))) {
+            createHologram(getDefenceLocation(), struct, playerUUIDorFactionName);
+        }
+        
+        enable();
+    }
+
     public abstract void enable();
 
     public abstract void disable();
-
-    public Entity getProjectileEntity() {
-        return null; // todo
-    }
 
     public boolean isEnabled() {
         return this.task != null;
     }
 
-    public void createHologram(Location location, DefenceStruct defence, String playerName) {
+    public Location getDefenceLocation() {
+        World world = Bukkit.getWorld(data.getWORLD_LOC());
+        return new Location(world, data.getX(), data.getY(), data.getZ());
+    }
+
+    public String getHologramID(String playerUUIDorFactionName) {
+        return String.format("%s_%s_%s_%s_%s",
+                playerUUIDorFactionName,
+                struct.getIDENTIFIER(),
+                data.getX(),
+                data.getY(),
+                data.getZ()
+        );
+    }
+
+    public void createHologram(Location location, DefenceStruct defence, String playerUUIDorFactionName) {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
 
-        TextHologram hologram = new TextHologram(playerName + "_" + defence.getFILE_NAME() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ())
+        TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ())
                 .setText(TextUtility.color(text.replace("%defence_name%", defence.getNAME())))
                 .setSeeThroughBlocks(true)
                 .setBillboard(Display.Billboard.VERTICAL)

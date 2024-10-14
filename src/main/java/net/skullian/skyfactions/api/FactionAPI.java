@@ -280,7 +280,7 @@ public class FactionAPI {
         if (defences != null && !defences.isEmpty()) {
             for (Defence defence : defences) {
                 if (operation == DefenceOperation.ENABLE) {
-                    defence.enable();
+                    defence.onLoad(factionName);
                 } else if (operation == DefenceOperation.DISABLE) {
                     defence.disable();
                 }
