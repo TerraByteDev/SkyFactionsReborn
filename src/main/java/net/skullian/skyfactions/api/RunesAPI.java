@@ -8,13 +8,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class RunesAPI {
+
+    public static final Map<UUID, Integer> playerRunes = new HashMap<>();
 
     /**
      * See whether an item is allowed for rune conversion.
@@ -138,7 +137,11 @@ public class RunesAPI {
      * @return {@link CompletableFuture<Void>}
      */
     public static CompletableFuture<Void> removeRunes(UUID playerUUID, int amount) {
-        return SkyFactionsReborn.databaseHandler.removeRunes(playerUUID, amount);
+        playerRunes.replace(playerUUID, playerRunes.get(playerUUID) - amount);
+        return SkyFactionsReborn.databaseHandler.removeRunes(playerUUID, amount).exceptionally(ex -> {
+            playerRunes.replace(playerUUID, playerRunes.get(playerUUID) + amount);
+            return null;
+        });
     }
 
     /**
@@ -149,7 +152,11 @@ public class RunesAPI {
      * @return {@link CompletableFuture<Void>}
      */
     public static CompletableFuture<Void> addRunes(UUID playerUUID, int amount) {
-        return SkyFactionsReborn.databaseHandler.addRunes(playerUUID, amount);
+        playerRunes.replace(playerUUID, playerRunes.get(playerUUID) + amount);
+        return SkyFactionsReborn.databaseHandler.addRunes(playerUUID, amount).exceptionally(ex -> {
+            playerRunes.replace(playerUUID, playerRunes.get(playerUUID) - amount);
+            return null;
+        });
     }
 
     /**
@@ -159,7 +166,12 @@ public class RunesAPI {
      * @return {@link CompletableFuture<Integer>}
      */
     public static CompletableFuture<Integer> getRunes(UUID playerUUID) {
-        return SkyFactionsReborn.databaseHandler.getRunes(playerUUID);
+        if (playerRunes.containsKey(playerUUID)) return CompletableFuture.completedFuture(playerRunes.get(playerUUID));
+        return SkyFactionsReborn.databaseHandler.getRunes(playerUUID).whenComplete((runes, ex) -> {
+            if (ex != null) return;
+
+            playerRunes.put(playerUUID, runes);
+        });
     }
 
     private static boolean hasEnchants(ItemStack stack) {

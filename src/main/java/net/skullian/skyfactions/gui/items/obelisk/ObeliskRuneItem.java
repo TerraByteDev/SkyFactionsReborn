@@ -1,8 +1,8 @@
 package net.skullian.skyfactions.gui.items.obelisk;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
+import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.ObeliskConfig;
 import net.skullian.skyfactions.faction.Faction;
@@ -39,7 +39,7 @@ public class ObeliskRuneItem extends AsyncItem {
 
                             int runes = 0;
                             if (type.equals("player")) {
-                                runes = SkyFactionsReborn.databaseHandler.getRunes(player.getUniqueId()).join();
+                                runes = RunesAPI.getRunes(player.getUniqueId()).join();
                             } else if (type.equals("faction")) {
                                 Faction faction = FactionAPI.getFaction(player).join();
                                 if (faction != null) {

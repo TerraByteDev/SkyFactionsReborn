@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.retrooper.packetevents.protocol.world.damagetype.DamageType;
 import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
@@ -23,6 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -37,6 +39,7 @@ public class DefenceHandler implements Listener {
     public static final Map<UUID, List<Defence>> loadedPlayerDefences = new HashMap<>();
 
     public static final Map<String, TextHologram> hologramsMap = new ConcurrentHashMap<>();
+    public static final Map<UUID, Map<DamageType, String>> toDie = new HashMap<>();
 
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {
@@ -158,6 +161,22 @@ public class DefenceHandler implements Listener {
         }
     }
 
+    @EventHandler
+    public void onPlayerDeathFromDefence(PlayerDeathEvent event) {
+        Player player = event.getPlayer();
+        if (toDie.containsKey(player.getUniqueId())) {
+            Map<DamageType, String> damages = new HashMap<>();
+
+            String deathMessage = damages.get(event.getDamageSource().getDamageType());
+            if (deathMessage != null) {
+
+                event.setDeathMessage(TextUtility.color(deathMessage
+                        .replaceAll("%player_name%", player.getName())
+                        .replaceAll("%defender%", "DEFENDER_NAME")));
+            }
+        }
+    }
+
     private boolean isAllowedBlock(Block block, DefenceStruct defenceStruct) {
         boolean isWhitelist = defenceStruct.isIS_WHITELIST();
 
@@ -238,6 +257,8 @@ public class DefenceHandler implements Listener {
 
                             instance.onLoad(player.getUniqueId().toString());
                             defences.add(instance);
+
+                            Messages.DEFENCE_PLACE_SUCCESS.send(player, "%defence_name%", defence.getNAME());
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
                     } catch (Exception error) {
                         error.printStackTrace();

@@ -10,6 +10,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -27,7 +28,15 @@ public class SoundUtil {
             SLogger.warn("Attempted to play a sound of {} when it returned null!", identifier);
             return;
         }
+
         player.playSound(sound, Sound.Emitter.self());
+    }
+
+    public static void playSound(Location location, String identifier, float pitch, float volume) {
+        if (identifier == null || identifier.equalsIgnoreCase("NONE")) return;
+        org.bukkit.Sound sound = org.bukkit.Sound.valueOf(identifier);
+        if (sound == null) SLogger.warn("Attempted to play a sound of {} when it returned null!", identifier);
+        else location.getWorld().playSound(location, sound, volume, pitch);
     }
 
     public static void playMusic(Player def, Player att) {

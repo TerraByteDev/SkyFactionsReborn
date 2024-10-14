@@ -12,7 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,7 +25,7 @@ public abstract class Defence {
 
     private DefenceData data;
     private DefenceStruct struct;
-    private BukkitTask task;
+    private int task = -1;
     private List<String> targetedEntities;
 
     public Defence(DefenceData defenceData, DefenceStruct defenceStruct) {
@@ -92,16 +91,19 @@ public abstract class Defence {
         if (!DefenceHandler.hologramsMap.containsKey(getHologramID(playerUUIDorFactionName))) {
             createHologram(getDefenceLocation(), struct, playerUUIDorFactionName);
         }
-        
+
         enable();
     }
 
     public abstract void enable();
 
-    public abstract void disable();
+    public void disable() {
+        Bukkit.getScheduler().cancelTask(task);
+        task = -1;
+    }
 
     public boolean isEnabled() {
-        return this.task != null;
+        return this.task != -1;
     }
 
     public Location getDefenceLocation() {
