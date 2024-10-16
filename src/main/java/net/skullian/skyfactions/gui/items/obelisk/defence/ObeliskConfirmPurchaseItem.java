@@ -113,6 +113,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncItem {
                     return;
                 }
 
+                player.closeInventory();
                 Messages.PLEASE_WAIT.send(player, "%operation%", "Purchasing your defence");
                 DefencesFactory.addDefence(player, STRUCT, FACTION);
             });
