@@ -6,6 +6,7 @@ import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.block.BrokenBlocksService;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
@@ -17,6 +18,7 @@ import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.hologram.TextHologram;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -26,10 +28,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -45,6 +49,11 @@ public class DefenceHandler implements Listener {
 
     public static final Map<String, TextHologram> hologramsMap = new ConcurrentHashMap<>();
     public static final Map<UUID, Map<DamageType, String>> toDie = new HashMap<>();
+
+    @EventHandler
+    public void onBlockDamage(BlockDamageEvent event) {
+        BrokenBlocksService.createBrokenBlock(event.getBlock(), -1);
+    }
 
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {
