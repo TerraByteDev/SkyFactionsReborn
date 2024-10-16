@@ -19,12 +19,17 @@ import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -158,6 +163,42 @@ public class DefenceHandler implements Listener {
         if (container.has(defenceKey, PersistentDataType.STRING)) {
             event.setCancelled(true);
             Messages.DEFENCE_DESTROY_DENY.send(event.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamageFromDefence(EntityDamageByEntityEvent event) {
+        Entity damager = event.getDamager(); // get the damager
+
+        NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-damage");
+        PersistentDataContainer container = damager.getPersistentDataContainer();
+        if (container.has(key, PersistentDataType.INTEGER)) {
+            int damage = container.get(key, PersistentDataType.INTEGER);
+
+            event.setDamage(damage);
+        }
+    }
+
+    @EventHandler
+    public void onProjectileEntityHit(ProjectileHitEvent event) {
+        if (event.getHitEntity() == null) return;
+
+        if (!(event.getHitEntity() instanceof LivingEntity)) return;
+        LivingEntity hitEntity = (LivingEntity) event.getHitEntity();
+
+        NamespacedKey damageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-damage");
+        NamespacedKey messageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "damage-message");
+
+        PersistentDataContainer container = event.getEntity().getPersistentDataContainer();
+        if (container.has(damageKey, PersistentDataType.INTEGER)) {
+            int damage = container.get(damageKey, PersistentDataType.INTEGER);
+
+            hitEntity.damage(damage);
+
+            if (hitEntity.getType().equals(EntityType.PLAYER) && container.has(messageKey, PersistentDataType.STRING)) {
+                String message = container.get(messageKey, PersistentDataType.STRING);
+                hitEntity.sendMessage(TextUtility.color(message));
+            }
         }
     }
 

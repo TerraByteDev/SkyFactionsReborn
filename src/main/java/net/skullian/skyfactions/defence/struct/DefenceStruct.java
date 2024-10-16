@@ -41,7 +41,6 @@ public class DefenceStruct {
     private Map<String, String> EXPERIENCE_DROPS;
 
     private String PROJECTILE;
-    private String PARTICLE;
 
     private String BLOCK_MATERIAL;
     private String BLOCK_SKULL;

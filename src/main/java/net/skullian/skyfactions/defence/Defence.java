@@ -2,6 +2,7 @@ package net.skullian.skyfactions.defence;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.event.DefenceHandler;
@@ -9,9 +10,14 @@ import net.skullian.skyfactions.util.hologram.TextHologram;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,6 +63,33 @@ public abstract class Defence {
     public int getRate() {
         String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getCOOLDOWN(), this.data.getLEVEL());
         return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+    }
+
+    public String getRandomActionMessage() {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        List<String> messages = this.struct.getEFFECT_MESSAGES();
+        return messages.get(random.nextInt(messages.size())).replaceAll("%defence_name%", this.struct.getNAME())
+                .replaceAll("%damage%", String.valueOf(getDamage()));
+    }
+
+    public String getRandomDeathMessage() {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        List<String> messages = this.struct.getDEATH_MESSAGES();
+        return messages.get(random.nextInt(messages.size()));
+    }
+
+    public void applyPDC(Entity entity) {
+        NamespacedKey damageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-damage");
+
+        PersistentDataContainer container = entity.getPersistentDataContainer();
+        container.set(damageKey, PersistentDataType.INTEGER, getDamage());
+
+        if (entity.getType().equals(EntityType.PLAYER)) {
+            // better than the eventhandler searching itself, store the ranadom damage / action msg here.
+            NamespacedKey messageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "damage-message");
+
+            container.set(messageKey, PersistentDataType.STRING, getRandomActionMessage());
+        }
     }
 
     public int getLevel() {
@@ -133,5 +166,30 @@ public abstract class Defence {
 
         hologram.spawn(location.add(0, 1, 0));
         DefenceHandler.hologramsMap.put(hologram.getId(), hologram);
+    }
+
+    public boolean isAllowed(String configuredProjectile) {
+        List<String> allowed = List.of(
+                "ARROW",
+                "WIND_CHARGE",
+                "DRAGON_FIREBALL",
+                "EGG",
+                "ENDER_PEARL",
+                "FIREBALL",
+                "FIREWORK",
+                "FISHING_BOBBER",
+                "POTION",
+                "LLAMA_SPIT",
+                "SHULKER_BULLET",
+                "SMALL_FIREBALL",
+                "SNOWBALL",
+                "SPECTRAL_ARROW",
+                "EXPERIENCE_BOTTLE",
+                "TRIDENT",
+                "WIND_CHARGE",
+                "WITHER_SKULL"
+        ); // yes this is hardcoded
+
+        return allowed.contains(configuredProjectile);
     }
 }

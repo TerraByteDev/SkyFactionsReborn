@@ -163,9 +163,7 @@ EXPERIENCE_DROPS:
 # Projectile that it "shoots". NONE for no projectile.
 # See https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
 PROJECTILE: "POTION"
-# Use a particle instead of a projectile. This will only override if PROJECTILE is set to NONE.
-# See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
-PARTICLE: "NONE"
+
 
 # Block Configuration
 # SKULL only applies if material is PLAYER_HEAD

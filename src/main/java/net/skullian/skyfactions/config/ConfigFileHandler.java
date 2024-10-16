@@ -34,10 +34,6 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.DEFENCES, new ConfigHandler(plugin, "defences"));
 
         loadGUIs();
-        if (!Files.exists(Paths.get(plugin.getDataFolder() + "/defences"))) {
-            DefencesFactory.registerDefaultDefences();
-        }
-        DefencesFactory.register();
 
         configs.values().forEach(ConfigHandler::saveDefaultConfig);
         Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
@@ -48,6 +44,11 @@ public class ConfigFileHandler {
 
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();
         DISCORD_CONFIG = getFile(ConfigTypes.DISCORD).getConfig();
+
+        if (!Files.exists(Paths.get(plugin.getDataFolder() + "/defences"))) {
+            DefencesFactory.registerDefaultDefences();
+        }
+        DefencesFactory.register();
     }
 
     public ConfigHandler getFile(ConfigTypes type) {
