@@ -1,7 +1,6 @@
 package net.skullian.skyfactions.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.retrooper.packetevents.protocol.world.damagetype.DamageType;
 import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
@@ -12,6 +11,7 @@ import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceData;
+import net.skullian.skyfactions.defence.struct.DefenceEntityDeathData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SLogger;
@@ -20,6 +20,7 @@ import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -30,24 +31,25 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DefenceHandler implements Listener {
-    public static final Map<String, List<Defence>> loadedFactionDefences = new HashMap<>();
-    public static final Map<UUID, List<Defence>> loadedPlayerDefences = new HashMap<>();
+    public static Map<String, List<Defence>> loadedFactionDefences = new HashMap<>();
+    public static Map<UUID, List<Defence>> loadedPlayerDefences = new HashMap<>();
 
-    public static final Map<String, TextHologram> hologramsMap = new ConcurrentHashMap<>();
-    public static final Map<UUID, Map<DamageType, String>> toDie = new HashMap<>();
+    public static Map<String, TextHologram> hologramsMap = new ConcurrentHashMap<>();
+    public static Map<UUID, Map<DamageType, DefenceEntityDeathData>> toDie = new HashMap<>();
 
     @EventHandler
     public void onBlockDamage(BlockDamageEvent event) {
@@ -64,7 +66,6 @@ public class DefenceHandler implements Listener {
         PersistentDataContainer container = stack.getItemMeta().getPersistentDataContainer();
         if (container.has(defenceKey, PersistentDataType.STRING)) {
             String defenceIdentifier = container.get(defenceKey, PersistentDataType.STRING);
-            System.out.println(defenceIdentifier);
 
             DefenceStruct defence = DefencesFactory.defences.get(defenceIdentifier);
             if (defence != null) {
@@ -100,12 +101,7 @@ public class DefenceHandler implements Listener {
                         blockContainer.set(defenceKey, PersistentDataType.STRING, defenceIdentifier);
                         blockContainer.set(dataKey, PersistentDataType.STRING, mapper.writeValueAsString(data));
 
-                        Class<? extends Defence> defenceClass = DefencesFactory.defenceTypes.get(defenceIdentifier);
-                        System.out.println(defenceClass);
-                        Defence instance = defenceClass.getDeclaredConstructor().newInstance(data);
-
-                        instance.onLoad(owner);
-                        addIntoMap(owner, isFaction, instance);
+                        createDefence(data, defence, owner, isFaction, Optional.of(player), Optional.of(event));
                     } catch (Exception error) {
                         event.setCancelled(true);
                         ErrorHandler.handleError(event.getPlayer(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
@@ -118,7 +114,29 @@ public class DefenceHandler implements Listener {
         }
     }
 
-    private void addIntoMap(String owner, boolean isFaction, Defence defence) {
+    private static Defence createDefence(DefenceData data, DefenceStruct defenceStruct, String owner, boolean isFaction, Optional<Player> player, Optional<BlockPlaceEvent> event) {
+        try {
+            Class<?> clazz = Class.forName(DefencesFactory.defenceTypes.get(defenceStruct.getTYPE()));
+            Constructor<?> constr = clazz.getConstructor(DefenceData.class, DefenceStruct.class);
+
+            Defence instance = (Defence) constr.newInstance(data, defenceStruct);
+            instance.onLoad(owner);
+
+            if (isFaction) SkyFactionsReborn.databaseHandler.registerDefenceLocation(owner, instance.getDefenceLocation());
+                else SkyFactionsReborn.databaseHandler.registerDefenceLocation(UUID.fromString(owner), instance.getDefenceLocation());
+
+            addIntoMap(owner, isFaction, instance);
+
+            return instance;
+        } catch (Exception error) {
+            if (event.isPresent()) event.get().setCancelled(true);
+            if (player.isPresent()) ErrorHandler.handleError(player.get(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
+        }
+
+        return null;
+    }
+
+    private static void addIntoMap(String owner, boolean isFaction, Defence defence) {
         if (isFaction) {
             if (!loadedFactionDefences.containsKey(owner)) {
                 loadedFactionDefences.put(owner, List.of(defence));
@@ -132,7 +150,7 @@ public class DefenceHandler implements Listener {
             if (!loadedPlayerDefences.containsKey(playeruuid)) {
                 loadedPlayerDefences.put(playeruuid, List.of(defence));
             } else {
-                List<Defence> defences = loadedPlayerDefences.get(owner);
+                List<Defence> defences = loadedPlayerDefences.get(playeruuid);
                 defences.add(defence);
                 loadedPlayerDefences.replace(playeruuid, defences);
             }
@@ -152,7 +170,7 @@ public class DefenceHandler implements Listener {
         if (location.getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString()) && FactionAPI.isLocationInRegion(location, player.getUniqueId().toString())) {
             return CompletableFuture.completedFuture(player.getUniqueId().toString());
         } else if (location.getWorld().getName().equals(Settings.ISLAND_FACTION_WORLD.getString())) {
-            return FactionAPI.getFaction(player).thenApply((faction) -> {
+            return FactionAPI.getFaction(player.getUniqueId()).thenApply((faction) -> {
                 if (faction != null && FactionAPI.isLocationInRegion(location, faction.getName())) {
                     return faction.getName();
                 } else return null;
@@ -175,19 +193,6 @@ public class DefenceHandler implements Listener {
     }
 
     @EventHandler
-    public void onEntityDamageFromDefence(EntityDamageByEntityEvent event) {
-        Entity damager = event.getDamager(); // get the damager
-
-        NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-damage");
-        PersistentDataContainer container = damager.getPersistentDataContainer();
-        if (container.has(key, PersistentDataType.INTEGER)) {
-            int damage = container.get(key, PersistentDataType.INTEGER);
-
-            event.setDamage(damage);
-        }
-    }
-
-    @EventHandler
     public void onProjectileEntityHit(ProjectileHitEvent event) {
         if (event.getHitEntity() == null) return;
 
@@ -199,6 +204,8 @@ public class DefenceHandler implements Listener {
 
         PersistentDataContainer container = event.getEntity().getPersistentDataContainer();
         if (container.has(damageKey, PersistentDataType.INTEGER)) {
+            event.getEntity().remove();
+
             int damage = container.get(damageKey, PersistentDataType.INTEGER);
 
             hitEntity.damage(damage);
@@ -214,16 +221,46 @@ public class DefenceHandler implements Listener {
     public void onPlayerDeathFromDefence(PlayerDeathEvent event) {
         Player player = event.getPlayer();
         if (toDie.containsKey(player.getUniqueId())) {
-            Map<DamageType, String> damages = new HashMap<>();
 
-            String deathMessage = damages.get(event.getDamageSource().getDamageType());
-            if (deathMessage != null) {
+            DefenceEntityDeathData data = getData(player.getUniqueId(), event.getDamageSource().getDamageType());
+            if (data == null) return;
 
-                event.setDeathMessage(TextUtility.color(deathMessage
-                        .replaceAll("%player_name%", player.getName())
-                        .replaceAll("%defender%", "DEFENDER_NAME")));
+            String deathMessage = data.getDEATH_MESSAGE();
+            event.setDeathMessage(TextUtility.color(deathMessage
+                    .replaceAll("%player_name%", player.getName())
+                    .replaceAll("%defender%", "DEFENDER_NAME")));
+
+            removeDeadEntity(event.getPlayer(), data);
+        }
+    }
+
+    @EventHandler
+    public void onEntityDeathFromDefence(EntityDeathEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (entity instanceof Player) return;
+
+        DefenceEntityDeathData data = getData(entity.getUniqueId(), event.getDamageSource().getDamageType());
+        if (data == null) return;
+
+        removeDeadEntity(entity, data);
+    }
+
+    private void removeDeadEntity(LivingEntity entity, DefenceEntityDeathData data) {
+        for (Defence defence : getDefencesFromData(data)) {
+            if (defence.getDefenceLocation().equals(data.getDEFENCE_LOCATION())) {
+                defence.removeDeadEntity(entity);
             }
         }
+    }
+
+    private List<Defence> getDefencesFromData(DefenceEntityDeathData data) {
+        if (isFaction(data.getOWNER())) return loadedFactionDefences.get(data.getOWNER());
+            else return loadedPlayerDefences.get(data.getOWNER());
+    }
+
+    private DefenceEntityDeathData getData(UUID uuid, DamageType type) {
+        Map<DamageType, DefenceEntityDeathData> map = toDie.get(uuid);
+        return map.get(type);
     }
 
     private boolean isAllowedBlock(Block block, DefenceStruct defenceStruct) {
@@ -259,10 +296,8 @@ public class DefenceHandler implements Listener {
                             ObjectMapper mapper = new ObjectMapper();
                             DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                            Class<? extends Defence> defenceClass = DefencesFactory.defenceTypes.get(name);
-                            Defence instance = defenceClass.getDeclaredConstructor().newInstance(defenceData);
+                            Defence instance = createDefence(defenceData, defence, factionName, true, Optional.empty(), Optional.empty());
 
-                            instance.onLoad(factionName);
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
                     } catch (Exception error) {
@@ -301,13 +336,8 @@ public class DefenceHandler implements Listener {
                             ObjectMapper mapper = new ObjectMapper();
                             DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                            Class<? extends Defence> defenceClass = DefencesFactory.defenceTypes.get(name);
-                            Defence instance = defenceClass.getDeclaredConstructor().newInstance(defenceData);
-
-                            instance.onLoad(player.getUniqueId().toString());
+                            Defence instance = createDefence(defenceData, defence, player.getUniqueId().toString(), false, Optional.of(player), Optional.empty());
                             defences.add(instance);
-
-                            Messages.DEFENCE_PLACE_SUCCESS.send(player, "%defence_name%", defence.getNAME());
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
                     } catch (Exception error) {
                         error.printStackTrace();
@@ -331,7 +361,7 @@ public class DefenceHandler implements Listener {
         boolean toWasPlayer = toWorldName.equals(Settings.ISLAND_PLAYER_WORLD.getString());
 
         if (fromWasFaction) {
-            FactionAPI.getFaction(player).whenComplete((faction, throwable) -> {
+            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
                 if (throwable != null) {
                     throwable.printStackTrace();
                     return;
@@ -341,7 +371,7 @@ public class DefenceHandler implements Listener {
                 FactionAPI.modifyDefenceOperation(faction.getName(), FactionAPI.DefenceOperation.DISABLE);
             });
         } else if (toWasFaction) {
-            FactionAPI.getFaction(player).whenComplete((faction, throwable) -> {
+            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
                 if (throwable != null) {
                     throwable.printStackTrace();
                     return;

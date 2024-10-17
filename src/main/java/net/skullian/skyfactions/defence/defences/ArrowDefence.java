@@ -1,5 +1,8 @@
 package net.skullian.skyfactions.defence.defences;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.defence.struct.DefenceData;
@@ -45,7 +48,7 @@ public class ArrowDefence extends Defence {
                                 Entity projectile = world.spawnEntity(defenceLocation.add(direction.multiply(0.5)), EntityType.ARROW);
                                 applyPDC(projectile);
 
-                                projectile.setVelocity(direction.multiply(0.5));
+                                projectile.setVelocity(direction.multiply(3));
                             }
                         });
                     }

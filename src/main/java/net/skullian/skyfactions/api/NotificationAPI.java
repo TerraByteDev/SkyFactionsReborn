@@ -22,7 +22,7 @@ public class NotificationAPI {
     public static Map<UUID, BukkitTask> tasks = new HashMap<>();
 
     public static void createCycle(Player player) {
-        FactionAPI.getFaction(player).whenComplete((faction, ex) -> {
+        FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;

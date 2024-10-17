@@ -46,7 +46,7 @@ public class FactionInfoCommand extends CommandTemplate {
                     Messages.NOT_IN_FACTION.send(player);
                 } else {
 
-                    FactionAPI.getFaction(player).whenComplete((faction, throwable) -> {
+                    FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
                         if (throwable != null) {
                             ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                             return;

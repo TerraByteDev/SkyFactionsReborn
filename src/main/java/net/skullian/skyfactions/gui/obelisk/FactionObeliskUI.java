@@ -46,7 +46,7 @@ public class FactionObeliskUI {
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
             List<ItemData> data = GUIAPI.getItemData("obelisk/faction_obelisk", player);
-            FactionAPI.getFaction(player).whenComplete((faction, exc) -> {
+            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
                 if (exc != null) {
                     ErrorHandler.handleError(player, "open your obelisk", "GUI_LOAD_EXCEPTION", exc);
                     return;

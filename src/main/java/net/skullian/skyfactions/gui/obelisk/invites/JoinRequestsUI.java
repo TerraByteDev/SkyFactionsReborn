@@ -99,7 +99,7 @@ public class JoinRequestsUI {
 
     private static List<Item> getItems(Player player, ItemData itemData) {
         List<Item> items = new ArrayList<>();
-        FactionAPI.getFaction(player).whenComplete((faction, exc) -> {
+        FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
             if (exc != null) {
                 ErrorHandler.handleError(player, "open the faction join requests GUI", "FACTION_NOT_FOUND", exc);
                 return;

@@ -41,7 +41,7 @@ public class ObeliskRuneItem extends AsyncItem {
                             if (type.equals("player")) {
                                 runes = RunesAPI.getRunes(player.getUniqueId()).join();
                             } else if (type.equals("faction")) {
-                                Faction faction = FactionAPI.getFaction(player).join();
+                                Faction faction = FactionAPI.getFaction(player.getUniqueId()).join();
                                 if (faction != null) {
                                     runes = faction.getRunes();
                                 }

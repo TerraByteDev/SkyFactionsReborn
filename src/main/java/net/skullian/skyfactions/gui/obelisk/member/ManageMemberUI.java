@@ -44,7 +44,7 @@ public class ManageMemberUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, OfflinePlayer player, Player actor) {
         try {
-            FactionAPI.getFaction(actor).whenComplete((faction, exc) -> {
+            FactionAPI.getFaction(actor.getUniqueId()).whenComplete((faction, exc) -> {
                 if (exc != null) {
                     ErrorHandler.handleError(actor, "manage a member", "GUI_LOAD_EXCEPTION", exc);
                     return;

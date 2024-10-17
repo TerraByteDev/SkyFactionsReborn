@@ -100,7 +100,7 @@ public class FactionAuditLogUI {
         List<Item> items = new ArrayList<>();
 
         CompletableFuture.runAsync(() -> {
-            Faction faction = FactionAPI.getFaction(player).join();
+            Faction faction = FactionAPI.getFaction(player.getUniqueId()).join();
             List<AuditLogData> auditLogData = faction.getAuditLogs().join();
 
             for (AuditLogData auditLog : auditLogData) {

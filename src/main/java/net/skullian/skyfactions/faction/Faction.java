@@ -380,6 +380,17 @@ public class Faction {
         );
     }
 
+    public String getRank(UUID playerUUID) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
+        if (owner.equals(player)) return TextUtility.color(Messages.FACTION_OWNER_TITLE.getString());
+        if (admins.contains(player)) return TextUtility.color(Messages.FACTION_ADMIN_TITLE.getString());
+        if (moderators.contains(player)) return TextUtility.color(Messages.FACTION_MODERATOR_TITLE.getString());
+        if (fighters.contains(player)) return TextUtility.color(Messages.FACTION_FIGHTER_TITLE.getString());
+        if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString());
+
+        return "UNKNOWN";
+    }
+
     private void cache(OfflinePlayer player, String oldRank, RankType newType) {
         switch (oldRank) {
             case "admin":

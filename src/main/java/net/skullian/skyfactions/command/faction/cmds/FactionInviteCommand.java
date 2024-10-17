@@ -38,7 +38,7 @@ public class FactionInviteCommand extends CommandTemplate {
             Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
         } else if (args.length > 1) {
             String name = args[1];
-            FactionAPI.getFaction(player).whenComplete((faction, ex) -> {
+            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                     return;

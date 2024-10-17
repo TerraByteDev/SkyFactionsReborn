@@ -111,19 +111,19 @@ public class FactionAPI {
     /**
      * Get the faction from a player.
      *
-     * @param player Member of faction (Owner, Moderator, whatever).
+     * @param playerUUID UUID of member of faction (Owner, Moderator, whatever).
      * @return {@link Faction}
      */
-    public static CompletableFuture<Faction> getFaction(Player player) {
-        if (factionCache.containsKey(player.getUniqueId()))
-            return CompletableFuture.completedFuture(factionCache.get(player.getUniqueId()));
+    public static CompletableFuture<Faction> getFaction(UUID playerUUID) {
+        if (factionCache.containsKey(playerUUID))
+            return CompletableFuture.completedFuture(factionCache.get(playerUUID));
 
 
-        return SkyFactionsReborn.databaseHandler.getFaction(player).whenComplete((faction, ex) -> {
+        return SkyFactionsReborn.databaseHandler.getFaction(playerUUID).whenComplete((faction, ex) -> {
             if (ex != null) ex.printStackTrace();
             if (faction == null) return;
 
-            factionCache.put(player.getUniqueId(), faction);
+            factionCache.put(playerUUID, faction);
             factionNameCache.put(faction.getName(), faction);
         });
     }

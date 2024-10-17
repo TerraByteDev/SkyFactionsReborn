@@ -18,6 +18,8 @@ import me.tofaa.entitylib.meta.display.TextDisplayMeta;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -36,17 +38,14 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class TextHologram {
 
-    @Getter
-    @Accessors(chain = true)
+    @Getter @Accessors(chain = true)
     private long updateTaskPeriod = 20L * 3;
-    @Getter
-    @Accessors(chain = true)
+    @Getter @Accessors(chain = true)
     private double nearbyEntityScanningDistance = 40.0;
     @Getter
     private final String id;
 
-    @Getter
-    @Accessors(chain = true)
+    @Getter @Accessors(chain = true)
     private int entityID;
 
     protected Component text = Component.text("Hologram API");
@@ -56,53 +55,34 @@ public class TextHologram {
     protected Quaternion4f rightRotation = new Quaternion4f(0, 0, 0, 1);
     protected Quaternion4f leftRotation = new Quaternion4f(0, 0, 0, 1);
 
-    @Setter
-    @Getter
-    @Accessors(chain = true)
+    @Getter @Setter
+    private String owner;
+
+    @Setter @Getter @Accessors(chain = true)
     private Display.Billboard billboard = Display.Billboard.CENTER;
-    @Setter
-    @Getter
-    @Accessors(chain = true)
+    @Setter @Getter @Accessors(chain = true)
     private int interpolationDurationRotation = 10;
-    @Setter
-    @Getter
-    @Accessors(chain = true)
+    @Setter @Getter @Accessors(chain = true)
     private int interpolationDurationTransformation = 10;
-    @Setter
-    @Getter
-    @Accessors(chain = true)
+    @Setter @Getter @Accessors(chain = true)
     private double viewRange = 1.0;
-    @Setter
-    @Getter
-    @Accessors(chain = true)
+    @Setter @Getter @Accessors(chain = true)
     private boolean shadow = true;
-    @Setter
-    @Getter
-    @Accessors(chain = true)
+    @Setter @Getter @Accessors(chain = true)
     private int maxLineWidth = 200;
-    @Setter
-    @Getter
-    @Accessors(chain = true)
+    @Setter @Getter @Accessors(chain = true)
     private int backgroundColor;
-    @Setter
-    @Getter
-    @Accessors(chain = true)
+    @Setter @Getter @Accessors(chain = true)
     private boolean seeThroughBlocks = false;
-    @Setter
-    @Getter
-    @Accessors(chain = true)
+    @Setter @Getter @Accessors(chain = true)
     private TextDisplay.TextAlignment alignment = TextDisplay.TextAlignment.CENTER;
-    @Setter
-    @Getter
-    @Accessors(chain = true)
+    @Setter @Getter @Accessors(chain = true)
     private byte textOpacity = (byte) -1;
 
-    @Getter
-    @Accessors(chain = true)
+    @Getter @Accessors(chain = true)
     private final RenderMode renderMode;
 
-    @Getter
-    @Accessors(chain = true)
+    @Getter @Accessors(chain = true)
     private Location location;
 
     @Getter
@@ -114,15 +94,16 @@ public class TextHologram {
     @Getter
     private BukkitTask task;
 
-    public TextHologram(String id, RenderMode renderMode) {
+    public TextHologram(String id, RenderMode renderMode, String owner) {
         this.renderMode = renderMode;
         validateId(id);
         this.id = id.toLowerCase();
+        this.owner = owner;
         startRunnable();
     }
 
-    public TextHologram(String id) {
-        this(id, RenderMode.NEARBY);
+    public TextHologram(String id, String owner) {
+        this(id, RenderMode.NEARBY, owner);
     }
 
     private void validateId(String id) {
@@ -283,7 +264,7 @@ public class TextHologram {
     }
 
     public TextHologram setText(String text) {
-        this.text = Component.text(text);
+        this.text = Component.text(TextUtility.color(text));
         return this;
     }
 
@@ -294,7 +275,7 @@ public class TextHologram {
 
     private void updateAffectedPlayers() {
         viewers.stream()
-                .filter(player -> player.isOnline() && (player.getWorld() != this.location.getWorld() || player.getLocation().distance(this.location) > 20))
+                .filter(player -> player.isOnline() && (player.getWorld() != this.location.getWorld() || player.getLocation().distance(this.location) > (isFaction() ? Settings.GEN_FACTION_REGION_SIZE.getInt() : Settings.GEN_PLAYER_REGION_SIZE.getInt())))
                 .forEach(player -> {
                     WrapperPlayServerDestroyEntities packet = new WrapperPlayServerDestroyEntities(this.entityID);
                     PacketEvents.getAPI().getPlayerManager().sendPacket(player, packet);
@@ -316,6 +297,16 @@ public class TextHologram {
         if (this.renderMode == RenderMode.NONE) return;
         viewers.forEach(player -> PacketEvents.getAPI().getPlayerManager().sendPacket(player, packet));
     }
+
+    private boolean isFaction() {
+        try {
+            UUID.fromString(this.owner);
+            return false; // is player uuid
+        } catch (Exception ignored) {
+            return true; // is false
+        }
+    }
+
 
     public enum RenderMode {
         NONE,

@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.defence;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.SkyFactionsReborn;
@@ -12,10 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -32,7 +30,7 @@ public abstract class Defence {
     private DefenceData data;
     private DefenceStruct struct;
     private int task = -1;
-    private List<String> targetedEntities;
+    private List<LivingEntity> targetedEntities = new ArrayList<>();
 
     public Defence(DefenceData defenceData, DefenceStruct defenceStruct) {
         this.data = defenceData;
@@ -46,12 +44,22 @@ public abstract class Defence {
     }
 
     public int getRadius() {
-        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getDISTANCE(), this.data.getLEVEL());
+        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getRANGE(), this.data.getLEVEL());
         return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
     }
 
     public int getDamage() {
         String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getDAMAGE(), this.data.getLEVEL());
+        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+    }
+
+    public int getDistance() { // for springs
+        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getDISTANCE(), this.data.getLEVEL());
+        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+    }
+
+    public int getHealing() { // for healing defences
+        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getHEALING(), this.data.getLEVEL());
         return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
     }
 
@@ -97,27 +105,40 @@ public abstract class Defence {
     }
 
     public CompletableFuture<List<LivingEntity>> getRandomEntity(World defenceWorld) {
+        if (targetedEntities.size() == getMaxSimEntities()) return CompletableFuture.completedFuture(targetedEntities);
+
         Location location = new Location(defenceWorld, data.getX(), data.getY(), data.getZ());
         int radius = getRadius();
+
         Collection<LivingEntity> nearbyEntities = defenceWorld.getNearbyLivingEntities(location, radius, radius, radius);
         List<LivingEntity> filteredEntities = new ArrayList<>();
+        targetedEntities.removeIf(currentlyTargeted -> !nearbyEntities.contains(currentlyTargeted));
+
         for (LivingEntity entity : nearbyEntities) {
-            if (struct.getENTITY_CONFIG().isIS_WHITELIST() && struct.getENTITY_CONFIG().getENTITY_LIST().contains(entity.getType().name())) {
+            if (entity.isInvisible()) continue;
+            if (entity instanceof Player) continue; // TODO: check if raid is ongoing, if so target them
+
+            if (struct.getENTITY_CONFIG().isIS_WHITELIST() && struct.getENTITY_CONFIG().getENTITY_LIST().contains(entity.getType().name()) && !filteredEntities.contains(entity)) {
                 filteredEntities.add(entity);
-            } else if (!struct.getENTITY_CONFIG().isIS_WHITELIST() && !struct.getENTITY_CONFIG().getENTITY_LIST().contains(entity.getType().name())) {
+            } else if (!struct.getENTITY_CONFIG().isIS_WHITELIST() && !struct.getENTITY_CONFIG().getENTITY_LIST().contains(entity.getType().name()) && !filteredEntities.contains(entity)) {
                 filteredEntities.add(entity);
             }
         }
 
         List<LivingEntity> chosenEntities = new ArrayList<>();
         if (!filteredEntities.isEmpty()) {
-            for (int i = 0; i < getMaxSimEntities(); i++) {
+            for (int i = 0; i < (getMaxSimEntities() - targetedEntities.size()); i++) {
                 ThreadLocalRandom random = ThreadLocalRandom.current();
                 chosenEntities.add(filteredEntities.get(random.nextInt(filteredEntities.size())));
             }
         }
 
+        chosenEntities.addAll(targetedEntities);
         return CompletableFuture.completedFuture(chosenEntities);
+    }
+
+    public void removeDeadEntity(LivingEntity entity) {
+        targetedEntities.remove(entity);
     }
 
     public void onLoad(String playerUUIDorFactionName) {
@@ -157,14 +178,14 @@ public abstract class Defence {
     public void createHologram(Location location, DefenceStruct defence, String playerUUIDorFactionName) {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
 
-        TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ())
+        TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName())
                 .setText(TextUtility.color(text.replace("%defence_name%", defence.getNAME())))
-                .setSeeThroughBlocks(true)
                 .setBillboard(Display.Billboard.VERTICAL)
+                .setSeeThroughBlocks(false)
                 .setShadow(true)
                 .setScale(1.0F, 1.0F, 1.0F);
 
-        hologram.spawn(location.add(0, 1, 0));
+        hologram.spawn(location.add(0.5, -0.2, 0.5));
         DefenceHandler.hologramsMap.put(hologram.getId(), hologram);
     }
 

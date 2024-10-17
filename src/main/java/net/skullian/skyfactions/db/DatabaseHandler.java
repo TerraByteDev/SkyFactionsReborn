@@ -1134,12 +1134,12 @@ public class DatabaseHandler {
         });
     }
 
-    public CompletableFuture<Faction> getFaction(Player player) {
+    public CompletableFuture<Faction> getFaction(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement memberStatement = connection.prepareStatement("SELECT * FROM factionMembers WHERE uuid = ?")) {
 
-                memberStatement.setString(1, player.getUniqueId().toString());
+                memberStatement.setString(1, playerUUID.toString());
 
                 ResultSet set = memberStatement.executeQuery();
 

@@ -28,7 +28,7 @@ public class ObeliskFactionOverviewItem extends AsyncItem {
                     return new ItemProvider() {
                         @Override
                         public @NotNull ItemStack get(@Nullable String s) {
-                            Faction faction = FactionAPI.getFaction(player).join();
+                            Faction faction = FactionAPI.getFaction(player.getUniqueId()).join();
                             ItemBuilder builder = new ItemBuilder(stack)
                                     .setDisplayName(TextUtility.color(data.getNAME().replace("%faction_name%", faction.getName())));
 

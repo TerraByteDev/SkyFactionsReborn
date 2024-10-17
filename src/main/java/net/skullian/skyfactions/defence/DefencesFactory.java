@@ -9,6 +9,7 @@ import net.skullian.skyfactions.config.ConfigHandler;
 import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.defence.defences.ArrowDefence;
 import net.skullian.skyfactions.defence.struct.DefenceAttributeStruct;
 import net.skullian.skyfactions.defence.struct.DefenceEffectStruct;
 import net.skullian.skyfactions.defence.struct.DefenceEntityStruct;
@@ -44,7 +45,9 @@ import java.util.stream.Stream;
 public class DefencesFactory {
 
     public static final Map<String, DefenceStruct> defences = new HashMap<>();
-    public static final Map<String, Class<? extends Defence>> defenceTypes = new HashMap<>();
+    public static final Map<String, String> defenceTypes = new HashMap<>();
+
+    public static final List<String> cachedMaterials = new ArrayList<>();
 
     public static void registerDefaultDefences() {
         try {
@@ -74,6 +77,8 @@ public class DefencesFactory {
 
     public static void register() {
         try {
+            defenceTypes.put("ARROW", "net.skullian.skyfactions.defence.defences.ArrowDefence");
+
             File dir = new File(SkyFactionsReborn.getInstance().getDataFolder() + "/defences");
             for (File defenceFile : Objects.requireNonNull(dir.listFiles())) {
                 String fullPathName = defenceFile.getName();
@@ -143,6 +148,7 @@ public class DefencesFactory {
 
         DefenceEntityStruct ENTITY_DATA = getEntityConfiguration(config);
 
+        cachedMaterials.add(ITEM_MATERIAL);
         return new DefenceStruct(fileName, COLOR_NAME, TYPE, IDENTIFIER, BUY_COST, SELL_COST, AMMO_COST, MAX_LEVEL,
                 PLACE_SOUND, PLACE_PITCH, BREAK_SOUND, BREAK_PITCH, ACTIVATE_SOUND, ACTIVATE_PITCH, EFFECTS, DEATH_MESSAGES, EFFECT_MESSAGES,
                 ATTRIBUTES, EXPERIENCE_DROPS, PROJECTILE, BLOCK_MATERIAL, BLOCK_SKULL, ITEM_MATERIAL, ITEM_SKULL, ITEM_LORE, UPGRADE_LORE,

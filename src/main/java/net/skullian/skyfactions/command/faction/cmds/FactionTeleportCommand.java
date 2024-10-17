@@ -31,7 +31,7 @@ public class FactionTeleportCommand extends CommandTemplate {
         if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
         if (CooldownHandler.manageCooldown(player)) return;
 
-        FactionAPI.getFaction(player).whenComplete((faction, ex) -> {
+        FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;

@@ -63,7 +63,7 @@ public class OutgoingInvitePaginationItem extends AbstractItem {
         if (clickType.isRightClick()) {
             event.getInventory().close();
 
-            FactionAPI.getFaction(player).whenComplete((faction, ex) -> {
+            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
                 if (faction == null) {
                     Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
                     return;

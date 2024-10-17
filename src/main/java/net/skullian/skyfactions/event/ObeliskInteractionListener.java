@@ -46,7 +46,6 @@ public class ObeliskInteractionListener implements Listener {
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
         for (Block block : event.blockList()) {
-            System.out.println(block.getType());
             if (!block.getType().equals(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString())) && !block.getType().equals(Material.BARRIER))
                 continue;
 
@@ -117,7 +116,7 @@ public class ObeliskInteractionListener implements Listener {
 
             return CompletableFuture.completedFuture(false);
         } else if (type.equals("faction")) {
-            return FactionAPI.getFaction(player).thenApply(faction -> {
+            return FactionAPI.getFaction(player.getUniqueId()).thenApply(faction -> {
                 if (faction == null) {
                     return false;
                 }

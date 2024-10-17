@@ -27,7 +27,7 @@ public class NotificationTask {
                 });
 
                 if (isInFaction) {
-                    FactionAPI.getFaction(player).thenAccept((faction) -> {
+                    FactionAPI.getFaction(player.getUniqueId()).thenAccept((faction) -> {
                         if (faction == null) return;
                         if (NotificationAPI.factionInviteStore.containsKey(faction.getName())) {
                             int factionJoinRequestCount = NotificationAPI.factionInviteStore.get(faction.getName());

@@ -33,7 +33,7 @@ public class FactionMOTDCommand extends CommandTemplate {
         if (CooldownHandler.manageCooldown(player)) return;
 
         if (args.length > 1) {
-            FactionAPI.getFaction(player).whenComplete((faction, ex) -> {
+            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 }
