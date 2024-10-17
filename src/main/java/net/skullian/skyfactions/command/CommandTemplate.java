@@ -6,10 +6,6 @@ import java.util.List;
 
 public abstract class CommandTemplate {
 
-    public CommandTemplate() {
-
-    }
-
     public abstract String getName();
 
     public abstract String getDescription();
