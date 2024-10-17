@@ -2,8 +2,8 @@ package net.skullian.skyfactions.command.island.cmds;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CooldownHandler;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -29,8 +29,8 @@ public class IslandUntrustCommand extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
-        if (CooldownHandler.manageCooldown(player)) return;
+        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        if (CommandsUtility.manageCooldown(player)) return;
 
         if (args.length > 1) {
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);

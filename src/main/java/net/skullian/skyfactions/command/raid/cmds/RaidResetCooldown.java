@@ -2,8 +2,8 @@ package net.skullian.skyfactions.command.raid.cmds;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CooldownHandler;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.CommandsUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -27,8 +27,8 @@ public class RaidResetCooldown extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
-        if (CooldownHandler.manageCooldown(player)) return;
+        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        if (CommandsUtility.manageCooldown(player)) return;
         
         SkyFactionsReborn.databaseHandler.updateLastRaid(player, 0).thenAccept(result -> {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aSuccessfully reset your raid cooldown."));

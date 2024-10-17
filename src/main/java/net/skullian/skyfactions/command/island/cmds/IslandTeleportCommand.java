@@ -3,8 +3,8 @@ package net.skullian.skyfactions.command.island.cmds;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CooldownHandler;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import org.bukkit.Bukkit;
@@ -31,8 +31,8 @@ public class IslandTeleportCommand extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
-        if (CooldownHandler.manageCooldown(player)) return;
+        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        if (CommandsUtility.manageCooldown(player)) return;
 
         SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).thenAccept(island -> {
             if (island == null) {

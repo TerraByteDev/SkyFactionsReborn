@@ -3,8 +3,8 @@ package net.skullian.skyfactions.command.faction.cmds;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CooldownHandler;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.util.ErrorHandler;
@@ -30,8 +30,8 @@ public class FactionCreateCommand extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
-        if (CooldownHandler.manageCooldown(player)) return;
+        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        if (CommandsUtility.manageCooldown(player)) return;
 
         if (args.length == 1) {
             Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());

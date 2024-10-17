@@ -194,6 +194,9 @@ Messages:
     INSUFFICIENT_GEM_COUNT: "%server_name%&c&lHey!&r&7 You do not have enough gems for that!"
 
   Factions:
+    # Sent when a player donates some of their gems to their Faction.
+    # Placeholders: %amount% - Amount of gems donated.
+    GEMS_DONATION_SUCCESS: "%server_name%&a Successfully donated&r&e %amount%&r&a Gems to your Faction!"
 
     # Sent when a player tries to create, join a faction (etc.) when they are already in one.
     ALREADY_IN_FACTION: "%server_name%&c&l Hey!&r&7 You are already in a faction!"

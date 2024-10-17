@@ -2,8 +2,8 @@ package net.skullian.skyfactions.command.discord;
 
 import net.dv8tion.jda.api.entities.User;
 import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.command.CooldownHandler;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.command.Command;
@@ -19,9 +19,9 @@ public class LinkCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
 
         if (commandSender instanceof Player player) {
-            if (!PermissionsHandler.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true))
+            if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true))
                 return true;
-            if (CooldownHandler.manageCooldown(player)) return true;
+            if (CommandsUtility.manageCooldown(player)) return true;
 
             SkyFactionsReborn.databaseHandler.getDiscordLink(player).whenComplete((id, ex) -> {
                 if (ex != null) {

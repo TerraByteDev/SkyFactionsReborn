@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.command.runes;
 
 import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.runes.subcommands.RunesBalanceCommand;
 import net.skullian.skyfactions.command.runes.subcommands.RunesGiveCommand;
 import net.skullian.skyfactions.command.runes.subcommands.RunesHelpCommand;
@@ -29,13 +29,13 @@ public class RunesCommandTabCompletion implements TabCompleter {
             String arg = args[0].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (PermissionsHandler.hasPerm((Player) sender, RunesHelpCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, RunesHelpCommand.permissions, false)) {
                 completions.add("help");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, RunesBalanceCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, RunesBalanceCommand.permissions, false)) {
                 completions.add("balance");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, RunesGiveCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, RunesGiveCommand.permissions, false)) {
                 completions.add("give");
             }
 
@@ -45,7 +45,7 @@ public class RunesCommandTabCompletion implements TabCompleter {
             String arg = args[1].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (PermissionsHandler.hasPerm((Player) sender, RunesGiveCommand.permissions, false) && subcmd.equals("give")) {
+            if (CommandsUtility.hasPerm((Player) sender, RunesGiveCommand.permissions, false) && subcmd.equals("give")) {
                 completions.add("faction");
                 completions.add("player");
             }
@@ -57,7 +57,7 @@ public class RunesCommandTabCompletion implements TabCompleter {
             String arg = args[2].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (PermissionsHandler.hasPerm((Player) sender, RunesGiveCommand.permissions, false) && subcmd.equals("give")) {
+            if (CommandsUtility.hasPerm((Player) sender, RunesGiveCommand.permissions, false) && subcmd.equals("give")) {
                 if (type.equalsIgnoreCase("faction")) {
                     completions.addAll(FactionAPI.factionNameCache.keySet());
                 } else if (type.equalsIgnoreCase("player")) {

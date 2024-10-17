@@ -1,8 +1,8 @@
 package net.skullian.skyfactions.command.sf.cmds;
 
 import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CooldownHandler;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.sf.SFCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import org.bukkit.entity.Player;
@@ -27,15 +27,15 @@ public class SFHelpCommand extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
-        if (CooldownHandler.manageCooldown(player)) return;
+        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        if (CommandsUtility.manageCooldown(player)) return;
 
         Messages.COMMAND_HEAD.send(player);
         if (SFCommandHandler.getSubCommands().size() <= 0) {
             Messages.NO_COMMANDS_FOUND.send(player);
         }
         for (int i = 0; i < SFCommandHandler.getSubCommands().size(); i++) {
-            if (!PermissionsHandler.hasPerm(player, SFCommandHandler.getSubCommands().get(i).permission(), false))
+            if (!CommandsUtility.hasPerm(player, SFCommandHandler.getSubCommands().get(i).permission(), false))
                 continue;
             Messages.COMMAND_INFO.send(player, "%command_syntax%", SFCommandHandler.getSubCommands().get(i).getSyntax(), "%command_name%", SFCommandHandler.getSubCommands().get(i).getName(), "%command_description%", SFCommandHandler.getSubCommands().get(i).getDescription());
         }

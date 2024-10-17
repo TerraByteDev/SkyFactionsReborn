@@ -2,8 +2,8 @@ package net.skullian.skyfactions.command.faction.cmds;
 
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CooldownHandler;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.entity.Player;
@@ -28,8 +28,8 @@ public class FactionTeleportCommand extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
-        if (CooldownHandler.manageCooldown(player)) return;
+        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        if (CommandsUtility.manageCooldown(player)) return;
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {

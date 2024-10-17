@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.command.island;
 
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.island.cmds.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -27,25 +27,25 @@ public class IslandCommandTabCompletion implements TabCompleter {
             List<String> completions = new ArrayList<>();
 
 
-            if (PermissionsHandler.hasPerm((Player) sender, IslandHelpCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, IslandHelpCommand.permissions, false)) {
                 completions.add("help");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, IslandCreateCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, IslandCreateCommand.permissions, false)) {
                 completions.add("create");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, IslandTeleportCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, IslandTeleportCommand.permissions, false)) {
                 completions.add("teleport");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, IslandDeleteCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, IslandDeleteCommand.permissions, false)) {
                 completions.add("delete");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, IslandTrustCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, IslandTrustCommand.permissions, false)) {
                 completions.add("trust");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, IslandUntrustCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, IslandUntrustCommand.permissions, false)) {
                 completions.add("untrust");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, IslandVisitCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, IslandVisitCommand.permissions, false)) {
                 completions.add("visit");
             }
 
@@ -55,20 +55,20 @@ public class IslandCommandTabCompletion implements TabCompleter {
             String arg = args[1].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (subcmd.equals("delete") && PermissionsHandler.hasPerm((Player) sender, IslandDeleteCommand.permissions, false)) {
+            if (subcmd.equals("delete") && CommandsUtility.hasPerm((Player) sender, IslandDeleteCommand.permissions, false)) {
                 completions.add("confirm");
             }
-            if (subcmd.equals("trust") && PermissionsHandler.hasPerm((Player) sender, IslandTrustCommand.permissions, false)) {
+            if (subcmd.equals("trust") && CommandsUtility.hasPerm((Player) sender, IslandTrustCommand.permissions, false)) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     completions.add(player.getName());
                 }
             }
-            if (subcmd.equals("untrust") && PermissionsHandler.hasPerm((Player) sender, IslandUntrustCommand.permissions, false)) {
+            if (subcmd.equals("untrust") && CommandsUtility.hasPerm((Player) sender, IslandUntrustCommand.permissions, false)) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     completions.add(player.getName());
                 }
             }
-            if (subcmd.equals("visit") && PermissionsHandler.hasPerm((Player) sender, IslandVisitCommand.permissions, false)) {
+            if (subcmd.equals("visit") && CommandsUtility.hasPerm((Player) sender, IslandVisitCommand.permissions, false)) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     completions.add(player.getName());
                 }

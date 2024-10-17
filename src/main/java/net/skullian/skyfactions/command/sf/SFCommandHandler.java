@@ -1,8 +1,8 @@
 package net.skullian.skyfactions.command.sf;
 
 import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CooldownHandler;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.sf.cmds.SFHelpCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFInfoCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFReloadCommand;
@@ -36,7 +36,7 @@ public class SFCommandHandler implements CommandExecutor {
                     }
                 }
             } else if (strings.length == 0) {
-                if (CooldownHandler.manageCooldown(player)) return true;
+                if (CommandsUtility.manageCooldown(player)) return true;
                 if (!player.hasPermission("skyfactions.sf.help")) {
                     Messages.PERMISSION_DENY.send(player);
                     return true;
@@ -47,7 +47,7 @@ public class SFCommandHandler implements CommandExecutor {
                     Messages.NO_COMMANDS_FOUND.send(player);
                 }
                 for (int i = 0; i < getSubCommands().size(); i++) {
-                    if (!PermissionsHandler.hasPerm(player, getSubCommands().get(i).permission(), false)) continue;
+                    if (!CommandsUtility.hasPerm(player, getSubCommands().get(i).permission(), false)) continue;
                     Messages.COMMAND_INFO.send(player, "%command_syntax%", getSubCommands().get(i).getSyntax(), "%command_name%", getSubCommands().get(i).getName(), "%command_description%", getSubCommands().get(i).getDescription());
                 }
                 Messages.COMMAND_HEAD.send(player);

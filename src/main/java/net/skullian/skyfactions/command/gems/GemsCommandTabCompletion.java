@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.command.gems;
 
 import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.gems.cmds.GemsBalanceCommand;
 import net.skullian.skyfactions.command.gems.cmds.GemsGiveCommand;
 import net.skullian.skyfactions.command.gems.cmds.GemsHelpCommand;
@@ -30,16 +30,16 @@ public class GemsCommandTabCompletion implements TabCompleter {
             String arg = args[0].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (PermissionsHandler.hasPerm((Player) sender, GemsHelpCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, GemsHelpCommand.permissions, false)) {
                 completions.add("help");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, GemsPayCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, GemsPayCommand.permissions, false)) {
                 completions.add("pay");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, GemsBalanceCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, GemsBalanceCommand.permissions, false)) {
                 completions.add("balance");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, GemsGiveCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, GemsGiveCommand.permissions, false)) {
                 completions.add("give");
             }
 
@@ -49,12 +49,12 @@ public class GemsCommandTabCompletion implements TabCompleter {
             String arg = args[1].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (PermissionsHandler.hasPerm((Player) sender, GemsPayCommand.permissions, false) && subcmd.equals("pay")) {
+            if (CommandsUtility.hasPerm((Player) sender, GemsPayCommand.permissions, false) && subcmd.equals("pay")) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     completions.add(player.getName());
                 }
             }
-            if (PermissionsHandler.hasPerm((Player) sender, GemsGiveCommand.permissions, false) && subcmd.equals("give")) {
+            if (CommandsUtility.hasPerm((Player) sender, GemsGiveCommand.permissions, false) && subcmd.equals("give")) {
                 completions.add("faction");
                 completions.add("player");
             }
@@ -66,7 +66,7 @@ public class GemsCommandTabCompletion implements TabCompleter {
             String arg = args[2].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (PermissionsHandler.hasPerm((Player) sender, GemsGiveCommand.permissions, false) && subcmd.equals("give")) {
+            if (CommandsUtility.hasPerm((Player) sender, GemsGiveCommand.permissions, false) && subcmd.equals("give")) {
                 if (type.equalsIgnoreCase("faction")) {
                     completions.addAll(FactionAPI.factionNameCache.keySet());
                 } else if (type.equalsIgnoreCase("player")) {

@@ -1,8 +1,8 @@
 package net.skullian.skyfactions.command.raid.cmds;
 
 import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CooldownHandler;
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.raid.RaidCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import org.bukkit.entity.Player;
@@ -27,15 +27,15 @@ public class RaidHelpCommand extends CommandTemplate {
 
     @Override
     public void perform(Player player, String[] args) {
-        if (!PermissionsHandler.hasPerm(player, permission(), true)) return;
-        if (CooldownHandler.manageCooldown(player)) return;
+        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        if (CommandsUtility.manageCooldown(player)) return;
 
         Messages.COMMAND_HEAD.send(player);
         if (RaidCommandHandler.getSubCommands().size() <= 0) {
             Messages.NO_COMMANDS_FOUND.send(player);
         }
         for (int i = 0; i < RaidCommandHandler.getSubCommands().size(); i++) {
-            if (!PermissionsHandler.hasPerm(player, RaidCommandHandler.getSubCommands().get(i).permission(), false))
+            if (!CommandsUtility.hasPerm(player, RaidCommandHandler.getSubCommands().get(i).permission(), false))
                 continue;
             Messages.COMMAND_INFO.send(player, "%command_syntax%", RaidCommandHandler.getSubCommands().get(i).getSyntax(), "%command_name%", RaidCommandHandler.getSubCommands().get(i).getName(), "%command_description%", RaidCommandHandler.getSubCommands().get(i).getDescription());
         }

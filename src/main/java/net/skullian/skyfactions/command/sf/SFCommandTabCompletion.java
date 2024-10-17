@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.command.sf;
 
-import net.skullian.skyfactions.command.PermissionsHandler;
+import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.sf.cmds.SFHelpCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFInfoCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFReloadCommand;
@@ -28,13 +28,13 @@ public class SFCommandTabCompletion implements TabCompleter {
             String arg = args[0].toLowerCase(Locale.ROOT);
             List<String> completions = new ArrayList<>();
 
-            if (PermissionsHandler.hasPerm((Player) sender, SFHelpCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, SFHelpCommand.permissions, false)) {
                 completions.add("help");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, SFReloadCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, SFReloadCommand.permissions, false)) {
                 completions.add("reload");
             }
-            if (PermissionsHandler.hasPerm((Player) sender, SFInfoCommand.permissions, false)) {
+            if (CommandsUtility.hasPerm((Player) sender, SFInfoCommand.permissions, false)) {
                 completions.add("info");
             }
 

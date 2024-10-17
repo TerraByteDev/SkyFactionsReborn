@@ -3,12 +3,9 @@ package net.skullian.skyfactions.command;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import org.bukkit.entity.Player;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-public class CooldownHandler {
+public class CommandsUtility {
 
     private static Map<UUID, Long> cooldowns = new HashMap<>();
 
@@ -29,6 +26,17 @@ public class CooldownHandler {
             }
         }
         cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
+        return false;
+    }
+
+    public static boolean hasPerm(Player player, List<String> node, boolean sendDeny) {
+        for (String perm : node) {
+            if (player.hasPermission(perm)) return true;
+        }
+
+        if (sendDeny) {
+            Messages.PERMISSION_DENY.send(player);
+        }
         return false;
     }
 }
