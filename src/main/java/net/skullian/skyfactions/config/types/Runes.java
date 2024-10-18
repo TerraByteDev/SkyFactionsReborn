@@ -1,9 +1,9 @@
 package net.skullian.skyfactions.config.types;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +23,7 @@ public enum Runes {
     RUNE_OVERRIDES("OVERRIDES");
 
     @Setter
-    private static FileConfiguration config;
+    private static YamlDocument config;
     private final String path;
 
     Runes(String path) {
@@ -35,7 +35,7 @@ public enum Runes {
     }
 
     public List<Integer> getIntegerList() {
-        return config.getIntegerList(this.path);
+        return config.getIntList(this.path);
     }
 
     public String getString() {
@@ -52,10 +52,10 @@ public enum Runes {
 
     public Map<String, Integer> getMap() {
         Map<String, Integer> map = new HashMap<>();
-        if (config.isSet(this.path)) {
-            ConfigurationSection section = config.getConfigurationSection(this.path);
+        if (config.isSection(this.path)) {
+            Section section = config.getSection(this.path);
 
-            for (String key : section.getKeys(false)) {
+            for (String key : section.getRoutesAsStrings(false)) {
                 int count = section.getInt(key);
                 map.put(key, count);
             }

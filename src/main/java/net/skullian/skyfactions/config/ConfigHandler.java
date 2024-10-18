@@ -1,9 +1,16 @@
 package net.skullian.skyfactions.config;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.dvs.versioning.AutomaticVersioning;
+import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
+import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
+import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
+import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import lombok.Getter;
+import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,23 +25,17 @@ public class ConfigHandler {
     private final File file;
 
     @Getter
-    private FileConfiguration config;
+    private YamlDocument config;
 
     public ConfigHandler(JavaPlugin plugin, String name) {
         this.plugin = plugin;
         this.name = name + ".yml";
         this.file = new File(plugin.getDataFolder(), this.name);
-        this.config = new YamlConfiguration();
-    }
-
-    public void saveDefaultConfig() {
-        if (!file.exists()) {
-            plugin.saveResource(name, false);
-        }
 
         try {
-            config.load(file);
-        } catch (InvalidConfigurationException | IOException error) {
+            this.config = YamlDocument.create(this.file, SkyFactionsReborn.getInstance().getResource(this.name),
+                    GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+        } catch (IOException error) {
             SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
             SLogger.fatal("There was an error loading config {}", name);
             SLogger.fatal("Please check that config for any configuration mistakes.");
@@ -55,7 +56,15 @@ public class ConfigHandler {
     }
 
     public void reload() {
-        config = YamlConfiguration.loadConfiguration(file);
+        try {
+            config.reload();
+        } catch (IOException error) {
+            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+            SLogger.fatal("There was an error reloading config {}", name);
+            SLogger.fatal("Please see the below error.");
+            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+            error.printStackTrace();
+        }
     }
 
 }

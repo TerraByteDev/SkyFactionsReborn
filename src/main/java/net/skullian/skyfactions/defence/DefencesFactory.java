@@ -1,5 +1,12 @@
 package net.skullian.skyfactions.defence;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
+import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
+import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
+import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
+import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.skullian.skyfactions.SkyFactionsReborn;
@@ -9,7 +16,6 @@ import net.skullian.skyfactions.config.ConfigHandler;
 import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.defence.defences.ArrowDefence;
 import net.skullian.skyfactions.defence.struct.DefenceAttributeStruct;
 import net.skullian.skyfactions.defence.struct.DefenceEffectStruct;
 import net.skullian.skyfactions.defence.struct.DefenceEntityStruct;
@@ -22,10 +28,6 @@ import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -60,8 +62,7 @@ public class DefencesFactory {
                     String fullPathName = path.getFileName().toString();
                     String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
 
-                    ConfigHandler handler = new ConfigHandler(SkyFactionsReborn.getInstance(), "defences/" + defenceName);
-                    handler.saveDefaultConfig();
+                    new ConfigHandler(SkyFactionsReborn.getInstance(), "defences/" + defenceName);
                 });
             }
         } catch (URISyntaxException | IOException error) {
@@ -85,12 +86,13 @@ public class DefencesFactory {
                 String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
                 SLogger.info("Registering Defence: \u001B[32m{}", defenceName);
 
-                YamlConfiguration config = new YamlConfiguration();
-                config.load(defenceFile);
+                YamlDocument config = YamlDocument.create(defenceFile, GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(),
+                        DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+
                 DefenceStruct struct = createStruct(config, defenceName);
                 defences.put(struct.getIDENTIFIER(), struct);
             }
-        } catch (InvalidConfigurationException | IOException error) {
+        } catch (IOException error) {
             SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
             SLogger.fatal("There was an error loading defences.");
             SLogger.fatal("Please check the below error and proceed accordingly.");
@@ -101,7 +103,7 @@ public class DefencesFactory {
         }
     }
 
-    private static DefenceStruct createStruct(FileConfiguration config, String fileName) {
+    private static DefenceStruct createStruct(YamlDocument config, String fileName) {
         String COLOR_NAME = config.getString("NAME");
         String TYPE = config.getString("TYPE");
         String IDENTIFIER = config.getString("IDENTIFIER");
@@ -155,13 +157,13 @@ public class DefencesFactory {
                 PLACEMENT_BLOCKED_MESSAGE, IS_WHITELIST, BLOCKS_LIST, HOLOGRAM_STACK, OUT_OF_STOCK_LINE, APPEND_TO_TOP, ENTITY_DATA);
     }
 
-    private static List<DefenceEffectStruct> getEffects(FileConfiguration config) {
-        ConfigurationSection section = config.getConfigurationSection("EFFECTS");
+    private static List<DefenceEffectStruct> getEffects(YamlDocument config) {
+        Section section = config.getSection("EFFECTS");
         List<DefenceEffectStruct> effectStructs = new ArrayList<>();
 
         if (section == null) return effectStructs;
-        for (String name : section.getKeys(false)) {
-            ConfigurationSection effect = section.getConfigurationSection(name);
+        for (String name : section.getRoutesAsStrings(false)) {
+            Section effect = section.getSection(name);
             String effectType = effect.getString("EFFECT");
             int defenceLevel = effect.getInt("DEFENCE_LEVEL");
             int effectLevel = effect.getInt("EFFECT_LEVEL");
@@ -173,7 +175,7 @@ public class DefencesFactory {
         return effectStructs;
     }
 
-    private static DefenceEntityStruct getEntityConfiguration(FileConfiguration config) {
+    private static DefenceEntityStruct getEntityConfiguration(YamlDocument config) {
         boolean OVERRIDE = config.getBoolean("ENTITIES.OVERRIDE_GLOBAL_CONFIG");
 
         boolean ALLOW_HOSTILE = config.getBoolean("ENTITIES.ALLOW_HOSTILE_TARGETING");
@@ -201,7 +203,7 @@ public class DefencesFactory {
                 ALLOW_ATTACK_PLAYERS, IS_WHITELIST, ENTITY_LIST);
     }
 
-    private static DefenceAttributeStruct getAttributes(FileConfiguration config) {
+    private static DefenceAttributeStruct getAttributes(YamlDocument config) {
         String RANGE = config.getString("ATTRIBUTES.RANGE");
         String COOLDOWN = config.getString("ATTRIBUTES.COOLDOWN");
         String TARGET_MAX = config.getString("ATTRIBUTES.TARGET_MAX");
@@ -217,13 +219,13 @@ public class DefencesFactory {
         return new DefenceAttributeStruct(RANGE, COOLDOWN, TARGET_MAX, MAX_AMMO, UPGRADE_COST, DAMAGE, DISTANCE, HEALING, HOSTILE_MOBS_TARGET_LEVEL, PASSIVE_MOBS_TARGET_LEVEL);
     }
 
-    private static Map<String, String> getXPFormulas(FileConfiguration config) {
-        ConfigurationSection drops = config.getConfigurationSection("EXPERIENCE_DROPS");
+    private static Map<String, String> getXPFormulas(YamlDocument config) {
+        Section drops = config.getSection("EXPERIENCE_DROPS");
         // Mob Name / Expression
         Map<String, String> formulas = new HashMap<>();
         if (drops == null) return formulas;
 
-        for (String mobType : drops.getKeys(false)) {
+        for (String mobType : drops.getRoutesAsStrings(false)) {
             String dropExpression = drops.getString(mobType);
 
             formulas.put(mobType, dropExpression);
@@ -318,7 +320,7 @@ public class DefencesFactory {
         return newLore;
     }
 
-    private static List<String> getPlacementBlocks(FileConfiguration config, String fName) {
+    private static List<String> getPlacementBlocks(YamlDocument config, String fName) {
         List<String> matchingMaterials = new ArrayList<>();
         List<String> list = config.getStringList("PLACEMENT.BLOCKS");
 

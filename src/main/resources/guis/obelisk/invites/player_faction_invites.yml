@@ -1,3 +1,6 @@
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
 # Title of the GUI (Inventory)
 TITLE: "&9Faction Invites"
 OPEN_SOUND: "ui.button.click"

@@ -1,9 +1,9 @@
 package net.skullian.skyfactions.config;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.*;
 import net.skullian.skyfactions.defence.DefencesFactory;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -19,8 +19,8 @@ public class ConfigFileHandler {
         configs = new HashMap<>();
     }
 
-    public FileConfiguration MESSAGES_CONFIG;
-    public FileConfiguration DISCORD_CONFIG;
+    public YamlDocument MESSAGES_CONFIG;
+    public YamlDocument DISCORD_CONFIG;
 
     public void loadFiles(SkyFactionsReborn plugin) {
         new File(plugin.getDataFolder(), "/schematics").mkdirs();
@@ -35,7 +35,6 @@ public class ConfigFileHandler {
 
         loadGUIs();
 
-        configs.values().forEach(ConfigHandler::saveDefaultConfig);
         Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
@@ -73,7 +72,6 @@ public class ConfigFileHandler {
     private void loadGUIs() {
         for (GUIEnums enumEntry : GUIEnums.values()) {
             ConfigHandler handler = new ConfigHandler(SkyFactionsReborn.getInstance(), enumEntry.getConfigPath());
-            handler.saveDefaultConfig();
             GUIEnums.configs.put(enumEntry.getConfigPath(), handler.getConfig());
         }
     }

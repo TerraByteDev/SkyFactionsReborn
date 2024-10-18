@@ -1,3 +1,6 @@
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
 # Title of the GUI (Inventory)
 TITLE: "&aPurchase Defence"
 OPEN_SOUND: "" # Already played in the overview config

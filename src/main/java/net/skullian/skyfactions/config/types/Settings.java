@@ -1,8 +1,8 @@
 package net.skullian.skyfactions.config.types;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 
@@ -84,7 +84,7 @@ public enum Settings {
     NOTIFICATIONS_INTERVAL("Notifications.INTERVAL");
 
     @Setter
-    private static FileConfiguration config;
+    private static YamlDocument config;
     private final String path;
 
     Settings(String path) {
@@ -96,7 +96,7 @@ public enum Settings {
     }
 
     public List<Integer> getIntegerList() {
-        return config.getIntegerList(this.path);
+        return config.getIntList(this.path);
     }
 
     public String getString() {

@@ -1,10 +1,10 @@
 package net.skullian.skyfactions.config.types;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public enum ObeliskConfig {
     LOADING_ITEM_LORE("Block.LOADING.LORE");
 
     @Setter
-    private static FileConfiguration config;
+    private static YamlDocument config;
     private final String path;
 
     ObeliskConfig(String path) {
@@ -33,7 +33,7 @@ public enum ObeliskConfig {
     }
 
     public List<Integer> getIntegerList() {
-        return config.getIntegerList(this.path);
+        return config.getIntList(this.path);
     }
 
     public String getString() {

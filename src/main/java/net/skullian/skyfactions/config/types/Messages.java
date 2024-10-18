@@ -1,10 +1,10 @@
 package net.skullian.skyfactions.config.types;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 
@@ -189,7 +189,7 @@ public enum Messages {
     NOTIFICATION_DISMISS_SUCCESS("Notifications.NOTIFICATION_DISMISS_SUCCESS");
 
     @Setter
-    private static FileConfiguration config;
+    private static YamlDocument config;
     private final String path;
 
     Messages(String path) {
