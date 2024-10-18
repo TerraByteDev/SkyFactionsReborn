@@ -48,7 +48,7 @@ public class GemsHelpCommand extends CommandTemplate {
         for (int i = 0; i < handler.getSubCommands().size(); i++) {
             if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, handler.getSubCommands().get(i).permission(), false))
                 continue;
-            Messages.COMMAND_INFO.send(sender, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", GemsCommandHandler.getSubCommands().get(i).getName(), "%command_description%", GemsCommandHandler.getSubCommands().get(i).getDescription());
+            Messages.COMMAND_INFO.send(sender, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", handler.getSubCommands().get(i).getName(), "%command_description%", handler.getSubCommands().get(i).getDescription());
         }
         Messages.COMMAND_HEAD.send(sender);
     }
