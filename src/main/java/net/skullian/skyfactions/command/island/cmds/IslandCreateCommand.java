@@ -31,7 +31,7 @@ public class IslandCreateCommand extends CommandTemplate {
         return "/island create";
     }
 
-    @Command("create [confirm]")
+    @Command("create")
     public void perform(
             CommandSender sender
     ) {

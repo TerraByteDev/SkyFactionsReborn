@@ -35,7 +35,7 @@ public class FactionMOTDCommand extends CommandTemplate {
     @Command("motd <motd>")
     public void perform(
             CommandSender sender,
-            @Argument(value = "message") @Greedy String motd
+            @Argument(value = "motd") @Greedy String motd
     ) {
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;

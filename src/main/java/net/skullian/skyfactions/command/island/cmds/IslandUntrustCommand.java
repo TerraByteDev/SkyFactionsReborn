@@ -47,7 +47,7 @@ public class IslandUntrustCommand extends CommandTemplate {
     @Command("untrust <player>")
     public void perform(
             CommandSender sender,
-            @Argument(value = "playerName", suggestions = "onlinePlayers") String playerName
+            @Argument(value = "player", suggestions = "onlinePlayers") String playerName
     ) {
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
