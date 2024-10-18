@@ -12,8 +12,6 @@ public abstract class CommandTemplate {
 
     public abstract String getSyntax();
 
-    public abstract void perform(Player player, String args[]);
-
     public abstract List<String> permission();
 
 }

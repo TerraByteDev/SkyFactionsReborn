@@ -38,7 +38,8 @@ public class SkyLoader implements PluginLoader {
         resolver.addDependency(new Dependency(new DefaultArtifact("com.google.errorprone:error_prone_annotations:2.18.0"), null));
         resolver.addDependency(new Dependency(new DefaultArtifact("com.google.code.gson:gson:2.10.1"), null));
         resolver.addDependency(new Dependency(new DefaultArtifact("dev.dejvokep:boosted-yaml:1.3.7"), null));
-        resolver.addDependency(new Dependency(new DefaultArtifact("me.tofaa.entitylib:spigot:2.4.10-SNAPSHOT"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-paper:2.0.0-beta.10"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-annotations:2.0.0"), null));
 
         pluginClasspathBuilder.addLibrary(resolver);
     }

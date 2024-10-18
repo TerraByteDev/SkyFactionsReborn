@@ -12,20 +12,8 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import net.skullian.skyfactions.command.discord.LinkCommand;
-import net.skullian.skyfactions.command.discord.UnlinkCommand;
-import net.skullian.skyfactions.command.faction.FactionCommandHandler;
-import net.skullian.skyfactions.command.faction.FactionCommandTabCompletion;
 import net.skullian.skyfactions.command.gems.GemsCommandHandler;
 import net.skullian.skyfactions.command.gems.GemsCommandTabCompletion;
-import net.skullian.skyfactions.command.island.IslandCommandHandler;
-import net.skullian.skyfactions.command.island.IslandCommandTabCompletion;
-import net.skullian.skyfactions.command.raid.RaidCommandHandler;
-import net.skullian.skyfactions.command.raid.RaidCommandTabCompletion;
-import net.skullian.skyfactions.command.runes.RunesCommandHandler;
-import net.skullian.skyfactions.command.runes.RunesCommandTabCompletion;
-import net.skullian.skyfactions.command.sf.SFCommandHandler;
-import net.skullian.skyfactions.command.sf.SFCommandTabCompletion;
 import net.skullian.skyfactions.config.ConfigFileHandler;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.db.DatabaseHandler;
@@ -86,31 +74,34 @@ public final class SkyFactionsReborn extends JavaPlugin {
         InvUI.getInstance().setPlugin(this);
 
         SLogger.info("Registering Commands.");
-        getCommand("island").setExecutor(new IslandCommandHandler());
-        getCommand("island").setTabCompleter(new IslandCommandTabCompletion());
+        //getCommand("island").setExecutor(new IslandCommandHandler());
+        //getCommand("island").setTabCompleter(new IslandCommandTabCompletion());
 
         // There is the option to disable the discord integration if you don't want it.
         // To avoid later confusion, we only register the discord related commands if it is enabled.
         boolean discordEnabled = SkyFactionsReborn.configHandler.DISCORD_CONFIG.getBoolean("Discord.ENABLED");
         if (discordEnabled) {
-            getCommand("link").setExecutor(new LinkCommand());
-            getCommand("unlink").setExecutor(new UnlinkCommand());
+            //getCommand("link").setExecutor(new LinkCommand());
+            //getCommand("unlink").setExecutor(new UnlinkCommand());
         }
 
-        getCommand("raid").setExecutor(new RaidCommandHandler());
-        getCommand("raid").setTabCompleter(new RaidCommandTabCompletion());
+        //getCommand("raid").setExecutor(new RaidCommandHandler());
+        //getCommand("raid").setTabCompleter(new RaidCommandTabCompletion());
 
-        getCommand("gems").setExecutor(new GemsCommandHandler());
-        getCommand("gems").setTabCompleter(new GemsCommandTabCompletion());
+        //getCommand("gems").setExecutor(new GemsCommandHandler());
+        //getCommand("gems").setTabCompleter(new GemsCommandTabCompletion());
 
-        getCommand("sf").setExecutor(new SFCommandHandler());
-        getCommand("sf").setTabCompleter(new SFCommandTabCompletion());
+        //getCommand("sf").setExecutor(new SFCommandHandler());
+        //getCommand("sf").setTabCompleter(new SFCommandTabCompletion());
 
-        getCommand("faction").setExecutor(new FactionCommandHandler());
-        getCommand("faction").setTabCompleter(new FactionCommandTabCompletion());
+        //getCommand("faction").setExecutor(new FactionCommandHandler());
+        //getCommand("faction").setTabCompleter(new FactionCommandTabCompletion());
 
-        getCommand("runes").setExecutor(new RunesCommandHandler());
-        getCommand("runes").setTabCompleter(new RunesCommandTabCompletion());
+        //getCommand("runes").setExecutor(new RunesCommandHandler());
+        //getCommand("runes").setTabCompleter(new RunesCommandTabCompletion());
+
+        SLogger.info("IDWAJDOIWAJDIOWJ");
+        new GemsCommandHandler();
 
         SLogger.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);

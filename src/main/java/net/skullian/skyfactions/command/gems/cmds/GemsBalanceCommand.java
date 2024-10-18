@@ -3,12 +3,14 @@ package net.skullian.skyfactions.command.gems.cmds;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
+@Command("gems")
 public class GemsBalanceCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -25,8 +27,11 @@ public class GemsBalanceCommand extends CommandTemplate {
         return "/gems balance";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Command("balance")
+    public void perform(
+            CommandSender sender
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
