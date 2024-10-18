@@ -36,7 +36,7 @@ public class GemsGiveCommand extends CommandTemplate{
 
     @Override
     public String getSyntax() {
-        return "/gems give <type> <Player name / Faction name> <amount>";
+        return "/gems give <player / faction> <Player Name / Faction Name> <amount>";
     }
 
     @Suggestions("playerFactionName")
@@ -46,10 +46,15 @@ public class GemsGiveCommand extends CommandTemplate{
                 .collect(Collectors.toList());
     }
 
-    @Command("give player|faction <playerFactionName> <amount>")
+    @Suggestions("giveTypeSelection")
+    public List<String> selectionSuggestion(CommandContext<CommandSender> context, CommandInput input) {
+        return List.of("player", "faction");
+    }
+
+    @Command("give <type> <playerFactionName> <amount>")
     public void perform(
             CommandSender sender,
-            @Argument(value = "type") String type,
+            @Argument(value = "type", suggestions = "giveTypeSelection") String type,
             @Argument(value = "playerFactionName", suggestions = "playerFactionName") String playerFactionName,
             @Argument(value = "amount") int amount
     ) {
