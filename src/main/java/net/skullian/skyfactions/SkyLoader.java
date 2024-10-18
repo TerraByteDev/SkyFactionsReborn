@@ -1,0 +1,46 @@
+package net.skullian.skyfactions;
+
+import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
+import io.papermc.paper.plugin.loader.PluginLoader;
+import io.papermc.paper.plugin.loader.library.impl.MavenLibraryResolver;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.jetbrains.annotations.NotNull;
+
+public class SkyLoader implements PluginLoader {
+    @Override
+    public void classloader(@NotNull PluginClasspathBuilder pluginClasspathBuilder) {
+        MavenLibraryResolver resolver = new MavenLibraryResolver();
+        resolver.addRepository(new RemoteRepository.Builder("maven-central", "default", "https://repo1.maven.org/maven2/").build());
+        resolver.addRepository(new RemoteRepository.Builder("xenondevs", "default", "https://repo.xenondevs.xyz/releases/").build());
+        resolver.addRepository(new RemoteRepository.Builder("evokegames", "default", "https://maven.evokegames.gg/snapshots").build());
+
+        resolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:invui:pom:1.38"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("com.zaxxer:HikariCP:6.0.0"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.xerial:sqlite-jdbc:3.46.0.0"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("net.dv8tion:JDA:5.0.1"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("com.fasterxml.jackson.core:jackson-databind:2.17.2"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("com.jeff-media:custom-block-data:2.2.2"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.jetbrains.kotlin:kotlin-stdlib-common:1.9.10"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.jetbrains.kotlin:kotlin-stdlib:1.8.21"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.apache.commons:commons-collections4:4.4"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("net.sf.trove4j:core:3.1.0"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("com.fasterxml.jackson.core:jackson-core:2.17.0"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("com.fasterxml.jackson.core:jackson-annotations:2.17.2"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.slf4j:slf4j-api:2.0.9"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.jetbrains:annotations:23.0.0"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("com.google.code.findbugs:jsr305:3.0.2"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("com.google.crypto.tink:tink:1.14.1"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("com.google.protobuf:protobuf-java:3.25.3"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("com.google.errorprone:error_prone_annotations:2.18.0"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("com.google.code.gson:gson:2.10.1"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("dev.dejvokep:boosted-yaml:1.3.7"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-paper:2.0.0-beta.10"), null));
+        resolver.addDependency(new Dependency(new DefaultArtifact("me.tofaa.entitylib:spigot:2.4.10-SNAPSHOT"), null));
+
+        pluginClasspathBuilder.addLibrary(resolver);
+    }
+}
