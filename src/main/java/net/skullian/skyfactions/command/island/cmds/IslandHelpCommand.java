@@ -2,14 +2,23 @@ package net.skullian.skyfactions.command.island.cmds;
 
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.island.IslandCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
+@Command("island")
 public class IslandHelpCommand extends CommandTemplate {
+
+    IslandCommandHandler handler;
+
+    public IslandHelpCommand(IslandCommandHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
     public String getName() {
         return "help";
@@ -25,21 +34,23 @@ public class IslandHelpCommand extends CommandTemplate {
         return "/island help";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
-        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
+    @Command("help")
+    public void perform(
+            CommandSender sender
+    ) {
+        if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
+        if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 
-        Messages.COMMAND_HEAD.send(player);
-        if (IslandCommandHandler.getSubCommands().size() <= 0) {
-            Messages.NO_COMMANDS_FOUND.send(player);
+        Messages.COMMAND_HEAD.send(sender);
+        if (handler.getSubCommands().size() <= 0) {
+            Messages.NO_COMMANDS_FOUND.send(sender);
         }
-        for (int i = 0; i < IslandCommandHandler.getSubCommands().size(); i++) {
-            if (!CommandsUtility.hasPerm(player, IslandCommandHandler.getSubCommands().get(i).permission(), false))
+        for (int i = 0; i < handler.getSubCommands().size(); i++) {
+            if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, handler.getSubCommands().get(i).permission(), false))
                 continue;
-            Messages.COMMAND_INFO.send(player, "%command_syntax%", IslandCommandHandler.getSubCommands().get(i).getSyntax(), "%command_name%", IslandCommandHandler.getSubCommands().get(i).getName(), "%command_description%", IslandCommandHandler.getSubCommands().get(i).getDescription());
+            Messages.COMMAND_INFO.send(sender, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", handler.getSubCommands().get(i).getName(), "%command_description%", handler.getSubCommands().get(i).getDescription());
         }
-        Messages.COMMAND_HEAD.send(player);
+        Messages.COMMAND_HEAD.send(sender);
     }
 
     public static List<String> permissions = List.of("skyfactions.island.help", "skyfactions.island");

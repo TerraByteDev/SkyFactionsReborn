@@ -4,16 +4,19 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@Command("island")
 public class IslandDeleteCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -22,7 +25,7 @@ public class IslandDeleteCommand extends CommandTemplate {
 
     @Override
     public String getDescription() {
-        return "Delete your island. PERMANENT.";
+        return "Delete your island permanently.";
     }
 
     @Override
@@ -30,8 +33,12 @@ public class IslandDeleteCommand extends CommandTemplate {
         return "/island delete <confirm>";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Command("delete [confirm]")
+    public void perform(
+            CommandSender sender,
+            @Nullable String confirm
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
         SkyFactionsReborn.databaseHandler.hasIsland(player.getUniqueId()).thenAccept(has -> {
@@ -39,11 +46,11 @@ public class IslandDeleteCommand extends CommandTemplate {
                 Messages.NO_ISLAND.send(player);
             } else {
 
-                if (args.length == 1) {
+                if (confirm == null) {
                     Messages.DELETION_CONFIRM.send(player);
                     IslandAPI.awaitingDeletion.add(player.getUniqueId());
-                } else if (args.length > 1) {
-                    if (args[1].equals("confirm")) {
+                } else if (confirm != null) {
+                    if (confirm.equalsIgnoreCase("confirm")) {
 
                         if (IslandAPI.awaitingDeletion.contains(player.getUniqueId())) {
                             World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());

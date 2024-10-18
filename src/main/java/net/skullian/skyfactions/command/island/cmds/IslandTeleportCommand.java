@@ -9,10 +9,13 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
+@Command("island")
 public class IslandTeleportCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -29,8 +32,11 @@ public class IslandTeleportCommand extends CommandTemplate {
         return "/island teleport";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Command("teleport")
+    public void perform(
+            CommandSender sender
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 

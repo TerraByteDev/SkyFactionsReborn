@@ -1,16 +1,26 @@
 package net.skullian.skyfactions.command.island.cmds;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.suggestion.Suggestions;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.context.CommandInput;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Command("island")
 public class IslandUntrustCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -27,53 +37,58 @@ public class IslandUntrustCommand extends CommandTemplate {
         return "/untrust <player name>";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Suggestions("onlinePlayers")
+    public List<String> suggestPlayers(CommandContext<CommandSender> context, CommandInput input) {
+        return Bukkit.getOnlinePlayers().stream()
+                .map(Player::getName)
+                .collect(Collectors.toList());
+    }
+
+    @Command("untrust <player>")
+    public void perform(
+            CommandSender sender,
+            @Argument(value = "playerName", suggestions = "onlinePlayers") String playerName
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
-        if (args.length > 1) {
-            OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+        OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
-            if (!target.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
+        if (!target.hasPlayedBefore()) {
+            Messages.UNKNOWN_PLAYER.send(player, "%player%", playerName);
+            return;
+        }
+
+        IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((is, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
+                return;
+            } else if (is == null) {
+                Messages.NO_ISLAND.send(player);
                 return;
             }
 
-            SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).thenAccept(is -> {
-                if (is == null) {
-                    Messages.NO_ISLAND.send(player);
-                } else {
-                    SkyFactionsReborn.databaseHandler.isPlayerTrusted(target.getPlayer(), is.getId()).thenAccept(isTrusted -> {
+            SkyFactionsReborn.databaseHandler.isPlayerTrusted(target.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
+                if (throwable != null) {
+                    ErrorHandler.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", throwable);
+                    return;
+                }
 
-                        if (isTrusted) {
-                            SkyFactionsReborn.databaseHandler.removeTrust(target.getPlayer(), is.getId()).thenAccept(result -> {
-                                Messages.UNTRUST_SUCCESS.send(player, "%player%", target.getName());
-                            }).exceptionally(ex -> {
-                                ex.printStackTrace();
-                                Messages.ERROR.send(player, "%operation%", "untrust a player", "%debug%", "SQL_TRUST_REMOVE");
-                                return null;
-                            });
-                        } else {
-                            Messages.UNTRUST_FAILURE.send(player);
+                if (isTrusted) {
+                    SkyFactionsReborn.databaseHandler.removeTrust(target.getPlayer(), is.getId()).whenComplete((ignored, exc) -> {
+                        if (exc != null) {
+                            ErrorHandler.handleError(player, "untrust a player", "SQL_TRUST_REMOVE", exc);
+                            return;
                         }
 
-                    }).exceptionally(ex -> {
-                        ex.printStackTrace();
-                        Messages.ERROR.send(player, "%operation%", "untrust a player", "%debug%", "SQL_TRUST_GET");
-                        return null;
+                        Messages.UNTRUST_SUCCESS.send(player, "%player%", target.getName());
                     });
-
+                } else {
+                    Messages.UNTRUST_FAILURE.send(player);
                 }
-            }).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "untrust a player", "%debug%", "SQL_ISLAND_GET");
-                return null;
             });
-
-        } else {
-            Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
-        }
+        });
     }
 
     public static List<String> permissions = List.of("skyfactions.island.untrust", "skyfactions.island");

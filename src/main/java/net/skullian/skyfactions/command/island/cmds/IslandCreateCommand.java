@@ -7,10 +7,14 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.IslandCreationConfirmationUI;
 import net.skullian.skyfactions.util.ErrorHandler;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
+@Command("island")
 public class IslandCreateCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -27,8 +31,11 @@ public class IslandCreateCommand extends CommandTemplate {
         return "/island create";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Command("create [confirm]")
+    public void perform(
+            CommandSender sender
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 

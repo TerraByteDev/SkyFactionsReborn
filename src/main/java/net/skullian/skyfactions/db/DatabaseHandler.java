@@ -854,13 +854,13 @@ public class DatabaseHandler {
 
     // ------------------ TRUSTING ------------------ //
 
-    public CompletableFuture<Boolean> isPlayerTrusted(Player player, int id) {
+    public CompletableFuture<Boolean> isPlayerTrusted(UUID playerUUID, int id) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("SELECT * FROM trustedPlayers WHERE island_id = ? AND uuid = ?")) {
 
                 statement.setInt(1, id);
-                statement.setString(2, player.getUniqueId().toString());
+                statement.setString(2, playerUUID.toString());
 
                 ResultSet set = statement.executeQuery();
                 if (set.next()) {

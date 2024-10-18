@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.command.island.cmds;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
@@ -8,10 +9,18 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.suggestion.Suggestions;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.context.CommandInput;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Command("island")
 public class IslandTrustCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -28,52 +37,58 @@ public class IslandTrustCommand extends CommandTemplate {
         return "/island trust <player name>";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Suggestions("onlinePlayers")
+    public List<String> suggestPlayers(CommandContext<CommandSender> context, CommandInput input) {
+        return Bukkit.getOnlinePlayers().stream()
+                .map(Player::getName)
+                .collect(Collectors.toList());
+    }
+
+    @Command("trust <player>")
+    public void perform(
+            CommandSender sender,
+            @Argument(value = "player", suggestions = "onlinePlayers") String playerName
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
-        if (args.length > 1) {
-            OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+        OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
-            if (!target.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
+        if (!target.hasPlayedBefore()) {
+            Messages.UNKNOWN_PLAYER.send(player, "%player%", playerName);
+            return;
+        }
+
+        IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
+                return;
+            } else if (island == null) {
+                Messages.NO_ISLAND.send(player);
                 return;
             }
 
-            SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).thenAccept(is -> {
-                if (is == null) {
-                    Messages.NO_ISLAND.send(player);
+            SkyFactionsReborn.databaseHandler.isPlayerTrusted(target.getUniqueId(), island.getId()).whenComplete((isTrusted, throwable) -> {
+                if (throwable != null) {
+                    ErrorHandler.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", throwable);
+                    return;
+                }
+
+                if (isTrusted) {
+                    Messages.PLAYER_ALREADY_TRUSTED.send(player);
                 } else {
-                    SkyFactionsReborn.databaseHandler.isPlayerTrusted(target.getPlayer(), is.getId()).whenComplete((isTrusted, ex) -> {
-                        if (ex != null) {
-                            ErrorHandler.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", ex);
+                    SkyFactionsReborn.databaseHandler.trustPlayer(target.getPlayer(), island.getId()).whenComplete((result, exc) -> {
+                        if (exc != null) {
+                            ErrorHandler.handleError(player, "trust a player", "SQL_TRUST_ADD", exc);
                             return;
                         }
 
-                        if (isTrusted) {
-                            Messages.PLAYER_ALREADY_TRUSTED.send(player);
-                        } else {
-                            SkyFactionsReborn.databaseHandler.trustPlayer(target.getPlayer(), is.getId()).whenComplete((result, exc) -> {
-                                if (exc != null) {
-                                    ErrorHandler.handleError(player, "trust a player", "SQL_TRUST_ADD", exc);
-                                    return;
-                                }
-
-                                Messages.TRUST_SUCCESS.send(player, "%player%", target.getName());
-                            });
-                        }
+                        Messages.TRUST_SUCCESS.send(player, "%player%", target.getName());
                     });
                 }
-            }).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "trust a player", "%debug%", "SQL_ISLAND_GET");
-                return null;
             });
-
-        } else {
-            Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
-        }
+        });
     }
 
     public static List<String> permissions = List.of("skyfactions.island.trust", "skyfactions.island");

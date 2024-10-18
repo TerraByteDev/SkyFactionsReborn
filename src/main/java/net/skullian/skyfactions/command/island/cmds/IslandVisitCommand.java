@@ -8,13 +8,22 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.suggestion.Suggestions;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.context.CommandInput;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Command("island")
 public class IslandVisitCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -31,58 +40,62 @@ public class IslandVisitCommand extends CommandTemplate {
         return "/island visit <player>";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Suggestions("onlinePlayers")
+    public List<String> suggestPlayers(CommandContext<CommandSender> context, CommandInput input) {
+        return Bukkit.getOnlinePlayers().stream()
+                .map(Player::getName)
+                .collect(Collectors.toList());
+    }
+
+    @Command("visit <player>")
+    public void perform(
+            CommandSender sender,
+            @Argument(value = "player", suggestions = "onlinePlayers") String playerName
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
-        if (args.length > 1) {
-            Messages.VISIT_PROCESSING.send(player);
-            OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+        Messages.VISIT_PROCESSING.send(player);
+        OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
-            if (!target.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(player, "%player%", args[1]);
+        if (!target.hasPlayedBefore()) {
+            Messages.UNKNOWN_PLAYER.send(player, "%player%", playerName);
+            return;
+        }
+
+        IslandAPI.getPlayerIsland(target.getUniqueId()).whenComplete((is, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get that player's island", "SQL_ISLAND_GET", ex);
+                return;
+            } else if (is == null) {
+                Messages.VISIT_NO_ISLAND.send(player);
                 return;
             }
 
-            SkyFactionsReborn.databaseHandler.getPlayerIsland(target.getUniqueId()).thenAccept(is -> {
-                if (is != null) {
-
-                    if (RaidAPI.currentRaids.containsValue(player.getUniqueId()) || RaidAPI.processingRaid.containsValue(player.getUniqueId())) {
-                        Messages.VISIT_IN_RAID.send(player);
-                    } else {
-                        SkyFactionsReborn.databaseHandler.isPlayerTrusted(player, is.getId()).thenAccept(isTrusted -> {
-                            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-                            if (world == null) {
-                                Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "WORLD_NOT_EXIST");
-                            } else {
-                                if (isTrusted) {
-                                    Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-                                        IslandAPI.handlePlayerJoinBorder(player, is); // shift the worldborder
-                                        IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
-                                    });
-                                } else {
-                                    Messages.PLAYER_NOT_TRUSTED.send(player);
-                                }
-                            }
-
-                        }).exceptionally(ex -> {
-                            ex.printStackTrace();
-                            Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "SQL_TRUST_GET");
-                            return null;
-                        });
+            if ((RaidAPI.currentRaids.containsValue(player.getUniqueId()) || RaidAPI.processingRaid.containsValue(player.getUniqueId())) || (RaidAPI.currentRaids.containsValue(target.getUniqueId()) || RaidAPI.processingRaid.containsValue(target.getUniqueId()))) {
+                Messages.VISIT_IN_RAID.send(player);
+            } else {
+                SkyFactionsReborn.databaseHandler.isPlayerTrusted(player.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
+                    if (throwable != null) {
+                        ErrorHandler.handleError(player, "check if your are trusted", "SQL_TRUST_GET", throwable);
+                        return;
                     }
 
-                } else {
-                    Messages.VISIT_NO_ISLAND.send(player);
-                }
-
-            }).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "SQL_ISLAND_GET");
-                return null;
-            });
-        }
+                    World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+                    if (world == null) {
+                        Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "WORLD_NOT_EXIST");
+                    } else {
+                        if (isTrusted) {
+                            IslandAPI.handlePlayerJoinBorder(player, is); // shift the worldborder
+                            IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
+                        } else {
+                            Messages.PLAYER_NOT_TRUSTED.send(player);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     public static List<String> permissions = List.of("skyfactions.island.visit", "skyfactions.island");
