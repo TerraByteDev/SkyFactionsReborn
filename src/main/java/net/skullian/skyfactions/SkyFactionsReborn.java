@@ -100,7 +100,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
         //getCommand("runes").setExecutor(new RunesCommandHandler());
         //getCommand("runes").setTabCompleter(new RunesCommandTabCompletion());
 
-        SLogger.info("IDWAJDOIWAJDIOWJ");
         new GemsCommandHandler();
 
         SLogger.info("Registering Events.");
