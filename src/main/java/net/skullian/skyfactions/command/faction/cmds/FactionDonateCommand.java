@@ -5,14 +5,25 @@ import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.faction.FactionCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Command("faction")
 public class FactionDonateCommand extends CommandTemplate {
+
+    FactionCommandHandler handler;
+
+    public FactionDonateCommand(FactionCommandHandler handler) {
+        this.handler = handler;
+    }
 
     @Override
     public String getName() { return "donate"; }
@@ -23,12 +34,14 @@ public class FactionDonateCommand extends CommandTemplate {
     @Override
     public String getSyntax() { return "/faction donate <gems>"; }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Command("donate <amount>")
+    public void perform(
+            CommandSender sender,
+            @Argument("amount") int amount
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
-
-        Integer requestedDonation = Integer.parseInt(args[1]);
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
            if (throwable != null) {
@@ -43,21 +56,21 @@ public class FactionDonateCommand extends CommandTemplate {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "get your Gem count", "SQL_GEMS_GET", ex);
                     return;
-                } else if (gems < requestedDonation) {
+                } else if (gems < amount) {
                     Messages.INSUFFICIENT_GEMS_COUNT.send(player);
                     return;
                 }
 
                 CompletableFuture.allOf(
-                        GemsAPI.subtractGems(player.getUniqueId(), requestedDonation),
-                        faction.addGems(requestedDonation)
+                        GemsAPI.subtractGems(player.getUniqueId(), amount),
+                        faction.addGems(amount)
                         ).whenComplete((ignored, exc) -> {
 
                             if (exc != null) {
                                 ErrorHandler.handleError(player, "donate gems to your Faction", "SQL_GEMS_MODIFY", exc);
                                 return;
                             }
-                            Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, "%amount%", requestedDonation);
+                            Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, "%amount%", amount);
                 });
             });
         });

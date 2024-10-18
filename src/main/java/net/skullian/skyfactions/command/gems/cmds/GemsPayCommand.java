@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.gems.cmds;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.gems.GemsCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
@@ -16,6 +17,13 @@ import java.util.List;
 
 @Command("gems")
 public class GemsPayCommand extends CommandTemplate {
+
+    GemsCommandHandler handler;
+
+    public GemsPayCommand(GemsCommandHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
     public String getName() {
         return "pay";

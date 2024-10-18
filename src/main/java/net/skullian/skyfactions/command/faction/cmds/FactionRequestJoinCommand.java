@@ -9,10 +9,14 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
+@Command("faction")
 public class FactionRequestJoinCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -29,14 +33,14 @@ public class FactionRequestJoinCommand extends CommandTemplate {
         return "/faction requestjoin <faction name>";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Command("requestjoin <factionName>")
+    public void perform(
+            CommandSender sender,
+            @Argument(value = "factionName") String factionName
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
-        if (args.length <= 1) {
-            Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
-            return;
-        }
 
         FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
             if (ex != null) {
@@ -47,7 +51,6 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                 return;
             }
 
-            String factionName = args[1];
             FactionAPI.getFaction(factionName).whenComplete((faction, throwable) -> {
                 if (throwable != null) {
                     ErrorHandler.handleError(player, "check the Faction", "SQL_FACTION_GET", throwable);

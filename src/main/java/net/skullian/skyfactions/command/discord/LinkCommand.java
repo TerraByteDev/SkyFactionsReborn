@@ -2,23 +2,26 @@ package net.skullian.skyfactions.command.discord;
 
 import net.dv8tion.jda.api.entities.User;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class LinkCommand implements CommandExecutor {
-    @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+public class LinkCommand extends CommandTemplate {
+    @Command("link")
+    public boolean handleLink(
+            CommandSender sender
+    ) {
 
-        if (commandSender instanceof Player player) {
+        if (sender instanceof Player player) {
             if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true))
                 return true;
             if (CommandsUtility.manageCooldown(player)) return true;
@@ -40,5 +43,25 @@ public class LinkCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return "link";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Link your discord account for raid notifications, etc.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return "/link";
+    }
+
+    @Override
+    public List<String> permission() {
+        return List.of("skyfactions.command.link");
     }
 }

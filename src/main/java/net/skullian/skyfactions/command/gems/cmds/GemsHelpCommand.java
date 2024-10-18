@@ -13,6 +13,12 @@ import java.util.List;
 @Command("gems")
 public class GemsHelpCommand extends CommandTemplate {
 
+    GemsCommandHandler handler;
+
+    public GemsHelpCommand(GemsCommandHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
     public String getName() {
         return "help";
@@ -36,13 +42,13 @@ public class GemsHelpCommand extends CommandTemplate {
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 
         Messages.COMMAND_HEAD.send(sender);
-        if (GemsCommandHandler.getSubCommands().size() == 0) {
+        if (handler.getSubCommands().size() == 0) {
             Messages.NO_COMMANDS_FOUND.send(sender);
         }
-        for (int i = 0; i < GemsCommandHandler.getSubCommands().size(); i++) {
-            if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, GemsCommandHandler.getSubCommands().get(i).permission(), false))
+        for (int i = 0; i < handler.getSubCommands().size(); i++) {
+            if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, handler.getSubCommands().get(i).permission(), false))
                 continue;
-            Messages.COMMAND_INFO.send(sender, "%command_syntax%", GemsCommandHandler.getSubCommands().get(i).getSyntax(), "%command_name%", GemsCommandHandler.getSubCommands().get(i).getName(), "%command_description%", GemsCommandHandler.getSubCommands().get(i).getDescription());
+            Messages.COMMAND_INFO.send(sender, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", GemsCommandHandler.getSubCommands().get(i).getName(), "%command_description%", GemsCommandHandler.getSubCommands().get(i).getDescription());
         }
         Messages.COMMAND_HEAD.send(sender);
     }

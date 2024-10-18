@@ -12,8 +12,9 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.skullian.skyfactions.command.discord.DiscordCommandHandler;
+import net.skullian.skyfactions.command.faction.FactionCommandHandler;
 import net.skullian.skyfactions.command.gems.GemsCommandHandler;
-import net.skullian.skyfactions.command.gems.GemsCommandTabCompletion;
 import net.skullian.skyfactions.config.ConfigFileHandler;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.db.DatabaseHandler;
@@ -101,6 +102,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
         //getCommand("runes").setTabCompleter(new RunesCommandTabCompletion());
 
         new GemsCommandHandler();
+        new DiscordCommandHandler();
+        new FactionCommandHandler();
 
         SLogger.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);

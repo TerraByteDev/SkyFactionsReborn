@@ -9,11 +9,15 @@ import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Command("faction")
 public class FactionInfoCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -30,12 +34,16 @@ public class FactionInfoCommand extends CommandTemplate {
         return "/faction info <name>";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Command("info [name]")
+    public void perform(
+            CommandSender sender,
+            @Nullable String name
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
-        if (args.length == 1) {
+        if (name == null) {
             FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
@@ -58,10 +66,7 @@ public class FactionInfoCommand extends CommandTemplate {
                     });
                 }
             });
-        } else if (args.length > 1) {
-            String name = args[1];
-
-
+        } else {
             FactionAPI.getFaction(name).whenComplete((faction, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);

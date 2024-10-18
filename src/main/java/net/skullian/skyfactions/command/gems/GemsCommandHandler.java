@@ -56,9 +56,9 @@ public class GemsCommandHandler implements CommandHandler {
 
     @Override
     public void registerSubCommands() {
-        register(new GemsBalanceCommand());
-        register(new GemsGiveCommand());
-        register(new GemsHelpCommand());
-        register(new GemsPayCommand());
+        register(new GemsBalanceCommand(this));
+        register(new GemsGiveCommand(this));
+        register(new GemsHelpCommand(this));
+        register(new GemsPayCommand(this));
     }
 }

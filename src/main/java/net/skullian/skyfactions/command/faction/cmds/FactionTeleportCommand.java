@@ -6,10 +6,13 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
+@Command("faction")
 public class FactionTeleportCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -26,8 +29,11 @@ public class FactionTeleportCommand extends CommandTemplate {
         return "/faction teleport";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Command("teleport")
+    public void perform(
+            CommandSender sender
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 

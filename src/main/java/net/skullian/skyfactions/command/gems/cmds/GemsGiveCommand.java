@@ -5,6 +5,7 @@ import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.gems.GemsCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
@@ -22,6 +23,13 @@ import java.util.stream.Collectors;
 
 @Command("gems")
 public class GemsGiveCommand extends CommandTemplate{
+
+    GemsCommandHandler handler;
+
+    public GemsGiveCommand(GemsCommandHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
     public String getName() {
         return "give";
@@ -79,7 +87,7 @@ public class GemsGiveCommand extends CommandTemplate{
                     });
                 });
             }
-        } else if (type .equalsIgnoreCase("faction")) {
+        } else if (type.equalsIgnoreCase("faction")) {
             FactionAPI.getFaction(playerFactionName).whenComplete((faction, throwable) -> {
                 if (throwable != null) {
                     ErrorHandler.handleError(sender, "get the specified Faction", "SQL_FACTION_GET", throwable);

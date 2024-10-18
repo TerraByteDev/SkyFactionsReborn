@@ -7,10 +7,13 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.FactionLeaveConfirmationUI;
 import net.skullian.skyfactions.util.ErrorHandler;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
+@Command("faction")
 public class FactionLeaveCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -27,8 +30,11 @@ public class FactionLeaveCommand extends CommandTemplate {
         return "/faction leave";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
+    @Command("leave")
+    public void perform(
+            CommandSender sender
+    ) {
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 

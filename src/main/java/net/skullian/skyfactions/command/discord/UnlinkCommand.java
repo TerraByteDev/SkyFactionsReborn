@@ -1,23 +1,23 @@
 package net.skullian.skyfactions.command.discord;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
-public class UnlinkCommand implements CommandExecutor {
-    @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+public class UnlinkCommand extends CommandTemplate {
+    @Command("unlink")
+    public boolean handleUnlink(
+            CommandSender sender
+    ) {
 
-        if (commandSender instanceof Player player) {
+        if (sender instanceof Player player) {
             if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord"), true))
                 return true;
             if (CommandsUtility.manageCooldown(player)) return true;
@@ -36,5 +36,25 @@ public class UnlinkCommand implements CommandExecutor {
             });
         }
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return "unlink";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Remove the link between your discord account and your SkyFactions account.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return "/unlink";
+    }
+
+    @Override
+    public List<String> permission() {
+        return List.of("skyfactions.command.unlink");
     }
 }
