@@ -18,12 +18,6 @@ import java.util.List;
 @Command("create")
 public class FactionCreateCommand extends CommandTemplate {
 
-    FactionCommandHandler handler;
-
-    public FactionCreateCommand(FactionCommandHandler handler) {
-        this.handler = handler;
-    }
-
     @Override
     public String getName() {
         return "create";

@@ -24,12 +24,6 @@ import java.util.stream.Collectors;
 @Command("gems")
 public class GemsGiveCommand extends CommandTemplate{
 
-    GemsCommandHandler handler;
-
-    public GemsGiveCommand(GemsCommandHandler handler) {
-        this.handler = handler;
-    }
-
     @Override
     public String getName() {
         return "give";

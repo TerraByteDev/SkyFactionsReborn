@@ -14,12 +14,6 @@ import java.util.List;
 @Command("gems")
 public class GemsBalanceCommand extends CommandTemplate {
 
-    GemsCommandHandler handler;
-
-    public GemsBalanceCommand(GemsCommandHandler handler) {
-        this.handler = handler;
-    }
-
     @Override
     public String getName() {
         return "balance";

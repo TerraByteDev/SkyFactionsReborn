@@ -21,10 +21,6 @@ public class FactionBroadcastCommand extends CommandTemplate {
 
     FactionCommandHandler handler;
 
-    public FactionBroadcastCommand(FactionCommandHandler handler) {
-        this.handler = handler;
-    }
-
     @Override
     public String getName() {
         return "broadcast";

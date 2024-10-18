@@ -5,6 +5,7 @@ import lombok.Getter;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandHandler;
 import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.faction.cmds.*;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
@@ -54,6 +55,15 @@ public class FactionCommandHandler implements CommandHandler {
 
     @Override
     public void registerSubCommands() {
-
+        register(new FactionBroadcastCommand());
+        register(new FactionCreateCommand());
+        register(new FactionDonateCommand());
+        register(new FactionHelpCommand(this));
+        register(new FactionInfoCommand());
+        register(new FactionInviteCommand());
+        register(new FactionLeaveCommand());
+        register(new FactionMOTDCommand());
+        register(new FactionRequestJoinCommand());
+        register(new FactionTeleportCommand());
     }
 }

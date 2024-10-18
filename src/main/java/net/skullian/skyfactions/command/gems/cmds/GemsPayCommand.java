@@ -18,12 +18,6 @@ import java.util.List;
 @Command("gems")
 public class GemsPayCommand extends CommandTemplate {
 
-    GemsCommandHandler handler;
-
-    public GemsPayCommand(GemsCommandHandler handler) {
-        this.handler = handler;
-    }
-
     @Override
     public String getName() {
         return "pay";

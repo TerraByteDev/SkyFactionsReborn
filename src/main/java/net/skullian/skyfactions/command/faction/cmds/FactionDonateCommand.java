@@ -19,12 +19,6 @@ import java.util.concurrent.CompletableFuture;
 @Command("faction")
 public class FactionDonateCommand extends CommandTemplate {
 
-    FactionCommandHandler handler;
-
-    public FactionDonateCommand(FactionCommandHandler handler) {
-        this.handler = handler;
-    }
-
     @Override
     public String getName() { return "donate"; }
 
