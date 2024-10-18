@@ -1,3 +1,6 @@
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
 # Title of the GUI (Inventory)
 TITLE: "&a&lCreate Island"
 # Sound when GUI is opened.

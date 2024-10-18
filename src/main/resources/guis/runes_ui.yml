@@ -1,3 +1,6 @@
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
 # Title of the GUI (Inventory)
 TITLE: "{#A908FB}Runes Menu{#004FFF}"
 OPEN_SOUND: "ui.button.click"

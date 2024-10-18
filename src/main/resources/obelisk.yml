@@ -7,6 +7,9 @@
 
 # =============== OBELISK CONFIG =============== #
 
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
 # The Obelisk is one of the main features of SkyFactions. It allows you to
 # manage defences, resources, and more.
 

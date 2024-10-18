@@ -7,6 +7,9 @@
 
 # =============== RUNES CONFIG =============== #
 
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
 # Runes are SkyFaction's 'currency'. It allows you to advance in the game,
 # including purchase defences, upgrade islands / factions and more.
 

@@ -1,3 +1,6 @@
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
 # Name of the defence.
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
 NAME: "{#7E00D9}&lElixir Cannon{/#2371FF}"

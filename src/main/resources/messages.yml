@@ -7,6 +7,9 @@
 
 # =============== MESSAGE CONFIG =============== #
 
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
 
 Messages:

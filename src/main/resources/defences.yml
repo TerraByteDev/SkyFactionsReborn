@@ -7,6 +7,9 @@
 
 # =============== DEFENCES CONFIG =============== #
 
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
 # Defences are one of the key features of SkyFactions.
 # It allows players and Factions to defend their islands in different ways.
 

@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.config.types;
 
-import org.bukkit.configuration.file.FileConfiguration;
+import dev.dejvokep.boostedyaml.YamlDocument;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public enum GUIEnums {
 
 
     private final String path;
-    public static final Map<String, FileConfiguration> configs = new HashMap<>();
+    public static final Map<String, YamlDocument> configs = new HashMap<>();
 
     GUIEnums(String path) {
         this.path = path;

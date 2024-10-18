@@ -7,6 +7,9 @@
 
 # =============== SKYFACTIONS CONFIG =============== #
 
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
 # Database config. Requires a restart to apply.
 Database:
   # You can either use 'sqlite' or 'sql' (MySQL). Default: sqlite.

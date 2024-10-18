@@ -260,6 +260,7 @@ public class DefenceHandler implements Listener {
 
     private DefenceEntityDeathData getData(UUID uuid, DamageType type) {
         Map<DamageType, DefenceEntityDeathData> map = toDie.get(uuid);
+        if (map == null) return null;
         return map.get(type);
     }
 

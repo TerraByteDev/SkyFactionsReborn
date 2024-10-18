@@ -1,12 +1,12 @@
 package net.skullian.skyfactions.api;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.data.PaginationItemData;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,7 +24,7 @@ public class GUIAPI {
      * @throws IllegalArgumentException
      */
     public static GUIData getGUIData(String guiName) throws IllegalArgumentException {
-        FileConfiguration config = GUIEnums.configs.get("guis/" + guiName);
+        YamlDocument config = GUIEnums.configs.get("guis/" + guiName);
         if (config != null) {
             String guiTitle = config.getString("TITLE");
             String openSound = config.getString("OPEN_SOUND");
@@ -47,14 +47,14 @@ public class GUIAPI {
      * @throws IllegalArgumentException
      */
     public static List<ItemData> getItemData(String guiName, Player player) throws IllegalArgumentException {
-        FileConfiguration config = GUIEnums.configs.get("guis/" + guiName);
+        YamlDocument config = GUIEnums.configs.get("guis/" + guiName);
         if (config != null) {
 
-            ConfigurationSection itemsConfig = config.getConfigurationSection("ITEMS");
+            Section itemsConfig = config.getSection("ITEMS");
             List<ItemData> data = new ArrayList<>();
-            for (String name : itemsConfig.getKeys(false)) {
+            for (String name : itemsConfig.getRoutesAsStrings(false)) {
                 boolean isModel = name.equalsIgnoreCase("MODEL");
-                ConfigurationSection itemData = itemsConfig.getConfigurationSection(name);
+                Section itemData = itemsConfig.getSection(name);
 
                 char charValue = !isModel ? itemData.getString("char").charAt(0) : "x".charAt(0);
                 String material = itemData.getString("material");
@@ -80,13 +80,13 @@ public class GUIAPI {
      * @throws RuntimeException
      */
     public static List<PaginationItemData> getPaginationData(Player player) throws RuntimeException {
-        FileConfiguration config = GUIEnums.configs.get("guis/pagination");
+        YamlDocument config = GUIEnums.configs.get("guis/pagination");
         if (config != null) {
 
-            ConfigurationSection itemsConfig = config.getConfigurationSection("ITEMS");
+            Section itemsConfig = config.getSection("ITEMS");
             List<PaginationItemData> data = new ArrayList<>();
-            for (String name : itemsConfig.getKeys(false)) {
-                ConfigurationSection itemData = itemsConfig.getConfigurationSection(name);
+            for (String name : itemsConfig.getRoutesAsStrings(false)) {
+                Section itemData = itemsConfig.getSection(name);
 
                 char charValue = itemData.getString("char").charAt(0);
                 String material = itemData.getString("material");

@@ -1,8 +1,8 @@
 package net.skullian.skyfactions.config.types;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public enum DefencesConfig {
     GLOBAL_ENTITIES_ENTITY_LIST("Global.ENTITIES.ENTITY_LIST");
 
     @Setter
-    private static FileConfiguration config;
+    private static YamlDocument config;
     private final String path;
 
     DefencesConfig(String path) {
@@ -31,7 +31,7 @@ public enum DefencesConfig {
     }
 
     public List<Integer> getIntegerList() {
-        return config.getIntegerList(this.path);
+        return config.getIntList(this.path);
     }
 
     public String getString() {
