@@ -1,0 +1,40 @@
+name: SkyFactionsReborn
+version: '${project.version}'
+main: net.skullian.skyfactions.SkyFactionsReborn
+description: An advanced plugin core merging Skyblock and Factions together.
+api-version: '1.21'
+loader: net.skullian.skyfactions.SkyLoader
+
+dependencies:
+  server:
+    FastAsyncWorldEdit:
+      load: BEFORE
+      required: true
+
+    WorldGuard:
+      load: BEFORE
+      required: true
+
+    WorldBorderAPI:
+      load: BEFORE
+      required: true
+
+    packetevents:
+      load: BEFORE
+      required: true
+
+    JukeBox:
+      load: BEFORE
+      required: false
+
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+
+    NoteBlockAPI:
+      load: BEFORE
+      required: false
+
+    MythicMobs:
+      load: BEFORE
+      required: false

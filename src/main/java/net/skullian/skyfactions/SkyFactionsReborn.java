@@ -38,6 +38,7 @@ import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.xenondevs.invui.InvUI;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -80,6 +81,9 @@ public final class SkyFactionsReborn extends JavaPlugin {
         SLogger.info("Initialising Configs.");
         configHandler = new ConfigFileHandler();
         configHandler.loadFiles(this); // Load all files (and create them if they don't exist already).
+
+        SLogger.info("Loading InvLib Instance");
+        InvUI.getInstance().setPlugin(this);
 
         SLogger.info("Registering Commands.");
         getCommand("island").setExecutor(new IslandCommandHandler());

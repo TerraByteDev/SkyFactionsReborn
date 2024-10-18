@@ -46,8 +46,7 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>xyz.xenondevs.invui:*</include>
-                            <include>me.tofaa.entitylib:*</include>
+                            <include>net.objecthunter.exp4j:*</include>
                         </includes>
                     </artifactSet>
                 </configuration>
