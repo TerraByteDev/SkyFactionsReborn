@@ -36,6 +36,8 @@ public class PlayerHandler implements Listener {
             }
         });
 
+        IslandAPI.cacheData(event.getPlayer());
+
         SkyFactionsReborn.databaseHandler.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
                 SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());

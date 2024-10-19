@@ -53,6 +53,13 @@ public class IslandAPI {
         return SkyFactionsReborn.databaseHandler.getPlayerIsland(playerUUID);
     }
 
+    // for PlaceholderAPI
+    public static void cacheData(Player player) {
+        if (!GemsAPI.playerGems.containsKey(player.getUniqueId())) GemsAPI.getGems(player.getUniqueId());
+        if (!RunesAPI.playerRunes.containsKey(player.getUniqueId())) RunesAPI.getRunes(player.getUniqueId());
+        if (!FactionAPI.factionCache.containsKey(player.getUniqueId())) FactionAPI.getFaction(player.getUniqueId());
+    }
+
     public static void handlePlayerJoinBorder(Player player, PlayerIsland island) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());

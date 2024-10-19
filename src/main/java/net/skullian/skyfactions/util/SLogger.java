@@ -11,10 +11,10 @@ public class SLogger {
     }
 
     public static void warn(Object message, Object... args) {
-        LOGGER.warn("\u001B[0m" + message + "\u001B[0m", args);
+        LOGGER.warn(message + "\u001B[0m", args);
     }
 
     public static void fatal(Object message, Object... args) {
-        LOGGER.error("\u001B[0m" + message + "\u001B[0m", args);
+        LOGGER.error(message + "\u001B[0m", args);
     }
 }
