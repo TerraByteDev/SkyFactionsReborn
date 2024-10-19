@@ -47,11 +47,11 @@ public class RunesGiveCommand extends CommandTemplate {
 
     @Suggestions("playerFactionName")
     public List<String> suggestPlayerOrFaction(CommandContext<CommandSourceStack> context, CommandInput input) {
-        if (input.input().equalsIgnoreCase("runes give player")) {
+        if (input.input().startsWith("runes give player")) {
             return Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
                     .collect(Collectors.toList());
-        } else if (input.input().equalsIgnoreCase("runes give faction")) {
+        } else if (input.input().startsWith("runes give faction")) {
             return new ArrayList<>(FactionAPI.factionNameCache.keySet());
         }
 

@@ -74,6 +74,7 @@ public class DefenceHandler implements Listener {
                 belowLoc.setY(belowLoc.getY() - 1);
 
                 Block belowBlock = placed.getWorld().getBlockAt(belowLoc);
+                System.out.println(belowBlock.getType().name());
                 if (!isAllowedBlock(belowBlock, defence)) {
                     event.setCancelled(true);
                     player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString())));
@@ -141,7 +142,7 @@ public class DefenceHandler implements Listener {
             if (!loadedFactionDefences.containsKey(owner)) {
                 loadedFactionDefences.put(owner, List.of(defence));
             } else {
-                List<Defence> defences = loadedFactionDefences.get(owner);
+                List<Defence> defences = new ArrayList<>(loadedFactionDefences.computeIfAbsent(owner, k -> new ArrayList<>()));
                 defences.add(defence);
                 loadedFactionDefences.replace(owner, defences);
             }
@@ -150,9 +151,9 @@ public class DefenceHandler implements Listener {
             if (!loadedPlayerDefences.containsKey(playeruuid)) {
                 loadedPlayerDefences.put(playeruuid, List.of(defence));
             } else {
-                List<Defence> defences = loadedPlayerDefences.get(playeruuid);
+                List<Defence> defences = new ArrayList<>(loadedPlayerDefences.computeIfAbsent(playeruuid, k -> new ArrayList<>()));
                 defences.add(defence);
-                loadedPlayerDefences.replace(playeruuid, defences);
+                loadedPlayerDefences.put(playeruuid, defences);
             }
         }
     }
@@ -204,6 +205,7 @@ public class DefenceHandler implements Listener {
 
         PersistentDataContainer container = event.getEntity().getPersistentDataContainer();
         if (container.has(damageKey, PersistentDataType.INTEGER)) {
+            event.setCancelled(true);
             event.getEntity().remove();
 
             int damage = container.get(damageKey, PersistentDataType.INTEGER);

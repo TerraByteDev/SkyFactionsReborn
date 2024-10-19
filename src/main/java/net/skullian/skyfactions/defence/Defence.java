@@ -31,6 +31,7 @@ public abstract class Defence {
     private DefenceStruct struct;
     private int task = -1;
     private List<LivingEntity> targetedEntities = new ArrayList<>();
+    private boolean noAmmoNotified;
 
     public Defence(DefenceData defenceData, DefenceStruct defenceStruct) {
         this.data = defenceData;
@@ -86,6 +87,18 @@ public abstract class Defence {
         return messages.get(random.nextInt(messages.size()));
     }
 
+    public void notifyNoAmmo() {
+        if (this.noAmmoNotified) return;
+
+        if (DefenceHandler.hologramsMap.containsKey(getHologramID(data.getUUIDFactionName()))) {
+            System.out.println("MOD");
+            TextHologram holo = DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName()));
+            holo.setText(holo.getText() + TextUtility.color("\n" + struct.getOUT_OF_STOCK_HOLOGRAM()));
+            holo.update();
+            this.noAmmoNotified = true;
+        }
+    }
+
     public void applyPDC(Entity entity) {
         NamespacedKey damageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-damage");
 
@@ -120,9 +133,11 @@ public abstract class Defence {
             if (entity instanceof Player) continue; // TODO: check if raid is ongoing, if so target them
 
             if (struct.getENTITY_CONFIG().isIS_WHITELIST() && struct.getENTITY_CONFIG().getENTITY_LIST().contains(entity.getType().name()) && !filteredEntities.contains(entity)) {
+                System.out.println("adding entities");
                 filteredEntities.add(entity);
             } else if (!struct.getENTITY_CONFIG().isIS_WHITELIST() && !struct.getENTITY_CONFIG().getENTITY_LIST().contains(entity.getType().name()) && !filteredEntities.contains(entity)) {
                 filteredEntities.add(entity);
+                System.out.println("adding");
             }
         }
 
@@ -173,11 +188,12 @@ public abstract class Defence {
                 data.getX(),
                 data.getY(),
                 data.getZ()
-        );
+        ).toLowerCase();
     }
 
     public void createHologram(Location location, DefenceStruct defence, String playerUUIDorFactionName) {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
+        System.out.println(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ());
 
         TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName())
                 .setText(TextUtility.color(text.replace("%defence_name%", defence.getNAME())))

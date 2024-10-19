@@ -113,8 +113,9 @@ Global:
       - "ZOMBIE"
       - "ZOMBIE_VILLAGER"
       - "ZOMBIFIED_PIGLIN"
-      - # What entities should be blacklisted or whitelisted?
-        # See https://jd.papermc.io/paper/1.21.1/org/bukkit/entity/EntityType.html
-        # There is no need to include entity types such as arrows!
-      # Read https://docs.terrabytedev.com/skyfactions/mechanics/defences/managing_entities.html for more detail into integrations
+
+    # What entities should be blacklisted or whitelisted?
+    # See https://jd.papermc.io/paper/1.21.1/org/bukkit/entity/EntityType.html
+    # There is no need to include entity types such as arrows!
+    # Read https://docs.terrabytedev.com/skyfactions/mechanics/defences/managing_entities.html for more detail into integrations
     ENTITY_LIST: [ "" ]

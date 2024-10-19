@@ -44,11 +44,11 @@ public class GemsGiveCommand extends CommandTemplate{
 
     @Suggestions("playerFactionName")
     public List<String> suggestPlayers(CommandContext<CommandSourceStack> context, CommandInput input) {
-        if (input.input().equalsIgnoreCase("gems give player")) {
+        if (input.input().startsWith("gems give player")) {
             return Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
                     .collect(Collectors.toList());
-        } else if (input.input().equalsIgnoreCase("gems give faction")) {
+        } else if (input.input().startsWith("gems give faction")) {
             return new ArrayList<>(FactionAPI.factionNameCache.keySet());
         }
 

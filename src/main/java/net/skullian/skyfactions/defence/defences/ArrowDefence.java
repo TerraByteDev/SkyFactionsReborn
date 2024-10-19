@@ -1,8 +1,5 @@
 package net.skullian.skyfactions.defence.defences;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.defence.struct.DefenceData;
@@ -28,6 +25,10 @@ public class ArrowDefence extends Defence {
                 Bukkit.getScheduler().scheduleSyncRepeatingTask(SkyFactionsReborn.getInstance(), new Runnable() {
                     @Override
                     public void run() {
+                        /*if (getData().getAMMO() == 0) {
+                            notifyNoAmmo();
+                            return;
+                        }*/
                         if (!isAllowed(getStruct().getPROJECTILE())) return;
 
                         getRandomEntity(getDefenceLocation().getWorld()).whenComplete((entities, throwable) -> {
@@ -48,13 +49,13 @@ public class ArrowDefence extends Defence {
 
                                 if (type == EntityType.ARROW || type == EntityType.SPECTRAL_ARROW) {
                                     projectileObject = entity.getType() == EntityType.SPECTRAL_ARROW ? SpectralArrow.class : Arrow.class;
-                                    world.spawnArrow(defenceLocation, direction, (float) 3.0, 3.0f, (Class) projectileObject);
+                                    projectileObject = world.spawnArrow(defenceLocation, direction, (float) 3.0, 3.0f, (Class) projectileObject);
                                 } else {
                                     projectileObject = world.spawnEntity(defenceLocation, type);
                                     ((Entity) projectileObject).setVelocity(((Entity) projectileObject).getVelocity().multiply(3.0f));
-
-                                    applyPDC((Entity) projectileObject);
                                 }
+
+                                applyPDC((Entity) projectileObject);
                             }
                         });
                     }

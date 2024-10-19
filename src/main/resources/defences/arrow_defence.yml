@@ -59,7 +59,7 @@ MESSAGES:
 # PLACEHOLDERS: level - The defence level.
 ATTRIBUTES:
   RANGE: 4 + level # How far the defence's range is.
-  COOLDOWN: 12 - level # Cooldown.
+  COOLDOWN: 6 - level # Cooldown.
   TARGET_MAX: 2 # Max targets for the defence at once.
   MAX_AMMO: 350 * level # Highest ammo count.
   UPGRADE_COST: 40 * level # Cost of upgrading the defence.
@@ -88,10 +88,10 @@ HOLOGRAMS:
   # You can have multiple entries, each is a new line.
   # Lowest line will be the lowest hologram (closest to the top of the defence)
   LINES:
-    - "⌞%defence_name%⌝"
+    - "&7⌞&r%defence_name%&7⌝"
 
   # Appended to the bottom (or top if configured) of the hologram stack if the defence is out of stock.
-  OUT_OF_STOCK_LINE: "&cOut of Stock!"
+  OUT_OF_STOCK_LINE: "&cOut of Ammo!"
 
   # Append the OUT_OF_STOCK_LINE to the top of the hologram stack.
   STOCK_AT_TOP: false
