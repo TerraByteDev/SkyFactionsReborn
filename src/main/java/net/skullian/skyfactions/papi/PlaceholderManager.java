@@ -55,7 +55,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
             return "-1";
         } else if (params.equalsIgnoreCase("player_faction")) {
             if (player == null) return "UNKNOWN PLAYER";
-            if (FactionAPI.factionCache.containsKey(player.getUniqueId())) return String.valueOf(FactionAPI.factionCache.get(player.getUniqueId()));
+            if (FactionAPI.factionCache.containsKey(player.getUniqueId())) return String.valueOf(FactionAPI.factionCache.get(player.getUniqueId()).getName());
                 else FactionAPI.getFaction(player.getUniqueId());
 
             return "Loading...";
