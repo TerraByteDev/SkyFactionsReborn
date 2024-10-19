@@ -16,8 +16,8 @@ TYPE: "FLAMETHROWER"
 
 # Runes cost when buying from the Obelisk
 COST:
-  BUY: 160
-  SELL: 70
+  BUY: 350
+  SELL: 160
 
   # How many runes to purchase ONE ammo.
   # This supports level scaling!

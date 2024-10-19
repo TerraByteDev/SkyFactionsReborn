@@ -10,6 +10,7 @@ import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.api.SkullAPI;
 import net.skullian.skyfactions.config.ConfigHandler;
@@ -78,6 +79,7 @@ public class DefencesFactory {
 
     public static void register() {
         try {
+            defences.clear();
             defenceTypes.put("ARROW", "net.skullian.skyfactions.defence.defences.ArrowDefence");
 
             File dir = new File(SkyFactionsReborn.getInstance().getDataFolder() + "/defences");
@@ -254,16 +256,7 @@ public class DefencesFactory {
     }
 
     public static void addDefence(Player player, DefenceStruct defence, Faction faction) {
-        ItemStack stack = SkullAPI.convertToSkull(new ItemStack(Material.getMaterial(defence.getITEM_MATERIAL())), defence.getITEM_SKULL());
-        NamespacedKey nameKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
-
-        ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(TextUtility.color(defence.getNAME()));
-        meta.getPersistentDataContainer().set(nameKey, PersistentDataType.STRING, defence.getIDENTIFIER());
-
-        meta.setLore(getFormattedLore(defence, defence.getITEM_LORE()));
-        stack.setItemMeta(meta);
-
+        ItemStack stack = DefenceAPI.createDefenceStack(defence);
 
         if (faction != null) {
             // assume faction type
@@ -291,33 +284,6 @@ public class DefencesFactory {
                 Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME()));
             });
         }
-    }
-
-    private static List<String> getFormattedLore(DefenceStruct struct, List<String> lore) {
-        String maxLevel = String.valueOf(struct.getMAX_LEVEL());
-        String range = DefencesFactory.solveFormula(struct.getATTRIBUTES().getRANGE(), 1);
-        String ammo = DefencesFactory.solveFormula(struct.getATTRIBUTES().getMAX_AMMO(), 1);
-        String targetMax = DefencesFactory.solveFormula(struct.getATTRIBUTES().getMAX_TARGETS(), 1);
-        String damage = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDAMAGE(), 1);
-        String cooldown = DefencesFactory.solveFormula(struct.getATTRIBUTES().getCOOLDOWN(), 1);
-        String healing = DefencesFactory.solveFormula(struct.getATTRIBUTES().getHEALING(), 1);
-        String distance = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDISTANCE(), 1);
-        List<String> newLore = new ArrayList<>();
-
-        for (String str : lore) {
-            newLore.add(TextUtility.color(str
-                    .replace("%max_level%", maxLevel)
-                    .replace("%range%", range)
-                    .replace("%ammo%", ammo)
-                    .replace("%target_max%", targetMax)
-                    .replace("%damage%", damage)
-                    .replace("%cooldown%", cooldown)
-                    .replace("%healing%", healing)
-                    .replace("%distance%", distance)
-                    .replace("%cost%", String.valueOf(struct.getBUY_COST()))));
-        }
-
-        return newLore;
     }
 
     private static List<String> getPlacementBlocks(YamlDocument config, String fName) {

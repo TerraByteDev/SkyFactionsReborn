@@ -16,8 +16,8 @@ TYPE: "POTION"
 
 # Runes cost when buying from the Obelisk
 COST:
-  BUY: 145
-  SELL: 100
+  BUY: 280
+  SELL: 120
 
   # How many runes to purchase ONE ammo.
   # This supports level scaling!

@@ -16,8 +16,8 @@ TYPE: "LANDMINE"
 
 # Runes cost when buying from the Obelisk
 COST:
-  BUY: 100
-  SELL: 55
+  BUY: 200
+  SELL: 110
 
   # How many runes to purchase ONE ammo.
   # This supports level scaling!

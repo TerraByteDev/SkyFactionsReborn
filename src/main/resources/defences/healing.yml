@@ -16,8 +16,8 @@ TYPE: "HEALING"
 
 # Runes cost when buying from the Obelisk (and for ammo).
 COST:
-  BUY: 85
-  SELL: 50
+  BUY: 220
+  SELL: 100
 
   # How many runes to purchase ONE ammo.
   # This supports level scaling!

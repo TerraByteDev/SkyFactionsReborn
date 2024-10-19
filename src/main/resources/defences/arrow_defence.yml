@@ -16,8 +16,8 @@ TYPE: "ARROW"
 
 # Resource Points cost when buying from the Obelisk (among other things)
 COST:
-  BUY: 80
-  SELL: 40
+  BUY: 200
+  SELL: 90
 
   # How many runes to purchase ONE ammo.
   # This supports level scaling!

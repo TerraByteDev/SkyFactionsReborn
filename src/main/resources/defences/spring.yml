@@ -16,8 +16,8 @@ TYPE: "SPRING"
 
 # Runes cost when buying from the Obelisk
 COST:
-  BUY: 95
-  SELL: 65
+  BUY: 180
+  SELL: 70
 
   # How many runes to purchase ONE ammo.
   # This supports level scaling!
