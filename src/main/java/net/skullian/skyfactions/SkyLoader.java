@@ -12,7 +12,7 @@ public class SkyLoader implements PluginLoader {
     @Override
     public void classloader(@NotNull PluginClasspathBuilder pluginClasspathBuilder) {
         MavenLibraryResolver invUIResolver = new MavenLibraryResolver();
-        .addRepository(new RemoteRepository.Builder("maven-central", "default", "https://repo1.maven.org/maven2/").build());
+        
         invUIResolver.addRepository(new RemoteRepository.Builder("xenondevs", "default", "https://repo.xenondevs.xyz/releases/").build());
         invUIResolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:invui:pom:1.38"), null));
 
@@ -43,7 +43,8 @@ public class SkyLoader implements PluginLoader {
         centralResolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-paper:2.0.0-beta.10"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-annotations:2.0.0"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("net.objecthunter:exp4j:0.4.8"), null));
-        
+
+        pluginClasspathBuilder.addLibrary(centralResolver);
         pluginClasspathBuilder.addLibrary(invUIResolver);
     }
 }
