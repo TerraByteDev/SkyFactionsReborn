@@ -7,6 +7,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.db.IslandRaidData;
+import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.apache.commons.lang3.time.DurationFormatUtils;
@@ -31,23 +32,18 @@ public class RaidAPI {
     public static Map<UUID, UUID> processingRaid = new HashMap<>();
     public static Map<UUID, UUID> currentRaids = new HashMap<>();
 
-    public static String getCooldownDuration(Player player) {
-        try {
-            long cooldownDurationInMilliseconds = Settings.RAIDING_COOLDOWN.getInt();
-            AtomicLong lastTime = new AtomicLong();
-            SkyFactionsReborn.databaseHandler.getLastRaid(player).thenAccept(lastTime::set).get();
+    public static CompletableFuture<String> getCooldownDuration(Player player) {
+        long cooldownDurationInMilliseconds = Settings.RAIDING_COOLDOWN.getInt();
+        return SkyFactionsReborn.databaseHandler.getLastRaid(player).thenApply((lastTime) -> {
             long currentTime = System.currentTimeMillis();
 
-            if (currentTime - lastTime.get() >= cooldownDurationInMilliseconds) {
+            if (currentTime - lastTime >= cooldownDurationInMilliseconds) {
                 return null;
             } else {
-                long cooldownDuration = cooldownDurationInMilliseconds - (currentTime - lastTime.get());
+                long cooldownDuration = cooldownDurationInMilliseconds - (currentTime - lastTime);
                 return DurationFormatUtils.formatDuration(cooldownDuration, "HH'h 'mm'm 'ss's'");
             }
-        } catch (ExecutionException | InterruptedException error) {
-            error.printStackTrace();
-            return "ERROR";
-        }
+        });
     }
 
     public static void startRaid(Player player) {

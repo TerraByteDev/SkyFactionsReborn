@@ -6,11 +6,14 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.PlayerRaidConfirmationUI;
+import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SoundUtil;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
+@Command("raid")
 public class RaidStartCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -27,22 +30,24 @@ public class RaidStartCommand extends CommandTemplate {
         return "/raid start";
     }
 
-    @Override
+    @Command("start")
     public void perform(Player player, String[] args) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
-        String cooldownLeft = RaidAPI.getCooldownDuration(player);
-        if (cooldownLeft != null) {
-            if (cooldownLeft.equals("ERROR")) {
-                Messages.ERROR.send(player, "%error%", "start a raid", "%debug%", "SQL_RAID_COOLDOWN_GET");
-            } else {
-                Messages.RAID_ON_COOLDOWN.send(player, "%cooldown%", cooldownLeft);
+        RaidAPI.getCooldownDuration(player).whenComplete((cooldown, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "start a raid", "SQL_RAID_COOLDOWN_GET", ex);
+                return;
             }
-        } else {
-            PlayerRaidConfirmationUI.promptPlayer(player);
-            SoundUtil.playSound(player, "ui.button.click", 1f, 1f);
-        }
+
+            if (cooldown != null) {
+                Messages.RAID_ON_COOLDOWN.send(player, "%cooldown%", cooldown);
+            } else {
+                PlayerRaidConfirmationUI.promptPlayer(player);
+                SoundUtil.playSound(player, "ui.button.click", 1f, 1f);
+            }
+        });
     }
 
     public static List<String> permissions = List.of("skyfactions.raid.start", "skyfactions.raid");
