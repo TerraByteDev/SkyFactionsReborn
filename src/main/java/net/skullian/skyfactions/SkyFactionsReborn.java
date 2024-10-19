@@ -16,6 +16,8 @@ import net.skullian.skyfactions.command.discord.DiscordCommandHandler;
 import net.skullian.skyfactions.command.faction.FactionCommandHandler;
 import net.skullian.skyfactions.command.gems.GemsCommandHandler;
 import net.skullian.skyfactions.command.island.IslandCommandHandler;
+import net.skullian.skyfactions.command.raid.RaidCommandHandler;
+import net.skullian.skyfactions.command.runes.RunesCommandHandler;
 import net.skullian.skyfactions.config.ConfigFileHandler;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.db.DatabaseHandler;
@@ -89,6 +91,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
         new GemsCommandHandler();
         new FactionCommandHandler();
         new IslandCommandHandler();
+        new RaidCommandHandler();
+        new RunesCommandHandler();
 
         SLogger.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);

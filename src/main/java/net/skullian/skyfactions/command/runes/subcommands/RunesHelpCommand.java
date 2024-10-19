@@ -5,11 +5,21 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.runes.RunesCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
+@Command("runes")
 public class RunesHelpCommand extends CommandTemplate {
+
+    RunesCommandHandler handler;
+
+    public RunesHelpCommand(RunesCommandHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
     public String getName() {
         return "help";
@@ -25,21 +35,23 @@ public class RunesHelpCommand extends CommandTemplate {
         return "/runes help";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
-        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
+    @Command("help")
+    public void perform(
+            CommandSender sender
+    ) {
+        if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
+        if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 
-        Messages.COMMAND_HEAD.send(player);
-        if (RunesCommandHandler.getSubCommands().size() == 0) {
-            Messages.NO_COMMANDS_FOUND.send(player);
+        Messages.COMMAND_HEAD.send(sender);
+        if (handler.getSubCommands().isEmpty()) {
+            Messages.NO_COMMANDS_FOUND.send(sender);
         }
-        for (int i = 0; i < RunesCommandHandler.getSubCommands().size(); i++) {
-            if (!CommandsUtility.hasPerm(player, RunesCommandHandler.getSubCommands().get(i).permission(), false))
+        for (int i = 0; i < handler.getSubCommands().size(); i++) {
+            if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, handler.getSubCommands().get(i).permission(), false))
                 continue;
-            Messages.COMMAND_INFO.send(player, "%command_syntax%", RunesCommandHandler.getSubCommands().get(i).getSyntax(), "%command_name%", RunesCommandHandler.getSubCommands().get(i).getName(), "%command_description%", RunesCommandHandler.getSubCommands().get(i).getDescription());
+            Messages.COMMAND_INFO.send(sender, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", handler.getSubCommands().get(i).getName(), "%command_description%", handler.getSubCommands().get(i).getDescription());
         }
-        Messages.COMMAND_HEAD.send(player);
+        Messages.COMMAND_HEAD.send(sender);
     }
 
     public static List<String> permissions = List.of("skyfactions.runes.help", "skyfactions.runes");

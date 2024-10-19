@@ -51,6 +51,9 @@ Messages:
     # Sent when the player tries to run a command related to islands when they do not have one.
     NO_ISLAND: "%server_name% &c&lHey!&r&7 You do not have an island!"
 
+    # Sent when a player in question does not have an island (but someone tries to do something such as /runes give)
+    PLAYER_HAS_NO_ISLAND: "%server_name% &c&lHey!&r&7 That player does not have an island!"
+
     # Sent when a player runs /island delete confirm and the deletion is processing.
     DELETION_PROCESSING: "%server_name%&r&e Deleting your island, please wait..."
     # Sent when the player initially runs /island delete, and has to rerun the command below.

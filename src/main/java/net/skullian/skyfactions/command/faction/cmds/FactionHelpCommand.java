@@ -44,13 +44,13 @@ public class FactionHelpCommand extends CommandTemplate {
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 
         Messages.COMMAND_HEAD.send(sender);
-        if (RaidCommandHandler.getSubCommands().size() <= 0) {
+        if (handler.getSubCommands().isEmpty()) {
             Messages.NO_COMMANDS_FOUND.send(sender);
         }
-        for (int i = 0; i < RaidCommandHandler.getSubCommands().size(); i++) {
-            if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, RaidCommandHandler.getSubCommands().get(i).permission(), false))
+        for (int i = 0; i < handler.getSubCommands().size(); i++) {
+            if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, handler.getSubCommands().get(i).permission(), false))
                 continue;
-            Messages.COMMAND_INFO.send(sender, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", RaidCommandHandler.getSubCommands().get(i).getName(), "%command_description%", RaidCommandHandler.getSubCommands().get(i).getDescription());
+            Messages.COMMAND_INFO.send(sender, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", handler.getSubCommands().get(i).getName(), "%command_description%", handler.getSubCommands().get(i).getDescription());
         }
         Messages.COMMAND_HEAD.send(sender);
     }

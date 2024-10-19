@@ -43,7 +43,7 @@ public class RaidHelpCommand extends CommandTemplate {
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 
         Messages.COMMAND_HEAD.send(sender);
-        if (handler.getSubCommands().size() <= 0) {
+        if (handler.getSubCommands().isEmpty()) {
             Messages.NO_COMMANDS_FOUND.send(sender);
         }
         for (int i = 0; i < handler.getSubCommands().size(); i++) {

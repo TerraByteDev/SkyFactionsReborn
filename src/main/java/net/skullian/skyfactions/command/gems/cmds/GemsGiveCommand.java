@@ -41,6 +41,7 @@ public class GemsGiveCommand extends CommandTemplate{
 
     @Suggestions("playerFactionName")
     public List<String> suggestPlayers(CommandContext<CommandSender> context, CommandInput input) {
+        System.out.println(input.input());
         return Bukkit.getOnlinePlayers().stream()
                 .map(Player::getName)
                 .collect(Collectors.toList());
@@ -72,7 +73,7 @@ public class GemsGiveCommand extends CommandTemplate{
                         ErrorHandler.handleError(sender, "check if the specified player had an island", "SQL_ISLAND_GET", throwable);
                         return;
                     } else if (!hasIsland) {
-                        Messages.NO_ISLAND.send(sender);
+                        Messages.PLAYER_HAS_NO_ISLAND.send(sender);
                         return;
                     }
 
