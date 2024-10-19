@@ -12,7 +12,7 @@ public class SkyLoader implements PluginLoader {
     @Override
     public void classloader(@NotNull PluginClasspathBuilder pluginClasspathBuilder) {
         MavenLibraryResolver invUIResolver = new MavenLibraryResolver();
-        
+
         invUIResolver.addRepository(new RemoteRepository.Builder("xenondevs", "default", "https://repo.xenondevs.xyz/releases/").build());
         invUIResolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:invui:pom:1.38"), null));
 

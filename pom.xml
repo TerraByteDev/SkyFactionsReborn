@@ -46,7 +46,6 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>net.objecthunter:*</include>
                             <include>me.tofaa.entitylib:*</include>
                         </includes>
                     </artifactSet>
