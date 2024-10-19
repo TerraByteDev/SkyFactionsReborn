@@ -5,6 +5,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.RunesAPI;
+import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,40 +60,38 @@ public class PlaceholderManager extends PlaceholderExpansion {
                 return String.valueOf(FactionAPI.factionCache.get(player.getUniqueId()).getName());
             else FactionAPI.getFaction(player.getUniqueId());
 
-            return "Loading...";
+            return TextUtility.color("&eLoading...");
         } else if (params.equalsIgnoreCase("faction_runes")) {
             if (player == null) return "UNKNOWN PLAYER";
             if (FactionAPI.factionCache.containsKey(player.getUniqueId())) return String.valueOf(FactionAPI.factionCache.get(player.getUniqueId()).getRunes());
                 else FactionAPI.getFaction(player.getUniqueId());
 
-            return "Loading...";
+            return TextUtility.color("&eLoading...");
         } else if (params.toLowerCase().startsWith("faction_runes_")) {
             String factionName = params.toLowerCase().replace("faction_runes_", "");
             if (FactionAPI.factionNameCache.containsKey(factionName))
                 return String.valueOf(FactionAPI.factionNameCache.get(factionName).getRunes());
             else FactionAPI.getFaction(factionName);
 
-            return "Loading...";
+            return TextUtility.color("&eLoading...");
         } else if (params.equalsIgnoreCase("faction_gems")) {
             if (player == null) return "UNKNOWN PLAYER";
             if (FactionAPI.factionCache.containsKey(player.getUniqueId())) return String.valueOf(FactionAPI.factionCache.get(player.getUniqueId()).getGems());
             else FactionAPI.getFaction(player.getUniqueId());
 
-            return "Loading...";
+            return TextUtility.color("&eLoading...");
         } else if (params.toLowerCase().startsWith("faction_gems_")) {
             String factionName = params.toLowerCase().replace("faction_gems_", "");
             if (FactionAPI.factionNameCache.containsKey(factionName)) return String.valueOf(FactionAPI.factionNameCache.get(factionName).getGems());
                 else FactionAPI.getFaction(factionName);
 
-            return "Loading...";
-        } else if (params.toLowerCase().startsWith("faction_rank_")) {
+            return TextUtility.color("&eLoading...");
+        } else if (params.equalsIgnoreCase("faction_rank")) {
             if (player == null) return "UNKNOWN PLAYER";
-            String factionName = params.toLowerCase().replace("faction_rank_", "");
+            if (FactionAPI.factionCache.containsKey(player.getUniqueId())) return TextUtility.color(FactionAPI.factionCache.get(player.getUniqueId()).getRank(player.getUniqueId()));
+                else FactionAPI.getFaction(player.getUniqueId());
 
-            if (FactionAPI.factionNameCache.containsKey(factionName)) return FactionAPI.factionNameCache.get(factionName).getRank(player.getUniqueId());
-                else FactionAPI.getFaction(factionName);
-
-            return "Loading...";
+            return TextUtility.color("&eLoading...");
         }
         return null;
     }
