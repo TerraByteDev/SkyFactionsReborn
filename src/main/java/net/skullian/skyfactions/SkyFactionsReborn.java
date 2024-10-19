@@ -83,27 +83,10 @@ public final class SkyFactionsReborn extends JavaPlugin {
         // To avoid later confusion, we only register the discord related commands if it is enabled.
         boolean discordEnabled = SkyFactionsReborn.configHandler.DISCORD_CONFIG.getBoolean("Discord.ENABLED");
         if (discordEnabled) {
-            //getCommand("link").setExecutor(new LinkCommand());
-            //getCommand("unlink").setExecutor(new UnlinkCommand());
+            new DiscordCommandHandler();
         }
 
-        //getCommand("raid").setExecutor(new RaidCommandHandler());
-        //getCommand("raid").setTabCompleter(new RaidCommandTabCompletion());
-
-        //getCommand("gems").setExecutor(new GemsCommandHandler());
-        //getCommand("gems").setTabCompleter(new GemsCommandTabCompletion());
-
-        //getCommand("sf").setExecutor(new SFCommandHandler());
-        //getCommand("sf").setTabCompleter(new SFCommandTabCompletion());
-
-        //getCommand("faction").setExecutor(new FactionCommandHandler());
-        //getCommand("faction").setTabCompleter(new FactionCommandTabCompletion());
-
-        //getCommand("runes").setExecutor(new RunesCommandHandler());
-        //getCommand("runes").setTabCompleter(new RunesCommandTabCompletion());
-
         new GemsCommandHandler();
-        new DiscordCommandHandler();
         new FactionCommandHandler();
         new IslandCommandHandler();
 
