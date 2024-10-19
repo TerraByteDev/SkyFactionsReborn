@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.command.discord;
+package net.skullian.skyfactions.command.discord.cmds;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;

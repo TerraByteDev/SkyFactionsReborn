@@ -1,17 +1,14 @@
-package net.skullian.skyfactions.command.discord;
+package net.skullian.skyfactions.command.discord.cmds;
 
 import net.dv8tion.jda.api.entities.User;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 

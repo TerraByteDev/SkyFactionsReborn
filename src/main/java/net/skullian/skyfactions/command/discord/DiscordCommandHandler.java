@@ -4,6 +4,8 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandHandler;
 import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.discord.cmds.LinkCommand;
+import net.skullian.skyfactions.command.discord.cmds.UnlinkCommand;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
