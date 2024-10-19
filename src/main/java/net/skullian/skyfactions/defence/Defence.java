@@ -115,6 +115,7 @@ public abstract class Defence {
         targetedEntities.removeIf(currentlyTargeted -> !nearbyEntities.contains(currentlyTargeted));
 
         for (LivingEntity entity : nearbyEntities) {
+            if (!entity.isVisibleByDefault()) continue;
             if (entity.isInvisible()) continue;
             if (entity instanceof Player) continue; // TODO: check if raid is ongoing, if so target them
 
