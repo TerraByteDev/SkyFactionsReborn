@@ -5,11 +5,21 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.sf.SFCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
+@Command("sf")
 public class SFHelpCommand extends CommandTemplate {
+
+    SFCommandHandler handler;
+
+    public SFHelpCommand(SFCommandHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
     public String getName() {
         return "help";
@@ -25,21 +35,23 @@ public class SFHelpCommand extends CommandTemplate {
         return "/sf help";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
-        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
+    @Command("help")
+    public void perform(
+            CommandSender sender
+    ) {
+        if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
+        if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 
-        Messages.COMMAND_HEAD.send(player);
-        if (SFCommandHandler.getSubCommands().size() <= 0) {
-            Messages.NO_COMMANDS_FOUND.send(player);
+        Messages.COMMAND_HEAD.send(sender);
+        if (handler.getSubCommands().isEmpty()) {
+            Messages.NO_COMMANDS_FOUND.send(sender);
         }
-        for (int i = 0; i < SFCommandHandler.getSubCommands().size(); i++) {
-            if (!CommandsUtility.hasPerm(player, SFCommandHandler.getSubCommands().get(i).permission(), false))
+        for (int i = 0; i < handler.getSubCommands().size(); i++) {
+            if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, handler.getSubCommands().get(i).permission(), false))
                 continue;
-            Messages.COMMAND_INFO.send(player, "%command_syntax%", SFCommandHandler.getSubCommands().get(i).getSyntax(), "%command_name%", SFCommandHandler.getSubCommands().get(i).getName(), "%command_description%", SFCommandHandler.getSubCommands().get(i).getDescription());
+            Messages.COMMAND_INFO.send(sender, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", handler.getSubCommands().get(i).getName(), "%command_description%", handler.getSubCommands().get(i).getDescription());
         }
-        Messages.COMMAND_HEAD.send(player);
+        Messages.COMMAND_HEAD.send(sender);
     }
 
     public static List<String> permissions = List.of("skyfactions.sf.help");

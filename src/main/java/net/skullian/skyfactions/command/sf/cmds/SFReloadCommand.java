@@ -6,11 +6,13 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.SLogger;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
 
-
+@Command("sf")
 public class SFReloadCommand extends CommandTemplate {
     @Override
     public String getName() {
@@ -27,16 +29,18 @@ public class SFReloadCommand extends CommandTemplate {
         return "/sf reload";
     }
 
-    @Override
-    public void perform(Player player, String[] args) {
-        if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
+    @Command("reload")
+    public void perform(
+            CommandSender sender
+    ) {
+        if ((sender instanceof Player) &&!CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
+        if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 
-        SLogger.warn("[{}] is reloading SkyFactionsReborn.", player.getName());
-        Messages.RELOADING.send(player);
+        SLogger.warn("[{}] is reloading SkyFactionsReborn.", sender.getName());
+        Messages.RELOADING.send(sender);
 
         SkyFactionsReborn.configHandler.reloadFiles();
-        Messages.RELOADED.send(player);
+        Messages.RELOADED.send(sender);
         SLogger.warn("SkyFactionsReborn reloaded.");
     }
 
