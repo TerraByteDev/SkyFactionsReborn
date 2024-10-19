@@ -135,9 +135,8 @@ EXPERIENCE_DROPS:
   SLIME: randInt(2, 4)
 
 # Projectile that it "shoots". NONE for no projectile.
-# See https://docs.terrabytedev.com/skyfactions/mechanics/defences/projectiles.html/
+# See https://docs.terrabytedev.com/skyfactions/mechanics/defences/projectiles
 PROJECTILE: "ARROW"
-
 
 # Block Configuration
 # SKULL only applies if material is PLAYER_HEAD

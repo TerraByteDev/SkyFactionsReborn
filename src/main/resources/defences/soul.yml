@@ -143,7 +143,7 @@ EXPERIENCE_DROPS:
   SLIME: randInt(3, 4)
 
 # Projectile that it "shoots". NONE for no projectile.
-# See https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
+# See https://docs.terrabytedev.com/skyfactions/mechanics/defences/projectiles
 PROJECTILE: "AREA_EFFECT_CLOUD"
 
 # Block Configuration

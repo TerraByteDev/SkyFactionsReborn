@@ -10,9 +10,7 @@ import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
 public class ArrowDefence extends Defence {
@@ -45,10 +43,18 @@ public class ArrowDefence extends Defence {
                                 Location defenceLocation = getDefenceLocation();
                                 Vector direction = entity.getLocation().subtract(defenceLocation).toVector().normalize();
 
-                                Entity projectile = world.spawnEntity(defenceLocation.add(direction.multiply(0.5)), EntityType.ARROW);
-                                applyPDC(projectile);
+                                EntityType type = EntityType.valueOf(getStruct().getPROJECTILE());
+                                Object projectileObject;
 
-                                projectile.setVelocity(direction.multiply(3));
+                                if (type == EntityType.ARROW || type == EntityType.SPECTRAL_ARROW) {
+                                    projectileObject = entity.getType() == EntityType.SPECTRAL_ARROW ? SpectralArrow.class : Arrow.class;
+                                    world.spawnArrow(defenceLocation, direction, (float) 3.0, 3.0f, (Class) projectileObject);
+                                } else {
+                                    projectileObject = world.spawnEntity(defenceLocation, type);
+                                    ((Entity) projectileObject).setVelocity(((Entity) projectileObject).getVelocity().multiply(3.0f));
+
+                                    applyPDC((Entity) projectileObject);
+                                }
                             }
                         });
                     }

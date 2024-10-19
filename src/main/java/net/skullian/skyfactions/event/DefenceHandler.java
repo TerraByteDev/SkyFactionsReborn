@@ -209,6 +209,7 @@ public class DefenceHandler implements Listener {
             int damage = container.get(damageKey, PersistentDataType.INTEGER);
 
             hitEntity.damage(damage);
+            hitEntity.knockback(0.5f, 0.5f, 0.5f);
 
             if (hitEntity.getType().equals(EntityType.PLAYER) && container.has(messageKey, PersistentDataType.STRING)) {
                 String message = container.get(messageKey, PersistentDataType.STRING);

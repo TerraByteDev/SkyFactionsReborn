@@ -133,7 +133,7 @@ EXPERIENCE_DROPS:
   SLIME: randInt(3, 4)
 
 # Projectile that it "shoots". NONE for no projectile.
-# See https://jd.papermc.io/paper/1.21.1/org/bukkit/entity/Projectile.html under the All Known Subinterfaces section.
+# See https://docs.terrabytedev.com/skyfactions/mechanics/defences/projectiles
 PROJECTILE: "SmallFireball"
 
 
