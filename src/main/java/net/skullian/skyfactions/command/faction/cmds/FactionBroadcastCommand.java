@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
@@ -13,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.annotation.specifier.Greedy;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 
 import java.util.List;
 
@@ -37,10 +39,12 @@ public class FactionBroadcastCommand extends CommandTemplate {
     }
 
     @Command("broadcast <message>")
+    @Permission(value = { "skyfactions.faction.broadcast", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender,
+            CommandSourceStack commandSourceStack,
             @Argument(value = "message") @Greedy String message
     ) {
+        CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;

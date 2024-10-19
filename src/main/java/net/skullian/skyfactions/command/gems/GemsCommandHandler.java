@@ -8,7 +8,7 @@ import net.skullian.skyfactions.command.gems.cmds.GemsBalanceCommand;
 import net.skullian.skyfactions.command.gems.cmds.GemsGiveCommand;
 import net.skullian.skyfactions.command.gems.cmds.GemsHelpCommand;
 import net.skullian.skyfactions.command.gems.cmds.GemsPayCommand;
-import org.bukkit.command.CommandSender;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class GemsCommandHandler implements CommandHandler {
 
     PaperCommandManager<CommandSourceStack> manager;
-    AnnotationParser<CommandSender> parser;
+    AnnotationParser<CommandSourceStack> parser;
     ArrayList<CommandTemplate> subcommands = new ArrayList<>();
 
     public GemsCommandHandler() {
@@ -29,9 +29,11 @@ public class GemsCommandHandler implements CommandHandler {
 
         this.parser = new AnnotationParser(
                 manager,
-                CommandSender.class,
-                paramas -> SimpleCommandMeta.empty()
+                CommandSourceStack.class,
+                params -> SimpleCommandMeta.empty()
         );
+
+        registerSubCommands(this.parser);
     }
 
     @Override
@@ -45,7 +47,7 @@ public class GemsCommandHandler implements CommandHandler {
     }
 
     @Override
-    public AnnotationParser<CommandSender> getParser() {
+    public AnnotationParser<CommandSourceStack> getParser() {
         return this.parser;
     }
 
@@ -55,10 +57,18 @@ public class GemsCommandHandler implements CommandHandler {
     }
 
     @Override
-    public void registerSubCommands() {
+    public void registerSubCommands(AnnotationParser<CommandSourceStack> parser) {
         register(new GemsBalanceCommand());
         register(new GemsGiveCommand());
         register(new GemsHelpCommand(this));
         register(new GemsPayCommand());
     }
+
+    @Override
+    public void register(CommandTemplate template) {
+        parser.parse(template);
+        subcommands.add(template);
+    }
+
+
 }

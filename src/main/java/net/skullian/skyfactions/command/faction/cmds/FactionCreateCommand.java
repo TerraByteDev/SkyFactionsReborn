@@ -1,10 +1,10 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.faction.FactionCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.util.ErrorHandler;
@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 
 import java.util.List;
 
@@ -34,10 +35,12 @@ public class FactionCreateCommand extends CommandTemplate {
     }
 
     @Command("create <name>")
+    @Permission(value = { "skyfactions.faction.create", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender,
+            CommandSourceStack commandSourceStack,
             @Argument(value = "name") String name
     ) {
+        CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;

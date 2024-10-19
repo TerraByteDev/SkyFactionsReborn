@@ -7,7 +7,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.sf.cmds.SFHelpCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFInfoCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFReloadCommand;
-import org.bukkit.command.CommandSender;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class SFCommandHandler implements CommandHandler {
 
     PaperCommandManager<CommandSourceStack> manager;
-    AnnotationParser<CommandSender> parser;
+    AnnotationParser<CommandSourceStack> parser;
     ArrayList<CommandTemplate> subcommands = new ArrayList<>();
 
     public SFCommandHandler() {
@@ -28,9 +28,11 @@ public class SFCommandHandler implements CommandHandler {
 
         this.parser = new AnnotationParser(
                 manager,
-                CommandSender.class,
-                paramas -> SimpleCommandMeta.empty()
+                CommandSourceStack.class,
+                params -> SimpleCommandMeta.empty()
         );
+
+        registerSubCommands(this.parser);
     }
 
     @Override
@@ -44,7 +46,7 @@ public class SFCommandHandler implements CommandHandler {
     }
 
     @Override
-    public AnnotationParser<CommandSender> getParser() {
+    public AnnotationParser<CommandSourceStack> getParser() {
         return this.parser;
     }
 
@@ -54,9 +56,15 @@ public class SFCommandHandler implements CommandHandler {
     }
 
     @Override
-    public void registerSubCommands() {
+    public void registerSubCommands(AnnotationParser<CommandSourceStack> parser) {
         register(new SFHelpCommand(this));
         register(new SFInfoCommand());
         register(new SFReloadCommand());
+    }
+
+    @Override
+    public void register(CommandTemplate template) {
+        parser.parse(template);
+        subcommands.add(template);
     }
 }

@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.command.discord.cmds;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.dv8tion.jda.api.entities.User;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
@@ -9,15 +10,17 @@ import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 
 import java.util.List;
 
 public class LinkCommand extends CommandTemplate {
     @Command("link")
+    @Permission(value = { "skyfactions.command.link" }, mode = Permission.Mode.ANY_OF)
     public boolean handleLink(
-            CommandSender sender
+            CommandSourceStack commandSourceStack
     ) {
-
+        CommandSender sender = commandSourceStack.getSender();
         if (sender instanceof Player player) {
             if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true))
                 return true;

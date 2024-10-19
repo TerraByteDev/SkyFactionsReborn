@@ -5,9 +5,11 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.raid.RaidCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 
 import java.util.List;
 
@@ -36,9 +38,11 @@ public class RaidHelpCommand extends CommandTemplate {
     }
 
     @Command("help")
+    @Permission(value = { "skyfactions.raid.help", "skyfactions.raid" }, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender
+            CommandSourceStack commandSourceStack
     ) {
+        CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 

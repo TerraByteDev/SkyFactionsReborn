@@ -9,9 +9,12 @@ import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -35,10 +38,12 @@ public class FactionInfoCommand extends CommandTemplate {
     }
 
     @Command("info [name]")
+    @Permission(value = { "skyfactions.faction.info", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender,
-            @Nullable String name
+            CommandSourceStack commandSourceStack,
+            @Argument(value = "name") @Nullable String name
     ) {
+        CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;

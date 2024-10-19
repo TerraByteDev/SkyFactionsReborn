@@ -3,7 +3,7 @@ version: '${project.version}'
 main: net.skullian.skyfactions.SkyFactionsReborn
 api-version: 1.21
 authors: [ Skullians, nouish ]
-website: https://www.torrentsmp.com/
+website: https://github.com/TerraByteDev/SkyFactionsReborn
 
 depend: [ "FastAsyncWorldEdit", "WorldGuard", "WorldBorderAPI", "packetevents" ]
 softdepend:

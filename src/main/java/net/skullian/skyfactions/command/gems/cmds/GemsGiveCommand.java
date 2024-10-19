@@ -10,14 +10,17 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,25 +43,32 @@ public class GemsGiveCommand extends CommandTemplate{
     }
 
     @Suggestions("playerFactionName")
-    public List<String> suggestPlayers(CommandContext<CommandSender> context, CommandInput input) {
-        System.out.println(input.input());
-        return Bukkit.getOnlinePlayers().stream()
-                .map(Player::getName)
-                .collect(Collectors.toList());
+    public List<String> suggestPlayers(CommandContext<CommandSourceStack> context, CommandInput input) {
+        if (input.input().equalsIgnoreCase("gems give player")) {
+            return Bukkit.getOnlinePlayers().stream()
+                    .map(Player::getName)
+                    .collect(Collectors.toList());
+        } else if (input.input().equalsIgnoreCase("gems give faction")) {
+            return new ArrayList<>(FactionAPI.factionNameCache.keySet());
+        }
+
+        return List.of();
     }
 
     @Suggestions("giveTypeSelection")
-    public List<String> selectionSuggestion(CommandContext<CommandSender> context, CommandInput input) {
+    public List<String> selectionSuggestion(CommandContext<CommandSourceStack> context, CommandInput input) {
         return List.of("player", "faction");
     }
 
     @Command("give <type> <playerFactionName> <amount>")
+    @Permission(value = { "skyfactions.gems.give" }, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender,
+            CommandSourceStack commandSourceStack,
             @Argument(value = "type", suggestions = "giveTypeSelection") String type,
             @Argument(value = "playerFactionName", suggestions = "playerFactionName") String playerFactionName,
             @Argument(value = "amount") int amount
     ) {
+        CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 

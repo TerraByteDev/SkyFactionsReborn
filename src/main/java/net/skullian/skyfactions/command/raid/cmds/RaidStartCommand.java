@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.command.raid.cmds;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.RaidAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
@@ -8,8 +9,10 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.PlayerRaidConfirmationUI;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SoundUtil;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 
 import java.util.List;
 
@@ -31,7 +34,12 @@ public class RaidStartCommand extends CommandTemplate {
     }
 
     @Command("start")
-    public void perform(Player player, String[] args) {
+    @Permission(value = { "skyfactions.raid.start", "skyfactions.raid" }, mode = Permission.Mode.ANY_OF)
+    public void perform(
+            CommandSourceStack commandSourceStack
+    ) {
+        CommandSender sender = commandSourceStack.getSender();
+        if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 

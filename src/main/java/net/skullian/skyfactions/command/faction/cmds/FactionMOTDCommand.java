@@ -7,11 +7,13 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotation.specifier.Greedy;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 
 import java.util.List;
 
@@ -33,10 +35,12 @@ public class FactionMOTDCommand extends CommandTemplate {
     }
 
     @Command("motd <motd>")
+    @Permission(value = { "skyfactions.faction.motd", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender,
+            CommandSourceStack commandSourceStack,
             @Argument(value = "motd") @Greedy String motd
     ) {
+        CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;

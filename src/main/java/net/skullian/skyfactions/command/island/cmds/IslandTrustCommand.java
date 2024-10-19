@@ -9,10 +9,12 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
@@ -38,17 +40,19 @@ public class IslandTrustCommand extends CommandTemplate {
     }
 
     @Suggestions("onlinePlayers")
-    public List<String> suggestPlayers(CommandContext<CommandSender> context, CommandInput input) {
+    public List<String> suggestPlayers(CommandContext<CommandSourceStack> context, CommandInput input) {
         return Bukkit.getOnlinePlayers().stream()
                 .map(Player::getName)
                 .collect(Collectors.toList());
     }
 
     @Command("trust <player>")
+    @Permission(value = { "skyfactions.island.trust", "skyfactions.island" }, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender,
+            CommandSourceStack commandSourceStack,
             @Argument(value = "player", suggestions = "onlinePlayers") String playerName
     ) {
+        CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;

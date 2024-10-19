@@ -9,9 +9,12 @@ import net.skullian.skyfactions.config.types.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -34,10 +37,12 @@ public class IslandDeleteCommand extends CommandTemplate {
     }
 
     @Command("delete [confirm]")
+    @Permission(value = { "skyfactions.island.delete", "skyfactions.island" }, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender,
-            @Nullable String confirm
+            CommandSourceStack commandSourceStack,
+            @Argument(value = "confirm") @Nullable String confirm
     ) {
+        CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;

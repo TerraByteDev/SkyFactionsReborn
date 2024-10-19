@@ -6,9 +6,11 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 
 import java.util.List;
 
@@ -30,9 +32,11 @@ public class FactionTeleportCommand extends CommandTemplate {
     }
 
     @Command("teleport")
+    @Permission(value = { "skyfactions.faction.teleport", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender
+            CommandSourceStack commandSourceStack
     ) {
+        CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;

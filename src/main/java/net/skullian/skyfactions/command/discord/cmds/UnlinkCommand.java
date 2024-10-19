@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.command.discord.cmds;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
@@ -8,15 +9,17 @@ import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
 
 import java.util.List;
 
 public class UnlinkCommand extends CommandTemplate {
     @Command("unlink")
+    @Permission(value = { "skyfactions.command.unlink" }, mode = Permission.Mode.ANY_OF)
     public boolean handleUnlink(
-            CommandSender sender
+            CommandSourceStack commandSourceStack
     ) {
-
+        CommandSender sender = commandSourceStack.getSender();
         if (sender instanceof Player player) {
             if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord"), true))
                 return true;

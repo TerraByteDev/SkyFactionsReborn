@@ -1,7 +1,6 @@
 package net.skullian.skyfactions.command;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import org.bukkit.command.CommandSender;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.paper.PaperCommandManager;
 
@@ -12,15 +11,12 @@ public interface CommandHandler {
 
     PaperCommandManager<CommandSourceStack> getManager();
 
-    AnnotationParser<CommandSender> getParser();
+    AnnotationParser<CommandSourceStack> getParser();
 
     ArrayList<CommandTemplate> getSubCommands();
 
-    default void register(CommandTemplate command) {
-        getParser().parse((Object) command);
-        getSubCommands().add(command);
-    }
+    void registerSubCommands(AnnotationParser<CommandSourceStack> parser);
 
-    void registerSubCommands();
+    void register(CommandTemplate template);
 
 }
