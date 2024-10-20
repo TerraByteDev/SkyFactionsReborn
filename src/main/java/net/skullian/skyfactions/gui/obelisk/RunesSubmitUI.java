@@ -74,11 +74,10 @@ public class RunesSubmitUI {
             builder.addIngredient('.', inventory);
 
             inventory.setPreUpdateHandler((handler) -> {
-                this.ITEMS.put(handler.getSlot(), handler.getNewItem());
 
                 handler.setCancelled(!(handler.getUpdateReason() instanceof PlayerUpdateReason playerUpdateReason));
-
                 handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
+                if (!handler.isCancelled()) this.ITEMS.put(handler.getSlot(), handler.getNewItem());
             });
 
             List<ItemData> data = GUIAPI.getItemData("runes_ui", player);
