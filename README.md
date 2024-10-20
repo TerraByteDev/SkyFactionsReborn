@@ -21,6 +21,10 @@ This plugin contains an abundance of smart features, including:
 - Custom unique currency system called "gems" and a provided (optional) resource pack for them
 - Much, much more
 
+## Statistics
+
+![Alt](https://repobeats.axiom.co/api/embed/f10adbc3ce8d4130661433d027336988f8ff1853.svg "Repobeats analytics image")
+
 ## Links
 
 - [Discord](https://discord.gg/Y7DVR9gpwa) - For general questions, support, and chatting about the plugin. For bug

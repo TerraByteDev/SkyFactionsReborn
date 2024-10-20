@@ -6,6 +6,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.block.BrokenBlocksService;
+import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
@@ -15,6 +16,7 @@ import net.skullian.skyfactions.defence.struct.DefenceEntityDeathData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SLogger;
+import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.hologram.TextHologram;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Location;
@@ -63,33 +65,49 @@ public class DefenceHandler implements Listener {
 
         PersistentDataContainer container = stack.getItemMeta().getPersistentDataContainer();
         if (container.has(defenceKey, PersistentDataType.STRING)) {
-            String defenceIdentifier = container.get(defenceKey, PersistentDataType.STRING);
-
-            DefenceStruct defence = DefencesFactory.defences.get(defenceIdentifier);
-            if (defence != null) {
-                Block placed = event.getBlockPlaced();
-                Location belowLoc = placed.getLocation().clone();
-                belowLoc.setY(belowLoc.getY() - 1);
-
-                Block belowBlock = placed.getWorld().getBlockAt(belowLoc);
-                if (!isAllowedBlock(belowBlock, defence)) {
+            Block placed = event.getBlockPlaced();
+            returnOwnerDependingOnLocation(placed.getLocation(), player).whenComplete((owner, ex) -> {
+                boolean isFaction = isFaction(owner);
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "place your defence", "SQL_FACTION_GET", ex);
                     event.setCancelled(true);
-                    player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString())));
+                    return;
+                } else if (owner == null) {
+                    event.setCancelled(true);
                     return;
                 }
 
-                returnOwnerDependingOnLocation(placed.getLocation(), player).whenComplete((owner, ex) -> {
+                if (isFaction) {
+                    List<Defence> loadedDefences = loadedFactionDefences.get(owner);
+                    if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_FACTION_DEFENCES.getInt()) {
+                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, "%defence_max%", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
+                        SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
+                        return;
+                    }
+                } else {
+                    List<Defence> loadedDefences = loadedPlayerDefences.get(UUID.fromString(owner));
+                    if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_PLAYER_DEFENCES.getInt()) {
+                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, "%defence_max%", DefencesConfig.MAX_PLAYER_DEFENCES.getInt());
+                        SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
+                        return;
+                    }
+                }
+
+                String defenceIdentifier = container.get(defenceKey, PersistentDataType.STRING);
+
+                DefenceStruct defence = DefencesFactory.defences.get(defenceIdentifier);
+                if (defence != null) {
+                    Location belowLoc = placed.getLocation().clone();
+                    belowLoc.setY(belowLoc.getY() - 1);
+
+                    Block belowBlock = placed.getWorld().getBlockAt(belowLoc);
+                    if (!isAllowedBlock(belowBlock, defence)) {
+                        event.setCancelled(true);
+                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString())));
+                        return;
+                    }
+
                     try {
-                        if (ex != null) {
-                            ErrorHandler.handleError(player, "place your defence", "SQL_FACTION_GET", ex);
-                            return;
-                        } else if (owner == null) {
-                            event.setCancelled(true);
-                            return;
-                        }
-
-
-                        boolean isFaction = isFaction(owner);
                         DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation().getWorld().getName(), placed.getLocation().getBlockX(), placed.getLocation().getBlockY(), placed.getLocation().getBlockZ(), owner, isFaction, defence.getENTITY_CONFIG().isTARGET_HOSTILE_DEFAULT(), defence.getENTITY_CONFIG().isTARGET_PASSIVE_DEFAULT());
                         ObjectMapper mapper = new ObjectMapper();
 
@@ -104,11 +122,11 @@ public class DefenceHandler implements Listener {
                         event.setCancelled(true);
                         ErrorHandler.handleError(event.getPlayer(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
                     }
-                });
-            } else {
-                event.setCancelled(true);
-                ErrorHandler.handleError(player, "place your defence", "DEFENCE_PROCESSING_EXCEPTION", new IllegalArgumentException("Failed to find defence with the name of " + defenceIdentifier));
-            }
+                }else {
+                    event.setCancelled(true);
+                    ErrorHandler.handleError(player, "place your defence", "DEFENCE_PROCESSING_EXCEPTION", new IllegalArgumentException("Failed to find defence with the name of " + defenceIdentifier));
+                }
+            });
         }
     }
 

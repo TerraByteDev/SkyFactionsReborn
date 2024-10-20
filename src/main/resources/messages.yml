@@ -8,7 +8,7 @@
 # =============== MESSAGE CONFIG =============== #
 
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+CONFIG_VERSION: 2
 
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
 
@@ -166,7 +166,7 @@ Messages:
       - ""
       - "&c&oYou do not have enough"
       - "&c&oRunes to purchase this defence!"
-      -
+
       # Appended to the end of the defence purchase confirmation item if the player doesn't have enough space in their inventory.
     INSUFFICIENT_INVENTORY_LORE:
       - ""
@@ -183,6 +183,20 @@ Messages:
 
     # Sent when the player tries to mine the defence.
     DEFENCE_DESTROY_DENY: "%server_name% &c&lHey! &r&7You must remove the defence from the management GUI!"
+
+    # In the defence management GUI, the "%operation%" placeholder is used (by default) to dynamically show whether
+    # the passive/hostile targeting is enabled or disabled.
+    # You can configure what this looks like here.
+    ENABLE_PLACEHOLDER: "&aEnable"
+
+    # In the defence management GUI, the "%operation%" placeholder is used (by default) to dynamically show whether
+    # the passive/hostile targeting is enabled or disabled.
+    # You can configure what this looks like here.
+    DISABLE_PLACEHOLDER: "&cDisable"
+
+    # Sent when a player tries to place too many defences.
+    # Placeholders: %defence_max% - Configured (in defences.yml) maximum defence count for players / factions.
+    TOO_MANY_DEFENCES: "%server_name%&c&l Hey!&r&e You have too many defences! &7(Max %defence_max%%)"
 
   Gems:
     # Sent when the player runs /gems or /gems balance

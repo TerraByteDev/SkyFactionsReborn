@@ -29,6 +29,8 @@ public enum GUIEnums {
     OBELISK_DEFENCE_PURCHASE_OVERVIEW_GUI("guis/obelisk/defences/defence_purchase_overview"),
     OBELISK_PURCHASE_DEFENCE_GUI("guis/obelisk/defences/purchase_defence"),
 
+    DEFENCE_MANAGEMENT_UI("guis/defence/management_ui"),
+
     PAGINATION_MODEL("guis/pagination");
 
 
