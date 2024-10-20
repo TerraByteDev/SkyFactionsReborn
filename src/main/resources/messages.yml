@@ -8,7 +8,7 @@
 # =============== MESSAGE CONFIG =============== #
 
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 2
+CONFIG_VERSION: 1
 
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
 
@@ -196,7 +196,7 @@ Messages:
 
     # Sent when a player tries to place too many defences.
     # Placeholders: %defence_max% - Configured (in defences.yml) maximum defence count for players / factions.
-    TOO_MANY_DEFENCES: "%server_name%&c&l Hey!&r&e You have too many defences! &7(Max %defence_max%%)"
+    TOO_MANY_DEFENCES: "%server_name%&c&l Hey!&r&e You have too many defences! &7(Max %defence_max%)"
 
   Gems:
     # Sent when the player runs /gems or /gems balance

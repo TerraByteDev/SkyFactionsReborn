@@ -80,6 +80,8 @@ public class DefenceHandler implements Listener {
                 if (isFaction) {
                     List<Defence> loadedDefences = loadedFactionDefences.get(owner);
                     if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_FACTION_DEFENCES.getInt()) {
+                        event.setCancelled(true);
+
                         Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, "%defence_max%", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
                         SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
                         return;
@@ -87,6 +89,8 @@ public class DefenceHandler implements Listener {
                 } else {
                     List<Defence> loadedDefences = loadedPlayerDefences.get(UUID.fromString(owner));
                     if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_PLAYER_DEFENCES.getInt()) {
+                        event.setCancelled(true);
+
                         Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, "%defence_max%", DefencesConfig.MAX_PLAYER_DEFENCES.getInt());
                         SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
                         return;
