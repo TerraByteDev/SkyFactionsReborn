@@ -223,8 +223,10 @@ public abstract class Defence {
         Bukkit.getScheduler().cancelTask(task);
         task = -1;
 
-        String id = getHologramID(data.getUUIDFactionName());
+        noAmmoNotified = false;
+        targetedEntities.clear();
 
+        String id = getHologramID(data.getUUIDFactionName());
         DefenceHandler.hologramsMap.get(id).kill();
         DefenceHandler.hologramsMap.remove(id);
     }
