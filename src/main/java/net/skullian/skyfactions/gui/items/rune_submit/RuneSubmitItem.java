@@ -61,19 +61,14 @@ public class RuneSubmitItem extends AbstractItem {
         }
 
         List<ItemStack> stacks = new ArrayList<>(UI.ITEMS.values());
-
-        for (ItemStack item : UI.ITEMS.values()) {
-            if (item == null) continue;
-            System.out.println(item.getType());
-        }
+        UI.ITEMS.clear(); // clear so when the close handler triggers, it doesn't give items back
 
         player.removeMetadata("rune_ui", SkyFactionsReborn.getInstance());
         if (TYPE.equals("player")) {
             RunesAPI.handleRuneConversion(stacks, player);
-            player.closeInventory();
         } else if (TYPE.equals("faction")) {
             RunesAPI.handleRuneFactionConversion(stacks, player);
-            player.closeInventory();
         }
+        player.closeInventory();
     }
 }
