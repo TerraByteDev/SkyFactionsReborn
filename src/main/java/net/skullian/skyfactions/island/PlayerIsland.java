@@ -49,7 +49,6 @@ public class PlayerIsland {
         }
 
         Location newLocation = location.multiply((Settings.GEN_PLAYER_REGION_SIZE.getInt() + Settings.GEN_PLAYER_REGION_PADDING.getInt()));
-
         return newLocation;
     }
 

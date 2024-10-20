@@ -71,7 +71,7 @@ public class PlayerHandler implements Listener {
         BukkitTask task = NotificationAPI.tasks.get(event.getPlayer().getUniqueId());
         if (task != null) task.cancel();
 
-        IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId(), event.getPlayer().getLocation());
+        IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
     }
 
     @EventHandler

@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
 import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.CommandsUtility;
@@ -49,6 +50,7 @@ public class FactionTeleportCommand extends CommandTemplate {
                 Messages.NOT_IN_FACTION.send(player);
                 return;
             }
+            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player.getUniqueId());
 
             FactionAPI.handleFactionWorldBorder(player, faction.getIsland());
             FactionAPI.teleportToFactionIsland(player, faction);

@@ -92,12 +92,12 @@ public class IslandVisitCommand extends CommandTemplate {
                         Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "WORLD_NOT_EXIST");
                     } else {
                         if (isTrusted) {
-                            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player.getUniqueId(), player.getLocation());
+                            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player.getUniqueId());
 
                             IslandAPI.handlePlayerJoinBorder(player, is); // shift the worldborder
                             IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
 
-                            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, target.getUniqueId(), player.getLocation());
+                            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, target.getUniqueId());
                         } else {
                             Messages.PLAYER_NOT_TRUSTED.send(player);
                         }

@@ -1,13 +1,12 @@
 package net.skullian.skyfactions.command.island.cmds;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -45,27 +44,29 @@ public class IslandTeleportCommand extends CommandTemplate {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
-        SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).thenAccept(island -> {
-            if (island == null) {
+        IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
+                return;
+            } else if (island == null) {
                 Messages.NO_ISLAND.send(player);
-            } else {
-                World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-                if (world != null) {
-                    FactionAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player);
-
-                    IslandAPI.handlePlayerJoinBorder(player, island); // shift join border
-                    IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
-
-                    IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, player.getUniqueId(), player.getLocation());
-
-                } else {
-                    Messages.ERROR.send(player, "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");
-                }
+            } else if (FactionAPI.isLocationInRegion(player.getLocation(), player.getUniqueId().toString())) {
+                Messages.ALREADY_ON_ISLAND.send(player);
+                return;
             }
-        }).exceptionally(ex -> {
-            ex.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "get your island", "%debug%", "SQL_ISLAND_GET");
-            return null;
+
+            World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
+            if (world != null) {
+                FactionAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player);
+
+                IslandAPI.handlePlayerJoinBorder(player, island); // shift join border
+                IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
+
+                IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, player.getUniqueId());
+
+            } else {
+                Messages.ERROR.send(player, "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");
+            }
         });
     }
 

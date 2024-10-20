@@ -211,9 +211,7 @@ public class IslandAPI {
         });
     }
 
-    public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID, Location location) {
-        if (!FactionAPI.isLocationInRegion(location, playerUUID.toString())) return;
-
+    public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID) {
         List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(playerUUID);
         if (defences == null || defences.isEmpty()) return;
 

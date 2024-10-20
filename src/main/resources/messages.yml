@@ -87,6 +87,8 @@ Messages:
     # Sent if the player tries to use nether portals (when disabled).
     NETHER_PORTALS_BLOCKED: "%server_name%&c&l Hey!&r&7 You cannot use nether portals here!"
 
+    # Sent when the player tries to teleport to their faction / player island when they are already on it.
+    ALREADY_ON_ISLAND: "%server_name%&c&l Hey!&r&7 You are already on your island!"
 
   Discord:
     # Sent to the player when they request to link (runs /link).

@@ -58,8 +58,8 @@ public class FactionAPI {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
 
         if (world != null) {
-            FactionAPI.modifyDefenceOperation(DefenceOperation.ENABLE, player);
             IslandAPI.teleportPlayerToLocation(player, faction.getIsland().getCenter(world));
+            FactionAPI.modifyDefenceOperation(DefenceOperation.ENABLE, player);
         } else {
             Messages.ERROR.send(player, "%operation%", "teleport to your faction's island", "%debug%", "WORLD_NOT_EXIST");
         }
@@ -226,7 +226,7 @@ public class FactionAPI {
             ObeliskHandler.spawnFactionObelisk(faction_name, island);
 
             handleFactionWorldBorder(player, island);
-            IslandAPI.modifyDefenceOperation(DefenceOperation.DISABLE, player.getUniqueId(), player.getLocation());
+            IslandAPI.modifyDefenceOperation(DefenceOperation.DISABLE, player.getUniqueId());
             IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
 
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
@@ -264,6 +264,7 @@ public class FactionAPI {
      * @return {@link Boolean}
      */
     public static boolean isLocationInRegion(Location bukkitLoc, String regionName) {
+
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         com.sk89q.worldedit.util.Location location = BukkitAdapter.adapt(bukkitLoc);
         RegionQuery query = container.createQuery();
@@ -284,8 +285,6 @@ public class FactionAPI {
                 ex.printStackTrace();
                 return;
             }
-
-            if (!isLocationInRegion(player.getLocation(), faction.getName())) return;
 
             List<Defence> defences = DefenceHandler.loadedFactionDefences.get(faction.getName());
             if (defences != null && !defences.isEmpty()) {
