@@ -161,11 +161,11 @@ Messages:
       - "&c&l---------------------------------------"
 
   Defences:
-    # Appended to the end of the defence purchase confirmation item if the player does not have enough Runes.
+    # Appended to the end of the defence purchase confirmation (or defence upgrade) item if the player does not have enough Runes.
     INSUFFICIENT_RUNES_LORE:
       - ""
       - "&c&oYou do not have enough"
-      - "&c&oRunes to purchase this defence!"
+      - "&c&oRunes to do this!"
 
       # Appended to the end of the defence purchase confirmation item if the player doesn't have enough space in their inventory.
     INSUFFICIENT_INVENTORY_LORE:

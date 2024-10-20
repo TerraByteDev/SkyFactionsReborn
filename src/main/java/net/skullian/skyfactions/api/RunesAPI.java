@@ -3,10 +3,16 @@ package net.skullian.skyfactions.api;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Runes;
+import net.skullian.skyfactions.defence.DefencesFactory;
+import net.skullian.skyfactions.defence.struct.DefenceStruct;
+import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -38,41 +44,8 @@ public class RunesAPI {
     }
 
     public static void handleRuneConversion(List<ItemStack> stacks, Player player) {
-        int total = 0;
-
         if (!stacks.isEmpty()) {
-            Map<String, Integer> overrides = Runes.RUNE_OVERRIDES.getMap();
-            int forEach = Runes.BASE_FOR_EACH.getInt();
-            int returnForEach = Runes.BASE_RUNE_RETURN.getInt();
-
-            List<ItemStack> remaindingItems = new ArrayList<>();
-
-            for (ItemStack stack : stacks) {
-                if (stack == null || stack.getType().equals(Material.AIR)) continue;
-                if (overrides.containsKey(stack.getType().name())) {
-                    int amount = overrides.get(stack.getType().name()) * stack.getAmount();
-                    total += amount;
-                } else {
-                    int quotient = stack.getAmount() / forEach;
-                    int remainder = stack.getAmount() % forEach;
-
-                    int amount = quotient * returnForEach;
-                    total += amount;
-
-                    if (remainder > 0) {
-                        ItemStack cloned = stack.clone();
-                        cloned.setAmount(remainder);
-                        remaindingItems.add(cloned);
-                    }
-                }
-            }
-            returnItems(remaindingItems, player);
-            if (total > 0) {
-                SkyFactionsReborn.databaseHandler.addRunes(player.getUniqueId(), total);
-                Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
-            } else {
-                Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
-            }
+            handleConversion(stacks, player, null)
         }
     }
 
@@ -83,42 +56,9 @@ public class RunesAPI {
                 return;
             }
 
-            int total = 0;
             if (faction != null) {
-                Map<String, Integer> overrides = Runes.RUNE_OVERRIDES.getMap();
-                int forEach = Runes.BASE_FOR_EACH.getInt();
-                int returnForEach = Runes.BASE_RUNE_RETURN.getInt();
-
-                List<ItemStack> remaindingItems = new ArrayList<>();
-
-                for (ItemStack stack : stacks) {
-                    if (stack == null || stack.getType().equals(Material.AIR)) continue;
-                    if (overrides.containsKey(stack.getType().name())) {
-                        int amount = overrides.get(stack.getType().name()) * stack.getAmount();
-                        total += amount;
-                    } else {
-                        int quotient = stack.getAmount() / forEach;
-                        int remainder = stack.getAmount() % forEach;
-                        remainder = remainder > 0 ? remainder + 1 : 0;
-
-                        int amount = quotient * returnForEach;
-                        total += amount;
-
-                        ItemStack cloned = stack.clone();
-                        cloned.setAmount(remainder);
-                        remaindingItems.add(cloned);
-                    }
-                }
-
-                returnItems(remaindingItems, player);
-                if (total > 0) {
-                    faction.addRunes(total);
-                    Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
-                } else {
-                    Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
-                }
-
-            } else if (faction == null) {
+                handleConversion(stacks, player, faction);
+            } else {
                 Messages.ERROR.send(player, "%operation%", "convert to runes", "%debug%", "SQL_UNKNOWN_FACTION");
                 for (ItemStack stack : stacks) {
                     if (stack != null && !stack.getType().equals(Material.AIR)) {
@@ -127,6 +67,56 @@ public class RunesAPI {
                 }
             }
         });
+    }
+
+    public static void handleConversion(List<ItemStack> stacks, Player player, Faction faction) {
+        int total = 0;
+        Map<String, Integer> overrides = Runes.RUNE_OVERRIDES.getMap();
+        int forEach = Runes.BASE_FOR_EACH.getInt();
+        int returnForEach = Runes.BASE_RUNE_RETURN.getInt();
+
+        List<ItemStack> remainingItems = new ArrayList<>();
+
+        for (ItemStack stack : stacks) {
+            if (stack == null || stack.getType().equals(Material.AIR)) continue;
+            if (overrides.containsKey(stack.getType().name())) {
+                int amount = overrides.get(stack.getType().name()) * stack.getAmount();
+                total += amount;
+            } else {
+                int quotient = stack.getAmount() / forEach;
+                int remainder = stack.getAmount() % forEach;
+                remainder = remainder > 0 ? remainder + 1 : 0;
+
+                int amount = quotient * returnForEach;
+                total += amount;
+
+                if (remainder > 0) {
+                    ItemStack cloned = stack.clone();
+                    cloned.setAmount(remainder);
+                    remainingItems.add(cloned);
+                }
+            }
+        }
+
+        if (total > 0) {
+            faction.addRunes(total);
+            Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
+        } else {
+            Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
+        }
+
+        returnItems(remainingItems, player);
+        if (total > 0) {
+            if (faction != null) {
+                faction.addRunes(total);
+            } else {
+                addRunes(player.getUniqueId(), total);
+            }
+
+            Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
+        } else {
+            Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
+        }
     }
 
     /**
@@ -172,6 +162,19 @@ public class RunesAPI {
 
             playerRunes.put(playerUUID, runes);
         });
+    }
+
+    private static int getDefenceCost(ItemStack item) {
+        NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
+        PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+
+        if (container.has(defenceKey, PersistentDataType.STRING)) {
+            String identifier = container.get(defenceKey, PersistentDataType.STRING);
+            DefenceStruct struct = DefencesFactory.defences.get(identifier);
+            if (struct != null) return struct.getSELL_COST();
+        }
+
+        return -1;
     }
 
     private static boolean hasEnchants(ItemStack stack) {

@@ -142,7 +142,7 @@ public class DefencesFactory {
 
         String PLACEMENT_BLOCKED_MESSAGE = config.getString("PLACEMENT.DEFENCE_INCORRECT_BLOCK");
         boolean IS_WHITELIST = config.getBoolean("PLACEMENT.WHITELIST");
-        List<String> BLOCKS_LIST = getPlacementBlocks(config, fileName);
+        List<String> BLOCKS_LIST = getPlacementBlocks(config);
 
         List<String> HOLOGRAM_STACK = config.getStringList("HOLOGRAMS.LINES");
         String OUT_OF_STOCK_LINE = config.getString("HOLOGRAMS.OUT_OF_STOCK_LINE");
@@ -287,7 +287,7 @@ public class DefencesFactory {
         }
     }
 
-    private static List<String> getPlacementBlocks(YamlDocument config, String fName) {
+    private static List<String> getPlacementBlocks(YamlDocument config) {
         List<String> matchingMaterials = new ArrayList<>();
         List<String> list = config.getStringList("PLACEMENT.BLOCKS");
 
