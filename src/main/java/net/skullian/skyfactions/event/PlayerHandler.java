@@ -48,6 +48,7 @@ public class PlayerHandler implements Listener {
 
             if (island != null) {
                 IslandAPI.handlePlayerJoinBorder(event.getPlayer(), island);
+                DefenceHandler.addPlacedDefences(event.getPlayer());
 
                 if (Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean()) {
                     World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
@@ -55,7 +56,7 @@ public class PlayerHandler implements Listener {
                         Location centerLocation = island.getCenter(world);
                         IslandAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
 
-                        DefenceHandler.addPlacedDefences(event.getPlayer());
+                        IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, event.getPlayer().getUniqueId());
                     }
                 }
             }

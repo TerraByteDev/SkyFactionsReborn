@@ -121,7 +121,7 @@ public class DefenceHandler implements Listener {
                         blockContainer.set(defenceKey, PersistentDataType.STRING, defenceIdentifier);
                         blockContainer.set(dataKey, PersistentDataType.STRING, mapper.writeValueAsString(data));
 
-                        createDefence(data, defence, owner, isFaction, Optional.of(player), Optional.of(event), true);
+                        createDefence(data, defence, owner, isFaction, Optional.of(player), Optional.of(event), true, true);
                     } catch (Exception error) {
                         event.setCancelled(true);
                         ErrorHandler.handleError(event.getPlayer(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
@@ -134,13 +134,13 @@ public class DefenceHandler implements Listener {
         }
     }
 
-    private static Defence createDefence(DefenceData data, DefenceStruct defenceStruct, String owner, boolean isFaction, Optional<Player> player, Optional<BlockPlaceEvent> event, boolean isPlace) {
+    private static Defence createDefence(DefenceData data, DefenceStruct defenceStruct, String owner, boolean isFaction, Optional<Player> player, Optional<BlockPlaceEvent> event, boolean isPlace, boolean shouldLoad) {
         try {
             Class<?> clazz = Class.forName(DefencesFactory.defenceTypes.get(defenceStruct.getTYPE()));
             Constructor<?> constr = clazz.getConstructor(DefenceData.class, DefenceStruct.class);
 
             Defence instance = (Defence) constr.newInstance(data, defenceStruct);
-            instance.onLoad(owner);
+            if (shouldLoad) instance.onLoad(owner);
 
             if (isFaction && isPlace) SkyFactionsReborn.databaseHandler.registerDefenceLocation(owner, instance.getDefenceLocation());
                 else if (!isFaction && isPlace) SkyFactionsReborn.databaseHandler.registerDefenceLocation(UUID.fromString(owner), instance.getDefenceLocation());
@@ -319,7 +319,7 @@ public class DefenceHandler implements Listener {
                             ObjectMapper mapper = new ObjectMapper();
                             DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                            Defence instance = createDefence(defenceData, defence, factionName, true, Optional.empty(), Optional.empty(), false);
+                            Defence instance = createDefence(defenceData, defence, factionName, true, Optional.empty(), Optional.empty(), false, false);
 
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
@@ -362,7 +362,7 @@ public class DefenceHandler implements Listener {
                             ObjectMapper mapper = new ObjectMapper();
                             DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                            Defence instance = createDefence(defenceData, defence, player.getUniqueId().toString(), false, Optional.of(player), Optional.empty(), false);
+                            Defence instance = createDefence(defenceData, defence, player.getUniqueId().toString(), false, Optional.of(player), Optional.empty(), false, false);
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
                     } catch (Exception error) {
