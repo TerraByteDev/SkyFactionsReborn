@@ -182,7 +182,8 @@ public class RunesAPI {
     }
 
     private static boolean isAllowed(ItemStack stack) {
-        if (stack == null) return true;
+        if (stack == null || stack.getType().equals(Material.AIR) || DefenceAPI.isDefence(stack)) return true;
+        if (DefenceAPI.isDefence(stack)) return true;
 
         List<String> list = Runes.MATERIALS_LIST.getList();
         boolean isBlacklist = Runes.MATERIALS_IS_BLACKLIST.getBoolean();
