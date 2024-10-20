@@ -46,6 +46,20 @@ public class RunesSubmitUI {
 
     private Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, String type, GUIData guiData) {
         try {
+            // yes very rudimentary
+            int invSize = 0;
+            for (String row : guiData.getLAYOUT()) {
+                invSize += row.length() - row.replace(".", "").length();
+            }
+
+            VirtualInventory inventory = new VirtualInventory(invSize);
+            this.INVENTORY = inventory;
+            builder.addIngredient('.', inventory);
+
+            inventory.setPreUpdateHandler((handler) -> {
+                handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
+            });
+
             List<ItemData> data = GUIAPI.getItemData("runes_ui", player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
@@ -67,20 +81,6 @@ public class RunesSubmitUI {
                         break;
                 }
             }
-
-            // yes very rudimentary
-            int invSize = 0;
-            for (String row : guiData.getLAYOUT()) {
-                invSize += row.length() - row.replace(".", "").length();
-            }
-
-            VirtualInventory inventory = new VirtualInventory(invSize);
-            this.INVENTORY = inventory;
-            builder.addIngredient('.', inventory);
-
-            inventory.setPreUpdateHandler((handler) -> {
-                handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
-            });
 
             return builder;
         } catch (IllegalArgumentException e) {
