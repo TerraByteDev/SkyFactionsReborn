@@ -25,10 +25,10 @@ public class ArrowDefence extends Defence {
                 Bukkit.getScheduler().scheduleSyncRepeatingTask(SkyFactionsReborn.getInstance(), new Runnable() {
                     @Override
                     public void run() {
-                        /*if (getData().getAMMO() == 0) {
+                        if (getData().getAMMO() == 0) {
                             notifyNoAmmo();
                             return;
-                        }*/
+                        }
                         if (!isAllowed(getStruct().getPROJECTILE())) return;
 
                         getRandomEntity(getDefenceLocation().getWorld()).whenComplete((entities, throwable) -> {
