@@ -45,7 +45,7 @@ public class RunesAPI {
 
     public static void handleRuneConversion(List<ItemStack> stacks, Player player) {
         if (!stacks.isEmpty()) {
-            handleConversion(stacks, player, null)
+            handleConversion(stacks, player, null);
         }
     }
 
