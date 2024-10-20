@@ -85,7 +85,6 @@ public class RunesAPI {
             } else {
                 int quotient = stack.getAmount() / forEach;
                 int remainder = stack.getAmount() % forEach;
-                remainder = remainder > 0 ? remainder + 1 : 0;
 
                 int amount = quotient * returnForEach;
                 total += amount;

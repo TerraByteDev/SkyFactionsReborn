@@ -8,7 +8,7 @@ import net.skullian.skyfactions.config.types.ObeliskConfig;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.gui.obelisk.RuneSubmitUI;
+import net.skullian.skyfactions.gui.obelisk.RunesSubmitUI;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
@@ -72,7 +72,7 @@ public class ObeliskRuneItem extends AsyncItem {
             }
 
             GUIData data = GUIAPI.getGUIData("runes_ui");
-            new RuneSubmitUI(RuneSubmitUI.createStructure(data), data, player, TYPE).promptPlayer(player);
+            new RunesSubmitUI().promptPlayer(player, TYPE);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             event.getInventory().close();

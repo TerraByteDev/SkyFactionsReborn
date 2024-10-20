@@ -16,6 +16,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RuneSubmitItem extends AbstractItem {
@@ -26,16 +27,16 @@ public class RuneSubmitItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
     private String TYPE;
-    private AbstractGui GUI;
+    private ItemStack[] ITEMS;
 
-    public RuneSubmitItem(ItemData data, ItemStack stack, String type, AbstractGui gui) {
+    public RuneSubmitItem(ItemData data, ItemStack stack, String type, ItemStack[] items) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
         this.TYPE = type;
-        this.GUI = gui;
+        this.ITEMS = items;
     }
 
     @Override
@@ -58,12 +59,7 @@ public class RuneSubmitItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        List<ItemStack> stacks = new ArrayList<>();
-        for (int i = 0; i < event.getClickedInventory().getSize(); i++) {
-            if (GUI.hasSlotElement(i)) continue;
-
-            stacks.add(event.getClickedInventory().getItem(i));
-        }
+        List<ItemStack> stacks = new ArrayList<>(Arrays.asList(ITEMS));
 
         player.removeMetadata("rune_ui", SkyFactionsReborn.getInstance());
         if (TYPE.equals("player")) {
