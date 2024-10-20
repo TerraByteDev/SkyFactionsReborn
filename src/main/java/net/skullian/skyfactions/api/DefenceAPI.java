@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -33,6 +34,11 @@ public class DefenceAPI {
         stack.setItemMeta(meta);
 
         return stack;
+    }
+
+    public static boolean isDefence(ItemStack item) {
+        NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
+        return item.getItemMeta().getPersistentDataContainer().has(defenceKey, PersistentDataType.STRING);
     }
 
     private static List<String> getFormattedLore(DefenceStruct struct, List<String> lore) {

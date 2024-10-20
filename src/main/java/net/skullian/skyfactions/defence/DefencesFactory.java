@@ -7,6 +7,7 @@ import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+import io.lumine.mythic.bukkit.utils.events.extra.ArmorEquipEvent;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.skullian.skyfactions.SkyFactionsReborn;
@@ -28,6 +29,7 @@ import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -306,5 +308,12 @@ public class DefencesFactory {
         }
 
         return matchingMaterials;
+    }
+
+    @EventHandler
+    public void onArmorEquip(ArmorEquipEvent event) {
+        if (DefenceAPI.isDefence(event.getNewArmorPiece())) {
+            event.setCancelled(true);
+        }
     }
 }
