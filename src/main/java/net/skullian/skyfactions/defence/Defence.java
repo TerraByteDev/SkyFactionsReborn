@@ -222,6 +222,8 @@ public abstract class Defence {
     public void disable() {
         Bukkit.getScheduler().cancelTask(task);
         task = -1;
+
+        DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName())).kill();
     }
 
     public boolean isEnabled() {

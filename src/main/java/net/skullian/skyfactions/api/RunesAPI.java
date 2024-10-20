@@ -182,6 +182,8 @@ public class RunesAPI {
     }
 
     private static boolean isAllowed(ItemStack stack) {
+        if (stack == null) return true;
+
         List<String> list = Runes.MATERIALS_LIST.getList();
         boolean isBlacklist = Runes.MATERIALS_IS_BLACKLIST.getBoolean();
 
@@ -199,7 +201,12 @@ public class RunesAPI {
             for (ItemStack stack : stacks) {
                 if (stack == null || stack.getType().equals(Material.AIR)) return;
 
-                player.getInventory().addItem(stack);
+                Map<Integer, ItemStack> map = player.getInventory().addItem(stack);
+
+                // if the player's inventory is full, drop the item.
+                for (ItemStack item : map.values()) {
+                    player.getWorld().dropItemNaturally(player.getLocation(), item);
+                }
             }
         }
     }

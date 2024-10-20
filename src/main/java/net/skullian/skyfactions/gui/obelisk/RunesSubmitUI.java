@@ -11,16 +11,21 @@ import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.rune_submit.RuneSubmitItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.inventory.VirtualInventory;
+import xyz.xenondevs.invui.inventory.event.PlayerUpdateReason;
 import xyz.xenondevs.invui.window.Window;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RunesSubmitUI {
 
-    public VirtualInventory INVENTORY;
+    public Map<Integer, ItemStack> ITEMS = new HashMap<>();
 
     public void promptPlayer(Player player, String type) {
         try {
@@ -31,7 +36,20 @@ public class RunesSubmitUI {
             Window window = Window.single()
                     .setViewer(player)
                     .setTitle(TextUtility.color(data.getTITLE()))
-                    .setCloseable(false)
+                    .addCloseHandler(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (ItemStack item : ITEMS.values()) {
+                                if (item == null || item.getType().equals(Material.AIR)) return;
+                                Map<Integer, ItemStack> map = player.getInventory().addItem(item);
+
+                                // if the player's inventory is full, drop the item.
+                                for (ItemStack stack : map.values()) {
+                                    player.getWorld().dropItemNaturally(player.getLocation(), stack);
+                                }
+                            }
+                        }
+                    })
                     .setGui(gui)
                     .build();
 
@@ -53,10 +71,13 @@ public class RunesSubmitUI {
             }
 
             VirtualInventory inventory = new VirtualInventory(invSize);
-            this.INVENTORY = inventory;
             builder.addIngredient('.', inventory);
 
             inventory.setPreUpdateHandler((handler) -> {
+                this.ITEMS.put(handler.getSlot(), handler.getNewItem());
+
+                handler.setCancelled(!(handler.getUpdateReason() instanceof PlayerUpdateReason playerUpdateReason));
+
                 handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
             });
 
@@ -77,7 +98,7 @@ public class RunesSubmitUI {
                         break;
 
                     case "SUBMIT":
-                        builder.addIngredient(itemData.getCHARACTER(), new RuneSubmitItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), type, INVENTORY.getItems() /* todo */));
+                        builder.addIngredient(itemData.getCHARACTER(), new RuneSubmitItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), type, this));
                         break;
                 }
             }

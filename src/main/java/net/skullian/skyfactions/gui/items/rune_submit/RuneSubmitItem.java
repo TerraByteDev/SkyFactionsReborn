@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.rune_submit;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.RunesAPI;
+import net.skullian.skyfactions.gui.obelisk.RunesSubmitUI;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.util.text.TextUtility;
@@ -27,16 +28,16 @@ public class RuneSubmitItem extends AbstractItem {
     private List<String> LORE;
     private ItemStack STACK;
     private String TYPE;
-    private ItemStack[] ITEMS;
+    private RunesSubmitUI UI;
 
-    public RuneSubmitItem(ItemData data, ItemStack stack, String type, ItemStack[] items) {
+    public RuneSubmitItem(ItemData data, ItemStack stack, String type, RunesSubmitUI ui) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
         this.STACK = stack;
         this.TYPE = type;
-        this.ITEMS = items;
+        this.UI = ui;
     }
 
     @Override
@@ -59,7 +60,12 @@ public class RuneSubmitItem extends AbstractItem {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
 
-        List<ItemStack> stacks = new ArrayList<>(Arrays.asList(ITEMS));
+        List<ItemStack> stacks = new ArrayList<>(UI.ITEMS.values());
+
+        for (ItemStack item : UI.ITEMS.values()) {
+            if (item == null) continue;
+            System.out.println(item.getType());
+        }
 
         player.removeMetadata("rune_ui", SkyFactionsReborn.getInstance());
         if (TYPE.equals("player")) {
