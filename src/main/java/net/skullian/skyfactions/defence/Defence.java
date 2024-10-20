@@ -1,12 +1,15 @@
 package net.skullian.skyfactions.defence;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.defence.struct.DefenceData;
+import net.skullian.skyfactions.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.hologram.TextHologram;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -22,6 +25,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -128,12 +133,17 @@ public abstract class Defence {
         List<LivingEntity> filteredEntities = new ArrayList<>();
         targetedEntities.removeIf(currentlyTargeted -> !nearbyEntities.contains(currentlyTargeted));
 
+        List<String> allowedEntities = compileAllowedEntities();
+        boolean shouldBlockNPCS = shouldBlockNPCs(allowedEntities);
+        List<String> blockedMythicMobs = getBlockedMythicMobs(allowedEntities);
         for (LivingEntity entity : nearbyEntities) {
             if (!entity.isVisibleByDefault()) continue;
             if (entity.isInvisible()) continue;
+            if (shouldBlockNPCS && entity.hasMetadata("NPC")) continue;
             if (entity instanceof Player) continue; // TODO: check if raid is ongoing, if so target them
+            if (blockedMythicMobs != null && isBlockedMythicMob(entity, blockedMythicMobs)) continue;
 
-            if (struct.getENTITY_CONFIG().getENTITY_LIST().contains(entity.getType().name()) && !filteredEntities.contains(entity)) {
+            if (allowedEntities.contains(entity.getType().name()) && !filteredEntities.contains(entity)) {
                 filteredEntities.add(entity);
             }
         }
@@ -148,6 +158,51 @@ public abstract class Defence {
 
         chosenEntities.addAll(targetedEntities);
         return CompletableFuture.completedFuture(chosenEntities);
+    }
+
+    public List<String> compileAllowedEntities() {
+        List<String> allowedEntities = new ArrayList<>();
+
+        DefenceEntityStruct entityStruct = struct.getENTITY_CONFIG();
+        if (canTargetPassive()) allowedEntities.addAll(entityStruct.getPASSIVE_LIST());
+        if (canTargetHostile()) allowedEntities.addAll(entityStruct.getHOSTILE_LIST());
+        if (entityStruct.isIS_WHITELIST()) allowedEntities.addAll(entityStruct.getENTITY_LIST());
+
+        return allowedEntities;
+    }
+
+    public boolean shouldBlockNPCs(List<String> entities) {
+        if (entities.contains("NPC")) return true;
+            else return false;
+    }
+
+    // acts as a boolean too
+    public List<String> getBlockedMythicMobs(List<String> entities) {
+        if (DependencyHandler.enabledDeps.contains("MythicMobs")) {
+            return entities.stream()
+                    .filter(s -> s.startsWith("mythicmobs:"))
+                    .collect(Collectors.toList());
+        }
+
+        return null;
+    }
+
+    public boolean isBlockedMythicMob(LivingEntity entity, List<String> blockedIdentifiers) {
+        AtomicBoolean isblocked = new AtomicBoolean(false);
+        MythicBukkit.inst().getMobManager().getActiveMob(entity.getUniqueId()).ifPresent(mm -> {
+            if (blockedIdentifiers.contains("mythicmobs:*")) isblocked.set(true);
+            if (blockedIdentifiers.contains(mm.getMobType())) isblocked.set(true);
+        });
+
+        return isblocked.get();
+    }
+
+    public boolean canTargetPassive() {
+        return struct.getENTITY_CONFIG().isALLOW_PASSIVE_TARGETING() && data.getLEVEL() >= struct.getATTRIBUTES().getPASSIVE_MOBS_TARGET_LEVEL() && data.isTARGET_PASSIVE();
+    }
+
+    public boolean canTargetHostile() {
+        return struct.getENTITY_CONFIG().isALLOW_HOSTILE_TARGETING() && data.getLEVEL() >= struct.getATTRIBUTES().getHOSTILE_MOBS_TARGET_LEVEL() && data.isTARGET_PASSIVE();
     }
 
     public void removeDeadEntity(LivingEntity entity) {

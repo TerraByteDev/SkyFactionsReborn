@@ -24,5 +24,7 @@ public class DefenceEntityStruct {
     private boolean ATTACK_PLAYERS;
 
     private boolean IS_WHITELIST;
+    private List<String> PASSIVE_LIST;
+    private List<String> HOSTILE_LIST;
     private List<String> ENTITY_LIST;
 }
