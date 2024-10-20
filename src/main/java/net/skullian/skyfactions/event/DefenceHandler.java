@@ -30,11 +30,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -74,7 +72,6 @@ public class DefenceHandler implements Listener {
                 belowLoc.setY(belowLoc.getY() - 1);
 
                 Block belowBlock = placed.getWorld().getBlockAt(belowLoc);
-                System.out.println(belowBlock.getType().name());
                 if (!isAllowedBlock(belowBlock, defence)) {
                     event.setCancelled(true);
                     player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString())));
@@ -102,7 +99,7 @@ public class DefenceHandler implements Listener {
                         blockContainer.set(defenceKey, PersistentDataType.STRING, defenceIdentifier);
                         blockContainer.set(dataKey, PersistentDataType.STRING, mapper.writeValueAsString(data));
 
-                        createDefence(data, defence, owner, isFaction, Optional.of(player), Optional.of(event));
+                        createDefence(data, defence, owner, isFaction, Optional.of(player), Optional.of(event), true);
                     } catch (Exception error) {
                         event.setCancelled(true);
                         ErrorHandler.handleError(event.getPlayer(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
@@ -115,7 +112,7 @@ public class DefenceHandler implements Listener {
         }
     }
 
-    private static Defence createDefence(DefenceData data, DefenceStruct defenceStruct, String owner, boolean isFaction, Optional<Player> player, Optional<BlockPlaceEvent> event) {
+    private static Defence createDefence(DefenceData data, DefenceStruct defenceStruct, String owner, boolean isFaction, Optional<Player> player, Optional<BlockPlaceEvent> event, boolean isPlace) {
         try {
             Class<?> clazz = Class.forName(DefencesFactory.defenceTypes.get(defenceStruct.getTYPE()));
             Constructor<?> constr = clazz.getConstructor(DefenceData.class, DefenceStruct.class);
@@ -123,8 +120,8 @@ public class DefenceHandler implements Listener {
             Defence instance = (Defence) constr.newInstance(data, defenceStruct);
             instance.onLoad(owner);
 
-            if (isFaction) SkyFactionsReborn.databaseHandler.registerDefenceLocation(owner, instance.getDefenceLocation());
-                else SkyFactionsReborn.databaseHandler.registerDefenceLocation(UUID.fromString(owner), instance.getDefenceLocation());
+            if (isFaction && isPlace) SkyFactionsReborn.databaseHandler.registerDefenceLocation(owner, instance.getDefenceLocation());
+                else if (!isFaction && isPlace) SkyFactionsReborn.databaseHandler.registerDefenceLocation(UUID.fromString(owner), instance.getDefenceLocation());
 
             addIntoMap(owner, isFaction, instance);
 
@@ -300,7 +297,7 @@ public class DefenceHandler implements Listener {
                             ObjectMapper mapper = new ObjectMapper();
                             DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                            Defence instance = createDefence(defenceData, defence, factionName, true, Optional.empty(), Optional.empty());
+                            Defence instance = createDefence(defenceData, defence, factionName, true, Optional.empty(), Optional.empty(), false);
 
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
@@ -315,7 +312,10 @@ public class DefenceHandler implements Listener {
     }
 
     public static void addPlacedDefences(Player player) {
-        if (loadedPlayerDefences.get(player.getUniqueId()) != null) return;
+        if (loadedPlayerDefences.get(player.getUniqueId()) != null) {
+            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, player.getUniqueId(), player.getLocation());
+            return;
+        }
         SkyFactionsReborn.databaseHandler.getDefenceLocations(player.getUniqueId()).whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
@@ -340,7 +340,7 @@ public class DefenceHandler implements Listener {
                             ObjectMapper mapper = new ObjectMapper();
                             DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                            Defence instance = createDefence(defenceData, defence, player.getUniqueId().toString(), false, Optional.of(player), Optional.empty());
+                            Defence instance = createDefence(defenceData, defence, player.getUniqueId().toString(), false, Optional.of(player), Optional.empty(), false);
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
                     } catch (Exception error) {
@@ -351,59 +351,5 @@ public class DefenceHandler implements Listener {
 
             loadedPlayerDefences.put(player.getUniqueId(), defences);
         });
-    }
-
-    @EventHandler
-    public void onTeleport(PlayerTeleportEvent event) {
-        Player player = event.getPlayer();
-
-        String fromWorldName = event.getFrom().getWorld().getName();
-        String toWorldName = event.getTo().getWorld().getName();
-        boolean fromWasFaction = fromWorldName.equals(Settings.ISLAND_FACTION_WORLD.getString());
-        boolean fromWasPlayer = fromWorldName.equals(Settings.ISLAND_PLAYER_WORLD.getString());
-        boolean toWasFaction = toWorldName.equals(Settings.ISLAND_FACTION_WORLD.getString());
-        boolean toWasPlayer = toWorldName.equals(Settings.ISLAND_PLAYER_WORLD.getString());
-
-        if (fromWasFaction) {
-            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
-                if (throwable != null) {
-                    throwable.printStackTrace();
-                    return;
-                } else if (faction == null) return;
-                else if (!FactionAPI.isLocationInRegion(event.getFrom(), faction.getName())) return;
-
-                FactionAPI.modifyDefenceOperation(faction.getName(), FactionAPI.DefenceOperation.DISABLE);
-            });
-        } else if (toWasFaction) {
-            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
-                if (throwable != null) {
-                    throwable.printStackTrace();
-                    return;
-                } else if (faction == null) return;
-                else if (!FactionAPI.isLocationInRegion(event.getTo(), faction.getName())) return;
-
-                FactionAPI.modifyDefenceOperation(faction.getName(), FactionAPI.DefenceOperation.ENABLE);
-            });
-        } else if (fromWasPlayer) {
-            IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, throwable) -> {
-                if (throwable != null) {
-                    throwable.printStackTrace();
-                    return;
-                } else if (island == null) return;
-                else if (!FactionAPI.isLocationInRegion(event.getFrom(), player.getUniqueId().toString())) return;
-
-                IslandAPI.disableDefencesOnExit(player);
-            });
-        } else if (toWasPlayer) {
-            IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, throwable) -> {
-                if (throwable != null) {
-                    throwable.printStackTrace();
-                    return;
-                } else if (island == null) return;
-                else if (!FactionAPI.isLocationInRegion(event.getTo(), player.getUniqueId().toString())) return;
-
-                IslandAPI.enableDefencesOnEntry(player);
-            });
-        }
     }
 }

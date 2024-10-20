@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.event;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.config.types.Messages;
@@ -47,13 +48,14 @@ public class PlayerHandler implements Listener {
 
             if (island != null) {
                 IslandAPI.handlePlayerJoinBorder(event.getPlayer(), island);
-                DefenceHandler.addPlacedDefences(event.getPlayer());
 
                 if (Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean()) {
                     World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                     if (world != null) {
                         Location centerLocation = island.getCenter(world);
                         IslandAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
+
+                        DefenceHandler.addPlacedDefences(event.getPlayer());
                     }
                 }
             }
@@ -68,6 +70,8 @@ public class PlayerHandler implements Listener {
         SLogger.info("Cancelling Notification Task for {}...", event.getPlayer().getName());
         BukkitTask task = NotificationAPI.tasks.get(event.getPlayer().getUniqueId());
         if (task != null) task.cancel();
+
+        IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId(), event.getPlayer().getLocation());
     }
 
     @EventHandler

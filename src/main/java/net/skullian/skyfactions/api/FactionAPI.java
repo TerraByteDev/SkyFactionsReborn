@@ -58,6 +58,7 @@ public class FactionAPI {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
 
         if (world != null) {
+            FactionAPI.modifyDefenceOperation(DefenceOperation.ENABLE, player);
             IslandAPI.teleportPlayerToLocation(player, faction.getIsland().getCenter(world));
         } else {
             Messages.ERROR.send(player, "%operation%", "teleport to your faction's island", "%debug%", "WORLD_NOT_EXIST");
@@ -98,7 +99,7 @@ public class FactionAPI {
 
     /**
      * Check if a player is in a faction.
-     * You can alternatively use {@link #getFaction(Player)} and check if the return value is null.
+     * You can alternatively use {@link #getFaction(String)} and check if the return value is null.
      *
      * @param player Player to check.
      * @return {@link Boolean}
@@ -225,7 +226,9 @@ public class FactionAPI {
             ObeliskHandler.spawnFactionObelisk(faction_name, island);
 
             handleFactionWorldBorder(player, island);
+            IslandAPI.modifyDefenceOperation(DefenceOperation.DISABLE, player.getUniqueId(), player.getLocation());
             IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
+
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
             Messages.FACTION_CREATION_SUCCESS.send(player);
         });
@@ -275,17 +278,26 @@ public class FactionAPI {
         return false;
     }
 
-    public static void modifyDefenceOperation(String factionName, DefenceOperation operation) {
-        List<Defence> defences = DefenceHandler.loadedFactionDefences.get(factionName);
-        if (defences != null && !defences.isEmpty()) {
-            for (Defence defence : defences) {
-                if (operation == DefenceOperation.ENABLE) {
-                    defence.onLoad(factionName);
-                } else if (operation == DefenceOperation.DISABLE) {
-                    defence.disable();
+    public static void modifyDefenceOperation(DefenceOperation operation, Player player) {
+        getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return;
+            }
+
+            if (!isLocationInRegion(player.getLocation(), faction.getName())) return;
+
+            List<Defence> defences = DefenceHandler.loadedFactionDefences.get(faction.getName());
+            if (defences != null && !defences.isEmpty()) {
+                for (Defence defence : defences) {
+                    if (operation == DefenceOperation.ENABLE) {
+                        defence.onLoad(faction.getName());
+                    } else {
+                        defence.disable();
+                    }
                 }
             }
-        }
+        });
     }
 
     public enum DefenceOperation {

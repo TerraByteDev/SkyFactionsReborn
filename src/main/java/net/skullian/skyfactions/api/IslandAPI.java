@@ -211,19 +211,16 @@ public class IslandAPI {
         });
     }
 
-    public static void enableDefencesOnEntry(Player player) {
-        List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(player.getUniqueId());
-        if (defences != null && !defences.isEmpty()) {
-            for (Defence defence : defences) {
-                defence.onLoad(player.getUniqueId().toString());
-            }
-        }
-    }
+    public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID, Location location) {
+        if (!FactionAPI.isLocationInRegion(location, playerUUID.toString())) return;
 
-    public static void disableDefencesOnExit(Player player) {
-        List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(player.getUniqueId());
-        if (defences != null && !defences.isEmpty()) {
-            for (Defence defence : defences) {
+        List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(playerUUID);
+        if (defences == null || defences.isEmpty()) return;
+
+        for (Defence defence : defences) {
+            if (operation == FactionAPI.DefenceOperation.ENABLE) {
+                defence.onLoad(playerUUID.toString());
+            } else {
                 defence.disable();
             }
         }

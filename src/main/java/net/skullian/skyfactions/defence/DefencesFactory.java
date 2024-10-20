@@ -193,13 +193,13 @@ public class DefencesFactory {
         boolean IS_WHITELIST = config.getBoolean("ENTITIES.WHITELIST");
 
         List<String> ENTITY_LIST = new ArrayList<>();
-        if (!OVERRIDE && ALLOW_HOSTILE && !IS_WHITELIST)
+        if (!OVERRIDE && ALLOW_HOSTILE)
             ENTITY_LIST.addAll(DefencesConfig.GLOBAL_HOSTILE_ENTITIES.getList());
-        if (!OVERRIDE && ALLOW_PASSIVE && !IS_WHITELIST)
+        if (!OVERRIDE && ALLOW_PASSIVE)
             ENTITY_LIST.addAll(DefencesConfig.GLOBAL_PASSIVE_ENTITIES.getList());
-        if (!OVERRIDE && !IS_WHITELIST) ENTITY_LIST.addAll(DefencesConfig.GLOBAL_ENTITIES_ENTITY_LIST.getList());
+        if (!OVERRIDE) ENTITY_LIST.addAll(DefencesConfig.GLOBAL_ENTITIES_ENTITY_LIST.getList());
 
-        ENTITY_LIST.addAll(config.getStringList("ENTITIES.ENTITY_LIST"));
+        if (IS_WHITELIST) ENTITY_LIST.addAll(config.getStringList("ENTITIES.ENTITY_LIST"));
 
         return new DefenceEntityStruct(OVERRIDE, ALLOW_HOSTILE, ALLOW_TOGGLE_HOSTILE, TARGET_HOSTILE, ALLOW_PASSIVE, ALLOW_TOGGLE_PASSIVE, TARGET_PASSIVE,
                 ALLOW_ATTACK_PLAYERS, IS_WHITELIST, ENTITY_LIST);

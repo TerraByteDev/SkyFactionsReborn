@@ -118,7 +118,7 @@ ENTITIES:
   ALLOW_ATTACK_PLAYERS: true
 
   # Whether the ENTITY_LIST is a whitelist of entities that can be targeted.
-  # Setting this to true will override the above booleans and you would have to add in the entities yourself.
+  # This does not override the global defence entity config, or the above booleans.
   WHITELIST: false
   # What entities should be blacklisted or whitelisted?
   # See https://jd.papermc.io/paper/1.21.1/org/bukkit/entity/EntityType.html

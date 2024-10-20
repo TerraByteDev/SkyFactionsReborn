@@ -123,6 +123,8 @@ public abstract class Defence {
         int radius = getRadius();
 
         Collection<LivingEntity> nearbyEntities = defenceWorld.getNearbyLivingEntities(location, radius, radius, radius);
+        if (nearbyEntities.isEmpty()) return CompletableFuture.completedFuture(new ArrayList<LivingEntity>());
+
         List<LivingEntity> filteredEntities = new ArrayList<>();
         targetedEntities.removeIf(currentlyTargeted -> !nearbyEntities.contains(currentlyTargeted));
 
@@ -131,12 +133,8 @@ public abstract class Defence {
             if (entity.isInvisible()) continue;
             if (entity instanceof Player) continue; // TODO: check if raid is ongoing, if so target them
 
-            if (struct.getENTITY_CONFIG().isIS_WHITELIST() && struct.getENTITY_CONFIG().getENTITY_LIST().contains(entity.getType().name()) && !filteredEntities.contains(entity)) {
-                System.out.println("adding entities");
+            if (struct.getENTITY_CONFIG().getENTITY_LIST().contains(entity.getType().name()) && !filteredEntities.contains(entity)) {
                 filteredEntities.add(entity);
-            } else if (!struct.getENTITY_CONFIG().isIS_WHITELIST() && !struct.getENTITY_CONFIG().getENTITY_LIST().contains(entity.getType().name()) && !filteredEntities.contains(entity)) {
-                filteredEntities.add(entity);
-                System.out.println("adding");
             }
         }
 
@@ -192,7 +190,6 @@ public abstract class Defence {
 
     public void createHologram(Location location, DefenceStruct defence, String playerUUIDorFactionName) {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
-        System.out.println(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ());
 
         TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName())
                 .setText(TextUtility.color(text.replace("%defence_name%", defence.getNAME())))

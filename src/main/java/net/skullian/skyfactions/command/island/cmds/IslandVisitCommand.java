@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.command.island.cmds;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.RaidAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
@@ -91,8 +92,12 @@ public class IslandVisitCommand extends CommandTemplate {
                         Messages.ERROR.send(player, "%operation%", "visit a player", "%debug%", "WORLD_NOT_EXIST");
                     } else {
                         if (isTrusted) {
+                            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player.getUniqueId(), player.getLocation());
+
                             IslandAPI.handlePlayerJoinBorder(player, is); // shift the worldborder
                             IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
+
+                            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, target.getUniqueId(), player.getLocation());
                         } else {
                             Messages.PLAYER_NOT_TRUSTED.send(player);
                         }

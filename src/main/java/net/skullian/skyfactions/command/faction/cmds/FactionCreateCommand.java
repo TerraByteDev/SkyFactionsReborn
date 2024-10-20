@@ -16,7 +16,7 @@ import org.incendo.cloud.annotations.Permission;
 
 import java.util.List;
 
-@Command("create")
+@Command("faction")
 public class FactionCreateCommand extends CommandTemplate {
 
     @Override

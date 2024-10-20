@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.command.island.cmds;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
@@ -50,8 +51,13 @@ public class IslandTeleportCommand extends CommandTemplate {
             } else {
                 World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                 if (world != null) {
+                    FactionAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player);
+
                     IslandAPI.handlePlayerJoinBorder(player, island); // shift join border
                     IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
+
+                    IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, player.getUniqueId(), player.getLocation());
+
                 } else {
                     Messages.ERROR.send(player, "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");
                 }
