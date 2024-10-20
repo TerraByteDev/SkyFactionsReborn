@@ -91,7 +91,6 @@ public abstract class Defence {
         if (this.noAmmoNotified) return;
 
         if (DefenceHandler.hologramsMap.containsKey(getHologramID(data.getUUIDFactionName()))) {
-            System.out.println("MOD");
             TextHologram holo = DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName()));
             holo.setText(holo.getText() + TextUtility.color("\n" + struct.getOUT_OF_STOCK_HOLOGRAM()));
             holo.update();
