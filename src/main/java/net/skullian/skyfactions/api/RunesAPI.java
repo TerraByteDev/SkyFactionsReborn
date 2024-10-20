@@ -98,13 +98,6 @@ public class RunesAPI {
             }
         }
 
-        if (total > 0) {
-            faction.addRunes(total);
-            Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
-        } else {
-            Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
-        }
-
         returnItems(remainingItems, player);
         if (total > 0) {
             if (faction != null) {
