@@ -4,11 +4,9 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandHandler;
 import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.gems.cmds.GemsBalanceCommand;
-import net.skullian.skyfactions.command.gems.cmds.GemsGiveCommand;
-import net.skullian.skyfactions.command.gems.cmds.GemsHelpCommand;
-import net.skullian.skyfactions.command.gems.cmds.GemsPayCommand;
+import net.skullian.skyfactions.command.gems.cmds.*;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.config.types.Settings;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
@@ -62,6 +60,10 @@ public class GemsCommandHandler implements CommandHandler {
         register(new GemsGiveCommand());
         register(new GemsHelpCommand(this));
         register(new GemsPayCommand());
+        if (Settings.GEMS_CAN_WIDHTRAW.getBoolean()) {
+            register(new GemsWithdrawCommand());
+            register(new GemsDepositCommand());
+        }
     }
 
     @Override

@@ -1,11 +1,14 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.GemsAPI;
+import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.gems.GemsCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
@@ -41,12 +44,22 @@ public class GemsBalanceCommand extends CommandTemplate {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
-        SkyFactionsReborn.databaseHandler.getGems(player.getUniqueId()).thenAccept(count -> {
-            Messages.GEMS_COUNT_MESSAGE.send(player, "%count%", count);
-        }).exceptionally(ex -> {
-            ex.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "get your gems balance", "%debug%", "SQL_GEMS_GET");
-            return null;
+        IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
+            if (ex != null) {
+                ErrorHandler.handleError(player, "get your island", "SQL_GEMS_GET", ex);
+                return;
+            }
+
+            if (hasIsland) {
+                GemsAPI.getGems(player.getUniqueId()).whenComplete((count, throwable) -> {
+                    if (throwable != null) {
+                        ErrorHandler.handleError(player, "get your gems balance", "SQL_GEMS_GET", throwable);
+                        return;
+                    }
+
+                    Messages.GEMS_COUNT_MESSAGE.send(player, "%count%", count);
+                });
+            }
         });
     }
 

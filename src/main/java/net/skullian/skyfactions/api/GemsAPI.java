@@ -2,7 +2,14 @@ package net.skullian.skyfactions.api;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,5 +62,28 @@ public class GemsAPI {
             playerGems.replace(playerUUID, playerGems.get(playerUUID) + subtraction);
             return null;
         });
+    }
+
+    public static ItemStack createGemsStack() {
+        ItemStack stack = new ItemStack(Material.valueOf(Settings.GEMS_MATERIAL.getString()));
+
+        ItemMeta meta = stack.getItemMeta();
+        meta.setCustomModelData(Settings.GEMS_CUSTOM_MODEL_DATA.getInt());
+
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), "gem");
+        container.set(key, PersistentDataType.BOOLEAN, true);
+
+        stack.setItemMeta(meta);
+
+        return stack;
+    }
+
+    public static boolean isGemsStack(ItemStack stack) {
+        if (stack == null) return false;
+        NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), "gem");
+        PersistentDataContainer container = stack.getItemMeta().getPersistentDataContainer();
+
+        return container.has(key, PersistentDataType.BOOLEAN);
     }
 }
