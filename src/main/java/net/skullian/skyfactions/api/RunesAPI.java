@@ -79,6 +79,12 @@ public class RunesAPI {
 
         for (ItemStack stack : stacks) {
             if (stack == null || stack.getType().equals(Material.AIR)) continue;
+            int defenceCost = getDefenceCost(stack);
+            if (defenceCost != -1) {
+                total += defenceCost;
+                continue;
+            }
+
             if (overrides.containsKey(stack.getType().name())) {
                 int amount = overrides.get(stack.getType().name()) * stack.getAmount();
                 total += amount;
