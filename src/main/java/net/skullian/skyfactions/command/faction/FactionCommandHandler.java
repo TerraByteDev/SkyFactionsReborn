@@ -32,7 +32,7 @@ public class FactionCommandHandler implements CommandHandler {
                     context.sender().getSender().sendMessage("test");
                 }));
 
-        this.parser = new AnnotationParser(
+        this.parser = new AnnotationParser<>(
                 manager,
                 CommandSourceStack.class,
                 params -> SimpleCommandMeta.empty()

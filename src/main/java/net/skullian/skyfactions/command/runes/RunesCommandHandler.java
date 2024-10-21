@@ -25,7 +25,7 @@ public class RunesCommandHandler implements CommandHandler {
                 .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
                 .buildOnEnable(SkyFactionsReborn.getInstance());
 
-        this.parser = new AnnotationParser(
+        this.parser = new AnnotationParser<>(
                 manager,
                 CommandSourceStack.class,
                 params -> SimpleCommandMeta.empty()
