@@ -97,7 +97,7 @@ public class IslandVisitCommand extends CommandTemplate {
                             IslandAPI.handlePlayerJoinBorder(player, is); // shift the worldborder
                             IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
 
-                            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, target.getUniqueId());
+                            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, player.getUniqueId());
                         } else {
                             Messages.PLAYER_NOT_TRUSTED.send(player);
                         }

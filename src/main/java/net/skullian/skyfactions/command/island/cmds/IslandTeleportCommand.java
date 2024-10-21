@@ -61,9 +61,6 @@ public class IslandTeleportCommand extends CommandTemplate {
 
                 IslandAPI.handlePlayerJoinBorder(player, island); // shift join border
                 IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
-
-                IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, player.getUniqueId());
-
             } else {
                 Messages.ERROR.send(player, "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");
             }

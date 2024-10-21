@@ -227,7 +227,9 @@ public abstract class Defence {
         targetedEntities.clear();
 
         String id = getHologramID(data.getUUIDFactionName());
-        DefenceHandler.hologramsMap.get(id).kill();
+        TextHologram holo = DefenceHandler.hologramsMap.get(id);
+        if (holo == null) return;
+        holo.kill();
         DefenceHandler.hologramsMap.remove(id);
     }
 

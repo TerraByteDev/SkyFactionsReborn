@@ -334,10 +334,7 @@ public class DefenceHandler implements Listener {
     }
 
     public static void addPlacedDefences(Player player) {
-        if (loadedPlayerDefences.get(player.getUniqueId()) != null) {
-            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, player.getUniqueId());
-            return;
-        }
+        if (loadedPlayerDefences.get(player.getUniqueId()) != null) return;
         SkyFactionsReborn.databaseHandler.getDefenceLocations(player.getUniqueId()).whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
