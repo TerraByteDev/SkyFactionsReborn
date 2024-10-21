@@ -368,7 +368,6 @@ public class DefenceHandler implements Listener {
                 }
             }
 
-            System.out.println(defences.size());
             loadedPlayerDefences.put(player.getUniqueId(), defences);
         });
     }

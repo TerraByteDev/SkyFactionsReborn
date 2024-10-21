@@ -213,15 +213,10 @@ public class IslandAPI {
 
     public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID) {
         List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(playerUUID);
-        System.out.println(defences);
-        System.out.println(defences.isEmpty());
         if (defences == null || defences.isEmpty()) return;
-        System.out.println("wdwdwdwd");
 
         for (Defence defence : defences) {
-            System.out.println(defence);
             if (operation == FactionAPI.DefenceOperation.ENABLE) {
-                System.out.println("onload");
                 defence.onLoad(playerUUID.toString());
             } else {
                 defence.disable();
