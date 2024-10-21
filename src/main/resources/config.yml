@@ -123,13 +123,13 @@ Gems:
   MATERIAL: "EMERALD"
 
   # Item name for the gem.
-  ITEM_NAME: "{##37FF00}Gem{/#89FF58}"
+  ITEM_NAME: "&l{#37FF00}Gem{/#89FF58}"
 
   # Item lore for the gem.
-  ITEM_LORE: [""] # No lore for me!
+  ITEM_LORE: [] # No lore for me!
 
-  # Custom Model Data / ID for the block (if you want it). Keep at 0 to disable the feature.
-  CUSTOM_MODEL_DATA: 0
+  # Custom Model Data / ID for the block (if you want it). Keep at -1 to disable the feature.
+  CUSTOM_MODEL_DATA: -1
 
 Raiding:
   # Cost of raiding a user in Gems.

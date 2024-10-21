@@ -47,16 +47,16 @@ public class PlayerHandler implements Listener {
             }
 
             if (island != null) {
-                IslandAPI.handlePlayerJoinBorder(event.getPlayer(), island);
                 DefenceHandler.addPlacedDefences(event.getPlayer());
-
                 if (Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean()) {
+
                     World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                     if (world != null) {
                         Location centerLocation = island.getCenter(world);
+
+                        IslandAPI.handlePlayerJoinBorder(event.getPlayer(), island);
                         IslandAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
 
-                        IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, event.getPlayer().getUniqueId());
                     }
                 }
             }
@@ -78,6 +78,7 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void playerRespawn(PlayerRespawnEvent event) {
         if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
+            if (FactionAPI.isLocationInRegion(event.getPlayer().getLocation(), event.getPlayer().getUniqueId().toString())) IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, event.getPlayer().getUniqueId());
             SkyFactionsReborn.databaseHandler.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
                 if (ex != null) {
                     SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());

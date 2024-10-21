@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.gems.cmds;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.GemsAPI;
+import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
@@ -9,6 +10,7 @@ import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
@@ -44,56 +46,75 @@ public class GemsDepositCommand extends CommandTemplate {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
-        Map<Integer, ItemStack> stacks = calculateGemsPresent(player);
-        int presentGems = computeGemsPresentFromMap(stacks);
-        if (presentGems == 0) {
-            Messages.NO_GEMS_PRESENT.send(player);
-            return;
-        }
-
-        int parsedAmount;
-        if (amount.equalsIgnoreCase("all")) parsedAmount = presentGems;
-        else parsedAmount = (Integer.parseInt(amount) - presentGems);
-
-        int computedAmount = 0;
-        for (int i = 0; i < player.getInventory().getSize(); i++) {
-            if (GemsAPI.isGemsStack(player.getInventory().getItem(i))) {
-                computedAmount += player.getInventory().getItem(i).getAmount();
-
-                player.getInventory().setItem(i, null);
-            }
-        }
-
-        GemsAPI.addGems(player.getUniqueId(), computedAmount).whenComplete((ignored, exc) -> {
-            if (exc != null) {
-                ErrorHandler.handleError(player, "deposit your gems", "SQL_GEMS_MODIFY", exc);
+        IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {
+            if (throwable != null) {
+                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", throwable);
                 return;
+            } else if (!hasIsland) {
+                Messages.NO_ISLAND.send(player);
             }
 
-            Messages.GEMS_DEPOSIT_SUCCESS.send(player, "%amount%", "GEMS_DEPOSIT_SUCCESS");
+            ItemStack currencyItem = GemsAPI.createGemsStack();
+            int totalDeposited = 0;
+
+            if (amount.equalsIgnoreCase("all")) {
+                totalDeposited = depositAllItems(player, currencyItem);
+            } else {
+                try {
+                    int parsedAmount = Integer.parseInt(amount);
+                    totalDeposited = depositSpecificAmount(player, currencyItem, parsedAmount);
+                } catch (NumberFormatException exception) {
+                    Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
+                }
+            }
+
+            int finalTotalDeposited = totalDeposited;
+            GemsAPI.subtractGems(player.getUniqueId(), totalDeposited).whenComplete((ignored, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(player, "deposit your gems", "SQL_GEMS_MODIFY", ex);
+                    return;
+                }
+
+                Messages.GEMS_DEPOSIT_SUCCESS.send(player, "%amount%", finalTotalDeposited);
+            });
         });
 
     }
 
-    private Map<Integer, ItemStack> calculateGemsPresent(Player player) {
-        Map<Integer, ItemStack> stacks = new HashMap<>();
+    private int depositAllItems(Player player, ItemStack currencyItem) {
+        Inventory inventory = player.getInventory();
+        int totalDeposited = 0;
 
-        for (int i = 0; i < player.getInventory().getSize(); i++) {
-            if (GemsAPI.isGemsStack(player.getInventory().getItem(i))) {
-                stacks.put(i, player.getInventory().getItem(i));
+        for (int i = 0; i < inventory.getSize(); i++) {
+            ItemStack slotContents = inventory.getItem(i);
+            if (slotContents != null && slotContents.isSimilar(currencyItem)) {
+                int amountInSlot = slotContents.getAmount();
+                slotContents.setAmount(0);
+                totalDeposited += amountInSlot;
             }
         }
 
-        return stacks;
+        player.updateInventory();
+        return totalDeposited;
     }
 
-    private int computeGemsPresentFromMap(Map<Integer, ItemStack> stacks) {
-        int count = 0;
-        for (ItemStack stack : stacks.values()) {
-            count += stack.getAmount();
+    private int depositSpecificAmount(Player player, ItemStack currencyItem, int amount) {
+        Inventory inventory = player.getInventory();
+        int totalDeposited = 0;
+
+        for (int i = 0; i < inventory.getSize(); i++) {
+            ItemStack slotContents = inventory.getItem(i);
+            if (slotContents != null && slotContents.isSimilar(currencyItem)) {
+                int amountInSlot = Math.min(amount, slotContents.getAmount());
+                slotContents.setAmount(slotContents.getAmount() - amountInSlot);
+                totalDeposited += amountInSlot;
+
+                if (totalDeposited >= amount) break;
+            }
         }
 
-        return count;
+        player.updateInventory();
+        return totalDeposited;
     }
 
     @Override

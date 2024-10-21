@@ -26,7 +26,7 @@ public class ObeliskHandler {
                 List<Integer> offset = ObeliskConfig.OBELISK_SPAWN_OFFSET.getIntegerList();
                 Location offsetLocation = islandCenter.add(offset.get(0), offset.get(1), offset.get(2));
 
-                if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() > 0) {
+                if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() != -1) {
                     new ObeliskBlockEntity(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
                 } else {
                     offsetLocation.getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
@@ -45,7 +45,7 @@ public class ObeliskHandler {
                 List<Integer> offset = ObeliskConfig.OBELISK_SPAWN_OFFSET.getIntegerList();
                 Location offsetLocation = islandCenter.add(offset.get(0), offset.get(1), offset.get(2));
 
-                if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() > 0) {
+                if (ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt() != -1) {
                     new ObeliskBlockEntity(offsetLocation, new ObeliskItem(new ItemStack(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()))));
                 } else {
                     offsetLocation.getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));

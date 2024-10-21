@@ -1,8 +1,10 @@
 package net.skullian.skyfactions.api;
 
+import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -16,6 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.stream.Collectors;
 
 public class GemsAPI {
 
@@ -68,7 +71,13 @@ public class GemsAPI {
         ItemStack stack = new ItemStack(Material.valueOf(Settings.GEMS_MATERIAL.getString()));
 
         ItemMeta meta = stack.getItemMeta();
-        meta.setCustomModelData(Settings.GEMS_CUSTOM_MODEL_DATA.getInt());
+        if (Settings.GEMS_CUSTOM_MODEL_DATA.getInt() != -1) meta.setCustomModelData(Settings.GEMS_CUSTOM_MODEL_DATA.getInt());
+        meta.setDisplayName(TextUtility.color(Settings.GEMS_ITEM_NAME.getString()));
+        if (!Settings.GEMS_ITEM_LORE.getList().isEmpty()) meta.setLore(
+                Settings.GEMS_ITEM_LORE.getList().stream()
+                        .map(TextUtility::color)
+                        .collect(Collectors.toList())
+        );
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), "gem");

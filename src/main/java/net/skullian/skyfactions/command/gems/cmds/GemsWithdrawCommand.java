@@ -10,10 +10,12 @@ import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,48 +54,36 @@ public class GemsWithdrawCommand extends CommandTemplate {
 
             if (hasIsland) {
                 GemsAPI.getGems(player.getUniqueId()).whenComplete((gems, ex) -> {
-                    if (ex != null) {
-                        ErrorHandler.handleError(player, "get your gems balance", "SQL_GEMS_GET", ex);
-                        return;
-                    }
-                    int parsedAmount;
-
-                    if (amount.equalsIgnoreCase("all")) parsedAmount = gems;
-                    else parsedAmount = Integer.parseInt(amount);
-
-                    if (gems < parsedAmount) {
-                        Messages.INSUFFICIENT_GEMS_COUNT.send(player);
-                        return;
-                    } else {
-                        int available = parsedAmount - calculateAvailableInventorySpace(player);
-
-                        ItemStack stack = GemsAPI.createGemsStack();
-                        stack.setAmount(available);
-
-                        HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(stack);
-                        int count = 0;
-                        for (ItemStack leftoverStack : leftover.values()) {
-                            count += leftoverStack.getAmount();
+                    try {
+                        if (ex != null) {
+                            ErrorHandler.handleError(player, "get your gems balance", "SQL_GEMS_GET", ex);
+                            return;
                         }
 
-                        GemsAPI.subtractGems(player.getUniqueId(), parsedAmount - count).whenComplete((ignored, ex2) -> {
+                        int parsedAmount = amount.equalsIgnoreCase("all") ? gems : (Integer.parseInt(amount) > gems ? gems : Integer.parseInt(amount));
+                        ItemStack stack = GemsAPI.createGemsStack();
+                        stack.setAmount(parsedAmount);
+
+                        int remainingItems = addItemToInventory(player.getInventory(), stack);
+
+                        GemsAPI.subtractGems(player.getUniqueId(), parsedAmount - remainingItems).whenComplete((ignored, ex2) -> {
                             if (ex2 != null) {
                                 for (int i = 0; i < player.getInventory().getSize(); i++) {
                                     if (GemsAPI.isGemsStack(player.getInventory().getItem(i))) {
                                         player.getInventory().setItem(i, null);
                                     }
                                 }
-
                                 ErrorHandler.handleError(player, "withdraw your gems", "SQL_GEMS_MODIFY", ex2);
                                 return;
                             }
 
-                            if (available < parsedAmount) {
+                            Messages.GEMS_WITHDRAW_SUCCESS.send(player, "%amount%", parsedAmount);
+                            if (remainingItems > 0) {
                                 Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player);
-                            } else {
-                                Messages.GEMS_WITHDRAW_SUCCESS.send(player, "%amount%", available);
                             }
                         });
+                    } catch (NumberFormatException exception) {
+                        Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
                     }
                 });
             } else {
@@ -103,17 +93,63 @@ public class GemsWithdrawCommand extends CommandTemplate {
 
     }
 
-    private int calculateAvailableInventorySpace(Player player) {
-        int capacity = 0;
-        for (ItemStack item : player.getInventory()) {
-            if (item == null || item.getType() == Material.AIR) {
-                capacity += 64;
-            } else if (GemsAPI.isGemsStack(item) && item.getAmount() < 64) {
-                capacity += 64 - item.getAmount();
+    private int addItemToInventory(Inventory inventory, ItemStack itemStack) {
+        int remaining = itemStack.getAmount();
+        int[] blockedSlots = new int[]{103, 102, 101, 100}; // armor slots
+
+        while (remaining > 0) {
+            boolean added = false;
+
+            for (int i = 0; i < inventory.getSize(); i++) {
+                final int index = i;
+                if (Arrays.stream(blockedSlots).anyMatch(x -> x == index)) continue;
+
+                ItemStack slot = inventory.getItem(i);
+
+                if (slot == null || slot.getType() == Material.AIR) {
+                    int space = Math.min(remaining, 64);
+                    inventory.setItem(i, cloneItem(itemStack, space));
+                    remaining -= space;
+
+                    if (remaining <= 0) {
+                        return 0;
+                    }
+
+                    added = true;
+                    break;
+                } else if (slot.isSimilar(itemStack)) {
+                    int maxStackSize = Math.min(slot.getMaxStackSize(), inventory.getMaxStackSize());
+                    int space = maxStackSize - slot.getAmount();
+
+                    if (space > 0) {
+                        int addAmount = Math.min(space, remaining);
+
+                        ItemStack newSlot = cloneItem(slot, slot.getAmount() + addAmount);
+                        inventory.setItem(i, newSlot);
+                        remaining -= addAmount;
+
+                        if (remaining <= 0) {
+                            return 0;
+                        }
+
+                        added = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!added) {
+                return remaining;
             }
         }
 
-        return capacity;
+        return 0;
+    }
+
+    private ItemStack cloneItem(ItemStack original, int amount) {
+        ItemStack cloned = original.clone();
+        cloned.setAmount(Math.min(amount, 64));
+        return cloned;
     }
 
     @Override

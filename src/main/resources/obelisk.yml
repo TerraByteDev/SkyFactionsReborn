@@ -25,8 +25,8 @@ Block:
   # AFTER YOU CHANGE THIS, ALL EXISTING OBELISKS WILL BE BROKEN.
   MATERIAL: "BEACON"
 
-  # Custom Model Data / ID for the block (if you want it). Keep at 0 to disable the feature.
-  CUSTOM_MODEL_DATA: 0
+  # Custom Model Data / ID for the block (if you want it). Keep at -1 to disable the feature.
+  CUSTOM_MODEL_DATA: -1
 
   # Certain parts of the obelisk GUI take some time to load.
   # You can configure the placeholder item here.

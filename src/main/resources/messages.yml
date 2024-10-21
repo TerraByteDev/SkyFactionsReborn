@@ -222,13 +222,13 @@ Messages:
 
     # Sent when a player tries to pay another player more gems than they have in their balance.
     # Also occurs if they try to
-    INSUFFICIENT_GEM_COUNT: "%server_name%&c&lHey!&r&7 You do not have enough gems for that!"
+    INSUFFICIENT_GEM_COUNT: "%server_name% &c&lHey!&r&7 You do not have enough gems for that!"
 
     # Sent when a player tries to withdraw more gems than they have in their inventory.
     INSUFFICIENT_INVENTORY_SPACE: "%server_name%&c There was not enough space in your inventory to withdraw the desired amount of gems."
 
     # Sent when a player tries to deposit gems when there are none in their inventory.
-    NO_GEMS_PRESENT: "%server_name%&c&lHey! &r&7You do not have any gems in your inventory!"
+    NO_GEMS_PRESENT: "%server_name% &c&lHey! &r&7You do not have any gems in your inventory!"
   Factions:
     # Sent when a player donates some of their gems to their Faction.
     # Placeholders: %amount% - Amount of gems donated.

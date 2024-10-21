@@ -31,7 +31,7 @@ public class ObeliskItem {
 
         itemMeta.setDisplayName(this.displayName);
         itemMeta.setLore(this.lore);
-        if (this.customModelData != 0) {
+        if (this.customModelData != -1) {
             itemMeta.setCustomModelData(this.customModelData);
         }
 

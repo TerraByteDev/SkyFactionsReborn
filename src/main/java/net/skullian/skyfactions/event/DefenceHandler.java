@@ -359,7 +359,7 @@ public class DefenceHandler implements Listener {
                             ObjectMapper mapper = new ObjectMapper();
                             DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                            Defence instance = createDefence(defenceData, defence, player.getUniqueId().toString(), false, Optional.of(player), Optional.empty(), false, false);
+                            Defence instance = createDefence(defenceData, defence, player.getUniqueId().toString(), false, Optional.of(player), Optional.empty(), false, Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean());
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
                     } catch (Exception error) {
@@ -368,6 +368,7 @@ public class DefenceHandler implements Listener {
                 }
             }
 
+            System.out.println(defences.size());
             loadedPlayerDefences.put(player.getUniqueId(), defences);
         });
     }
