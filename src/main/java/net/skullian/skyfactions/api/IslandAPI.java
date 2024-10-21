@@ -188,7 +188,8 @@ public class IslandAPI {
                 CompletableFuture.allOf(
                         cutRegion(region),
                         SkyFactionsReborn.databaseHandler.removeIsland(player),
-                        SkyFactionsReborn.databaseHandler.removeAllTrustedPlayers(island.getId())
+                        SkyFactionsReborn.databaseHandler.removeAllTrustedPlayers(island.getId()),
+                        SkyFactionsReborn.databaseHandler.removeAllDefences(player.getUniqueId())
                 ).whenComplete((ignored, throwable) -> {
                     if (throwable != null) {
                         throwable.printStackTrace();

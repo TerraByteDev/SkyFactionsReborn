@@ -2064,6 +2064,84 @@ public class DatabaseHandler {
         });
     }
 
+    public CompletableFuture<Void> removeDefence(UUID playerUUID, Location location) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("DELETE FROM defenceLocations WHERE uuid = ? AND type = 'player' and x = ? and y = ? and z = ?")) {
+
+                statement.setString(1, playerUUID.toString());
+                statement.setInt(2, location.getBlockX());
+                statement.setInt(3, location.getBlockY());
+                statement.setInt(4, location.getBlockZ());
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> removeDefence(String factionName, Location location) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("DELETE FROM defenceLocations WHERE factionName = ? AND type = 'faction' and x = ? and y = ? and z = ?")) {
+
+                statement.setString(1, factionName);
+                statement.setInt(2, location.getBlockX());
+                statement.setInt(3, location.getBlockY());
+                statement.setInt(4, location.getBlockZ());
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> removeAllDefences(String factionName) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("DELETE FROM defenceLocations WHERE factionName = ? AND type = 'faction'")) {
+
+                statement.setString(1, factionName);
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> removeAllDefences(UUID playerUUID) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("DELETE FROM defenceLocations WHERE uuid = ? AND type = 'player'")) {
+
+                statement.setString(1, playerUUID.toString());
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
 
     // ------------------ MISC ------------------ //
 
