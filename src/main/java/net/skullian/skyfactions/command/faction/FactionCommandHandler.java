@@ -19,7 +19,6 @@ public class FactionCommandHandler implements CommandHandler {
 
     PaperCommandManager<CommandSourceStack> manager;
     AnnotationParser<CommandSourceStack> parser;
-    @Getter
     ArrayList<CommandTemplate> subcommands = new ArrayList<>();
 
     public FactionCommandHandler() {
