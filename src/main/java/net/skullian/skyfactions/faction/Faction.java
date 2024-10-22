@@ -40,6 +40,16 @@ public class Faction {
     public int runes;
     public int gems;
 
+    public int getRunes() {
+        if (SkyFactionsReborn.cacheService.factionsToCache.containsKey(this)) return (runes += SkyFactionsReborn.cacheService.factionsToCache.get(this).getRunes());
+            else return runes;
+    }
+
+    public int getGems() {
+        if (SkyFactionsReborn.cacheService.factionsToCache.containsKey(this)) return (gems += SkyFactionsReborn.cacheService.factionsToCache.get(this).getGems());
+            else return gems;
+    }
+
     /**
      * Update the name of the faction.
      *

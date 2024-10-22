@@ -1,7 +1,9 @@
 package net.skullian.skyfactions.gui.items.obelisk;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.config.types.ObeliskConfig;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.island.PlayerIsland;
@@ -39,8 +41,8 @@ public class ObeliskHeadItem extends AsyncItem {
                             for (String loreLine : data.getLORE()) {
                                 builder.addLoreLines(TextUtility.color(loreLine
                                         .replace("%level%", String.valueOf(SkyFactionsReborn.databaseHandler.getIslandLevel(island).join()))
-                                        .replace("%rune_count%", String.valueOf(SkyFactionsReborn.databaseHandler.getRunes(player.getUniqueId()).join()))
-                                        .replace("%gem_count%", String.valueOf(SkyFactionsReborn.databaseHandler.getGems(player.getUniqueId()).join()))
+                                        .replace("%rune_count%", String.valueOf(RunesAPI.getRunes(player.getUniqueId())))
+                                        .replace("%gem_count%", String.valueOf(GemsAPI.getGems(player.getUniqueId())))
                                 ));
                             }
 

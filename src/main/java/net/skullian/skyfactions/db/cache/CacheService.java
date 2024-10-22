@@ -12,8 +12,8 @@ import java.util.UUID;
 
 public class CacheService {
 
-    private final Map<UUID, CacheEntry> playersToCache = new HashMap<>();
-    private final Map<Faction, CacheEntry> factionsToCache = new HashMap<>();
+    public final Map<UUID, CacheEntry> playersToCache = new HashMap<>();
+    public final Map<Faction, CacheEntry> factionsToCache = new HashMap<>();
 
     private BukkitTask task;
 

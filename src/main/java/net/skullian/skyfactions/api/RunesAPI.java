@@ -122,14 +122,10 @@ public class RunesAPI {
      *
      * @param playerUUID UUID of the Player {@link UUID}
      * @param amount     Amount of runes to remove {@link Integer}
-     * @return {@link CompletableFuture<Void>}
      */
-    public static CompletableFuture<Void> removeRunes(UUID playerUUID, int amount) {
+    public static void removeRunes(UUID playerUUID, int amount) {
         playerRunes.replace(playerUUID, playerRunes.get(playerUUID) - amount);
-        return SkyFactionsReborn.databaseHandler.removeRunes(playerUUID, amount).exceptionally(ex -> {
-            playerRunes.replace(playerUUID, playerRunes.get(playerUUID) + amount);
-            return null;
-        });
+        SkyFactionsReborn.cacheService.subtractRunes(playerUUID, amount);
     }
 
     /**
@@ -137,29 +133,22 @@ public class RunesAPI {
      *
      * @param playerUUID UUID of the Player {@link UUID}
      * @param amount     Amount of runes to add {@link Integer}
-     * @return {@link CompletableFuture<Void>}
      */
-    public static CompletableFuture<Void> addRunes(UUID playerUUID, int amount) {
+    public static void addRunes(UUID playerUUID, int amount) {
         playerRunes.replace(playerUUID, playerRunes.get(playerUUID) + amount);
-        return SkyFactionsReborn.databaseHandler.addRunes(playerUUID, amount).exceptionally(ex -> {
-            playerRunes.replace(playerUUID, playerRunes.get(playerUUID) - amount);
-            return null;
-        });
+        SkyFactionsReborn.cacheService.addRunes(playerUUID, amount);
     }
 
     /**
      * Get a player's rune count.
      *
      * @param playerUUID UUID of the Player {@link UUID}
-     * @return {@link CompletableFuture<Integer>}
+     * @return {@link Integer}
      */
-    public static CompletableFuture<Integer> getRunes(UUID playerUUID) {
-        if (playerRunes.containsKey(playerUUID)) return CompletableFuture.completedFuture(playerRunes.get(playerUUID));
-        return SkyFactionsReborn.databaseHandler.getRunes(playerUUID).whenComplete((runes, ex) -> {
-            if (ex != null) return;
+    public static int getRunes(UUID playerUUID) {
+        if (SkyFactionsReborn.cacheService.playersToCache.containsKey(playerUUID)) return (playerRunes.get(playerUUID) - SkyFactionsReborn.cacheService.playersToCache.get(playerUUID).getRunes());
+            else return playerRunes.get(playerUUID);
 
-            playerRunes.put(playerUUID, runes);
-        });
     }
 
     private static int getDefenceCost(ItemStack item) {
