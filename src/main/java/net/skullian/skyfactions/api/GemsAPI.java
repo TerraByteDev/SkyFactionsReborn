@@ -57,6 +57,17 @@ public class GemsAPI {
         SkyFactionsReborn.cacheService.subtractGems(playerUUID, subtraction);
     }
 
+    public static void cachePlayer(UUID playerUUID) {
+        SkyFactionsReborn.databaseHandler.getGems(playerUUID).whenComplete((gems, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return;
+            }
+
+            playerGems.put(playerUUID, gems);
+        });
+    }
+
     public static ItemStack createGemsStack() {
         ItemStack stack = new ItemStack(Material.valueOf(Settings.GEMS_MATERIAL.getString()));
 

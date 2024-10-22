@@ -148,7 +148,17 @@ public class RunesAPI {
     public static int getRunes(UUID playerUUID) {
         if (SkyFactionsReborn.cacheService.playersToCache.containsKey(playerUUID)) return (playerRunes.get(playerUUID) - SkyFactionsReborn.cacheService.playersToCache.get(playerUUID).getRunes());
             else return playerRunes.get(playerUUID);
+    }
 
+    public static void cachePlayer(UUID playerUUID) {
+        SkyFactionsReborn.databaseHandler.getRunes(playerUUID).whenComplete((runes, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return;
+            }
+
+            playerRunes.put(playerUUID, runes);
+        });
     }
 
     private static int getDefenceCost(ItemStack item) {
