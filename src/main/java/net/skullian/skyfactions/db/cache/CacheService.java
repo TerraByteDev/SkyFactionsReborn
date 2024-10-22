@@ -9,6 +9,8 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class CacheService {
 
@@ -17,36 +19,37 @@ public class CacheService {
 
     private BukkitTask task;
 
-    public void cacheOnce() {
-        SLogger.warn("Periodic Save - Running.");
+    public CompletableFuture<Void> cacheOnce() {
+        return CompletableFuture.runAsync(() -> {
+            SLogger.warn("Periodic Save - Running.");
 
-        for (Map.Entry<UUID, CacheEntry> cachedPlayer : playersToCache.entrySet()) {
-            cachedPlayer.getValue().cache(cachedPlayer.getKey().toString(), null);
+            for (Map.Entry<UUID, CacheEntry> cachedPlayer : playersToCache.entrySet()) {
+                cachedPlayer.getValue().cache(cachedPlayer.getKey().toString(), null).join();
 
-            playersToCache.remove(cachedPlayer.getKey());
-        }
+                playersToCache.remove(cachedPlayer.getKey());
+            }
 
-        for (Map.Entry<Faction, CacheEntry> cachedFaction : factionsToCache.entrySet()) {
-            cachedFaction.getValue().cache(null, cachedFaction.getKey());
+            for (Map.Entry<Faction, CacheEntry> cachedFaction : factionsToCache.entrySet()) {
+                cachedFaction.getValue().cache(null, cachedFaction.getKey()).join();
 
-            factionsToCache.remove(cachedFaction.getKey());
-        }
+                factionsToCache.remove(cachedFaction.getKey());
+            }
 
-        SLogger.info("Periodic Save - Done.");
+            SLogger.info("Periodic Save - Done.");
+        });
     }
 
     public void enable() {
         this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), this::cacheOnce, 0L, 6000);
     }
 
-    public void disable() {
+    public CompletableFuture<Void> disable() {
         SLogger.info("Disabling Cache Service...");
         if (task != null) {
             task.cancel();
         }
 
-        cacheOnce();
-        SLogger.info("Cache Service Disabled!");
+        return cacheOnce().orTimeout(60, TimeUnit.SECONDS);
     }
 
     public void addRunes(UUID playerUUID, int runes) {

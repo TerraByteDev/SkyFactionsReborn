@@ -4,10 +4,10 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandHandler;
 import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.sf.cmds.SFSyncCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFHelpCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFInfoCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFReloadCommand;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
@@ -60,6 +60,7 @@ public class SFCommandHandler implements CommandHandler {
         register(new SFHelpCommand(this));
         register(new SFInfoCommand());
         register(new SFReloadCommand());
+        register(new SFSyncCommand());
     }
 
     @Override

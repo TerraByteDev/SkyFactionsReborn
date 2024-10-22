@@ -36,6 +36,10 @@ import xyz.xenondevs.invui.InvUI;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public final class SkyFactionsReborn extends JavaPlugin {
@@ -144,17 +148,25 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        SLogger.info("Closing Database connection.");
-        closeDatabase();
-        discordHandler.disconnect();
+        try {
+            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
+            cacheService.disable().get();
 
-        SLogger.info("Terminating PacketEvents.");
-        PacketEvents.getAPI().terminate();
+            scheduler.shutdownNow();
 
-        cacheService.disable();
+            SLogger.info("Closing Database connection.");
+            closeDatabase();
+            discordHandler.disconnect();
 
-        print();
-        SLogger.info("SkyFactions has been disabled.");
+            SLogger.info("Terminating PacketEvents.");
+            PacketEvents.getAPI().terminate();
+
+            print();
+            SLogger.info("SkyFactions has been disabled.");
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Failed to disable Cache Service: " + e.getMessage(), e);
+        }
     }
 
     private void initialiseDatabaseConnection() {

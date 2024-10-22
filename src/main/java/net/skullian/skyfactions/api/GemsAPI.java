@@ -33,7 +33,7 @@ public class GemsAPI {
     public static int getGems(UUID playerUUID) {
         if (!playerGems.containsKey(playerUUID)) cachePlayer(playerUUID);
 
-        if (SkyFactionsReborn.cacheService.playersToCache.containsKey(playerUUID)) return (playerGems.get(playerUUID) - SkyFactionsReborn.cacheService.playersToCache.get(playerUUID).getGems());
+        if (SkyFactionsReborn.cacheService.playersToCache.containsKey(playerUUID)) return (playerGems.get(playerUUID) + SkyFactionsReborn.cacheService.playersToCache.get(playerUUID).getGems());
             else return playerGems.get(playerUUID);
     }
 
@@ -46,7 +46,6 @@ public class GemsAPI {
     public static void addGems(UUID playerUUID, int addition) {
         if (!playerGems.containsKey(playerUUID)) cachePlayer(playerUUID);
 
-        playerGems.replace(playerUUID, playerGems.get(playerUUID) + addition);
         SkyFactionsReborn.cacheService.addGems(playerUUID, addition);
     }
 
@@ -59,7 +58,6 @@ public class GemsAPI {
     public static void subtractGems(UUID playerUUID, int subtraction) {
         if (!playerGems.containsKey(playerUUID)) cachePlayer(playerUUID);
 
-        playerGems.replace(playerUUID, playerGems.get(playerUUID) - subtraction);
         SkyFactionsReborn.cacheService.subtractGems(playerUUID, subtraction);
     }
 

@@ -22,6 +22,7 @@ Messages:
   INCORRECT_USAGE: '%server_name%&r&7 Incorrect usage of command. Usage: &c&l%usage%' # Sent when the player uses a command with improper syntax.
   UNKNOWN_PLAYER: "%server_name%&r&7 Unknown player: &c&l%player%" # Sent when a command is ran on an unknown player (when applicable).
   PLEASE_WAIT: "%server_name%&r&7 %operation%, please wait..." # Sent when the plugin is processing a request. Everything is fully async so responses aren't guaranteed to be immediate.
+  SYNC_SUCCESS: "%server_name%&r&a Successfully synced cached data with the database!" # Sent when /sf sync is ran.
 
   # Sent when an error occurs when trying to execute a command or task.
   # Placeholders: %operation% - what was happening / %debug% - Debug code to be used in accordance to https://docs.terrabytedev.com/skyfactions/errors-and-debugging.

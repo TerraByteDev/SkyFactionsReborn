@@ -46,7 +46,7 @@ public class CacheEntry {
         if (faction != null) {
             return CompletableFuture.allOf(
                     SkyFactionsReborn.databaseHandler.addGems(toCache, gems).exceptionally((ex) -> {
-                        faction.gems -= gems;
+                        faction.gems += gems;
                         if (faction.gems < 0) faction.gems = 0;
 
                         throw new RuntimeException("Failed to set gems of faction " + faction.getName(), ex);
@@ -62,12 +62,12 @@ public class CacheEntry {
             UUID uuid = UUID.fromString(toCache);
             return CompletableFuture.allOf(
                     SkyFactionsReborn.databaseHandler.addGems(uuid, gems).exceptionally((ex) -> {
-                        GemsAPI.playerGems.replace(uuid, Math.max(0, GemsAPI.playerGems.get(uuid) - gems));
+                        GemsAPI.playerGems.replace(uuid, Math.max(0, GemsAPI.playerGems.get(uuid) + gems));
 
                         throw new RuntimeException("Failed to set gems of player " + uuid, ex);
                     }),
                     SkyFactionsReborn.databaseHandler.addRunes(uuid, runes).exceptionally((ex) -> {
-                        RunesAPI.playerRunes.replace(uuid, Math.max(0, RunesAPI.playerRunes.get(uuid) - runes));
+                        RunesAPI.playerRunes.replace(uuid, Math.max(0, RunesAPI.playerRunes.get(uuid) + runes));
 
                         throw new RuntimeException("Failed to set runes of player " + uuid, ex);
                     })
