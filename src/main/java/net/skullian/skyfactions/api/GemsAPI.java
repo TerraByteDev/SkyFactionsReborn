@@ -30,13 +30,9 @@ public class GemsAPI {
      * @param playerUUID UUID of the player you want to get gem count from.
      * @return {@link Integer}
      */
-    public static CompletableFuture<Integer> getGems(UUID playerUUID) {
-        if (playerGems.containsKey(playerUUID)) return CompletableFuture.completedFuture(playerGems.get(playerUUID));
-        return SkyFactionsReborn.databaseHandler.getGems(playerUUID).whenComplete((gems, ex) -> {
-            if (ex != null) return;
-
-            playerGems.put(playerUUID, gems);
-        });
+    public static int getGems(UUID playerUUID) {
+        if (SkyFactionsReborn.cacheService.playersToCache.containsKey(playerUUID)) return (playerGems.get(playerUUID) - SkyFactionsReborn.cacheService.playersToCache.get(playerUUID).getGems());
+            else return playerGems.get(playerUUID);
     }
 
     /**
@@ -45,12 +41,9 @@ public class GemsAPI {
      * @param playerUUID UUID of player to give gems to.
      * @param addition   Amount of gems to add.
      */
-    public static CompletableFuture<Void> addGems(UUID playerUUID, int addition) {
+    public static void addGems(UUID playerUUID, int addition) {
         playerGems.replace(playerUUID, playerGems.get(playerUUID) + addition);
-        return SkyFactionsReborn.databaseHandler.addGems(playerUUID, addition).exceptionally(ex -> {
-            playerGems.replace(playerUUID, playerGems.get(playerUUID) - addition);
-            return null;
-        });
+        SkyFactionsReborn.cacheService.addGems(playerUUID, addition);
     }
 
     /**
@@ -59,12 +52,9 @@ public class GemsAPI {
      * @param playerUUID  UUID of player to subtract gems from.
      * @param subtraction Amount of gems to remove.
      */
-    public static CompletableFuture<Void> subtractGems(UUID playerUUID, int subtraction) {
+    public static void subtractGems(UUID playerUUID, int subtraction) {
         playerGems.replace(playerUUID, playerGems.get(playerUUID) - subtraction);
-        return SkyFactionsReborn.databaseHandler.subtractGems(playerUUID, subtraction).exceptionally((ex) -> {
-            playerGems.replace(playerUUID, playerGems.get(playerUUID) + subtraction);
-            return null;
-        });
+        SkyFactionsReborn.cacheService.subtractGems(playerUUID, subtraction);
     }
 
     public static ItemStack createGemsStack() {

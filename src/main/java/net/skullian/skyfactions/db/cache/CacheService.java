@@ -12,8 +12,8 @@ import java.util.UUID;
 
 public class CacheService {
 
-    private final Map<UUID, CacheEntry> playersToCache = new HashMap<>();
-    private final Map<Faction, CacheEntry> factionsToCache = new HashMap<>();
+    public final Map<UUID, CacheEntry> playersToCache = new HashMap<>();
+    public final Map<Faction, CacheEntry> factionsToCache = new HashMap<>();
 
     private BukkitTask task;
 
@@ -22,10 +22,14 @@ public class CacheService {
 
         for (Map.Entry<UUID, CacheEntry> cachedPlayer : playersToCache.entrySet()) {
             cachedPlayer.getValue().cache(cachedPlayer.getKey().toString(), null);
+
+            playersToCache.remove(cachedPlayer.getKey());
         }
 
         for (Map.Entry<Faction, CacheEntry> cachedFaction : factionsToCache.entrySet()) {
             cachedFaction.getValue().cache(null, cachedFaction.getKey());
+
+            factionsToCache.remove(cachedFaction.getKey());
         }
 
         SLogger.info("Periodic Save - Done.");

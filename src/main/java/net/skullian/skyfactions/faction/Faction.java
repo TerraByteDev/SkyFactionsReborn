@@ -40,6 +40,16 @@ public class Faction {
     public int runes;
     public int gems;
 
+    public int getRunes() {
+        if (SkyFactionsReborn.cacheService.factionsToCache.containsKey(this)) return (runes += SkyFactionsReborn.cacheService.factionsToCache.get(this).getRunes());
+            else return runes;
+    }
+
+    public int getGems() {
+        if (SkyFactionsReborn.cacheService.factionsToCache.containsKey(this)) return (gems += SkyFactionsReborn.cacheService.factionsToCache.get(this).getGems());
+            else return gems;
+    }
+
     /**
      * Update the name of the faction.
      *
@@ -120,14 +130,9 @@ public class Faction {
      *
      * @param addition Amount of runes to add [{@link Integer}]
      */
-    public CompletableFuture<Void> addRunes(int addition) {
-        return SkyFactionsReborn.databaseHandler.addRunes(name, addition).whenComplete((ignored, ex) -> {
-            if (ex != null) {
-                throw new RuntimeException(ex);
-            }
-
-            runes += addition;
-        });
+    public void addRunes (int addition) {
+        runes += addition;
+        SkyFactionsReborn.cacheService.addRunes(this, addition);
     }
 
     /**
@@ -135,14 +140,9 @@ public class Faction {
      *
      * @param subtraction Amount of runes to remove [{@link Integer}]
      */
-    public CompletableFuture<Void> subtractRunes(int subtraction) {
-        return SkyFactionsReborn.databaseHandler.removeRunes(name, subtraction).whenComplete((ignored, ex) -> {
-            if (ex != null) {
-                throw new RuntimeException(ex);
-            }
-
-            runes -= subtraction;
-        });
+    public void subtractRunes(int subtraction) {
+        runes -= subtraction;
+        SkyFactionsReborn.cacheService.subtractRunes(this, subtraction);
     }
 
     /**
@@ -150,13 +150,9 @@ public class Faction {
      *
      * @param addition Gems to add [{@link Integer}]
      */
-    public CompletableFuture<Void> addGems(int addition) {
+    public void addGems(int addition) {
         gems += addition;
-        return SkyFactionsReborn.databaseHandler.addGems(name, addition).exceptionally((ex) -> {
-            ex.printStackTrace();
-            gems -= addition;
-            return null;
-        });
+        SkyFactionsReborn.cacheService.addGems(this, addition);
     }
 
     /**
