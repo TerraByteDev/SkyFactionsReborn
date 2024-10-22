@@ -44,14 +44,14 @@ public class PlaceholderManager extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         if (params.equalsIgnoreCase("player_runes")) {
             if (player == null) return "-1";
-            if (RunesAPI.playerRunes.containsKey(player.getUniqueId())) return String.valueOf(RunesAPI.playerRunes.get(player.getUniqueId()));
-                else RunesAPI.getRunes(player.getUniqueId());
+            if (RunesAPI.playerRunes.containsKey(player.getUniqueId())) return String.valueOf(RunesAPI.getRunes(player.getUniqueId()));
+                else RunesAPI.cachePlayer(player.getUniqueId());
 
             return "-1";
         } else if (params.equalsIgnoreCase("player_gems")) {
             if (player == null) return "-1";
-            if (GemsAPI.playerGems.containsKey(player.getUniqueId())) return String.valueOf(GemsAPI.playerGems.get(player.getUniqueId()));
-                else GemsAPI.getGems(player.getUniqueId());
+            if (GemsAPI.playerGems.containsKey(player.getUniqueId())) return String.valueOf(GemsAPI.getGems(player.getUniqueId()));
+                else GemsAPI.cachePlayer(player.getUniqueId());
 
             return "-1";
         } else if (params.equalsIgnoreCase("player_faction")) {
