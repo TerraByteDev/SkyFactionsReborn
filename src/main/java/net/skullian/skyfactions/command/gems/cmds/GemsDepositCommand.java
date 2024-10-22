@@ -69,14 +69,8 @@ public class GemsDepositCommand extends CommandTemplate {
             }
 
             int finalTotalDeposited = totalDeposited;
-            GemsAPI.subtractGems(player.getUniqueId(), totalDeposited).whenComplete((ignored, ex) -> {
-                if (ex != null) {
-                    ErrorHandler.handleError(player, "deposit your gems", "SQL_GEMS_MODIFY", ex);
-                    return;
-                }
-
-                Messages.GEMS_DEPOSIT_SUCCESS.send(player, "%amount%", finalTotalDeposited);
-            });
+            GemsAPI.subtractGems(player.getUniqueId(), totalDeposited);
+            Messages.GEMS_DEPOSIT_SUCCESS.send(player, "%amount%", finalTotalDeposited);
         });
 
     }

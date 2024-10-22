@@ -53,39 +53,23 @@ public class GemsWithdrawCommand extends CommandTemplate {
             }
 
             if (hasIsland) {
-                GemsAPI.getGems(player.getUniqueId()).whenComplete((gems, ex) -> {
-                    try {
-                        if (ex != null) {
-                            ErrorHandler.handleError(player, "get your gems balance", "SQL_GEMS_GET", ex);
-                            return;
-                        }
+                int gems = GemsAPI.getGems(player.getUniqueId());
+                try {
+                    int parsedAmount = amount.equalsIgnoreCase("all") ? gems : (Integer.parseInt(amount) > gems ? gems : Integer.parseInt(amount));
+                    ItemStack stack = GemsAPI.createGemsStack();
+                    stack.setAmount(parsedAmount);
 
-                        int parsedAmount = amount.equalsIgnoreCase("all") ? gems : (Integer.parseInt(amount) > gems ? gems : Integer.parseInt(amount));
-                        ItemStack stack = GemsAPI.createGemsStack();
-                        stack.setAmount(parsedAmount);
+                    int remainingItems = addItemToInventory(player.getInventory(), stack);
 
-                        int remainingItems = addItemToInventory(player.getInventory(), stack);
+                    GemsAPI.subtractGems(player.getUniqueId(), (parsedAmount - remainingItems));
 
-                        GemsAPI.subtractGems(player.getUniqueId(), parsedAmount - remainingItems).whenComplete((ignored, ex2) -> {
-                            if (ex2 != null) {
-                                for (int i = 0; i < player.getInventory().getSize(); i++) {
-                                    if (GemsAPI.isGemsStack(player.getInventory().getItem(i))) {
-                                        player.getInventory().setItem(i, null);
-                                    }
-                                }
-                                ErrorHandler.handleError(player, "withdraw your gems", "SQL_GEMS_MODIFY", ex2);
-                                return;
-                            }
-
-                            Messages.GEMS_WITHDRAW_SUCCESS.send(player, "%amount%", parsedAmount);
-                            if (remainingItems > 0) {
-                                Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player);
-                            }
-                        });
-                    } catch (NumberFormatException exception) {
-                        Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
+                    Messages.GEMS_WITHDRAW_SUCCESS.send(player, "%amount%", parsedAmount);
+                    if (remainingItems > 0) {
+                        Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player);
                     }
-                });
+                } catch (NumberFormatException exception) {
+                    Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
+                }
             } else {
                 Messages.NO_ISLAND.send(player);
             }

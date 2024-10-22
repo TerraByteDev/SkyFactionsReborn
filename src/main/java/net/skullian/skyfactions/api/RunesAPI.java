@@ -124,6 +124,8 @@ public class RunesAPI {
      * @param amount     Amount of runes to remove {@link Integer}
      */
     public static void removeRunes(UUID playerUUID, int amount) {
+        if (!playerRunes.containsKey(playerUUID)) cachePlayer(playerUUID);
+
         playerRunes.replace(playerUUID, playerRunes.get(playerUUID) - amount);
         SkyFactionsReborn.cacheService.subtractRunes(playerUUID, amount);
     }
@@ -135,6 +137,8 @@ public class RunesAPI {
      * @param amount     Amount of runes to add {@link Integer}
      */
     public static void addRunes(UUID playerUUID, int amount) {
+        if (!playerRunes.containsKey(playerUUID)) cachePlayer(playerUUID);
+
         playerRunes.replace(playerUUID, playerRunes.get(playerUUID) + amount);
         SkyFactionsReborn.cacheService.addRunes(playerUUID, amount);
     }
@@ -146,6 +150,8 @@ public class RunesAPI {
      * @return {@link Integer}
      */
     public static int getRunes(UUID playerUUID) {
+        if (!playerRunes.containsKey(playerUUID)) cachePlayer(playerUUID);
+
         if (SkyFactionsReborn.cacheService.playersToCache.containsKey(playerUUID)) return (playerRunes.get(playerUUID) - SkyFactionsReborn.cacheService.playersToCache.get(playerUUID).getRunes());
             else return playerRunes.get(playerUUID);
     }

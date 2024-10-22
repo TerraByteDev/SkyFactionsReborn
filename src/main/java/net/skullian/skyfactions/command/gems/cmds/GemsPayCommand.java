@@ -52,21 +52,15 @@ public class GemsPayCommand extends CommandTemplate {
             Messages.UNKNOWN_PLAYER.send(sender, "%player%", playerName);
         } else {
 
-            GemsAPI.getGems(player.getUniqueId()).whenComplete((playerGemCount, ex) -> {
-                if (ex != null) {
-                    ErrorHandler.handleError(player, "pay gems to another player", "SQL_GEMS_GET", ex);
-                    return;
-                }
+            int playerGemCount = GemsAPI.getGems(player.getUniqueId());
+            if (playerGemCount >= amount) {
+                GemsAPI.subtractGems(player.getUniqueId(), amount);
+                GemsAPI.addGems(offlinePlayer.getUniqueId(), amount);
 
-                if (playerGemCount >= amount) {
-                    GemsAPI.subtractGems(player.getUniqueId(), amount);
-                    GemsAPI.addGems(offlinePlayer.getUniqueId(), amount);
-
-                    Messages.GEM_ADD_SUCCESS.send(player, "%amount%", amount, "%player%", offlinePlayer.getName());
-                } else {
-                    Messages.INSUFFICIENT_GEMS_COUNT.send(player);
-                }
-            });
+                Messages.GEM_ADD_SUCCESS.send(player, "%amount%", amount, "%player%", offlinePlayer.getName());
+            } else {
+                Messages.INSUFFICIENT_GEMS_COUNT.send(player);
+            }
         }
     }
 

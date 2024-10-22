@@ -67,21 +67,14 @@ public class FactionCreateCommand extends CommandTemplate {
                         if (FactionAPI.hasValidName(player, name)) {
                             int cost = Settings.FACTION_CREATION_COST.getInt();
                             if (cost > 0) {
-                                RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, throwable) -> {
-                                    if (throwable != null) {
-                                        ErrorHandler.handleError(player, "get your Runes count", "SQL_RUNES_GET", throwable);
-                                        return;
-                                    }
+                                int runes = RunesAPI.getRunes(player.getUniqueId());
 
-                                    if (runes < cost) {
-                                        Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
-                                    } else {
-                                        RunesAPI.removeRunes(player.getUniqueId(), cost).whenComplete((ignored, exce) -> {
-                                            if (exce == null) FactionAPI.createFaction(player, name);
-                                            else exce.printStackTrace();
-                                        });
-                                    }
-                                });
+                                if (runes < cost) {
+                                    Messages.FACTION_INSUFFICIENT_FUNDS.send(player, "%creation_cost%", cost);
+                                } else {
+                                    RunesAPI.removeRunes(player.getUniqueId(), cost);
+                                    FactionAPI.createFaction(player, name);
+                                }
                             }
                         }
                     }

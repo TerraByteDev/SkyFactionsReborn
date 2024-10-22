@@ -50,12 +50,14 @@ public class ObeliskConfirmPurchaseItem extends AsyncItem {
                                     }
                                 }
                             } else if (type.equals("player")) {
-                                int runes = RunesAPI.getRunes(player.getUniqueId()).join();
+
+                                int runes = RunesAPI.getRunes(player.getUniqueId());
                                 if (runes < struct.getBUY_COST()) {
                                     for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList()) {
                                         builder.addLoreLines(TextUtility.color(line));
                                     }
                                 }
+
                             }
 
                             if (player.getInventory().firstEmpty() == -1) {
@@ -94,29 +96,21 @@ public class ObeliskConfirmPurchaseItem extends AsyncItem {
 
             player.closeInventory();
             Messages.PLEASE_WAIT.send(player, "%operation%", "purchasing your defence");
-            FACTION.subtractRunes(STRUCT.getBUY_COST()).whenComplete((ignored, ex) -> {
-                if (ex != null) {
-                    ErrorHandler.handleError(player, "purchase your defence", "SQL_RUNES_MODIFY", ex);
-                    return;
-                }
 
-                Messages.PLEASE_WAIT.send(player, "%operation%", "Purchasing your defence");
-                DefencesFactory.addDefence(player, STRUCT, FACTION);
-            });
+            FACTION.subtractRunes(STRUCT.getBUY_COST());
+            Messages.PLEASE_WAIT.send(player, "%operation%", "Purchasing your defence");
+            DefencesFactory.addDefence(player, STRUCT, FACTION);;
         } else if (TYPE.equals("player")) {
-            RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, ex) -> {
-                if (ex != null) {
-                    ex.printStackTrace();
-                    return;
-                } else if (runes < STRUCT.getBUY_COST()) {
-                    SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND.getInt(), 1);
-                    return;
-                }
 
-                player.closeInventory();
-                Messages.PLEASE_WAIT.send(player, "%operation%", "Purchasing your defence");
-                DefencesFactory.addDefence(player, STRUCT, FACTION);
-            });
+            int runes = RunesAPI.getRunes(player.getUniqueId());
+            if (runes < STRUCT.getBUY_COST()) {
+                SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND.getInt(), 1);
+                return;
+            }
+
+            player.closeInventory();
+            Messages.PLEASE_WAIT.send(player, "%operation%", "Purchasing your defence");
+            DefencesFactory.addDefence(player, STRUCT, FACTION);
         }
 
 

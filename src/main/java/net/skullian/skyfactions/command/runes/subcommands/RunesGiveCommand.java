@@ -84,15 +84,8 @@ public class RunesGiveCommand extends CommandTemplate {
                             return;
                         }
 
-                        RunesAPI.addRunes(offlinePlayer.getUniqueId(), amount).whenComplete((ignored, throwable) -> {
-                            if (throwable != null) {
-                                throwable.printStackTrace();
-                                ErrorHandler.handleError(sender, "give runes to another player", "SQL_RUNES_GIVE", throwable);
-                                return;
-                            }
-
-                            Messages.RUNES_GIVE_SUCCESS.send(sender, "%amount%", amount, "%name%", offlinePlayer.getName());
-                        });
+                        RunesAPI.addRunes(offlinePlayer.getUniqueId(), amount);
+                        Messages.RUNES_GIVE_SUCCESS.send(sender, "%amount%", amount, "%name%", offlinePlayer.getName());
                     });
                 }
             } else if (type.equalsIgnoreCase("faction")) {
@@ -106,14 +99,8 @@ public class RunesGiveCommand extends CommandTemplate {
                         return;
                     }
 
-                    faction.addRunes(amount).whenComplete((ignored, ex) -> {
-                        if (ex != null) {
-                            ErrorHandler.handleError(sender, "give Runes to the specified Faction", "SQL_RUNES_MODIFY", ex);
-                            return;
-                        }
-
-                        Messages.RUNES_GIVE_SUCCESS.send(sender, "%amount%", amount, "%name%", faction.getName());
-                    });
+                    faction.addRunes(amount);
+                    Messages.RUNES_GIVE_SUCCESS.send(sender, "%amount%", amount, "%name%", faction.getName());
                 });
 
         }

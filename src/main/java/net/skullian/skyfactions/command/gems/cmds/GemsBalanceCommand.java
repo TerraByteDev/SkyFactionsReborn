@@ -51,14 +51,8 @@ public class GemsBalanceCommand extends CommandTemplate {
             }
 
             if (hasIsland) {
-                GemsAPI.getGems(player.getUniqueId()).whenComplete((count, throwable) -> {
-                    if (throwable != null) {
-                        ErrorHandler.handleError(player, "get your gems balance", "SQL_GEMS_GET", throwable);
-                        return;
-                    }
-
-                    Messages.GEMS_COUNT_MESSAGE.send(player, "%count%", count);
-                });
+                int gems = GemsAPI.getGems(player.getUniqueId());
+                Messages.GEMS_COUNT_MESSAGE.send(player, "%count%", gems);
             }
         });
     }

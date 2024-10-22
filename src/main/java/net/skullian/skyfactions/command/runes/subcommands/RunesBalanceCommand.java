@@ -50,14 +50,8 @@ public class RunesBalanceCommand extends CommandTemplate {
                 Messages.NO_ISLAND.send(player);
                 return;
             }
-            RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, exc) -> {
-                if (exc != null) {
-                    ErrorHandler.handleError(player, "get your runes balance", "SQL_RUNES_MODIFY", exc);
-                    return;
-                }
-
-                Messages.RUNES_BALANCE_MESSAGE.send(player, "%count%", runes);
-            });
+            int runes = RunesAPI.getRunes(player.getUniqueId());
+            Messages.RUNES_BALANCE_MESSAGE.send(player, "%count%", runes);
         });
     }
 

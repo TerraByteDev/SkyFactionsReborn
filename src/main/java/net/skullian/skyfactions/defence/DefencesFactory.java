@@ -261,29 +261,18 @@ public class DefencesFactory {
 
         if (faction != null) {
             // assume faction type
-            faction.subtractRunes(defence.getBUY_COST()).whenComplete((ignored, ex) -> {
-                if (ex != null) {
-                    ErrorHandler.handleError(player, "purchase a defence", "SQL_GEMS_MODIFY", ex);
-                    return;
-                }
+            faction.subtractRunes(defence.getBUY_COST());
+            player.getInventory().addItem(stack);
+            SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME()));
 
-                player.getInventory().addItem(stack);
-                SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
-                Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME()));
-
-                faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_PURCHASE, "%player_name%", player.getName(), "%defence_name%", TextUtility.color(defence.getNAME()));
-            });
+            faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_PURCHASE, "%player_name%", player.getName(), "%defence_name%", TextUtility.color(defence.getNAME()));
         } else {
-            RunesAPI.removeRunes(player.getUniqueId(), defence.getBUY_COST()).whenComplete((ignored, ex) -> {
-                if (ex != null) {
-                    ErrorHandler.handleError(player, "purchase a defence", "SQL_GEMS_MODIFY", ex);
-                    return;
-                }
 
-                player.getInventory().addItem(stack);
-                SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
-                Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME()));
-            });
+            RunesAPI.removeRunes(player.getUniqueId(), defence.getBUY_COST());
+            player.getInventory().addItem(stack);
+            SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME()));
         }
     }
 
