@@ -830,6 +830,44 @@ public class DatabaseHandler {
         });
     }
 
+    public CompletableFuture<Void> setGems(String factionName, int count) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET runes = ? WHERE factionName = ?")) {
+
+                statement.setInt(1, count);
+                statement.setString(2, factionName);
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> setGems(UUID playerUUID, int count) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("UPDATE islands set gems = ? WHERE uuid = ?")) {
+
+                statement.setInt(1, count);
+                statement.setString(2, playerUUID.toString());
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
     public CompletableFuture<Void> addGems(UUID playerUUID, int amount) {
         return CompletableFuture.runAsync(() -> {
             int currentCount = getGems(playerUUID).join();
@@ -1417,6 +1455,44 @@ public class DatabaseHandler {
                 connection.close();
 
                 return 0;
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> setRunes(UUID playerUUID, int runes) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("UPDATE islands SET runes = ? WHERE uuid = ?")) {
+
+                statement.setInt(1, runes);
+                statement.setString(2, playerUUID.toString());
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> setRunes(String factionName, int runes) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("UPDATE factionIslands SET runes = ? WHERE factionName = ?")) {
+
+                statement.setInt(1, runes);
+                statement.setString(2, factionName);
+
+                statement.executeUpdate();
+                statement.close();
+
+                connection.close();
             } catch (SQLException error) {
                 handleError(error);
                 throw new RuntimeException(error);
@@ -2154,5 +2230,9 @@ public class DatabaseHandler {
             SLogger.fatal("Please contact the devs.");
             SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
         });
+    }
+
+    public boolean isActive() {
+        return !this.dataSource.isClosed();
     }
 }

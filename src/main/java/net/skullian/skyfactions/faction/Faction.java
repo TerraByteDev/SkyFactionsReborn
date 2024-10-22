@@ -37,8 +37,8 @@ public class Faction {
     private List<OfflinePlayer> fighters;
     private List<OfflinePlayer> members;
     private String motd;
-    private int runes;
-    private int gems;
+    public int runes;
+    public int gems;
 
     /**
      * Update the name of the faction.

@@ -25,6 +25,11 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        if (!SkyFactionsReborn.databaseHandler.isActive()) {
+            event.getPlayer().kick();
+            throw new RuntimeException("Database is closed! Cannot allow player to join without risking dupes.");
+        };
+
         SkyFactionsReborn.databaseHandler.playerIsRegistered(event.getPlayer()).whenComplete((isRegistered, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();

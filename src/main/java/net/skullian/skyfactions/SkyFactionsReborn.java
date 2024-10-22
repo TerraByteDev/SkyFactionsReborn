@@ -22,6 +22,7 @@ import net.skullian.skyfactions.command.sf.SFCommandHandler;
 import net.skullian.skyfactions.config.ConfigFileHandler;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.db.DatabaseHandler;
+import net.skullian.skyfactions.db.cache.CacheService;
 import net.skullian.skyfactions.discord.DiscordHandler;
 import net.skullian.skyfactions.event.DefenceHandler;
 import net.skullian.skyfactions.event.ObeliskInteractionListener;
@@ -43,6 +44,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static DatabaseHandler databaseHandler;
     public static DiscordHandler discordHandler;
     public static WorldBorderApi worldBorderApi;
+    public static CacheService cacheService;
 
     private void print() {
         ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
@@ -78,9 +80,9 @@ public final class SkyFactionsReborn extends JavaPlugin {
         SLogger.info("Loading InvLib Instance");
         InvUI.getInstance().setPlugin(this);
 
-        SLogger.info("Registering Commands.");
-        //getCommand("island").setExecutor(new IslandCommandHandler());
-        //getCommand("island").setTabCompleter(new IslandCommandTabCompletion());
+        SLogger.info("Initialising Cache Service.");
+        cacheService = new CacheService();
+        cacheService.enable();
 
         // There is the option to disable the discord integration if you don't want it.
         // To avoid later confusion, we only register the discord related commands if it is enabled.
@@ -148,6 +150,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
         SLogger.info("Terminating PacketEvents.");
         PacketEvents.getAPI().terminate();
+
+        cacheService.disable();
 
         print();
         SLogger.info("SkyFactions has been disabled.");
