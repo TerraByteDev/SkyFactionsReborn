@@ -21,7 +21,16 @@ COST:
 
   # How many runes to purchase ONE ammo.
   # This supports level scaling!
+  # Supports level scaling with math expressions! Use "level" for the current defence level.
   AMMO_COST: 2
+
+  # Increase (%) of the repaired status every time the defence is repaired (through clicking the repair button).
+  # E.g. if the defence was at 10% durability, you would have to repair it 9 times (assuming the step config is 10).
+  # Supports level scaling with math expressions! Use "level" for the current defence level.
+  REPAIR_STEP: 10
+  # Cost for one repair step (above) in runes.
+  # Supports level scaling with math expressions! Use "level" for the current defence level.
+  REPAIR_COST: 25
 
 # Maximum level this defence can be upgraded to.
 MAX_LEVEL: 4
@@ -64,6 +73,10 @@ ATTRIBUTES:
   MAX_AMMO: 350 * level # Highest ammo count.
   UPGRADE_COST: 40 * level # Cost of upgrading the defence.
   DAMAGE: 2 + level # The damage dealt by the defence.
+
+  # The below value will also apply for wither destruction.
+  EXPLOSION_DAMAGE_PERCENT: 50 - (level * 3) # The defence will be "damaged" each time it is exploded (e.g. by tnt or a creeper)
+  MINE_DAMAGE_PERCENT: 15 + (level * 2) # The defence will be "damaged" each time it is broken (during a raid).
 
   TARGET_HOSTILE_MOBS_LEVEL: 1 # At what level should the defence be able to target hostile mobs? 1 for immediately (base level)
   TARGET_PASSIVE_MOBS_LEVEL: 2 # At what level should the defence be able to target passive mobs. 1 for immediately (base level)
@@ -163,6 +176,7 @@ ITEM:
     - "&7○ &9Max Targets:&6 %target_max%"
     - "&7○ &9Damage:&6 %damage%"
     - "&7○ &9Cooldown:&6 %cooldown%"
+    - "&7○ &9Repair Cost: &6%repair_cost%"
     - ""
     - "&7○ &9Cost:&6 %cost%"
 
@@ -177,5 +191,6 @@ ITEM:
     - "&7○ &9Max Targets:&a %old_target_max% &e>&a %new_target_max%"
     - "&7○ &9Damage:&a %old_damage% &e>&a %new_damage%"
     - "&7○ &9Cooldown:&a %old_cooldown% &e>&a %new_damage%"
+    - "&7○ &9Repair Cost:&a %old_repair_cost% &e>&a %new_repair_cost%"
     - ""
     - "&7○ &9Upgrade Cost:&6 %cost%"

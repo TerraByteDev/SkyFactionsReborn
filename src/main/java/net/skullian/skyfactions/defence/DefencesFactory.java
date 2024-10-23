@@ -110,7 +110,9 @@ public class DefencesFactory {
 
         int BUY_COST = config.getInt("COST.BUY");
         int SELL_COST = config.getInt("COST.SELL");
-        int AMMO_COST = config.getInt("AMMO_COST");
+        String AMMO_COST = config.getString("COST.AMMO_COST");
+        String REPAIR_STEP = config.getString("COST.REPAIR_STEP");
+        String REPAIR_COST = config.getString("COST.REPAIR_COST");
 
         int MAX_LEVEL = config.getInt("MAX_LEVEL");
 
@@ -151,7 +153,7 @@ public class DefencesFactory {
         DefenceEntityStruct ENTITY_DATA = getEntityConfiguration(config);
 
         cachedMaterials.add(ITEM_MATERIAL);
-        return new DefenceStruct(fileName, COLOR_NAME, TYPE, IDENTIFIER, BUY_COST, SELL_COST, AMMO_COST, MAX_LEVEL,
+        return new DefenceStruct(fileName, COLOR_NAME, TYPE, IDENTIFIER, BUY_COST, SELL_COST, AMMO_COST, REPAIR_STEP, REPAIR_COST, MAX_LEVEL,
                 PLACE_SOUND, PLACE_PITCH, BREAK_SOUND, BREAK_PITCH, ACTIVATE_SOUND, ACTIVATE_PITCH, EFFECTS, DEATH_MESSAGES, EFFECT_MESSAGES,
                 ATTRIBUTES, EXPERIENCE_DROPS, PROJECTILE, BLOCK_MATERIAL, BLOCK_SKULL, ITEM_MATERIAL, ITEM_SKULL, ITEM_LORE, UPGRADE_LORE,
                 PLACEMENT_BLOCKED_MESSAGE, IS_WHITELIST, BLOCKS_LIST, HOLOGRAM_STACK, OUT_OF_STOCK_LINE, APPEND_TO_TOP, ENTITY_DATA);
@@ -216,10 +218,13 @@ public class DefencesFactory {
         String DISTANCE = config.getString("ATTRIBUTES.DISTANCE");
         String HEALING = config.getString("ATTRIBUTES.HEALING");
 
+        String EXPLOSION_DAMAGE_PERCENT = config.getString("ATTRIBUTES.EXPLOSION_DAMAGE_PERCENT");
+        String MINE_DAMAGE_PERCENT = config.getString("ATTRIBUTES.MINE_DAMAGE_PERCENT");
+
         int HOSTILE_MOBS_TARGET_LEVEL = config.getInt("ATTRIBUTES.TARGET_HOSTILE_MOBS_LEVEL");
         int PASSIVE_MOBS_TARGET_LEVEL = config.getInt("ATTRIBUTES.TARGET_PASSIVE_MOBS_LEVEL");
 
-        return new DefenceAttributeStruct(RANGE, COOLDOWN, TARGET_MAX, MAX_AMMO, UPGRADE_COST, DAMAGE, DISTANCE, HEALING, HOSTILE_MOBS_TARGET_LEVEL, PASSIVE_MOBS_TARGET_LEVEL);
+        return new DefenceAttributeStruct(RANGE, COOLDOWN, TARGET_MAX, MAX_AMMO, UPGRADE_COST, DAMAGE, DISTANCE, HEALING, EXPLOSION_DAMAGE_PERCENT, MINE_DAMAGE_PERCENT, HOSTILE_MOBS_TARGET_LEVEL, PASSIVE_MOBS_TARGET_LEVEL);
     }
 
     private static Map<String, String> getXPFormulas(YamlDocument config) {

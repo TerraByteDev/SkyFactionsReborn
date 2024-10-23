@@ -45,6 +45,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncItem {
                             String cooldown = DefencesFactory.solveFormula(struct.getATTRIBUTES().getCOOLDOWN(), 1);
                             String healing = DefencesFactory.solveFormula(struct.getATTRIBUTES().getHEALING(), 1);
                             String distance = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDISTANCE(), 1);
+                            String repairCost = DefencesFactory.solveFormula(struct.getREPAIR_COST(), 1);
 
                             for (String loreLine : struct.getITEM_LORE()) {
                                 builder.addLoreLines(TextUtility.color(loreLine
@@ -56,6 +57,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncItem {
                                         .replace("%cooldown%", cooldown)
                                         .replace("%healing%", healing)
                                         .replace("%distance%", distance)
+                                        .replace("%repair_cost%", repairCost)
                                         .replace("%cost%", String.valueOf(struct.getBUY_COST()))));
                             }
 

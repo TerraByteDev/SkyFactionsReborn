@@ -19,7 +19,9 @@ public class DefenceStruct {
 
     private int BUY_COST;
     private int SELL_COST;
-    private int AMMO_COST;
+    private String AMMO_COST;
+    private String REPAIR_STEP;
+    private String REPAIR_COST;
 
     private int MAX_LEVEL;
 
