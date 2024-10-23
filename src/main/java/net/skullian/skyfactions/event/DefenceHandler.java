@@ -145,6 +145,9 @@ public class DefenceHandler implements Listener {
             if (isFaction && isPlace) SkyFactionsReborn.databaseHandler.registerDefenceLocation(owner, instance.getDefenceLocation());
                 else if (!isFaction && isPlace) SkyFactionsReborn.databaseHandler.registerDefenceLocation(UUID.fromString(owner), instance.getDefenceLocation());
 
+            if (isFaction && isPlace) SkyFactionsReborn.cacheService.registerDefence(FactionAPI.factionNameCache.get(owner), instance.getDefenceLocation());
+                else if (!isFaction && isPlace) SkyFactionsReborn.cacheService.registerDefence(UUID.fromString(owner), instance.getDefenceLocation());
+
             addIntoMap(owner, isFaction, instance);
 
             return instance;

@@ -2041,6 +2041,64 @@ public class DatabaseHandler {
         });
     }
 
+    public CompletableFuture<Void> registerDefenceLocations(String factionName, List<Location> locations) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO defenceLocations(uuid, type, factionName, x, y, z) VALUES (?, ?, ?, ?, ?, ?)")) {
+
+                connection.setAutoCommit(false);
+                for (Location location : locations) {
+                    statement.setString(1, "N/A");
+                    statement.setString(2, "faction");
+                    statement.setString(3, factionName);
+                    statement.setInt(4, location.getBlockX());
+                    statement.setInt(5, location.getBlockY());
+                    statement.setInt(6, location.getBlockZ());
+
+                    statement.addBatch();
+                }
+
+                statement.executeBatch();
+                statement.close();
+
+                connection.commit();
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> registerDefenceLocations(UUID playerUUID, List<Location> locations) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO defenceLocations(uuid, type, factionName, x, y, z) VALUES (?, ?, ?, ?, ?, ?)")) {
+
+                connection.setAutoCommit(false);
+                for (Location location : locations) {
+                    statement.setString(1, playerUUID.toString());
+                    statement.setString(2, "player");
+                    statement.setString(3, "N/A");
+                    statement.setInt(4, location.getBlockX());
+                    statement.setInt(5, location.getBlockY());
+                    statement.setInt(6, location.getBlockZ());
+
+                    statement.addBatch();
+                }
+
+                statement.executeBatch();
+                statement.close();
+
+                connection.commit();
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
     public CompletableFuture<Void> registerDefenceLocation(UUID playerUUID, Location location) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
@@ -2098,6 +2156,60 @@ public class DatabaseHandler {
                 statement.executeUpdate();
                 statement.close();
 
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> removeDefences(String factionName, List<Location> locations) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("DELETE FROM defenceLocations WHERE factionName = ? AND type = 'faction' and x = ? and y = ? and z = ?")) {
+
+                connection.setAutoCommit(false);
+                for (Location location : locations) {
+                    statement.setString(1, factionName);
+                    statement.setInt(2, location.getBlockX());
+                    statement.setInt(3, location.getBlockY());
+                    statement.setInt(4, location.getBlockZ());
+
+                    statement.addBatch();
+                }
+
+                statement.executeBatch();
+                statement.close();
+
+                connection.commit();
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> removeDefences(UUID playerUUID, List<Location> locations) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("DELETE FROM defenceLocations WHERE uuid = ? AND type = 'player' and x = ? and y = ? and z = ?")) {
+
+                connection.setAutoCommit(false);
+                for (Location location : locations) {
+                    statement.setString(1, playerUUID.toString());
+                    statement.setInt(2, location.getBlockX());
+                    statement.setInt(3, location.getBlockY());
+                    statement.setInt(4, location.getBlockZ());
+
+                    statement.addBatch();
+                }
+
+                statement.executeBatch();
+                statement.close();
+
+                connection.commit();
                 connection.close();
             } catch (SQLException error) {
                 handleError(error);

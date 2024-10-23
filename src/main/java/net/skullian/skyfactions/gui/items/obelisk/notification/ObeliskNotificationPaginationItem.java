@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.gui.items.obelisk;
+package net.skullian.skyfactions.gui.items.obelisk.notification;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
@@ -67,14 +67,13 @@ public class ObeliskNotificationPaginationItem extends AbstractItem {
         }
 
         if (clickType.isRightClick()) {
+            player.closeInventory();
             SkyFactionsReborn.databaseHandler.removeNotification(player, DATA).whenComplete((ignored, ex) -> {
                 if (ex != null) {
                     ErrorHandler.handleError(player, "remove a notification", "SQL_NOTIFICATION_REMOVE", ex);
-                    player.closeInventory();
                     return;
                 }
 
-                player.closeInventory();
                 Messages.NOTIFICATION_DISMISS_SUCCESS.send(player);
             });
         }

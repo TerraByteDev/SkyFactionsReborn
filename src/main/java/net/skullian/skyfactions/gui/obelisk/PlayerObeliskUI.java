@@ -8,7 +8,7 @@ import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskHeadItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskInvitesItem;
-import net.skullian.skyfactions.gui.items.obelisk.ObeliskPlayerNotificationsItem;
+import net.skullian.skyfactions.gui.items.obelisk.notification.ObeliskPlayerNotificationsItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskRuneItem;
 import net.skullian.skyfactions.gui.items.obelisk.defence.ObeliskDefencePurchaseItem;
 import net.skullian.skyfactions.util.SoundUtil;

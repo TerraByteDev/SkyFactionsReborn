@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.gui.items.obelisk;
+package net.skullian.skyfactions.gui.items.obelisk.notification;
 
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.config.types.ObeliskConfig;

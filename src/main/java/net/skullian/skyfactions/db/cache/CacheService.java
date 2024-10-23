@@ -6,9 +6,11 @@ import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -33,8 +35,8 @@ public class CacheService {
                 int runesModification = cachedPlayer.getValue().getRunes();
 
                 playersToCache.remove(cachedPlayer.getKey());
-                GemsAPI.playerGems.replace(uuid, (GemsAPI.playerGems.get(uuid) + gemsModification));
-                RunesAPI.playerRunes.replace(uuid, (RunesAPI.playerRunes.get(uuid) + runesModification));
+                GemsAPI.playerGems.replace(uuid, (Math.max(0, GemsAPI.playerGems.get(uuid) + gemsModification)));
+                RunesAPI.playerRunes.replace(uuid, (Math.max(0, RunesAPI.playerRunes.get(uuid) + runesModification)));
             }
 
             for (Map.Entry<Faction, CacheEntry> cachedFaction : factionsToCache.entrySet()) {
@@ -47,6 +49,9 @@ public class CacheService {
                 factionsToCache.remove(cachedFaction.getKey());
                 faction.gems += gemsModification;
                 faction.runes += runesModification;
+
+                if (faction.gems < 0) faction.gems = 0;
+                if (faction.runes < 0) faction.runes = 0;
             }
 
             SLogger.info("Periodic Save - Done.");
@@ -101,17 +106,32 @@ public class CacheService {
     }
 
     public void subtractGems(UUID playerUUID, int gems) {
-        CacheEntry entry = playersToCache.get(playerUUID);
-        if (entry != null) {
-            entry.removeGems(gems);
-        }
+        CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
+        entry.removeGems(gems);
     }
 
     public void subtractGems(Faction faction, int gems) {
-        CacheEntry entry = factionsToCache.get(faction);
-        if (entry != null) {
-            entry.removeGems(gems);
-        }
+        CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
+        entry.removeGems(gems);
     }
 
+    public void registerDefence(Faction faction, Location location) {
+        CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
+        entry.addDefence(location);
+    }
+
+    public void registerDefence(UUID playerUUID, Location location) {
+        CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
+        entry.addDefence(location);
+    }
+
+    public void removeDefence(Faction faction, Location location) {
+        CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
+        entry.removeDefence(location);
+    }
+
+    public void removeDefence(UUID playerUUID, Location location) {
+        CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
+        entry.removeDefence(location);
+    }
 }

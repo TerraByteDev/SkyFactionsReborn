@@ -6,7 +6,9 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.faction.Faction;
+import org.bukkit.Location;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -16,6 +18,8 @@ public class CacheEntry {
 
     private int runes;
     private int gems;
+    private List<Location> defencesToRegister;
+    private List<Location> defencesToRemove;
 
     public void addRunes(int amount) {
         runes += amount;
@@ -33,6 +37,16 @@ public class CacheEntry {
         gems -= amount;
     }
 
+    public void addDefence(Location location) {
+        defencesToRemove.remove(location);
+        defencesToRegister.add(location);
+    }
+
+    public void removeDefence(Location location) {
+        defencesToRegister.remove(location);
+        defencesToRemove.add(location);
+    }
+
     /**
      *
      * @param toCache - UUID
@@ -46,30 +60,32 @@ public class CacheEntry {
         if (faction != null) {
             return CompletableFuture.allOf(
                     SkyFactionsReborn.databaseHandler.addGems(toCache, gems).exceptionally((ex) -> {
-                        faction.gems += gems;
-                        if (faction.gems < 0) faction.gems = 0;
-
                         throw new RuntimeException("Failed to set gems of faction " + faction.getName(), ex);
                     }),
                     SkyFactionsReborn.databaseHandler.addRunes(toCache, runes).exceptionally((ex) -> {
-                        faction.runes -= runes;
-                        if (faction.runes < 0) faction.runes = 0;
-
                         throw new RuntimeException("Failed to set runes of faction " + faction.getName(), ex);
+                    }),
+                    SkyFactionsReborn.databaseHandler.registerDefenceLocations(toCache, defencesToRegister).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to register new defences for faction " + faction.getName(), ex);
+                    }),
+                    SkyFactionsReborn.databaseHandler.removeDefences(toCache, defencesToRemove).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to remove defences for faction " + faction.getName(), ex);
                     })
             );
         } else {
             UUID uuid = UUID.fromString(toCache);
             return CompletableFuture.allOf(
                     SkyFactionsReborn.databaseHandler.addGems(uuid, gems).exceptionally((ex) -> {
-                        GemsAPI.playerGems.replace(uuid, Math.max(0, GemsAPI.playerGems.get(uuid) + gems));
-
                         throw new RuntimeException("Failed to set gems of player " + uuid, ex);
                     }),
                     SkyFactionsReborn.databaseHandler.addRunes(uuid, runes).exceptionally((ex) -> {
-                        RunesAPI.playerRunes.replace(uuid, Math.max(0, RunesAPI.playerRunes.get(uuid) + runes));
-
                         throw new RuntimeException("Failed to set runes of player " + uuid, ex);
+                    }),
+                    SkyFactionsReborn.databaseHandler.registerDefenceLocations(uuid, defencesToRegister).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to register new defences for player " + uuid, ex);
+                    }),
+                    SkyFactionsReborn.databaseHandler.removeDefences(uuid, defencesToRemove).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to remove defences for player " + uuid, ex);
                     })
             );
         }

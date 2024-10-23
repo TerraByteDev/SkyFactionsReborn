@@ -76,6 +76,9 @@ public class IslandVisitCommand extends CommandTemplate {
             } else if (is == null) {
                 Messages.VISIT_NO_ISLAND.send(player);
                 return;
+            } else if (FactionAPI.isLocationInRegion(player.getLocation(), target.getUniqueId().toString())) {
+                Messages.VISIT_ALREADY_ON_ISLAND.send(player, "%player%", target.getName());
+                return;
             }
 
             if ((RaidAPI.currentRaids.containsValue(player.getUniqueId()) || RaidAPI.processingRaid.containsValue(player.getUniqueId())) || (RaidAPI.currentRaids.containsValue(target.getUniqueId()) || RaidAPI.processingRaid.containsValue(target.getUniqueId()))) {

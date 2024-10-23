@@ -11,7 +11,7 @@ import net.skullian.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
-import net.skullian.skyfactions.gui.items.obelisk.ObeliskNotificationPaginationItem;
+import net.skullian.skyfactions.gui.items.obelisk.notification.ObeliskNotificationPaginationItem;
 import net.skullian.skyfactions.notification.NotificationData;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SoundUtil;

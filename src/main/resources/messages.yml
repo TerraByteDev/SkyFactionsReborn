@@ -91,6 +91,10 @@ Messages:
     # Sent when the player tries to teleport to their faction / player island when they are already on it.
     ALREADY_ON_ISLAND: "%server_name%&c&l Hey!&r&7 You are already on your island!"
 
+    # Sent when a player tries to /island visit another, but they are already on their island.
+    # Placeholders: %player% - Name of the player they tried to visit.
+    VISIT_ALREADY_ON_ISLAND: "%server_name%&c&l Hey!&r&7 You are already on %player%'s island!"
+
   Discord:
     # Sent to the player when they request to link (runs /link).
     # Placeholders: %code% - Code to run in the discord.
