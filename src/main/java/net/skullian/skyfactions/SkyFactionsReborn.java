@@ -24,6 +24,7 @@ import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.db.DatabaseHandler;
 import net.skullian.skyfactions.db.cache.CacheService;
 import net.skullian.skyfactions.discord.DiscordHandler;
+import net.skullian.skyfactions.event.DefenceDestructionHandler;
 import net.skullian.skyfactions.event.DefenceHandler;
 import net.skullian.skyfactions.event.ObeliskInteractionListener;
 import net.skullian.skyfactions.event.PlayerHandler;
@@ -106,6 +107,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
         getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
         getServer().getPluginManager().registerEvents(new DefenceHandler(), this);
+        getServer().getPluginManager().registerEvents(new DefenceDestructionHandler(), this);
 
         // We store an instance of the DiscordHandler class as that is how other internals
         // access methods related to Discord (e.g. raid notifications).

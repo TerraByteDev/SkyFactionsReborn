@@ -56,6 +56,7 @@ public class ArrowDefence extends Defence {
                                 }
 
                                 applyPDC((Entity) projectileObject);
+                                onShoot();
                             }
                         });
                     }

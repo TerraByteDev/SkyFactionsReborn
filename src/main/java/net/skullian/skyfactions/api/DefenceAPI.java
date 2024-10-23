@@ -1,11 +1,15 @@
 package net.skullian.skyfactions.api;
 
+import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.util.text.TextUtility;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -39,6 +43,18 @@ public class DefenceAPI {
     public static boolean isDefence(ItemStack item) {
         NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
         return item.getItemMeta().getPersistentDataContainer().has(defenceKey, PersistentDataType.STRING);
+    }
+
+    public static boolean isDefence(Location location) {
+        Block block = location.getBlock();
+        NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
+
+        PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
+        if (container.has(defenceKey, PersistentDataType.STRING)) {
+            return true;
+        }
+
+        return false;
     }
 
     private static List<String> getFormattedLore(DefenceStruct struct, List<String> lore) {

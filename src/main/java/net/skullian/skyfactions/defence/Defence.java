@@ -1,5 +1,8 @@
 package net.skullian.skyfactions.defence;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jeff_media.customblockdata.CustomBlockData;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +13,7 @@ import net.skullian.skyfactions.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.event.DefenceHandler;
 import net.skullian.skyfactions.util.DependencyHandler;
+import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.hologram.TextHologram;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -43,6 +47,23 @@ public abstract class Defence {
         if (defenceStruct == null)
             throw new NullPointerException("Could not find defence with the type of " + data.getTYPE());
         this.struct = defenceStruct;
+    }
+
+    public void onShoot() {
+        this.data.setAMMO(this.data.getAMMO() - 1);
+        updatePDC();
+    }
+
+    public void updatePDC() {
+        try {
+            PersistentDataContainer container = new CustomBlockData(getDefenceLocation().getBlock(), SkyFactionsReborn.getInstance());
+            NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
+
+            ObjectMapper mapper = new ObjectMapper();
+            container.set(dataKey, PersistentDataType.STRING, mapper.writeValueAsString(data));
+        } catch (JsonProcessingException exception) {
+            SLogger.fatal("Error when trying to update PDC Defence Data for Defence [{}].", getHologramID(data.getUUIDFactionName()), exception);
+        }
     }
 
     public String getType() {

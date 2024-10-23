@@ -3,6 +3,7 @@ package net.skullian.skyfactions.event;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.block.BrokenBlocksService;
@@ -112,7 +113,7 @@ public class DefenceHandler implements Listener {
                     }
 
                     try {
-                        DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation().getWorld().getName(), placed.getLocation().getBlockX(), placed.getLocation().getBlockY(), placed.getLocation().getBlockZ(), owner, isFaction, defence.getENTITY_CONFIG().isTARGET_HOSTILE_DEFAULT(), defence.getENTITY_CONFIG().isTARGET_PASSIVE_DEFAULT());
+                        DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation().getWorld().getName(), placed.getLocation().getBlockX(), placed.getLocation().getBlockY(), placed.getLocation().getBlockZ(), owner, isFaction, 100, defence.getENTITY_CONFIG().isTARGET_HOSTILE_DEFAULT(), defence.getENTITY_CONFIG().isTARGET_PASSIVE_DEFAULT());
                         ObjectMapper mapper = new ObjectMapper();
 
                         PersistentDataContainer blockContainer = new CustomBlockData(placed, SkyFactionsReborn.getInstance());
@@ -205,11 +206,7 @@ public class DefenceHandler implements Listener {
 
     @EventHandler
     public void onDefenceBreak(BlockBreakEvent event) {
-        Block block = event.getBlock();
-        NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
-
-        PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
-        if (container.has(defenceKey, PersistentDataType.STRING)) {
+        if (DefenceAPI.isDefence(event.getBlock().getLocation())) {
             event.setCancelled(true);
             Messages.DEFENCE_DESTROY_DENY.send(event.getPlayer());
         }
