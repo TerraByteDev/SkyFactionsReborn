@@ -1,6 +1,8 @@
 package net.skullian.skyfactions.db.cache;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.GemsAPI;
+import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
@@ -26,13 +28,25 @@ public class CacheService {
             for (Map.Entry<UUID, CacheEntry> cachedPlayer : playersToCache.entrySet()) {
                 cachedPlayer.getValue().cache(cachedPlayer.getKey().toString(), null).join();
 
+                UUID uuid = cachedPlayer.getKey();
+                int gemsModification = cachedPlayer.getValue().getGems();
+                int runesModification = cachedPlayer.getValue().getRunes();
+
                 playersToCache.remove(cachedPlayer.getKey());
+                GemsAPI.playerGems.replace(uuid, (GemsAPI.playerGems.get(uuid) + gemsModification));
+                RunesAPI.playerRunes.replace(uuid, (RunesAPI.playerRunes.get(uuid) + runesModification));
             }
 
             for (Map.Entry<Faction, CacheEntry> cachedFaction : factionsToCache.entrySet()) {
                 cachedFaction.getValue().cache(null, cachedFaction.getKey()).join();
 
+                Faction faction = cachedFaction.getKey();
+                int gemsModification = cachedFaction.getValue().getGems();
+                int runesModification = cachedFaction.getValue().getRunes();
+
                 factionsToCache.remove(cachedFaction.getKey());
+                faction.gems += gemsModification;
+                faction.runes += runesModification;
             }
 
             SLogger.info("Periodic Save - Done.");
