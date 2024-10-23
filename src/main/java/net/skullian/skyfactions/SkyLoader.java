@@ -14,13 +14,13 @@ public class SkyLoader implements PluginLoader {
         MavenLibraryResolver invUIResolver = new MavenLibraryResolver();
 
         invUIResolver.addRepository(new RemoteRepository.Builder("xenondevs", "default", "https://repo.xenondevs.xyz/releases/").build());
-        invUIResolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:invui:pom:1.38"), null));
+        invUIResolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:invui:pom:1.39"), null));
 
         MavenLibraryResolver centralResolver = new MavenLibraryResolver();
         centralResolver.addRepository(new RemoteRepository.Builder("maven-central", "default", "https://repo1.maven.org/maven2/").build());
 
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.zaxxer:HikariCP:6.0.0"), null));
-        centralResolver.addDependency(new Dependency(new DefaultArtifact("org.xerial:sqlite-jdbc:3.46.0.0"), null));
+        centralResolver.addDependency(new Dependency(new DefaultArtifact("org.xerial:sqlite-jdbc:3.47.0.0"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("net.dv8tion:JDA:5.0.1"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.fasterxml.jackson.core:jackson-databind:2.17.2"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.jeff-media:custom-block-data:2.2.2"), null));
