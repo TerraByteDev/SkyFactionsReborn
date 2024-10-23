@@ -879,13 +879,13 @@ public class DatabaseHandler {
         });
     }
 
-    public CompletableFuture<Void> trustPlayer(Player player, int id) {
+    public CompletableFuture<Void> trustPlayer(UUID playerUUID, int id) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("INSERT INTO trustedPlayers (island_id, uuid) VALUES (?, ?)")) {
 
                 statement.setInt(1, id);
-                statement.setString(2, player.getUniqueId().toString());
+                statement.setString(2, playerUUID.toString());
 
                 statement.executeUpdate();
                 statement.close();
@@ -897,13 +897,13 @@ public class DatabaseHandler {
         });
     }
 
-    public CompletableFuture<Void> removeTrust(Player player, int id) {
+    public CompletableFuture<Void> removeTrust(UUID playerUUID, int id) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement statement = connection.prepareStatement("DELETE FROM trustedPlayers WHERE island_id = ? AND uuid = ?")) {
 
                 statement.setInt(1, id);
-                statement.setString(2, player.getUniqueId().toString());
+                statement.setString(2, playerUUID.toString());
 
                 statement.executeUpdate();
 

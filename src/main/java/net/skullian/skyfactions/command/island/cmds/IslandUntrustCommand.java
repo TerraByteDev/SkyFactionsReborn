@@ -80,7 +80,7 @@ public class IslandUntrustCommand extends CommandTemplate {
                 }
 
                 if (isTrusted) {
-                    SkyFactionsReborn.databaseHandler.removeTrust(target.getPlayer(), is.getId()).whenComplete((ignored, exc) -> {
+                    SkyFactionsReborn.databaseHandler.removeTrust(target.getUniqueId(), is.getId()).whenComplete((ignored, exc) -> {
                         if (exc != null) {
                             ErrorHandler.handleError(player, "untrust a player", "SQL_TRUST_REMOVE", exc);
                             return;

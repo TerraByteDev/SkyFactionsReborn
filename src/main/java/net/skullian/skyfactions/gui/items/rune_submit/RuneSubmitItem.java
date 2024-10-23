@@ -59,6 +59,7 @@ public class RuneSubmitItem extends AbstractItem {
         if (!SOUND.equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, SOUND, PITCH, 1);
         }
+        player.closeInventory();
 
         List<ItemStack> stacks = new ArrayList<>(UI.ITEMS.values());
         UI.ITEMS.clear(); // clear so when the close handler triggers, it doesn't give items back
@@ -69,6 +70,5 @@ public class RuneSubmitItem extends AbstractItem {
         } else if (TYPE.equals("faction")) {
             RunesAPI.handleRuneFactionConversion(stacks, player);
         }
-        player.closeInventory();
     }
 }
