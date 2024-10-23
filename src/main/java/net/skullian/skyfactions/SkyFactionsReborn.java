@@ -51,7 +51,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static WorldBorderApi worldBorderApi;
     public static CacheService cacheService;
 
-    private void print() 
+    private void print() {
         ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
 
         Style style = Style.style(TextColor.color(25, 100, 230), TextDecoration.BOLD);
