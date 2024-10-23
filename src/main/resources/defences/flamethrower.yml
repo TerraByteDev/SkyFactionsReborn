@@ -65,6 +65,9 @@ ATTRIBUTES:
   UPGRADE_COST: 40 * level # Cost of upgrading the defence.
   DAMAGE: 5 + level # The damage dealt by the defence.
 
+  TARGET_HOSTILE_MOBS_LEVEL: 1 # At what level should the defence be able to target hostile mobs? 1 for immediately (base level)
+  TARGET_PASSIVE_MOBS_LEVEL: 2 # At what level should the defence be able to target passive mobs. 1 for immediately (base level)
+
 # Configuration for limiting where this defence can be placed.
 PLACEMENT:
 
