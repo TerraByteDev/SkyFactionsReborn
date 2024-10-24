@@ -75,7 +75,6 @@ repositories {
     }
 
     maven {
-        allowInsecureProtocol = true
         name = "EvokeGames Snapshots"
         url = "https://maven.evokegames.gg/snapshots"
     }
