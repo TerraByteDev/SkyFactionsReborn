@@ -3,8 +3,10 @@ package net.skullian.skyfactions.api;
 import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
+import net.skullian.skyfactions.event.DefenceHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -82,5 +84,17 @@ public class DefenceAPI {
         }
 
         return newLore;
+    }
+
+    public static Defence getLoadedDefence(Location location) {
+        return DefenceHandler.loadedFactionDefences.values().stream()
+                .flatMap(List::stream)
+                .filter(d -> d.getDefenceLocation().equals(location))
+                .findFirst()
+                .orElseGet(() -> DefenceHandler.loadedPlayerDefences.values().stream()
+                        .flatMap(List::stream)
+                        .filter(d -> d.getDefenceLocation().equals(location))
+                        .findFirst()
+                        .orElse(null));
     }
 }

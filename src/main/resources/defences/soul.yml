@@ -86,7 +86,6 @@ ATTRIBUTES:
 
   # The below value will also apply for wither destruction.
   EXPLOSION_DAMAGE_PERCENT: 50 - (level * 3) # The defence will be "damaged" each time it is exploded (e.g. by tnt or a creeper)
-  MINE_DAMAGE_PERCENT: 15 + (level * 2) # The defence will be "damaged" each time it is broken (during a raid).
 
   TARGET_HOSTILE_MOBS_LEVEL: 1 # At what level should the defence be able to target hostile mobs? 1 for immediately (base level)
   TARGET_PASSIVE_MOBS_LEVEL: 2 # At what level should the defence be able to target passive mobs. 1 for immediately (base level)
@@ -116,8 +115,15 @@ HOLOGRAMS:
   # Appended to the bottom (or top if configured) of the hologram stack if the defence is out of stock.
   OUT_OF_STOCK_LINE: "&cOut of Ammo!"
 
+  # Appended to the top (default, or bottom if configured) of the hologram stack, showing the durability of the defence (100%)
+  DURABILITY_LINE: "&7Durability: &e%durability%%"
+
   # Append the OUT_OF_STOCK_LINE to the top of the hologram stack.
   STOCK_AT_TOP: false
+
+  # Append the DURABILITY_LINE to the top of the hologram stock.
+  # This will be overridden by STOCK_AT_TOP.
+  DURABILITY_AT_TOP: true
 
 # This allows you to configure what entities will be targeted by the defence.
 ENTITIES:

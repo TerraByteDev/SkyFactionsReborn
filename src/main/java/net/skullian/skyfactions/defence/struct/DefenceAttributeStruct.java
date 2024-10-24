@@ -19,7 +19,6 @@ public class DefenceAttributeStruct {
     private String HEALING;
 
     private String EXPLOSION_DAMAGE_PERCENT;
-    private String MINE_DAMAGE_PERCENT;
 
     private int HOSTILE_MOBS_TARGET_LEVEL;
     private int PASSIVE_MOBS_TARGET_LEVEL;

@@ -23,6 +23,7 @@ import net.skullian.skyfactions.config.ConfigFileHandler;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.db.DatabaseHandler;
 import net.skullian.skyfactions.db.cache.CacheService;
+import net.skullian.skyfactions.defence.block.BrokenBlockService;
 import net.skullian.skyfactions.discord.DiscordHandler;
 import net.skullian.skyfactions.event.DefenceDestructionHandler;
 import net.skullian.skyfactions.event.DefenceHandler;
@@ -50,6 +51,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static DiscordHandler discordHandler;
     public static WorldBorderApi worldBorderApi;
     public static CacheService cacheService;
+    public static BrokenBlockService blockService = new BrokenBlockService();
 
     private void print() {
         ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");

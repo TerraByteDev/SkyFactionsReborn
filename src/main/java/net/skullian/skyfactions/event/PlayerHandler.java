@@ -83,7 +83,7 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void playerRespawn(PlayerRespawnEvent event) {
         if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
-            if (FactionAPI.isLocationInRegion(event.getPlayer().getLocation(), event.getPlayer().getUniqueId().toString())) IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, event.getPlayer().getUniqueId());
+            if (FactionAPI.isLocationInRegion(event.getPlayer().getLocation(), event.getPlayer().getUniqueId().toString())) IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
             SkyFactionsReborn.databaseHandler.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
                 if (ex != null) {
                     SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
@@ -93,6 +93,7 @@ public class PlayerHandler implements Listener {
 
                 World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                 if (island != null && world != null) {
+                    System.out.println("DEBUG - TELEPORTING");
                     event.getPlayer().teleport(island.getCenter(world));
                 }
             });

@@ -5,8 +5,6 @@ import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.block.BrokenBlocksService;
 import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
@@ -51,11 +49,6 @@ public class DefenceHandler implements Listener {
 
     public static Map<String, TextHologram> hologramsMap = new ConcurrentHashMap<>();
     public static Map<UUID, Map<DamageType, DefenceEntityDeathData>> toDie = new HashMap<>();
-
-    @EventHandler
-    public void onBlockDamage(BlockDamageEvent event) {
-        BrokenBlocksService.createBrokenBlock(event.getBlock(), -1);
-    }
 
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {

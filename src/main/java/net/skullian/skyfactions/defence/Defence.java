@@ -27,6 +27,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -51,6 +52,11 @@ public abstract class Defence {
 
     public void onShoot() {
         this.data.setAMMO(this.data.getAMMO() - 1);
+        updatePDC();
+    }
+
+    public void damage(Optional<Integer> amount) {
+        this.data.setDURABILITY((Math.max(this.data.getDURABILITY() - (amount.orElseGet(this::getExplosionDamage)), 0)));
         updatePDC();
     }
 
@@ -100,6 +106,11 @@ public abstract class Defence {
         return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
     }
 
+    public int getExplosionDamage() {
+        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getEXPLOSION_DAMAGE_PERCENT(), this.data.getLEVEL());
+        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+    }
+
     public String getRandomActionMessage() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         List<String> messages = this.struct.getEFFECT_MESSAGES();
@@ -113,15 +124,43 @@ public abstract class Defence {
         return messages.get(random.nextInt(messages.size()));
     }
 
-    public void notifyNoAmmo() {
-        if (this.noAmmoNotified) return;
+    public boolean canShoot() {
+        return checkAmmo() && checkDurability();
+    }
 
-        if (DefenceHandler.hologramsMap.containsKey(getHologramID(data.getUUIDFactionName()))) {
-            TextHologram holo = DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName()));
-            holo.setText(holo.getText() + TextUtility.color("\n" + struct.getOUT_OF_STOCK_HOLOGRAM()));
-            holo.update();
-            this.noAmmoNotified = true;
+    public boolean checkDurability() {
+        if (getData().getDURABILITY() < 100) {
+
+            if (DefenceHandler.hologramsMap.containsKey(getHologramID(data.getUUIDFactionName()))) {
+                TextHologram holo = DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName()));
+                holo.setText(
+                        struct.isAPPEND_DURABILITY_AT_TOP() ? TextUtility.color(struct.getDURABILITY_HOLOGRAM().replace("%durability%", String.valueOf(data.getDURABILITY())) + "\n" + holo.getText())
+                                : TextUtility.color(holo.getText() + "\n" + struct.getDURABILITY_HOLOGRAM().replace("%durability%", String.valueOf(data.getDURABILITY())))
+                );
+                holo.update();
+            }
         }
+
+        return getData().getDURABILITY() != 0;
+    }
+
+    public boolean checkAmmo() {
+        if (getData().getAMMO() == 0) {
+            if (this.noAmmoNotified) return false;
+
+            if (DefenceHandler.hologramsMap.containsKey(getHologramID(data.getUUIDFactionName()))) {
+                TextHologram holo = DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName()));
+                holo.setText(
+                        struct.isAPPEND_OUT_OF_STOCK_TO_TOP() ? TextUtility.color(struct.getOUT_OF_STOCK_HOLOGRAM() + "\n" + holo.getText()) : TextUtility.color(holo.getText() + "\n" + struct.getOUT_OF_STOCK_HOLOGRAM())
+                );
+                holo.update();
+                this.noAmmoNotified = true;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     public void applyPDC(Entity entity) {
@@ -193,8 +232,7 @@ public abstract class Defence {
     }
 
     public boolean shouldBlockNPCs(List<String> entities) {
-        if (entities.contains("NPC")) return true;
-            else return false;
+        return entities.contains("NPC");
     }
 
     // acts as a boolean too
