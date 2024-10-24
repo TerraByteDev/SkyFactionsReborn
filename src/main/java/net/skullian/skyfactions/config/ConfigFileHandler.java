@@ -4,6 +4,7 @@ import dev.dejvokep.boostedyaml.YamlDocument;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.*;
 import net.skullian.skyfactions.defence.DefencesFactory;
+import net.skullian.skyfactions.event.DefenceHandler;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -64,6 +65,7 @@ public class ConfigFileHandler {
 
         loadGUIs();
         DefencesFactory.register();
+        DefenceHandler.refresh();
 
         MESSAGES_CONFIG = getFile(ConfigTypes.MESSAGES).getConfig();
         DISCORD_CONFIG = getFile(ConfigTypes.DISCORD).getConfig();

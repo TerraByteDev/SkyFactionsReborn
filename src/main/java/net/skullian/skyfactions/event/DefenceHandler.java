@@ -364,4 +364,16 @@ public class DefenceHandler implements Listener {
             loadedPlayerDefences.put(player.getUniqueId(), defences);
         });
     }
+
+    public static void refresh() {
+        SLogger.info("Refreshing existing loaded defences...");
+
+        loadedPlayerDefences.values().stream()
+                .flatMap(List::stream)
+                .forEach(Defence::refresh);
+
+        loadedFactionDefences.values().stream()
+                .flatMap(List::stream)
+                .forEach(Defence::refresh);
+    }
 }

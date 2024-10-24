@@ -325,6 +325,13 @@ public abstract class Defence {
         DefenceHandler.hologramsMap.put(hologram.getId(), hologram);
     }
 
+    public void refresh() {
+        DefenceStruct fetchedStruct = DefencesFactory.defences.get(struct.getIDENTIFIER());
+        if (fetchedStruct != null) {
+            this.struct = fetchedStruct;
+        }
+    }
+
     public boolean isAllowed(String configuredProjectile) {
         List<String> allowed = List.of(
                 "ARROW",
