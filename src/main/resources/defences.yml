@@ -73,8 +73,8 @@ Global:
       - "VILLAGER"
       - "WOLF"
       - "ZOMBIE_HORSE"
-      -
-      # You can edit what entities are deemed as "hostile".
+
+    # You can edit what entities are deemed as "hostile".
     HOSTILE_ENTITIES:
       - "BAT"
       - "BLAZE"
