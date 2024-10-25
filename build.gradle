@@ -139,11 +139,10 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 processResources {
-    def props = [version: version]
-    inputs.properties props
-    filteringCharset 'UTF-8'
-    filesMatching('paper-plugin.yml') {
-        expand props
+		filesNotMatching(listOf("**/*.png", "**/*.ogg", "**/models/**", "**/textures/**", "**/font/**.json", "**/plugin.yml")) {
+			expand(mapOf(project.version.toString() to pluginVersion))
     }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    filteringCharset = Charsets.UTF_8.name()
 }
 
