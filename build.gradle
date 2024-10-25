@@ -75,10 +75,7 @@ repositories {
         url = "https://repo.pyr.lol/snapshots"
     }
 
-    maven {
-        name = "EvokeGames Snapshots"
-        url = "https://maven.evokegames.gg/snapshots"
-    }
+    maven { url "https://jitpack.io" }
 
     maven {
         name = "SpigotMC Snapshots"
