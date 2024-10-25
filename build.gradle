@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     //id("net.ltgt.errorprone") version "4.1.0"
     id("io.papermc.paperweight.userdev") version "1.7.3"
@@ -139,10 +141,8 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 processResources {
-		filesNotMatching(listOf("**/*.png", "**/*.ogg", "**/models/**", "**/textures/**", "**/font/**.json", "**/plugin.yml")) {
-			expand(mapOf(project.version.toString() to pluginVersion))
-    }
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    filteringCharset = Charsets.UTF_8.name()
+    filter ReplaceTokens, tokens: [
+            "version": project.property("version")
+    ]
 }
 
