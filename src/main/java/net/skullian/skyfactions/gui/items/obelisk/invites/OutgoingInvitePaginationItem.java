@@ -32,7 +32,7 @@ public class OutgoingInvitePaginationItem extends AbstractItem {
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
         this.LORE = data.getLORE();
-        this.STACK = stack;
+        this.STACK = STACK;
         this.DATA = inviteData;
     }
 
