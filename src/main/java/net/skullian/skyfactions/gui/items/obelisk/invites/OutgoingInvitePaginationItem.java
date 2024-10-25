@@ -27,7 +27,7 @@ public class OutgoingInvitePaginationItem extends AbstractItem {
     private ItemStack STACK;
     private InviteData DATA;
 
-    public OutgoingInvitePaginationItem(ItemData data, ItemStack stack, InviteData inviteData) {
+    public OutgoingInvitePaginationItem(ItemData data, ItemStack STACK, InviteData inviteData) {
         this.NAME = data.getNAME();
         this.SOUND = data.getSOUND();
         this.PITCH = data.getPITCH();
