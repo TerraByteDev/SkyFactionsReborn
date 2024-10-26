@@ -95,7 +95,7 @@ dependencies {
     compileOnly("com.zaxxer:HikariCP:6.0.0")
     compileOnly("xyz.xenondevs.invui:invui:1.39")
 
-    implementation(platform("com.intellectualsites.bom:bom-newest:1.49"))
+    implementation(platform("com.intellectualsites.bom:bom-newest:1.50"))
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core")
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit")
 
