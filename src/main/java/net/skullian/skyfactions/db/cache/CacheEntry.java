@@ -11,15 +11,16 @@ import org.bukkit.Location;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.ArrayList;
 
 @Getter
 @Setter
 public class CacheEntry {
 
-    private int runes;
-    private int gems;
-    private List<Location> defencesToRegister;
-    private List<Location> defencesToRemove;
+    private int runes = 0;
+    private int gems = 0;
+    private List<Location> defencesToRegister = new ArrayList<>();
+    private List<Location> defencesToRemove = new ArrayList<>();
 
     public void addRunes(int amount) {
         runes += amount;
