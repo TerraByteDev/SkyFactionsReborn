@@ -3,6 +3,8 @@ package net.skullian.skyfactions.event;
 import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.defence.DefencesFactory;
+import net.skullian.skyfactions.defence.block.DefenceDestructionManager;
+import net.skullian.skyfactions.SkyFactionsReborn;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
