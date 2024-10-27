@@ -1,63 +1,33 @@
 package net.skullian.skyfactions.gui.items.obelisk;
 
+import java.util.List;
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
 import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.config.types.ObeliskConfig;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import xyz.xenondevs.invui.item.ItemProvider;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.AsyncItem;
+import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
 
-public class ObeliskFactionOverviewItem extends AsyncItem {
-
-    private String SOUND;
-    private int PITCH;
+public class ObeliskFactionOverviewItem extends AsyncSkyItem {
 
     public ObeliskFactionOverviewItem(ItemData data, ItemStack stack, Player player) {
-        super(
-                ObeliskConfig.getLoadingItem(),
-                () -> {
-                    return new ItemProvider() {
-                        @Override
-                        public @NotNull ItemStack get(@Nullable String s) {
-                            Faction faction = FactionAPI.getFaction(player.getUniqueId()).join();
-                            ItemBuilder builder = new ItemBuilder(stack)
-                                    .setDisplayName(TextUtility.color(data.getNAME().replace("%faction_name%", faction.getName())));
-
-                            for (String loreLine : data.getLORE()) {
-                                builder.addLoreLines(TextUtility.color(loreLine
-                                        .replace("%level%", String.valueOf(faction.getLevel()))
-                                        .replace("%member_count%", String.valueOf(faction.getTotalMemberCount()))
-                                        .replace("%rune_count%", String.valueOf(faction.getRunes()))
-                                        .replace("%gem_count%", String.valueOf(faction.getGems()))
-                                ));
-                            }
-
-                            return builder.get();
-                        }
-                    };
-                }
-        );
-
-        this.SOUND = data.getSOUND();
-        this.PITCH = data.getPITCH();
+        super(data, stack, player);
     }
 
     @Override
-    public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        event.setCancelled(true);
+    public Object[] replacements() {
 
-        if (!SOUND.equalsIgnoreCase("none")) {
-            SoundUtil.playSound(player, SOUND, PITCH, 1);
-        }
+        Faction faction = FactionAPI.getFaction(getPLAYER().getUniqueId()).join();
+
+        return List.of(
+            "%faction_name%", faction.getName(),
+            "%level%", faction.getLevel(),
+            "%member_count%", faction.getTotalMemberCount(),
+            "%rune_count%", faction.getRunes(),
+            "%gem_count%", faction.getRunes()
+        ).toArray();
     }
 
 

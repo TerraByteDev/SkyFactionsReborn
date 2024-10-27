@@ -4,7 +4,6 @@ import org.bukkit.inventory.ItemStack;
 
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 public class EmptyItem extends SkyItem {
 

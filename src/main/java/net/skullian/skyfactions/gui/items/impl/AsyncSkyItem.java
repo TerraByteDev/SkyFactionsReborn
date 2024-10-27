@@ -33,14 +33,14 @@ public abstract class AsyncSkyItem implements Item {
     private Player PLAYER;
     private ItemProvider provider;
 
-    public AsyncSkyItem(ItemData data, ItemStack stack, Player player, Object... replacements) {
+    public AsyncSkyItem(ItemData data, ItemStack stack, Player player) {
         this.provider = ObeliskConfig.getLoadingItem();
         Bukkit.getScheduler().runTaskAsynchronously(SkyFactionsReborn.getInstance(), () -> {
             this.provider = new ItemProvider() {
                 @Override
                 public @NotNull ItemStack get(@Nullable String s) {
                     ItemBuilder builder = new ItemBuilder(stack)
-                        .setDisplayName(replace(TextUtility.color(data.getNAME()), replacements));
+                        .setDisplayName(replace(TextUtility.color(data.getNAME()), replacements()));
 
                     return process(builder).get();
                 }
@@ -53,6 +53,11 @@ public abstract class AsyncSkyItem implements Item {
     }
 
     @Override
+    public ItemProvider getItemProvider() {
+        return provider;
+    }
+
+    @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.setCancelled(true);
 
@@ -61,9 +66,9 @@ public abstract class AsyncSkyItem implements Item {
         }
     }
 
-    public abstract ItemBuilder process(ItemBuilder builder);
+    public ItemBuilder process(ItemBuilder builder) { return builder; }
 
-    public abstract Object[] replacements();
+    public Object[] replacements() { return new Object[0]; }
 
     public static String replace(String message, Object... replacements) {
         for (int i = 0; i < replacements.length; i += 2) {
