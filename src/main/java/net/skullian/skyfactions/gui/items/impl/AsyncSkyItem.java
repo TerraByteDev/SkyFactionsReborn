@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +14,7 @@ import org.jetbrains.annotations.ApiStatus.OverrideOnly;
 import lombok.Getter;
 import net.skullian.skyfactions.config.types.ObeliskConfig;
 import net.skullian.skyfactions.gui.data.ItemData;
+import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
@@ -43,6 +46,15 @@ public abstract class AsyncSkyItem extends AsyncItem {
         this.DATA = data;
         this.STACK = stack;
         this.PLAYER = player;
+    }
+
+    @Override
+    public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+        event.setCancelled(true);
+
+        if (!DATA.getSOUND().equalsIgnoreCase("none")) {
+            SoundUtil.playSound(player, DATA.getSOUND(), DATA.getPITCH(), 1f);
+        }
     }
 
     public abstract ItemBuilder process(ItemBuilder builder);
