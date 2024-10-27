@@ -5,6 +5,7 @@ import net.skullian.skyfactions.config.types.Settings;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 public class TextUtility {
 
     public static String color(final String string) {
-        return Component.text(ColorAPI.process(string)).toString();
+        return MiniMessage.miniMessage().deserialize(ColorAPI.process(string)).toString();
     }
 
     public static String fromList(List<?> list) {
