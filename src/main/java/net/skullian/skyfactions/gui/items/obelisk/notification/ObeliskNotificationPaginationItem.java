@@ -3,6 +3,7 @@ package net.skullian.skyfactions.gui.items.obelisk.notification;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.data.ItemData;
+import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.notification.NotificationData;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SoundUtil;
@@ -18,30 +19,22 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.List;
 
-public class ObeliskNotificationPaginationItem extends AbstractItem {
+public class ObeliskNotificationPaginationItem extends SkyItem {
 
-    private String NAME;
-    private String SOUND;
-    private int PITCH;
-    private List<String> LORE;
-    private ItemStack STACK;
     private NotificationData DATA;
 
     public ObeliskNotificationPaginationItem(ItemData data, ItemStack stack, NotificationData inviteData) {
-        this.NAME = data.getNAME();
-        this.SOUND = data.getSOUND();
-        this.PITCH = data.getPITCH();
-        this.LORE = data.getLORE();
-        this.STACK = stack;
+        super(data, stack, null);
+
         this.DATA = inviteData;
     }
 
     @Override
     public ItemProvider getItemProvider() {
-        ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME.replace("%notification_title%", DATA.getTitle())));
+        ItemBuilder builder = new ItemBuilder(getSTACK())
+                .setDisplayName(TextUtility.color(getDATA().getNAME().replace("%notification_title%", DATA.getTitle())));
 
-        for (String loreLine : LORE) {
+        for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("%notification_description%")) {
                 for (String part : TextUtility.toParts(DATA.getDescription())) {
                     builder.addLoreLines(part);
@@ -59,13 +52,15 @@ public class ObeliskNotificationPaginationItem extends AbstractItem {
     }
 
     @Override
-    public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        event.setCancelled(true);
+    public Object[] replacements() {
+        return List.of(
+            "%timestamp%",
+            Messages.NOTIFICATION_TIMESTAMP_FORMAT.get("%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))
+        ).toArray();
+    }
 
-        if (!SOUND.equalsIgnoreCase("none")) {
-            SoundUtil.playSound(player, SOUND, PITCH, 1);
-        }
-
+    @Override
+    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (clickType.isRightClick()) {
             player.closeInventory();
             SkyFactionsReborn.databaseHandler.removeNotification(player, DATA).whenComplete((ignored, ex) -> {
