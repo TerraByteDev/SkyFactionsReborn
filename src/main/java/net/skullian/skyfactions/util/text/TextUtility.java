@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class TextUtility {
 
     public static String color(final String string) {
-        return ColorAPI.process(string);
+        return Component.text(ColorAPI.process(string)).toString();
     }
 
     public static String fromList(List<?> list) {
