@@ -6,6 +6,7 @@ import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.RaidAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.island.IslandCommandHandler;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
@@ -23,11 +24,20 @@ import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Command("island")
 public class IslandVisitCommand extends CommandTemplate {
+
+    IslandCommandHandler handler;
+
+    public IslandVisitCommand(IslandCommandHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
     public String getName() {
         return "visit";
@@ -55,7 +65,7 @@ public class IslandVisitCommand extends CommandTemplate {
     public void perform(
             CommandSourceStack commandSourceStack,
             @Argument(value = "player", suggestions = "onlinePlayers") String playerName
-    ) {
+    ) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
@@ -67,6 +77,11 @@ public class IslandVisitCommand extends CommandTemplate {
         if (!target.hasPlayedBefore()) {
             Messages.UNKNOWN_PLAYER.send(player, "%player%", playerName);
             return;
+        } else if (target.getUniqueId().equals(player.getUniqueId())) {
+            CommandTemplate template = this.handler.getSubCommands().get("teleport");
+            Method method = template.getClass().getDeclaredMethod("perform");
+
+            method.invoke(template, commandSourceStack);
         }
 
         IslandAPI.getPlayerIsland(target.getUniqueId()).whenComplete((is, ex) -> {

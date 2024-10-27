@@ -14,12 +14,14 @@ import org.incendo.cloud.meta.SimpleCommandMeta;
 import org.incendo.cloud.paper.PaperCommandManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FactionCommandHandler implements CommandHandler {
 
     PaperCommandManager<CommandSourceStack> manager;
     AnnotationParser<CommandSourceStack> parser;
-    ArrayList<CommandTemplate> subcommands = new ArrayList<>();
+    Map<String, CommandTemplate> subcommands = new HashMap<>();
 
     public FactionCommandHandler() {
         this.manager = PaperCommandManager.builder()
@@ -56,7 +58,7 @@ public class FactionCommandHandler implements CommandHandler {
     }
 
     @Override
-    public ArrayList<CommandTemplate> getSubCommands() {
+    public Map<String, CommandTemplate> getSubCommands() {
         return this.subcommands;
     }
 
@@ -77,6 +79,6 @@ public class FactionCommandHandler implements CommandHandler {
     @Override
     public void register(CommandTemplate template) {
         parser.parse(template);
-        subcommands.add(template);
+        subcommands.put(template.getName(), template);
     }
 }

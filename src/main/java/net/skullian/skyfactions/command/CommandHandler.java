@@ -5,6 +5,7 @@ import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.paper.PaperCommandManager;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public interface CommandHandler {
     CommandHandler getHandler();
@@ -13,7 +14,7 @@ public interface CommandHandler {
 
     AnnotationParser<CommandSourceStack> getParser();
 
-    ArrayList<CommandTemplate> getSubCommands();
+    Map<String, CommandTemplate> getSubCommands();
 
     void registerSubCommands(AnnotationParser<CommandSourceStack> parser);
 

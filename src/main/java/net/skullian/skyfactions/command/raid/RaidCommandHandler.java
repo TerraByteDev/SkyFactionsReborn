@@ -12,14 +12,17 @@ import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
 import org.incendo.cloud.paper.PaperCommandManager;
+import org.stringtemplate.v4.compiler.STParser.templateAndEOF_return;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RaidCommandHandler implements CommandHandler {
 
     PaperCommandManager<CommandSourceStack> manager;
     AnnotationParser<CommandSourceStack> parser;
-    ArrayList<CommandTemplate> subcommands = new ArrayList<>();
+    Map<String, CommandTemplate> subcommands = new HashMap<>();
 
     public RaidCommandHandler() {
         this.manager = PaperCommandManager.builder()
@@ -51,7 +54,7 @@ public class RaidCommandHandler implements CommandHandler {
     }
 
     @Override
-    public ArrayList<CommandTemplate> getSubCommands() {
+    public Map<String, CommandTemplate> getSubCommands() {
         return this.subcommands;
     }
 
@@ -65,6 +68,6 @@ public class RaidCommandHandler implements CommandHandler {
     @Override
     public void register(CommandTemplate template) {
         parser.parse(template);
-        subcommands.add(template);
+        subcommands.put(template.getName(), template);
     }
 }
