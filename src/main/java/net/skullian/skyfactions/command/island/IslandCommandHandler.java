@@ -63,7 +63,7 @@ public class IslandCommandHandler implements CommandHandler {
         register(new IslandTeleportCommand());
         register(new IslandTrustCommand());
         register(new IslandUntrustCommand());
-        register(new IslandVisitCommand());
+        register(new IslandVisitCommand(this));
     }
 
     @Override
