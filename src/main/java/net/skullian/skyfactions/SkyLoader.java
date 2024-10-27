@@ -14,7 +14,8 @@ public class SkyLoader implements PluginLoader {
         MavenLibraryResolver invUIResolver = new MavenLibraryResolver();
 
         invUIResolver.addRepository(new RemoteRepository.Builder("xenondevs", "default", "https://repo.xenondevs.xyz/releases/").build());
-        invUIResolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:invui:pom:1.39"), null));
+        invUIResolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:invui-core:1.39"), null));
+        invUIResolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:inventory-access-r21:1.39", null));
 
         MavenLibraryResolver centralResolver = new MavenLibraryResolver();
         centralResolver.addRepository(new RemoteRepository.Builder("maven-central", "default", "https://repo1.maven.org/maven2/").build());
