@@ -1,5 +1,9 @@
 package net.skullian.skyfactions.gui.items.impl;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -10,12 +14,15 @@ import lombok.Getter;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
+import xyz.xenondevs.invui.item.Item;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
+import xyz.xenondevs.invui.window.AbstractWindow;
+import xyz.xenondevs.invui.window.Window;
 
 @Getter
-public abstract class SkyItem extends AbstractItem {
+public abstract class SkyItem implements Item {
 
     private ItemData DATA;
     private ItemStack STACK;
@@ -63,4 +70,26 @@ public abstract class SkyItem extends AbstractItem {
     }
 
     public void onClick(ClickType clickType, Player player, InventoryClickEvent event) {}
+
+    private final Set<AbstractWindow> windows = new HashSet<>();
+    
+    @Override
+    public void addWindow(AbstractWindow window) {
+        windows.add(window);
+    }
+    
+    @Override
+    public void removeWindow(AbstractWindow window) {
+        windows.remove(window);
+    }
+    
+    @Override
+    public Set<Window> getWindows() {
+        return Collections.unmodifiableSet(windows);
+    }
+    
+    @Override
+    public void notifyWindows() {
+        windows.forEach(w -> w.handleItemProviderUpdate(this));
+    }
 }

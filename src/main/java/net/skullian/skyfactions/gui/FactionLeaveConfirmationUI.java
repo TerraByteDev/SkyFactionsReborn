@@ -7,7 +7,7 @@ import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.GeneralCancelItem;
 import net.skullian.skyfactions.gui.items.faction_leave.LeaveConfirmationItem;
-import net.skullian.skyfactions.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
