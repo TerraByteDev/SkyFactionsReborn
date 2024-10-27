@@ -5,12 +5,14 @@ import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import lombok.Getter;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
+@Getter
 public abstract class SkyItem extends AbstractItem {
 
     private ItemData DATA;

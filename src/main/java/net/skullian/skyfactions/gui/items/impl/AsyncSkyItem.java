@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.ApiStatus.OverrideOnly;
 
+import lombok.Getter;
 import net.skullian.skyfactions.config.types.ObeliskConfig;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.util.text.TextUtility;
@@ -16,6 +17,7 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AsyncItem;
 
+@Getter
 public abstract class AsyncSkyItem extends AsyncItem {
 
     private ItemData DATA;
