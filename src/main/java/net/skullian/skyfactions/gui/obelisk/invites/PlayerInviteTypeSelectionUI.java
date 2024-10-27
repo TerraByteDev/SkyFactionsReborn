@@ -1,21 +1,21 @@
 package net.skullian.skyfactions.gui.obelisk.invites;
 
+import java.util.List;
+
+import org.bukkit.entity.Player;
+
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.gui.items.GeneralBorderItem;
-import net.skullian.skyfactions.gui.items.GeneralPromptItem;
+import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.JoinRequestsTypeItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.PlayerFactionInvitesTypeItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.entity.Player;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.window.Window;
-
-import java.util.List;
 
 public class PlayerInviteTypeSelectionUI {
 
@@ -46,7 +46,7 @@ public class PlayerInviteTypeSelectionUI {
                 switch (itemData.getITEM_ID()) {
 
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
 
                     case "OUTGOING_JOIN_REQUEST":
@@ -62,7 +62,7 @@ public class PlayerInviteTypeSelectionUI {
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }

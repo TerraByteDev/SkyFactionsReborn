@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.gui.items.impl;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.entity.Player;
@@ -9,7 +8,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.ApiStatus.OverrideOnly;
 
 import lombok.Getter;
 import net.skullian.skyfactions.config.types.ObeliskConfig;
@@ -72,6 +70,5 @@ public abstract class AsyncSkyItem extends AsyncItem {
         return message;
     }
 
-
-
+    public void onClick(ClickType clickType, Player player, InventoryClickEvent event) {}
 }

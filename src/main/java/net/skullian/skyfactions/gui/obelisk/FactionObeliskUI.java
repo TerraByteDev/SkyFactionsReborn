@@ -6,7 +6,7 @@ import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.gui.items.GeneralBorderItem;
+import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.*;
 import net.skullian.skyfactions.gui.items.obelisk.defence.ObeliskDefencePurchaseItem;
 import net.skullian.skyfactions.util.ErrorHandler;
@@ -83,7 +83,7 @@ public class FactionObeliskUI {
                             break;
 
                         case "BORDER":
-                            builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                            builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                             break;
                     }
                 }

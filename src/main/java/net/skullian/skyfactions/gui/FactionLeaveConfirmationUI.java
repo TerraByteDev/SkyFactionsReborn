@@ -5,10 +5,9 @@ import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.gui.items.GeneralBorderItem;
 import net.skullian.skyfactions.gui.items.GeneralCancelItem;
-import net.skullian.skyfactions.gui.items.GeneralPromptItem;
 import net.skullian.skyfactions.gui.items.faction_leave.LeaveConfirmationItem;
+import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -49,7 +48,7 @@ public class FactionLeaveConfirmationUI {
                 switch (itemData.getITEM_ID()) {
 
                     case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                     case "CONFIRM":
                         builder.addIngredient(itemData.getCHARACTER(), new LeaveConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
@@ -58,7 +57,7 @@ public class FactionLeaveConfirmationUI {
                         builder.addIngredient(itemData.getCHARACTER(), new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }

@@ -1,24 +1,25 @@
 package net.skullian.skyfactions.gui.obelisk.invites;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.faction.JoinRequestData;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.gui.items.GeneralBorderItem;
+import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestConfirmItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestDenyItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestRevoke;
 import net.skullian.skyfactions.gui.items.obelisk.invites.PlayerJoinRequestPromptItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.window.Window;
-
-import java.util.List;
 
 public class PlayerOutgoingRequestManageUI {
 
@@ -71,7 +72,7 @@ public class PlayerOutgoingRequestManageUI {
                     break;
 
                 case "BORDER":
-                    builder.addIngredient(itemData.getCHARACTER(), new GeneralBorderItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                    builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                     break;
             }
         }

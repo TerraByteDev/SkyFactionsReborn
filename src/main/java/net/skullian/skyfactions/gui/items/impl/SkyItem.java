@@ -1,13 +1,10 @@
 package net.skullian.skyfactions.gui.items.impl;
 
-import java.util.List;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.ApiStatus.OverrideOnly;
 
 import lombok.Getter;
 import net.skullian.skyfactions.gui.data.ItemData;
@@ -49,11 +46,13 @@ public abstract class SkyItem extends AbstractItem {
         if (!DATA.getSOUND().equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, DATA.getSOUND(), DATA.getPITCH(), 1f);
         }
+
+        onClick(clickType, player, event);
     }
 
-    public abstract ItemBuilder process(ItemBuilder builder);
+    public ItemBuilder process(ItemBuilder builder) { return builder; }
 
-    public abstract Object[] replacements();
+    public Object[] replacements() { return new Object[0]; }
 
     public static String replace(String message, Object... replacements) {
         for (int i = 0; i < replacements.length; i += 2) {
@@ -63,6 +62,5 @@ public abstract class SkyItem extends AbstractItem {
         return message;
     }
 
-
-
+    public void onClick(ClickType clickType, Player player, InventoryClickEvent event) {}
 }
