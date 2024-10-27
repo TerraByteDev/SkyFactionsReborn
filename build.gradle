@@ -119,6 +119,8 @@ dependencies {
 
     //errorprone("com.google.errorprone:error_prone_core:2.35.1")
     
+		compileOnly "net.kyori:adventure-text-minimessage:4.17.0"
+
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
 

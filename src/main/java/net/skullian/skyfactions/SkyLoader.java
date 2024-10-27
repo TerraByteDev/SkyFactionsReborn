@@ -14,7 +14,8 @@ public class SkyLoader implements PluginLoader {
         MavenLibraryResolver invUIResolver = new MavenLibraryResolver();
 
         invUIResolver.addRepository(new RemoteRepository.Builder("xenondevs", "default", "https://repo.xenondevs.xyz/releases/").build());
-        invUIResolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:invui:pom:1.39"), null));
+        invUIResolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:invui-core:1.39"), null));
+        invUIResolver.addDependency(new Dependency(new DefaultArtifact("xyz.xenondevs.invui:inventory-access-r21:1.39"), null));
 
         MavenLibraryResolver centralResolver = new MavenLibraryResolver();
         centralResolver.addRepository(new RemoteRepository.Builder("maven-central", "default", "https://repo1.maven.org/maven2/").build());
@@ -43,6 +44,7 @@ public class SkyLoader implements PluginLoader {
         centralResolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-paper:2.0.0-beta.10"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-annotations:2.0.0"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("net.objecthunter:exp4j:0.4.8"), null));
+        centralResolver.addDependency(new Dependency(new DefaultArtifact("net.kyori:adventure-text-minimessage:4.17.0"), null));
 
         pluginClasspathBuilder.addLibrary(centralResolver);
         pluginClasspathBuilder.addLibrary(invUIResolver);
