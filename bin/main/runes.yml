@@ -1,0 +1,88 @@
+#      ____
+#    / __ \__  ______  ___  _____
+#   / /_/ / / / / __ \/ _ \/ ___/
+#  / _, _/ /_/ / / / /  __(__  )
+# /_/ |_|\__,_/_/ /_/\___/____/
+#
+
+# =============== RUNES CONFIG =============== #
+
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
+# Runes are SkyFaction's 'currency'. It allows you to advance in the game,
+# including purchase defences, upgrade islands / factions and more.
+
+# To gain Runes, you can convert blocks into Runes.
+# This configuration file allows you to customise the amount of Runes
+# that players will get per block / item, as well as override it
+# for certain blocks.
+
+# This is the base configuration for runes.
+# Unless overriden in the OVERRIDES section, all items & blocks
+# will apply to this configuration.
+RUNES:
+  FOR_EACH: 4 # For every 4 blocks / items input...
+  GIVE: 1 # You will get one rune in return.
+
+# General filters to what items / blocks are allowed or not.
+FILTERS:
+  ALLOW_LORE: true # Allow items with custom lore.
+  ALLOW_ENCHANTS: true # Allow items with enchants.
+  MATERIALS:
+    # If enabled, all items in LIST will not be convertible. If disabled, only items in LIST will be convertible.
+    # The OVERRIDES entries bypass this.
+    IS_BLACKLIST: true
+
+    LIST:
+      - STRING
+      - STICK
+      - MINECART
+      - HOPPER_MINECART
+      - CHEST_MINECART
+      - FURNACE_MINECART
+      - TNT_MINECART
+      - DECORATED_POT
+      - PAINTING
+      - PLAYER_HEAD
+      - ARMOR_STAND
+
+# Override the default configuration for certain blocks / items.
+# FOR_EACH does not apply here.
+# Runes given PER ITEM.
+OVERRIDES:
+  COAL: 1
+  COAL_ORE: 3
+  COAL_BLOCK: 9
+
+  COPPER: 1
+  COPPER_ORE: 3
+  COPPER_BLOCK: 9
+
+  REDSTONE: 3
+  REDSTONE_ORE: 9
+  REDSTONE_BLOCK: 18
+
+  IRON: 5
+  IRON_ORE: 15
+  IRON_BLOCK: 45
+
+  LAPIS: 6
+  LAPIS_ORE: 18
+  LAPIS_BLOCK: 54
+
+  EMERALD: 7
+  EMERADLD_ORE: 21
+  EMERALD_BLOCK: 63
+
+  GOLD: 8
+  GOLD_ORE: 24
+  GOLD_BLOCK: 72
+
+  DIAMOND: 10
+  DIAMOND_ORE: 30
+  DIAMOND_BLOCK: 90
+
+  ANCIENT_DEBRIS: 20
+  NETHERITE_BLOCK: 810
+

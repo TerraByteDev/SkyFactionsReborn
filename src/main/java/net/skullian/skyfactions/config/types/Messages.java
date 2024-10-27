@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.command.CommandSender;
+import net.kyori.adventure.text.Component;
 
 import java.util.List;
 
@@ -245,7 +246,7 @@ public enum Messages {
         }
 
         if (!message.isEmpty()) {
-            receiver.sendMessage(TextUtility.color(replace(message, replacements)));
+            receiver.sendMessage(Component.text(TextUtility.color(replace(message, replacements))));
         }
     }
 

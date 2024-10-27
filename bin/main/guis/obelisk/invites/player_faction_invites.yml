@@ -1,0 +1,78 @@
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
+# Title of the GUI (Inventory)
+TITLE: "&9Faction Invites"
+OPEN_SOUND: "ui.button.click"
+OPEN_PITCH: 1
+
+# This allows you to customise the shape of the GUI.
+# You can only have a maximum of 54 slots (9 x 6).
+# Each character represents an item / slot.
+# '.' represents an empty slot.
+# Any other characters are shown below under ITEMS
+# Each character corresponds to an item.
+
+# This GUI is where Players can view all the incoming Faction invites.
+
+# THIS IS A PAGINATED GUI! This means it can have multiple pages.
+# THE LETTER 'x' CORRESPONDS TO WHERE THE PAGINATED ITEMS WILL BE!
+# YOU CANNOT CHANGE THIS!
+# PAGINATION ITEMS ARE CONFIGURED IN 'pagination.yml'!
+LAYOUT:
+  - "b # # # # # # # #"
+  - "# x x x x x x x #"
+  - "# x x x x x x x #"
+  - "# x x x x x x x #"
+  - "# < # # p # # > #"
+
+
+
+ITEMS:
+
+  # Just a general prompt for what this GUI is about.
+  PROMPT:
+    char: "p" # This is the character to use in the LAYOUT!
+    material: "NETHER_STAR"
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
+    text: "&9Incoming Invites"
+    sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
+    pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
+    lore:
+      - "&eView, accept and decline"
+      - "&eincoming Faction invites."
+
+  # Back button, return to the main Obelisk UI
+  BACK:
+    char: "b"
+    material: "BARRIER"
+    skull: ""
+    text: "&c&oBack"
+    sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
+    pitch: 1
+    lore: ""
+
+  # This is the item that displays each outgoing faction invite.
+  # By default, the item is the player's head, and you shouldn't change this unless you're... insane?
+  # You can customise the text, lore and sound though.
+  MODEL:
+    material: "PLAYER_HEAD"
+    skull: "%player_skull%"
+    text: "&9%faction_name%" # Placeholders: %player_name% - Name of the player who invited you to their Faction.
+    sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
+    pitch: 1
+    # Placeholders: %player_name% - Name of player / %faction_name% - Name of Faction.
+    lore:
+      - "&a%player_name% &ewants you"
+      - "&eto join &a%faction_name%."
+      - ""
+      - "&7Click for actions."
+
+  BORDER:
+    char: "#"
+    material: "GRAY_STAINED_GLASS_PANE"
+    skull: ""
+    text: " " # No text
+    sound: "none"
+    pitch: 1
+    lore: "" # Empty lore

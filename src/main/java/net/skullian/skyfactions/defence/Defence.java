@@ -129,36 +129,31 @@ public abstract class Defence {
     }
 
     public boolean checkDurability() {
-        if (getData().getDURABILITY() < 100) {
-
-            if (DefenceHandler.hologramsMap.containsKey(getHologramID(data.getUUIDFactionName()))) {
-                TextHologram holo = DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName()));
-                holo.setText(
-                        struct.isAPPEND_DURABILITY_AT_TOP() ? TextUtility.color(struct.getDURABILITY_HOLOGRAM().replace("%durability%", String.valueOf(data.getDURABILITY())) + "\n" + holo.getText())
-                                : TextUtility.color(holo.getText() + "\n" + struct.getDURABILITY_HOLOGRAM().replace("%durability%", String.valueOf(data.getDURABILITY())))
-                );
-                holo.update();
-            }
-        }
-
         return getData().getDURABILITY() != 0;
     }
 
-    public boolean checkAmmo() {
-        if (getData().getAMMO() == 0) {
-            if (this.noAmmoNotified) return false;
+    public void updateHologram() {
+        if (DefenceHandler.hologramsMap.containsKey(getHologramID(data.getUUIDFactionName()))) {
+            TextHologram holo = DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName()));
 
-            if (DefenceHandler.hologramsMap.containsKey(getHologramID(data.getUUIDFactionName()))) {
-                TextHologram holo = DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName()));
-                holo.setText(
-                        struct.isAPPEND_OUT_OF_STOCK_TO_TOP() ? TextUtility.color(struct.getOUT_OF_STOCK_HOLOGRAM() + "\n" + holo.getText()) : TextUtility.color(holo.getText() + "\n" + struct.getOUT_OF_STOCK_HOLOGRAM())
-                );
-                holo.update();
+            String text = TextUtility.color(String.join("\n", struct.getHOLOGRAM_LIST()));
+
+            if (getData().getAMMO() == 0 && !this.noAmmoNotified) {
+                text = struct.isAPPEND_OUT_OF_STOCK_TO_TOP() ? TextUtility.color(struct.getOUT_OF_STOCK_HOLOGRAM() + "\n" + text) : TextUtility.color(text + "\n" + struct.getOUT_OF_STOCK_HOLOGRAM());
                 this.noAmmoNotified = true;
             }
 
-            return false;
+            if (getData().getDURABILITY() < 100) {
+                text = struct.isAPPEND_DURABILITY_AT_TOP() ? TextUtility.color(struct.getDURABILITY_HOLOGRAM() + "\n" + text) : TextUtility.color(text + "\n" + struct.getDURABILITY_HOLOGRAM());
+            }
+
+            holo.setText(text);
+            holo.update();
         }
+    }
+
+    public boolean checkAmmo() {
+        if (getData().getAMMO() == 0 || this.noAmmoNotified) return false;
 
         return true;
     }
