@@ -61,3 +61,8 @@ dependencies:
     fancynpcs:
       load: BEFORE
       required: false
+    
+    Vault:
+      load: BEFORE
+      required: false
+      
