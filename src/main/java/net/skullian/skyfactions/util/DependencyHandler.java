@@ -46,7 +46,7 @@ public class DependencyHandler {
         if (isPluginEnabled("fancynpcs")) {
             SLogger.info("Found {} installed on the server.", "\001B[33mFancyNPCs\u001B[34m");
             enabledDeps.add("FancyNPCs");
-        }
+        } else alert("FancyNPCs");
     }
 
     public static boolean isEnabled(String name) {
