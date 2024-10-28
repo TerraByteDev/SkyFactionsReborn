@@ -85,21 +85,24 @@ public class RunesAPI {
                 continue;
             }
 
+            int tempForEach = Runes.BASE_FOR_EACH.getInt();
+            int tempReturn = Runes.BASE_RUNE_RETURN.getInt();
+            
             if (overrides.containsKey(stack.getType().name())) {
-                int amount = overrides.get(stack.getType().name()) * stack.getAmount();
-                total += amount;
-            } else {
-                int quotient = stack.getAmount() / forEach;
-                int remainder = stack.getAmount() % forEach;
+                tempReturn = overrides.get(stack.getType().name());
+                tempForEach = 1;
+            }
+            
+            int quotient = stack.getAmount() / forEach;
+            int remainder = stack.getAmount() % forEach;
 
-                int amount = quotient * returnForEach;
-                total += amount;
+            int amount = quotient * returnForEach;
+            total += amount;
 
-                if (remainder > 0) {
-                    ItemStack cloned = stack.clone();
-                    cloned.setAmount(remainder);
-                    remainingItems.add(cloned);
-                }
+            if (remainder > 0) {
+                ItemStack cloned = stack.clone();
+                cloned.setAmount(remainder);
+                remainingItems.add(cloned);
             }
         }
 
