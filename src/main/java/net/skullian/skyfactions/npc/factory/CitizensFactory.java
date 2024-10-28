@@ -4,26 +4,78 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
+import lombok.AllArgsConstructor;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.event.DespawnReason;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.trait.SkinTrait;
 import net.skullian.skyfactions.npc.SkyNPC;
 
 public class CitizensFactory implements SkyNPCFactory {
 
     @Override
     public boolean isNPC(Entity entity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isNPC'");
+        // Citizens' docs tell you to check for metadata, but we use this to avoid compat issues
+        // other plugins that may use the same metadata system.
+        return CitizensAPI.getNPCRegistry().isNPC(entity);
     }
 
     @Override
     public SkyNPC create(String id, String name, Location location, String skin, EntityType entityType) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+        NPC npc = CitizensAPI.getNPCRegistry().createNPC(entityType, name);
+        npc.spawn(location);
+
+        if (skin.equalsIgnoreCase("none") && npc.hasTrait(SkinTrait.class)) {
+            npc.getTraitNullable(SkinTrait.class).clearTexture();
+        } else if (entityType == EntityType.PLAYER) {
+            npc.getOrAddTrait(SkinTrait.class).setSkinName(skin);
+        }
+
+        return new SkyCitizen(npc);
     }
 
     @Override
     public SkyNPC getNPC(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNPC'");
+        NPC npc = CitizensAPI.getNPCRegistry().getById(Integer.parseInt(id));
+        return npc == null ? null : new SkyCitizen(npc);
+    }
+
+    @AllArgsConstructor
+    public static class SkyCitizen implements SkyNPC {
+
+        private NPC npc;
+
+        @Override
+        public String getId() {
+            return Integer.toString(npc.getId());
+        }
+
+        @Override
+        public String getDisplayName() {
+            return npc.getName();
+        }
+
+        @Override
+        public Location getLocation() {
+            return npc.getStoredLocation();
+        }
+
+        @Override
+        public boolean isPresent() {
+            return npc.isSpawned();
+        }
+
+        @Override
+        public Entity getEntity() {
+            return npc.getEntity();
+        }
+
+        @Override
+        public void remove() {
+            npc.despawn(DespawnReason.REMOVAL);
+            CitizensAPI.getNPCRegistry().deregister(npc);
+        }
+
     }
 
 }

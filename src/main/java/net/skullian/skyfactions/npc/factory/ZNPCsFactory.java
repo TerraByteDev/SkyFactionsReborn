@@ -9,6 +9,7 @@ import lol.pyr.znpcsplus.api.npc.NpcEntry;
 import lol.pyr.znpcsplus.util.NpcLocation;
 import lombok.AllArgsConstructor;
 import net.skullian.skyfactions.npc.SkyNPC;
+import net.skullian.skyfactions.util.text.TextUtility;
 
 public class ZNPCsFactory implements SkyNPCFactory {
 
@@ -26,6 +27,7 @@ public class ZNPCsFactory implements SkyNPCFactory {
             new NpcLocation(location)
         );
         entry.enableEverything();
+        entry.getNpc().getHologram().insertLine(0, TextUtility.color(name));
 
         return new SkyZNPCs(entry); 
     }
@@ -33,6 +35,7 @@ public class ZNPCsFactory implements SkyNPCFactory {
     @Override
     public SkyNPC getNPC(String id) {
         NpcEntry entry = NpcApiProvider.get().getNpcRegistry().getById(id);
+        
         return entry == null ? null : new SkyZNPCs(entry);
     }
 
