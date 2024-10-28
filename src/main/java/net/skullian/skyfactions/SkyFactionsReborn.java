@@ -29,6 +29,7 @@ import net.skullian.skyfactions.event.DefenceDestructionHandler;
 import net.skullian.skyfactions.event.DefenceHandler;
 import net.skullian.skyfactions.event.ObeliskInteractionListener;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.npc.NPCManager;
 import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
@@ -52,6 +53,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static WorldBorderApi worldBorderApi;
     public static CacheService cacheService;
     public static BrokenBlockService blockService = new BrokenBlockService();
+    public static NPCManager npcManager = new NPCManager();
 
     private void print() {
         ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");

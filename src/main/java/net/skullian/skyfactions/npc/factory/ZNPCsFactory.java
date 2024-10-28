@@ -3,15 +3,19 @@ package net.skullian.skyfactions.npc.factory;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 import lol.pyr.znpcsplus.api.NpcApiProvider;
+import lol.pyr.znpcsplus.api.event.NpcInteractEvent;
 import lol.pyr.znpcsplus.api.npc.NpcEntry;
 import lol.pyr.znpcsplus.util.NpcLocation;
 import lombok.AllArgsConstructor;
+import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.npc.SkyNPC;
 import net.skullian.skyfactions.util.text.TextUtility;
 
-public class ZNPCsFactory implements SkyNPCFactory {
+public class ZNPCsFactory implements SkyNPCFactory, Listener {
 
     @Override
     public boolean isNPC(Entity entity) {
@@ -37,6 +41,11 @@ public class ZNPCsFactory implements SkyNPCFactory {
         NpcEntry entry = NpcApiProvider.get().getNpcRegistry().getById(id);
         
         return entry == null ? null : new SkyZNPCs(entry);
+    }
+
+    @EventHandler
+    public void onInteract(NpcInteractEvent event) {
+        SkyFactionsReborn.npcManager.onClick(new SkyZNPCs(event.getEntry()), event.getPlayer());
     }
 
     @AllArgsConstructor

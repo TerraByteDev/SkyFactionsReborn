@@ -3,15 +3,19 @@ package net.skullian.skyfactions.npc.factory;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 import lombok.AllArgsConstructor;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.DespawnReason;
+import net.citizensnpcs.api.event.NPCClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.trait.SkinTrait;
+import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.npc.SkyNPC;
 
-public class CitizensFactory implements SkyNPCFactory {
+public class CitizensFactory implements SkyNPCFactory, Listener {
 
     @Override
     public boolean isNPC(Entity entity) {
@@ -38,6 +42,11 @@ public class CitizensFactory implements SkyNPCFactory {
     public SkyNPC getNPC(String id) {
         NPC npc = CitizensAPI.getNPCRegistry().getById(Integer.parseInt(id));
         return npc == null ? null : new SkyCitizen(npc);
+    }
+
+    @EventHandler
+    public void onInteract(NPCClickEvent event) {
+        SkyFactionsReborn.npcManager.onClick(new SkyCitizen(event.getNPC()), event.getClicker());
     }
 
     @AllArgsConstructor
