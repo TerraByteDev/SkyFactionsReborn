@@ -106,6 +106,29 @@ NPC:
   # Specifing an invalid factory or a factory that is not installed will
   # cause the plugin to disable.
   FACTORY: "znpcsplus"
+  
+  # The display name of the NPC.
+  NAME: "&9Sky Master"
+
+  # This allows you to configure the offsets of where the NPC
+  # will spawn, relative to the center of the island.
+  OFFSETS:
+    # How far from the center of player islands should the NPC be spawned?
+    PLAYER_ISLANDS: [2, 0, 2] # [x, y, z]
+    
+    # How far from the center of faction islands should the NPC be spawned?
+    FACTION_ISLANDS: [2, 0, 2] # [x, y, z]
+
+  # Control the events when NPCs are interacted with.
+  # See https://docs.terrabytedev.com/skyfactions/mechanics/npcs.html#actions
+  ACTIONS:
+    # Command(s) to run when the NPC on player islands are interacted with.
+    PLAYER_ISLANDS: 
+      - "[console] tell %player_name% You clicked me!"
+
+    # Command(s) to run when the NPC on faction islands are interacted with.
+    FACTION_ISLANDS: 
+      - "[console] tell %player_name% You clicked me!"
 
 # Island grid generation algorithm configuration
 Generation:
