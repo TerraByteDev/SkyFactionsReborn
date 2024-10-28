@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id("net.ltgt.errorprone") version "4.1.0"
+    //id("net.ltgt.errorprone") version "4.1.0"
     id("io.papermc.paperweight.userdev") version "1.7.4"
     id 'com.gradleup.shadow' version '8.3.3'
     id 'java'
@@ -126,7 +126,7 @@ dependencies {
     compileOnly("org.incendo:cloud-annotations:2.0.0")
     compileOnly("lol.pyr:znpcsplus-api:2.0.0-SNAPSHOT")
     compileOnly('net.citizensnpcs:citizens-main:2.0.36-SNAPSHOT')
-    errorprone("com.google.errorprone:error_prone_core:2.35.1")
+    //errorprone("com.google.errorprone:error_prone_core:2.35.1")
 	compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
     compileOnly("de.oliver:FancyNpcs:2.3.1")
 
