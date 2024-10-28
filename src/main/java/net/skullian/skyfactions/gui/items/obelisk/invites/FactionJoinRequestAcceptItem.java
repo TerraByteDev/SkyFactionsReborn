@@ -59,8 +59,10 @@ public class FactionJoinRequestAcceptItem extends AbstractItem {
         event.getInventory().close();
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
-            if (faction == null) Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
-            if (ex != null) {
+            if (faction == null) {
+                Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
+                return;
+            } else if (ex != null) {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             }
