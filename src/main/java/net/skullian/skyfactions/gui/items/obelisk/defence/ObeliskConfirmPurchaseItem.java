@@ -1,15 +1,15 @@
 package net.skullian.skyfactions.gui.items.obelisk.defence;
 
+import java.util.List;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.config.types.ObeliskConfig;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
@@ -18,23 +18,17 @@ import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
-import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.AsyncItem;
-
-import java.util.List;
 
 public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
 
     private String TYPE;
     private DefenceStruct STRUCT;
     private Faction FACTION;
-    private ItemData DATA;
 
     public ObeliskConfirmPurchaseItem(ItemData data, ItemStack stack, String type, DefenceStruct struct, Faction faction, Player player) {
         super(data, stack, player, List.of(type, faction, struct).toArray());
 
-        this.DATA = data;
         this.TYPE = type;
         this.STRUCT = struct;
         this.FACTION = faction;
