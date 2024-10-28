@@ -94,6 +94,18 @@ Island:
   ALLOWED_DIMENSIONS:
     - "my_world_name"
 
+# SkyFactions can hook into numerous NPC plugins to add support
+# for per-island NPCs, such as Jerry from Hypixel SkyBlock.
+# You can configure the system for this here.
+NPC:
+  # Whether the NPC system should be enabled or not.
+  ENABLED: false
+
+  # Specify which NPC plugin (factory) to use.
+  # Possible Factories: "citizens" / "znpcpsplus" / "fancynpcs"
+  # Specifing an invalid factory or a factory that is not installed will
+  # cause the plugin to disable.
+  FACTORY: "znpcsplus"
 
 # Island grid generation algorithm configuration
 Generation:

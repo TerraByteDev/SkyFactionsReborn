@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 
-import net.skullian.skyfactions.db.InviteData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 

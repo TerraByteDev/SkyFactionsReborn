@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    //id("net.ltgt.errorprone") version "4.1.0"
+    id("net.ltgt.errorprone") version "4.1.0"
     id("io.papermc.paperweight.userdev") version "1.7.4"
     id 'com.gradleup.shadow' version '8.3.3'
     id 'java'
@@ -77,19 +77,27 @@ repositories {
         url = "https://repo.pyr.lol/snapshots"
     }
 
-    maven { url "https://jitpack.io" }
+    maven {
+        name = "JitPack"
+        url "https://jitpack.io" 
+    }
 
     maven {
         name = "SpigotMC Snapshots"
         url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+
+    maven{
+        name = "FancyNPCs Repository"
+        url = "https://repo.fancyplugins.de/releases"
     }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
 
-    compileOnly 'org.projectlombok:lombok:1.18.34'
-    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
 
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.zaxxer:HikariCP:6.0.0")
@@ -116,10 +124,11 @@ dependencies {
     compileOnly("org.incendo:cloud-paper:2.0.0-SNAPSHOT")
     compileOnly("org.incendo:cloud-core:2.0.0")
     compileOnly("org.incendo:cloud-annotations:2.0.0")
-
-    //errorprone("com.google.errorprone:error_prone_core:2.35.1")
-    
-		compileOnly "net.kyori:adventure-text-minimessage:4.17.0"
+    compileOnly("lol.pyr:znpcsplus-api:2.0.0-SNAPSHOT")
+    compileOnly('net.citizensnpcs:citizens-main:2.0.36-SNAPSHOT')
+    errorprone("com.google.errorprone:error_prone_core:2.35.1")
+	compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
+    compileOnly("de.oliver:FancyNpcs:2.3.1.217")
 
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }

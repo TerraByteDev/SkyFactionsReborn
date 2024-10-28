@@ -48,3 +48,16 @@ dependencies:
     MythicMobs:
       load: BEFORE
       required: false
+
+    ZNPCsPlus:
+      load: BEFORE
+      required: false
+
+
+    Citizens:
+      load: BEFORE
+      required: false
+
+    fancynpcs:
+      load: BEFORE
+      required: false

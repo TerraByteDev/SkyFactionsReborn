@@ -2,7 +2,6 @@ package net.skullian.skyfactions.gui.items.impl;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import org.bukkit.entity.Player;
