@@ -18,7 +18,7 @@ import net.skullian.skyfactions.notification.NotificationData;
 public class ObeliskPlayerNotificationsItem extends AsyncSkyItem {
 
     public ObeliskPlayerNotificationsItem(ItemData data, ItemStack stack, Player player) {
-        super(data, stack, player);
+        super(data, stack, player, null);
     }
 
     @Override

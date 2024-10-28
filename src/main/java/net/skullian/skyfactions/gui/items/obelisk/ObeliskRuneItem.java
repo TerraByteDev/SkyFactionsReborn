@@ -20,7 +20,7 @@ public class ObeliskRuneItem extends AsyncSkyItem {
     private String TYPE;
 
     public ObeliskRuneItem(ItemData data, ItemStack stack, String type, Player player) {
-        super(data, stack, player);
+        super(data, stack, player, null);
 
         this.TYPE = type;
     }

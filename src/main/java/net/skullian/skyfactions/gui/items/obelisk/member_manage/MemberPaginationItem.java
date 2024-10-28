@@ -1,53 +1,36 @@
 package net.skullian.skyfactions.gui.items.obelisk.member_manage;
 
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.gui.obelisk.member.ManageMemberUI;
-import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
+import java.util.List;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.ItemProvider;
+
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.gui.data.ItemData;
+import net.skullian.skyfactions.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.gui.obelisk.member.ManageMemberUI;
+import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
 
-import java.util.List;
+public class MemberPaginationItem extends SkyItem {
 
-public class MemberPaginationItem extends AbstractItem {
-
-    private String NAME;
-    private String SOUND;
-    private int PITCH;
-    private List<String> LORE;
     private String RANK_TITLE;
-    private ItemStack STACK;
     private OfflinePlayer SUBJECT;
-    private Player ACTOR;
 
     public MemberPaginationItem(ItemData data, ItemStack stack, String rankTitle, OfflinePlayer player, Player actor) {
-        this.NAME = data.getNAME();
-        this.SOUND = data.getSOUND();
-        this.PITCH = data.getPITCH();
-        this.LORE = data.getLORE();
+        super(data, stack, actor);
+
         this.RANK_TITLE = rankTitle;
-        this.STACK = stack;
         this.SUBJECT = player;
-        this.ACTOR = actor;
     }
 
     @Override
-    public ItemProvider getItemProvider() {
-        ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME));
-
-        for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine.replace("%player_rank%", TextUtility.color(RANK_TITLE))));
-        }
-        if (SUBJECT.getUniqueId().equals(ACTOR.getUniqueId())) {
+    public ItemBuilder process(ItemBuilder builder) {
+        if (SUBJECT.getUniqueId().equals(getPLAYER().getUniqueId())) {
             builder.addLoreLines(TextUtility.color(Messages.FACTION_MANAGE_SELF_DENY_LORE.get()));
         }
 
@@ -55,13 +38,14 @@ public class MemberPaginationItem extends AbstractItem {
     }
 
     @Override
-    public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        event.setCancelled(true);
+    public Object[] replacements() {
+        return List.of(
+            "%player_rank%", RANK_TITLE
+        ).toArray();
+    }
 
-        if (!SOUND.equalsIgnoreCase("none")) {
-            SoundUtil.playSound(player, SOUND, PITCH, 1);
-        }
-
+    @Override
+    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (SUBJECT.getUniqueId().equals(player.getUniqueId())) {
             Messages.FACTION_MANAGE_SELF_DENY.send(player);
         } else {

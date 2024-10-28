@@ -32,8 +32,14 @@ public abstract class AsyncSkyItem implements Item {
     private ItemStack STACK;
     private Player PLAYER;
     private ItemProvider provider;
+    private Object[] optionals;
 
-    public AsyncSkyItem(ItemData data, ItemStack stack, Player player) {
+    public AsyncSkyItem(ItemData data, ItemStack stack, Player player, Object[] optionals) {
+        this.optionals = optionals;
+        this.DATA = data;
+        this.STACK = stack;
+        this.PLAYER = player;
+
         this.provider = ObeliskConfig.getLoadingItem();
         Bukkit.getScheduler().runTaskAsynchronously(SkyFactionsReborn.getInstance(), () -> {
             this.provider = new ItemProvider() {
@@ -46,10 +52,6 @@ public abstract class AsyncSkyItem implements Item {
                 }
             };
         });
-
-        this.DATA = data;
-        this.STACK = stack;
-        this.PLAYER = player;
     }
 
     @Override
@@ -81,6 +83,7 @@ public abstract class AsyncSkyItem implements Item {
         return message;
     }
 
+    // I only have this so I'm not duplicating the sound checks / playing.
     public void onClick(ClickType clickType, Player player, InventoryClickEvent event) {}
 
     private final Set<AbstractWindow> windows = new HashSet<>();

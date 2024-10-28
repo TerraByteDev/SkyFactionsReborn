@@ -13,7 +13,7 @@ import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
 public class ObeliskFactionOverviewItem extends AsyncSkyItem {
 
     public ObeliskFactionOverviewItem(ItemData data, ItemStack stack, Player player) {
-        super(data, stack, player);
+        super(data, stack, player, null);
     }
 
     @Override

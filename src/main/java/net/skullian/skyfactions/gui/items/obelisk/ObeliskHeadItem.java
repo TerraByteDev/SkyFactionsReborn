@@ -16,7 +16,7 @@ import net.skullian.skyfactions.island.PlayerIsland;
 public class ObeliskHeadItem extends AsyncSkyItem {
 
     public ObeliskHeadItem(ItemData data, ItemStack stack, Player player) {
-        super(data, stack, player);
+        super(data, stack, player, null);
     }
 
     @Override
