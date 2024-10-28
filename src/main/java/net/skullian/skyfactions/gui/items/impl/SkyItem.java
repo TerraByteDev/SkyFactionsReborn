@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.impl;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.bukkit.entity.Player;
@@ -26,11 +27,13 @@ public abstract class SkyItem implements Item {
     private ItemData DATA;
     private ItemStack STACK;
     private Player PLAYER;
+    private Object[] optionals;
 
-    public SkyItem(ItemData data, ItemStack stack, Player player) {
+    public SkyItem(ItemData data, ItemStack stack, Player player, Object[] optionals) {
         this.DATA = data;
         this.STACK = stack;
         this.PLAYER = player;
+        this.optionals = optionals;
     }
 
     @Override

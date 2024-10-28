@@ -74,8 +74,7 @@ public class RunesSubmitUI {
             builder.addIngredient('.', inventory);
 
             inventory.setPreUpdateHandler((handler) -> {
-
-                handler.setCancelled(!(handler.getUpdateReason() instanceof PlayerUpdateReason playerUpdateReason));
+                handler.setCancelled(!(handler.getUpdateReason() instanceof PlayerUpdateReason));
                 handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
                 if (!handler.isCancelled()) this.ITEMS.put(handler.getSlot(), handler.getNewItem());
             });

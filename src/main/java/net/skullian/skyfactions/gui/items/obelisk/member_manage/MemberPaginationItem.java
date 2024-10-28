@@ -18,19 +18,19 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 public class MemberPaginationItem extends SkyItem {
 
-    private String RANK_TITLE;
     private OfflinePlayer SUBJECT;
 
     public MemberPaginationItem(ItemData data, ItemStack stack, String rankTitle, OfflinePlayer player, Player actor) {
-        super(data, stack, actor);
+        super(data, stack, actor, List.of(rankTitle, player).toArray());
 
-        this.RANK_TITLE = rankTitle;
         this.SUBJECT = player;
     }
 
     @Override
     public ItemBuilder process(ItemBuilder builder) {
-        if (SUBJECT.getUniqueId().equals(getPLAYER().getUniqueId())) {
+        OfflinePlayer subject = (OfflinePlayer) getOptionals()[1];
+
+        if (subject.getUniqueId().equals(getPLAYER().getUniqueId())) {
             builder.addLoreLines(TextUtility.color(Messages.FACTION_MANAGE_SELF_DENY_LORE.get()));
         }
 
@@ -39,8 +39,10 @@ public class MemberPaginationItem extends SkyItem {
 
     @Override
     public Object[] replacements() {
+        String rankTitle = (String) getOptionals()[0];
+
         return List.of(
-            "%player_rank%", RANK_TITLE
+            "%player_rank%", rankTitle
         ).toArray();
     }
 

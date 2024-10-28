@@ -13,7 +13,7 @@ import net.skullian.skyfactions.gui.items.impl.SkyItem;
 public class GeneralCancelItem extends SkyItem {
 
     public GeneralCancelItem(ItemData data, ItemStack stack) {
-        super(data, stack, null);
+        super(data, stack, null, null);
     }
 
     @Override

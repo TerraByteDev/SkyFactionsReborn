@@ -18,7 +18,7 @@ import net.skullian.skyfactions.util.ErrorHandler;
 public class ObeliskAuditLogItem extends SkyItem {
 
     public ObeliskAuditLogItem(ItemData data, ItemStack stack) {
-        super(data, stack, null);
+        super(data, stack, null, null);
     }
 
     @Override

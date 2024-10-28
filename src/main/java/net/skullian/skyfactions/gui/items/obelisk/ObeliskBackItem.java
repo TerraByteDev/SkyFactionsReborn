@@ -17,7 +17,7 @@ public class ObeliskBackItem extends SkyItem {
     private String TYPE;
 
     public ObeliskBackItem(ItemData data, ItemStack stack, String type) {
-        super(data, stack, null);
+        super(data, stack, null, null);
         
         this.TYPE = type;
     }

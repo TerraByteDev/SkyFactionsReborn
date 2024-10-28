@@ -13,7 +13,7 @@ import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.PlayerIncomingInviteAccept;
 import net.skullian.skyfactions.gui.items.obelisk.invites.PlayerIncomingInviteDeny;
-import net.skullian.skyfactions.gui.items.obelisk.invites.PlayerIncomingInvitePromptItem;
+import net.skullian.skyfactions.gui.items.obelisk.invites.InvitePromptItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.Gui;
@@ -47,7 +47,7 @@ public class PlayerManageIncomingInviteUI {
 
             switch (itemData.getITEM_ID()) {
                 case "PROMPT":
-                    builder.addIngredient(itemData.getCHARACTER(), new PlayerIncomingInvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData));
+                    builder.addIngredient(itemData.getCHARACTER(), new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData.getFactionName()));
                     break;
 
                 case "ACCEPT":

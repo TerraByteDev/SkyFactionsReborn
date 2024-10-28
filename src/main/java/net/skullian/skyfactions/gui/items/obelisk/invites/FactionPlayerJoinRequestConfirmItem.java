@@ -1,64 +1,33 @@
 package net.skullian.skyfactions.gui.items.obelisk.invites;
 
+import java.util.concurrent.CompletableFuture;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.faction.JoinRequestData;
 import net.skullian.skyfactions.gui.data.ItemData;
+import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.util.ErrorHandler;
-import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.ItemProvider;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
-public class FactionPlayerJoinRequestConfirmItem extends AbstractItem {
-
-    private String NAME;
-    private String SOUND;
-    private int PITCH;
-    private List<String> LORE;
-    private ItemStack STACK;
+public class FactionPlayerJoinRequestConfirmItem extends SkyItem {
     private JoinRequestData DATA;
 
     public FactionPlayerJoinRequestConfirmItem(ItemData data, ItemStack stack, JoinRequestData joinRequestData) {
-        this.NAME = data.getNAME();
-        this.SOUND = data.getSOUND();
-        this.PITCH = data.getPITCH();
-        this.LORE = data.getLORE();
-        this.STACK = stack;
+        super(data, stack, null, null);
+        
         this.DATA = joinRequestData;
     }
 
     @Override
-    public ItemProvider getItemProvider() {
-        ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME));
-
-        for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine));
-        }
-
-        return builder;
-    }
-
-
-    @Override
-    public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        event.setCancelled(true);
-
-        if (!SOUND.equalsIgnoreCase("none")) {
-            SoundUtil.playSound(player, SOUND, PITCH, 1);
-        }
+    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.getInventory().close();
 
         FactionAPI.getFaction(DATA.getFactionName()).whenComplete((faction, ex) -> {

@@ -17,7 +17,7 @@ public class ObeliskDefencePurchaseItem extends SkyItem {
     private Faction FACTION;
 
     public ObeliskDefencePurchaseItem(ItemData data, ItemStack stack, String type, Faction faction) {
-        super(data, stack, null);
+        super(data, stack, null, null);
         
         this.TYPE = type;
         this.FACTION = faction;

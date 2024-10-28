@@ -15,7 +15,7 @@ import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestConfirmItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestDenyItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestRevoke;
-import net.skullian.skyfactions.gui.items.obelisk.invites.PlayerJoinRequestPromptItem;
+import net.skullian.skyfactions.gui.items.obelisk.invites.InvitePromptItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.Gui;
@@ -52,7 +52,7 @@ public class PlayerOutgoingRequestManageUI {
             switch (itemData.getITEM_ID()) {
 
                 case "PROMPT":
-                    builder.addIngredient(itemData.getCHARACTER(), new PlayerJoinRequestPromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest));
+                    builder.addIngredient(itemData.getCHARACTER(), new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest.getFactionName()));
                     break;
 
                 case "ACCEPT":

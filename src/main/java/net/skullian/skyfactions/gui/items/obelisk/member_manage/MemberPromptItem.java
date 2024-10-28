@@ -10,18 +10,16 @@ import net.skullian.skyfactions.gui.items.impl.SkyItem;
 
 public class MemberPromptItem extends SkyItem {
 
-    private OfflinePlayer SUBJECT;
-
     public MemberPromptItem(ItemData data, ItemStack stack, OfflinePlayer player) {
-        super(data, stack, null);
-        
-        this.SUBJECT = player;
+        super(data, stack, null, List.of(player).toArray());
     }
 
     @Override
     public Object[] replacements() {
+        OfflinePlayer subject = (OfflinePlayer) getOptionals()[0];
+
         return List.of(
-            "%player_name%", SUBJECT.getName()
+            "%player_name%", subject.getName()
         ).toArray();
     }
 

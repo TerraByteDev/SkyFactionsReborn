@@ -20,16 +20,18 @@ public class ObeliskRuneItem extends AsyncSkyItem {
     private String TYPE;
 
     public ObeliskRuneItem(ItemData data, ItemStack stack, String type, Player player) {
-        super(data, stack, player, null);
+        super(data, stack, player, List.of(type).toArray());
 
         this.TYPE = type;
     }
 
     public Object[] replacements() {
+        String type = (String) getOptionals()[0];
+
         int runes = 0;
-        if (TYPE.equals("player")) {
+        if (type.equals("player")) {
             runes = RunesAPI.getRunes(getPLAYER().getUniqueId());
-        } else if (TYPE.equals("faction")) {
+        } else if (type.equals("faction")) {
             Faction faction = FactionAPI.getFaction(getPLAYER().getUniqueId()).join();
             if (faction != null) {
                 runes = faction.getRunes();

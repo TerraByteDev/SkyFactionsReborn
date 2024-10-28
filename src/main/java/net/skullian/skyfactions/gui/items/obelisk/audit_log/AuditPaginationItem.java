@@ -15,7 +15,7 @@ public class AuditPaginationItem extends SkyItem {
     private AuditLogData DATA;
 
     public AuditPaginationItem(ItemData data, ItemStack stack, AuditLogData auditData) {
-        super(data, stack, null);
+        super(data, stack, null, null);
         
         this.DATA = auditData;
     }

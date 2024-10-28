@@ -19,7 +19,7 @@ public class MemberBanItem extends SkyItem {
     private OfflinePlayer SUBJECT;
 
     public MemberBanItem(ItemData data, ItemStack stack, OfflinePlayer player) {
-        super(data, stack, null);
+        super(data, stack, null, null);
 
         this.SUBJECT = player;
     }

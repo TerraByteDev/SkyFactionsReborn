@@ -1,62 +1,41 @@
 package net.skullian.skyfactions.gui.items.obelisk.invites;
 
-import net.skullian.skyfactions.db.InviteData;
-import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.gui.obelisk.invites.PlayerManageIncomingInviteUI;
-import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
+import java.util.List;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.ItemProvider;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
 
-import java.util.List;
+import net.skullian.skyfactions.db.InviteData;
+import net.skullian.skyfactions.gui.data.ItemData;
+import net.skullian.skyfactions.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.gui.obelisk.invites.PlayerManageIncomingInviteUI;
 
-public class PlayerFactionInvitePaginationItem extends AbstractItem {
+public class PlayerFactionInvitePaginationItem extends SkyItem {
 
-    private String NAME;
-    private String SOUND;
-    private int PITCH;
-    private List<String> LORE;
-    private ItemStack STACK;
-    private OfflinePlayer SUBJECT;
     private InviteData DATA;
 
     public PlayerFactionInvitePaginationItem(ItemData data, ItemStack stack, OfflinePlayer player, InviteData inviteData) {
-        this.NAME = data.getNAME();
-        this.SOUND = data.getSOUND();
-        this.PITCH = data.getPITCH();
-        this.LORE = data.getLORE();
-        this.STACK = stack;
-        this.SUBJECT = player;
+        super(data, stack, null, List.of(inviteData).toArray());
+
         this.DATA = inviteData;
     }
 
     @Override
-    public ItemProvider getItemProvider() {
-        ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME));
+    public Object[] replacements() {
+        InviteData data = (InviteData) getOptionals()[0];
 
-        for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine.replace("%faction_name%", DATA.getFactionName()).replace("%player_name%", DATA.getInviter().getName())));
-        }
-
-        return builder;
+        return List.of(
+            "%faction_name%", data.getFactionName(),
+            "%player_name%", data.getInviter().getName()
+        ).toArray();
     }
 
     @Override
-    public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        event.setCancelled(true);
-
-        if (!SOUND.equalsIgnoreCase("none")) {
-            SoundUtil.playSound(player, SOUND, PITCH, 1);
-        }
-
+    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         PlayerManageIncomingInviteUI.promptPlayer(player, DATA);
     }
 

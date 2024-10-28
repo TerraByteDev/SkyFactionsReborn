@@ -1,7 +1,5 @@
 package net.skullian.skyfactions.gui.items.obelisk.notification;
 
-import java.util.List;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,7 +21,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
     private NotificationData DATA;
 
     public ObeliskNotificationPaginationItem(ItemData data, ItemStack stack, NotificationData inviteData) {
-        super(data, stack, null);
+        super(data, stack, null, null);
 
         this.DATA = inviteData;
     }
@@ -48,14 +46,6 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
         }
 
         return builder;
-    }
-
-    @Override
-    public Object[] replacements() {
-        return List.of(
-            "%timestamp%",
-            Messages.NOTIFICATION_TIMESTAMP_FORMAT.get("%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))
-        ).toArray();
     }
 
     @Override

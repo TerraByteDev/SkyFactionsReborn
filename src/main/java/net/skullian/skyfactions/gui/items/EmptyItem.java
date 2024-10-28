@@ -8,6 +8,6 @@ import net.skullian.skyfactions.gui.items.impl.SkyItem;
 public class EmptyItem extends SkyItem {
 
     public EmptyItem(ItemData data, ItemStack stack) {
-        super(data, stack, null);
+        super(data, stack, null, null);
     }
 }
