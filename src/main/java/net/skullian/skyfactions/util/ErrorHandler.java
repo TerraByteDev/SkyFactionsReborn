@@ -2,7 +2,6 @@ package net.skullian.skyfactions.util;
 
 import net.skullian.skyfactions.config.types.Messages;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class ErrorHandler {
 

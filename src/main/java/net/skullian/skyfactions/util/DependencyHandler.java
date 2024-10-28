@@ -5,6 +5,8 @@ import net.skullian.skyfactions.papi.PlaceholderManager;
 
 import java.util.ArrayList;
 
+import org.stringtemplate.v4.compiler.STParser.exprNoComma_return;
+
 
 public class DependencyHandler {
     public static ArrayList<String> enabledDeps = new ArrayList<>();
@@ -40,6 +42,15 @@ public class DependencyHandler {
             SLogger.info("Found {} installed on the server.", "\u001B[33mZNPCsPlus\u001B[34m");
             enabledDeps.add("ZNPCsPlus");
         } else alert("ZNPCsPlus");
+
+        if (isPluginEnabled("fancynpcs")) {
+            SLogger.info("Found {} installed on the server.", "\001B[33mFancyNPCs\u001B[34m");
+            enabledDeps.add("FancyNPCs");
+        }
+    }
+
+    public static boolean isEnabled(String name) {
+        return enabledDeps.contains(name);
     }
 
     private static boolean isPluginEnabled(String name) {

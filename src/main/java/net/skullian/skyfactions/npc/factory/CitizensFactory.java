@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.DespawnReason;
 import net.citizensnpcs.api.event.NPCClickEvent;
@@ -25,7 +26,7 @@ public class CitizensFactory implements SkyNPCFactory, Listener {
     }
 
     @Override
-    public SkyNPC create(String id, String name, Location location, String skin, EntityType entityType) {
+    public SkyNPC create(String id, String name, Location location, String skin, EntityType entityType, boolean isFaction) {
         NPC npc = CitizensAPI.getNPCRegistry().createNPC(entityType, name);
         npc.spawn(location);
 
@@ -35,24 +36,26 @@ public class CitizensFactory implements SkyNPCFactory, Listener {
             npc.getOrAddTrait(SkinTrait.class).setSkinName(skin);
         }
 
-        return new SkyCitizen(npc);
+        return new SkyCitizen(npc, isFaction);
     }
 
     @Override
     public SkyNPC getNPC(String id) {
         NPC npc = CitizensAPI.getNPCRegistry().getById(Integer.parseInt(id));
-        return npc == null ? null : new SkyCitizen(npc);
+        return npc == null ? null : new SkyCitizen(npc, false);
     }
 
     @EventHandler
     public void onInteract(NPCClickEvent event) {
-        SkyFactionsReborn.npcManager.onClick(new SkyCitizen(event.getNPC()), event.getClicker());
+        SkyFactionsReborn.npcManager.onClick(new SkyCitizen(event.getNPC(), false), event.getClicker());
     }
 
     @AllArgsConstructor
+    @Getter
     public static class SkyCitizen implements SkyNPC {
 
         private NPC npc;
+        private boolean faction;
 
         @Override
         public String getId() {

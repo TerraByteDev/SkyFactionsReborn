@@ -12,6 +12,7 @@ import de.oliver.fancynpcs.api.NpcData;
 import de.oliver.fancynpcs.api.events.NpcInteractEvent;
 import de.oliver.fancynpcs.api.utils.SkinFetcher;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.npc.SkyNPC;
 
@@ -23,7 +24,7 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
     }
 
     @Override
-    public SkyNPC create(String id, String name, Location location, String skin, EntityType entityType) {
+    public SkyNPC create(String id, String name, Location location, String skin, EntityType entityType, boolean isFaction) {
         NpcData data = new NpcData(id, null, location);
         SkinFetcher.SkinData fetched = new SkinFetcher.SkinData(skin, null, null);
         data.setType(entityType);
@@ -32,24 +33,26 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
         Npc npc = FancyNpcsPlugin.get().getNpcAdapter().apply(data);
         FancyNpcsPlugin.get().getNpcManager().registerNpc(npc);
 
-        return new SkyFancyNPC(npc);
+        return new SkyFancyNPC(npc, isFaction);
     }
 
     @Override
     public SkyNPC getNPC(String id) {
         Npc npc = FancyNpcsPlugin.get().getNpcManager().getNpc(id);
-        return npc == null ? null : new SkyFancyNPC(npc);
+        return npc == null ? null : new SkyFancyNPC(npc, false);
     }
 
     @EventHandler
     public void onInteract(NpcInteractEvent event) {
-        SkyFactionsReborn.npcManager.onClick(new SkyFancyNPC(event.getNpc()), event.getPlayer());
+        SkyFactionsReborn.npcManager.onClick(new SkyFancyNPC(event.getNpc(), false), event.getPlayer());
     }
     
     @AllArgsConstructor
+    @Getter
     public static class SkyFancyNPC implements SkyNPC {
 
-        private final Npc npc;
+        private Npc npc;
+        private boolean faction;
 
         @Override
         public String getId() {

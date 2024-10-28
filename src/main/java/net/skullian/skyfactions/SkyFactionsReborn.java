@@ -53,7 +53,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static WorldBorderApi worldBorderApi;
     public static CacheService cacheService;
     public static BrokenBlockService blockService = new BrokenBlockService();
-    public static NPCManager npcManager = new NPCManager();
+    public static NPCManager npcManager;
 
     private void print() {
         ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
@@ -86,7 +86,10 @@ public final class SkyFactionsReborn extends JavaPlugin {
         configHandler = new ConfigFileHandler();
         configHandler.loadFiles(this); // Load all files (and create them if they don't exist already).
 
-        SLogger.info("Loading InvLib Instance");
+        SLogger.info("Initialising NPC Manager.");
+        npcManager = new NPCManager();
+
+        SLogger.info("Loading InvLib Instance.");
         InvUI.getInstance().setPlugin(this);
 
         SLogger.info("Initialising Cache Service.");

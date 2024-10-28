@@ -10,7 +10,7 @@ public interface SkyNPCFactory {
 
     boolean isNPC(Entity entity);
 
-    SkyNPC create(String id, String name, Location location, String skin, EntityType entityType);
+    SkyNPC create(String id, String name, Location location, String skin, EntityType entityType, boolean isFaction);
 
     SkyNPC getNPC(String id);
     
