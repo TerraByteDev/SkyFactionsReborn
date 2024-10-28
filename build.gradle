@@ -128,7 +128,7 @@ dependencies {
     compileOnly('net.citizensnpcs:citizens-main:2.0.36-SNAPSHOT')
     errorprone("com.google.errorprone:error_prone_core:2.35.1")
 	compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
-    compileOnly("de.oliver:FancyNpcs:2.3.1.217")
+    compileOnly("de.oliver:FancyNpcs:2.3.1")
 
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
