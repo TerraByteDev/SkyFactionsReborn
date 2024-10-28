@@ -1,24 +1,20 @@
 package net.skullian.skyfactions.api;
 
-import net.kyori.adventure.text.Component;
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.util.text.TextUtility;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
-import java.util.stream.Collectors;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.util.text.TextUtility;
 
 public class GemsAPI {
 

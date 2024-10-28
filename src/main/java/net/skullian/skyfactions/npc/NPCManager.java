@@ -3,12 +3,14 @@ package net.skullian.skyfactions.npc;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.npc.factory.CitizensFactory;
@@ -30,9 +32,41 @@ public class NPCManager {
     }
     
     public void onClick(SkyNPC npc, Player player) {
+        boolean isFaction = playerNPCs.containsKey(npc); // sketchy, but it works (i hope 😭)
 
-        List<String> configs;
+        if (isFaction) {
+            Faction faction = Objects.requireNonNull(factionNPCs.get(npc));
+
+            if (!faction.isInFaction(player.getUniqueId())) {
+                Messages.NPC_ACCESS_DENY.send(player);
+                return;
+            }
+
+            process(Settings.NPC_FACTION_ISLANDS_ACTIONS.getList());
+        } else {
+            UUID owner = Objects.requireNonNull(playerNPCs.get(npc));
+
+            if (!owner.equals(player.getUniqueId())) {
+                Messages.NPC_ACCESS_DENY.send(player);
+                return;
+            }
+
+            process(Settings.NPC_PLAYER_ISLANDS_ACTIONS.getList());
+        }
+    }
+
+    public void spawnNPC(UUID playerUUID) {
         
+    }
+
+    private void process(List<String> actions) {
+        for (String action : actions) {
+
+            switch(action) {
+
+            }
+
+        }
     }
 
     private SkyNPCFactory getFactory() {

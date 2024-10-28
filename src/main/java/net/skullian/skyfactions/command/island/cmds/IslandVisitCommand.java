@@ -1,20 +1,13 @@
 package net.skullian.skyfactions.command.island.cmds;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.api.RaidAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.island.IslandCommandHandler;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.util.ErrorHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -24,10 +17,17 @@ import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.stream.Collectors;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.api.RaidAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.island.IslandCommandHandler;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("island")
 public class IslandVisitCommand extends CommandTemplate {
@@ -115,7 +115,7 @@ public class IslandVisitCommand extends CommandTemplate {
                             IslandAPI.handlePlayerJoinBorder(player, is); // shift the worldborder
                             IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
 
-                            IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, target.getUniqueId());
+                            IslandAPI.onIslandLoad(target.getUniqueId());
                         } else {
                             Messages.PLAYER_NOT_TRUSTED.send(player);
                         }

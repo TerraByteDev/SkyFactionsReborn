@@ -284,7 +284,7 @@ public class FactionAPI {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
-            }
+            } else if (operation == DefenceOperation.DISABLE && !isLocationInRegion(player.getLocation(), faction.getName())) return;
 
             List<Defence> defences = DefenceHandler.loadedFactionDefences.get(faction.getName());
             if (defences != null && !defences.isEmpty()) {

@@ -29,7 +29,6 @@ public class NotificationAPI {
             }
             if (faction != null && !factionInviteStore.containsKey(faction.getName())) {
                 DefenceHandler.addPlacedDefences(faction.getName());
-                FactionAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, player);
 
                 faction.getJoinRequests().whenComplete((requests, exc) -> {
                     if (exc != null) {

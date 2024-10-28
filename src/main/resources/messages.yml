@@ -131,6 +131,10 @@ Messages:
 
     UNLINK_SUCCESS: "%server_name%&r&7 You have unlinked your discord account. You will no longer receive raid notifications on Discord."
 
+  NPC:
+    # Sent when a player tries to access someone else's NPC (e.g. when visiting).
+    NPC_ACCESS_DENY: "%server_name%&c&l Hey!&r&7 You do not have access to this NPC!"
+
   Raiding:
     # Display Name of the raid confirmation GUI item (after player executes /raid)
     RAID_CONFIRMATION_NAME: "&a&lConfirm"

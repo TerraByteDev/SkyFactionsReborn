@@ -1,5 +1,20 @@
 package net.skullian.skyfactions.api;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -20,6 +35,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
@@ -31,26 +47,19 @@ import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.FileUtil;
 import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.SoundUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-
 
 public class IslandAPI {
 
+    public static Map<UUID, PlayerIsland> islands = new HashMap<>();
     public static HashSet<UUID> awaitingDeletion = new HashSet<>();
 
     public static CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
-        return SkyFactionsReborn.databaseHandler.getPlayerIsland(playerUUID);
+        if (islands.containsKey(playerUUID)) return CompletableFuture.completedFuture(islands.get(playerUUID));
+        return SkyFactionsReborn.databaseHandler.getPlayerIsland(playerUUID).thenApply((island) -> {
+            islands.put(playerUUID, island);
+
+            return island;
+        });
     }
 
     // for PlaceholderAPI
@@ -92,6 +101,8 @@ public class IslandAPI {
                 removePlayerIsland(player);
                 return;
             }
+
+            islands.put(player.getUniqueId(), island);
 
             IslandAPI.handlePlayerJoinBorder(player, island); // shift join border
             teleportPlayerToLocation(player, island.getCenter(world));
@@ -171,7 +182,7 @@ public class IslandAPI {
     }
 
     public static void removePlayerIsland(Player player) {
-        SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
+        getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
@@ -212,7 +223,22 @@ public class IslandAPI {
         });
     }
 
+    public static void onIslandLoad(UUID playerUUID) {
+        modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, playerUUID);
+
+        getPlayerIsland(playerUUID).whenComplete((island, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return;
+            }
+
+            SkyFactionsReborn.npcManager.spawnNPC(playerUUID);
+        });
+    }
+
     public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID) {
+        if (operation == FactionAPI.DefenceOperation.DISABLE && !FactionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), playerUUID.toString())) return;
+
         List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(playerUUID);
         if (defences == null || defences.isEmpty()) return;
 

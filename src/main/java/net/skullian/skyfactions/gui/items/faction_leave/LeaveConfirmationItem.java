@@ -72,7 +72,7 @@ public class LeaveConfirmationItem extends AbstractItem {
                 if (world != null) {
                     if (FactionAPI.isInRegion(player, faction.getName())) {
 
-                        SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).whenComplete((island, exc) -> {
+                        IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, exc) -> {
                             if (exc != null) {
                                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", exc);
                                 return;

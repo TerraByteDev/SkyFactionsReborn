@@ -1,15 +1,17 @@
 package net.skullian.skyfactions.api;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.title.Title;
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.db.IslandRaidData;
-import net.skullian.skyfactions.util.ErrorHandler;
-import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,13 +19,16 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.db.IslandRaidData;
+import net.skullian.skyfactions.npc.factory.CitizensFactory.SkyCitizen;
+import net.skullian.skyfactions.util.SoundUtil;
+import net.skullian.skyfactions.util.text.TextUtility;
 
 
 public class RaidAPI {
@@ -92,7 +97,7 @@ public class RaidAPI {
             alertPlayer(def, attacker);
             teleportToPreparationArea(def);
 
-            SkyFactionsReborn.databaseHandler.getPlayerIsland(def.getUniqueId()).thenAccept(is -> SkyFactionsReborn.databaseHandler.setIslandCooldown(is, System.currentTimeMillis())).exceptionally(ex -> {
+            IslandAPI.getPlayerIsland(def.getUniqueId()).thenAccept(is -> SkyFactionsReborn.databaseHandler.setIslandCooldown(is, System.currentTimeMillis())).exceptionally(ex -> {
                 cancel.set(true);
 
                 ex.printStackTrace();
@@ -106,7 +111,7 @@ public class RaidAPI {
 
             Bukkit.getScheduler().runTaskLater(SkyFactionsReborn.getInstance(), () -> {
                 if (!def.isOnline()) return;
-                SkyFactionsReborn.databaseHandler.getPlayerIsland(def.getUniqueId()).thenAccept(island -> {
+                IslandAPI.getPlayerIsland(def.getUniqueId()).thenAccept(island -> {
                     World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                     if (islandWorld != null && island != null) {
                         Location returnLoc = island.getCenter(islandWorld);
@@ -250,7 +255,7 @@ public class RaidAPI {
         SkyFactionsReborn.databaseHandler.addGems(player.getUniqueId(), Settings.RAIDING_COST.getInt()).join();
 
         if (isDefendant) {
-            SkyFactionsReborn.databaseHandler.getPlayerIsland(player.getUniqueId()).thenAccept(island -> SkyFactionsReborn.databaseHandler.setIslandCooldown(island, 0).exceptionally(ex -> {
+            IslandAPI.getPlayerIsland(player.getUniqueId()).thenAccept(island -> SkyFactionsReborn.databaseHandler.setIslandCooldown(island, 0).exceptionally(ex -> {
                 ex.printStackTrace();
                 Messages.ERROR.send(player, "%operation%", "handle raid errors", "%debug%", "SQL_ISLAND_COOLDOWN");
                 return null;

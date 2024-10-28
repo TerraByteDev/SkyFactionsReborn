@@ -130,7 +130,7 @@ public class Faction {
      *
      * @param addition Amount of runes to add [{@link Integer}]
      */
-    public void addRunes (int addition) {
+    public void addRunes(int addition) {
         runes += addition;
         SkyFactionsReborn.cacheService.addRunes(this, addition);
     }
@@ -376,6 +376,12 @@ public class Faction {
         );
     }
 
+    /*
+     * Get the configured rank title of a member.
+     * @param playerUUID UUID of the player {@link UUID}
+     * 
+     * @return The rank of the player. {@link String}
+     */
     public String getRank(UUID playerUUID) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         if (owner.equals(player)) return TextUtility.color(Messages.FACTION_OWNER_TITLE.getString());
@@ -385,6 +391,11 @@ public class Faction {
         if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString());
 
         return "UNKNOWN";
+    }
+
+    public boolean isInFaction(UUID playerUUID) {
+        return getAllMembers().stream()
+            .anyMatch(player -> player.getUniqueId().equals(playerUUID));
     }
 
     private void cache(OfflinePlayer player, String oldRank, RankType newType) {

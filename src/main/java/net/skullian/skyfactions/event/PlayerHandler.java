@@ -44,7 +44,7 @@ public class PlayerHandler implements Listener {
 
         IslandAPI.cacheData(event.getPlayer());
 
-        SkyFactionsReborn.databaseHandler.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
+        IslandAPI.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
                 SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
                 ex.printStackTrace();
@@ -84,7 +84,7 @@ public class PlayerHandler implements Listener {
     public void playerRespawn(PlayerRespawnEvent event) {
         if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
             if (FactionAPI.isLocationInRegion(event.getPlayer().getLocation(), event.getPlayer().getUniqueId().toString())) IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
-            SkyFactionsReborn.databaseHandler.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
+            IslandAPI.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
                 if (ex != null) {
                     SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
                     ex.printStackTrace();

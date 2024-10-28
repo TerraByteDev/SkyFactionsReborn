@@ -1,13 +1,8 @@
 package net.skullian.skyfactions.api;
 
-import com.jeff_media.customblockdata.CustomBlockData;
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.defence.Defence;
-import net.skullian.skyfactions.defence.DefencesFactory;
-import net.skullian.skyfactions.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.event.DefenceHandler;
-import net.skullian.skyfactions.util.text.TextUtility;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -17,8 +12,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.jeff_media.customblockdata.CustomBlockData;
+
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.defence.Defence;
+import net.skullian.skyfactions.defence.DefencesFactory;
+import net.skullian.skyfactions.defence.struct.DefenceStruct;
+import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.util.text.TextUtility;
 
 public class DefenceAPI {
 
