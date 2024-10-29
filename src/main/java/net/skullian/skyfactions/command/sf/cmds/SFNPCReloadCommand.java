@@ -40,7 +40,7 @@ public class SFNPCReloadCommand extends CommandTemplate {
         if ((sender instanceof Player) &&!CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 
-        SLogger.warn("[{}] is disabling SkyFactions NPCs.", sender.getName());
+        SLogger.warn("[{}] is reloading SkyFactions NPCs.", sender.getName());
         Messages.NPC_RELOADING.send(sender);
 
         SkyFactionsReborn.npcManager.updateNPCs(false).whenComplete((affected, exc) -> {
