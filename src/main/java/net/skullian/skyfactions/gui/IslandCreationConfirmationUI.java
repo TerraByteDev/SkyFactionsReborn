@@ -29,7 +29,7 @@ public class IslandCreationConfirmationUI {
 
                 Window window = Window.single()
                         .setViewer(player)
-                        .setTitle(TextUtility.color(data.getTITLE()))
+                        .setTitle(TextUtility.color(data.getTITLE(), player))
                         .setGui(gui)
                         .build();
 

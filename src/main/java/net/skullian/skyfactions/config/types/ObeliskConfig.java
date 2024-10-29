@@ -45,9 +45,9 @@ public enum ObeliskConfig {
     }
 
     public static ItemBuilder getLoadingItem() {
-        ItemBuilder builder = new ItemBuilder(Material.getMaterial(LOADING_ITEM_MATERIAL.getString())).setDisplayName(TextUtility.color(LOADING_ITEM_TEXT.getString()));
+        ItemBuilder builder = new ItemBuilder(Material.getMaterial(LOADING_ITEM_MATERIAL.getString())).setDisplayName(TextUtility.color(LOADING_ITEM_TEXT.getString(), null));
         for (String str : LOADING_ITEM_LORE.getList()) {
-            builder.addLoreLines(TextUtility.color(str));
+            builder.addLoreLines(TextUtility.color(str, null));
         }
 
         return builder;

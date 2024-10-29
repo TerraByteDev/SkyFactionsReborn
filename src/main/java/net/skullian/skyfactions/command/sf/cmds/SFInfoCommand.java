@@ -45,7 +45,8 @@ public class SFInfoCommand extends CommandTemplate {
                 "&3Version: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getVersion() + "{/#00B0CA}&r\n" +
                         "&3Authors: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "") + "{/#00B0CA}&r\n" +
                         "&3Discord: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getWebsite() + "{/#00B0CA}&r\n" +
-                        "&3Contributors: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getContributors().toString().replace("[", "").replace("]", "") + "{/#00B0CA}&r"
+                        "&3Contributors: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getContributors().toString().replace("[", "").replace("]", "") + "{/#00B0CA}&r",
+                        sender instanceof Player ? (Player) sender : null
         ));
         Messages.COMMAND_HEAD.send(sender);
     }

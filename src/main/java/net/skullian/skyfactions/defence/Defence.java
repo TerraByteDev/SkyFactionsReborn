@@ -141,15 +141,15 @@ public abstract class Defence {
         if (DefenceHandler.hologramsMap.containsKey(getHologramID(data.getUUIDFactionName()))) {
             TextHologram holo = DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName()));
 
-            String text = TextUtility.color(String.join("\n", struct.getHOLOGRAM_LIST()));
+            String text = TextUtility.color(String.join("\n", struct.getHOLOGRAM_LIST()), null);
 
             if (getData().getAMMO() == 0 && !this.noAmmoNotified) {
-                text = struct.isAPPEND_OUT_OF_STOCK_TO_TOP() ? TextUtility.color(struct.getOUT_OF_STOCK_HOLOGRAM() + "\n" + text) : TextUtility.color(text + "\n" + struct.getOUT_OF_STOCK_HOLOGRAM());
+                text = struct.isAPPEND_OUT_OF_STOCK_TO_TOP() ? TextUtility.color(struct.getOUT_OF_STOCK_HOLOGRAM() + "\n" + text, null) : TextUtility.color(text + "\n" + struct.getOUT_OF_STOCK_HOLOGRAM(), null);
                 this.noAmmoNotified = true;
             }
 
             if (getData().getDURABILITY() < 100) {
-                text = struct.isAPPEND_DURABILITY_AT_TOP() ? TextUtility.color(struct.getDURABILITY_HOLOGRAM() + "\n" + text) : TextUtility.color(text + "\n" + struct.getDURABILITY_HOLOGRAM());
+                text = struct.isAPPEND_DURABILITY_AT_TOP() ? TextUtility.color(struct.getDURABILITY_HOLOGRAM() + "\n" + text, null) : TextUtility.color(text + "\n" + struct.getDURABILITY_HOLOGRAM(), null);
             }
 
             holo.setText(text);
@@ -316,7 +316,7 @@ public abstract class Defence {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
 
         TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName())
-                .setText(TextUtility.color(text.replace("%defence_name%", defence.getNAME())))
+                .setText(TextUtility.color(text.replace("%defence_name%", defence.getNAME()), null))
                 .setBillboard(Display.Billboard.VERTICAL)
                 .setSeeThroughBlocks(false)
                 .setShadow(true)

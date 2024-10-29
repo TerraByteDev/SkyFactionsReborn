@@ -196,7 +196,7 @@ public class RaidAPI {
 
         if (player.isOnline()) {
             for (String msg : alertList) {
-                player.sendMessage(TextUtility.color(msg.replace("%player_name%", player.getName()).replace("%raider%", attacker.getName())));
+                player.sendMessage(TextUtility.color(msg.replace("%player_name%", player.getName()).replace("%raider%", attacker.getName()), player));
             }
         }
     }
@@ -219,7 +219,7 @@ public class RaidAPI {
                 int length = Settings.RAIDING_COUNTDOWN_DURATION.getInt();
                 String countdown_sound = Settings.COUNTDOWN_SOUND.getString();
                 int countdown_pitch = Settings.COUNTDOWN_SOUND_PITCH.getInt();
-                final Component subtitle = Component.text(TextUtility.color(Settings.RAIDING_COUNTDOWN_SUBTITLE.getString()));
+                final Component subtitle = Component.text(TextUtility.color(Settings.RAIDING_COUNTDOWN_SUBTITLE.getString(), defp));
                 Thread.sleep(3500);
                 for (int i = length; i == 0; i--) {
                     final Component mainTitle = Component.text(i + 1, NamedTextColor.RED);

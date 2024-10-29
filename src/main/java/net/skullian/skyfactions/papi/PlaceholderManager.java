@@ -57,33 +57,33 @@ public class PlaceholderManager extends PlaceholderExpansion {
         } else if (params.equalsIgnoreCase("player_faction")) {
             if (player == null || !player.hasPlayedBefore()) return "UNKNOWN PLAYER";
             if (FactionAPI.factionCache.containsKey(player.getUniqueId())) return String.valueOf(FactionAPI.factionCache.get(player.getUniqueId()).getName());
-                else return TextUtility.color("&cN/A");
+                else return TextUtility.color("&cN/A", player);
 
         } else if (params.equalsIgnoreCase("faction_runes")) {
             if (player == null || !player.hasPlayedBefore()) return "UNKNOWN PLAYER";
             if (FactionAPI.factionCache.containsKey(player.getUniqueId())) return String.valueOf(FactionAPI.factionCache.get(player.getUniqueId()).getRunes());
-                else return TextUtility.color("&cN/A");
+                else return TextUtility.color("&cN/A", player);
 
         } else if (params.toLowerCase().startsWith("faction_runes_")) {
             String factionName = params.toLowerCase().replace("faction_runes_", "");
             if (FactionAPI.factionNameCache.containsKey(factionName)) return String.valueOf(FactionAPI.factionNameCache.get(factionName).getRunes());
                 else FactionAPI.getFaction(factionName);
 
-            return TextUtility.color("&eLoading...");
+            return TextUtility.color("&eLoading...", player);
         } else if (params.equalsIgnoreCase("faction_gems")) {
             if (player == null) return "UNKNOWN PLAYER";
             if (FactionAPI.factionCache.containsKey(player.getUniqueId())) return String.valueOf(FactionAPI.factionCache.get(player.getUniqueId()).getGems());
-                else return TextUtility.color("&cN/A");
+                else return TextUtility.color("&cN/A", player);
         } else if (params.toLowerCase().startsWith("faction_gems_")) {
             String factionName = params.toLowerCase().replace("faction_gems_", "");
             if (FactionAPI.factionNameCache.containsKey(factionName)) return String.valueOf(FactionAPI.factionNameCache.get(factionName).getGems());
                 else FactionAPI.getFaction(factionName);
 
-            return TextUtility.color("&eLoading...");
+            return TextUtility.color("&eLoading...", player);
         } else if (params.equalsIgnoreCase("faction_rank")) {
             if (player == null) return "UNKNOWN PLAYER";
-            if (FactionAPI.factionCache.containsKey(player.getUniqueId())) return TextUtility.color(FactionAPI.factionCache.get(player.getUniqueId()).getRank(player.getUniqueId()));
-                else return TextUtility.color("&cN/A");
+            if (FactionAPI.factionCache.containsKey(player.getUniqueId())) return TextUtility.color(FactionAPI.factionCache.get(player.getUniqueId()).getRank(player.getUniqueId()), player);
+                else return TextUtility.color("&cN/A", player);
         }
         return null;
     }

@@ -270,15 +270,15 @@ public class DefencesFactory {
             faction.subtractRunes(defence.getBUY_COST());
             player.getInventory().addItem(stack);
             SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
-            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME()));
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME(), player));
 
-            faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_PURCHASE, "%player_name%", player.getName(), "%defence_name%", TextUtility.color(defence.getNAME()));
+            faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_PURCHASE, "%player_name%", player.getName(), "%defence_name%", TextUtility.color(defence.getNAME(), player));
         } else {
 
             RunesAPI.removeRunes(player.getUniqueId(), defence.getBUY_COST());
             player.getInventory().addItem(stack);
             SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
-            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME()));
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME(), player));
         }
     }
 

@@ -10,8 +10,8 @@ import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.gui.items.GeneralCancelItem;
 import net.skullian.skyfactions.gui.items.EmptyItem;
+import net.skullian.skyfactions.gui.items.GeneralCancelItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.defence.ObeliskConfirmPurchaseItem;
 import net.skullian.skyfactions.gui.items.obelisk.defence.ObeliskPaginatedDefenceItem;
@@ -30,7 +30,7 @@ public class ObeliskPurchaseDefenceUI {
 
             Window window = Window.single()
                     .setViewer(player)
-                    .setTitle(TextUtility.color(data.getTITLE()))
+                    .setTitle(TextUtility.color(data.getTITLE(), player))
                     .setGui(gui)
                     .build();
 

@@ -23,7 +23,7 @@ public class AuditPaginationItem extends SkyItem {
     @Override
     public ItemProvider getItemProvider() {
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.color(getDATA().getNAME().replace("%audit_title%", DATA.getType())));
+                .setDisplayName(TextUtility.color(getDATA().getNAME().replace("%audit_title%", DATA.getType()), getPLAYER()));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("%audit_description%")) {
@@ -35,7 +35,8 @@ public class AuditPaginationItem extends SkyItem {
             }
 
             builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%timestamp%", Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.get("%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp())))
+                    .replace("%timestamp%", Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.get("%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+                    getPLAYER()
             ));
         }
 

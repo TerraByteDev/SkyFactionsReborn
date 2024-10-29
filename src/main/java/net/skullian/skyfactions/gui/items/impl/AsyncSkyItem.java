@@ -46,7 +46,11 @@ public abstract class AsyncSkyItem implements Item {
                 @Override
                 public @NotNull ItemStack get(@Nullable String s) {
                     ItemBuilder builder = new ItemBuilder(stack)
-                        .setDisplayName(replace(TextUtility.color(data.getNAME()), replacements()));
+                        .setDisplayName(replace(TextUtility.color(data.getNAME(), PLAYER), replacements()));
+                    
+                    for (String loreLine : data.getLORE()) {
+                        builder.addLoreLines(TextUtility.color(loreLine, PLAYER));
+                    }
 
                     return process(builder).get();
                 }

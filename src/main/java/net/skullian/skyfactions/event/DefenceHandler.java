@@ -101,7 +101,7 @@ public class DefenceHandler implements Listener {
                     Block belowBlock = placed.getWorld().getBlockAt(belowLoc);
                     if (!isAllowedBlock(belowBlock, defence)) {
                         event.setCancelled(true);
-                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString())));
+                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString()), player));
                         return;
                     }
 
@@ -209,8 +209,7 @@ public class DefenceHandler implements Listener {
     public void onProjectileEntityHit(ProjectileHitEvent event) {
         if (event.getHitEntity() == null) return;
 
-        if (!(event.getHitEntity() instanceof LivingEntity)) return;
-        LivingEntity hitEntity = (LivingEntity) event.getHitEntity();
+        if (!(event.getHitEntity() instanceof LivingEntity hitEntity)) return;
 
         NamespacedKey damageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-damage");
         NamespacedKey messageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "damage-message");
@@ -227,7 +226,7 @@ public class DefenceHandler implements Listener {
 
             if (hitEntity.getType().equals(EntityType.PLAYER) && container.has(messageKey, PersistentDataType.STRING)) {
                 String message = container.get(messageKey, PersistentDataType.STRING);
-                hitEntity.sendMessage(TextUtility.color(message));
+                hitEntity.sendMessage(TextUtility.color(message, (Player) hitEntity));
             }
         }
     }
@@ -243,7 +242,7 @@ public class DefenceHandler implements Listener {
             String deathMessage = data.getDEATH_MESSAGE();
             event.setDeathMessage(TextUtility.color(deathMessage
                     .replaceAll("%player_name%", player.getName())
-                    .replaceAll("%defender%", "DEFENDER_NAME")));
+                    .replaceAll("%defender%", "DEFENDER_NAME"), player));
 
             removeDeadEntity(event.getPlayer(), data);
         }

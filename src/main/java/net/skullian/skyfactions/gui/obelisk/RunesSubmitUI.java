@@ -35,7 +35,7 @@ public class RunesSubmitUI {
 
             Window window = Window.single()
                     .setViewer(player)
-                    .setTitle(TextUtility.color(data.getTITLE()))
+                    .setTitle(TextUtility.color(data.getTITLE(), player))
                     .addCloseHandler(new Runnable() {
                         @Override
                         public void run() {

@@ -73,10 +73,10 @@ public class GemsAPI {
 
         ItemMeta meta = stack.getItemMeta();
         if (Settings.GEMS_CUSTOM_MODEL_DATA.getInt() != -1) meta.setCustomModelData(Settings.GEMS_CUSTOM_MODEL_DATA.getInt());
-        meta.setDisplayName(TextUtility.color(Settings.GEMS_ITEM_NAME.getString()));
+        meta.setDisplayName(TextUtility.color(Settings.GEMS_ITEM_NAME.getString(), null));
         if (!Settings.GEMS_ITEM_LORE.getList().isEmpty()) meta.setLore(
                 Settings.GEMS_ITEM_LORE.getList().stream()
-                        .map(TextUtility::color)
+                        .map(text -> TextUtility.color(text, null))
                         .collect(Collectors.toList())
         );
 

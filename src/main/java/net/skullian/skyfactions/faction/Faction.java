@@ -115,7 +115,7 @@ public class Faction {
      * @param message Message to broadcast [{@link String}]
      */
     public void createBroadcast(OfflinePlayer broadcaster, String message) {
-        String formatted = TextUtility.color(message).replace("%broadcaster%", broadcaster.getName());
+        String formatted = TextUtility.color(message, broadcaster).replace("%broadcaster%", broadcaster.getName());
         List<OfflinePlayer> players = getAllMembers();
         for (OfflinePlayer player : players) {
             if (player.isOnline()) {
@@ -384,11 +384,11 @@ public class Faction {
      */
     public String getRank(UUID playerUUID) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
-        if (owner.equals(player)) return TextUtility.color(Messages.FACTION_OWNER_TITLE.getString());
-        if (admins.contains(player)) return TextUtility.color(Messages.FACTION_ADMIN_TITLE.getString());
-        if (moderators.contains(player)) return TextUtility.color(Messages.FACTION_MODERATOR_TITLE.getString());
-        if (fighters.contains(player)) return TextUtility.color(Messages.FACTION_FIGHTER_TITLE.getString());
-        if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString());
+        if (owner.equals(player)) return TextUtility.color(Messages.FACTION_OWNER_TITLE.getString(), player);
+        if (admins.contains(player)) return TextUtility.color(Messages.FACTION_ADMIN_TITLE.getString(), player);
+        if (moderators.contains(player)) return TextUtility.color(Messages.FACTION_MODERATOR_TITLE.getString(), player);
+        if (fighters.contains(player)) return TextUtility.color(Messages.FACTION_FIGHTER_TITLE.getString(), player);
+        if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString(), player);
 
         return "UNKNOWN";
     }

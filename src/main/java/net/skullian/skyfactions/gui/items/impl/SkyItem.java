@@ -38,10 +38,10 @@ public abstract class SkyItem implements Item {
     @Override
     public ItemProvider getItemProvider() {
         ItemBuilder builder = new ItemBuilder(STACK)
-            .setDisplayName(replace(TextUtility.color(DATA.getNAME())));
+            .setDisplayName(replace(TextUtility.color(DATA.getNAME(), getPLAYER())));
 
         for (String loreLine : DATA.getLORE()) {
-            builder.addLoreLines(replace(TextUtility.color(loreLine), replacements()));
+            builder.addLoreLines(replace(TextUtility.color(loreLine, getPLAYER()), replacements()));
         }
 
         return process(builder);

@@ -34,7 +34,7 @@ public class DefenceAPI {
         NamespacedKey nameKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
 
         ItemMeta meta = stack.getItemMeta();
-        meta.setDisplayName(TextUtility.color(defence.getNAME()));
+        meta.setDisplayName(TextUtility.color(defence.getNAME(), null));
         meta.getPersistentDataContainer().set(nameKey, PersistentDataType.STRING, defence.getIDENTIFIER());
 
         meta.setLore(getFormattedLore(defence, defence.getITEM_LORE()));
@@ -81,7 +81,7 @@ public class DefenceAPI {
                     .replace("%cooldown%", cooldown)
                     .replace("%healing%", healing)
                     .replace("%distance%", distance)
-                    .replace("%cost%", String.valueOf(struct.getBUY_COST()))));
+                    .replace("%cost%", String.valueOf(struct.getBUY_COST())), null));
         }
 
         return newLore;

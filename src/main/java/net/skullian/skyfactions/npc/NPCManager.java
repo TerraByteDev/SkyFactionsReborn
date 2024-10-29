@@ -8,9 +8,13 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.m;
+import org.eclipse.aether.impl.OfflineController;
 
+import io.lumine.mythic.bukkit.BukkitAPIHelper;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
@@ -47,7 +51,7 @@ public class NPCManager {
                 return;
             }
 
-            process(Settings.NPC_FACTION_ISLANDS_ACTIONS.getList());
+            process(Settings.NPC_FACTION_ISLANDS_ACTIONS.getList(), player);
         } else {
             UUID owner = Objects.requireNonNull(playerNPCs.get(npc));
 
@@ -56,16 +60,17 @@ public class NPCManager {
                 return;
             }
 
-            process(Settings.NPC_PLAYER_ISLANDS_ACTIONS.getList());
+            process(Settings.NPC_PLAYER_ISLANDS_ACTIONS.getList(), player);
         }
     }
 
     public void spawnNPC(UUID playerUUID, PlayerIsland island) {
         if (playerNPCs.containsValue(playerUUID)) return;
-
+        
+        OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         SkyNPC npc = factory.create(
             Integer.toString(island.getId()),
-            TextUtility.color(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("%player_name%", Bukkit.getOfflinePlayer(playerUUID).getName())),
+            TextUtility.color(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("%player_name%", player.getName()), player),
             getOffsetLocation(island.getCenter(Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString())), Settings.NPC_PLAYER_ISLANDS_OFFSET.getIntegerList()),
             Settings.NPC_PLAYER_ISLANDS_SKIN.getString().replace("%player_name%", Bukkit.getOfflinePlayer(playerUUID).getName()),
             EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()),
@@ -80,7 +85,7 @@ public class NPCManager {
 
         SkyNPC npc = factory.create(
             Integer.toString(island.getId()),
-            TextUtility.color(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("%faction_name%", faction.getName())),
+            TextUtility.color(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("%faction_name%", faction.getName()), null),
             getOffsetLocation(island.getCenter(Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString())), Settings.NPC_FACTION_ISLANDS_OFFSET.getIntegerList()),
             Settings.NPC_FACTION_ISLANDS_SKIN.getString().replace("%faction_owner%", faction.getOwner().getName()),
             EntityType.valueOf(Settings.NPC_FACTION_ISLANDS_ENTITY.getString()),
@@ -100,11 +105,28 @@ public class NPCManager {
         return center;
     }
 
-    private void process(List<String> actions) {
-        for (String action : actions) {
+    private void process(List<String> actions, Player player) {
+        for (String request : actions) {
+            String[] parts = request.split("\\[([^]]+)\\]: (.+)");
+            String action = parts[0].trim().toLowerCase();
+            String cmd = parts[1].trim();
 
             switch(action) {
 
+                case "[console]":
+                    Bukkit.dispatchCommand(
+                        Bukkit.getServer().getConsoleSender(),
+                        TextUtility.color(cmd, player)
+                    );
+                    break;
+                
+                case "[player]":
+                    player.performCommand(TextUtility.color(cmd, player));
+                    break;
+                
+                case "[message]":
+                    player.sendMessage(TextUtility.color(cmd, player));
+                    break;
             }
 
         }

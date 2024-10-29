@@ -1,12 +1,7 @@
 package net.skullian.skyfactions.event;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.api.NotificationAPI;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.util.SLogger;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -18,7 +13,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.List;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.api.NotificationAPI;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.util.SLogger;
 
 
 public class PlayerHandler implements Listener {
@@ -93,7 +94,6 @@ public class PlayerHandler implements Listener {
 
                 World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                 if (island != null && world != null) {
-                    System.out.println("DEBUG - TELEPORTING");
                     event.getPlayer().teleport(island.getCenter(world));
                 }
             });

@@ -1,20 +1,24 @@
 package net.skullian.skyfactions.util.text;
 
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.config.types.Settings;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.util.DependencyHandler;
+
 public class TextUtility {
 
-    public static String color(final String string) {
+    public static String color(String string, OfflinePlayer player) {
+        if (DependencyHandler.isEnabled("PlaceholderAPI")) string = PlaceholderAPI.setPlaceholders(player, string);
         return MiniMessage.miniMessage().deserialize(ColorAPI.process(string)).toString();
     }
 

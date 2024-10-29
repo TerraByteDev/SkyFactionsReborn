@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import net.kyori.adventure.text.Component;
 
 import java.util.List;
@@ -213,11 +215,11 @@ public enum Messages {
 
         String message;
         if (value == null) {
-            message = TextUtility.color(SERVER_NAME.get() + "&r&7 Message not found: " + this.path);
+            message = TextUtility.color(SERVER_NAME.get() + "&r&7 Message not found: " + this.path, null);
         } else {
             message = value instanceof List ? TextUtility.fromList((List<?>) value) : value.toString();
         }
-        return TextUtility.color(replace(message, replacements));
+        return TextUtility.color(replace(message, replacements), null);
     }
 
     public String getString() {
@@ -242,13 +244,13 @@ public enum Messages {
 
         String message;
         if (value == null) {
-            message = TextUtility.color(SERVER_NAME.get() + "&r&7 Message not found: " + this.path);
+            message = TextUtility.color(SERVER_NAME.get() + "&r&7 Message not found: " + this.path, null);
         } else {
             message = value instanceof List ? TextUtility.fromList((List<?>) value) : value.toString();
         }
 
         if (!message.isEmpty()) {
-            receiver.sendMessage(Component.text(TextUtility.color(replace(message, replacements))));
+            receiver.sendMessage(Component.text(TextUtility.color(replace(message, replacements), receiver instanceof Player ? (Player) receiver : null)));
         }
     }
 

@@ -29,7 +29,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
     @Override
     public ItemProvider getItemProvider() {
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.color(getDATA().getNAME().replace("%notification_title%", DATA.getTitle())));
+                .setDisplayName(TextUtility.color(getDATA().getNAME().replace("%notification_title%", DATA.getTitle()), getPLAYER()));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("%notification_description%")) {
@@ -41,7 +41,8 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
             }
 
             builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%timestamp%", Messages.NOTIFICATION_TIMESTAMP_FORMAT.get("%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp())))
+                    .replace("%timestamp%", Messages.NOTIFICATION_TIMESTAMP_FORMAT.get("%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+                    getPLAYER()
             ));
         }
 

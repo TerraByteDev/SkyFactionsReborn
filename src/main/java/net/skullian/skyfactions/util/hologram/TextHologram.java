@@ -264,7 +264,7 @@ public class TextHologram {
     }
 
     public TextHologram setText(String text) {
-        this.text = Component.text(TextUtility.color(text));
+        this.text = Component.text(TextUtility.color(text, null));
         return this;
     }
 

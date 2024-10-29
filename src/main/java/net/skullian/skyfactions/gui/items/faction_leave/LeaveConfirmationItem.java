@@ -1,14 +1,7 @@
 package net.skullian.skyfactions.gui.items.faction_leave;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.util.ErrorHandler;
-import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -17,49 +10,24 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.ItemProvider;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.AbstractItem;
 
-import java.util.List;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.gui.data.ItemData;
+import net.skullian.skyfactions.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.util.ErrorHandler;
 
-public class LeaveConfirmationItem extends AbstractItem {
-
-    private String NAME;
-    private String SOUND;
-    private int PITCH;
-    private List<String> LORE;
-    private ItemStack STACK;
+public class LeaveConfirmationItem extends SkyItem {
 
     public LeaveConfirmationItem(ItemData data, ItemStack stack) {
-        this.NAME = data.getNAME();
-        this.SOUND = data.getSOUND();
-        this.PITCH = data.getPITCH();
-        this.LORE = data.getLORE();
-        this.STACK = stack;
-    }
-
-    @Override
-    public ItemProvider getItemProvider() {
-        ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME));
-
-        for (String loreLine : LORE) {
-            builder.addLoreLines(TextUtility.color(loreLine));
-        }
-
-        return builder;
+        super(data, stack, null, null);
     }
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        event.setCancelled(true);
         event.getInventory().close();
-
-        if (!SOUND.equalsIgnoreCase("none")) {
-            SoundUtil.playSound(player, SOUND, PITCH, 1);
-        }
-
         // We do this again in case they get kicked before the confirmation.
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {

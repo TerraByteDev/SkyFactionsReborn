@@ -46,7 +46,7 @@ public class RaidResetCooldown extends CommandTemplate {
                 return;
             }
 
-            player.sendMessage(TextUtility.color("&aSuccessfully reset your raid cooldown."));
+            player.sendMessage(TextUtility.color("&aSuccessfully reset your raid cooldown.", player));
         });
     }
 

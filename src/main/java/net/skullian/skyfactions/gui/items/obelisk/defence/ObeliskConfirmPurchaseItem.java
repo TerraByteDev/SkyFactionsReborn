@@ -43,7 +43,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
         if (type.equals("faction")) {
             if (faction.getRunes() < struct.getBUY_COST()) {
                 for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList()) {
-                    builder.addLoreLines(TextUtility.color(line));
+                    builder.addLoreLines(TextUtility.color(line, getPLAYER()));
                 }
             }
         } else if (type.equals("player")) {
@@ -51,14 +51,14 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
             int runes = RunesAPI.getRunes(getPLAYER().getUniqueId());
             if (runes < struct.getBUY_COST()) {
                 for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList()) {
-                    builder.addLoreLines(TextUtility.color(line));
+                    builder.addLoreLines(TextUtility.color(line, getPLAYER()));
                 }
             }
         }
 
         if (getPLAYER().getInventory().firstEmpty() == -1) {
             for (String line : Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList()) {
-                builder.addLoreLines(TextUtility.color(line));
+                builder.addLoreLines(TextUtility.color(line, getPLAYER()));
             }
         }
 

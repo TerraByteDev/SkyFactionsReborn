@@ -31,7 +31,7 @@ public class MemberPaginationItem extends SkyItem {
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[1];
 
         if (subject.getUniqueId().equals(getPLAYER().getUniqueId())) {
-            builder.addLoreLines(TextUtility.color(Messages.FACTION_MANAGE_SELF_DENY_LORE.get()));
+            builder.addLoreLines(TextUtility.color(Messages.FACTION_MANAGE_SELF_DENY_LORE.get(), getPLAYER()));
         }
 
         return builder;
