@@ -59,7 +59,7 @@ public class FactionAPI {
 
         if (world != null) {
             IslandAPI.teleportPlayerToLocation(player, faction.getIsland().getCenter(world));
-            FactionAPI.modifyDefenceOperation(DefenceOperation.ENABLE, player);
+            onFactionLoad(faction, player);
         } else {
             Messages.ERROR.send(player, "%operation%", "teleport to your faction's island", "%debug%", "WORLD_NOT_EXIST");
         }
@@ -277,6 +277,11 @@ public class FactionAPI {
         }
 
         return false;
+    }
+
+    public static void onFactionLoad(Faction faction, Player player) {
+        SkyFactionsReborn.npcManager.spawnNPC(faction, faction.getIsland());
+        modifyDefenceOperation(DefenceOperation.ENABLE, player);
     }
 
     public static void modifyDefenceOperation(DefenceOperation operation, Player player) {

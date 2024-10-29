@@ -67,7 +67,7 @@ public class NPCManager {
             Integer.toString(island.getId()),
             TextUtility.color(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("%player_name%", Bukkit.getOfflinePlayer(playerUUID).getName())),
             getOffsetLocation(island.getCenter(Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString())), Settings.NPC_PLAYER_ISLANDS_OFFSET.getIntegerList()),
-            Settings.NPC_PLAYER_ISLANDS_SKIN.getString(),
+            Settings.NPC_PLAYER_ISLANDS_SKIN.getString().replace("%player_name%", Bukkit.getOfflinePlayer(playerUUID).getName()),
             EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()),
             false
         );
@@ -76,7 +76,18 @@ public class NPCManager {
     }
 
     public void spawnNPC(Faction faction, FactionIsland island) {
-        
+        if (factionNPCs.containsValue(faction)) return;
+
+        SkyNPC npc = factory.create(
+            Integer.toString(island.getId()),
+            TextUtility.color(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("%faction_name%", faction.getName())),
+            getOffsetLocation(island.getCenter(Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString())), Settings.NPC_FACTION_ISLANDS_OFFSET.getIntegerList()),
+            Settings.NPC_FACTION_ISLANDS_SKIN.getString().replace("%faction_owner%", faction.getOwner().getName()),
+            EntityType.valueOf(Settings.NPC_FACTION_ISLANDS_ENTITY.getString()),
+            true
+        );
+
+        factionNPCs.put(npc, faction);
     }
 
     private Location getOffsetLocation(Location center, List<Integer> offset) {
