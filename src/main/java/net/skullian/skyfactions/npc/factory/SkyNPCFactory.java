@@ -12,6 +12,6 @@ public interface SkyNPCFactory {
 
     SkyNPC create(String id, String name, Location location, String skin, EntityType entityType, boolean isFaction);
 
-    SkyNPC getNPC(String id);
+    SkyNPC getNPC(String id, boolean faction);
     
 }

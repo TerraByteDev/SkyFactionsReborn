@@ -1,24 +1,5 @@
 package net.skullian.skyfactions.db;
 
-import com.google.common.net.HostAndPort;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.faction.Faction;
-import net.skullian.skyfactions.faction.JoinRequestData;
-import net.skullian.skyfactions.island.FactionIsland;
-import net.skullian.skyfactions.island.PlayerIsland;
-import net.skullian.skyfactions.notification.NotificationData;
-import net.skullian.skyfactions.util.SLogger;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.sqlite.JDBC;
-
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,6 +11,27 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.sqlite.JDBC;
+
+import com.google.common.net.HostAndPort;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.faction.Faction;
+import net.skullian.skyfactions.faction.JoinRequestData;
+import net.skullian.skyfactions.island.FactionIsland;
+import net.skullian.skyfactions.island.PlayerIsland;
+import net.skullian.skyfactions.notification.NotificationData;
+import net.skullian.skyfactions.util.SLogger;
 
 
 public class DatabaseHandler {
@@ -481,6 +483,30 @@ public class DatabaseHandler {
                 if (set.next()) {
                     int id = set.getInt("id");
                     return new PlayerIsland(id);
+                }
+
+                statement.close();
+                connection.close();
+
+                return null;
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<UUID> getOwnerOfIsland(PlayerIsland island) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM islands where id = ?")) {
+
+                statement.setInt(1, island.getId());
+                ResultSet set = statement.executeQuery();
+
+                if (set.next()) {
+                    String uuid = set.getString("uuid");
+                    return UUID.fromString(uuid);
                 }
 
                 statement.close();
@@ -1084,6 +1110,30 @@ public class DatabaseHandler {
             }
 
             return null;
+        });
+    }
+
+    public CompletableFuture<Faction> getFactionByIslandID(int id) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM factionIslands where id = ?")) {
+
+                statement.setInt(1, id);
+                ResultSet set = statement.executeQuery();
+
+                if (set.next()) {
+                    String factionName = set.getString("factionName");
+                    return getFaction(factionName).join();
+                }
+
+                statement.close();
+                connection.close();
+
+                return null;
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
         });
     }
 

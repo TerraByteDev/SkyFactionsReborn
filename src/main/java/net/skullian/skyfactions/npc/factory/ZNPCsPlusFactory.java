@@ -40,9 +40,11 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
             new NpcLocation(location)
         );
         
-        EntityPropertyRegistry registry = NpcApiProvider.get().getPropertyRegistry();
-        EntityProperty<SkinDescriptor> skinProperty = registry.getByName("skin", SkinDescriptor.class);
-        entry.getNpc().setProperty(skinProperty, getSkinDescriptor(skin));
+        if (!skin.equalsIgnoreCase("none")) {
+            EntityPropertyRegistry registry = NpcApiProvider.get().getPropertyRegistry();
+            EntityProperty<SkinDescriptor> skinProperty = registry.getByName("skin", SkinDescriptor.class);
+            entry.getNpc().setProperty(skinProperty, getSkinDescriptor(skin));
+        }
 
         entry.getNpc().getHologram().insertLine(0, TextUtility.color(name, null));
         entry.enableEverything();
@@ -50,7 +52,7 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
         return new SkyZNPCs(entry, isFaction); 
     }
     
-    private SkinDescriptor getSkinDescriptor(String skin) {
+    public static SkinDescriptor getSkinDescriptor(String skin) {
         SkinDescriptorFactory factory = NpcApiProvider.get().getSkinDescriptorFactory();
 
         if (isValidURL(skin.replace("url:", ""))) {
@@ -60,7 +62,7 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
         }
     }
 
-    private boolean isValidURL(String url) {
+    private static boolean isValidURL(String url) {
         try {
             new URL(url).toURI();
             return true;
@@ -72,10 +74,10 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
     }
 
     @Override
-    public SkyNPC getNPC(String id) {
+    public SkyNPC getNPC(String id, boolean faction) {
         NpcEntry entry = NpcApiProvider.get().getNpcRegistry().getById(id);
         
-        return entry == null ? null : new SkyZNPCs(entry, false);
+        return entry == null ? null : new SkyZNPCs(entry, faction);
     }
 
     @EventHandler
@@ -121,6 +123,26 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
             NpcApiProvider.get().getNpcRegistry().delete(getId());
         }
 
-    }
+        @Override
+        public void updateDisplayName(String name) {
+            npc.getNpc().getHologram().insertLine(0, name);
+        }
 
+        @Override
+        public void updateEntityType(EntityType type) {
+            npc.getNpc().setType(NpcApiProvider.get().getNpcTypeRegistry().getByName(type.name()));
+        }
+
+        @Override
+        public void updateSkin(String skin) {
+            EntityPropertyRegistry registry = NpcApiProvider.get().getPropertyRegistry();
+            EntityProperty<SkinDescriptor> skinProperty = registry.getByName("skin", SkinDescriptor.class);
+            npc.getNpc().setProperty(skinProperty, getSkinDescriptor(skin));
+        }
+
+        @Override
+        public EntityType getEntityType() {
+            return EntityType.valueOf(npc.getNpc().getType().getName());
+        }
+    }
 }

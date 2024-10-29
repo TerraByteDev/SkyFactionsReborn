@@ -12,6 +12,5 @@ softdepend:
   - NoteBlockAPI
   - MythicMobs
   - ZNPCsPlus
-  - Citizens
   - fancynpcs
   - Vault

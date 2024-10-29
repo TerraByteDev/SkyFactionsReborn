@@ -53,11 +53,6 @@ dependencies:
       load: BEFORE
       required: false
 
-
-    Citizens:
-      load: BEFORE
-      required: false
-
     fancynpcs:
       load: BEFORE
       required: false

@@ -26,14 +26,18 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
     @Override
     public SkyNPC create(String id, String name, Location location, String skin, EntityType entityType, boolean isFaction) {
         NpcData data = new NpcData(id, null, location);
-        SkinFetcher.SkinData fetched = new SkinFetcher.SkinData(skin
-            .replace("url:", "")
-            .replace("texture:", "")
-            .replace("player:", ""), 
-            null, null
-        );
+
+
+        if (!skin.equalsIgnoreCase("none")) {
+            SkinFetcher.SkinData fetched = new SkinFetcher.SkinData(skin
+                .replace("url:", "")
+                .replace("texture:", "")
+                .replace("player:", ""), 
+                null, null
+            );
+            data.setSkin(fetched);
+        }
         data.setType(entityType);
-        data.setSkin(fetched);
 
         Npc npc = FancyNpcsPlugin.get().getNpcAdapter().apply(data);
         FancyNpcsPlugin.get().getNpcManager().registerNpc(npc);
@@ -42,9 +46,9 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
     }
 
     @Override
-    public SkyNPC getNPC(String id) {
+    public SkyNPC getNPC(String id, boolean faction) {
         Npc npc = FancyNpcsPlugin.get().getNpcManager().getNpc(id);
-        return npc == null ? null : new SkyFancyNPC(npc, false);
+        return npc == null ? null : new SkyFancyNPC(npc, faction);
     }
 
     @EventHandler
@@ -88,6 +92,35 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
         public void remove() {
             npc.removeForAll();
             FancyNpcsPlugin.get().getNpcManager().removeNpc(npc);
+        }
+
+        @Override
+        public void updateDisplayName(String name) {
+            npc.getData().setDisplayName(name);
+            npc.updateForAll();
+        }
+
+        @Override
+        public void updateEntityType(EntityType type) {
+            npc.getData().setType(type);
+            npc.updateForAll();
+        }
+
+        @Override
+        public void updateSkin(String skin) {
+            SkinFetcher.SkinData fetched = new SkinFetcher.SkinData(skin
+                .replace("url:", "")
+                .replace("texture:", "")
+                .replace("player:", ""), 
+                null, null
+            );
+            npc.getData().setSkin(fetched);
+            npc.updateForAll();
+        }
+
+        @Override
+        public EntityType getEntityType() {
+            return npc.getData().getType();
         }
         
     }

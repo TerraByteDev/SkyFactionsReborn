@@ -1,10 +1,9 @@
 package net.skullian.skyfactions.db;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.bukkit.OfflinePlayer;
 
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
 @Getter

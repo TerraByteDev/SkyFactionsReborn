@@ -135,6 +135,13 @@ Messages:
     # Sent when a player tries to access someone else's NPC (e.g. when visiting).
     NPC_ACCESS_DENY: "%server_name%&c&l Hey!&r&7 You do not have access to this NPC!"
 
+    # Sent when a player runs /sf updatenpcs. 
+    NPC_RELOADING: "%server_name%&e Reloading NPCs, please wait..."
+
+    # Sent after a player runs /sf updatenpcs, once it has finished.
+    # Placeholders: %count% - How many NPCs were updated
+    NPC_RELOADED: "%server_name%&a Finished updating NPCs. &7(%count% NPCs updates)"
+
   Raiding:
     # Display Name of the raid confirmation GUI item (after player executes /raid)
     RAID_CONFIRMATION_NAME: "&a&lConfirm"

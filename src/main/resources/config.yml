@@ -101,8 +101,11 @@ NPC:
   # Whether the NPC system should be enabled or not.
   ENABLED: false
 
+  # If you have updated the skin of the NPC, or any other attribute you must
+  # run /sf updatenpcs.
+
   # Specify which NPC plugin (factory) to use.
-  # Possible Factories: "citizens" / "znpcpsplus" / "fancynpcs"
+  # Possible Factories: "znpcpsplus" / "fancynpcs"
   # Specifing an invalid factory or a factory that is not installed will
   # cause the plugin to disable.
   FACTORY: "znpcsplus"
@@ -132,6 +135,7 @@ NPC:
   # "url:skin_url_here" - Specify a URL to a skin texture: ZNPCsPlus and FancyNPCs only.
   # "player:name_of_player_here" - Specify the name of a player who's skim you want to display.
   # "texture:texture_data_here" - Provide the texture data of the skin manually.
+  # None - no player skin, will go to the default of whatever factory provider plugin you use.
   SKINS:
     # Skin of the NPC on player islands.
     # You can use the placeholder "%player_name%" for it to be the skin of the island's owner.

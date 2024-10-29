@@ -36,11 +36,6 @@ public class DependencyHandler {
             enabledDeps.add("MythicMobs");
         } else alert("MythicMobs");
 
-        if (isPluginEnabled("Citizens")) {
-            SLogger.info("Found {} installed on the server.", "\u001B[33mCitizens\u001B[34m");
-            enabledDeps.add("Citizens");
-        } else alert("Citizens");
-
         if (isPluginEnabled("ZNPCsPlus")) {
             SLogger.info("Found {} installed on the server.", "\u001B[33mZNPCsPlus\u001B[34m");
             enabledDeps.add("ZNPCsPlus");

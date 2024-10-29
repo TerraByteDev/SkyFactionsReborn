@@ -1,21 +1,22 @@
 package net.skullian.skyfactions.command.sf;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.command.CommandHandler;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.sf.cmds.SFSyncCommand;
-import net.skullian.skyfactions.command.sf.cmds.SFHelpCommand;
-import net.skullian.skyfactions.command.sf.cmds.SFInfoCommand;
-import net.skullian.skyfactions.command.sf.cmds.SFReloadCommand;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
 import org.incendo.cloud.paper.PaperCommandManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.command.CommandHandler;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.sf.cmds.SFHelpCommand;
+import net.skullian.skyfactions.command.sf.cmds.SFInfoCommand;
+import net.skullian.skyfactions.command.sf.cmds.SFNPCReloadCommand;
+import net.skullian.skyfactions.command.sf.cmds.SFReloadCommand;
+import net.skullian.skyfactions.command.sf.cmds.SFSyncCommand;
 
 public class SFCommandHandler implements CommandHandler {
 
@@ -63,6 +64,7 @@ public class SFCommandHandler implements CommandHandler {
         register(new SFInfoCommand());
         register(new SFReloadCommand());
         register(new SFSyncCommand());
+        register(new SFNPCReloadCommand());
     }
 
     @Override
