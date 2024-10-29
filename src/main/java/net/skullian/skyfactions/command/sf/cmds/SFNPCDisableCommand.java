@@ -37,7 +37,7 @@ public class SFNPCDisableCommand extends CommandTemplate {
         CommandSourceStack commandSourceStack
     ) {
         CommandSender sender = commandSourceStack.getSender();
-        if ((sender instanceof Player) &&!CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
+        if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 
         SLogger.warn("[{}] is disabling SkyFactions NPCs.", sender.getName());
