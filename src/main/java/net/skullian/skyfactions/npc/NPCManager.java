@@ -11,10 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.units.qual.m;
-import org.eclipse.aether.impl.OfflineController;
 
-import io.lumine.mythic.bukkit.BukkitAPIHelper;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
@@ -127,6 +124,20 @@ public class NPCManager {
                 case "[message]":
                     player.sendMessage(TextUtility.color(cmd, player));
                     break;
+
+                case "[givepermission]":
+                    if (DependencyHandler.isEnabled("Vault")) {
+                        DependencyHandler.vaultPermissions.playerAdd(player, cmd);
+                    } else SLogger.warn("Attempted to give player a permission node on NPC interact when Vault is not present!");
+                    break;
+
+                case "[removepermission]":
+                    if (DependencyHandler.isEnabled("Vault")) {
+                        DependencyHandler.vaultPermissions.playerRemove(player, cmd);
+                    } else SLogger.warn("Attempted to remove a permission node from a player on NPC interact when Vault is not present!");
+                    break;
+
+
             }
 
         }
