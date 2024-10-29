@@ -14,6 +14,7 @@ import net.skullian.skyfactions.command.CommandHandler;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.sf.cmds.SFHelpCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFInfoCommand;
+import net.skullian.skyfactions.command.sf.cmds.SFNPCDisableCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFNPCReloadCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFReloadCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFSyncCommand;
@@ -65,6 +66,7 @@ public class SFCommandHandler implements CommandHandler {
         register(new SFReloadCommand());
         register(new SFSyncCommand());
         register(new SFNPCReloadCommand());
+        register(new SFNPCDisableCommand());
     }
 
     @Override

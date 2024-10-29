@@ -41,6 +41,8 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
 
         Npc npc = FancyNpcsPlugin.get().getNpcAdapter().apply(data);
         FancyNpcsPlugin.get().getNpcManager().registerNpc(npc);
+        npc.create();
+        npc.spawnForAll();
 
         return new SkyFancyNPC(npc, isFaction);
     }

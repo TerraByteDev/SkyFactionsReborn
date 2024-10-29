@@ -42,7 +42,8 @@ public class NPCManager {
         boolean isFaction = playerNPCs.containsKey(npc); // sketchy, but it works (i hope 😭)
 
         if (isFaction) {
-            Faction faction = Objects.requireNonNull(factionNPCs.get(npc));
+            Faction faction = factionNPCs.get(npc);
+            if (faction == null) return; // probably only when a non-per-island npc is clicked.
 
             if (!faction.isInFaction(player.getUniqueId())) {
                 Messages.NPC_ACCESS_DENY.send(player);
@@ -51,7 +52,8 @@ public class NPCManager {
 
             process(Settings.NPC_FACTION_ISLANDS_ACTIONS.getList(), player);
         } else {
-            UUID owner = Objects.requireNonNull(playerNPCs.get(npc));
+            UUID owner = playerNPCs.get(npc);
+            if (owner == null) return;
 
             if (!owner.equals(player.getUniqueId())) {
                 Messages.NPC_ACCESS_DENY.send(player);
@@ -63,6 +65,7 @@ public class NPCManager {
     }
 
     public void spawnNPC(UUID playerUUID, PlayerIsland island) {
+        if (!Settings.NPC_INTEGRATION_ENABLED.getBoolean()) return;
         if (playerNPCs.containsValue(playerUUID) || factory.getNPC("player-" + island.getId(), false) != null) return;
         
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
@@ -79,6 +82,7 @@ public class NPCManager {
     }
 
     public void spawnNPC(Faction faction, FactionIsland island) {
+        if (!Settings.NPC_INTEGRATION_ENABLED.getBoolean()) return;
         if (factionNPCs.containsValue(faction) || factory.getNPC("faction-" + island.getId(), true) != null) return;
 
         SkyNPC npc = factory.create(
@@ -149,6 +153,9 @@ public class NPCManager {
 
             case "znpcsplus":
                 if (DependencyHandler.isEnabled("FancyNPCs")) {
+                    ZNPCsPlusFactory npcFactory = new ZNPCsPlusFactory();
+                    Bukkit.getServer().getPluginManager().registerEvents(npcFactory, SkyFactionsReborn.getInstance());
+
                     return new ZNPCsPlusFactory();
                 } else alert("FancyNPCs");
 
@@ -156,6 +163,9 @@ public class NPCManager {
 
             case "fancynpcs":
                 if (DependencyHandler.isEnabled("FancyNPCs")) {
+                    FancyNPCsFactory npcFactory = new FancyNPCsFactory();
+                    Bukkit.getServer().getPluginManager().registerEvents(npcFactory, SkyFactionsReborn.getInstance());
+
                     return new FancyNPCsFactory();
                 } else alert("FancyNPCs");
 
@@ -169,7 +179,7 @@ public class NPCManager {
         return null;
     }
 
-    public CompletableFuture<Integer> reloadNPCs() {
+    public CompletableFuture<Integer> updateNPCs(boolean remove) {
         return CompletableFuture.supplyAsync(() -> {
 
             AtomicInteger affected = new AtomicInteger(0);
@@ -179,6 +189,11 @@ public class NPCManager {
 
                 SkyNPC npc = factory.getNPC("player-" + i, false);
                 if (npc == null) continue;
+                if (remove) {
+                    npc.remove();
+                    affected.incrementAndGet();
+                    continue;
+                }
 
                 SkyFactionsReborn.databaseHandler.getOwnerOfIsland(new PlayerIsland(i)).whenComplete((uuid, ex) -> {
                     if (ex != null) {
@@ -201,6 +216,11 @@ public class NPCManager {
 
                 SkyNPC npc = factory.getNPC("faction-" + i, true);
                 if (npc == null) continue;
+                if (remove) {
+                    npc.remove();
+                    affected.incrementAndGet();
+                    continue;
+                }
 
                 SkyFactionsReborn.databaseHandler.getFactionByIslandID(i).whenComplete((faction, ex) -> {
                     if (ex != null) {

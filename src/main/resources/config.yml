@@ -99,6 +99,7 @@ Island:
 # You can configure the system for this here.
 NPC:
   # Whether the NPC system should be enabled or not.
+  # If you disable this after previously having it enabled, YOU MUST RUN /sf disablenpcs
   ENABLED: false
 
   # If you have updated the skin of the NPC, or any other attribute you must

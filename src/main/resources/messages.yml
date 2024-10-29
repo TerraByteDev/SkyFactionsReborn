@@ -140,7 +140,14 @@ Messages:
 
     # Sent after a player runs /sf updatenpcs, once it has finished.
     # Placeholders: %count% - How many NPCs were updated
-    NPC_RELOADED: "%server_name%&a Finished updating NPCs. &7(%count% NPCs updates)"
+    NPC_RELOADED: "%server_name%&a Finished updating NPCs. &7(%count% NPCs affected)"
+
+    # Sent when an admin runs /sf disablenpcs.(%count% NPCs removed).
+    NPC_DISABLING: "%server_name%&e Disabling NPCs, please wait..."
+
+    # Sent after all NPCs were disabled.
+    # Placeholders: %count% - Amount of NPCs disabled.
+    NPC_DISABLED: "%server_name%&a Finished disabling NPCs. &7(%count% NPCs removed)"
 
   Raiding:
     # Display Name of the raid confirmation GUI item (after player executes /raid)

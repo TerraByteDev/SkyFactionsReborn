@@ -15,24 +15,24 @@ import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SLogger;
 
 @Command("sf")
-public class SFNPCReloadCommand extends CommandTemplate {
+public class SFNPCDisableCommand extends CommandTemplate {
 
     @Override
     public String getName() {
-        return "updatenpcs";
+        return "disablenpcs";
     }
 
     @Override
     public String getDescription() {
-        return "Reload all NPC attributes.";
+        return "Disable all per-island NPCs.";
     }
 
     @Override
     public String getSyntax() {
-        return "/sf updatenpcs";
+        return "/sf disablenpcs";
     }
 
-    @Command("updatenpcs")
+    @Command("disablenpcs")
     public void perform(
         CommandSourceStack commandSourceStack
     ) {
@@ -41,22 +41,22 @@ public class SFNPCReloadCommand extends CommandTemplate {
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
 
         SLogger.warn("[{}] is disabling SkyFactions NPCs.", sender.getName());
-        Messages.NPC_RELOADING.send(sender);
+        Messages.NPC_DISABLING.send(sender);
 
         SkyFactionsReborn.npcManager.updateNPCs(false).whenComplete((affected, exc) -> {
             if (exc != null) {
-                ErrorHandler.handleError(sender, "update NPCs", "NPC_RELOAD_EXCEPTION", exc);
+                ErrorHandler.handleError(sender, "disable NPCs", "NPC_DISABLE_EXCEPTION", exc);
                 return;
             }
 
-            Messages.NPC_RELOADED.send(sender, "%count%", affected);
-            SLogger.info("Finished reloading NPCs - [{}] NPCs affected.", affected);
+            Messages.NPC_DISABLED.send(sender, "%count%", affected);
+            SLogger.info("Finished disabling all NPCs - [{}] NPCs removed.", affected);
         });   
     }
 
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.sf.updatenpcs", "skyfactions.sf");
+        return List.of("skyfactions.sf.disablenpcs");
     }
 
 }
