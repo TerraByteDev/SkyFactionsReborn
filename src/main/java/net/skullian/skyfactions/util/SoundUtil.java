@@ -23,6 +23,7 @@ public class SoundUtil {
 
     public static void playSound(Player player, String identifier, float pitch, float volume) {
         if (identifier == null || identifier.equalsIgnoreCase("NONE")) return;
+        
         Sound sound = Sound.sound(Key.key(identifier), Sound.Source.MASTER, volume, pitch);
         if (sound == null) {
             SLogger.warn("Attempted to play a sound of {} when it returned null!", identifier);
@@ -35,6 +36,7 @@ public class SoundUtil {
     public static void playSound(Location location, String identifier, float pitch, float volume) {
         if (identifier == null || identifier.equalsIgnoreCase("NONE")) return;
         org.bukkit.Sound sound = org.bukkit.Sound.valueOf(identifier);
+
         if (sound == null) SLogger.warn("Attempted to play a sound of {} when it returned null!", identifier);
         else location.getWorld().playSound(location, sound, volume, pitch);
     }

@@ -26,7 +26,12 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
     @Override
     public SkyNPC create(String id, String name, Location location, String skin, EntityType entityType, boolean isFaction) {
         NpcData data = new NpcData(id, null, location);
-        SkinFetcher.SkinData fetched = new SkinFetcher.SkinData(skin, null, null);
+        SkinFetcher.SkinData fetched = new SkinFetcher.SkinData(skin
+            .replace("url:", "")
+            .replace("texture:", "")
+            .replace("player:", ""), 
+            null, null
+        );
         data.setType(entityType);
         data.setSkin(fetched);
 

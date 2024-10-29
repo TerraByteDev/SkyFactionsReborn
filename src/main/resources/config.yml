@@ -106,9 +106,41 @@ NPC:
   # Specifing an invalid factory or a factory that is not installed will
   # cause the plugin to disable.
   FACTORY: "znpcsplus"
-  
-  # The display name of the NPC.
-  NAME: "&9Sky Master"
+
+  # Customise the entity of the NPC.
+  # See https://jd.papermc.io/paper/1.21.1/org/bukkit/entity/EntityType.html for a list
+  # of valid entity types.
+  ENTITY:
+    # Entity type for player islands.
+    PLAYER_ISLANDS: "PLAYER"
+
+    # Entity type for faction islands.
+    FACTION_ISLANDS: "PLAYER"
+
+  NAMES:
+    # NPC name for player islands,
+    # You can use the placeholder "%player_name%" to display the name of the player.
+    # This placeholder does not apply for faction island NPC names!
+    PLAYER_ISLANDS: "&9Sky Master"
+    
+    # NPC Name for faction islands.
+    # You can use the placeholder "%faction_name%" to display the name of the faction instead.
+    FACTION_ISLANDS: "&9Sky Master"
+
+  # Allows you to configure the skin of the NPCs for island and faction islands
+  # Skin Format:
+  # "url:skin_url_here" - Specify a URL to a skin texture: ZNPCsPlus and FancyNPCs only.
+  # "player:name_of_player_here" - Specify the name of a player who's skim you want to display.
+  # "texture:texture_data_here" - Provide the texture data of the skin manually.
+  SKINS:
+    # Skin of the NPC on player islands.
+    # You can use the placeholder "%player_name%" for it to be the skin of the island's owner.
+    # The above placeholder does not work on the Faction Island NPC skins!
+    PLAYER_ISLANDS: "player:%player_name%"
+
+    # Skin of the NPC on faction islands.
+    # You can use the "%faction_owner%" placeholder to display the skim of the faction's owner.
+    FACTION_ISLANDS: "player:%faction_owner"
 
   # This allows you to configure the offsets of where the NPC
   # will spawn, relative to the center of the island.

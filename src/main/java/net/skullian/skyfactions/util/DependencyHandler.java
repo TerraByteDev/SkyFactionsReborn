@@ -1,14 +1,17 @@
 package net.skullian.skyfactions.util;
 
+import java.util.ArrayList;
+
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
+
+import net.milkbowl.vault.permission.Permission;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.papi.PlaceholderManager;
 
-import java.util.ArrayList;
-
-import org.stringtemplate.v4.compiler.STParser.exprNoComma_return;
-
-
 public class DependencyHandler {
+    public static Permission vaultPermissions;
+
     public static ArrayList<String> enabledDeps = new ArrayList<>();
 
     public static void init() {
@@ -47,6 +50,14 @@ public class DependencyHandler {
             SLogger.info("Found {} installed on the server.", "\001B[33mFancyNPCs\u001B[34m");
             enabledDeps.add("FancyNPCs");
         } else alert("FancyNPCs");
+
+        if (isPluginEnabled("Vault")) {
+            RegisteredServiceProvider<Permission> serviceProvider = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
+            vaultPermissions = serviceProvider.getProvider();
+
+            enabledDeps.add("Vault");
+            SLogger.info("Found {} installed on the server.", "\001B[33mFancyNPCs\u001B[34m");
+        } else alert("Vault");
     }
 
     public static boolean isEnabled(String name) {

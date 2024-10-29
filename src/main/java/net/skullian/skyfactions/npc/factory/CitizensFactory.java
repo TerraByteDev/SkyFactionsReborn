@@ -1,5 +1,7 @@
 package net.skullian.skyfactions.npc.factory;
 
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -27,13 +29,17 @@ public class CitizensFactory implements SkyNPCFactory, Listener {
 
     @Override
     public SkyNPC create(String id, String name, Location location, String skin, EntityType entityType, boolean isFaction) {
-        NPC npc = CitizensAPI.getNPCRegistry().createNPC(entityType, name);
+        NPC npc = CitizensAPI.getNPCRegistry().createNPC(entityType, UUID.randomUUID(), Integer.parseInt(id), name);
         npc.spawn(location);
 
         if (skin.equalsIgnoreCase("none") && npc.hasTrait(SkinTrait.class)) {
             npc.getTraitNullable(SkinTrait.class).clearTexture();
         } else if (entityType == EntityType.PLAYER) {
-            npc.getOrAddTrait(SkinTrait.class).setSkinName(skin);
+            npc.getOrAddTrait(SkinTrait.class).setSkinName(skin
+                .replace("texture:", "")
+                .replace("player:", "")
+                .replace("url:", "")
+            );
         }
 
         return new SkyCitizen(npc, isFaction);

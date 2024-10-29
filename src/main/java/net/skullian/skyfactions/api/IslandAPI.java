@@ -232,7 +232,7 @@ public class IslandAPI {
                 return;
             }
 
-            SkyFactionsReborn.npcManager.spawnNPC(playerUUID);
+            SkyFactionsReborn.npcManager.spawnNPC(playerUUID, island);
         });
     }
 

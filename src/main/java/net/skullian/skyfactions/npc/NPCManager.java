@@ -7,18 +7,23 @@ import java.util.Objects;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.faction.Faction;
+import net.skullian.skyfactions.island.FactionIsland;
+import net.skullian.skyfactions.island.PlayerIsland;
 import net.skullian.skyfactions.npc.factory.CitizensFactory;
 import net.skullian.skyfactions.npc.factory.FancyNPCsFactory;
 import net.skullian.skyfactions.npc.factory.SkyNPCFactory;
 import net.skullian.skyfactions.npc.factory.ZNPCsPlusFactory;
 import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.SLogger;
+import net.skullian.skyfactions.util.text.TextUtility;
 
 public class NPCManager {
 
@@ -55,8 +60,33 @@ public class NPCManager {
         }
     }
 
-    public void spawnNPC(UUID playerUUID) {
+    public void spawnNPC(UUID playerUUID, PlayerIsland island) {
+        if (playerNPCs.containsValue(playerUUID)) return;
+
+        SkyNPC npc = factory.create(
+            Integer.toString(island.getId()),
+            TextUtility.color(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("%player_name%", Bukkit.getOfflinePlayer(playerUUID).getName())),
+            getOffsetLocation(island.getCenter(Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString())), Settings.NPC_PLAYER_ISLANDS_OFFSET.getIntegerList()),
+            Settings.NPC_PLAYER_ISLANDS_SKIN.getString(),
+            EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()),
+            false
+        );
+
+        playerNPCs.put(npc, playerUUID);
+    }
+
+    public void spawnNPC(Faction faction, FactionIsland island) {
         
+    }
+
+    private Location getOffsetLocation(Location center, List<Integer> offset) {
+        center.add(
+            offset.get(0),
+            offset.get(1),
+            offset.get(2)
+        );
+
+        return center;
     }
 
     private void process(List<String> actions) {

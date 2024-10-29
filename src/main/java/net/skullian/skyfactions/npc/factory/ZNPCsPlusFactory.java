@@ -1,5 +1,9 @@
 package net.skullian.skyfactions.npc.factory;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -7,8 +11,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import lol.pyr.znpcsplus.api.NpcApiProvider;
+import lol.pyr.znpcsplus.api.entity.EntityProperty;
+import lol.pyr.znpcsplus.api.entity.EntityPropertyRegistry;
 import lol.pyr.znpcsplus.api.event.NpcInteractEvent;
 import lol.pyr.znpcsplus.api.npc.NpcEntry;
+import lol.pyr.znpcsplus.api.skin.SkinDescriptor;
+import lol.pyr.znpcsplus.api.skin.SkinDescriptorFactory;
 import lol.pyr.znpcsplus.util.NpcLocation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,10 +39,36 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
             NpcApiProvider.get().getNpcTypeRegistry().getByName(entityType.name()),
             new NpcLocation(location)
         );
-        entry.enableEverything();
-        entry.getNpc().getHologram().insertLine(0, TextUtility.color(name));
+        
+        EntityPropertyRegistry registry = NpcApiProvider.get().getPropertyRegistry();
+        EntityProperty<SkinDescriptor> skinProperty = registry.getByName("skin", SkinDescriptor.class);
+        entry.getNpc().setProperty(skinProperty, getSkinDescriptor(skin));
 
+        entry.getNpc().getHologram().insertLine(0, TextUtility.color(name));
+        entry.enableEverything();
+        
         return new SkyZNPCs(entry, isFaction); 
+    }
+    
+    private SkinDescriptor getSkinDescriptor(String skin) {
+        SkinDescriptorFactory factory = NpcApiProvider.get().getSkinDescriptorFactory();
+
+        if (isValidURL(skin.replace("url:", ""))) {
+            return factory.createUrlDescriptor(skin.replace("url:", ""), "classic");
+        } else {
+            return skin.startsWith("player:") ? factory.createRefreshingDescriptor(skin.replace("player:", "")) : factory.createStaticDescriptor(skin.replace("texture:", ""), null);
+        }
+    }
+
+    private boolean isValidURL(String url) {
+        try {
+            new URL(url).toURI();
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        } catch (URISyntaxException e) {
+            return false;
+        }
     }
 
     @Override
