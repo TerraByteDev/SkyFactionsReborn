@@ -191,7 +191,7 @@ public class RaidAPI {
 
     private static void alertPlayer(Player player, Player attacker) {
         SoundUtil.soundAlarm(player);
-        List<String> alertList = SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getStringList("Messages.Raiding.RAIDED_NOTIFICATION");
+        List<String> alertList = Messages.RAID_IMMINENT_MESSAGE.getStringList();
 
         if (player.isOnline()) {
             for (String msg : alertList) {

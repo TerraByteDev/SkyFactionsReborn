@@ -123,7 +123,7 @@ Messages:
     # Placeholders: %discord_name% - Username (tag) of the discord user you are already linked to.
     ALREADY_LINKED: "%server_name% &c&lHey! &r&7You are already linked to %discord_name%!"
 
-    # Sent when the code is invalid. (IS AN EMBED!)
+    # Sent in Discord when the code is invalid. (IS AN EMBED!).
     LINK_FAILED: "`❓` The code you entered is invalid. Please try again."
 
     # Sent when the player tries to unlink (runs /unlink) when they are not unlinked.
