@@ -68,11 +68,6 @@ repositories {
     }
 
     maven {
-        name = "CitizensNPCs"
-        url = "https://maven.citizensnpcs.co/repo"
-    }
-
-    maven {
         name = "Pyr's Snapshots"
         url = "https://repo.pyr.lol/snapshots"
     }
