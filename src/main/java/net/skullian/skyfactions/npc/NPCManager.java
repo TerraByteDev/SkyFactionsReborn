@@ -3,7 +3,6 @@ package net.skullian.skyfactions.npc;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -183,6 +182,8 @@ public class NPCManager {
         return CompletableFuture.supplyAsync(() -> {
 
             AtomicInteger affected = new AtomicInteger(0);
+            if (remove && Settings.NPC_INTEGRATION_ENABLED.getBoolean()) throw new RuntimeException("Attempted to disable NPCs when the integration is still enabled in the config!");
+                else if (!remove && !Settings.NPC_INTEGRATION_ENABLED.getBoolean()) throw new RuntimeException("Attempted to reload NPCs when the integration is not enabled in the config!");
             
             for (int i = 0; i < SkyFactionsReborn.databaseHandler.cachedPlayerIslandID; i++) {
                 final int islandID = i;
