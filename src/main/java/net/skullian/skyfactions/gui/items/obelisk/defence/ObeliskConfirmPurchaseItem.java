@@ -42,7 +42,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
 
         if (type.equals("faction")) {
             if (faction.getRunes() < struct.getBUY_COST()) {
-                for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList()) {
+                for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList(getPLAYER().locale())) {
                     builder.addLoreLines(TextUtility.color(line, getPLAYER()));
                 }
             }
@@ -50,14 +50,14 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
 
             int runes = RunesAPI.getRunes(getPLAYER().getUniqueId());
             if (runes < struct.getBUY_COST()) {
-                for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList()) {
+                for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList(getPLAYER().locale())) {
                     builder.addLoreLines(TextUtility.color(line, getPLAYER()));
                 }
             }
         }
 
         if (getPLAYER().getInventory().firstEmpty() == -1) {
-            for (String line : Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList()) {
+            for (String line : Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(getPLAYER().locale())) {
                 builder.addLoreLines(TextUtility.color(line, getPLAYER()));
             }
         }
@@ -79,10 +79,10 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
             }
 
             player.closeInventory();
-            Messages.PLEASE_WAIT.send(player, "%operation%", "purchasing your defence");
+            Messages.PLEASE_WAIT.send(player, getPLAYER().locale(), "%operation%", "purchasing your defence");
 
             FACTION.subtractRunes(STRUCT.getBUY_COST());
-            Messages.PLEASE_WAIT.send(player, "%operation%", "Purchasing your defence");
+            Messages.PLEASE_WAIT.send(player, getPLAYER().locale(), "%operation%", "Purchasing your defence");
             DefencesFactory.addDefence(player, STRUCT, FACTION);;
         } else if (TYPE.equals("player")) {
 
@@ -93,7 +93,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
             }
 
             player.closeInventory();
-            Messages.PLEASE_WAIT.send(player, "%operation%", "Purchasing your defence");
+            Messages.PLEASE_WAIT.send(player, getPLAYER().locale(), "%operation%", "Purchasing your defence");
             DefencesFactory.addDefence(player, STRUCT, FACTION);
         }
 

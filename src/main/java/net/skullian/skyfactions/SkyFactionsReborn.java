@@ -20,6 +20,7 @@ import net.skullian.skyfactions.command.raid.RaidCommandHandler;
 import net.skullian.skyfactions.command.runes.RunesCommandHandler;
 import net.skullian.skyfactions.command.sf.SFCommandHandler;
 import net.skullian.skyfactions.config.ConfigFileHandler;
+import net.skullian.skyfactions.config.types.DiscordConfig;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.db.DatabaseHandler;
 import net.skullian.skyfactions.db.cache.CacheService;
@@ -98,7 +99,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
         // There is the option to disable the discord integration if you don't want it.
         // To avoid later confusion, we only register the discord related commands if it is enabled.
-        boolean discordEnabled = SkyFactionsReborn.configHandler.DISCORD_CONFIG.getBoolean("Discord.ENABLED");
+        boolean discordEnabled = DiscordConfig.ENABLED.getBoolean();
         if (discordEnabled) {
             new DiscordCommandHandler();
         }

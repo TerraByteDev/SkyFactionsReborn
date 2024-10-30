@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.command.sf.cmds;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,6 +13,8 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.defence.DefencesFactory;
+import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.util.SLogger;
 
 @Command("sf")
@@ -37,14 +40,17 @@ public class SFReloadCommand extends CommandTemplate {
             CommandSourceStack commandSourceStack
     ) {
         CommandSender sender = commandSourceStack.getSender();
-        if ((sender instanceof Player) &&!CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
+        if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
+        Locale locale = sender instanceof Player ? ((Player) sender).locale() : Locale.ROOT;
 
         SLogger.warn("[{}] is reloading SkyFactionsReborn.", sender.getName());
-        Messages.RELOADING.send(sender);
+        Messages.RELOADING.send(sender, locale);
 
         SkyFactionsReborn.configHandler.reloadFiles();
-        Messages.RELOADED.send(sender);
+        DefencesFactory.onReload();
+
+        Messages.RELOADED.send(sender, locale);
         SLogger.warn("SkyFactionsReborn reloaded.");
     }
 

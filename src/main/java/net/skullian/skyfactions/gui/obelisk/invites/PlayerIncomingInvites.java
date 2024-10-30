@@ -30,7 +30,7 @@ public class PlayerIncomingInvites {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/invites/player_faction_invites");
+            GUIData data = GUIAPI.getGUIData("obelisk/invites/player_faction_invites", player);
             PagedGui.Builder gui = registerItems(PagedGui.items()
                     .setStructure(data.getLAYOUT()), player);
 
@@ -44,7 +44,7 @@ public class PlayerIncomingInvites {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "open the incoming faction invites GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale(), "%operation%", "open the incoming faction invites GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 

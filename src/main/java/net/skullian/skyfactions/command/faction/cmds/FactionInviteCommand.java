@@ -1,15 +1,10 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.db.InviteData;
-import net.skullian.skyfactions.util.ErrorHandler;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -19,8 +14,13 @@ import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.db.InviteData;
+import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("faction")
 public class FactionInviteCommand extends CommandTemplate {
@@ -64,19 +64,19 @@ public class FactionInviteCommand extends CommandTemplate {
             }
 
             if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player);
+                Messages.NOT_IN_FACTION.send(player, player.locale());
                 return;
             } else if (playerName.equalsIgnoreCase(player.getName())) {
-                Messages.FACTION_INVITE_SELF_DENY.send(player);
+                Messages.FACTION_INVITE_SELF_DENY.send(player, player.locale());
                 return;
             }
 
                 OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
                 if (!target.hasPlayedBefore()) {
-                    Messages.UNKNOWN_PLAYER.send(player, "%player%", playerName);
+                    Messages.UNKNOWN_PLAYER.send(player, player.locale(), "%player%", playerName);
 
                 } else if (faction.getAllMembers().contains(target)) {
-                    Messages.FACTION_INVITE_IN_SAME_FACTION.send(player);
+                    Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, player.locale());
 
                 } else {
                     faction.getOutgoingInvites().whenComplete((invites, throwable) -> {
@@ -87,14 +87,14 @@ public class FactionInviteCommand extends CommandTemplate {
 
                         for (InviteData invite : invites) {
                             if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
-                                Messages.FACTION_INVITE_DUPLICATE.send(player);
+                                Messages.FACTION_INVITE_DUPLICATE.send(player, player.locale());
                                 return;
                             }
                         }
                     });
 
                     faction.createInvite(target, player);
-                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, "%player_name%", target.getName());
+                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, player.locale(), "%player_name%", target.getName());
                 }
             });
     }

@@ -30,7 +30,7 @@ public class ObeliskDefencePurchaseOverviewUI {
 
     public static void promptPlayer(Player player, String obeliskType, Faction faction) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/defences/defence_purchase_overview");
+            GUIData data = GUIAPI.getGUIData("obelisk/defences/defence_purchase_overview", player);
             PagedGui.Builder gui = registerItems(PagedGui.items()
                     .setStructure(data.getLAYOUT()), player, obeliskType, faction);
 
@@ -44,7 +44,7 @@ public class ObeliskDefencePurchaseOverviewUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "open the defences purchase GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale(), "%operation%", "open the defences purchase GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -95,7 +95,7 @@ public class ObeliskDefencePurchaseOverviewUI {
     private static List<Item> getItems(Player player, ItemData data, String obeliskType, Faction faction) {
         List<Item> items = new ArrayList<>();
 
-        for (Map.Entry<String, DefenceStruct> defence : DefencesFactory.defences.entrySet()) {
+        for (Map.Entry<String, DefenceStruct> defence : DefencesFactory.defences.getOrDefault(player.locale().getLanguage(), DefencesFactory.getDefaultStruct()).entrySet()) {
             DefenceStruct struct = defence.getValue();
             data.setNAME(struct.getNAME());
             data.setBASE64_TEXTURE(struct.getITEM_SKULL());

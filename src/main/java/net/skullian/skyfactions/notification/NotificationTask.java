@@ -22,7 +22,7 @@ public class NotificationTask {
                     }
 
                     if (!data.isEmpty()) {
-                        Messages.UNREAD_NOTIFICATIONS.send(player, "%count%", data.size());
+                        Messages.UNREAD_NOTIFICATIONS.send(player, player.locale(), "%count%", data.size());
                     }
                 });
 
@@ -32,7 +32,7 @@ public class NotificationTask {
                         if (NotificationAPI.factionInviteStore.containsKey(faction.getName())) {
                             int factionJoinRequestCount = NotificationAPI.factionInviteStore.get(faction.getName());
                             if (factionJoinRequestCount > 0 && (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player))) {
-                                Messages.NOTIFICATION_PENDING_JOIN_REQUESTS.send(player, "%count%", factionJoinRequestCount);
+                                Messages.NOTIFICATION_PENDING_JOIN_REQUESTS.send(player, player.locale(), "%count%", factionJoinRequestCount);
                             }
                         }
                     });

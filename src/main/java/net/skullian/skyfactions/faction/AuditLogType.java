@@ -1,5 +1,7 @@
 package net.skullian.skyfactions.faction;
 
+import java.util.Locale;
+
 import net.skullian.skyfactions.config.types.Messages;
 
 public enum AuditLogType {
@@ -31,11 +33,11 @@ public enum AuditLogType {
     }
 
     public String getTitle(Object... replacements) {
-        return title.get(replacements);
+        return title.get(Locale.ROOT, replacements);
     }
 
     public String getDescription(Object... replacements) {
-        return description.get(replacements);
+        return description.get(Locale.ROOT, replacements);
     }
 
 

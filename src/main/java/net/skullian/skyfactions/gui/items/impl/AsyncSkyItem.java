@@ -40,7 +40,7 @@ public abstract class AsyncSkyItem implements Item {
         this.STACK = stack;
         this.PLAYER = player;
 
-        this.provider = ObeliskConfig.getLoadingItem();
+        this.provider = ObeliskConfig.getLoadingItem(player);
         Bukkit.getScheduler().runTaskAsynchronously(SkyFactionsReborn.getInstance(), () -> {
             this.provider = new ItemProvider() {
                 @Override

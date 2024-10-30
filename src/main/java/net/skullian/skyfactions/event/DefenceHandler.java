@@ -1,7 +1,36 @@
 package net.skullian.skyfactions.event;
 
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.damage.DamageType;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeff_media.customblockdata.CustomBlockData;
+
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.api.FactionAPI;
@@ -18,30 +47,6 @@ import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.hologram.TextHologram;
 import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.Block;
-import org.bukkit.damage.DamageType;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
-
-import java.lang.reflect.Constructor;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class DefenceHandler implements Listener {
     public static Map<String, List<Defence>> loadedFactionDefences = new HashMap<>();
@@ -76,7 +81,7 @@ public class DefenceHandler implements Listener {
                     if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_FACTION_DEFENCES.getInt()) {
                         event.setCancelled(true);
 
-                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, "%defence_max%", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
+                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, player.locale(), "%defence_max%", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
                         SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
                         return;
                     }
@@ -85,7 +90,7 @@ public class DefenceHandler implements Listener {
                     if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_PLAYER_DEFENCES.getInt()) {
                         event.setCancelled(true);
 
-                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, "%defence_max%", DefencesConfig.MAX_PLAYER_DEFENCES.getInt());
+                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, player.locale(), "%defence_max%", DefencesConfig.MAX_PLAYER_DEFENCES.getInt());
                         SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
                         return;
                     }
@@ -93,7 +98,7 @@ public class DefenceHandler implements Listener {
 
                 String defenceIdentifier = container.get(defenceKey, PersistentDataType.STRING);
 
-                DefenceStruct defence = DefencesFactory.defences.get(defenceIdentifier);
+                DefenceStruct defence = DefencesFactory.defences.getOrDefault(player.locale().getLanguage(), DefencesFactory.getDefaultStruct()).get(defenceIdentifier);
                 if (defence != null) {
                     Location belowLoc = placed.getLocation().clone();
                     belowLoc.setY(belowLoc.getY() - 1);
@@ -101,12 +106,12 @@ public class DefenceHandler implements Listener {
                     Block belowBlock = placed.getWorld().getBlockAt(belowLoc);
                     if (!isAllowedBlock(belowBlock, defence)) {
                         event.setCancelled(true);
-                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString()), player));
+                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString(player.locale())), player));
                         return;
                     }
 
                     try {
-                        DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation().getWorld().getName(), placed.getLocation().getBlockX(), placed.getLocation().getBlockY(), placed.getLocation().getBlockZ(), owner, isFaction, 100, defence.getENTITY_CONFIG().isTARGET_HOSTILE_DEFAULT(), defence.getENTITY_CONFIG().isTARGET_PASSIVE_DEFAULT());
+                        DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation().getWorld().getName(), placed.getLocation().getBlockX(), placed.getLocation().getBlockY(), placed.getLocation().getBlockZ(), owner, isFaction, player.locale().getLanguage(), 100, defence.getENTITY_CONFIG().isTARGET_HOSTILE_DEFAULT(), defence.getENTITY_CONFIG().isTARGET_PASSIVE_DEFAULT());
                         ObjectMapper mapper = new ObjectMapper();
 
                         PersistentDataContainer blockContainer = new CustomBlockData(placed, SkyFactionsReborn.getInstance());
@@ -201,7 +206,7 @@ public class DefenceHandler implements Listener {
     public void onDefenceBreak(BlockBreakEvent event) {
         if (DefenceAPI.isDefence(event.getBlock().getLocation())) {
             event.setCancelled(true);
-            Messages.DEFENCE_DESTROY_DENY.send(event.getPlayer());
+            Messages.DEFENCE_DESTROY_DENY.send(event.getPlayer(), event.getPlayer().locale());
         }
     }
 
@@ -269,7 +274,7 @@ public class DefenceHandler implements Listener {
 
     private List<Defence> getDefencesFromData(DefenceEntityDeathData data) {
         if (isFaction(data.getOWNER())) return loadedFactionDefences.get(data.getOWNER());
-            else return loadedPlayerDefences.get(data.getOWNER());
+            else return loadedPlayerDefences.get(UUID.fromString(data.getOWNER()));
     }
 
     private DefenceEntityDeathData getData(UUID uuid, DamageType type) {
@@ -302,19 +307,21 @@ public class DefenceHandler implements Listener {
                 NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
                 PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
                 if (container.has(defenceKey, PersistentDataType.STRING)) {
+                try {
+
                     String name = container.get(defenceKey, PersistentDataType.STRING);
                     String data = container.get(dataKey, PersistentDataType.STRING);
-                    DefenceStruct defence = DefencesFactory.defences.get(name);
+                    ObjectMapper mapper = new ObjectMapper();
+                    DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                    try {
+                    DefenceStruct defence = DefencesFactory.defences.getOrDefault(defenceData.getLOCALE(), DefencesFactory.getDefaultStruct()).get(name);
                         if (defence != null) {
-                            ObjectMapper mapper = new ObjectMapper();
-                            DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
                             Defence instance = createDefence(defenceData, defence, factionName, true, Optional.empty(), Optional.empty(), false, false);
 
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
+
                     } catch (Exception error) {
                         error.printStackTrace();
                     }
@@ -344,7 +351,7 @@ public class DefenceHandler implements Listener {
                 if (container.has(defenceKey, PersistentDataType.STRING)) {
                     String name = container.get(defenceKey, PersistentDataType.STRING);
                     String data = container.get(dataKey, PersistentDataType.STRING);
-                    DefenceStruct defence = DefencesFactory.defences.get(name);
+                    DefenceStruct defence = DefencesFactory.defences.getOrDefault(player.locale().getLanguage(), DefencesFactory.getDefaultStruct()).get(name);
 
                     try {
                         if (defence != null) {

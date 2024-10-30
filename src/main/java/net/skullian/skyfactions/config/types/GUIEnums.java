@@ -1,9 +1,9 @@
 package net.skullian.skyfactions.config.types;
 
-import dev.dejvokep.boostedyaml.YamlDocument;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import dev.dejvokep.boostedyaml.YamlDocument;
 
 public enum GUIEnums {
 
@@ -35,7 +35,7 @@ public enum GUIEnums {
 
 
     private final String path;
-    public static final Map<String, YamlDocument> configs = new HashMap<>();
+    public static final Map<String, Map<String, YamlDocument>> configs = new HashMap<>();
 
     GUIEnums(String path) {
         this.path = path;

@@ -45,21 +45,21 @@ public class NPCManager {
             if (faction == null) return; // probably only when a non-per-island npc is clicked.
 
             if (!faction.isInFaction(player.getUniqueId())) {
-                Messages.NPC_ACCESS_DENY.send(player);
+                Messages.NPC_ACCESS_DENY.send(player, player.locale());
                 return;
             }
 
-            process(Settings.NPC_FACTION_ISLANDS_ACTIONS.getList(), player);
+            process(Messages.NPC_FACTION_ISLANDS_ACTIONS.getStringList(player.locale()), player);
         } else {
             UUID owner = playerNPCs.get(npc);
             if (owner == null) return;
 
             if (!owner.equals(player.getUniqueId())) {
-                Messages.NPC_ACCESS_DENY.send(player);
+                Messages.NPC_ACCESS_DENY.send(player, player.locale());
                 return;
             }
 
-            process(Settings.NPC_PLAYER_ISLANDS_ACTIONS.getList(), player);
+            process(Messages.NPC_PLAYER_ISLANDS_ACTIONS.getStringList(player.locale()), player);
         }
     }
 

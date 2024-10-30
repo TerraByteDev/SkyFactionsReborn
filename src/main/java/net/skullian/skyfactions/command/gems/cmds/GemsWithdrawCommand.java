@@ -1,12 +1,8 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.api.GemsAPI;
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,9 +11,13 @@ import org.bukkit.inventory.ItemStack;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.GemsAPI;
+import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("gems")
 public class GemsWithdrawCommand extends CommandTemplate {
@@ -56,22 +56,22 @@ public class GemsWithdrawCommand extends CommandTemplate {
                 int gems = GemsAPI.getGems(player.getUniqueId());
                 try {
                     int parsedAmount = amount.equalsIgnoreCase("all") ? gems : (Integer.parseInt(amount) > gems ? gems : Integer.parseInt(amount));
-                    ItemStack stack = GemsAPI.createGemsStack();
+                    ItemStack stack = GemsAPI.createGemsStack(player);
                     stack.setAmount(parsedAmount);
 
                     int remainingItems = addItemToInventory(player.getInventory(), stack);
 
                     GemsAPI.subtractGems(player.getUniqueId(), (parsedAmount - remainingItems));
 
-                    Messages.GEMS_WITHDRAW_SUCCESS.send(player, "%amount%", parsedAmount);
+                    Messages.GEMS_WITHDRAW_SUCCESS.send(player, player.locale(), "%amount%", parsedAmount);
                     if (remainingItems > 0) {
-                        Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player);
+                        Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player, player.locale());
                     }
                 } catch (NumberFormatException exception) {
-                    Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
+                    Messages.INCORRECT_USAGE.send(player, player.locale(), "%usage%", getSyntax());
                 }
             } else {
-                Messages.NO_ISLAND.send(player);
+                Messages.NO_ISLAND.send(player, player.locale());
             }
         });
 

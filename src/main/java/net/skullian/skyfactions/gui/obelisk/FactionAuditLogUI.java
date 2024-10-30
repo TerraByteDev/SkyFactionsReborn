@@ -33,7 +33,7 @@ public class FactionAuditLogUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("obelisk/audit_log");
+                GUIData data = GUIAPI.getGUIData("obelisk/audit_log", player);
                 PagedGui.Builder gui = registerItems(PagedGui.items()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -47,7 +47,7 @@ public class FactionAuditLogUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "open the audit log GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "open the audit log GUI", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }
@@ -104,7 +104,7 @@ public class FactionAuditLogUI {
             List<AuditLogData> auditLogData = faction.getAuditLogs().join();
 
             for (AuditLogData auditLog : auditLogData) {
-                items.add(new AuditPaginationItem(data, GUIAPI.createItem(data, auditLog.getPlayer().getUniqueId()), auditLog));
+                items.add(new AuditPaginationItem(data, GUIAPI.createItem(data, auditLog.getPlayer().getUniqueId()), auditLog, player));
             }
         });
 

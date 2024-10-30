@@ -22,7 +22,7 @@ public class JoinRequestManageUI {
 
     public static void promptPlayer(Player player, InviteData inviteData) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/invites/join_request_manage");
+            GUIData data = GUIAPI.getGUIData("obelisk/invites/join_request_manage", player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player, inviteData);
 
@@ -36,7 +36,7 @@ public class JoinRequestManageUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "open the join request manage GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale(), "%operation%", "open the join request manage GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 

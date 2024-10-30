@@ -21,7 +21,7 @@ public class PlayerInviteTypeSelectionUI {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/invites/player_invite_selection");
+            GUIData data = GUIAPI.getGUIData("obelisk/invites/player_invite_selection", player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player);
 
@@ -35,7 +35,7 @@ public class PlayerInviteTypeSelectionUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "open the invite selection GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale(), "%operation%", "open the invite selection GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 

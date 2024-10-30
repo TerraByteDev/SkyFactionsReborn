@@ -24,7 +24,7 @@ public class FactionObeliskUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("obelisk/faction_obelisk");
+                GUIData data = GUIAPI.getGUIData("obelisk/faction_obelisk", player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -38,7 +38,7 @@ public class FactionObeliskUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "open your obelisk", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "open your obelisk", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }
@@ -51,7 +51,7 @@ public class FactionObeliskUI {
                     ErrorHandler.handleError(player, "open your obelisk", "GUI_LOAD_EXCEPTION", exc);
                     return;
                 } else if (faction == null) {
-                    Messages.ERROR.send(player, "%operation%", "open your obelisk", "%debug%", "FACTION_NOT_FOUND");
+                    Messages.ERROR.send(player, player.locale(), "%operation%", "open your obelisk", "%debug%", "FACTION_NOT_FOUND");
                     return;
                 }
 

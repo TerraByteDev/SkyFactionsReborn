@@ -11,11 +11,14 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.DiscordConfig;
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,9 +33,9 @@ public class DiscordHandler {
 
     public void initialiseBot() {
         try {
-            if (!SkyFactionsReborn.configHandler.DISCORD_CONFIG.getBoolean("Discord.ENABLED")) return;
+            if (!DiscordConfig.ENABLED.getBoolean()) return;
 
-            JDA = JDABuilder.createDefault(SkyFactionsReborn.configHandler.DISCORD_CONFIG.getString("Discord.TOKEN"))
+            JDA = JDABuilder.createDefault(DiscordConfig.TOKEN.getString())
                     .setChunkingFilter(ChunkingFilter.ALL)
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_WEBHOOKS)
@@ -50,7 +53,7 @@ public class DiscordHandler {
             enabled = true;
 
 
-            String channelID = SkyFactionsReborn.configHandler.DISCORD_CONFIG.getString("Discord.RAID_CHANNEL");
+            String channelID = DiscordConfig.RAID_CHANNEL.getString();
             RAID_NOTIFICATION_CHANNEL = JDA.getTextChannelById(channelID);
             if (RAID_NOTIFICATION_CHANNEL == null) {
                 throw new NullPointerException("Invalid notification channel ID. Check your config.");
@@ -76,7 +79,7 @@ public class DiscordHandler {
     }
 
     public void disconnect() {
-        if (!SkyFactionsReborn.configHandler.DISCORD_CONFIG.getBoolean("Discord.ENABLED")) return;
+        if (!DiscordConfig.ENABLED.getBoolean()) return;
         try {
             JDA.shutdown();
             if (!JDA.awaitShutdown(Duration.ofSeconds(10))) {
@@ -95,8 +98,8 @@ public class DiscordHandler {
         SkyFactionsReborn.databaseHandler.getDiscordLink(victim).thenAccept(id -> {
             if (id != null && !id.equals("none")) {
                 EmbedBuilder embedBuilder = new EmbedBuilder()
-                        .setDescription(SkyFactionsReborn.configHandler.MESSAGES_CONFIG.getString("Messages.Discord.DISCORD_RAID_MESSAGE").replace("%attacker%", attacker.getName()))
-                        .setThumbnail(SkyFactionsReborn.configHandler.DISCORD_CONFIG.getString("Discord.AVATAR_API").replace("%player%", attacker.getUniqueId().toString()));
+                        .setDescription(Messages.DISCORD_RAID_MESSAGE.getString(victim.locale()).replace("%attacker%", attacker.getName()))
+                        .setThumbnail(DiscordConfig.AVATAR_API.getString().replace("%player%", attacker.getUniqueId().toString()));
 
                 RAID_NOTIFICATION_CHANNEL.sendMessage("<@" + id + ">").setEmbeds(embedBuilder.build()).queue();
             }

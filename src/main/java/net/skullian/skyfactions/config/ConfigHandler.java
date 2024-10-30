@@ -1,7 +1,11 @@
 package net.skullian.skyfactions.config;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.bukkit.Bukkit;
+
 import dev.dejvokep.boostedyaml.YamlDocument;
-import dev.dejvokep.boostedyaml.dvs.versioning.AutomaticVersioning;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
@@ -10,27 +14,19 @@ import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import lombok.Getter;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.util.SLogger;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.IOException;
 
 
 public class ConfigHandler {
 
-    private final JavaPlugin plugin;
     private final String name;
     private final File file;
 
     @Getter
     private YamlDocument config;
 
-    public ConfigHandler(JavaPlugin plugin, String name) {
-        this.plugin = plugin;
+    public ConfigHandler(String name) {
         this.name = name + ".yml";
-        this.file = new File(plugin.getDataFolder(), this.name);
+        this.file = new File(SkyFactionsReborn.getInstance().getDataFolder(), this.name);
 
         try {
             this.config = YamlDocument.create(this.file, SkyFactionsReborn.getInstance().getResource(this.name),
@@ -42,7 +38,7 @@ public class ConfigHandler {
             SLogger.fatal("Plugin will now disable.");
             SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
             error.printStackTrace();
-            plugin.getServer().getPluginManager().disablePlugin(plugin);
+            Bukkit.getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
         }
     }
 

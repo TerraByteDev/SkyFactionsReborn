@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public class NotificationAPI {
@@ -53,7 +54,8 @@ public class NotificationAPI {
      * @param replacements Replacements for the notification title / desc.
      */
     public static CompletableFuture<Void> createNotification(UUID playerUUID, NotificationType type, Object... replacements) {
-        return SkyFactionsReborn.databaseHandler.createNotification(playerUUID, type.getTitle(replacements), type.getDescription(replacements));
+        Locale locale = Locale.of(Settings.DEFAULT_LANGUAGE.getString());
+        return SkyFactionsReborn.databaseHandler.createNotification(playerUUID, type.getTitle(locale, replacements), type.getDescription(locale, replacements));
     }
 
     /**

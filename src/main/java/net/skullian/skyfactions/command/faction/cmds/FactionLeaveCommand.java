@@ -1,19 +1,19 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.gui.FactionLeaveConfirmationUI;
-import net.skullian.skyfactions.util.ErrorHandler;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
-import java.util.List;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.gui.FactionLeaveConfirmationUI;
+import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("faction")
 public class FactionLeaveCommand extends CommandTemplate {
@@ -49,10 +49,10 @@ public class FactionLeaveCommand extends CommandTemplate {
             }
 
             if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player);
+                Messages.NOT_IN_FACTION.send(player, player.locale());
                 return;
             } else if (faction.isOwner(player)) {
-                Messages.FACTION_OWNER_LEAVE_DENY.send(player);
+                Messages.FACTION_OWNER_LEAVE_DENY.send(player, player.locale());
                 return;
             }
 

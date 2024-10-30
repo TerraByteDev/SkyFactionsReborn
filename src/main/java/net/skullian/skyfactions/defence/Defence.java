@@ -153,7 +153,7 @@ public abstract class Defence {
             }
 
             holo.setText(text);
-            holo.update();
+            holo.update(false);
         }
     }
 
@@ -315,7 +315,7 @@ public abstract class Defence {
     public void createHologram(Location location, DefenceStruct defence, String playerUUIDorFactionName) {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
 
-        TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName())
+        TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName(), defence)
                 .setText(TextUtility.color(text.replace("%defence_name%", defence.getNAME()), null))
                 .setBillboard(Display.Billboard.VERTICAL)
                 .setSeeThroughBlocks(false)
@@ -327,7 +327,7 @@ public abstract class Defence {
     }
 
     public void refresh() {
-        DefenceStruct fetchedStruct = DefencesFactory.defences.get(struct.getIDENTIFIER());
+        DefenceStruct fetchedStruct = DefencesFactory.defences.get(this.data.getLOCALE()).get(struct.getIDENTIFIER());
         if (fetchedStruct != null) {
             this.struct = fetchedStruct;
         }

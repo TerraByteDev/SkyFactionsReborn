@@ -30,7 +30,7 @@ public class PlayerObeliskNotificationUI {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/player_notifications");
+            GUIData data = GUIAPI.getGUIData("obelisk/player_notifications", player);
             PagedGui.Builder gui = registerItems(PagedGui.items()
                     .setStructure(data.getLAYOUT()), player);
 
@@ -44,7 +44,7 @@ public class PlayerObeliskNotificationUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "open the notifications GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale(), "%operation%", "open the notifications GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -101,7 +101,7 @@ public class PlayerObeliskNotificationUI {
             }
             
             for (NotificationData notification : notifications) {
-                items.add(new ObeliskNotificationPaginationItem(data, GUIAPI.createItem(data, player.getUniqueId()), notification));
+                items.add(new ObeliskNotificationPaginationItem(data, GUIAPI.createItem(data, player.getUniqueId()), notification, player));
             }
 
             return items;

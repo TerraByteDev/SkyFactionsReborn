@@ -31,7 +31,7 @@ public class MemberPaginationItem extends SkyItem {
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[1];
 
         if (subject.getUniqueId().equals(getPLAYER().getUniqueId())) {
-            builder.addLoreLines(TextUtility.color(Messages.FACTION_MANAGE_SELF_DENY_LORE.get(), getPLAYER()));
+            builder.addLoreLines(TextUtility.color(Messages.FACTION_MANAGE_SELF_DENY_LORE.get(getPLAYER().locale()), getPLAYER()));
         }
 
         return builder;
@@ -49,7 +49,7 @@ public class MemberPaginationItem extends SkyItem {
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (SUBJECT.getUniqueId().equals(player.getUniqueId())) {
-            Messages.FACTION_MANAGE_SELF_DENY.send(player);
+            Messages.FACTION_MANAGE_SELF_DENY.send(player, player.locale());
         } else {
             ManageMemberUI.promptPlayer(player, SUBJECT);
         }

@@ -34,10 +34,10 @@ public class LinkCommand extends CommandTemplate {
 
                 if (id == null) {
                     String generatedCode = SkyFactionsReborn.discordHandler.createLinkCode(player);
-                    Messages.DISCORD_LINK_PROMPT.send(player, "%code%", generatedCode);
+                    Messages.DISCORD_LINK_PROMPT.send(player, player.locale(), "%code%", generatedCode);
                 } else {
                     User retrivedUser = SkyFactionsReborn.discordHandler.JDA.getUserById(id);
-                    Messages.DISCORD_ALREADY_LINKED.send(player, "%discord_name%", retrivedUser.getName());
+                    Messages.DISCORD_ALREADY_LINKED.send(player, player.locale(), "%discord_name%", retrivedUser.getName());
                 }
             });
         }

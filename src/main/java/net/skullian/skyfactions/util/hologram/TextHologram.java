@@ -1,5 +1,21 @@
 package net.skullian.skyfactions.util.hologram;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Display;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
+import org.bukkit.scheduler.BukkitTask;
+import org.joml.Vector3f;
+
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.protocol.entity.type.EntityTypes;
 import com.github.retrooper.packetevents.util.Quaternion4f;
@@ -8,6 +24,7 @@ import com.github.retrooper.packetevents.wrapper.PacketWrapper;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerDestroyEntities;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityTeleport;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSpawnEntity;
+
 import io.github.retrooper.packetevents.util.SpigotConversionUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,22 +36,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.defence.struct.DefenceStruct;
+import net.skullian.skyfactions.npc.factory.FancyNPCsFactory.SkyFancyNPC;
 import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Display;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.TextDisplay;
-import org.bukkit.scheduler.BukkitTask;
-import org.joml.Vector3f;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class TextHologram {
 
@@ -94,16 +98,20 @@ public class TextHologram {
     @Getter
     private BukkitTask task;
 
-    public TextHologram(String id, RenderMode renderMode, String owner) {
+    @Getter
+    private DefenceStruct defence;
+
+    public TextHologram(String id, RenderMode renderMode, String owner, DefenceStruct defence) {
         this.renderMode = renderMode;
         validateId(id);
+        this.defence = defence;
         this.id = id.toLowerCase();
         this.owner = owner;
         startRunnable();
     }
 
-    public TextHologram(String id, String owner) {
-        this(id, RenderMode.NEARBY, owner);
+    public TextHologram(String id, String owner, DefenceStruct defence) {
+        this(id, RenderMode.NEARBY, owner, defence);
     }
 
     private void validateId(String id) {
@@ -133,14 +141,20 @@ public class TextHologram {
             sendPacket(packet);
             this.dead = false;
         });
-        update();
+        update(true);
     }
 
-    public TextHologram update() {
+    public TextHologram update(boolean first) {
         SkyFactionsReborn.getInstance().getServer().getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             updateAffectedPlayers();
             TextDisplayMeta meta = createMeta();
-            sendPacket(meta.createPacket());
+            if (first) {
+                viewers.forEach((player) -> {
+                    
+                });
+            } else {
+                sendPacket(meta.createPacket());
+            }
         });
         return this;
     }

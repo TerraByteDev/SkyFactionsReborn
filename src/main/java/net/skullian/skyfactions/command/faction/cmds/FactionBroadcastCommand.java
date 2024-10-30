@@ -1,14 +1,7 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.faction.FactionCommandHandler;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.faction.AuditLogType;
-import net.skullian.skyfactions.util.ErrorHandler;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotation.specifier.Greedy;
@@ -16,7 +9,14 @@ import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
-import java.util.List;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.command.faction.FactionCommandHandler;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.faction.AuditLogType;
+import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("faction")
 public class FactionBroadcastCommand extends CommandTemplate {
@@ -62,7 +62,7 @@ public class FactionBroadcastCommand extends CommandTemplate {
                     }
 
                 } else {
-                    Messages.FACTION_ACTION_DENY.send(player);
+                    Messages.FACTION_ACTION_DENY.send(player, player.locale());
                 }
             }
         });

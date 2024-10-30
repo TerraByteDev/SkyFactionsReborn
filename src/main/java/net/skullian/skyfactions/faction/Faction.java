@@ -12,6 +12,8 @@ import net.skullian.skyfactions.island.FactionIsland;
 import net.skullian.skyfactions.notification.NotificationType;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
+
+import org.antlr.v4.parse.ANTLRParser.block_return;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -22,6 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.Locale;
 
 @AllArgsConstructor
 @Getter
@@ -112,6 +115,23 @@ public class Faction {
     /**
      * Broadcast a message to the Faction's online members.
      *
+     * @param message Message to broadcast [{@link Messages}]
+     */
+    public void createBroadcast(OfflinePlayer broadcaster, Messages message, Object... replacements) {
+        List<OfflinePlayer> players = getAllMembers();
+        for (OfflinePlayer player : players) {
+            if (player.isOnline()) {
+                String model = Messages.FACTION_BROADCAST_MODEL.get(player.getPlayer().locale(), "%broadcaster%", broadcaster.getName(), "%broadcast%", 
+                    TextUtility.color(message.get(player.getPlayer().locale(), replacements).replace("%broadcaster%", broadcaster.getName()), broadcaster)
+                );
+                player.getPlayer().sendMessage(model);
+            }
+        }
+    }
+
+    /**
+     * Broadcast a message to the Faction's online members.
+     *
      * @param message Message to broadcast [{@link String}]
      */
     public void createBroadcast(OfflinePlayer broadcaster, String message) {
@@ -119,7 +139,7 @@ public class Faction {
         List<OfflinePlayer> players = getAllMembers();
         for (OfflinePlayer player : players) {
             if (player.isOnline()) {
-                String model = Messages.FACTION_BROADCAST_MODEL.get("%broadcaster%", broadcaster.getName(), "%broadcast%", formatted);
+                String model = Messages.FACTION_BROADCAST_MODEL.get(player.getPlayer().locale(), "%broadcaster%", broadcaster.getName(), "%broadcast%", formatted);
                 player.getPlayer().sendMessage(model);
             }
         }
@@ -167,7 +187,7 @@ public class Faction {
                 return;
             }
             if (Settings.FACTION_MANAGE_BROADCAST_KICKS.getBoolean()) {
-                createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST.get("%kicked%", player.getName()));
+                createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST,"%kicked%", player.getName());
             }
         });
     }
@@ -185,7 +205,7 @@ public class Faction {
             }
 
             if (Settings.FACTION_MANAGE_BROADCAST_BANS.getBoolean()) {
-                createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST.get("%banned%", player.getName()));
+                createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST,"%banned%", player.getName());
             }
         });
     }
@@ -287,7 +307,7 @@ public class Faction {
                 createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "%inviter%", inviter.getName(), "%player_name%", player.getName())
         ).whenComplete((ignored, ex) -> {
             if (player.isOnline()) {
-                Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer());
+                Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), player.getPlayer().locale());
             } else {
                 NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "%player_name%", inviter.getName(), "%faction_name%", name);
             }
@@ -309,7 +329,7 @@ public class Faction {
 
             for (OfflinePlayer user : users) {
                 if (user.isOnline()) {
-                    Messages.JOIN_REQUEST_NOTIFICATION.send(user.getPlayer());
+                    Messages.JOIN_REQUEST_NOTIFICATION.send(user.getPlayer(), user.getPlayer().locale());
                 }
             }
         });
@@ -384,11 +404,13 @@ public class Faction {
      */
     public String getRank(UUID playerUUID) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
-        if (owner.equals(player)) return TextUtility.color(Messages.FACTION_OWNER_TITLE.getString(), player);
-        if (admins.contains(player)) return TextUtility.color(Messages.FACTION_ADMIN_TITLE.getString(), player);
-        if (moderators.contains(player)) return TextUtility.color(Messages.FACTION_MODERATOR_TITLE.getString(), player);
-        if (fighters.contains(player)) return TextUtility.color(Messages.FACTION_FIGHTER_TITLE.getString(), player);
-        if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString(), player);
+        Locale locale = player.isOnline() ? player.getPlayer().locale() : Locale.of(Settings.DEFAULT_LANGUAGE.getString());
+
+        if (owner.equals(player)) return TextUtility.color(Messages.FACTION_OWNER_TITLE.getString(locale), player);
+        if (admins.contains(player)) return TextUtility.color(Messages.FACTION_ADMIN_TITLE.getString(locale), player);
+        if (moderators.contains(player)) return TextUtility.color(Messages.FACTION_MODERATOR_TITLE.getString(locale), player);
+        if (fighters.contains(player)) return TextUtility.color(Messages.FACTION_FIGHTER_TITLE.getString(locale), player);
+        if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString(locale), player);
 
         return "UNKNOWN";
     }

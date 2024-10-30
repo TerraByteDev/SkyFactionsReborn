@@ -1,18 +1,19 @@
 package net.skullian.skyfactions.command.sf.cmds;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.text.TextUtility;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
+import java.util.List;
+import java.util.Locale;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
-import java.util.List;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.util.text.TextUtility;
 
 @Command("sf")
 public class SFInfoCommand extends CommandTemplate {
@@ -39,8 +40,9 @@ public class SFInfoCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
+        Locale locale = sender instanceof Player ? ((Player) sender).locale() : Locale.ROOT;
 
-        Messages.COMMAND_HEAD.send(sender);
+        Messages.COMMAND_HEAD.send(sender, locale);
         sender.sendMessage(TextUtility.color(
                 "&3Version: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getVersion() + "{/#00B0CA}&r\n" +
                         "&3Authors: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "") + "{/#00B0CA}&r\n" +
@@ -48,7 +50,7 @@ public class SFInfoCommand extends CommandTemplate {
                         "&3Contributors: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getContributors().toString().replace("[", "").replace("]", "") + "{/#00B0CA}&r",
                         sender instanceof Player ? (Player) sender : null
         ));
-        Messages.COMMAND_HEAD.send(sender);
+        Messages.COMMAND_HEAD.send(sender, locale);
     }
 
     public static List<String> permissions = List.of("skyfactions.command.info");

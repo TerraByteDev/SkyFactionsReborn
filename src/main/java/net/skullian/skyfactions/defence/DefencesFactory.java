@@ -1,5 +1,25 @@
 package net.skullian.skyfactions.defence;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemStack;
+
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
@@ -23,29 +43,13 @@ import net.skullian.skyfactions.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.Faction;
-import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.inventory.ItemStack;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Stream;
 
 public class DefencesFactory {
 
-    public static final Map<String, DefenceStruct> defences = new HashMap<>();
+    public static final Map<String, Map<String, DefenceStruct>> defences = new HashMap<>();
     public static final Map<String, String> defenceTypes = new HashMap<>();
 
     public static final List<String> cachedMaterials = new ArrayList<>();
@@ -56,12 +60,12 @@ public class DefencesFactory {
             URI defencesFolder = SkyFactionsReborn.class.getResource("/defences").toURI();
             FileSystem fileSystem = FileSystems.newFileSystem(defencesFolder, new HashMap());
             for (Path yamlPath : fileSystem.getRootDirectories()) {
-                Stream<Path> stream = Files.list(yamlPath.resolve("/defences"));
+                Stream<Path> stream = Files.list(yamlPath.resolve("/language/en/defences"));
                 stream.forEach(path -> {
                     String fullPathName = path.getFileName().toString();
                     String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
 
-                    new ConfigHandler(SkyFactionsReborn.getInstance(), "defences/" + defenceName);
+                    new ConfigHandler("defences/" + defenceName);
                 });
             }
         } catch (URISyntaxException | IOException error) {
@@ -75,12 +79,17 @@ public class DefencesFactory {
         }
     }
 
-    public static void register() {
+    public static void onReload() {
+        defences.clear();
+        defenceTypes.clear();
+        defenceTypes.put("ARROW", "net.skullian.skyfactions.defence.defences.ArrowDefence");
+    }
+    
+    public static void register(File directory, String locale) {
         try {
-            defences.clear();
-            defenceTypes.put("ARROW", "net.skullian.skyfactions.defence.defences.ArrowDefence");
+            File dir = new File(directory + "/defences");
 
-            File dir = new File(SkyFactionsReborn.getInstance().getDataFolder() + "/defences");
+            Map<String, DefenceStruct> dMap = new HashMap<>();
             for (File defenceFile : Objects.requireNonNull(dir.listFiles())) {
                 String fullPathName = defenceFile.getName();
                 String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
@@ -90,8 +99,10 @@ public class DefencesFactory {
                         DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
                 DefenceStruct struct = createStruct(config, defenceName);
-                defences.put(struct.getIDENTIFIER(), struct);
+                dMap.put(struct.getIDENTIFIER(), struct);
             }
+
+            defences.put(locale, dMap);
         } catch (IOException error) {
             SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
             SLogger.fatal("There was an error loading defences.");
@@ -101,6 +112,10 @@ public class DefencesFactory {
             error.printStackTrace();
             SkyFactionsReborn.getInstance().getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
         }
+    }
+
+    public static Map<String, DefenceStruct> getDefaultStruct() {
+        return defences.get(Settings.DEFAULT_LANGUAGE.getString());
     }
 
     private static DefenceStruct createStruct(YamlDocument config, String fileName) {
@@ -270,7 +285,7 @@ public class DefencesFactory {
             faction.subtractRunes(defence.getBUY_COST());
             player.getInventory().addItem(stack);
             SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
-            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME(), player));
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, player.locale(), "%defence_name%", TextUtility.color(defence.getNAME(), player));
 
             faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_PURCHASE, "%player_name%", player.getName(), "%defence_name%", TextUtility.color(defence.getNAME(), player));
         } else {
@@ -278,7 +293,7 @@ public class DefencesFactory {
             RunesAPI.removeRunes(player.getUniqueId(), defence.getBUY_COST());
             player.getInventory().addItem(stack);
             SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
-            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, "%defence_name%", TextUtility.color(defence.getNAME(), player));
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, player.locale(), "%defence_name%", TextUtility.color(defence.getNAME(), player));
         }
     }
 

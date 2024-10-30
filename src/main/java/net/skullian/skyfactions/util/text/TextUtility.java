@@ -76,7 +76,7 @@ public class TextUtility {
         }
 
         if (regexMatch) {
-            Messages.FACTION_NAME_PROHIBITED.send(player);
+            Messages.FACTION_NAME_PROHIBITED.send(player, player.locale());
             return true;
         } else {
             return false;

@@ -36,7 +36,7 @@ public class JoinRequestsTypeItem extends SkyItem {
                 }
 
                 if (joinRequest == null) {
-                    Messages.FACTION_JOIN_REQUEST_NOT_EXIST.send(player);
+                    Messages.FACTION_JOIN_REQUEST_NOT_EXIST.send(player, player.locale());
                 } else {
                     PlayerOutgoingRequestManageUI.promptPlayer(player, joinRequest);
                 }

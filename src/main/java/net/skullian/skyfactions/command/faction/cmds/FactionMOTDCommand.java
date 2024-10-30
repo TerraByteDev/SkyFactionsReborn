@@ -1,13 +1,7 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
-import net.skullian.skyfactions.util.text.TextUtility;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotation.specifier.Greedy;
@@ -15,7 +9,13 @@ import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
-import java.util.List;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.text.TextUtility;
 
 @Command("faction")
 public class FactionMOTDCommand extends CommandTemplate {
@@ -51,18 +51,18 @@ public class FactionMOTDCommand extends CommandTemplate {
             }
 
             if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player);
+                Messages.NOT_IN_FACTION.send(player, player.locale());
                 return;
             } else if (!faction.isOwner(player) || !faction.isModerator(player)) {
-                Messages.PERMISSION_DENY.send(player);
+                Messages.PERMISSION_DENY.send(player, player.locale());
                 return;
             }
 
-            Messages.MOTD_CHANGE_PROCESSING.send(player);
+            Messages.MOTD_CHANGE_PROCESSING.send(player, player.locale());
 
             if (!TextUtility.hasBlacklistedWords(player, motd)) {
                 faction.updateMOTD(motd, player);
-                Messages.MOTD_CHANGE_SUCCESS.send(player);
+                Messages.MOTD_CHANGE_SUCCESS.send(player, player.locale());
             }
         });
     }

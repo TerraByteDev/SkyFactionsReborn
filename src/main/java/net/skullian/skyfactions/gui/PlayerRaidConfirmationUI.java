@@ -23,7 +23,7 @@ public class PlayerRaidConfirmationUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("confirmations/start_raid");
+                GUIData data = GUIAPI.getGUIData("confirmations/start_raid", player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -38,7 +38,7 @@ public class PlayerRaidConfirmationUI {
                 window.open();
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "start a raid", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "start a raid", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }

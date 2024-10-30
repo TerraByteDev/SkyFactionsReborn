@@ -1,22 +1,20 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.api.GemsAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.faction.FactionCommandHandler;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.GemsAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("faction")
 public class FactionDonateCommand extends CommandTemplate {
@@ -46,18 +44,18 @@ public class FactionDonateCommand extends CommandTemplate {
                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                return;
            } else if (faction == null) {
-               Messages.NOT_IN_FACTION.send(player);
+               Messages.NOT_IN_FACTION.send(player, player.locale());
                return;
            }
 
            int gems = GemsAPI.getGems(player.getUniqueId());
            if (gems < amount) {
-               Messages.INSUFFICIENT_GEMS_COUNT.send(player);
+               Messages.INSUFFICIENT_GEMS_COUNT.send(player, player.locale());
                return;
            }
            GemsAPI.subtractGems(player.getUniqueId(), amount);
            faction.addGems(amount);
-           Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, "%amount%", amount);
+           Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, player.locale(), "%amount%", amount);
         });
     }
 
