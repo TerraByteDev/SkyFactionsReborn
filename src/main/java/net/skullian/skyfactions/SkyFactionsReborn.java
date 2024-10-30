@@ -159,11 +159,13 @@ public final class SkyFactionsReborn extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
-            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-            scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
-            cacheService.disable().get();
+            if (cacheService != null) {
+                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+                scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
+                cacheService.disable().get();
 
-            scheduler.shutdownNow();
+                scheduler.shutdownNow();
+            }
 
             SLogger.info("Closing Database connection.");
             closeDatabase();
