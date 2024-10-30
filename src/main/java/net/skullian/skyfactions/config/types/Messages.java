@@ -281,7 +281,7 @@ public enum Messages {
     private static void registerGUIs(File dir, String locale) throws IOException {
         Map<String, YamlDocument> docs = new HashMap<>();
         for (GUIEnums enumEntry : GUIEnums.values()) {
-            YamlDocument doc = YamlDocument.create(new File(dir, enumEntry.getConfigPath()),
+            YamlDocument doc = YamlDocument.create(new File(dir, enumEntry.getConfigPath(), SkyFactionsReborn.getInstance().getResource("language/" + locale + "/guis/" + enumEntry.getConfigPath() + ".yml")),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
             docs.put(enumEntry.getConfigPath(), doc);
