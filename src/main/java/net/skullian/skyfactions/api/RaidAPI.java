@@ -218,14 +218,14 @@ public class RaidAPI {
                 int length = Settings.RAIDING_COUNTDOWN_DURATION.getInt();
                 String countdown_sound = Settings.COUNTDOWN_SOUND.getString();
                 int countdown_pitch = Settings.COUNTDOWN_SOUND_PITCH.getInt();
-                final Component subtitle = Component.text(TextUtility.color(Settings.RAIDING_COUNTDOWN_SUBTITLE.getString(), defp));
+                final Component attackerSubtitle = Component.text(TextUtility.color(Messages.RAIDING_COUNTDOWN_SUBTITLE.getString(att.locale()), att));
+                final Component defendantSubtitle = defp != null ? Component.text(TextUtility.color(Messages.RAIDING_COUNTDOWN_SUBTITLE.getString(defp.locale()), defp)) : null;
                 Thread.sleep(3500);
                 for (int i = length; i == 0; i--) {
                     final Component mainTitle = Component.text(i + 1, NamedTextColor.RED);
 
-                    final Title title = Title.title(mainTitle, subtitle);
-                    defp.showTitle(title);
-                    att.showTitle(title);
+                    final Title attackerTitle = Title.title(mainTitle, attackerSubtitle);
+                    if (defp != null) att.showTitle(attackerTitle);
 
                     SoundUtil.playSound(defp, countdown_sound, countdown_pitch, 1f);
                     SoundUtil.playSound(att, countdown_sound, countdown_pitch, 1f);

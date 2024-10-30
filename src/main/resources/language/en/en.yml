@@ -188,6 +188,9 @@ Messages:
     # Sent to the player when the raid is processing (preparing).
     RAID_PROCESSING: "%server_name% &r&eStarting a raid, please wait..."
 
+    # Upon countdown, a title going "5", then "4", etc (depends on your countdown duration is displayed). That is not configurable but the subtitle is.
+    COUNTDOWN_SUBTITLE: "&aGet ready!"
+
     # Sent to a player when they are being raided (imminent) and are online. Is as a list, each value is a new line.
     # Placeholders: %raider% - Player attacking / %player_name% - Player being raided.
     RAIDED_NOTIFICATION:

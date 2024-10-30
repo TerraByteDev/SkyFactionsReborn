@@ -221,9 +221,8 @@ Raiding:
   # Players are spawned in a random pos at SPAWN_HEIGHT. The radius from the centre of the region is dictated here.
   RANDOM_SPAWN_RADIUS: 30
 
+  # After preparation, how long should the countdown last?
   COUNTDOWN_DURATION: 5 # IN SECONDS
-  # Upon countdown, a title going "5", then "4", etc (depends on your countdown duration is displayed). That is not configurable but the subtitle is.
-  COUNTDOWN_SUBTITLE: "&aGet ready!"
 
   # This is a feature where players can be teleported to areas to prepare themselves for the raid.
   TELEPORT_TO_PREPARATION: true
