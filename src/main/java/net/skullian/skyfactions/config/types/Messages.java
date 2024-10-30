@@ -243,8 +243,8 @@ public enum Messages {
             new File(SkyFactionsReborn.getInstance().getDataFolder(), "/language").mkdirs();
             SLogger.info("Saving default language [English].");
         
-            YamlDocument.create(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/language/en/en.yml"), SkyFactionsReborn.getInstance().getResource("/language/en/en.yml"),
-                        GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+            configs.put("en", YamlDocument.create(new File(SkyFactionsReborn.getInstance().getDataFolder() + "/language/en/en.yml"), SkyFactionsReborn.getInstance().getResource("/language/en/en.yml"),
+                        GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build()));
 
             File folder = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/language");
             if (!folder.exists() || !folder.isDirectory()) throw new Exception("Could not find the language folder. Please report this error ASAP.");
