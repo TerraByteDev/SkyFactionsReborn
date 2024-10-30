@@ -36,8 +36,8 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.RUNES, new ConfigHandler("runes"));
         registerFile(ConfigTypes.DEFENCES, new ConfigHandler("defences"));
 
-        Messages.load();
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
+        Messages.load();
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
         DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
@@ -54,8 +54,9 @@ public class ConfigFileHandler {
 
     public void reloadFiles() {
         configs.values().forEach(ConfigHandler::reload);
-        Messages.load();
+
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
+        Messages.load();
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
         DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
