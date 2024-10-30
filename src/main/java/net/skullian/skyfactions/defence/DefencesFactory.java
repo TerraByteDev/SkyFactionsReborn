@@ -57,7 +57,7 @@ public class DefencesFactory {
     public static void registerDefaultDefences() {
         try {
             SLogger.info("Saving default defence configs.");
-            URI defencesFolder = SkyFactionsReborn.class.getResource("/defences").toURI();
+            URI defencesFolder = SkyFactionsReborn.class.getResource("/language/en/defences").toURI();
             FileSystem fileSystem = FileSystems.newFileSystem(defencesFolder, new HashMap());
             for (Path yamlPath : fileSystem.getRootDirectories()) {
                 Stream<Path> stream = Files.list(yamlPath.resolve("/language/en/defences"));
@@ -65,7 +65,7 @@ public class DefencesFactory {
                     String fullPathName = path.getFileName().toString();
                     String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
 
-                    new ConfigHandler("defences/" + defenceName);
+                    new ConfigHandler("/language/en/defences/" + defenceName);
                 });
             }
         } catch (URISyntaxException | IOException error) {
@@ -87,7 +87,7 @@ public class DefencesFactory {
     
     public static void register(File directory, String locale) {
         try {
-            File dir = new File(directory + "/defences");
+            File dir = new File(directory + "/defences").mkdirs();
 
             Map<String, DefenceStruct> dMap = new HashMap<>();
             for (File defenceFile : Objects.requireNonNull(dir.listFiles())) {
