@@ -243,8 +243,7 @@ public enum Messages {
     public static void load() {
         try {
             new File(SkyFactionsReborn.getInstance().getDataFolder(), "/language").mkdirs();
-            SLogger.info("Saving default language [English].");
-            SLogger.fatal(SkyFactionsReborn.getInstance().getResource("language/en/en.yml"));
+            SLogger.info("Saving default language [English].")
             configs.put("en", YamlDocument.create(new File(SkyFactionsReborn.getInstance().getDataFolder() + "/language/en/en.yml"), SkyFactionsReborn.getInstance().getResource("language/en/en.yml"),
                         GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build()));
 
@@ -281,7 +280,7 @@ public enum Messages {
     private static void registerGUIs(File dir, String locale) throws IOException {
         Map<String, YamlDocument> docs = new HashMap<>();
         for (GUIEnums enumEntry : GUIEnums.values()) {
-            YamlDocument doc = YamlDocument.create(new File(dir, enumEntry.getConfigPath(), SkyFactionsReborn.getInstance().getResource("language/" + locale + "/guis/" + enumEntry.getConfigPath() + ".yml")),
+            YamlDocument doc = YamlDocument.create(new File(dir, enumEntry.getConfigPath(), SkyFactionsReborn.getInstance().getResource(String.format("language/%s/guis/%s.yml", locale, enumEntry.getConfigPath()))),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
             docs.put(enumEntry.getConfigPath(), doc);
