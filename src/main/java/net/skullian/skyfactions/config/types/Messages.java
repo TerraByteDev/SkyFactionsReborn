@@ -26,6 +26,8 @@ import net.skullian.skyfactions.util.text.TextUtility;
 
 public enum Messages {
 
+    LANGUAGE_NAME("LANGUAGE_NAME"),
+
     SERVER_NAME("SERVER_NAME"),
     PERMISSION_DENY("PERMISSION_DENY"),
     RELOADING("RELOADING"),

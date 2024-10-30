@@ -148,7 +148,7 @@ public class NPCManager {
     }
 
     private SkyNPCFactory getFactory() {
-        if (!Settings.NPC_INTEGRATION_ENABLED.getBoolean()) return;
+        if (!Settings.NPC_INTEGRATION_ENABLED.getBoolean()) return null;
 
         switch (Settings.NPC_FACTORY.getString().toLowerCase()) {
 

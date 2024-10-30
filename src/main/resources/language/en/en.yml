@@ -13,6 +13,10 @@ CONFIG_VERSION: 1
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
 
 Messages:
+  # Used in the /sf language tabcomplete to allow players to choose available
+  # languages other than auto detected. Avoid changing this.
+  LANGUAGE_NAME: "English"
+  
   SERVER_NAME: '&7[&r{#0083FF}&lSkyFactions{/#00FFC7}&r&7]' # Name of your server
 
   PERMISSION_DENY: '%server_name% &c&lHey!&r&7 You are not allowed to execute this command.' # Sent when a player tries to run a command they do not have permission for.
