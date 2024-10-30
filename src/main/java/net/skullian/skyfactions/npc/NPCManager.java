@@ -149,6 +149,7 @@ public class NPCManager {
 
     private SkyNPCFactory getFactory() {
         if (!Settings.NPC_INTEGRATION_ENABLED.getBoolean()) return;
+
         switch (Settings.NPC_FACTORY.getString().toLowerCase()) {
 
             case "znpcsplus":
