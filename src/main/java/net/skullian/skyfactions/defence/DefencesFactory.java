@@ -87,7 +87,8 @@ public class DefencesFactory {
     
     public static void register(File directory, String locale) {
         try {
-            File dir = new File(directory + "/defences").mkdirs();
+            File dir = new File(directory + "/defences");
+            dir.mkdirs();
 
             Map<String, DefenceStruct> dMap = new HashMap<>();
             for (File defenceFile : Objects.requireNonNull(dir.listFiles())) {
