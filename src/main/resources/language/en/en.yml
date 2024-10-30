@@ -148,16 +148,6 @@ Messages:
     # Sent after all NPCs were disabled.
     # Placeholders: %count% - Amount of NPCs disabled.
     NPC_DISABLED: "%server_name%&a Finished disabling NPCs. &7(%count% NPCs removed)"
-    
-    NAMES:
-      # NPC name for player islands,
-      # You can use the placeholder "%player_name%" to display the name of the player.
-      # This placeholder does not apply for faction island NPC names!
-      PLAYER_ISLANDS: "&9Sky Master"
-    
-      # NPC Name for faction islands.
-      # You can use the placeholder "%faction_name%" to display the name of the faction instead.
-      FACTION_ISLANDS: "&9Sky Master"
 
     # Control what happens when NPCs are interacted with.
     # See https://docs.terrabytedev.com/skyfactions/mechanics/npcs.html#actions
@@ -273,6 +263,13 @@ Messages:
 
     # Sent when a player tries to deposit gems when there are none in their inventory.
     NO_GEMS_PRESENT: "%server_name% &c&lHey! &r&7You do not have any gems in your inventory!"
+
+    # Item name of the gem item (when withdrawed).
+    ITEM_NAME: "&l{#37FF00}Gem{/#89FF58"
+
+    # Item lore for the gem (when withdrawed).
+    ITEM_LORE: [] # No lore for me!
+
   Factions:
     # Sent when a player donates some of their gems to their Faction.
     # Placeholders: %amount% - Amount of gems donated.

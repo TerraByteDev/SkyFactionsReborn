@@ -7,12 +7,14 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.util.text.TextUtility;
 
@@ -68,14 +70,14 @@ public class GemsAPI {
         });
     }
 
-    public static ItemStack createGemsStack() {
+    public static ItemStack createGemsStack(Player player) {
         ItemStack stack = new ItemStack(Material.valueOf(Settings.GEMS_MATERIAL.getString()));
 
         ItemMeta meta = stack.getItemMeta();
         if (Settings.GEMS_CUSTOM_MODEL_DATA.getInt() != -1) meta.setCustomModelData(Settings.GEMS_CUSTOM_MODEL_DATA.getInt());
-        meta.setDisplayName(TextUtility.color(Settings.GEMS_ITEM_NAME.getString(), null));
-        if (!Settings.GEMS_ITEM_LORE.getList().isEmpty()) meta.setLore(
-                Settings.GEMS_ITEM_LORE.getList().stream()
+        meta.setDisplayName(TextUtility.color(Messages.GEMS_ITEM_NAME.getString(player.locale()), null));
+        if (!Messages.GEMS_ITEM_LORE.getStringList(player.locale()).isEmpty()) meta.setLore(
+                Messages.GEMS_ITEM_LORE.getStringList(player.locale()).stream()
                         .map(text -> TextUtility.color(text, null))
                         .collect(Collectors.toList())
         );

@@ -191,9 +191,6 @@ Gems:
   # You can find a list of items at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html.
   MATERIAL: "EMERALD"
 
-  # Item name for the gem.
-  ITEM_NAME: "&l{#37FF00}Gem{/#89FF58}"
-
   # Item lore for the gem.
   ITEM_LORE: [] # No lore for me!
 

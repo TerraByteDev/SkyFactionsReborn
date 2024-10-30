@@ -54,7 +54,7 @@ public class GemsDepositCommand extends CommandTemplate {
                 Messages.NO_ISLAND.send(player, player.locale());
             }
 
-            ItemStack currencyItem = GemsAPI.createGemsStack();
+            ItemStack currencyItem = GemsAPI.createGemsStack(player);
             int totalDeposited = 0;
 
             if (amount.equalsIgnoreCase("all")) {

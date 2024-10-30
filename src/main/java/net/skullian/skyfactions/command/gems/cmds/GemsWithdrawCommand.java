@@ -56,7 +56,7 @@ public class GemsWithdrawCommand extends CommandTemplate {
                 int gems = GemsAPI.getGems(player.getUniqueId());
                 try {
                     int parsedAmount = amount.equalsIgnoreCase("all") ? gems : (Integer.parseInt(amount) > gems ? gems : Integer.parseInt(amount));
-                    ItemStack stack = GemsAPI.createGemsStack();
+                    ItemStack stack = GemsAPI.createGemsStack(player);
                     stack.setAmount(parsedAmount);
 
                     int remainingItems = addItemToInventory(player.getInventory(), stack);
