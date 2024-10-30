@@ -529,6 +529,15 @@ Messages:
         - "&4&oGuard it with your life."
         - "&6&l┕━━━━╗✹╔━━━━┙"
 
+    # Certain parts of the obelisk GUI take some time to load.
+    # You can configure the placeholder item here.
+    LOADING:
+      MATERIAL: "COMPASS" # Material of the item
+      TEXT: "&ePlease wait..." # Text of the item. Supports color codes
+      LORE:
+        - "&7We're loading this section"
+        - "&7of your Obelisk. Bear with us!"
+
 
   Runes:
     # Sent when items with enchants are not allowed for rune conversion.

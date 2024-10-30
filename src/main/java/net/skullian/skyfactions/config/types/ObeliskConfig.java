@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 import java.util.List;
@@ -14,11 +16,7 @@ public enum ObeliskConfig {
 
     OBELISK_MATERIAL("Block.MATERIAL"),
     OBELISK_SPAWN_OFFSET("Block.SPAWN_OFFSET"),
-    OBELISK_CUSTOM_MODEL_DATA("Block.CUSTOM_MODEL_DATA"),
-
-    LOADING_ITEM_MATERIAL("Block.LOADING.MATERIAL"),
-    LOADING_ITEM_TEXT("Block.LOADING.TEXT"),
-    LOADING_ITEM_LORE("Block.LOADING.LORE");
+    OBELISK_CUSTOM_MODEL_DATA("Block.CUSTOM_MODEL_DATA");
 
     @Setter
     private static YamlDocument config;
@@ -44,9 +42,9 @@ public enum ObeliskConfig {
         return config.getInt(this.path);
     }
 
-    public static ItemBuilder getLoadingItem() {
-        ItemBuilder builder = new ItemBuilder(Material.getMaterial(LOADING_ITEM_MATERIAL.getString())).setDisplayName(TextUtility.color(LOADING_ITEM_TEXT.getString(), null));
-        for (String str : LOADING_ITEM_LORE.getList()) {
+    public static ItemBuilder getLoadingItem(Player player) {
+        ItemBuilder builder = new ItemBuilder(Material.getMaterial(Messages.LOADING_ITEM_MATERIAL.getString(player.locale()))).setDisplayName(TextUtility.color(Messages.LOADING_ITEM_TEXT.getString(player.locale()), player));
+        for (String str : Messages.LOADING_ITEM_LORE.getStringList(player.locale())) {
             builder.addLoreLines(TextUtility.color(str, null));
         }
 

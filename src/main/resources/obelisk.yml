@@ -27,12 +27,3 @@ Block:
 
   # Custom Model Data / ID for the block (if you want it). Keep at -1 to disable the feature.
   CUSTOM_MODEL_DATA: -1
-
-  # Certain parts of the obelisk GUI take some time to load.
-  # You can configure the placeholder item here.
-  LOADING:
-    MATERIAL: "COMPASS" # Material of the item
-    TEXT: "&ePlease wait..." # Text of the item. Supports color codes
-    LORE:
-      - "&7We're loading this section"
-      - "&7of your Obelisk. Bear with us!"
