@@ -245,7 +245,7 @@ public enum Messages {
             new File(SkyFactionsReborn.getInstance().getDataFolder(), "/language").mkdirs();
             SLogger.info("Saving default language [English].");
             SLogger.fatal(SkyFactionsReborn.getInstance().getResource("language/en/en.yml"));
-            configs.put("en", YamlDocument.create(new File(SkyFactionsReborn.getInstance().getDataFolder() + "/language/en/en.yml"), SkyFactionsReborn.getInstance().getResource("/language/en/en.yml"),
+            configs.put("en", YamlDocument.create(new File(SkyFactionsReborn.getInstance().getDataFolder() + "/language/en/en.yml"), SkyFactionsReborn.getInstance().getResource("language/en/en.yml"),
                         GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build()));
 
             File folder = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/language");
