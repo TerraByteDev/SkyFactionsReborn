@@ -30,7 +30,6 @@ public class ConfigFileHandler {
         new File(plugin.getDataFolder(), "/songs").mkdirs();
 
         registerFile(ConfigTypes.SETTINGS, new ConfigHandler("config"));
-        registerFile(ConfigTypes.MESSAGES, new ConfigHandler("messages"));
         registerFile(ConfigTypes.DISCORD, new ConfigHandler("discord"));
         registerFile(ConfigTypes.OBELISK, new ConfigHandler("obelisk"));
         registerFile(ConfigTypes.RUNES, new ConfigHandler("runes"));
