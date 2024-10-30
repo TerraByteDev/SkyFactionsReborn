@@ -11,6 +11,7 @@ import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
 import java.util.List;
+import java.util.Locale;
 
 @Command("gems")
 public class GemsHelpCommand extends CommandTemplate {
@@ -44,17 +45,18 @@ public class GemsHelpCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
+        Locale locale = sender instanceof Player ? ((Player) sender).locale() : Locale.ROOT;
 
-        Messages.COMMAND_HEAD.send(sender);
+        Messages.COMMAND_HEAD.send(sender, locale);
         if (handler.getSubCommands().isEmpty()) {
-            Messages.NO_COMMANDS_FOUND.send(sender);
+            Messages.NO_COMMANDS_FOUND.send(sender, locale);
         }
         for (int i = 0; i < handler.getSubCommands().size(); i++) {
             if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, handler.getSubCommands().get(i).permission(), false))
                 continue;
-            Messages.COMMAND_INFO.send(sender, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", handler.getSubCommands().get(i).getName(), "%command_description%", handler.getSubCommands().get(i).getDescription());
+            Messages.COMMAND_INFO.send(sender, locale, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", handler.getSubCommands().get(i).getName(), "%command_description%", handler.getSubCommands().get(i).getDescription());
         }
-        Messages.COMMAND_HEAD.send(sender);
+        Messages.COMMAND_HEAD.send(sender, locale);
     }
 
     public static List<String> permissions = List.of("skyfactions.gems.help", "skyfactions.gems");

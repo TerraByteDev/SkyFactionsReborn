@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -97,7 +98,7 @@ public class DiscordHandler {
         SkyFactionsReborn.databaseHandler.getDiscordLink(victim).thenAccept(id -> {
             if (id != null && !id.equals("none")) {
                 EmbedBuilder embedBuilder = new EmbedBuilder()
-                        .setDescription(Messages.DISCORD_RAID_MESSAGE.getString().replace("%attacker%", attacker.getName()))
+                        .setDescription(Messages.DISCORD_RAID_MESSAGE.getString(victim.locale()).replace("%attacker%", attacker.getName()))
                         .setThumbnail(DiscordConfig.AVATAR_API.getString().replace("%player%", attacker.getUniqueId().toString()));
 
                 RAID_NOTIFICATION_CHANNEL.sendMessage("<@" + id + ">").setEmbeds(embedBuilder.build()).queue();

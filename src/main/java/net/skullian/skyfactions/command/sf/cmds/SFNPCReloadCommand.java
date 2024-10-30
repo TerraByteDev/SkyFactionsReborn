@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.command.sf.cmds;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -39,9 +40,10 @@ public class SFNPCReloadCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) &&!CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
+        Locale locale = sender instanceof Player ? ((Player) sender).locale() : Locale.ROOT;
 
         SLogger.warn("[{}] is reloading SkyFactions NPCs.", sender.getName());
-        Messages.NPC_RELOADING.send(sender);
+        Messages.NPC_RELOADING.send(sender, locale);
 
         SkyFactionsReborn.npcManager.updateNPCs(false).whenComplete((affected, exc) -> {
             if (exc != null) {
@@ -49,7 +51,7 @@ public class SFNPCReloadCommand extends CommandTemplate {
                 return;
             }
 
-            Messages.NPC_RELOADED.send(sender, "%count%", affected);
+            Messages.NPC_RELOADED.send(sender, locale, "%count%", affected);
             SLogger.info("Finished reloading NPCs - [{}] NPCs affected.", affected);
         });   
     }

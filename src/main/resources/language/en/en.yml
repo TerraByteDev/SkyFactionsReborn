@@ -1,0 +1,651 @@
+#      __  ___
+#    /  |/  /__  ______________ _____ ____  _____
+#   / /|_/ / _ \/ ___/ ___/ __ `/ __ `/ _ \/ ___/
+#  / /  / /  __(__  |__  ) /_/ / /_/ /  __(__  )
+# /_/  /_/\___/____/____/\__,_/\__, /\___/____/
+#                             /____/
+
+# =============== MESSAGE CONFIG =============== #
+
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
+# Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
+
+Messages:
+  SERVER_NAME: '&7[&r{#0083FF}&lSkyFactions{/#00FFC7}&r&7]' # Name of your server
+
+  PERMISSION_DENY: '%server_name% &c&lHey!&r&7 You are not allowed to execute this command.' # Sent when a player tries to run a command they do not have permission for.
+  RELOADING: '%server_name%&r&7 Reloading SkyFactions, please wait...' # Message sent when the plugin is being reloaded.
+  RELOADED: '%server_name%&r&a Plugin reloaded!' # Message sent when plugin is finished reloading.
+  COOLDOWN: '%server_name%&r&7 You must wait &c&l%cooldown%&r&7 seconds to use this command.' # When the player tries to use a command that is on cooldown (configured in config.yml!).
+  INCORRECT_USAGE: '%server_name%&r&7 Incorrect usage of command. Usage: &c&l%usage%' # Sent when the player uses a command with improper syntax.
+  UNKNOWN_PLAYER: "%server_name%&r&7 Unknown player: &c&l%player%" # Sent when a command is ran on an unknown player (when applicable).
+  PLEASE_WAIT: "%server_name%&r&7 %operation%, please wait..." # Sent when the plugin is processing a request. Everything is fully async so responses aren't guaranteed to be immediate.
+  SYNC_SUCCESS: "%server_name%&r&a Successfully synced cached data with the database!" # Sent when /sf sync is ran.
+
+  # Sent when an error occurs when trying to execute a command or task.
+  # Placeholders: %operation% - what was happening / %debug% - Debug code to be used in accordance to https://docs.terrabytedev.com/skyfactions/errors-and-debugging.
+  ERROR: '%server_name%&r&7 Something went wrong when trying to %operation%. Please try again later. (&c%debug%&7)'
+
+  Commands:
+    # Sent at the start and the bottom of the help command response.
+    COMMAND_HEAD: "&7------------- &r{#0083FF}&lSkyFactions{/#00FFC7}&r&7 -------------"
+
+    # Possible placeholders: %command_syntax% - Syntax of Command (e.g. "/<command> help") // %command_name% - Command Name (e.g. "help") // %command_description% - Description of Command.
+    # displayed when user uses /<command> help (or just does /<command>, which routes to /<command> help). It outlines all messages.
+    COMMAND_INFO: "{#15FB08}%command_syntax%{/#00B0CA}&r&6 - &3%command_description%"
+
+    # Sent when a player runs a command and there are no commands to show (e.g. they don't have perms to see them).
+    NO_COMMANDS_FOUND: '&c&lNo commands found!'
+
+  Islands:
+    # Sent when a player tries to create an island when they already have one.
+    ISLAND_CREATION_DENY: "%server_name% &r&c&lHey! &r&7You already have an island!"
+
+    # Sent when the player creates an island, and it is being created.
+    CREATING_MESSAGE: "%server_name%&r&e Creating your island, please wait..."
+
+    # Sent when the island has been successfully created.
+    CREATED_MESSAGE: "%server_name%&r&a&l Your island has been created!"
+
+    # Sent when the player tries to run a command related to islands when they do not have one.
+    NO_ISLAND: "%server_name% &c&lHey!&r&7 You do not have an island!"
+
+    # Sent when a player in question does not have an island (but someone tries to do something such as /runes give)
+    PLAYER_HAS_NO_ISLAND: "%server_name% &c&lHey!&r&7 That player does not have an island!"
+
+    # Sent when a player runs /island delete confirm and the deletion is processing.
+    DELETION_PROCESSING: "%server_name%&r&e Deleting your island, please wait..."
+    # Sent when the player initially runs /island delete, and has to rerun the command below.
+    CONFIRM_DELETION: "%server_name%&r&7 Please run&c&l /island delete confirm&r&7 to confirm deletion of your island."
+    # Sent when the player runs /island delete confirm and the island has been removed.
+    DELETION_SUCCESS: "%server_name%&r&7 Your island has been successfully deleted."
+    # Sent when the player runs /island delete confirm before they run /island delete (2 step!)
+    DELETION_BLOCK: "%server_name%&c&l Hey!&r&7 You must run &c&l/island delete&r&7 before using this command."
+
+    # Sent when a player successfully trusts another player to visit their island.
+    # Placeholders: %player% - Name of player who is trusted.
+    TRUST_SUCCESS: "%server_name%&a Successfully trusted %player%!"
+    # Sent when a player tries to trust a player that is already trusted.
+    ALREADY_TRUSTED: "%server_name%&r&c You have already trusted that player!"
+
+    # Sent when a player successfully untrusts a player.
+    # Placeholders: %player% - Untrusted player.
+    UNTRUST_SUCCESS: "%server_name%&a Successfully untrusted %player%."
+    # Sent when a player tries to untrust a player that is not trusted already.
+    UNTRUST_FAILURE: "%server_name%&c That player is not trusted by you!"
+
+    # Sent while the visit is processing.
+    VISIT_PROCESSING: "%server_name%&e Teleporting, please wait..."
+    # Sent when a player tries to visit a player's island without being trusted.
+    VISIT_NOT_TRUSTED: "%server_name%&c&l Hey!&r&7 You must be trusted to visit that island!"
+    # Sent when a player tries to visit a player that has no island.
+    VISIT_NO_ISLAND: "%server_name%&c&l Hey!&r&7 That player does not have an island!"
+    # Sent when a player tries to visit a player that is participating in a raid.
+    VISIT_IN_RAID: "%server_name%&c&l Hey!&r&7 That player is raiding/being raided."
+
+    # Sent if the player tries to use nether portals (when disabled).
+    NETHER_PORTALS_BLOCKED: "%server_name%&c&l Hey!&r&7 You cannot use nether portals here!"
+
+    # Sent when the player tries to teleport to their faction / player island when they are already on it.
+    ALREADY_ON_ISLAND: "%server_name%&c&l Hey!&r&7 You are already on your island!"
+
+    # Sent when a player tries to /island visit another, but they are already on their island.
+    # Placeholders: %player% - Name of the player they tried to visit.
+    VISIT_ALREADY_ON_ISLAND: "%server_name%&c&l Hey!&r&7 You are already on %player%'s island!"
+
+  Discord:
+    # Sent to the player when they request to link (runs /link).
+    # Placeholders: %code% - Code to run in the discord.
+    LINK_PROMPT: "%server_name% &r&e Run '&c&l/link-mc %code%&r&e' in the discord to link your account!"
+
+    # Message content of the embed sent when a player is being raided.
+    # Placeholders: %attacker% - Name of attacker.
+    DISCORD_RAID_MESSAGE: "`❗` You are being raided by **%attacker%**!\n\n`⚔️` Defend thy honour!"
+
+    # Message sent to the player INGAME when linking is successful.
+    # Placeholders: %discord_name% - Username (tag) of the discord user you link to.
+    LINK_SUCCESS_MESSAGE: "%server_name% &a&lSuccess!&r&7 You are now linked to %discord_name%"
+
+    # Message sent to the user IN DISCORD when linking is successful. (IS AN EMBED!)
+    # Placeholders: %player_name% - Name of ingame player you link to.
+    DISCORD_LINK_SUCCESS_MESSAGE: "`✅` Success! You are now linked to %player_name%"
+
+    # Sent when an error occurs when linking. (IS AN EMBED!)
+    DISCORD_LINK_ERROR: "`❌` Oops! Looks like something went wrong when trying to link your account.\nPlease try again later."
+
+    # Sent when the user is already linked (when discord command is run) (IS AN EMBED!)
+    # Placeholders: %player_name% - Name of ingame player you are already linked to.
+    DISCORD_ALREADY_LINKED: "`❌` You are already linked to %player_name%"
+
+    # Sent when the user is already linked (when ingame command is run) (IS AN EMBED!)
+    # Placeholders: %discord_name% - Username (tag) of the discord user you are already linked to.
+    ALREADY_LINKED: "%server_name% &c&lHey! &r&7You are already linked to %discord_name%!"
+
+    # Sent in Discord when the code is invalid. (IS AN EMBED!).
+    LINK_FAILED: "`❓` The code you entered is invalid. Please try again."
+
+    # Sent when the player tries to unlink (runs /unlink) when they are not unlinked.
+    NOT_LINKED: "%server_name% &c&lHey! &r&7You are not linked to a Discord account. Run &c&l/link&r&7 to get started!"
+
+    UNLINK_SUCCESS: "%server_name%&r&7 You have unlinked your discord account. You will no longer receive raid notifications on Discord."
+
+  NPC:
+    # Sent when a player tries to access someone else's NPC (e.g. when visiting).
+    NPC_ACCESS_DENY: "%server_name%&c&l Hey!&r&7 You do not have access to this NPC!"
+
+    # Sent when a player runs /sf updatenpcs. 
+    NPC_RELOADING: "%server_name%&e Reloading NPCs, please wait..."
+
+    # Sent after a player runs /sf updatenpcs, once it has finished.
+    # Placeholders: %count% - How many NPCs were updated
+    NPC_RELOADED: "%server_name%&a Finished updating NPCs. &7(%count% NPCs affected)"
+
+    # Sent when an admin runs /sf disablenpcs.(%count% NPCs removed).
+    NPC_DISABLING: "%server_name%&e Disabling NPCs, please wait..."
+
+    # Sent after all NPCs were disabled.
+    # Placeholders: %count% - Amount of NPCs disabled.
+    NPC_DISABLED: "%server_name%&a Finished disabling NPCs. &7(%count% NPCs removed)"
+    
+    NAMES:
+      # NPC name for player islands,
+      # You can use the placeholder "%player_name%" to display the name of the player.
+      # This placeholder does not apply for faction island NPC names!
+      PLAYER_ISLANDS: "&9Sky Master"
+    
+      # NPC Name for faction islands.
+      # You can use the placeholder "%faction_name%" to display the name of the faction instead.
+      FACTION_ISLANDS: "&9Sky Master"
+
+    # Control what happens when NPCs are interacted with.
+    # See https://docs.terrabytedev.com/skyfactions/mechanics/npcs.html#actions
+    ACTIONS:
+      # Actions(s) to run when the NPC on player islands are interacted with.
+      PLAYER_ISLANDS: 
+        - "[console] tell %player_name% You clicked me!"
+
+      # Action(s) to run when the NPC on faction islands are interacted with.
+      FACTION_ISLANDS: 
+        - "[console] tell %player_name% You clicked me!"
+
+  Raiding:
+    # Display Name of the raid confirmation GUI item (after player executes /raid)
+    RAID_CONFIRMATION_NAME: "&a&lConfirm"
+    # Lore of the raid confirmation GUI item. Can be multiple lines.
+    # Placeholders: %raid_cost% - Cost in Gems of the raid.
+    RAID_CONFIRMATION_LORE:
+      - "&a&oThis will cost you %raid_cost% Gems."
+      - "&cYou will not be able to raid for 3 hours."
+    # Display Name of the raid cancel GUI item (after player executes /raid)
+    RAID_CANCEL_NAME: "&c&lCancel"
+
+    # Sent when the player initiates a raid (assuming there are raidable players, has enough gems, etc.)
+    STARTING_RAID: "%server_name% &r&eStarting your raid, please wait..."
+
+    # Sent to the player if they try start a raid when on cooldown.
+    # Placeholders: %cooldown% - Cooldown left.
+    RAID_ON_COOLDOWN: "%server_name% &c&lHey!&r&7 You are on cooldown for &e&l%cooldown%."
+
+    # Sent to the player if they do not have sufficient gems to start a raid.
+    # Placeholders: %raid_cost% - How many gems to raid.
+    RAID_INSUFFICIENT_GEMS: "%server_name% &c&lHey!&r&7 You do not have enough gems to raid. You need %raid_cost% gems to raid."
+
+    # Sent when there are no raidable players.
+    NO_PLAYERS: "%server_name% &r&cThere are no players that can be raided! Try again later."
+
+    # Sent to the player when the raid is processing (preparing).
+    RAID_PROCESSING: "%server_name% &r&eStarting a raid, please wait..."
+
+    # Sent to a player when they are being raided (imminent) and are online. Is as a list, each value is a new line.
+    # Placeholders: %raider% - Player attacking / %player_name% - Player being raided.
+    RAIDED_NOTIFICATION:
+      - "&c&l---------------------------------------"
+      - "&a&l%player_name%&e&o, you are being raided by &c&l%raider%&e&o!"
+      - "&e&oGet back to your island and defend thy honour!"
+      - "&c&l---------------------------------------"
+
+  Defences:
+    # Appended to the end of the defence purchase confirmation (or defence upgrade) item if the player does not have enough Runes.
+    INSUFFICIENT_RUNES_LORE:
+      - ""
+      - "&c&oYou do not have enough"
+      - "&c&oRunes to do this!"
+
+      # Appended to the end of the defence purchase confirmation item if the player doesn't have enough space in their inventory.
+    INSUFFICIENT_INVENTORY_LORE:
+      - ""
+      - "&c&oYou do not have enough"
+      - "&c&ospace in your inventory!"
+
+    # Sent when a player successfully purchases a defence.
+    # Placeholders: %defence_name% - Name of the defence purchased
+    DEFENCE_PURCHASE_SUCCESS: "%server_name% &eSuccessfully purchased &r%defence_name%&e!"
+
+    # Sent when a player successfully places a defence.
+    # Placeholders: %defence_name% - Name of the defence placed
+    DEFENCE_PLACE_SUCCESS: "%server_name% &7Successfully placed &r%defence_name%&7!"
+
+    # Sent when the player tries to mine the defence.
+    DEFENCE_DESTROY_DENY: "%server_name% &c&lHey! &r&7You must remove the defence from the management GUI!"
+
+    # In the defence management GUI, the "%operation%" placeholder is used (by default) to dynamically show whether
+    # the passive/hostile targeting is enabled or disabled.
+    # You can configure what this looks like here.
+    ENABLE_PLACEHOLDER: "&aEnable"
+
+    # In the defence management GUI, the "%operation%" placeholder is used (by default) to dynamically show whether
+    # the passive/hostile targeting is enabled or disabled.
+    # You can configure what this looks like here.
+    DISABLE_PLACEHOLDER: "&cDisable"
+
+    # Sent when a player tries to place too many defences.
+    # Placeholders: %defence_max% - Configured (in defences.yml) maximum defence count for players / factions.
+    TOO_MANY_DEFENCES: "%server_name%&c&l Hey!&r&e You have too many defences! &7(Max %defence_max%)"
+
+  Gems:
+    # Sent when the player runs /gems or /gems balance
+    GEM_COUNT: "&eYou have: &a&l%count%&r&e Gems."
+
+    # Sent after a successful /gems paid command.
+    # Placeholders: %amount% - Amount of gems given / %player% - Player affected.
+    GEM_ADD_SUCCESS: "%server_name%&r&a Successfully paid&r&e %amount%&r&a Gems to &r&e%player%."
+
+    # Sent after an admin successfully /gems give a player / faction gems.
+    # Placeholders: %amount% - Amount of gems given / %name% - Name of Player / Faction affected.
+    GEM_GIVE_SUCCESS: "%server_name%&r&a Successfully gave&r&e %amount%&r&a Gems to&r&e %name%."
+
+    # Sent when a player successfully withdraws gems.
+    # Placeholders: %amount% - Amount of gems withdrawn
+    GEMS_WITHDRAW_SUCCESS: "%server_name%&r&a Successfully withdrew &r&e%amount% Gems."
+
+    # Sent when a player successfully deposits gems.
+    # Placeholders: %amount% - Amount of gems deposited
+    GEMS_DEPOSIT_SUCCESS: "%server_name%&r&a Successfully deposited &r&e%amount% Gems."
+
+    # Sent when a player tries to pay another player more gems than they have in their balance.
+    # Also occurs if they try to
+    INSUFFICIENT_GEM_COUNT: "%server_name% &c&lHey!&r&7 You do not have enough gems for that!"
+
+    # Sent when a player tries to withdraw more gems than they have in their inventory.
+    INSUFFICIENT_INVENTORY_SPACE: "%server_name%&c There was not enough space in your inventory to withdraw the desired amount of gems."
+
+    # Sent when a player tries to deposit gems when there are none in their inventory.
+    NO_GEMS_PRESENT: "%server_name% &c&lHey! &r&7You do not have any gems in your inventory!"
+  Factions:
+    # Sent when a player donates some of their gems to their Faction.
+    # Placeholders: %amount% - Amount of gems donated.
+    GEMS_DONATION_SUCCESS: "%server_name%&a Successfully donated&r&e %amount%&r&a Gems to your Faction!"
+
+    # Sent when a player tries to create, join a faction (etc.) when they are already in one.
+    ALREADY_IN_FACTION: "%server_name%&c&l Hey!&r&7 You are already in a faction!"
+
+    # Sent when a player tries to do faction-related commands that require you to be in a faction.
+    NOT_IN_FACTION: "%server_name%&c&l Hey!&r&7 You are not in a faction!"
+
+    # Sent when a player tries to join, get info of, etc. of a faction that does not exist.
+    # Placeholders: %name% - Faction Name.
+    FACTION_NOT_FOUND: "%server_name%&c Could not find faction with a name of %name%."
+
+    # Sent when a player tries to do faction-related commands that require you to have the proper permissions (e.g. kick when a member).
+    ACTION_DENY: "%server_name%&c&l Hey!&r&7 You do not have the sufficient permissions to do this."
+
+    FACTION_CREATION:
+      # Sent while creation of a faction is processing.
+      FACTION_CREATE_PROCESSING: "%server_name% &eCreating your faction, please wait..."
+
+      # Sent when a player tries to create a faction with a name that is too short / too long.
+      # Placeholders: %min% - Minimum name length / %max% - Maximum name length.
+      NAME_LENGTH_LIMIT: "%server_name%&c&l Hey!&r&7 The name must be between&c&l %min%&r&7 and &c&l%max% &r&7characters long."
+      # Sent when a player tries to create a faction name that has numbers in (permitting it is configured to disallow numbers).
+      NAME_NO_NUMBERS: "%server_name%&c&l Hey!&r&7 You cannot use numbers in your name."
+      # Sent when a player tries to create a faction that contains non-english characters.
+      NAME_NON_ENGLISH: "%server_name%&c&l Hey!&r&7 You cannot use non-english characters in your name."
+      # Sent when a player tries to create a faction that contains symbols.
+      NAME_NO_SYMBOLS: "%server_name%&c&l Hey!&r&7 You cannot use symbols in your name."
+      # Sent when a player tries to create a faction that contains prohibited words.
+      NAME_PROHIBITED: "%server_name%&c Your name contains prohibited words."
+      # Sent when a player tries to create a faction that already exists with the same name.
+      DUPLICATE_NAME: "%server_name% &cA Faction already exists with that name!"
+
+
+      # Sent when a player tries to create a faction but does not have enough runes.
+      # Placeholders: %creation_cost% - Cost of faction creation.
+      INSUFFICIENT_FUNDS: "%server_name%&c&l Hey!&r&7 You do not have enough runes to create a faction. You need &a&l%creation_cost% Runes&r&7 to create a faction."
+
+      # Sent when a player successfully creates a new faction.
+      FACTION_CREATE_SUCCESS: "%server_name%&a Successfully created your faction!"
+
+
+    FACTION_INFO:
+      # Message sent when the player runs /faction info. Each entry is a new line.
+
+      # Placeholders: %motd% - MOTD of the Faction.
+      # Placeholders: %owner% - Owner of the Faction. / %admins% - Admins of the faction.
+      # Placeholders: %
+      INFORMATION_MESSAGE:
+        - "&6&l------------- &c&l%faction_name% &6&l-------------&r"
+        - "&eMOTD:&r %motd%&r"
+        - ""
+        - "&eLord: &a%owner%&r"
+        - "&eDukes: &a%admins%&r"
+        - "&eBarons: &a%moderators%&r"
+        - "&eKnights: &a%fighters%&r"
+        - "&eSubjects: &a%members%&r"
+        - "&6&l------------- &c&l%faction_name% &6&l-------------&r"
+
+    CHANGE_MOTD:
+      # Sent while the server is processing the MOTD change.
+      MOTD_PROCESSING: "%server_name%&e Changing the MOTD, please wait..."
+
+      # Sent once the server has finished changing the MOTD.
+      MOTD_CHANGE_SUCCESS: "%server_name%&a Successfully changed the MOTD!"
+
+    FACTION_TITLES:
+      # See https://docs.terrabytedev.com/skyfactions/mechanics/factions/faction-ranks-titles
+      OWNER: "&c&lLord"
+      ADMIN: "&4&lDuke"
+      MODERATOR: "&9&lBaron"
+      FIGHTER: "&6&lKnight"
+      MEMBER: "&eSubject"
+
+    FACTION_LEAVE:
+      # Sent when a player successfully leaves a faction.
+      # Placeholders: %faction_name% - Name of the faction.
+      FACTION_LEAVE_SUCCESS: "%server_name% &aYou have successfully left &e%faction_name%."
+
+      # Sent when the faction owner tries to leave the faction.
+      FACTION_OWNER_LEAVE_DENY: "%server_name% &cYou cannot leave this faction because you are the owner!"
+
+    FACTION_BROADCAST:
+
+      # Model for faction broadcasts.
+      # Placeholders: %broadcast% - The broadcast message.
+      # Placeholders: %broadcaster% - The player who created the broadcast.
+      BROADCAST_MODEL:
+        - "&7╔═════════╝ &eFACTION BROADCAST &7╚═════════╗&r"
+        - "%broadcast%&7 - %broadcaster%"
+        - "&7╚═════════╗ &eFACTION BROADCAST &7╔═════════╝"#
+
+    FACTION_MANAGE:
+
+      # Sent when a player tries to select themselves in the management UI.
+      MANAGE_SELF_DENY: "%server_name%&c&l Hey!&r&7 You cannot manage yourself!"
+
+      # Put in the lore line of the management UI for yourself.
+      MANAGE_SELF_DENY_LORE: "&cYou cannot manage yourself!"
+
+      # Sent to the player (admin, moderator, owner) when they successfully kick a player.
+      # Placeholders: %player% - Player who was kicked.
+      KICK_SUCCESS: "%server_name% &r&7Successfully kicked &c&l%player%"
+
+      # If BROADCAST_KICKS is enabled in the config, this is what will be broadcast.
+      # Placeholders: %kicked% - Player who was kicked.
+      KICK_BROADCAST: "&c&l%kicked%&r&e has been kicked from the Faction."
+
+      # Sent to the player (admin, owner) when they successfully kick a player.
+      # Placeholders: %player% - Player who was kicked.
+      BAN_SUCCESS: "%server_name% &r&7Successfully banned &c&l%player%"
+
+      # If BROADCAST_BANS is enabled in the config, this is what will be broadcast.
+      # Placeholders: %banned% - Player who was banned.
+      BAN_BROADCAST: "&c&l%banned% &r&ehas been banned from the Faction."
+
+    FACTION_INVITE:
+
+      # Sent when the player tries to invite themselves to their Faction.
+      INVITE_SELF_DENY: "%server_name% &c&lHey!&r&7 You cannot invite yourself!"
+
+      # Sent when the player tries to invite someone in the same Faction.
+      INVITE_IN_SAME_FACTION: "%server_name% &c&lHey!&r&7 That player is already in your Faction!"
+
+      # Sent when the player successfully invites another player to their Faction.
+      # Placeholders: %player_name% - Name of the player being invited.
+      INVITE_CREATE_SUCCESS: "%server_name% &eSuccessfully invited &a%player_name% &eto your Faction."
+
+      # Sent to a player when they are invited to another Faction, if online.
+      INVITE_NOTIFICATION: "%server_name% &aYou have a new Faction invitation. Check your Obelisk."
+
+      # Sent when a player tries to invite a player to their Faction, when they have already been invited.
+      INVITE_DUPLICATE: "%server_name% &cYou have already invited that player!"
+
+      # Sent to all Faction moderators, admins and owner (if online) when someone requests to join their Faction.
+      JOIN_REQUEST_NOTIFICATION: "%server_name% &aYou have a new Faction join request. Check your Obelisk."
+
+      # Sent to a player when they create a join request for a Faction.
+      # Placeholders: %faction_name% - Name of the Faction.
+      JOIN_REQUEST_CREATE_SUCCESS: "%server_name% &eSuccessfully created a join request for &a%faction_name%."
+
+      # Sent when a player tries to create another join request when they already have an outgoing one.
+      JOIN_REQUEST_ALREADY_EXISTS: "%server_name% &cYou already have a join request for that Faction!"
+
+      # Sent when a player tries to view their outgoing join request when they don't have one.
+      JOIN_REQUEST_NOT_EXIST: "%server_name% &cYou do not have an outgoing Join Request!"
+
+      # Sent when a player tries to create a join request to a Faction that they are already in.
+      JOIN_REQUEST_SAME_FACTION: "%server_name% &cYou are already in that Faction!"
+
+      # Sent when a player revokes a Faction invite.
+      # Placeholders: %player_name% - Player who the invite was going to.
+      INVITE_REVOKE_SUCCESS: "%server_name% &aSuccessfully revoked your invitation to &a%player_name%."
+
+      # Sent when a player (moderator, admin or owner) accepts a Faction join request.
+      # Placeholders: %player_name% - Player who was accepted.
+      JOIN_REQUEST_ACCEPT_SUCCESS: "%server_name% &aSuccessfully accepted &e%player_name%'s &ajoin request."
+
+      # Sent when a player (moderator, admin or owner) accepts a Faction join request.
+      # Placeholders: %player_name% - Player who was rejeted.
+      JOIN_REQUEST_REJECT_SUCCESS: "%server_name% &eSuccessfully rejected &c&l%player_name%'s &r&e join request."
+
+      # Sent when a player revokes their outgoing join request.
+      # Placeholders: %faction_name% - Name of the Faction your join request WAS going to.
+      JOIN_REQUEST_REVOKE_SUCCESS: "%server_name% &aYour join request to &e%faction_name% &ahas been revoked."
+
+      # Sent when a player confirms the acceptance of their join request, or accepted a Faction invite.
+      # Placeholders: %faction_name% - Name of the Faction you are now part of.
+      PLAYER_FACTION_JOIN_SUCCESS: "%server_name% &eYou are now part of the Faction &a%faction_name%!"
+
+      # Sent when a player, after their join request is accepted by the Faction, rejects it.
+      # Placeholders: %faction_name% - Name of the Faction your join request was going to.
+      JOIN_REQUEST_DENY_SUCCESS: "%server_name% &cYou have rejected &e%faction_name%'s join request acceptance."
+
+      # Sent to the player (if online) when their join request to a Faction is accepted.
+      # Placeholders: %faction_name% - Name of the Faction.
+      JOIN_REQUEST_ACCEPT_NOTIFICATION: "%server_name% &aYour join request to &e%faction_name% &ehas been accepted!"
+
+      # Sent to the player (if online) when their join request to a Faction is rejected.
+      # Placeholders: %faction_name% - Name of the Faction.
+      JOIN_REQUEST_REJECT_NOTIFICATION: "%server_name% &eYour join request to &c&l%faction_name%&r&e has been rejected."
+
+      # Sent to the player when they denied a Faction's invite.
+      # Placeholders: %faction_name% - Name of the Faction.
+      FACTION_INVITE_DENY_SUCCESS: "%server_name% &eYou successfully denied &a%faction_name%'s &einvite."
+
+  Notifications:
+    # Sent when a player has a pending Faction invitation in their Obelisk.
+    # Placeholders: %count% - Amount of pending Faction invitations.
+    PENDING_FACTION_INVITATIONS: "%server_name% &eYou have &a&l%count%&r&e pending Faction invitations in your Obelisk!"
+
+    # Sent when a Faction has pending join requests in their Obelisk.
+    # Placeholders: %count% - Amount of pending join requests.
+    PENDING_JOIN_REQUESTS: "%server_name% &eYou have &a&l%count% &r&epending Faction join requests in your Obelisk!"
+
+    # Sent to the player when they have unread notifications.
+    # Placeholders: %count% - Amount of unread notifications.
+    UNREAD_NOTIFICATIONS: "%server_name% &eYou have &a&l%count%&r&e unread notifications in your Obelisk."
+
+    # Sent when a notification is dismissed while right-clicking.
+    NOTIFICATION_DISMISS_SUCCESS: "%server_name% &aSuccessfully dismissed notification."
+
+    # Message configuration for Notifications.
+    NOTIFICATION_TYPES:
+
+      # Format of the timestamp.
+      NOTIFICATION_TIMESTAMP: "&e%time% Ago"
+
+      # Format:
+      # NOTIFICATION_TITLE - (e.g. FACTION_INVITE_TITLE) The title of the notification, when being viewed in the Notification player obelisk GUI.
+      # NOTIFICATION_DESCRIPTION (e.g. FACTION_INVITE_DESCRIPTION) Description of the notification. Gives more information such as timestamp.
+      # Use '/' for a new lore line! This is so it is not put onto a singular line of lore!
+
+      # Notification for when the player is invited to a Faction.
+      # Placeholders: %player_name% - Player who invited you / %faction_name% - Name of the Faction in question.
+      FACTION_INVITE_TITLE: "&a&lFaction Invite"
+      FACTION_INVITE_DESCRIPTION: "&a%player_name% &ewants you /&eto join &a%faction_name%."
+
+      # Notification for when a Faction moderator / admin / owner rejects your join request.
+      # Placeholders: %player_name% - Player who rejected your join request / %faction_name% - Name of the Faction.
+      JOIN_REQUEST_REJECT_TITLE: "&c&lJoin Request Rejected"
+      JOIN_REQUEST_REJECT_DESCRIPTION: "&e%player_name% &crejected your join request to &a%faction_name%."
+
+      # Notification for when a Faction moderator / admin / owner accepts your join request.
+      # Placeholders: %player_name% - Player who accepted your join request / %faction_name% - Name of the Faction.
+      JOIN_REQUEST_ACCEPT_TITLE: "&a&lJoin Request Accepted"
+      JOIN_REQUEST_ACCEPT_DESCRIPTION: "&a%player_name% &eaccepted your join/request to &a%faction_name%./&7See the invite section of your/Obelisk for more info."
+
+
+
+  Obelisk:
+    # Sent when a player tries to access another player's or Faction's Obelisk (e.g. when visiting).
+    ACCESS_DENY: "%server_name% &c&lHey!&r&7 You cannot access this Obelisk!"
+    # Sent when the player tries to mine the block.
+    DESTROY_DENY: "%server_name% &c&lHey!&r&7 You cannot mine this block!"
+    # Sent when a faction member tries to access a prohibited portion of the obelisk UI.
+    # For example, a faction member / knight / moderator tries to access the player management UI.
+    # Placeholders: %rank% - Required rank for access. Color coded according to FACTION_TITLES (above).
+    OBELISK_GUI_DENY: "%server_name% &c&lHey!&r&7 You must be at least a %rank%&r&7 to access this menu!"
+
+    OBELISK_BLOCK:
+      # Name of the Obelisk Block Item
+      ITEM_NAME: "{#0854FB}&lObelisk{/#8000FF}"
+
+      # Lore of the Obelisk Block Item
+      ITEM_LORE:
+        - "&6&l┍━━━━╝✹╚━━━━┑"
+        - "&c&n&lObelisk"
+        - "&eThis block is one of the main mechanics of SkyFactions."
+        - "&eThis allows you to manage defences, resources, and more."
+        - "&4&oGuard it with your life."
+        - "&6&l┕━━━━╗✹╔━━━━┙"
+
+
+  Runes:
+    # Sent when items with enchants are not allowed for rune conversion.
+    ENCHANTS_DENY: "%server_name% &cYou cannot convert items with enchants."
+
+    # Sent when a player tries to convert an item with lore, or is blacklisted / not whitelisted.
+    GENERAL_DENY: "%server_name% &cYou cannot convert this item."
+
+    # Sent when a player runs /runes balance.
+    # Placeholders: %count% - Amount of Runes they have.
+    RUNES_BALANCE: "&eYou have: &a&l%count%&r&e Runes."
+
+    # Sent when an admin runs /runes give <type> <player / faction> <amount> (Admin Command!)
+    # Placeholders: %amount% - Amount of additional runes given / %name% - Player / Faction affected.
+    RUNES_GIVE_SUCCESS: "%server_name%&r&a Successfully paid&r&e %amount%&r&a Runes to &r&e%name%."
+
+    # Sent when they successfully convert their items to runes.
+    CONVERSION_SUCCESS: "%server_name%&a&l Success!&r&7 You have gained &a&l%added%&r&7 runes!"
+
+    # Sent when the player doesn't put enough of any item in to get any runes back.
+    INSUFFICIENT_ITEMS: "%server_name%&c You did not submit enough items to receive any runes."
+
+  # Message formatting for all audit logs.
+  Audit_Logs:
+
+    # Format of the timestamp.
+    AUDIT_TIMESTAMP: "&e%time% Ago"
+
+    # Format:
+    # ACTION_TITLE - (e.g. JOIN_TITLE) The title of the audit log, when being viewed in the Audit Log obelisk GUI.
+    # ACTION_DESCRIPTION (e.g. JOIN_DESCRIPTION) Description of the audit log. Gives more information such as timestamp.
+    # Use '/' for a new lore line! This is so it is not put onto a singular line of lore!
+
+    # When the faction is first created.
+    # Placeholders: %player_name% - Name of player who created the faction.
+    # Placeholders: %faction_name% - Name of the faction.
+    FACTION_CREATE_TITLE: "&a&lFaction Created"
+    FACTION_CREATE_DESCRIPTION: "&a%player_name%&r&e created the /&efaction &a%faction_name%."
+
+    # Sent when a player joins the faction.
+    # Placeholders: %player_name% - Player who joined.
+    JOIN_TITLE: "&a&lPlayer Joined"
+    JOIN_DESCRIPTION: "&a%player_name%&r&e joined the faction."
+
+    # Sent when a player leaves the faction.
+    # Placeholders: %player_name% - Player who left.
+    LEAVE_TITLE: "&c&lPlayer Left"
+    LEAVE_DESCRIPTION: "&c%player_name%&r&e left the faction."
+
+    # Sent when a player updates the MOTD.
+    # Placeholders: %player_name% - Player who updated the MOTD.
+    # Placeholders: %new_motd% - New MOTD.
+    MOTD_TITLE: "&e&lMOTD Updated"
+    MOTD_DESCRIPTION: "&a%player_name% &r&eupdated the /&eFaction's MOTD to&r /%new_motd%" # Reset colors as the MOTD may contain formatting.
+
+    # Sent when a player (moderator, admin or owner) creates a broadcast.
+    # Placeholders: %player_name% - Player who created the broadcast.
+    BROADCAST_TITLE: "&a&lBroadcast Created"
+    BROADCAST_DESCRIPTION: "&a%player_name% &r&ecreated a new broadcast."
+
+    # Sent when a player (moderator, admin or owner) kicks a player.
+    # Placeholders: %kicked% - Name of player who was kicked. %player% - Player who kicked them.
+    KICK_TITLE: "&c&lPlayer Kicked"
+    KICK_DESCRIPTION: "&a%kicked% &ewas kicked from the Faction/&eby &a%player%."
+
+    # Sent when a player (admin or owner) bans a player.
+    # Placeholders: %banned% - Name of player who was banned. %player% - Player who banned them.
+    BAN_TITLE: "&4&lPlayer Banned"
+    BAN_DESCRIPTION: "&a%banned% &ewas banned from the Faction/&eby &a%player%."
+
+    # Sent when a player (moderator, admin or owner) creates an invitation.
+    # Placeholder: %inviter% - Name of player who created the invite / %player_name% - Invited player.
+    INVITE_CREATE_TITLE: "&a&lInvite Created"
+    INVITE_CREATE_DESCRIPTION: "&a%inviter% &einvited &a%player_name% &eto the Faction."
+
+    # Sent when a player creates a join request to the Faction.
+    # Placeholder: %player_name% - Player who created the join request.
+    JOIN_REQUEST_TITLE: "&a&lJoin Request Created"
+    JOIN_REQUEST_DESCRIPTION: "&a%player_name% &ewants to join the Faction."
+
+    # Sent when a player (moderator, admin or owner) revokes an invitation.
+    # Placeholders: %player% - Player who revoked the invite / %invited% - Player who was invited.
+    INVITE_REVOKE_TITLE: "&c&lInvite Revoked"
+    INVITE_REVOKE_DESCRIPTION: "&a%player% &erevoked a Faction invite for &a%invited%"
+
+    # Sent when a player (moderator, admin or owner) accepts a join request.
+    # Placeholders: %player% - Player who was accepted. %inviter% - Player who accepted the join request.
+    JOIN_REQUEST_ACCEPT_TITLE: "&a&lJoin Request Accepted"
+    JOIN_REQUEST_ACCEPT_DESCRIPTION: "&a%player% &ewas accepted into the Faction/&eby &a%inviter%."
+
+    # Sent when a player (moderator, admin or owner) rejects a join request.
+    # Placeholders: %faction_player% - Faction member who rejected the join request / %player% - Player who made the join request in the first place.
+    JOIN_REQUEST_REJECT_TITLE: "&c&lJoin Request Rejected"
+    JOIN_REQUEST_REJECT_DESCRIPTION: "&a%faction_player% &erejected &a%player%'s/&ejoin request."
+
+    # Sent when a player revokes their outgoing join request to join your Faction.
+    # Placeholders: %player_name% - Owner of the join request.
+    PLAYER_JOIN_REQUEST_REVOKE_TITLE: "&c&lJoin Request Revoked"
+    PLAYER_JOIN_REQUEST_REVOKE_DESCRIPTION: "&a%player_name% &erevoked their/join request to the Faction."
+
+    # Sent when, after you accept a player's join request, they deny your acceptance.
+    # Placeholders: %player_name% - Owner of the join request.
+    PLAYER_JOIN_REQUEST_DENY_TITLE: "&c&lJoin Request Denied"
+    PLAYER_JOIN_REQUEST_DENY_DESCRIPTION: "&a%player_name% &edenied your acceptance/of their join request."
+
+    # Sent when a player accepts a Faction's invite.
+    # Placeholders: %player_name% - Player who accepted the invite.
+    INVITE_ACCEPT_TITLE: "&a&lInvite Accepted"
+    INVITE_ACCEPT_DESCRIPTION: "&a%player_name% &eaccepted your Faction invite."
+
+    # Sent when a player denies a Faction's invite.
+    # Placeholders: %player_name% - Player who denied the invite.
+    INVITE_DENY_TITLE: "&c&lInvite Denied"
+    INVITE_DENY_DESCRIPTION: "&a%player_name% &edenied your Faction invite."
+
+    # Sent when a player (moderator, admin or owner) purchases a defence.
+    # Placeholders: %player_name% - Name of the player / %defence_name% - Configured name of the defence bought.
+    DEFENCE_PURCHASE_TITLE: "&eDefence Purchased"
+    DEFENCE_PURCHASE_DESCRIPTION: "&a%player_name% &epurchased the &r%defence_name%&e defence."
+

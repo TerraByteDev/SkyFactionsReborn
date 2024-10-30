@@ -1,23 +1,23 @@
 package net.skullian.skyfactions.event;
 
-import net.skullian.skyfactions.api.DefenceAPI;
-import net.skullian.skyfactions.defence.Defence;
-import net.skullian.skyfactions.defence.DefencesFactory;
-import net.skullian.skyfactions.defence.block.DefenceDestructionManager;
-import net.skullian.skyfactions.SkyFactionsReborn;
+import java.util.HashSet;
+import java.util.Optional;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.entity.Player;
-import org.bukkit.Location;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 
-import java.util.HashSet;
-import java.util.Optional;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.DefenceAPI;
+import net.skullian.skyfactions.defence.Defence;
+import net.skullian.skyfactions.defence.DefencesFactory;
+import net.skullian.skyfactions.defence.block.DefenceDestructionManager;
 
 public class DefenceDestructionHandler implements Listener {
 
@@ -36,7 +36,8 @@ public class DefenceDestructionHandler implements Listener {
 
     private boolean isDefenceMaterial(Block block) {
         return DefencesFactory.defences.values().stream()
-                .anyMatch(defenceStruct -> defenceStruct.getBLOCK_MATERIAL().equals(block.getType().name()));
+            .flatMap(inner -> inner.values().stream())
+            .anyMatch(struct -> struct.getBLOCK_MATERIAL().equals(block.getType().name()));
     }
 
     private static HashSet<Material> transparentBlocks = new HashSet<>();
@@ -60,8 +61,6 @@ public class DefenceDestructionHandler implements Listener {
         Location blockPos = block.getLocation();
 
         if (!SkyFactionsReborn.blockService.isBrokenBlock(blockPos)) return;
-
-        ItemStack itemStack = player.getItemInHand();
 
         double distanceX = blockPos.getX() - player.getLocation().getX();
         double distanceY = blockPos.getY() - player.getLocation().getY();

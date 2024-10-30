@@ -34,13 +34,13 @@ public class RunesAPI {
      */
     public static boolean isStackProhibited(ItemStack stack, Player player) {
         if (!Runes.ALLOW_ENCHANTS.getBoolean() && hasEnchants(stack)) {
-            Messages.RUNE_ENCHANT_DENY.send(player);
+            Messages.RUNE_ENCHANT_DENY.send(player, player.locale());
             return true;
         } else if (!Runes.ALLOW_LORE.getBoolean() && hasLore(stack)) {
-            Messages.RUNE_GENERAL_DENY.send(player);
+            Messages.RUNE_GENERAL_DENY.send(player, player.locale());
             return true;
         } else if (!isAllowed(stack)) {
-            Messages.RUNE_GENERAL_DENY.send(player);
+            Messages.RUNE_GENERAL_DENY.send(player, player.locale());
             return true;
         } else {
             return false;
@@ -63,7 +63,7 @@ public class RunesAPI {
             if (faction != null) {
                 handleConversion(stacks, player, faction);
             } else {
-                Messages.ERROR.send(player, "%operation%", "convert to runes", "%debug%", "SQL_UNKNOWN_FACTION");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "convert to runes", "%debug%", "SQL_UNKNOWN_FACTION");
                 for (ItemStack stack : stacks) {
                     if (stack != null && !stack.getType().equals(Material.AIR)) {
                         player.getInventory().addItem(stack);
@@ -83,7 +83,7 @@ public class RunesAPI {
 
         for (ItemStack stack : stacks) {
             if (stack == null || stack.getType().equals(Material.AIR)) continue;
-            int defenceCost = getDefenceCost(stack);
+            int defenceCost = getDefenceCost(stack, player);
             if (defenceCost != -1) {
                 total += defenceCost;
                 continue;
@@ -97,10 +97,10 @@ public class RunesAPI {
                 tempForEach = 1;
             }
             
-            int quotient = stack.getAmount() / forEach;
-            int remainder = stack.getAmount() % forEach;
+            int quotient = stack.getAmount() / tempForEach;
+            int remainder = stack.getAmount() % tempForEach;
 
-            int amount = quotient * returnForEach;
+            int amount = quotient * tempReturn;
             total += amount;
 
             if (remainder > 0) {
@@ -118,9 +118,9 @@ public class RunesAPI {
                 addRunes(player.getUniqueId(), total);
             }
 
-            Messages.RUNE_CONVERSION_SUCCESS.send(player, "%added%", total);
+            Messages.RUNE_CONVERSION_SUCCESS.send(player, player.locale(), "%added%", total);
         } else {
-            Messages.RUNE_INSUFFICIENT_ITEMS.send(player);
+            Messages.RUNE_INSUFFICIENT_ITEMS.send(player, player.locale());
         }
     }
 
@@ -172,13 +172,13 @@ public class RunesAPI {
         });
     }
 
-    private static int getDefenceCost(ItemStack item) {
+    private static int getDefenceCost(ItemStack item, Player player) {
         NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
         PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
 
         if (container.has(defenceKey, PersistentDataType.STRING)) {
             String identifier = container.get(defenceKey, PersistentDataType.STRING);
-            DefenceStruct struct = DefencesFactory.defences.get(identifier);
+            DefenceStruct struct = DefencesFactory.defences.getOrDefault(player.locale().getLanguage(), DefencesFactory.getDefaultStruct()).get(identifier);
             if (struct != null) return struct.getSELL_COST();
         }
 

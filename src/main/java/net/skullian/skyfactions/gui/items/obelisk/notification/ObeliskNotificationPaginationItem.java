@@ -20,8 +20,8 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
 
     private NotificationData DATA;
 
-    public ObeliskNotificationPaginationItem(ItemData data, ItemStack stack, NotificationData inviteData) {
-        super(data, stack, null, null);
+    public ObeliskNotificationPaginationItem(ItemData data, ItemStack stack, NotificationData inviteData, Player player) {
+        super(data, stack, player, null);
 
         this.DATA = inviteData;
     }
@@ -41,7 +41,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
             }
 
             builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%timestamp%", Messages.NOTIFICATION_TIMESTAMP_FORMAT.get("%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+                    .replace("%timestamp%", Messages.NOTIFICATION_TIMESTAMP_FORMAT.get(getPLAYER().locale(), "%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
                     getPLAYER()
             ));
         }
@@ -59,7 +59,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
                     return;
                 }
 
-                Messages.NOTIFICATION_DISMISS_SUCCESS.send(player);
+                Messages.NOTIFICATION_DISMISS_SUCCESS.send(player, player.locale());
             });
         }
     }

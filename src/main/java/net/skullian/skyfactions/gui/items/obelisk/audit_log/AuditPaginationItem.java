@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.gui.items.obelisk.audit_log;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.skullian.skyfactions.config.types.Messages;
@@ -14,8 +15,8 @@ public class AuditPaginationItem extends SkyItem {
 
     private AuditLogData DATA;
 
-    public AuditPaginationItem(ItemData data, ItemStack stack, AuditLogData auditData) {
-        super(data, stack, null, null);
+    public AuditPaginationItem(ItemData data, ItemStack stack, AuditLogData auditData, Player player) {
+        super(data, stack, player, null);
         
         this.DATA = auditData;
     }
@@ -35,7 +36,7 @@ public class AuditPaginationItem extends SkyItem {
             }
 
             builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%timestamp%", Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.get("%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+                    .replace("%timestamp%", Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.get(getPLAYER().locale(), "%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
                     getPLAYER()
             ));
         }

@@ -29,7 +29,7 @@ public class RunesSubmitUI {
 
     public void promptPlayer(Player player, String type) {
         try {
-            GUIData data = GUIAPI.getGUIData("runes_ui");
+            GUIData data = GUIAPI.getGUIData("runes_ui", player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player, type, data);
 
@@ -57,7 +57,7 @@ public class RunesSubmitUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "open your runes submit GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale(), "%operation%", "open your runes submit GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 

@@ -105,7 +105,7 @@ public class PlayerHandler implements Listener {
         if (Settings.ISLAND_PREVENT_NETHER_PORTALS.getBoolean()) {
             List<String> allowedDims = Settings.ISLAND_ALLOWED_DIMENSIONS.getList();
             if (!allowedDims.contains(event.getFrom().getWorld().getName())) {
-                Messages.NETHER_PORTALS_BLOCKED.send(event.getPlayer());
+                Messages.NETHER_PORTALS_BLOCKED.send(event.getPlayer(), event.getPlayer().locale());
                 event.setCancelled(true);
             }
         }

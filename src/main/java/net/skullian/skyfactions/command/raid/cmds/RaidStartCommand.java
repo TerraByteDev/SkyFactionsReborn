@@ -1,20 +1,20 @@
 package net.skullian.skyfactions.command.raid.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.api.RaidAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.gui.PlayerRaidConfirmationUI;
-import net.skullian.skyfactions.util.ErrorHandler;
-import net.skullian.skyfactions.util.SoundUtil;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
-import java.util.List;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.RaidAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.gui.PlayerRaidConfirmationUI;
+import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.SoundUtil;
 
 @Command("raid")
 public class RaidStartCommand extends CommandTemplate {
@@ -50,7 +50,7 @@ public class RaidStartCommand extends CommandTemplate {
             }
 
             if (cooldown != null) {
-                Messages.RAID_ON_COOLDOWN.send(player, "%cooldown%", cooldown);
+                Messages.RAID_ON_COOLDOWN.send(player, player.locale(), "%cooldown%", cooldown);
             } else {
                 PlayerRaidConfirmationUI.promptPlayer(player);
                 SoundUtil.playSound(player, "ui.button.click", 1f, 1f);

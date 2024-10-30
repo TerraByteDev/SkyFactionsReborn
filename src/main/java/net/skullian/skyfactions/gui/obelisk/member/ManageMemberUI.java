@@ -24,7 +24,7 @@ public class ManageMemberUI {
 
     public static void promptPlayer(Player player, OfflinePlayer subject) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/manage_member");
+            GUIData data = GUIAPI.getGUIData("obelisk/manage_member", player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), subject, player);
 
@@ -38,7 +38,7 @@ public class ManageMemberUI {
             window.open();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "manage a member", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale(), "%operation%", "manage a member", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -51,7 +51,7 @@ public class ManageMemberUI {
                 }
 
                 if (faction == null) {
-                    Messages.ERROR.send(actor, "%operation%", "manage a member", "%debug%", "FACTION_NOT_FOUND");
+                    Messages.ERROR.send(actor, actor.locale(), "%operation%", "manage a member", "%debug%", "FACTION_NOT_FOUND");
                 }
 
                 List<ItemData> data = GUIAPI.getItemData("obelisk/manage_member", player.getPlayer());

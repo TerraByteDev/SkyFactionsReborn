@@ -24,7 +24,7 @@ public class ObeliskPurchaseDefenceUI {
 
     public static void promptPlayer(Player player, String obeliskType, DefenceStruct struct, Faction faction) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/defences/purchase_defence");
+            GUIData data = GUIAPI.getGUIData("obelisk/defences/purchase_defence", player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player, obeliskType, struct, faction);
 
@@ -38,7 +38,7 @@ public class ObeliskPurchaseDefenceUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "open the defence purchase confirmation GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale(), "%operation%", "open the defence purchase confirmation GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 

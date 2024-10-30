@@ -22,7 +22,7 @@ public class FactionLeaveConfirmationUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("confirmations/faction_leave");
+                GUIData data = GUIAPI.getGUIData("confirmations/faction_leave", player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -36,7 +36,7 @@ public class FactionLeaveConfirmationUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "leave your faction", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "leave your faction", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }

@@ -30,6 +30,12 @@ Database:
   # Only applies for MySQL!
   MAX_LIFETIME: 30
 
+# This plugin has multi-language support.
+# This means players in different locations are sent plugin messages in their native language.
+Language:
+  # Language to use / fallback to if the plugin cannot find a player's language config.
+  DEFAULT_LANGUAGE: "en"
+
 # SkyFactions Hub Config
 Hub:
   # Name of the world that the hub is located in.
@@ -121,6 +127,8 @@ NPC:
     # Entity type for faction islands.
     FACTION_ISLANDS: "PLAYER"
 
+  # Configure the names of the NPC.
+  # Unfortunately these cannot be configure in individual language files due to limitations. (Global Only).
   NAMES:
     # NPC name for player islands,
     # You can use the placeholder "%player_name%" to display the name of the player.
@@ -155,17 +163,6 @@ NPC:
     
     # How far from the center of faction islands should the NPC be spawned?
     FACTION_ISLANDS: [2, 0, 2] # [x, y, z]
-
-  # Control what happens when NPCs are interacted with.
-  # See https://docs.terrabytedev.com/skyfactions/mechanics/npcs.html#actions
-  ACTIONS:
-    # Actions(s) to run when the NPC on player islands are interacted with.
-    PLAYER_ISLANDS: 
-      - "[console] tell %player_name% You clicked me!"
-
-    # Action(s) to run when the NPC on faction islands are interacted with.
-    FACTION_ISLANDS: 
-      - "[console] tell %player_name% You clicked me!"
 
 # Island grid generation algorithm configuration
 Generation:

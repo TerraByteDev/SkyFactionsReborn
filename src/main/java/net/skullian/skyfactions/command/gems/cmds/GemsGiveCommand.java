@@ -22,6 +22,7 @@ import org.incendo.cloud.context.CommandInput;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Command("gems")
@@ -71,24 +72,24 @@ public class GemsGiveCommand extends CommandTemplate{
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
-
+        Locale locale = sender instanceof Player ? ((Player) sender).locale() : Locale.ROOT;
 
         if (type.equalsIgnoreCase("player")) {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
             if (!offlinePlayer.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(sender, "%player%", playerFactionName);
+                Messages.UNKNOWN_PLAYER.send(sender, locale, "%player%", playerFactionName);
             } else {
                 IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, throwable) -> {
                     if (throwable != null) {
                         ErrorHandler.handleError(sender, "check if the specified player had an island", "SQL_ISLAND_GET", throwable);
                         return;
                     } else if (!hasIsland) {
-                        Messages.PLAYER_HAS_NO_ISLAND.send(sender);
+                        Messages.PLAYER_HAS_NO_ISLAND.send(sender, locale);
                         return;
                     }
 
                     GemsAPI.addGems(offlinePlayer.getUniqueId(), amount);
-                    Messages.GEM_GIVE_SUCCESS.send(sender, "%amount%", amount, "%name%", offlinePlayer.getName());
+                    Messages.GEM_GIVE_SUCCESS.send(sender, locale, "%amount%", amount, "%name%", offlinePlayer.getName());
                 });
             }
         } else if (type.equalsIgnoreCase("faction")) {
@@ -97,15 +98,15 @@ public class GemsGiveCommand extends CommandTemplate{
                     ErrorHandler.handleError(sender, "get the specified Faction", "SQL_FACTION_GET", throwable);
                     return;
                 } else if (faction == null) {
-                    Messages.FACTION_NOT_FOUND.send(sender, "%name%", playerFactionName);
+                    Messages.FACTION_NOT_FOUND.send(sender, locale, "%name%", playerFactionName);
                     return;
                 }
 
                 faction.addGems(amount);
-                Messages.GEM_GIVE_SUCCESS.send(sender, "%amount%", amount, "%name%", playerFactionName);
+                Messages.GEM_GIVE_SUCCESS.send(sender, locale, "%amount%", amount, "%name%", playerFactionName);
             });
         } else {
-            Messages.INCORRECT_USAGE.send(sender, "%usage%", getSyntax());
+            Messages.INCORRECT_USAGE.send(sender, locale, "%usage%", getSyntax());
         }
     }
 

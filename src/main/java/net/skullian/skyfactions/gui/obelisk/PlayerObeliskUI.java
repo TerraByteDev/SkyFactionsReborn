@@ -25,7 +25,7 @@ public class PlayerObeliskUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("obelisk/player_obelisk");
+                GUIData data = GUIAPI.getGUIData("obelisk/player_obelisk", player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -39,7 +39,7 @@ public class PlayerObeliskUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "open your obelisk", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "open your obelisk", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }

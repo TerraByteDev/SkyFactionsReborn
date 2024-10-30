@@ -26,7 +26,7 @@ public class PlayerOutgoingRequestManageUI {
     public static void promptPlayer(Player player, JoinRequestData joinRequest) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("obelisk/invites/player_join_request");
+                GUIData data = GUIAPI.getGUIData("obelisk/invites/player_join_request", player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player, joinRequest);
 
@@ -40,7 +40,7 @@ public class PlayerOutgoingRequestManageUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "manage your outgoing join request", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "manage your outgoing join request", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }

@@ -1,19 +1,19 @@
 package net.skullian.skyfactions.command.runes.subcommands;
 
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.api.RunesAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
-import java.util.List;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.api.RunesAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("runes")
 public class RunesBalanceCommand extends CommandTemplate {
@@ -47,11 +47,11 @@ public class RunesBalanceCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (!hasIsland) {
-                Messages.NO_ISLAND.send(player);
+                Messages.NO_ISLAND.send(player, player.locale());
                 return;
             }
             int runes = RunesAPI.getRunes(player.getUniqueId());
-            Messages.RUNES_BALANCE_MESSAGE.send(player, "%count%", runes);
+            Messages.RUNES_BALANCE_MESSAGE.send(player, player.locale(), "%count%", runes);
         });
     }
 

@@ -34,7 +34,7 @@ public class FactionPlayerJoinRequestDenyItem extends SkyItem {
 
         FactionAPI.getFaction(DATA.getFactionName()).whenComplete((faction, ex) -> {
             if (faction == null) {
-                Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "get your Faction", "FACTION_NOT_FOUND");
                 return;
             } else if (ex != null) {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
@@ -51,7 +51,7 @@ public class FactionPlayerJoinRequestDenyItem extends SkyItem {
                 }
 
                 NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
-                Messages.FACTION_JOIN_REQUEST_DENY_SUCCESS.send(player, "%faction_name%", DATA.getFactionName());
+                Messages.FACTION_JOIN_REQUEST_DENY_SUCCESS.send(player, player.locale(), "%faction_name%", DATA.getFactionName());
             });
         });
     }

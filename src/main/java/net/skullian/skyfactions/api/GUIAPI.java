@@ -1,18 +1,21 @@
 package net.skullian.skyfactions.api;
 
-import dev.dejvokep.boostedyaml.YamlDocument;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
-import net.skullian.skyfactions.config.types.GUIEnums;
-import net.skullian.skyfactions.gui.data.GUIData;
-import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.gui.data.PaginationItemData;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
+import net.skullian.skyfactions.config.types.GUIEnums;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.gui.data.GUIData;
+import net.skullian.skyfactions.gui.data.ItemData;
+import net.skullian.skyfactions.gui.data.PaginationItemData;
 
 public class GUIAPI {
 
@@ -20,11 +23,12 @@ public class GUIAPI {
      * No idea why you'd want to use this :/
      *
      * @param guiName GUI 'path' in the config folder. E.g. "confirmations/create_island" corresponds to the "confirmations/create_island.yml"
+     * @param player Player in question. This is so that the correct data for the player's locale can be fetched.
      * @return {@link GUIData} GUI's corresponding Data.
      * @throws IllegalArgumentException
      */
-    public static GUIData getGUIData(String guiName) throws IllegalArgumentException {
-        YamlDocument config = GUIEnums.configs.get("guis/" + guiName);
+    public static GUIData getGUIData(String guiName, Player player) throws IllegalArgumentException {
+        YamlDocument config = GUIEnums.configs.getOrDefault(player.locale().getLanguage(), getFallbackLanguage()).get("guis/" + guiName);
         if (config != null) {
             String guiTitle = config.getString("TITLE");
             String openSound = config.getString("OPEN_SOUND");
@@ -38,16 +42,20 @@ public class GUIAPI {
         }
     }
 
+    private static Map<String, YamlDocument> getFallbackLanguage() {
+        return GUIEnums.configs.get(Settings.DEFAULT_LANGUAGE.getString());
+    }
+
     /**
      * Get a specific GUI's configured item datas.
      *
      * @param guiName GUI 'path' in the config folder. E.g. "confirmations/create_island" corresponds to the "confirmations/create_island.yml"
-     * @param player  We only need this because there is a placeholder of %player_name%.
+     * @param player  We only need this because there is a placeholder of %player_name%. Also for locale crap.
      * @return {@link List<ItemData>}
      * @throws IllegalArgumentException
      */
     public static List<ItemData> getItemData(String guiName, Player player) throws IllegalArgumentException {
-        YamlDocument config = GUIEnums.configs.get("guis/" + guiName);
+        YamlDocument config = GUIEnums.configs.getOrDefault(player.locale().getLanguage(), getFallbackLanguage()).get("guis/" + guiName);
         if (config != null) {
 
             Section itemsConfig = config.getSection("ITEMS");
@@ -80,7 +88,7 @@ public class GUIAPI {
      * @throws RuntimeException
      */
     public static List<PaginationItemData> getPaginationData(Player player) throws RuntimeException {
-        YamlDocument config = GUIEnums.configs.get("guis/pagination");
+        YamlDocument config = GUIEnums.configs.getOrDefault(player.locale().getLanguage(), getFallbackLanguage()).get("guis/pagination");
         if (config != null) {
 
             Section itemsConfig = config.getSection("ITEMS");

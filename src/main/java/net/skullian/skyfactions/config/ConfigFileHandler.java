@@ -10,7 +10,6 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.ConfigTypes;
 import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.DiscordConfig;
-import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.ObeliskConfig;
 import net.skullian.skyfactions.config.types.Runes;
@@ -28,7 +27,7 @@ public class ConfigFileHandler {
 
     public void loadFiles(SkyFactionsReborn plugin) {
         new File(plugin.getDataFolder(), "/schematics").mkdirs();
-        new File(plugin.getDataFolder(), "/songs").mkdir();
+        new File(plugin.getDataFolder(), "/songs").mkdirs();
 
         registerFile(ConfigTypes.SETTINGS, new ConfigHandler("config"));
         registerFile(ConfigTypes.MESSAGES, new ConfigHandler("messages"));
@@ -37,9 +36,7 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.RUNES, new ConfigHandler("runes"));
         registerFile(ConfigTypes.DEFENCES, new ConfigHandler("defences"));
 
-        loadGUIs();
-
-        Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
+        Messages.load();
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
@@ -49,7 +46,6 @@ public class ConfigFileHandler {
         if (!Files.exists(Paths.get(plugin.getDataFolder() + "/defences"))) {
             DefencesFactory.registerDefaultDefences();
         }
-        DefencesFactory.register();
     }
 
     public ConfigHandler getFile(ConfigTypes type) {
@@ -58,23 +54,14 @@ public class ConfigFileHandler {
 
     public void reloadFiles() {
         configs.values().forEach(ConfigHandler::reload);
-        Messages.setConfig(getFile(ConfigTypes.MESSAGES).getConfig());
+        Messages.load();
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
         DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
         DiscordConfig.setConfig(getFile(ConfigTypes.DISCORD).getConfig());
 
-        loadGUIs();
-        DefencesFactory.register();
         DefenceHandler.refresh();
-    }
-
-    private void loadGUIs() {
-        for (GUIEnums enumEntry : GUIEnums.values()) {
-            ConfigHandler handler = new ConfigHandler(enumEntry.getConfigPath());
-            GUIEnums.configs.put(enumEntry.getConfigPath(), handler.getConfig());
-        }
     }
 
     public void registerFile(ConfigTypes type, ConfigHandler handler) {

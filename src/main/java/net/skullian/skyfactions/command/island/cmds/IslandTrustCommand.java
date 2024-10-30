@@ -1,15 +1,10 @@
 package net.skullian.skyfactions.command.island.cmds;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -19,8 +14,13 @@ import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("island")
 public class IslandTrustCommand extends CommandTemplate {
@@ -60,7 +60,7 @@ public class IslandTrustCommand extends CommandTemplate {
         OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
         if (!target.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(player, "%player%", playerName);
+            Messages.UNKNOWN_PLAYER.send(player, player.locale(), "%player%", playerName);
             return;
         }
 
@@ -69,7 +69,7 @@ public class IslandTrustCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (island == null) {
-                Messages.NO_ISLAND.send(player);
+                Messages.NO_ISLAND.send(player, player.locale());
                 return;
             }
 
@@ -80,7 +80,7 @@ public class IslandTrustCommand extends CommandTemplate {
                 }
 
                 if (isTrusted) {
-                    Messages.PLAYER_ALREADY_TRUSTED.send(player);
+                    Messages.PLAYER_ALREADY_TRUSTED.send(player, player.locale());
                 } else {
                     SkyFactionsReborn.databaseHandler.trustPlayer(target.getUniqueId(), island.getId()).whenComplete((result, exc) -> {
                         if (exc != null) {
@@ -88,7 +88,7 @@ public class IslandTrustCommand extends CommandTemplate {
                             return;
                         }
 
-                        Messages.TRUST_SUCCESS.send(player, "%player%", target.getName());
+                        Messages.TRUST_SUCCESS.send(player, player.locale(), "%player%", target.getName());
                     });
                 }
             });

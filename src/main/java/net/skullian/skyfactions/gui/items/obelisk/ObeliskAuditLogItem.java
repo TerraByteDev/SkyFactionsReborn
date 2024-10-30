@@ -25,7 +25,7 @@ public class ObeliskAuditLogItem extends SkyItem {
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (faction == null) {
-                Messages.ERROR.send(player, "%operation%", "get your Faction", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "get your Faction", "FACTION_NOT_FOUND");
                 return;
             } else if (ex != null) {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
@@ -36,7 +36,7 @@ public class ObeliskAuditLogItem extends SkyItem {
             if (faction.getOwner().equals(offlinePlayer) || faction.getAdmins().contains(offlinePlayer)) {
                 FactionAuditLogUI.promptPlayer(player);
             } else {
-                Messages.OBELISK_GUI_DENY.send(player, "%rank%", Messages.FACTION_ADMIN_TITLE.get());
+                Messages.OBELISK_GUI_DENY.send(player, player.locale(), "%rank%", Messages.FACTION_ADMIN_TITLE.get(player.locale()));
             }
         });
     }

@@ -76,7 +76,7 @@ public class ObeliskInteractionListener implements Listener {
             return;
 
         event.setCancelled(true);
-        Messages.OBELISK_DESTROY_DENY.send(player);
+        Messages.OBELISK_DESTROY_DENY.send(player, player.locale());
     }
 
     // Listen for interaction with the Obelisk
@@ -102,7 +102,7 @@ public class ObeliskInteractionListener implements Listener {
 
         hasPermissions(player, type, owner).thenAccept((has) -> {
             if (!has) {
-                Messages.OBELISK_ACCESS_DENY.send(player);
+                Messages.OBELISK_ACCESS_DENY.send(player, player.locale());
             }
         });
     }

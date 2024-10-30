@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 
 import java.util.List;
+import java.util.Locale;
 
 @Command("sf")
 public class SFSyncCommand extends CommandTemplate {
@@ -37,6 +38,7 @@ public class SFSyncCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) &&!CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
+        Locale locale = sender instanceof Player ? ((Player) sender).locale() : Locale.ROOT;
 
         SLogger.warn("[{}] is forcing a database sync.", sender.getName());
 
@@ -46,7 +48,7 @@ public class SFSyncCommand extends CommandTemplate {
                 return;
             }
 
-            Messages.SYNC_SUCCESS.send(sender);
+            Messages.SYNC_SUCCESS.send(sender, locale);
         });
     }
 

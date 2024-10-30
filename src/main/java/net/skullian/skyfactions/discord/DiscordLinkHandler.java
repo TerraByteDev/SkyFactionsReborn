@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 import java.awt.*;
+import java.util.Locale;
 import java.util.UUID;
 
 public class DiscordLinkHandler extends ListenerAdapter {
@@ -25,14 +26,14 @@ public class DiscordLinkHandler extends ListenerAdapter {
 
                 SkyFactionsReborn.databaseHandler.registerDiscordLink(playerUUID, event.getUser().getId()).thenAccept(result -> {
                     if (player.isOnline()) {
-                        Messages.DISCORD_LINK_SUCCESS.send(player.getPlayer(), "%discord_name%", event.getUser().getName());
+                        Messages.DISCORD_LINK_SUCCESS.send(player.getPlayer(), player.getPlayer().locale(), "%discord_name%", event.getUser().getName());
                     }
 
-                    event.reply("").setEmbeds(buildEmbed(Color.GREEN, Messages.DISCORD_APP_LINK_SUCCESS.getString().replace("%player_name%", player.getName())).build()).queue();
+                    event.reply("").setEmbeds(buildEmbed(Color.GREEN, Messages.DISCORD_APP_LINK_SUCCESS.getString(Locale.ROOT).replace("%player_name%", player.getName())).build()).queue();
                     SkyFactionsReborn.discordHandler.codes.remove(code);
                 });
             } else {
-                event.reply("").setEmbeds(buildEmbed(Color.RED, Messages.DISCORD_APP_LINK_FAILED.getString()).build()).queue();
+                event.reply("").setEmbeds(buildEmbed(Color.RED, Messages.DISCORD_APP_LINK_FAILED.getString(Locale.ROOT)).build()).queue();
             }
         }
     }

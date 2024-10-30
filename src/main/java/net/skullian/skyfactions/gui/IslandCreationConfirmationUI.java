@@ -23,7 +23,7 @@ public class IslandCreationConfirmationUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("confirmations/create_island");
+                GUIData data = GUIAPI.getGUIData("confirmations/create_island", player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -37,7 +37,7 @@ public class IslandCreationConfirmationUI {
                 window.open();
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "create your island", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "create your island", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }

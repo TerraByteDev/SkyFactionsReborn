@@ -21,6 +21,7 @@ import org.incendo.cloud.context.CommandInput;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Command("runes")
@@ -70,39 +71,40 @@ public class RunesGiveCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
-            if (type.equalsIgnoreCase("player")) {
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
-                if (!offlinePlayer.hasPlayedBefore()) {
-                    Messages.UNKNOWN_PLAYER.send(sender, "%player%", playerFactionName);
-                } else {
-                    IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, ex) -> {
-                        if (ex != null) {
-                            ErrorHandler.handleError(sender, "check if the player had an island", "SQL_ISLAND_GET", ex);
-                            return;
-                        } else if (!hasIsland) {
-                            Messages.PLAYER_HAS_NO_ISLAND.send(sender);
-                            return;
-                        }
+        Locale locale = sender instanceof Player ? ((Player) sender).locale() : Locale.ROOT;
 
-                        RunesAPI.addRunes(offlinePlayer.getUniqueId(), amount);
-                        Messages.RUNES_GIVE_SUCCESS.send(sender, "%amount%", amount, "%name%", offlinePlayer.getName());
-                    });
-                }
-            } else if (type.equalsIgnoreCase("faction")) {
-
-                FactionAPI.getFaction(playerFactionName).whenComplete((faction, throwable) -> {
-                    if (throwable != null) {
-                        ErrorHandler.handleError(sender, "get the specified Faction", "SQL_FACTION_GET", throwable);
+        if (type.equalsIgnoreCase("player")) {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
+        if (!offlinePlayer.hasPlayedBefore()) {
+            Messages.UNKNOWN_PLAYER.send(sender, locale, "%player%", playerFactionName);
+        } else {
+            IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, ex) -> {
+                if (ex != null) {
+                    ErrorHandler.handleError(sender, "check if the player had an island", "SQL_ISLAND_GET", ex);
                         return;
-                    } else if (faction == null) {
-                        Messages.FACTION_NOT_FOUND.send(sender, "%name%", playerFactionName);
+                    } else if (!hasIsland) {
+                        Messages.PLAYER_HAS_NO_ISLAND.send(sender, locale);
                         return;
                     }
 
-                    faction.addRunes(amount);
-                    Messages.RUNES_GIVE_SUCCESS.send(sender, "%amount%", amount, "%name%", faction.getName());
+                    RunesAPI.addRunes(offlinePlayer.getUniqueId(), amount);
+                    Messages.RUNES_GIVE_SUCCESS.send(sender, locale, "%amount%", amount, "%name%", offlinePlayer.getName());
                 });
+            }
+        } else if (type.equalsIgnoreCase("faction")) {
 
+            FactionAPI.getFaction(playerFactionName).whenComplete((faction, throwable) -> {
+                if (throwable != null) {
+                    ErrorHandler.handleError(sender, "get the specified Faction", "SQL_FACTION_GET", throwable);
+                    return;
+                } else if (faction == null) {
+                    Messages.FACTION_NOT_FOUND.send(sender, locale, "%name%", playerFactionName);
+                    return;
+                }
+
+                faction.addRunes(amount);
+                Messages.RUNES_GIVE_SUCCESS.send(sender, locale, "%amount%", amount, "%name%", faction.getName());
+            });
         }
     }
 

@@ -38,13 +38,13 @@ public class MemberKickItem extends SkyItem {
                     faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_KICK, "%kicked%", SUBJECT.getName(), "%player%", player.getName());
                     faction.kickPlayer(SUBJECT, player);
 
-                    Messages.FACTION_MANAGE_KICK_SUCCESS.send(player, "%player%", SUBJECT.getName());
+                    Messages.FACTION_MANAGE_KICK_SUCCESS.send(player, player.locale(), "%player%", SUBJECT.getName());
                 } else {
-                    Messages.ERROR.send(player, "%operation%", "kick a player", "%debug%", "FACTION_MEMBER_UNKNOWN");
+                    Messages.ERROR.send(player, player.locale(), "%operation%", "kick a player", "%debug%", "FACTION_MEMBER_UNKNOWN");
                     event.getInventory().close();
                 }
             } else {
-                Messages.ERROR.send(player, "%operation%", "kick a player", "%debug%", "FACTION_NOT_EXIST");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "kick a player", "%debug%", "FACTION_NOT_EXIST");
                 event.getInventory().close();
             }
         });

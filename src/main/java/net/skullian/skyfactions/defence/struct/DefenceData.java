@@ -20,6 +20,7 @@ public class DefenceData {
     private int Z;
     private String UUIDFactionName; // either uuid or faction name
     private boolean IS_FACTION;
+    private String LOCALE;
 
     private int DURABILITY;
 

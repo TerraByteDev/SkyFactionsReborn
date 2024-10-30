@@ -23,7 +23,7 @@ public class PlayerManageIncomingInviteUI {
 
     public static void promptPlayer(Player player, InviteData inviteData) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/invites/player_invite_manage");
+            GUIData data = GUIAPI.getGUIData("obelisk/invites/player_invite_manage", player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player, inviteData);
 
@@ -37,7 +37,7 @@ public class PlayerManageIncomingInviteUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "manage an incoming Faction invite", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale(), "%operation%", "manage an incoming Faction invite", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 

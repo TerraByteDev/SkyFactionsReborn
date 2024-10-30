@@ -51,7 +51,7 @@ public class GemsDepositCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", throwable);
                 return;
             } else if (!hasIsland) {
-                Messages.NO_ISLAND.send(player);
+                Messages.NO_ISLAND.send(player, player.locale());
             }
 
             ItemStack currencyItem = GemsAPI.createGemsStack();
@@ -64,13 +64,13 @@ public class GemsDepositCommand extends CommandTemplate {
                     int parsedAmount = Integer.parseInt(amount);
                     totalDeposited = depositSpecificAmount(player, currencyItem, parsedAmount);
                 } catch (NumberFormatException exception) {
-                    Messages.INCORRECT_USAGE.send(player, "%usage%", getSyntax());
+                    Messages.INCORRECT_USAGE.send(player, player.locale(), "%usage%", getSyntax());
                 }
             }
 
             int finalTotalDeposited = totalDeposited;
             GemsAPI.subtractGems(player.getUniqueId(), totalDeposited);
-            Messages.GEMS_DEPOSIT_SUCCESS.send(player, "%amount%", finalTotalDeposited);
+            Messages.GEMS_DEPOSIT_SUCCESS.send(player, player.locale(), "%amount%", finalTotalDeposited);
         });
 
     }

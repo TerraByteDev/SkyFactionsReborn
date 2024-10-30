@@ -29,7 +29,7 @@ public class OutgoingInvitesUI {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/invites/outgoing_invites");
+            GUIData data = GUIAPI.getGUIData("obelisk/invites/outgoing_invites", player);
             PagedGui.Builder gui = registerItems(PagedGui.items()
                     .setStructure(data.getLAYOUT()), player);
 
@@ -43,7 +43,7 @@ public class OutgoingInvitesUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, "%operation%", "open the outgoing invites GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale(), "%operation%", "open the outgoing invites GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -102,7 +102,7 @@ public class OutgoingInvitesUI {
             }
 
             if (faction == null) {
-                Messages.ERROR.send(player, "%operation%", "open the outgoing invutes GUI", "%debug%", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "open the outgoing invutes GUI", "%debug%", "FACTION_NOT_FOUND");
                 return;
             }
 

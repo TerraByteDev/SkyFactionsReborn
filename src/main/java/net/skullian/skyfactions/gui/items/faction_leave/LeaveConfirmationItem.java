@@ -56,7 +56,7 @@ public class LeaveConfirmationItem extends SkyItem {
                                     Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
                                     IslandAPI.teleportPlayerToLocation(player, location);
                                 } else {
-                                    Messages.ERROR.send(player, "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
+                                    Messages.ERROR.send(player, player.locale(), "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
                                 }
                             }
                         });
@@ -64,13 +64,13 @@ public class LeaveConfirmationItem extends SkyItem {
                     }
 
                     faction.leaveFaction(Bukkit.getOfflinePlayer(player.getUniqueId()));
-                    Messages.FACTION_LEAVE_SUCCESS.send(player, "%faction_name%", faction.getName());
+                    Messages.FACTION_LEAVE_SUCCESS.send(player, player.locale(), "%faction_name%", faction.getName());
                 } else {
-                    Messages.ERROR.send(player, "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
+                    Messages.ERROR.send(player, player.locale(), "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
 
                 }
             } else {
-                Messages.NOT_IN_FACTION.send(player);
+                Messages.NOT_IN_FACTION.send(player, player.locale());
             }
         });
 

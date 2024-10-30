@@ -1,5 +1,7 @@
 package net.skullian.skyfactions.notification;
 
+import java.util.Locale;
+
 import net.skullian.skyfactions.config.types.Messages;
 
 public enum NotificationType {
@@ -16,12 +18,12 @@ public enum NotificationType {
         this.description = description;
     }
 
-    public String getTitle(Object... replacements) {
-        return title.get(replacements);
+    public String getTitle(Locale locale, Object... replacements) {
+        return title.get(locale, replacements);
     }
 
-    public String getDescription(Object... replacements) {
-        return description.get(replacements);
+    public String getDescription(Locale locale, Object... replacements) {
+        return description.get(locale, replacements);
     }
 
 }

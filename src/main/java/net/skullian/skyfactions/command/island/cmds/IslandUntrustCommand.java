@@ -1,15 +1,10 @@
 package net.skullian.skyfactions.command.island.cmds;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -19,8 +14,13 @@ import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("island")
 public class IslandUntrustCommand extends CommandTemplate {
@@ -60,7 +60,7 @@ public class IslandUntrustCommand extends CommandTemplate {
         OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
         if (!target.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(player, "%player%", playerName);
+            Messages.UNKNOWN_PLAYER.send(player, player.locale(), "%player%", playerName);
             return;
         }
 
@@ -69,7 +69,7 @@ public class IslandUntrustCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (is == null) {
-                Messages.NO_ISLAND.send(player);
+                Messages.NO_ISLAND.send(player, player.locale());
                 return;
             }
 
@@ -86,10 +86,10 @@ public class IslandUntrustCommand extends CommandTemplate {
                             return;
                         }
 
-                        Messages.UNTRUST_SUCCESS.send(player, "%player%", target.getName());
+                        Messages.UNTRUST_SUCCESS.send(player, player.locale(), "%player%", target.getName());
                     });
                 } else {
-                    Messages.UNTRUST_FAILURE.send(player);
+                    Messages.UNTRUST_FAILURE.send(player, player.locale());
                 }
             });
         });

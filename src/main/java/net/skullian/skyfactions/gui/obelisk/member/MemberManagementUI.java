@@ -32,7 +32,7 @@ public class MemberManagementUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("obelisk/member_management");
+                GUIData data = GUIAPI.getGUIData("obelisk/member_management", player);
                 PagedGui.Builder gui = registerItems(PagedGui.items()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -46,7 +46,7 @@ public class MemberManagementUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, "%operation%", "open the member management GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale(), "%operation%", "open the member management GUI", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }
@@ -112,23 +112,23 @@ public class MemberManagementUI {
             List<OfflinePlayer> members = faction.getMembers();
 
             data.setNAME(data.getNAME().replace("%player_name%", owner.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, owner.getUniqueId()), Messages.FACTION_OWNER_TITLE.get(), owner, player));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, owner.getUniqueId()), Messages.FACTION_OWNER_TITLE.get(player.locale()), owner, player));
 
             for (OfflinePlayer admin : admins) {
                 data.setNAME(data.getNAME().replace("%player_name%", admin.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, admin.getUniqueId()), Messages.FACTION_ADMIN_TITLE.get(), admin, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, admin.getUniqueId()), Messages.FACTION_ADMIN_TITLE.get(player.locale()), admin, player));
             }
             for (OfflinePlayer moderator : moderators) {
                 data.setNAME(data.getNAME().replace("%player_name%", moderator.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, moderator.getUniqueId()), Messages.FACTION_MODERATOR_TITLE.get(), moderator, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, moderator.getUniqueId()), Messages.FACTION_MODERATOR_TITLE.get(player.locale()), moderator, player));
             }
             for (OfflinePlayer fighter : fighters) {
                 data.setNAME(data.getNAME().replace("%player_name%", fighter.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, fighter.getUniqueId()), Messages.FACTION_FIGHTER_TITLE.get(), fighter, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, fighter.getUniqueId()), Messages.FACTION_FIGHTER_TITLE.get(player.locale()), fighter, player));
             }
             for (OfflinePlayer member : members) {
                 data.setNAME(data.getNAME().replace("%player_name%", member.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), Messages.FACTION_MEMBER_TITLE.get(), member, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), Messages.FACTION_MEMBER_TITLE.get(player.locale()), member, player));
             }
         });
         return items;

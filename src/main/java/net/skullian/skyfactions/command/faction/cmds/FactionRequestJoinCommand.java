@@ -1,22 +1,22 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.api.NotificationAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
+import java.util.List;
+
 import org.bukkit.Bukkit;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
-import java.util.List;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.NotificationAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("faction")
 public class FactionRequestJoinCommand extends CommandTemplate {
@@ -51,7 +51,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "check if you were in a Faction", "SQL_FACTION_GET", ex);
                 return;
             } else if (isInFaction) {
-                Messages.ALREADY_IN_FACTION.send(player);
+                Messages.ALREADY_IN_FACTION.send(player, player.locale());
                 return;
             }
 
@@ -60,10 +60,10 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     ErrorHandler.handleError(player, "check the Faction", "SQL_FACTION_GET", throwable);
                     return;
                 } else if (faction == null) {
-                    Messages.FACTION_NOT_FOUND.send(player, "%name%", factionName);
+                    Messages.FACTION_NOT_FOUND.send(player, player.locale(), "%name%", factionName);
                     return;
                 } else if (faction.getAllMembers().contains(Bukkit.getOfflinePlayer(player.getUniqueId()))) {
-                    Messages.JOIN_REQUEST_SAME_FACTION.send(player);
+                    Messages.JOIN_REQUEST_SAME_FACTION.send(player, player.locale());
                     return;
                 } else {
                     SkyFactionsReborn.databaseHandler.hasJoinRequest(player).whenComplete((hasJoinRequest, exc) -> {
@@ -73,7 +73,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                         }
 
                         if (hasJoinRequest) {
-                            Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player);
+                            Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player, player.locale());
                             return;
                         }
                     });
@@ -85,7 +85,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                         return;
                     }
 
-                    Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, "%faction_name%", factionName);
+                    Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, player.locale(), "%faction_name%", factionName);
                     NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
                 });
             });

@@ -1,17 +1,29 @@
 package net.skullian.skyfactions.config.types;
 
-import dev.dejvokep.boostedyaml.YamlDocument;
-import lombok.Getter;
-import lombok.Setter;
-import net.skullian.skyfactions.util.text.TextUtility;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
+import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
+import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
+import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.defence.DefencesFactory;
+import net.skullian.skyfactions.util.SLogger;
+import net.skullian.skyfactions.util.text.TextUtility;
 
-import java.util.List;
-
-@Getter
 public enum Messages {
 
     SERVER_NAME("SERVER_NAME"),
@@ -56,6 +68,8 @@ public enum Messages {
     NPC_RELOADED("NPC.NPC_RELOADED"),
     NPC_DISABLING("NPC.NPC_DISABLING"),
     NPC_DISABLED("NPC.NPC_DISABLED"),
+    NPC_PLAYER_ISLANDS_ACTIONS("NPC.ACTIONS.PLAYER_ISLANDS"),
+    NPC_FACTION_ISLANDS_ACTIONS("NPC.ACTIONS.FACTION_ISLANDS"),
 
     RAID_CONFIRMATION_NAME("Raiding.RAID_CONFIRMATION_NAME"),
     RAID_CANCEL_NAME("Raiding.RAID_CANCEL_NAME"),
@@ -210,59 +224,115 @@ public enum Messages {
     NOTIFICATION_JOIN_REQUEST_ACCEPT_DESCRIPTION("Notifications.NOTIFICATION_TYPES.JOIN_REQUEST_ACCEPT_DESCRIPTION"),
     NOTIFICATION_DISMISS_SUCCESS("Notifications.NOTIFICATION_DISMISS_SUCCESS");
 
-    @Setter
-    private static YamlDocument config;
+    private static Map<String, YamlDocument> configs = new HashMap<>();
+    @Getter
     private final String path;
 
     Messages(String path) {
         this.path = path;
     }
 
-    public String get(Object... replacements) {
-        Object value = config.get("Messages." + this.path);
+    public static void load() {
+        try {
+            new File(SkyFactionsReborn.getInstance().getDataFolder(), "/language").mkdirs();
+            SLogger.info("Saving default language [English].");
+        
+            YamlDocument.create(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/language/en/en.yml"), SkyFactionsReborn.getInstance().getResource("/language/en/en.yml"),
+                        GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+
+            File folder = new File(SkyFactionsReborn.getInstance().getDataFolder(), "/language");
+            if (!folder.exists() || !folder.isDirectory()) throw new Exception("Could not find the language folder. Please report this error ASAP.");
+
+            for (File dir : folder.listFiles()) {
+                
+                if (dir.isDirectory()) {
+                    SLogger.info("Registering Language: \u001B[32m{}", dir.getName());
+
+                    if (!dir.getName().equalsIgnoreCase(Settings.DEFAULT_LANGUAGE.getString())) configs.put(
+                        dir.getName(),
+                        YamlDocument.create(new File(dir + "/" + dir.getName() + ".yml"), GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(),
+                                DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build())
+                    );
+
+                    DefencesFactory.register(dir, dir.getName());
+                    registerGUIs(dir, dir.getName());
+                }
+            }
+        } catch (Exception exception) {
+            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+            SLogger.fatal("There was an error loading language configs.");
+            SLogger.fatal("Please check that config for any configuration mistakes.");
+            SLogger.fatal("Plugin will now disable.");
+            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+            exception.printStackTrace();
+            Bukkit.getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
+        }
+        
+    }
+
+    private static void registerGUIs(File dir, String locale) throws IOException {
+        Map<String, YamlDocument> docs = new HashMap<>();
+        for (GUIEnums enumEntry : GUIEnums.values()) {
+            YamlDocument doc = YamlDocument.create(new File(dir, enumEntry.getConfigPath()),
+                    GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+
+            docs.put(enumEntry.getConfigPath(), doc);
+        }
+
+        GUIEnums.configs.put(locale, docs);
+    }
+
+    public String get(Locale locale, Object... replacements) {
+        YamlDocument document = configs.getOrDefault(locale.getLanguage(), getFallbackDocument());
+        Object value = document.get("Messages." + this.path);
 
         String message;
         if (value == null) {
-            message = TextUtility.color(SERVER_NAME.get() + "&r&7 Message not found: " + this.path, null);
+            message = TextUtility.color(SERVER_NAME.get(Locale.ROOT) + "&r&7 Message not found: " + this.path, null);
         } else {
             message = value instanceof List ? TextUtility.fromList((List<?>) value) : value.toString();
         }
-        return TextUtility.color(replace(message, replacements), null);
+        return TextUtility.color(replace(message, locale, replacements), null);
     }
 
-    public String getString() {
+    public String getString(Locale locale) {
+        YamlDocument config = configs.getOrDefault(locale.getLanguage(), getFallbackDocument());
         return config.getString("Messages." + this.path);
     }
 
-    public List<String> getStringList() {
+    public List<String> getStringList(Locale locale) {
+        YamlDocument config = configs.getOrDefault(locale.getLanguage(), getFallbackDocument());
         List<String> val = config.getStringList("Messages." + this.path);
 
         if (val == null) {
             // we don't auto color this as this is only used for item lore which is handled already
-            val = List.of(SERVER_NAME.get() + "&r&7 Message not found: " + this.path);
+            val = List.of(SERVER_NAME.get(locale) + "&r&7 Message not found: " + this.path);
         }
 
         return val;
     }
 
-    public void send(CommandSender receiver, Object... replacements) {
+    public void send(CommandSender receiver, Locale locale, Object... replacements) {
         if (receiver == null) return;
+        YamlDocument config = configs.getOrDefault(locale.getLanguage(), getFallbackDocument());
 
         Object value = config.get("Messages." + this.path);
 
         String message;
         if (value == null) {
-            message = TextUtility.color(SERVER_NAME.get() + "&r&7 Message not found: " + this.path, null);
+            message = TextUtility.color(SERVER_NAME.get(locale) + "&r&7 Message not found: " + this.path, null);
         } else {
             message = value instanceof List ? TextUtility.fromList((List<?>) value) : value.toString();
         }
 
         if (!message.isEmpty()) {
-            receiver.sendMessage(Component.text(TextUtility.color(replace(message, replacements), receiver instanceof Player ? (Player) receiver : null)));
+            receiver.sendMessage(Component.text(TextUtility.color(replace(message, locale, replacements), receiver instanceof Player ? (Player) receiver : null)));
         }
     }
 
-    private String replace(String message, Object... replacements) {
+    private String replace(String message, Locale locale, Object... replacements) {
+        YamlDocument config = configs.getOrDefault(locale.getLanguage(), getFallbackDocument());
+
         for (int i = 0; i < replacements.length; i += 2) {
             if (i + 1 >= replacements.length) break;
             message = message.replace(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
@@ -270,6 +340,10 @@ public enum Messages {
 
         String prefix = config.getString("Messages." + SERVER_NAME.getPath());
         return message.replace("%server_name%", prefix != null && !prefix.isEmpty() ? prefix : "");
+    }
+
+    private YamlDocument getFallbackDocument() {
+        return configs.get(Settings.DEFAULT_LANGUAGE.getString());
     }
 
 }
