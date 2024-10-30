@@ -36,12 +36,12 @@ public class ConfigFileHandler {
         registerFile(ConfigTypes.RUNES, new ConfigHandler("runes"));
         registerFile(ConfigTypes.DEFENCES, new ConfigHandler("defences"));
 
-        DefencesFactory.registerDefaultDefences();
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
+        DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
+        DefencesFactory.registerDefaultDefences();
         Messages.load();
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
-        DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
         DiscordConfig.setConfig(getFile(ConfigTypes.DISCORD).getConfig());
     }
 
