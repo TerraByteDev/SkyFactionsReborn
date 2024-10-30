@@ -33,7 +33,6 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.api.RunesAPI;
-import net.skullian.skyfactions.config.ConfigHandler;
 import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
@@ -62,21 +61,29 @@ public class DefencesFactory {
             for (Path yamlPath : fileSystem.getRootDirectories()) {
                 Stream<Path> stream = Files.list(yamlPath.resolve("/language/en/defences"));
                 stream.forEach(path -> {
-                    String fullPathName = path.getFileName().toString();
-                    String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
-
-                    new ConfigHandler("/language/en/defences/" + defenceName);
+                    try {
+                        String fullPathName = path.getFileName().toString();
+                        String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
+                        YamlDocument.create(new File("/language/en/defences/", defenceName + ".yml"), SkyFactionsReborn.getInstance().getResource(String.format("language/en/%s.yml", defenceName)),
+                                GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+                    } catch (IOException err) {
+                        err(err);
+                    }
                 });
             }
         } catch (URISyntaxException | IOException error) {
-            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
-            SLogger.fatal("There was an error loading defences.");
-            SLogger.fatal("Please check the below error and proceed accordingly.");
-            SLogger.fatal("Plugin will now disable.");
-            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
-            error.printStackTrace();
-            SkyFactionsReborn.getInstance().getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
+            err(error);
         }
+    }
+
+    private static void err(Exception error) {
+        SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+        SLogger.fatal("There was an error loading defences.");
+        SLogger.fatal("Please check the below error and proceed accordingly.");
+        SLogger.fatal("Plugin will now disable.");
+        SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+        error.printStackTrace();
+        SkyFactionsReborn.getInstance().getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
     }
 
     public static void onReload() {
@@ -105,13 +112,7 @@ public class DefencesFactory {
 
             defences.put(locale, dMap);
         } catch (IOException error) {
-            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
-            SLogger.fatal("There was an error loading defences.");
-            SLogger.fatal("Please check the below error and proceed accordingly.");
-            SLogger.fatal("Plugin will now disable.");
-            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
-            error.printStackTrace();
-            SkyFactionsReborn.getInstance().getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
+            err(error);
         }
     }
 
