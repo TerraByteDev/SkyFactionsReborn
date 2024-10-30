@@ -148,15 +148,16 @@ public class NPCManager {
     }
 
     private SkyNPCFactory getFactory() {
+        if (!Settings.NPC_INTEGRATION_ENABLED.getBoolean()) return;
         switch (Settings.NPC_FACTORY.getString().toLowerCase()) {
 
             case "znpcsplus":
-                if (DependencyHandler.isEnabled("FancyNPCs")) {
+                if (DependencyHandler.isEnabled("ZNPCsPlus")) {
                     ZNPCsPlusFactory npcFactory = new ZNPCsPlusFactory();
                     Bukkit.getServer().getPluginManager().registerEvents(npcFactory, SkyFactionsReborn.getInstance());
 
                     return new ZNPCsPlusFactory();
-                } else alert("FancyNPCs");
+                } else alert("ZNPCsPlus");
 
                 break;
 
