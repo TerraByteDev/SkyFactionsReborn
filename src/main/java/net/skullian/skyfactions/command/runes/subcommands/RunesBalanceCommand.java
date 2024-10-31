@@ -47,11 +47,11 @@ public class RunesBalanceCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (!hasIsland) {
-                Messages.NO_ISLAND.send(player, player.locale());
+                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
                 return;
             }
             int runes = RunesAPI.getRunes(player.getUniqueId());
-            Messages.RUNES_BALANCE_MESSAGE.send(player, player.locale(), "%count%", runes);
+            Messages.RUNES_BALANCE_MESSAGE.send(player, player.locale().getLanguage(), "%count%", runes);
         });
     }
 

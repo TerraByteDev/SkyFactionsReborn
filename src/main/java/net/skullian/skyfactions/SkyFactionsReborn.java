@@ -12,6 +12,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.skullian.skyfactions.command.discord.DiscordCommandHandler;
 import net.skullian.skyfactions.command.faction.FactionCommandHandler;
 import net.skullian.skyfactions.command.gems.GemsCommandHandler;

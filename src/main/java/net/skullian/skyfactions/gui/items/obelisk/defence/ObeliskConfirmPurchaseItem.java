@@ -13,6 +13,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
@@ -39,26 +40,27 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
         String type = (String) getOptionals()[0];
         Faction faction = (Faction) getOptionals()[1];
         DefenceStruct struct = (DefenceStruct) getOptionals()[2];
+        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
 
         if (type.equals("faction")) {
             if (faction.getRunes() < struct.getBUY_COST()) {
-                for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList(getPLAYER().locale())) {
-                    builder.addLoreLines(TextUtility.color(line, getPLAYER()));
+                for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList(getPLAYER().locale().getLanguage())) {
+                    builder.addLoreLines(TextUtility.legacyColor(line, locale, getPLAYER()));
                 }
             }
         } else if (type.equals("player")) {
 
             int runes = RunesAPI.getRunes(getPLAYER().getUniqueId());
             if (runes < struct.getBUY_COST()) {
-                for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList(getPLAYER().locale())) {
-                    builder.addLoreLines(TextUtility.color(line, getPLAYER()));
+                for (String line : Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList(getPLAYER().locale().getLanguage())) {
+                    builder.addLoreLines(TextUtility.legacyColor(line, locale, getPLAYER()));
                 }
             }
         }
 
         if (getPLAYER().getInventory().firstEmpty() == -1) {
-            for (String line : Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(getPLAYER().locale())) {
-                builder.addLoreLines(TextUtility.color(line, getPLAYER()));
+            for (String line : Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(getPLAYER().locale().getLanguage())) {
+                builder.addLoreLines(TextUtility.legacyColor(line, locale, getPLAYER()));
             }
         }
 
@@ -79,10 +81,10 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
             }
 
             player.closeInventory();
-            Messages.PLEASE_WAIT.send(player, getPLAYER().locale(), "%operation%", "purchasing your defence");
+            Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "%operation%", "purchasing your defence");
 
             FACTION.subtractRunes(STRUCT.getBUY_COST());
-            Messages.PLEASE_WAIT.send(player, getPLAYER().locale(), "%operation%", "Purchasing your defence");
+            Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "%operation%", "Purchasing your defence");
             DefencesFactory.addDefence(player, STRUCT, FACTION);;
         } else if (TYPE.equals("player")) {
 
@@ -93,7 +95,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
             }
 
             player.closeInventory();
-            Messages.PLEASE_WAIT.send(player, getPLAYER().locale(), "%operation%", "Purchasing your defence");
+            Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "%operation%", "Purchasing your defence");
             DefencesFactory.addDefence(player, STRUCT, FACTION);
         }
 

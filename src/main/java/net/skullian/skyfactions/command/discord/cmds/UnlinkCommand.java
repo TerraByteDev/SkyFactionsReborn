@@ -32,9 +32,9 @@ public class UnlinkCommand extends CommandTemplate {
                 }
 
                 if (id == null) {
-                    Messages.DISCORD_NOT_LINKED.send(player, player.locale());
+                    Messages.DISCORD_NOT_LINKED.send(player, player.locale().getLanguage());
                 } else {
-                    Messages.DISCORD_UNLINK_SUCCESS.send(player, player.locale());
+                    Messages.DISCORD_UNLINK_SUCCESS.send(player, player.locale().getLanguage());
                 }
             });
         }

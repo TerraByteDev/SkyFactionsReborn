@@ -3,6 +3,7 @@ package net.skullian.skyfactions.gui.obelisk.member;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.antlr.v4.parse.ANTLRParser.localsSpec_return;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.data.PaginationItemData;
@@ -38,7 +40,7 @@ public class MemberManagementUI {
 
                 Window window = Window.single()
                         .setViewer(player)
-                        .setTitle(TextUtility.color(data.getTITLE(), player))
+                        .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
                         .setGui(gui)
                         .build();
 
@@ -46,7 +48,7 @@ public class MemberManagementUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, player.locale(), "%operation%", "open the member management GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the member management GUI", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }
@@ -104,6 +106,7 @@ public class MemberManagementUI {
                 ErrorHandler.handleError(player, "open the member management GUI", "GUI_LOAD_EXCEPTION", exc);
                 return;
             }
+            String locale = PlayerHandler.getLocale(player.getUniqueId());
 
             OfflinePlayer owner = faction.getOwner();
             List<OfflinePlayer> admins = faction.getAdmins();
@@ -112,23 +115,23 @@ public class MemberManagementUI {
             List<OfflinePlayer> members = faction.getMembers();
 
             data.setNAME(data.getNAME().replace("%player_name%", owner.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, owner.getUniqueId()), Messages.FACTION_OWNER_TITLE.get(player.locale()), owner, player));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, owner.getUniqueId()), Messages.FACTION_OWNER_TITLE.getString(locale), owner, player));
 
             for (OfflinePlayer admin : admins) {
                 data.setNAME(data.getNAME().replace("%player_name%", admin.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, admin.getUniqueId()), Messages.FACTION_ADMIN_TITLE.get(player.locale()), admin, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, admin.getUniqueId()), Messages.FACTION_ADMIN_TITLE.getString(locale), admin, player));
             }
             for (OfflinePlayer moderator : moderators) {
                 data.setNAME(data.getNAME().replace("%player_name%", moderator.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, moderator.getUniqueId()), Messages.FACTION_MODERATOR_TITLE.get(player.locale()), moderator, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, moderator.getUniqueId()), Messages.FACTION_MODERATOR_TITLE.getString(locale), moderator, player));
             }
             for (OfflinePlayer fighter : fighters) {
                 data.setNAME(data.getNAME().replace("%player_name%", fighter.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, fighter.getUniqueId()), Messages.FACTION_FIGHTER_TITLE.get(player.locale()), fighter, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, fighter.getUniqueId()), Messages.FACTION_FIGHTER_TITLE.getString(locale), fighter, player));
             }
             for (OfflinePlayer member : members) {
                 data.setNAME(data.getNAME().replace("%player_name%", member.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), Messages.FACTION_MEMBER_TITLE.get(player.locale()), member, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), Messages.FACTION_MEMBER_TITLE.getString(locale), member, player));
             }
         });
         return items;

@@ -1,20 +1,20 @@
 package net.skullian.skyfactions.db.cache;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.scheduler.BukkitTask;
+
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.SLogger;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.scheduler.BukkitTask;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 public class CacheService {
 
@@ -133,5 +133,15 @@ public class CacheService {
     public void removeDefence(UUID playerUUID, Location location) {
         CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
         entry.removeDefence(location);
+    }
+
+    public void updateLocale(UUID playerUUID, String locale) {
+        CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
+        entry.setLocale(locale);
+    }
+
+    public void updateLocale(Faction faction, String locale) {
+        CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
+        entry.setLocale(locale);
     }
 }

@@ -48,7 +48,7 @@ public class GemsPayCommand extends CommandTemplate {
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
         if (!offlinePlayer.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(sender, player.locale(), "%player%", playerName);
+            Messages.UNKNOWN_PLAYER.send(sender, player.locale().getLanguage(), "%player%", playerName);
         } else {
 
             int playerGemCount = GemsAPI.getGems(player.getUniqueId());
@@ -56,9 +56,9 @@ public class GemsPayCommand extends CommandTemplate {
                 GemsAPI.subtractGems(player.getUniqueId(), amount);
                 GemsAPI.addGems(offlinePlayer.getUniqueId(), amount);
 
-                Messages.GEM_ADD_SUCCESS.send(player, player.locale(), "%amount%", amount, "%player%", offlinePlayer.getName());
+                Messages.GEM_ADD_SUCCESS.send(player, player.locale().getLanguage(), "%amount%", amount, "%player%", offlinePlayer.getName());
             } else {
-                Messages.INSUFFICIENT_GEMS_COUNT.send(player, player.locale());
+                Messages.INSUFFICIENT_GEMS_COUNT.send(player, player.locale().getLanguage());
             }
         }
     }

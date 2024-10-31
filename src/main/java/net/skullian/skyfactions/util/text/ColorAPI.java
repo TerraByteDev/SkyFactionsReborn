@@ -1,12 +1,12 @@
 package net.skullian.skyfactions.util.text;
 
 import com.google.common.collect.ImmutableMap;
-import net.md_5.bungee.api.ChatColor;
-import net.skullian.skyfactions.util.text.pattern.GradientPattern;
-import net.skullian.skyfactions.util.text.pattern.MainPattern;
-import net.skullian.skyfactions.util.text.pattern.SolidPattern;
 
-import java.awt.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.md_5.bungee.api.ChatColor;
+
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +16,6 @@ public class ColorAPI {
 
     private static final boolean SUPPORTS_RGB = DataUtil.getVersion() >= 16;
     private static final List<String> SPECIAL_COLORS = Arrays.asList("&l", "&n", "&o", "&k", "&m");
-
-    private static final List<MainPattern> PATTERNS = Arrays.asList(new GradientPattern(), new SolidPattern());
 
     private static final Map<Color, ChatColor> COLORS = ImmutableMap.<Color, ChatColor>builder()
             .put(new Color(0), ChatColor.getByChar('0'))
@@ -38,16 +36,8 @@ public class ColorAPI {
             .put(new Color(16777215), ChatColor.getByChar('f')).build();
 
 
-    public static String process(String string) {
-        for (MainPattern pattern : PATTERNS) {
-            string = pattern.process(string);
-        }
-
-        return ChatColor.translateAlternateColorCodes('&', string);
-    }
-
-    public static List<String> process(List<String> strings) {
-        return strings.stream().map(ColorAPI::process).collect(Collectors.toList());
+    public static List<Component> process(List<String> strings) {
+        return strings.stream().map(input -> MiniMessage.miniMessage().deserialize(input)).collect(Collectors.toList());
     }
 
     public static String color(String string, Color color) {

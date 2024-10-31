@@ -51,18 +51,18 @@ public class FactionMOTDCommand extends CommandTemplate {
             }
 
             if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, player.locale());
+                Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
                 return;
             } else if (!faction.isOwner(player) || !faction.isModerator(player)) {
-                Messages.PERMISSION_DENY.send(player, player.locale());
+                Messages.PERMISSION_DENY.send(player, player.locale().getLanguage());
                 return;
             }
 
-            Messages.MOTD_CHANGE_PROCESSING.send(player, player.locale());
+            Messages.MOTD_CHANGE_PROCESSING.send(player, player.locale().getLanguage());
 
             if (!TextUtility.hasBlacklistedWords(player, motd)) {
                 faction.updateMOTD(motd, player);
-                Messages.MOTD_CHANGE_SUCCESS.send(player, player.locale());
+                Messages.MOTD_CHANGE_SUCCESS.send(player, player.locale().getLanguage());
             }
         });
     }

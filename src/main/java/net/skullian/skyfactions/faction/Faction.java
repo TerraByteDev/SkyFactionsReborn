@@ -1,30 +1,30 @@
 package net.skullian.skyfactions.faction;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.NotificationAPI;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.db.AuditLogData;
-import net.skullian.skyfactions.db.InviteData;
-import net.skullian.skyfactions.island.FactionIsland;
-import net.skullian.skyfactions.notification.NotificationType;
-import net.skullian.skyfactions.util.ErrorHandler;
-import net.skullian.skyfactions.util.text.TextUtility;
-
-import org.antlr.v4.parse.ANTLRParser.block_return;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.Locale;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import net.kyori.adventure.text.Component;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.NotificationAPI;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.db.AuditLogData;
+import net.skullian.skyfactions.db.InviteData;
+import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.island.FactionIsland;
+import net.skullian.skyfactions.notification.NotificationType;
+import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.text.TextUtility;
 
 @AllArgsConstructor
 @Getter
@@ -42,6 +42,7 @@ public class Faction {
     private String motd;
     public int runes;
     public int gems;
+    public String locale;
 
     public int getRunes() {
         if (SkyFactionsReborn.cacheService.factionsToCache.containsKey(this)) return (runes += SkyFactionsReborn.cacheService.factionsToCache.get(this).getRunes());
@@ -121,9 +122,12 @@ public class Faction {
         List<OfflinePlayer> players = getAllMembers();
         for (OfflinePlayer player : players) {
             if (player.isOnline()) {
-                String model = Messages.FACTION_BROADCAST_MODEL.get(player.getPlayer().locale(), "%broadcaster%", broadcaster.getName(), "%broadcast%", 
-                    TextUtility.color(message.get(player.getPlayer().locale(), replacements).replace("%broadcaster%", broadcaster.getName()), broadcaster)
+                String locale = PlayerHandler.getLocale(player.getUniqueId());
+
+                Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
+                    Messages.replace(message.getString(locale), locale, player.getPlayer(), replacements)
                 );
+        
                 player.getPlayer().sendMessage(model);
             }
         }
@@ -135,11 +139,14 @@ public class Faction {
      * @param message Message to broadcast [{@link String}]
      */
     public void createBroadcast(OfflinePlayer broadcaster, String message) {
-        String formatted = TextUtility.color(message, broadcaster).replace("%broadcaster%", broadcaster.getName());
         List<OfflinePlayer> players = getAllMembers();
         for (OfflinePlayer player : players) {
             if (player.isOnline()) {
-                String model = Messages.FACTION_BROADCAST_MODEL.get(player.getPlayer().locale(), "%broadcaster%", broadcaster.getName(), "%broadcast%", formatted);
+                String locale = PlayerHandler.getLocale(player.getUniqueId());
+
+                Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
+                    Messages.replace(message, locale, player.getPlayer()));
+                
                 player.getPlayer().sendMessage(model);
             }
         }
@@ -173,6 +180,10 @@ public class Faction {
     public void addGems(int addition) {
         gems += addition;
         SkyFactionsReborn.cacheService.addGems(this, addition);
+    }
+
+    public void updateLocale(String newLocale) {
+        SkyFactionsReborn.cacheService.updateLocale(this, newLocale);
     }
 
     /**
@@ -275,7 +286,7 @@ public class Faction {
      * @param replacements Values to replace.
      */
     public CompletableFuture<Void> createAuditLog(UUID playerUUID, AuditLogType type, Object... replacements) {
-        return SkyFactionsReborn.databaseHandler.createAuditLog(playerUUID, type.getTitle(replacements), type.getDescription(replacements), name);
+        return SkyFactionsReborn.databaseHandler.createAuditLog(playerUUID, type.getTitle(null, replacements), type.getDescription(null, replacements), name);
     }
 
     /**
@@ -307,7 +318,7 @@ public class Faction {
                 createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "%inviter%", inviter.getName(), "%player_name%", player.getName())
         ).whenComplete((ignored, ex) -> {
             if (player.isOnline()) {
-                Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), player.getPlayer().locale());
+                Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), player.getPlayer().locale().getLanguage());
             } else {
                 NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "%player_name%", inviter.getName(), "%faction_name%", name);
             }
@@ -329,7 +340,7 @@ public class Faction {
 
             for (OfflinePlayer user : users) {
                 if (user.isOnline()) {
-                    Messages.JOIN_REQUEST_NOTIFICATION.send(user.getPlayer(), user.getPlayer().locale());
+                    Messages.JOIN_REQUEST_NOTIFICATION.send(user.getPlayer(), user.getPlayer().locale().getLanguage());
                 }
             }
         });
@@ -400,19 +411,19 @@ public class Faction {
      * Get the configured rank title of a member.
      * @param playerUUID UUID of the player {@link UUID}
      * 
-     * @return The rank of the player. {@link String}
+     * @return The rank of the player. {@link Component}
      */
-    public String getRank(UUID playerUUID) {
+    public Component getRank(UUID playerUUID) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
-        Locale locale = player.isOnline() ? player.getPlayer().locale() : Locale.of(Settings.DEFAULT_LANGUAGE.getString());
+        String locale = player.isOnline() ? player.getPlayer().locale().getLanguage() : Messages.getDefaulLocale();
 
-        if (owner.equals(player)) return TextUtility.color(Messages.FACTION_OWNER_TITLE.getString(locale), player);
-        if (admins.contains(player)) return TextUtility.color(Messages.FACTION_ADMIN_TITLE.getString(locale), player);
-        if (moderators.contains(player)) return TextUtility.color(Messages.FACTION_MODERATOR_TITLE.getString(locale), player);
-        if (fighters.contains(player)) return TextUtility.color(Messages.FACTION_FIGHTER_TITLE.getString(locale), player);
-        if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString(locale), player);
+        if (owner.equals(player)) return TextUtility.color(Messages.FACTION_OWNER_TITLE.getString(locale), locale, player);
+        if (admins.contains(player)) return TextUtility.color(Messages.FACTION_ADMIN_TITLE.getString(locale), locale, player);
+        if (moderators.contains(player)) return TextUtility.color(Messages.FACTION_MODERATOR_TITLE.getString(locale), locale, player);
+        if (fighters.contains(player)) return TextUtility.color(Messages.FACTION_FIGHTER_TITLE.getString(locale), locale, player);
+        if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString(locale), locale, player);
 
-        return "UNKNOWN";
+        return Component.text("N/A");
     }
 
     public boolean isInFaction(UUID playerUUID) {

@@ -13,6 +13,7 @@ import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.db.AuditLogData;
 import net.skullian.skyfactions.faction.Faction;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.data.PaginationItemData;
@@ -39,7 +40,7 @@ public class FactionAuditLogUI {
 
                 Window window = Window.single()
                         .setViewer(player)
-                        .setTitle(TextUtility.color(data.getTITLE(), player))
+                        .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
                         .setGui(gui)
                         .build();
 
@@ -47,7 +48,7 @@ public class FactionAuditLogUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, player.locale(), "%operation%", "open the audit log GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the audit log GUI", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }

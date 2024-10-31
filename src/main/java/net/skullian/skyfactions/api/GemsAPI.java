@@ -75,10 +75,10 @@ public class GemsAPI {
 
         ItemMeta meta = stack.getItemMeta();
         if (Settings.GEMS_CUSTOM_MODEL_DATA.getInt() != -1) meta.setCustomModelData(Settings.GEMS_CUSTOM_MODEL_DATA.getInt());
-        meta.setDisplayName(TextUtility.color(Messages.GEMS_ITEM_NAME.getString(player.locale()), null));
-        if (!Messages.GEMS_ITEM_LORE.getStringList(player.locale()).isEmpty()) meta.setLore(
-                Messages.GEMS_ITEM_LORE.getStringList(player.locale()).stream()
-                        .map(text -> TextUtility.color(text, null))
+        meta.displayName(TextUtility.color(Messages.GEMS_ITEM_NAME.getString(player.locale().getLanguage()), player.locale().getLanguage(), player));
+        if (!Messages.GEMS_ITEM_LORE.getStringList(player.locale().getLanguage()).isEmpty()) meta.lore(
+                Messages.GEMS_ITEM_LORE.getStringList(player.locale().getLanguage()).stream()
+                        .map(text -> TextUtility.color(text, player.locale().getLanguage(), player))
                         .collect(Collectors.toList())
         );
 

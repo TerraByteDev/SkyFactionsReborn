@@ -47,7 +47,7 @@ public class FactionTeleportCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             } else if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, player.locale());
+                Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
                 return;
             }
             IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player.getUniqueId());

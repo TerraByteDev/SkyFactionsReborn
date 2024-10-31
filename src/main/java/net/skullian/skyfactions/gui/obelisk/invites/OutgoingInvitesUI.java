@@ -9,6 +9,7 @@ import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.db.InviteData;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.data.PaginationItemData;
@@ -35,7 +36,7 @@ public class OutgoingInvitesUI {
 
             Window window = Window.single()
                     .setViewer(player)
-                    .setTitle(TextUtility.color(data.getTITLE(), player))
+                    .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
                     .setGui(gui)
                     .build();
 
@@ -43,7 +44,7 @@ public class OutgoingInvitesUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, player.locale(), "%operation%", "open the outgoing invites GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the outgoing invites GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -102,7 +103,7 @@ public class OutgoingInvitesUI {
             }
 
             if (faction == null) {
-                Messages.ERROR.send(player, player.locale(), "%operation%", "open the outgoing invutes GUI", "%debug%", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the outgoing invutes GUI", "%debug%", "FACTION_NOT_FOUND");
                 return;
             }
 

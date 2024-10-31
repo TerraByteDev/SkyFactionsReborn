@@ -46,7 +46,7 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
             entry.getNpc().setProperty(skinProperty, getSkinDescriptor(skin));
         }
 
-        entry.getNpc().getHologram().insertLine(0, TextUtility.color(name, null));
+        entry.getNpc().getHologram().insertLine(0, TextUtility.legacyColor(name, null, null));
         entry.enableEverything();
         
         return new SkyZNPCs(entry, isFaction); 

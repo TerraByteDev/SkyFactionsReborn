@@ -1,17 +1,16 @@
 package net.skullian.skyfactions.db.cache;
 
-import lombok.Getter;
-import lombok.Setter;
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.GemsAPI;
-import net.skullian.skyfactions.api.RunesAPI;
-import net.skullian.skyfactions.faction.Faction;
-import org.bukkit.Location;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.ArrayList;
+
+import org.bukkit.Location;
+
+import lombok.Getter;
+import lombok.Setter;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.faction.Faction;
 
 @Getter
 @Setter
@@ -21,6 +20,7 @@ public class CacheEntry {
     private int gems = 0;
     private List<Location> defencesToRegister = new ArrayList<>();
     private List<Location> defencesToRemove = new ArrayList<>();
+    private String newLocale;
 
     public void addRunes(int amount) {
         runes += amount;
@@ -48,6 +48,10 @@ public class CacheEntry {
         defencesToRemove.add(location);
     }
 
+    public void setLocale(String locale) {
+        newLocale = locale;
+    }
+
     /**
      *
      * @param toCache - UUID
@@ -71,6 +75,9 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.databaseHandler.removeDefences(toCache, defencesToRemove).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to remove defences for faction " + faction.getName(), ex);
+                    }),
+                    SkyFactionsReborn.databaseHandler.setFactionLocale(toCache, newLocale).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to update locale for faction " + faction.getName(), ex);
                     })
             );
         } else {
@@ -87,6 +94,9 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.databaseHandler.removeDefences(uuid, defencesToRemove).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to remove defences for player " + uuid, ex);
+                    }),
+                    SkyFactionsReborn.databaseHandler.setLocale(uuid, newLocale).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to update defendes for player " + uuid, ex);
                     })
             );
         }

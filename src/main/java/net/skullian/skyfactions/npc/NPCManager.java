@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.island.FactionIsland;
 import net.skullian.skyfactions.island.PlayerIsland;
@@ -45,21 +46,21 @@ public class NPCManager {
             if (faction == null) return; // probably only when a non-per-island npc is clicked.
 
             if (!faction.isInFaction(player.getUniqueId())) {
-                Messages.NPC_ACCESS_DENY.send(player, player.locale());
+                Messages.NPC_ACCESS_DENY.send(player, player.locale().getLanguage());
                 return;
             }
 
-            process(Messages.NPC_FACTION_ISLANDS_ACTIONS.getStringList(player.locale()), player);
+            process(Messages.NPC_FACTION_ISLANDS_ACTIONS.getStringList(player.locale().getLanguage()), player);
         } else {
             UUID owner = playerNPCs.get(npc);
             if (owner == null) return;
 
             if (!owner.equals(player.getUniqueId())) {
-                Messages.NPC_ACCESS_DENY.send(player, player.locale());
+                Messages.NPC_ACCESS_DENY.send(player, player.locale().getLanguage());
                 return;
             }
 
-            process(Messages.NPC_PLAYER_ISLANDS_ACTIONS.getStringList(player.locale()), player);
+            process(Messages.NPC_PLAYER_ISLANDS_ACTIONS.getStringList(player.locale().getLanguage()), player);
         }
     }
 
@@ -70,7 +71,7 @@ public class NPCManager {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         SkyNPC npc = factory.create(
             "player-" + island.getId(),
-            TextUtility.color(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("%player_name%", player.getName()), player),
+            TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("%player_name%", player.getName()), PlayerHandler.getLocale(playerUUID), player),
             getOffsetLocation(island.getCenter(Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString())), Settings.NPC_PLAYER_ISLANDS_OFFSET.getIntegerList()),
             Settings.NPC_PLAYER_ISLANDS_SKIN.getString().replace("%player_name%", Bukkit.getOfflinePlayer(playerUUID).getName()),
             EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()),
@@ -86,7 +87,7 @@ public class NPCManager {
 
         SkyNPC npc = factory.create(
             "faction-" + island.getId(),
-            TextUtility.color(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("%faction_name%", faction.getName()), null),
+            TextUtility.legacyColor(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("%faction_name%", faction.getName()), faction.getLocale(), null),
             getOffsetLocation(island.getCenter(Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString())), Settings.NPC_FACTION_ISLANDS_OFFSET.getIntegerList()),
             Settings.NPC_FACTION_ISLANDS_SKIN.getString().replace("%faction_owner%", faction.getOwner().getName()),
             EntityType.valueOf(Settings.NPC_FACTION_ISLANDS_ENTITY.getString()),
@@ -107,6 +108,7 @@ public class NPCManager {
     }
 
     private void process(List<String> actions, Player player) {
+        String locale = PlayerHandler.getLocale(player.getUniqueId());
         for (String request : actions) {
             String[] parts = request.split("\\[([^]]+)\\]: (.+)");
             String action = parts[0].trim().toLowerCase();
@@ -117,16 +119,16 @@ public class NPCManager {
                 case "[console]":
                     Bukkit.dispatchCommand(
                         Bukkit.getServer().getConsoleSender(),
-                        TextUtility.color(cmd, player)
+                        TextUtility.legacyColor(cmd, locale, player)
                     );
                     break;
                 
                 case "[player]":
-                    player.performCommand(TextUtility.color(cmd, player));
+                    player.performCommand(TextUtility.legacyColor(cmd, locale, player));
                     break;
                 
                 case "[message]":
-                    player.sendMessage(TextUtility.color(cmd, player));
+                    player.sendMessage(TextUtility.legacyColor(cmd, locale, player));
                     break;
 
                 case "[givepermission]":
@@ -206,7 +208,7 @@ public class NPCManager {
                     }
 
                     OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
-                    npc.updateDisplayName(TextUtility.color(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("%player_name%", owner.getName()), owner));
+                    npc.updateDisplayName(TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("%player_name%", owner.getName()), PlayerHandler.getLocale(uuid), owner));
                     npc.updateEntityType(EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()));
                     npc.updateSkin(Settings.NPC_PLAYER_ISLANDS_SKIN.toString().replace("%player_name%", owner.getName()));
 

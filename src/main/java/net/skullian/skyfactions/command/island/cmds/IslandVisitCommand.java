@@ -71,11 +71,11 @@ public class IslandVisitCommand extends CommandTemplate {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
-        Messages.VISIT_PROCESSING.send(player, player.locale());
+        Messages.VISIT_PROCESSING.send(player, player.locale().getLanguage());
         OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
         if (!target.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(player, player.locale(), "%player%", playerName);
+            Messages.UNKNOWN_PLAYER.send(player, player.locale().getLanguage(), "%player%", playerName);
             return;
         } else if (target.getUniqueId().equals(player.getUniqueId())) {
             CommandTemplate template = this.handler.getSubCommands().get("teleport");
@@ -89,15 +89,15 @@ public class IslandVisitCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get that player's island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (is == null) {
-                Messages.VISIT_NO_ISLAND.send(player, player.locale());
+                Messages.VISIT_NO_ISLAND.send(player, player.locale().getLanguage());
                 return;
             } else if (FactionAPI.isLocationInRegion(player.getLocation(), target.getUniqueId().toString())) {
-                Messages.VISIT_ALREADY_ON_ISLAND.send(player, player.locale(), "%player%", target.getName());
+                Messages.VISIT_ALREADY_ON_ISLAND.send(player, player.locale().getLanguage(), "%player%", target.getName());
                 return;
             }
 
             if ((RaidAPI.currentRaids.containsValue(player.getUniqueId()) || RaidAPI.processingRaid.containsValue(player.getUniqueId())) || (RaidAPI.currentRaids.containsValue(target.getUniqueId()) || RaidAPI.processingRaid.containsValue(target.getUniqueId()))) {
-                Messages.VISIT_IN_RAID.send(player, player.locale());
+                Messages.VISIT_IN_RAID.send(player, player.locale().getLanguage());
             } else {
                 SkyFactionsReborn.databaseHandler.isPlayerTrusted(player.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
                     if (throwable != null) {
@@ -107,7 +107,7 @@ public class IslandVisitCommand extends CommandTemplate {
 
                     World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                     if (world == null) {
-                        Messages.ERROR.send(player, player.locale(), "%operation%", "visit a player", "%debug%", "WORLD_NOT_EXIST");
+                        Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "visit a player", "%debug%", "WORLD_NOT_EXIST");
                     } else {
                         if (isTrusted) {
                             IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player.getUniqueId());
@@ -117,7 +117,7 @@ public class IslandVisitCommand extends CommandTemplate {
 
                             IslandAPI.onIslandLoad(target.getUniqueId());
                         } else {
-                            Messages.PLAYER_NOT_TRUSTED.send(player, player.locale());
+                            Messages.PLAYER_NOT_TRUSTED.send(player, player.locale().getLanguage());
                         }
                     }
                 });

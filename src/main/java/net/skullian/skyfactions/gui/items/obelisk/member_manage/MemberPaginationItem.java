@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.gui.obelisk.member.ManageMemberUI;
@@ -28,10 +29,11 @@ public class MemberPaginationItem extends SkyItem {
 
     @Override
     public ItemBuilder process(ItemBuilder builder) {
+        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[1];
 
         if (subject.getUniqueId().equals(getPLAYER().getUniqueId())) {
-            builder.addLoreLines(TextUtility.color(Messages.FACTION_MANAGE_SELF_DENY_LORE.get(getPLAYER().locale()), getPLAYER()));
+            builder.addLoreLines(TextUtility.legacyColor(Messages.FACTION_MANAGE_SELF_DENY_LORE.getString(locale), locale, getPLAYER()));
         }
 
         return builder;
@@ -49,7 +51,7 @@ public class MemberPaginationItem extends SkyItem {
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (SUBJECT.getUniqueId().equals(player.getUniqueId())) {
-            Messages.FACTION_MANAGE_SELF_DENY.send(player, player.locale());
+            Messages.FACTION_MANAGE_SELF_DENY.send(player, player.locale().getLanguage());
         } else {
             ManageMemberUI.promptPlayer(player, SUBJECT);
         }

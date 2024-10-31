@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import lombok.Getter;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.ObeliskConfig;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
@@ -45,11 +46,13 @@ public abstract class AsyncSkyItem implements Item {
             this.provider = new ItemProvider() {
                 @Override
                 public @NotNull ItemStack get(@Nullable String s) {
+                    String locale = PlayerHandler.getLocale(PLAYER.getUniqueId());
+
                     ItemBuilder builder = new ItemBuilder(stack)
-                        .setDisplayName(replace(TextUtility.color(data.getNAME(), PLAYER), replacements()));
+                        .setDisplayName(replace(TextUtility.legacyColor(data.getNAME(), locale, PLAYER), replacements()));
                     
                     for (String loreLine : data.getLORE()) {
-                        builder.addLoreLines(TextUtility.color(loreLine, PLAYER));
+                        builder.addLoreLines(replace(TextUtility.legacyColor(loreLine, locale, PLAYER)));
                     }
 
                     return process(builder).get();

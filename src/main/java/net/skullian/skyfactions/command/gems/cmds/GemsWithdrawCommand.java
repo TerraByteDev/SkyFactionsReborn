@@ -63,15 +63,15 @@ public class GemsWithdrawCommand extends CommandTemplate {
 
                     GemsAPI.subtractGems(player.getUniqueId(), (parsedAmount - remainingItems));
 
-                    Messages.GEMS_WITHDRAW_SUCCESS.send(player, player.locale(), "%amount%", parsedAmount);
+                    Messages.GEMS_WITHDRAW_SUCCESS.send(player, player.locale().getLanguage(), "%amount%", parsedAmount);
                     if (remainingItems > 0) {
-                        Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player, player.locale());
+                        Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player, player.locale().getLanguage());
                     }
                 } catch (NumberFormatException exception) {
-                    Messages.INCORRECT_USAGE.send(player, player.locale(), "%usage%", getSyntax());
+                    Messages.INCORRECT_USAGE.send(player, player.locale().getLanguage(), "%usage%", getSyntax());
                 }
             } else {
-                Messages.NO_ISLAND.send(player, player.locale());
+                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
             }
         });
 

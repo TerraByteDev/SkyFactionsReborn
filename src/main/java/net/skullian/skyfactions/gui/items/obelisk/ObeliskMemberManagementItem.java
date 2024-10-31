@@ -31,7 +31,7 @@ public class ObeliskMemberManagementItem extends SkyItem {
 
             FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
                 if (faction == null) {
-                    Messages.ERROR.send(player, player.locale(), "%operation%", "get your Faction", "FACTION_NOT_FOUND");
+                    Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "get your Faction", "FACTION_NOT_FOUND");
                     return;
                 } else if (ex != null) {
                     ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
@@ -42,11 +42,11 @@ public class ObeliskMemberManagementItem extends SkyItem {
                 if (faction.getOwner().equals(offlinePlayer) || faction.getAdmins().contains(offlinePlayer)) {
                     MemberManagementUI.promptPlayer(player);
                 } else {
-                    Messages.OBELISK_GUI_DENY.send(player, player.locale(), "%rank%", Messages.FACTION_ADMIN_TITLE.get(player.locale()));
+                    Messages.OBELISK_GUI_DENY.send(player, player.locale().getLanguage(), "%rank%", Messages.FACTION_ADMIN_TITLE.get(player.locale().getLanguage()));
                 }
             });
         } else {
-            Messages.OBELISK_GUI_DENY.send(player, player.locale(), "%rank%", Messages.FACTION_MODERATOR_TITLE.get(player.locale()));
+            Messages.OBELISK_GUI_DENY.send(player, player.locale().getLanguage(), "%rank%", Messages.FACTION_MODERATOR_TITLE.get(player.locale().getLanguage()));
         }
     }
 

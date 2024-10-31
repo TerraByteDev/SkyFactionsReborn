@@ -1,7 +1,9 @@
 package net.skullian.skyfactions.util.hologram;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,11 +35,15 @@ import me.tofaa.entitylib.meta.EntityMeta;
 import me.tofaa.entitylib.meta.display.AbstractDisplayMeta;
 import me.tofaa.entitylib.meta.display.TextDisplayMeta;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.TextComponent;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.defence.DefencesFactory;
+import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.npc.factory.FancyNPCsFactory.SkyFancyNPC;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
 
 public class TextHologram {
@@ -101,17 +107,25 @@ public class TextHologram {
     @Getter
     private DefenceStruct defence;
 
-    public TextHologram(String id, RenderMode renderMode, String owner, DefenceStruct defence) {
+    @Getter
+    @Setter
+    private DefenceData data;
+
+    @Getter
+    private int durability; 
+
+    public TextHologram(String id, RenderMode renderMode, String owner, DefenceStruct defence, DefenceData data) {
         this.renderMode = renderMode;
         validateId(id);
         this.defence = defence;
         this.id = id.toLowerCase();
         this.owner = owner;
+        this.data = data;
         startRunnable();
     }
 
-    public TextHologram(String id, String owner, DefenceStruct defence) {
-        this(id, RenderMode.NEARBY, owner, defence);
+    public TextHologram(String id, String owner, DefenceStruct defence, DefenceData data) {
+        this(id, RenderMode.NEARBY, owner, defence, data);
     }
 
     private void validateId(String id) {
@@ -141,22 +155,31 @@ public class TextHologram {
             sendPacket(packet);
             this.dead = false;
         });
-        update(true);
+        update();
     }
 
-    public TextHologram update(boolean first) {
+    public TextHologram update() {
         SkyFactionsReborn.getInstance().getServer().getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             updateAffectedPlayers();
             TextDisplayMeta meta = createMeta();
-            if (first) {
                 viewers.forEach((player) -> {
-                    
+                    meta.setText(createText(player));
+                    sendPacket(meta.createPacket(), player);
                 });
-            } else {
-                sendPacket(meta.createPacket());
-            }
         });
         return this;
+    }
+
+    private Component createText(Player player) {
+        String locale = PlayerHandler.locales.get(player.getUniqueId());
+        DefenceStruct struct = DefencesFactory.defences.getOrDefault(locale, DefencesFactory.defences.get(Messages.getDefaulLocale())).get(defence.getIDENTIFIER());
+        Component[] components = new Component[3];
+        
+        components[0] = getData().getAMMO() == 0 && struct.isAPPEND_OUT_OF_STOCK_TO_TOP() ? TextUtility.color(struct.getOUT_OF_STOCK_HOLOGRAM(), locale, player) : (data.getDURABILITY() < 100 && struct.isAPPEND_DURABILITY_AT_TOP()) ? TextUtility.color(struct.getDURABILITY_HOLOGRAM(), locale, player) : Component.text("");
+        components[1] = TextUtility.fromList(struct.getHOLOGRAM_LIST(), locale, player);
+        components[2] = getData().getAMMO() == 0 && !struct.isAPPEND_OUT_OF_STOCK_TO_TOP() ? TextUtility.color(struct.getOUT_OF_STOCK_HOLOGRAM(), locale, player) : (data.getDURABILITY() < 100 && !struct.isAPPEND_DURABILITY_AT_TOP()) ? TextUtility.color(struct.getDURABILITY_HOLOGRAM(), locale, player) : Component.text("");
+
+        return Component.join(JoinConfiguration.newlines(), components);
     }
 
     private TextDisplayMeta createMeta() {
@@ -175,6 +198,7 @@ public class TextHologram {
         meta.setShadow(this.shadow);
         meta.setSeeThrough(this.seeThroughBlocks);
         setAlignment(meta);
+
         return meta;
     }
 
@@ -278,7 +302,7 @@ public class TextHologram {
     }
 
     public TextHologram setText(String text) {
-        this.text = Component.text(TextUtility.color(text, null));
+        this.text = TextUtility.color(text, Messages.getDefaulLocale(), null);
         return this;
     }
 
@@ -305,6 +329,11 @@ public class TextHologram {
                     .filter(entity -> entity instanceof Player)
                     .forEach(entity -> this.viewers.add((Player) entity));
         }
+    }
+
+    private void sendPacket(PacketWrapper<?> packet, Player player) {
+        if (this.renderMode == RenderMode.NONE) return;
+        PacketEvents.getAPI().getPlayerManager().sendPacket(player, packet);
     }
 
     private void sendPacket(PacketWrapper<?> packet) {

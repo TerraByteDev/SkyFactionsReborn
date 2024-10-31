@@ -32,7 +32,7 @@ public class PlayerIncomingInviteDeny extends SkyItem {
         event.getInventory().close();
         FactionAPI.getFaction(DATA.getFactionName()).whenComplete((faction, ex) -> {
             if (faction == null) {
-                Messages.ERROR.send(player, player.locale(), "%operation%", "get the Faction", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "get the Faction", "FACTION_NOT_FOUND");
                 return;
             } else if (ex != null) {
                 ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);
@@ -48,7 +48,7 @@ public class PlayerIncomingInviteDeny extends SkyItem {
                     return;
                 }
 
-                Messages.FACTION_INVITE_DENY_SUCCESS.send(player, player.locale(), "%faction_name%", faction.getName());
+                Messages.FACTION_INVITE_DENY_SUCCESS.send(player, player.locale().getLanguage(), "%faction_name%", faction.getName());
             });
         });
     }

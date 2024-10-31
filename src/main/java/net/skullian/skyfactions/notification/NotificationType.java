@@ -2,6 +2,7 @@ package net.skullian.skyfactions.notification;
 
 import java.util.Locale;
 
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.skullian.skyfactions.config.types.Messages;
 
 public enum NotificationType {
@@ -18,12 +19,12 @@ public enum NotificationType {
         this.description = description;
     }
 
-    public String getTitle(Locale locale, Object... replacements) {
-        return title.get(locale, replacements);
+    public String getTitle(String locale, Object... replacements) {
+        return LegacyComponentSerializer.legacySection().serialize(title.get(locale, replacements));
     }
 
-    public String getDescription(Locale locale, Object... replacements) {
-        return description.get(locale, replacements);
+    public String getDescription(String locale, Object... replacements) {
+        return LegacyComponentSerializer.legacySection().serialize(description.get(locale, replacements));
     }
 
 }

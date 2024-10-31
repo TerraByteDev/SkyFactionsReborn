@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
@@ -30,7 +31,7 @@ public class ManageMemberUI {
 
             Window window = Window.single()
                     .setViewer(player)
-                    .setTitle(TextUtility.color(data.getTITLE(), player))
+                    .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
                     .setGui(gui)
                     .build();
 
@@ -38,7 +39,7 @@ public class ManageMemberUI {
             window.open();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            Messages.ERROR.send(player, player.locale(), "%operation%", "manage a member", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "manage a member", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -51,7 +52,7 @@ public class ManageMemberUI {
                 }
 
                 if (faction == null) {
-                    Messages.ERROR.send(actor, actor.locale(), "%operation%", "manage a member", "%debug%", "FACTION_NOT_FOUND");
+                    Messages.ERROR.send(actor, actor.locale().getLanguage(), "%operation%", "manage a member", "%debug%", "FACTION_NOT_FOUND");
                 }
 
                 List<ItemData> data = GUIAPI.getItemData("obelisk/manage_member", player.getPlayer());

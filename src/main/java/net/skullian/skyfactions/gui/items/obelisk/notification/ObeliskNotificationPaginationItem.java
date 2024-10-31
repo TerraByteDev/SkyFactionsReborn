@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.notification.NotificationData;
@@ -28,8 +29,10 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
 
     @Override
     public ItemProvider getItemProvider() {
+        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
+
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.color(getDATA().getNAME().replace("%notification_title%", DATA.getTitle()), getPLAYER()));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("%notification_title%", DATA.getTitle()), locale, getPLAYER()));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("%notification_description%")) {
@@ -40,8 +43,9 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
                 continue;
             }
 
-            builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%timestamp%", Messages.NOTIFICATION_TIMESTAMP_FORMAT.get(getPLAYER().locale(), "%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+            builder.addLoreLines(TextUtility.legacyColor(loreLine
+                    .replace("%timestamp%", Messages.replace(Messages.NOTIFICATION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+                    locale,
                     getPLAYER()
             ));
         }
@@ -59,7 +63,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
                     return;
                 }
 
-                Messages.NOTIFICATION_DISMISS_SUCCESS.send(player, player.locale());
+                Messages.NOTIFICATION_DISMISS_SUCCESS.send(player, player.locale().getLanguage());
             });
         }
     }

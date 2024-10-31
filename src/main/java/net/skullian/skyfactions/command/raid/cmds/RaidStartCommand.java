@@ -50,7 +50,7 @@ public class RaidStartCommand extends CommandTemplate {
             }
 
             if (cooldown != null) {
-                Messages.RAID_ON_COOLDOWN.send(player, player.locale(), "%cooldown%", cooldown);
+                Messages.RAID_ON_COOLDOWN.send(player, player.locale().getLanguage(), "%cooldown%", cooldown);
             } else {
                 PlayerRaidConfirmationUI.promptPlayer(player);
                 SoundUtil.playSound(player, "ui.button.click", 1f, 1f);

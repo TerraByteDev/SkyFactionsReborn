@@ -4,6 +4,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
@@ -30,7 +31,7 @@ public class FactionObeliskUI {
 
                 Window window = Window.single()
                         .setViewer(player)
-                        .setTitle(TextUtility.color(data.getTITLE(), player))
+                        .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
                         .setGui(gui)
                         .build();
 
@@ -38,7 +39,7 @@ public class FactionObeliskUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, player.locale(), "%operation%", "open your obelisk", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open your obelisk", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }
@@ -51,7 +52,7 @@ public class FactionObeliskUI {
                     ErrorHandler.handleError(player, "open your obelisk", "GUI_LOAD_EXCEPTION", exc);
                     return;
                 } else if (faction == null) {
-                    Messages.ERROR.send(player, player.locale(), "%operation%", "open your obelisk", "%debug%", "FACTION_NOT_FOUND");
+                    Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open your obelisk", "%debug%", "FACTION_NOT_FOUND");
                     return;
                 }
 

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -18,9 +17,12 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.defence.DefencesFactory;
+import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.text.TextUtility;
 
@@ -232,7 +234,7 @@ public enum Messages {
     NOTIFICATION_JOIN_REQUEST_ACCEPT_DESCRIPTION("Notifications.NOTIFICATION_TYPES.JOIN_REQUEST_ACCEPT_DESCRIPTION"),
     NOTIFICATION_DISMISS_SUCCESS("Notifications.NOTIFICATION_DISMISS_SUCCESS");
 
-    private static Map<String, YamlDocument> configs = new HashMap<>();
+    public static Map<String, YamlDocument> configs = new HashMap<>();
     @Getter
     private final String path;
 
@@ -289,26 +291,26 @@ public enum Messages {
         GUIEnums.configs.put(locale, docs);
     }
 
-    public String get(Locale locale, Object... replacements) {
-        YamlDocument document = configs.getOrDefault(locale.getLanguage(), getFallbackDocument());
+    public Component get(String locale, Object... replacements) {
+        YamlDocument document = configs.getOrDefault(locale, getFallbackDocument());
         Object value = document.get("Messages." + this.path);
 
-        String message;
+        Component message;
         if (value == null) {
-            message = TextUtility.color(SERVER_NAME.get(Locale.ROOT) + "&r&7 Message not found: " + this.path, null);
+            message = TextUtility.color("%server_name%&r&7 Message not found: " + this.path, locale, null);
         } else {
-            message = value instanceof List ? TextUtility.fromList((List<?>) value) : value.toString();
+            message = value instanceof List ? TextUtility.fromList((List<?>) value, locale, null, replacements) : MiniMessage.miniMessage().deserialize(value.toString());
         }
-        return TextUtility.color(replace(message, locale, replacements), null);
+        return message;
     }
 
-    public String getString(Locale locale) {
-        YamlDocument config = configs.getOrDefault(locale.getLanguage(), getFallbackDocument());
+    public String getString(String locale) {
+        YamlDocument config = configs.getOrDefault(locale, getFallbackDocument());
         return config.getString("Messages." + this.path);
     }
 
-    public List<String> getStringList(Locale locale) {
-        YamlDocument config = configs.getOrDefault(locale.getLanguage(), getFallbackDocument());
+    public List<String> getStringList(String locale) {
+        YamlDocument config = configs.getOrDefault(locale, getFallbackDocument());
         List<String> val = config.getStringList("Messages." + this.path);
 
         if (val == null) {
@@ -319,38 +321,38 @@ public enum Messages {
         return val;
     }
 
-    public void send(CommandSender receiver, Locale locale, Object... replacements) {
+    public void send(CommandSender receiver, String locale, Object... replacements) {
         if (receiver == null) return;
-        YamlDocument config = configs.getOrDefault(locale.getLanguage(), getFallbackDocument());
+        YamlDocument config = configs.getOrDefault(locale, getFallbackDocument());
 
         Object value = config.get("Messages." + this.path);
 
-        String message;
+        Component message;
         if (value == null) {
-            message = TextUtility.color(SERVER_NAME.get(locale) + "&r&7 Message not found: " + this.path, null);
+            message = TextUtility.color(SERVER_NAME.get(locale) + "&r&7 Message not found: " + this.path, locale, receiver instanceof Player ? (Player) receiver : null , replacements);
         } else {
-            message = value instanceof List ? TextUtility.fromList((List<?>) value) : value.toString();
+            message = value instanceof List ? TextUtility.fromList((List<?>) value, locale, receiver instanceof Player ? (Player) receiver : null, replacements) : MiniMessage.miniMessage().deserialize(value.toString());
         }
 
-        if (!message.isEmpty()) {
-            receiver.sendMessage(Component.text(TextUtility.color(replace(message, locale, replacements), receiver instanceof Player ? (Player) receiver : null)));
-        }
+        receiver.sendMessage(message);
     }
 
-    private String replace(String message, Locale locale, Object... replacements) {
-        YamlDocument config = configs.getOrDefault(locale.getLanguage(), getFallbackDocument());
-
+    public static String replace(String value, String locale, Player player, Object... replacements) {
+        if (DependencyHandler.isEnabled("PlaceholderAPI")) value = PlaceholderAPI.setPlaceholders(player, value);
         for (int i = 0; i < replacements.length; i += 2) {
             if (i + 1 >= replacements.length) break;
-            message = message.replace(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
+            value = value.replace(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
         }
 
-        String prefix = config.getString("Messages." + SERVER_NAME.getPath());
-        return message.replace("%server_name%", prefix != null && !prefix.isEmpty() ? prefix : "");
+        return value;
     }
 
-    private YamlDocument getFallbackDocument() {
+    public static YamlDocument getFallbackDocument() {
         return configs.get(Settings.DEFAULT_LANGUAGE.getString());
+    }
+
+    public static String getDefaulLocale() {
+        return Settings.DEFAULT_LANGUAGE.getString();
     }
 
 }

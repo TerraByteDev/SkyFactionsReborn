@@ -49,10 +49,10 @@ public class FactionLeaveCommand extends CommandTemplate {
             }
 
             if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, player.locale());
+                Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
                 return;
             } else if (faction.isOwner(player)) {
-                Messages.FACTION_OWNER_LEAVE_DENY.send(player, player.locale());
+                Messages.FACTION_OWNER_LEAVE_DENY.send(player, player.locale().getLanguage());
                 return;
             }
 

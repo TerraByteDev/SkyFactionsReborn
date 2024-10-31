@@ -44,14 +44,14 @@ public class OutgoingInvitePaginationItem extends SkyItem {
 
             FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
                 if (faction == null) {
-                    Messages.ERROR.send(player, player.locale(), "%operation%", "get your Faction", "FACTION_NOT_FOUND");
+                    Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "get your Faction", "FACTION_NOT_FOUND");
                     return;
                 } else if (ex != null) {
                     ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                     return;
                 }
                 faction.revokeInvite(DATA, player);
-                Messages.FACTION_INVITE_REVOKE_SUCCESS.send(player, player.locale(), "%player_name%", DATA.getPlayer().getName());
+                Messages.FACTION_INVITE_REVOKE_SUCCESS.send(player, player.locale().getLanguage(), "%player_name%", DATA.getPlayer().getName());
             });
         }
     }

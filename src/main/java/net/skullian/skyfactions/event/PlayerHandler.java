@@ -1,6 +1,9 @@
 package net.skullian.skyfactions.event;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,6 +27,12 @@ import net.skullian.skyfactions.util.SLogger;
 
 public class PlayerHandler implements Listener {
 
+    public static final Map<UUID, String> locales = new HashMap<>();
+
+    public static String getLocale(UUID uuid) {
+        return locales.getOrDefault(uuid, Messages.getDefaulLocale());
+    }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (!SkyFactionsReborn.databaseHandler.isActive()) {
@@ -40,6 +49,16 @@ public class PlayerHandler implements Listener {
             if (!isRegistered) {
                 SLogger.info("Player [{}] has not joined before. Syncing with database.", event.getPlayer().getName());
                 SkyFactionsReborn.databaseHandler.registerPlayer(event.getPlayer());
+                locales.put(event.getPlayer().getUniqueId(), event.getPlayer().locale().getLanguage());
+            } else {
+                SkyFactionsReborn.databaseHandler.getPlayerLocale(event.getPlayer().getUniqueId()).whenComplete((locale, ex2) -> {
+                    if (ex2 != null) {
+                        ex2.printStackTrace();
+                        return;
+                    }
+
+                    locales.put(event.getPlayer().getUniqueId(), locale);
+                });
             }
         });
 
@@ -105,7 +124,7 @@ public class PlayerHandler implements Listener {
         if (Settings.ISLAND_PREVENT_NETHER_PORTALS.getBoolean()) {
             List<String> allowedDims = Settings.ISLAND_ALLOWED_DIMENSIONS.getList();
             if (!allowedDims.contains(event.getFrom().getWorld().getName())) {
-                Messages.NETHER_PORTALS_BLOCKED.send(event.getPlayer(), event.getPlayer().locale());
+                Messages.NETHER_PORTALS_BLOCKED.send(event.getPlayer(), event.getPlayer().locale().getLanguage());
                 event.setCancelled(true);
             }
         }

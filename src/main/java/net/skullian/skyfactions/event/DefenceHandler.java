@@ -58,6 +58,7 @@ public class DefenceHandler implements Listener {
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
+        String locale = PlayerHandler.getLocale(player.getUniqueId());
 
         ItemStack stack = event.getItemInHand();
         NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
@@ -81,7 +82,7 @@ public class DefenceHandler implements Listener {
                     if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_FACTION_DEFENCES.getInt()) {
                         event.setCancelled(true);
 
-                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, player.locale(), "%defence_max%", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
+                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "%defence_max%", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
                         SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
                         return;
                     }
@@ -90,7 +91,7 @@ public class DefenceHandler implements Listener {
                     if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_PLAYER_DEFENCES.getInt()) {
                         event.setCancelled(true);
 
-                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, player.locale(), "%defence_max%", DefencesConfig.MAX_PLAYER_DEFENCES.getInt());
+                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "%defence_max%", DefencesConfig.MAX_PLAYER_DEFENCES.getInt());
                         SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
                         return;
                     }
@@ -98,7 +99,7 @@ public class DefenceHandler implements Listener {
 
                 String defenceIdentifier = container.get(defenceKey, PersistentDataType.STRING);
 
-                DefenceStruct defence = DefencesFactory.defences.getOrDefault(player.locale().getLanguage(), DefencesFactory.getDefaultStruct()).get(defenceIdentifier);
+                DefenceStruct defence = DefencesFactory.defences.getOrDefault(locale, DefencesFactory.getDefaultStruct()).get(defenceIdentifier);
                 if (defence != null) {
                     Location belowLoc = placed.getLocation().clone();
                     belowLoc.setY(belowLoc.getY() - 1);
@@ -106,12 +107,12 @@ public class DefenceHandler implements Listener {
                     Block belowBlock = placed.getWorld().getBlockAt(belowLoc);
                     if (!isAllowedBlock(belowBlock, defence)) {
                         event.setCancelled(true);
-                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString(player.locale())), player));
+                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString(locale)), locale, player));
                         return;
                     }
 
                     try {
-                        DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation().getWorld().getName(), placed.getLocation().getBlockX(), placed.getLocation().getBlockY(), placed.getLocation().getBlockZ(), owner, isFaction, player.locale().getLanguage(), 100, defence.getENTITY_CONFIG().isTARGET_HOSTILE_DEFAULT(), defence.getENTITY_CONFIG().isTARGET_PASSIVE_DEFAULT());
+                        DefenceData data = new DefenceData(1, defenceIdentifier, 0, placed.getLocation().getWorld().getName(), placed.getLocation().getBlockX(), placed.getLocation().getBlockY(), placed.getLocation().getBlockZ(), owner, isFaction, locale, 100, defence.getENTITY_CONFIG().isTARGET_HOSTILE_DEFAULT(), defence.getENTITY_CONFIG().isTARGET_PASSIVE_DEFAULT());
                         ObjectMapper mapper = new ObjectMapper();
 
                         PersistentDataContainer blockContainer = new CustomBlockData(placed, SkyFactionsReborn.getInstance());
@@ -179,7 +180,7 @@ public class DefenceHandler implements Listener {
         }
     }
 
-    private boolean isFaction(String uuid) {
+    public static boolean isFaction(String uuid) {
         try {
             UUID.fromString(uuid);
             return false; // is player uuid
@@ -206,7 +207,7 @@ public class DefenceHandler implements Listener {
     public void onDefenceBreak(BlockBreakEvent event) {
         if (DefenceAPI.isDefence(event.getBlock().getLocation())) {
             event.setCancelled(true);
-            Messages.DEFENCE_DESTROY_DENY.send(event.getPlayer(), event.getPlayer().locale());
+            Messages.DEFENCE_DESTROY_DENY.send(event.getPlayer(), event.getPlayer().locale().getLanguage());
         }
     }
 
@@ -231,7 +232,8 @@ public class DefenceHandler implements Listener {
 
             if (hitEntity.getType().equals(EntityType.PLAYER) && container.has(messageKey, PersistentDataType.STRING)) {
                 String message = container.get(messageKey, PersistentDataType.STRING);
-                hitEntity.sendMessage(TextUtility.color(message, (Player) hitEntity));
+                Player player = (Player) hitEntity;
+                hitEntity.sendMessage(TextUtility.color(message, PlayerHandler.getLocale(player.getUniqueId()), player));
             }
         }
     }
@@ -245,9 +247,9 @@ public class DefenceHandler implements Listener {
             if (data == null) return;
 
             String deathMessage = data.getDEATH_MESSAGE();
-            event.setDeathMessage(TextUtility.color(deathMessage
+            event.deathMessage(TextUtility.color(deathMessage
                     .replaceAll("%player_name%", player.getName())
-                    .replaceAll("%defender%", "DEFENDER_NAME"), player));
+                    .replaceAll("%defender%", "DEFENDER_NAME"), PlayerHandler.getLocale(player.getUniqueId()), player));
 
             removeDeadEntity(event.getPlayer(), data);
         }
@@ -351,7 +353,7 @@ public class DefenceHandler implements Listener {
                 if (container.has(defenceKey, PersistentDataType.STRING)) {
                     String name = container.get(defenceKey, PersistentDataType.STRING);
                     String data = container.get(dataKey, PersistentDataType.STRING);
-                    DefenceStruct defence = DefencesFactory.defences.getOrDefault(player.locale().getLanguage(), DefencesFactory.getDefaultStruct()).get(name);
+                    DefenceStruct defence = DefencesFactory.defences.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(name);
 
                     try {
                         if (defence != null) {

@@ -40,6 +40,7 @@ import net.skullian.skyfactions.defence.struct.DefenceAttributeStruct;
 import net.skullian.skyfactions.defence.struct.DefenceEffectStruct;
 import net.skullian.skyfactions.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.SLogger;
@@ -54,6 +55,7 @@ public class DefencesFactory {
     public static final List<String> cachedMaterials = new ArrayList<>();
 
     public static void registerDefaultDefences() {
+        new File(SkyFactionsReborn.getInstance().getDataFolder() + "/language/en/defences").mkdirs();
         try {
             SLogger.info("Saving default defence configs.");
             URI defencesFolder = SkyFactionsReborn.class.getResource("/language/en/defences").toURI();
@@ -64,7 +66,7 @@ public class DefencesFactory {
                     try {
                         String fullPathName = path.getFileName().toString();
                         String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
-                        YamlDocument.create(new File("/language/en/defences/", defenceName + ".yml"), SkyFactionsReborn.getInstance().getResource(String.format("language/en/%s.yml", defenceName)),
+                        YamlDocument.create(new File(SkyFactionsReborn.getInstance().getDataFolder() + "/language/en/defences/", defenceName + ".yml"), SkyFactionsReborn.getInstance().getResource(String.format("language/en/defences/%s.yml", defenceName)),
                                 GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
                     } catch (IOException err) {
                         err(err);
@@ -280,22 +282,23 @@ public class DefencesFactory {
     }
 
     public static void addDefence(Player player, DefenceStruct defence, Faction faction) {
-        ItemStack stack = DefenceAPI.createDefenceStack(defence);
+        ItemStack stack = DefenceAPI.createDefenceStack(defence, player);
+        String locale = PlayerHandler.getLocale(player.getUniqueId());
 
         if (faction != null) {
             // assume faction type
             faction.subtractRunes(defence.getBUY_COST());
             player.getInventory().addItem(stack);
             SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
-            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, player.locale(), "%defence_name%", TextUtility.color(defence.getNAME(), player));
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, player.locale().getLanguage(), "%defence_name%", TextUtility.color(defence.getNAME(), locale, player));
 
-            faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_PURCHASE, "%player_name%", player.getName(), "%defence_name%", TextUtility.color(defence.getNAME(), player));
+            faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_PURCHASE, "%player_name%", player.getName(), "%defence_name%", TextUtility.color(defence.getNAME(), locale, player));
         } else {
 
             RunesAPI.removeRunes(player.getUniqueId(), defence.getBUY_COST());
             player.getInventory().addItem(stack);
             SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
-            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, player.locale(), "%defence_name%", TextUtility.color(defence.getNAME(), player));
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, player.locale().getLanguage(), "%defence_name%", TextUtility.color(defence.getNAME(), locale, player));
         }
     }
 

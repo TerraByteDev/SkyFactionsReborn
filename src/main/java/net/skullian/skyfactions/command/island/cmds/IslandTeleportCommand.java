@@ -50,9 +50,9 @@ public class IslandTeleportCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (island == null) {
-                Messages.NO_ISLAND.send(player, player.locale());
+                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
             } else if (FactionAPI.isLocationInRegion(player.getLocation(), player.getUniqueId().toString())) {
-                Messages.ALREADY_ON_ISLAND.send(player, player.locale());
+                Messages.ALREADY_ON_ISLAND.send(player, player.locale().getLanguage());
                 return;
             }
 
@@ -65,7 +65,7 @@ public class IslandTeleportCommand extends CommandTemplate {
 
                 IslandAPI.onIslandLoad(player.getUniqueId());
             } else {
-                Messages.ERROR.send(player, player.locale(), "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");
+                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");
             }
         });
     }

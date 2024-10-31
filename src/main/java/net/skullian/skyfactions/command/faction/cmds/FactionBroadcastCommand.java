@@ -62,7 +62,7 @@ public class FactionBroadcastCommand extends CommandTemplate {
                     }
 
                 } else {
-                    Messages.FACTION_ACTION_DENY.send(player, player.locale());
+                    Messages.FACTION_ACTION_DENY.send(player, player.locale().getLanguage());
                 }
             }
         });

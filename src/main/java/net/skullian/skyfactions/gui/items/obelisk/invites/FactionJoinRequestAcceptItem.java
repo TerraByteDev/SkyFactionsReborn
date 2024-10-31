@@ -30,7 +30,7 @@ public class FactionJoinRequestAcceptItem extends SkyItem {
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (faction == null) {
-                Messages.ERROR.send(player, player.locale(), "%operation%", "get your Faction", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "get your Faction", "FACTION_NOT_FOUND");
                 return;
             } else if (ex != null) {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
@@ -40,7 +40,7 @@ public class FactionJoinRequestAcceptItem extends SkyItem {
             faction.acceptJoinRequest(DATA, player);
             JoinRequestsUI.promptPlayer(player);
 
-            Messages.FACTION_JOIN_REQUEST_ACCEPT_SUCCESS.send(player, player.locale(), "%player_name%", DATA.getPlayer().getName());
+            Messages.FACTION_JOIN_REQUEST_ACCEPT_SUCCESS.send(player, player.locale().getLanguage(), "%player_name%", DATA.getPlayer().getName());
         });
     }
 

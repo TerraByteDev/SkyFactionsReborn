@@ -18,7 +18,7 @@ public class CommandsUtility {
         if (cooldowns.containsKey(player.getUniqueId())) {
             long secondsLeft = ((cooldowns.get(player.getUniqueId()) / 1000) + (cooldownDuration / 1000)) - (System.currentTimeMillis() / 1000);
             if (secondsLeft > 0) {
-                Messages.COOLDOWN.send(player, player.locale(), "%cooldown%", String.valueOf(secondsLeft));
+                Messages.COOLDOWN.send(player, player.locale().getLanguage(), "%cooldown%", String.valueOf(secondsLeft));
                 return true;
             } else {
                 cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
@@ -35,7 +35,7 @@ public class CommandsUtility {
         }
 
         if (sendDeny) {
-            Messages.PERMISSION_DENY.send(player, player.locale());
+            Messages.PERMISSION_DENY.send(player, player.locale().getLanguage());
         }
         return false;
     }

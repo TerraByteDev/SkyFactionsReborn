@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import lombok.Getter;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
@@ -37,11 +38,13 @@ public abstract class SkyItem implements Item {
 
     @Override
     public ItemProvider getItemProvider() {
+        String locale = PlayerHandler.getLocale(PLAYER.getUniqueId());
+
         ItemBuilder builder = new ItemBuilder(STACK)
-            .setDisplayName(replace(TextUtility.color(DATA.getNAME(), getPLAYER())));
+            .setDisplayName(replace(TextUtility.legacyColor(DATA.getNAME(), locale, getPLAYER())));
 
         for (String loreLine : DATA.getLORE()) {
-            builder.addLoreLines(replace(TextUtility.color(loreLine, getPLAYER()), replacements()));
+            builder.addLoreLines(replace(TextUtility.legacyColor(loreLine, locale, getPLAYER()), replacements()));
         }
 
         return process(builder);

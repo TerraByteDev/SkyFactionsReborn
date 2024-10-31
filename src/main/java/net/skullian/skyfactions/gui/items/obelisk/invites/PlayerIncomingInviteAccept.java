@@ -36,7 +36,7 @@ public class PlayerIncomingInviteAccept extends SkyItem {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             } else if (isInFaction) {
-                Messages.ALREADY_IN_FACTION.send(player, player.locale());
+                Messages.ALREADY_IN_FACTION.send(player, player.locale().getLanguage());
                 return;
             }
 
@@ -56,7 +56,7 @@ public class PlayerIncomingInviteAccept extends SkyItem {
                         return;
                     }
 
-                    Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, player.locale(), "%faction_name%", player.getName());
+                    Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, player.locale().getLanguage(), "%faction_name%", player.getName());
                 });
             });
         });

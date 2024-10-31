@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.db.AuditLogData;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.util.text.TextUtility;
@@ -23,8 +24,10 @@ public class AuditPaginationItem extends SkyItem {
 
     @Override
     public ItemProvider getItemProvider() {
+        String locale = Messages.getDefaulLocale(); // todo make audit system language compat
+
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.color(getDATA().getNAME().replace("%audit_title%", DATA.getType()), getPLAYER()));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("%audit_title%", DATA.getType()), locale, getPLAYER()));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("%audit_description%")) {
@@ -35,8 +38,9 @@ public class AuditPaginationItem extends SkyItem {
                 continue;
             }
 
-            builder.addLoreLines(TextUtility.color(loreLine
-                    .replace("%timestamp%", Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.get(getPLAYER().locale(), "%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+            builder.addLoreLines(TextUtility.legacyColor(loreLine
+                    .replace("%timestamp%", Messages.replace(Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+                    locale,
                     getPLAYER()
             ));
         }

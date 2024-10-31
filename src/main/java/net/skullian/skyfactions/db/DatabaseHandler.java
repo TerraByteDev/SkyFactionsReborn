@@ -25,6 +25,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.faction.JoinRequestData;
@@ -143,7 +144,8 @@ public class DatabaseHandler {
                      [uuid] TEXT PRIMARY KEY UNIQUE NOT NULL,
                      [faction] TEXT NOT NULL,
                      [discord_id] TEXT NOT NULL,
-                     [last_raid] INTEGER NOT NULL
+                     [last_raid] INTEGER NOT NULL,
+                     [locale] TEXT NOT NULL
                      ) STRICT;
                      """);
 
@@ -164,7 +166,8 @@ public class DatabaseHandler {
                      [name] TEXT PRIMARY KEY UNIQUE NOT NULL,
                      [motd] TEXT NOT NULL,
                      [level] INTEGER NOT NULL,
-                     [last_raid] INTEGER NOT NULL
+                     [last_raid] INTEGER NOT NULL,
+                     [locale] TEXT NOT NULL
                      ) STRICT;
                      """);
 
@@ -291,6 +294,7 @@ public class DatabaseHandler {
                      `faction` VARCHAR(255) NOT NULL,
                      `discord_id` VARCHAR(255) NOT NULL,
                      `last_raid` BIGINT NOT NULL
+                     `locale` VARCHAR(255) NOT NULL
                      );
                      """);
 
@@ -311,7 +315,8 @@ public class DatabaseHandler {
                      `name` VARCHAR(255) PRIMARY KEY UNIQUE NOT NULL,
                      `motd` VARCHAR(255) NOT NULL,
                      `level` BIGINT NOT NULL,
-                     `last_raid` BIGINT NOT NULL
+                     `last_raid` BIGINT NOT NULL,
+                     `locale` VARCHAR(255) NOT NULL
                      );
                      """);
 
@@ -675,12 +680,13 @@ public class DatabaseHandler {
     public CompletableFuture<Void> registerPlayer(Player player) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO playerData (uuid, faction, discord_id, last_raid) VALUES (?, ?, ?, ?);")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO playerData (uuid, faction, discord_id, last_raid, locale) VALUES (?, ?, ?, ?, ?);")) {
 
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setString(2, "none");
                 statement.setString(3, "none");
                 statement.setInt(4, 0);
+                statement.setString(5, player.locale().getLanguage());
 
                 statement.executeUpdate();
                 statement.close();
@@ -773,6 +779,48 @@ public class DatabaseHandler {
                 statement.executeUpdate();
                 statement.close();
 
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<String> getPlayerLocale(UUID player) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM playerData WHERE uuid = ?")) {
+
+                statement.setString(1, player.toString());
+                ResultSet set = statement.executeQuery();
+
+                if (set.next()) {
+                    String locale = set.getString("locale");
+                    if (locale.equalsIgnoreCase("none")) return Messages.getDefaulLocale();
+                    return locale;
+                }
+
+                statement.close();
+                connection.close();
+                return Messages.getDefaulLocale();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> setLocale(UUID uuid, String locale) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE playerData SET locale = ? WHERE uuid = ?")) {
+
+                statement.setString(1, uuid.toString());
+                statement.setString(2, locale);
+                statement.executeUpdate();
+
+                statement.close();
                 connection.close();
             } catch (SQLException error) {
                 handleError(error);
@@ -995,13 +1043,14 @@ public class DatabaseHandler {
     public CompletableFuture<Void> registerFaction(Player owner, String name) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, level, last_raid) VALUES (?, ?, ?, ?)");
+                 PreparedStatement factionRegistration = connection.prepareStatement("INSERT INTO factions (name, motd, level, last_raid, locale) VALUES (?, ?, ?, ?, ?)");
                  PreparedStatement factionOwnerRegistration = connection.prepareStatement("INSERT INTO factionMembers (factionName, uuid, rank) VALUES (?, ?, ?)")) {
 
                 factionRegistration.setString(1, name);
                 factionRegistration.setString(2, "&aNone");
                 factionRegistration.setInt(3, 1);
                 factionRegistration.setLong(4, 0);
+                factionRegistration.setString(5, "none");
 
                 factionOwnerRegistration.setString(1, name);
                 factionOwnerRegistration.setString(2, owner.getUniqueId().toString());
@@ -1012,6 +1061,25 @@ public class DatabaseHandler {
 
                 factionRegistration.executeUpdate();
                 factionRegistration.close();
+
+                connection.close();
+            } catch (SQLException error) {
+                handleError(error);
+                throw new RuntimeException(error);
+            }
+        });
+    }
+
+    public CompletableFuture<Void> setFactionLocale(String faction, String locale) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement statement = connection.prepareStatement("UPDATE factions set locale = ? WHERE name = ?")) {
+
+                statement.setString(1, faction);
+                statement.setString(2, locale);
+
+                statement.executeUpdate();
+                statement.close();
 
                 connection.close();
             } catch (SQLException error) {
@@ -1148,6 +1216,7 @@ public class DatabaseHandler {
                 if (set.next()) {
                     int last_raid = set.getInt("last_raid");
                     int level = set.getInt("level");
+                    String locale = set.getString("locale");
                     statement.close();
                     connection.close();
 
@@ -1165,7 +1234,8 @@ public class DatabaseHandler {
                             getMembersByRank(name, "member").join(),
                             getMOTD(name).join(),
                             getRunes(name).join(),
-                            getGems(name).join()
+                            getGems(name).join(),
+                            locale
                     );
                 }
 

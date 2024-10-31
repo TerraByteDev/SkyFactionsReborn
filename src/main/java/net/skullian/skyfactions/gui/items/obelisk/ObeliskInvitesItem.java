@@ -31,7 +31,7 @@ public class ObeliskInvitesItem extends SkyItem {
             if (FACTION.isOwner(player) || FACTION.isAdmin(player) || FACTION.isModerator(player)) {
                 FactionInviteTypeSelectionUI.promptPlayer(player);
             } else {
-                Messages.OBELISK_GUI_DENY.send(player, player.locale(), "%rank%", Messages.FACTION_MODERATOR_TITLE.get(player.locale()));
+                Messages.OBELISK_GUI_DENY.send(player, player.locale().getLanguage(), "%rank%", Messages.FACTION_MODERATOR_TITLE.get(player.locale().getLanguage()));
             }
         } else if (TYPE.equals("player")) {
             PlayerInviteTypeSelectionUI.promptPlayer(player);

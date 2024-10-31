@@ -1,7 +1,6 @@
 package net.skullian.skyfactions.command.island.cmds;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -46,7 +45,7 @@ public class IslandHelpCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
-        Locale locale = sender instanceof Player ? ((Player) sender).locale() : Locale.ROOT;
+        String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
         Messages.COMMAND_HEAD.send(sender, locale);
         if (handler.getSubCommands().isEmpty()) {

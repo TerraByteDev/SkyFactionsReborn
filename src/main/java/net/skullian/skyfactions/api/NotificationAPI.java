@@ -3,6 +3,7 @@ package net.skullian.skyfactions.api;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.notification.NotificationData;
 import net.skullian.skyfactions.notification.NotificationTask;
 import net.skullian.skyfactions.notification.NotificationType;
@@ -54,7 +55,7 @@ public class NotificationAPI {
      * @param replacements Replacements for the notification title / desc.
      */
     public static CompletableFuture<Void> createNotification(UUID playerUUID, NotificationType type, Object... replacements) {
-        Locale locale = Locale.of(Settings.DEFAULT_LANGUAGE.getString());
+        String locale = PlayerHandler.getLocale(playerUUID);
         return SkyFactionsReborn.databaseHandler.createNotification(playerUUID, type.getTitle(locale, replacements), type.getDescription(locale, replacements));
     }
 

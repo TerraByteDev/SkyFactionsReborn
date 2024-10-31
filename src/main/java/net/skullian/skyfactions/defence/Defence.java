@@ -29,6 +29,7 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
@@ -72,6 +73,8 @@ public abstract class Defence {
 
             ObjectMapper mapper = new ObjectMapper();
             container.set(dataKey, PersistentDataType.STRING, mapper.writeValueAsString(data));
+
+            DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName())).setData(data);
         } catch (JsonProcessingException exception) {
             SLogger.fatal("Error when trying to update PDC Defence Data for Defence [{}].", getHologramID(data.getUUIDFactionName()), exception);
         }
@@ -137,26 +140,7 @@ public abstract class Defence {
         return getData().getDURABILITY() != 0;
     }
 
-    public void updateHologram() {
-        if (DefenceHandler.hologramsMap.containsKey(getHologramID(data.getUUIDFactionName()))) {
-            TextHologram holo = DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName()));
-
-            String text = TextUtility.color(String.join("\n", struct.getHOLOGRAM_LIST()), null);
-
-            if (getData().getAMMO() == 0 && !this.noAmmoNotified) {
-                text = struct.isAPPEND_OUT_OF_STOCK_TO_TOP() ? TextUtility.color(struct.getOUT_OF_STOCK_HOLOGRAM() + "\n" + text, null) : TextUtility.color(text + "\n" + struct.getOUT_OF_STOCK_HOLOGRAM(), null);
-                this.noAmmoNotified = true;
-            }
-
-            if (getData().getDURABILITY() < 100) {
-                text = struct.isAPPEND_DURABILITY_AT_TOP() ? TextUtility.color(struct.getDURABILITY_HOLOGRAM() + "\n" + text, null) : TextUtility.color(text + "\n" + struct.getDURABILITY_HOLOGRAM(), null);
-            }
-
-            holo.setText(text);
-            holo.update(false);
-        }
-    }
-
+        
     public boolean checkAmmo() {
         if (getData().getAMMO() == 0 || this.noAmmoNotified) return false;
 
@@ -315,8 +299,8 @@ public abstract class Defence {
     public void createHologram(Location location, DefenceStruct defence, String playerUUIDorFactionName) {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
 
-        TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName(), defence)
-                .setText(TextUtility.color(text.replace("%defence_name%", defence.getNAME()), null))
+        TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName(), defence, data)
+                .setText(TextUtility.color(text.replace("%defence_name%", defence.getNAME()), Messages.getDefaulLocale(), null))
                 .setBillboard(Display.Billboard.VERTICAL)
                 .setSeeThroughBlocks(false)
                 .setShadow(true)

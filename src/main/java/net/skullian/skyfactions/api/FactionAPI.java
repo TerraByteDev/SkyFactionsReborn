@@ -61,7 +61,7 @@ public class FactionAPI {
             IslandAPI.teleportPlayerToLocation(player, faction.getIsland().getCenter(world));
             onFactionLoad(faction, player);
         } else {
-            Messages.ERROR.send(player, player.locale(), "%operation%", "teleport to your faction's island", "%debug%", "WORLD_NOT_EXIST");
+            Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "teleport to your faction's island", "%debug%", "WORLD_NOT_EXIST");
         }
     }
 
@@ -160,13 +160,13 @@ public class FactionAPI {
         int length = name.length();
         if (length >= minimumLength && length <= maximumLength) {
             if (!Settings.FACTION_CREATION_ALLOW_NUMBERS.getBoolean() && TextUtility.containsNumbers(name)) {
-                Messages.FACTION_NO_NUMBERS.send(player, player.locale());
+                Messages.FACTION_NO_NUMBERS.send(player, player.locale().getLanguage());
                 return false;
             } else if (!Settings.FACTION_CREATION_ALLOW_NON_ENGLISH.getBoolean() && !TextUtility.isEnglish(name)) {
-                Messages.FACTION_NON_ENGLISH.send(player, player.locale());
+                Messages.FACTION_NON_ENGLISH.send(player, player.locale().getLanguage());
                 return false;
             } else if (!Settings.FACTION_CREATION_ALLOW_SYMBOLS.getBoolean() && TextUtility.hasSymbols(name)) {
-                Messages.FACTION_NO_SYMBOLS.send(player, player.locale());
+                Messages.FACTION_NO_SYMBOLS.send(player, player.locale().getLanguage());
                 return false;
             } else {
                 boolean regexMatch = false;
@@ -180,7 +180,7 @@ public class FactionAPI {
                 }
 
                 if (regexMatch) {
-                    Messages.FACTION_NAME_PROHIBITED.send(player, player.locale());
+                    Messages.FACTION_NAME_PROHIBITED.send(player, player.locale().getLanguage());
                     return false;
                 } else {
                     return true;
@@ -188,7 +188,7 @@ public class FactionAPI {
             }
 
         } else {
-            Messages.FACTION_NAME_LENGTH_LIMIT.send(player, player.locale(), "%min%", minimumLength, "%max%", maximumLength);
+            Messages.FACTION_NAME_LENGTH_LIMIT.send(player, player.locale().getLanguage(), "%min%", minimumLength, "%max%", maximumLength);
             return false;
         }
     }
@@ -230,7 +230,7 @@ public class FactionAPI {
             IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
 
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
-            Messages.FACTION_CREATION_SUCCESS.send(player, player.locale());
+            Messages.FACTION_CREATION_SUCCESS.send(player, player.locale().getLanguage());
         });
     }
 

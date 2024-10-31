@@ -3,6 +3,7 @@ package net.skullian.skyfactions.gui.obelisk;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
@@ -31,7 +32,7 @@ public class PlayerObeliskUI {
 
                 Window window = Window.single()
                         .setViewer(player)
-                        .setTitle(TextUtility.color(data.getTITLE(), player))
+                        .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
                         .setGui(gui)
                         .build();
 
@@ -39,7 +40,7 @@ public class PlayerObeliskUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, player.locale(), "%operation%", "open your obelisk", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open your obelisk", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }

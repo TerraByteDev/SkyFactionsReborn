@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
@@ -29,7 +30,7 @@ public class IslandCreationConfirmationUI {
 
                 Window window = Window.single()
                         .setViewer(player)
-                        .setTitle(TextUtility.color(data.getTITLE(), player))
+                        .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
                         .setGui(gui)
                         .build();
 
@@ -37,7 +38,7 @@ public class IslandCreationConfirmationUI {
                 window.open();
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
-                Messages.ERROR.send(player, player.locale(), "%operation%", "create your island", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "create your island", "%debug%", "GUI_LOAD_EXCEPTION");
             }
         });
     }

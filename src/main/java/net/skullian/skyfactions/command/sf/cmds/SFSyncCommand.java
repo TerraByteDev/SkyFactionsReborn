@@ -1,5 +1,11 @@
 package net.skullian.skyfactions.command.sf.cmds;
 
+import java.util.List;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
+
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
@@ -7,12 +13,6 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SLogger;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.annotations.Command;
-
-import java.util.List;
-import java.util.Locale;
 
 @Command("sf")
 public class SFSyncCommand extends CommandTemplate {
@@ -38,7 +38,7 @@ public class SFSyncCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) &&!CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
-        Locale locale = sender instanceof Player ? ((Player) sender).locale() : Locale.ROOT;
+        String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
         SLogger.warn("[{}] is forcing a database sync.", sender.getName());
 

@@ -60,7 +60,7 @@ public class IslandTrustCommand extends CommandTemplate {
         OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
         if (!target.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(player, player.locale(), "%player%", playerName);
+            Messages.UNKNOWN_PLAYER.send(player, player.locale().getLanguage(), "%player%", playerName);
             return;
         }
 
@@ -69,7 +69,7 @@ public class IslandTrustCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (island == null) {
-                Messages.NO_ISLAND.send(player, player.locale());
+                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
                 return;
             }
 
@@ -80,7 +80,7 @@ public class IslandTrustCommand extends CommandTemplate {
                 }
 
                 if (isTrusted) {
-                    Messages.PLAYER_ALREADY_TRUSTED.send(player, player.locale());
+                    Messages.PLAYER_ALREADY_TRUSTED.send(player, player.locale().getLanguage());
                 } else {
                     SkyFactionsReborn.databaseHandler.trustPlayer(target.getUniqueId(), island.getId()).whenComplete((result, exc) -> {
                         if (exc != null) {
@@ -88,7 +88,7 @@ public class IslandTrustCommand extends CommandTemplate {
                             return;
                         }
 
-                        Messages.TRUST_SUCCESS.send(player, player.locale(), "%player%", target.getName());
+                        Messages.TRUST_SUCCESS.send(player, player.locale().getLanguage(), "%player%", target.getName());
                     });
                 }
             });

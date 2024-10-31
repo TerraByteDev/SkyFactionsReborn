@@ -11,6 +11,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.faction.Faction;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.data.PaginationItemData;
@@ -36,7 +37,7 @@ public class ObeliskDefencePurchaseOverviewUI {
 
             Window window = Window.single()
                     .setViewer(player)
-                    .setTitle(TextUtility.color(data.getTITLE(), player))
+                    .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
                     .setGui(gui)
                     .build();
 
@@ -44,7 +45,7 @@ public class ObeliskDefencePurchaseOverviewUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, player.locale(), "%operation%", "open the defences purchase GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the defences purchase GUI", "%debug%", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -95,7 +96,7 @@ public class ObeliskDefencePurchaseOverviewUI {
     private static List<Item> getItems(Player player, ItemData data, String obeliskType, Faction faction) {
         List<Item> items = new ArrayList<>();
 
-        for (Map.Entry<String, DefenceStruct> defence : DefencesFactory.defences.getOrDefault(player.locale().getLanguage(), DefencesFactory.getDefaultStruct()).entrySet()) {
+        for (Map.Entry<String, DefenceStruct> defence : DefencesFactory.defences.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).entrySet()) {
             DefenceStruct struct = defence.getValue();
             data.setNAME(struct.getNAME());
             data.setBASE64_TEXTURE(struct.getITEM_SKULL());

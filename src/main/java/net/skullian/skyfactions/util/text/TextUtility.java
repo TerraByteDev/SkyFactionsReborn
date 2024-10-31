@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.util.text;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -9,30 +10,50 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.util.DependencyHandler;
 
 public class TextUtility {
 
-    public static String color(String string, OfflinePlayer player) {
-        if (DependencyHandler.isEnabled("PlaceholderAPI")) string = PlaceholderAPI.setPlaceholders(player, string);
-        return MiniMessage.miniMessage().deserialize(ColorAPI.process(string)).toString();
-    }
+    public static Component color(String string, String locale, OfflinePlayer player, Object... replacements) {
+        YamlDocument config = Messages.configs.getOrDefault(locale, Messages.getFallbackDocument());
 
-    public static String fromList(List<?> list) {
-        if (list == null || list.isEmpty()) return null;
-        StringBuilder builder = new StringBuilder();
-
-        for (int i = 0; i < list.size(); i++) {
-            if (org.bukkit.ChatColor.stripColor(list.get(i).toString()).equals("")) builder.append("\n&r");
-            else builder.append(list.get(i).toString()).append(i + 1 != list.size() ? "\n" : "");
+        TagResolver[] resolvers = new TagResolver[(replacements.length / 2)];
+        for (int i = 0; i < replacements.length; i += 2) {
+            if (i + 1 >= replacements.length) break;
+            resolvers[i - 1] = Placeholder.parsed(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
         }
 
+        String prefix = config.getString("Messages." + Messages.SERVER_NAME.getPath());
+        resolvers[resolvers.length] = Placeholder.parsed("server_name", prefix != null && !prefix.isEmpty() ? prefix : "");
 
-        return builder.toString();
+        if (DependencyHandler.isEnabled("PlaceholderAPI")) string = PlaceholderAPI.setPlaceholders(player, string);
+        return MiniMessage.miniMessage().deserialize(string, resolvers);
+    }
+
+    public static String legacyColor(String string, String locale, OfflinePlayer player, Object... replacements) {
+        return LegacyComponentSerializer.legacySection().serialize(color(string, locale, player, replacements));
+    }
+
+    public static Component fromList(List<?> list, String locale, OfflinePlayer player, Object... replacements) {
+        if (list == null || list.isEmpty()) return null;
+
+        List<Component> components = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            components.add(color(list.get(i).toString(), locale, player, replacements));
+            if (i + 1 != list.size()) components.add(Component.text(""));
+        }
+
+        return Component.join(JoinConfiguration.newlines(), components);
     }
 
     public static boolean isEnglish(@NotNull CharSequence seq) {
@@ -76,7 +97,7 @@ public class TextUtility {
         }
 
         if (regexMatch) {
-            Messages.FACTION_NAME_PROHIBITED.send(player, player.locale());
+            Messages.FACTION_NAME_PROHIBITED.send(player, player.locale().getLanguage());
             return true;
         } else {
             return false;

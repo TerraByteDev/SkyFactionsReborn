@@ -35,10 +35,10 @@ public class PaginationBackItem extends PageItem {
     @Override
     public ItemProvider getItemProvider(PagedGui<?> gui) {
         ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.color(NAME, null))
+                .setDisplayName(TextUtility.legacyColor(NAME, null, null))
                 .addLoreLines(gui.hasNextPage()
-                        ? TextUtility.color(MORE_PAGES_LORE.replace("%next_page%", String.valueOf(gui.getCurrentPage() + 2)).replace("%total_pages%", String.valueOf(gui.getPageAmount())), null)
-                        : TextUtility.color(NO_PAGES_LORE, null));
+                        ? TextUtility.legacyColor(MORE_PAGES_LORE.replace("%next_page%", String.valueOf(gui.getCurrentPage() + 2)).replace("%total_pages%", String.valueOf(gui.getPageAmount())), null, null)
+                        : TextUtility.legacyColor(NO_PAGES_LORE, null, null));
 
         return builder;
     }

@@ -1,15 +1,15 @@
 package net.skullian.skyfactions.config.types;
 
+import java.util.List;
+
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+
 import dev.dejvokep.boostedyaml.YamlDocument;
 import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
-
-import java.util.List;
 
 @Getter
 public enum ObeliskConfig {
@@ -43,9 +43,9 @@ public enum ObeliskConfig {
     }
 
     public static ItemBuilder getLoadingItem(Player player) {
-        ItemBuilder builder = new ItemBuilder(Material.getMaterial(Messages.LOADING_ITEM_MATERIAL.getString(player.locale()))).setDisplayName(TextUtility.color(Messages.LOADING_ITEM_TEXT.getString(player.locale()), player));
-        for (String str : Messages.LOADING_ITEM_LORE.getStringList(player.locale())) {
-            builder.addLoreLines(TextUtility.color(str, null));
+        ItemBuilder builder = new ItemBuilder(Material.getMaterial(Messages.LOADING_ITEM_MATERIAL.getString(player.locale().getLanguage()))).setDisplayName(TextUtility.legacyColor(Messages.LOADING_ITEM_TEXT.getString(player.locale().getLanguage()), player.locale().getLanguage(), player));
+        for (String str : Messages.LOADING_ITEM_LORE.getStringList(player.locale().getLanguage())) {
+            builder.addLoreLines(TextUtility.legacyColor(str, player.locale().getLanguage(), player));
         }
 
         return builder;

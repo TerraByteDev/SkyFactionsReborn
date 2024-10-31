@@ -56,7 +56,7 @@ public class FactionInfoCommand extends CommandTemplate {
                 }
 
                 if (!isInFaction) {
-                    Messages.NOT_IN_FACTION.send(player, player.locale());
+                    Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
                 } else {
 
                     FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
@@ -81,7 +81,7 @@ public class FactionInfoCommand extends CommandTemplate {
                 if (faction != null) {
                     sendInfo(player, faction);
                 } else {
-                    Messages.FACTION_NOT_FOUND.send(player, player.locale(), "%name%", name);
+                    Messages.FACTION_NOT_FOUND.send(player, player.locale().getLanguage(), "%name%", name);
                 }
             });
         }
@@ -90,9 +90,9 @@ public class FactionInfoCommand extends CommandTemplate {
     private void sendInfo(Player player, Faction faction) {
 
         Messages.FACTION_INFO_LIST.send(player,
-                player.locale(), 
+                player.locale().getLanguage(), 
                 "%faction_name%", faction.getName(),
-                "%motd%", TextUtility.color(faction.getMOTD(), player),
+                "%motd%", TextUtility.color(faction.getMOTD(), player.locale().getLanguage(), player),
 
                 "%owner%", faction.getOwner().getName(),
                 "%admins%", buildString(faction.getAdmins()),

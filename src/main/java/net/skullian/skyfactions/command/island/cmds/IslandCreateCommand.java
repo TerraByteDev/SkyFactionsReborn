@@ -49,7 +49,7 @@ public class IslandCreateCommand extends CommandTemplate {
             }
 
             if (hasIsland) {
-                Messages.ISLAND_CREATION_DENY.send(player, player.locale());
+                Messages.ISLAND_CREATION_DENY.send(player, player.locale().getLanguage());
             } else {
                 IslandCreationConfirmationUI.promptPlayer(player);
             }

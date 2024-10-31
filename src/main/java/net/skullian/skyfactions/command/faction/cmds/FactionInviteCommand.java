@@ -64,19 +64,19 @@ public class FactionInviteCommand extends CommandTemplate {
             }
 
             if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, player.locale());
+                Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
                 return;
             } else if (playerName.equalsIgnoreCase(player.getName())) {
-                Messages.FACTION_INVITE_SELF_DENY.send(player, player.locale());
+                Messages.FACTION_INVITE_SELF_DENY.send(player, player.locale().getLanguage());
                 return;
             }
 
                 OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
                 if (!target.hasPlayedBefore()) {
-                    Messages.UNKNOWN_PLAYER.send(player, player.locale(), "%player%", playerName);
+                    Messages.UNKNOWN_PLAYER.send(player, player.locale().getLanguage(), "%player%", playerName);
 
                 } else if (faction.getAllMembers().contains(target)) {
-                    Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, player.locale());
+                    Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, player.locale().getLanguage());
 
                 } else {
                     faction.getOutgoingInvites().whenComplete((invites, throwable) -> {
@@ -87,14 +87,14 @@ public class FactionInviteCommand extends CommandTemplate {
 
                         for (InviteData invite : invites) {
                             if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
-                                Messages.FACTION_INVITE_DUPLICATE.send(player, player.locale());
+                                Messages.FACTION_INVITE_DUPLICATE.send(player, player.locale().getLanguage());
                                 return;
                             }
                         }
                     });
 
                     faction.createInvite(target, player);
-                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, player.locale(), "%player_name%", target.getName());
+                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, player.locale().getLanguage(), "%player_name%", target.getName());
                 }
             });
     }

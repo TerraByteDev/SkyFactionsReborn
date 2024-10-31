@@ -1,7 +1,6 @@
 package net.skullian.skyfactions.command.sf.cmds;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,7 +39,7 @@ public class SFInfoCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
-        Locale locale = sender instanceof Player ? ((Player) sender).locale() : Locale.ROOT;
+        String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
         Messages.COMMAND_HEAD.send(sender, locale);
         sender.sendMessage(TextUtility.color(
@@ -48,7 +47,8 @@ public class SFInfoCommand extends CommandTemplate {
                         "&3Authors: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "") + "{/#00B0CA}&r\n" +
                         "&3Discord: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getWebsite() + "{/#00B0CA}&r\n" +
                         "&3Contributors: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getContributors().toString().replace("[", "").replace("]", "") + "{/#00B0CA}&r",
-                        sender instanceof Player ? (Player) sender : null
+                        locale,
+                        sender instanceof Player ? ((Player) sender) : null
         ));
         Messages.COMMAND_HEAD.send(sender, locale);
     }
