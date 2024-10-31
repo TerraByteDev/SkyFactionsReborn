@@ -26,7 +26,7 @@ public class ObeliskPlayerNotificationsItem extends AsyncSkyItem {
         List<NotificationData> notifications = NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(getPLAYER().getUniqueId())).join();
 
         return List.of(
-            "%notification_count%", notifications.size()
+            "notification_count", notifications.size()
         ).toArray();
     }
 

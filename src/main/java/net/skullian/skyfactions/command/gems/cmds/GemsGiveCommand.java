@@ -77,7 +77,7 @@ public class GemsGiveCommand extends CommandTemplate{
         if (type.equalsIgnoreCase("player")) {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
             if (!offlinePlayer.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(sender, locale, "%player%", playerFactionName);
+                Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
             } else {
                 IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, throwable) -> {
                     if (throwable != null) {
@@ -89,7 +89,7 @@ public class GemsGiveCommand extends CommandTemplate{
                     }
 
                     GemsAPI.addGems(offlinePlayer.getUniqueId(), amount);
-                    Messages.GEM_GIVE_SUCCESS.send(sender, locale, "%amount%", amount, "%name%", offlinePlayer.getName());
+                    Messages.GEM_GIVE_SUCCESS.send(sender, locale, "amount", amount, "name", offlinePlayer.getName());
                 });
             }
         } else if (type.equalsIgnoreCase("faction")) {
@@ -98,15 +98,15 @@ public class GemsGiveCommand extends CommandTemplate{
                     ErrorHandler.handleError(sender, "get the specified Faction", "SQL_FACTION_GET", throwable);
                     return;
                 } else if (faction == null) {
-                    Messages.FACTION_NOT_FOUND.send(sender, locale, "%name%", playerFactionName);
+                    Messages.FACTION_NOT_FOUND.send(sender, locale, "name", playerFactionName);
                     return;
                 }
 
                 faction.addGems(amount);
-                Messages.GEM_GIVE_SUCCESS.send(sender, locale, "%amount%", amount, "%name%", playerFactionName);
+                Messages.GEM_GIVE_SUCCESS.send(sender, locale, "amount", amount, "name", playerFactionName);
             });
         } else {
-            Messages.INCORRECT_USAGE.send(sender, locale, "%usage%", getSyntax());
+            Messages.INCORRECT_USAGE.send(sender, locale, "usage", getSyntax());
         }
     }
 

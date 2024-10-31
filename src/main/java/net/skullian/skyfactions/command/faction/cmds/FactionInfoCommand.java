@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.faction.cmds;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -56,7 +57,7 @@ public class FactionInfoCommand extends CommandTemplate {
                 }
 
                 if (!isInFaction) {
-                    Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
+                    Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 } else {
 
                     FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
@@ -81,7 +82,7 @@ public class FactionInfoCommand extends CommandTemplate {
                 if (faction != null) {
                     sendInfo(player, faction);
                 } else {
-                    Messages.FACTION_NOT_FOUND.send(player, player.locale().getLanguage(), "%name%", name);
+                    Messages.FACTION_NOT_FOUND.send(player, PlayerHandler.getLocale(player.getUniqueId()), "name", name);
                 }
             });
         }
@@ -90,15 +91,15 @@ public class FactionInfoCommand extends CommandTemplate {
     private void sendInfo(Player player, Faction faction) {
 
         Messages.FACTION_INFO_LIST.send(player,
-                player.locale().getLanguage(), 
-                "%faction_name%", faction.getName(),
-                "%motd%", TextUtility.color(faction.getMOTD(), player.locale().getLanguage(), player),
+                PlayerHandler.getLocale(player.getUniqueId()),
+                "faction_name", faction.getName(),
+                "motd", TextUtility.color(faction.getMOTD(), PlayerHandler.getLocale(player.getUniqueId()), player),
 
-                "%owner%", faction.getOwner().getName(),
-                "%admins%", buildString(faction.getAdmins()),
-                "%moderators%", buildString(faction.getModerators()),
-                "%fighters%", buildString(faction.getFighters()),
-                "%members%", buildString(faction.getMembers())
+                "owner", faction.getOwner().getName(),
+                "admins", buildString(faction.getAdmins()),
+                "moderators", buildString(faction.getModerators()),
+                "fighters", buildString(faction.getFighters()),
+                "members", buildString(faction.getMembers())
         );
     }
 

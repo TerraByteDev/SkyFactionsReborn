@@ -38,7 +38,7 @@ public class IslandCreationConfirmationUI {
                 window.open();
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "create your island", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "create your island", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }

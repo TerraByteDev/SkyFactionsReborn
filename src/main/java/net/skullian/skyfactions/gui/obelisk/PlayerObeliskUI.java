@@ -40,7 +40,7 @@ public class PlayerObeliskUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open your obelisk", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open your obelisk", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }

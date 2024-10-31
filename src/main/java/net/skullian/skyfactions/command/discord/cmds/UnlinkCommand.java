@@ -5,6 +5,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,9 +33,9 @@ public class UnlinkCommand extends CommandTemplate {
                 }
 
                 if (id == null) {
-                    Messages.DISCORD_NOT_LINKED.send(player, player.locale().getLanguage());
+                    Messages.DISCORD_NOT_LINKED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 } else {
-                    Messages.DISCORD_UNLINK_SUCCESS.send(player, player.locale().getLanguage());
+                    Messages.DISCORD_UNLINK_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 }
             });
         }

@@ -37,7 +37,7 @@ public class FactionLeaveConfirmationUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "leave your faction", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "leave your faction", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }

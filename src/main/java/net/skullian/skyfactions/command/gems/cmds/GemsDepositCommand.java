@@ -6,6 +6,7 @@ import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -51,7 +52,7 @@ public class GemsDepositCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", throwable);
                 return;
             } else if (!hasIsland) {
-                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
+                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             }
 
             ItemStack currencyItem = GemsAPI.createGemsStack(player);
@@ -64,13 +65,13 @@ public class GemsDepositCommand extends CommandTemplate {
                     int parsedAmount = Integer.parseInt(amount);
                     totalDeposited = depositSpecificAmount(player, currencyItem, parsedAmount);
                 } catch (NumberFormatException exception) {
-                    Messages.INCORRECT_USAGE.send(player, player.locale().getLanguage(), "%usage%", getSyntax());
+                    Messages.INCORRECT_USAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "usage", getSyntax());
                 }
             }
 
             int finalTotalDeposited = totalDeposited;
             GemsAPI.subtractGems(player.getUniqueId(), totalDeposited);
-            Messages.GEMS_DEPOSIT_SUCCESS.send(player, player.locale().getLanguage(), "%amount%", finalTotalDeposited);
+            Messages.GEMS_DEPOSIT_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "amount", finalTotalDeposited);
         });
 
     }

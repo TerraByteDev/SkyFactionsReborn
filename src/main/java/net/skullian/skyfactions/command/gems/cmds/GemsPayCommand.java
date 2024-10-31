@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.gems.cmds;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -48,7 +49,7 @@ public class GemsPayCommand extends CommandTemplate {
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
         if (!offlinePlayer.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(sender, player.locale().getLanguage(), "%player%", playerName);
+            Messages.UNKNOWN_PLAYER.send(sender, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
         } else {
 
             int playerGemCount = GemsAPI.getGems(player.getUniqueId());
@@ -56,9 +57,9 @@ public class GemsPayCommand extends CommandTemplate {
                 GemsAPI.subtractGems(player.getUniqueId(), amount);
                 GemsAPI.addGems(offlinePlayer.getUniqueId(), amount);
 
-                Messages.GEM_ADD_SUCCESS.send(player, player.locale().getLanguage(), "%amount%", amount, "%player%", offlinePlayer.getName());
+                Messages.GEM_ADD_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "amount", amount, "player", offlinePlayer.getName());
             } else {
-                Messages.INSUFFICIENT_GEMS_COUNT.send(player, player.locale().getLanguage());
+                Messages.INSUFFICIENT_GEMS_COUNT.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             }
         }
     }

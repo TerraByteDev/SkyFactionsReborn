@@ -27,10 +27,10 @@ public class AuditPaginationItem extends SkyItem {
         String locale = Messages.getDefaulLocale(); // todo make audit system language compat
 
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("%audit_title%", DATA.getType()), locale, getPLAYER()));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("audit_title", DATA.getType()), locale, getPLAYER()));
 
         for (String loreLine : getDATA().getLORE()) {
-            if (loreLine.contains("%audit_description%")) {
+            if (loreLine.contains("audit_description")) {
                 for (String part : TextUtility.toParts(DATA.getDescription())) {
                     builder.addLoreLines(part);
                 }
@@ -39,7 +39,7 @@ public class AuditPaginationItem extends SkyItem {
             }
 
             builder.addLoreLines(TextUtility.legacyColor(loreLine
-                    .replace("%timestamp%", Messages.replace(Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+                    .replace("timestamp", Messages.replace(Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "time", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
                     locale,
                     getPLAYER()
             ));

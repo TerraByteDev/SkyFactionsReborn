@@ -45,7 +45,7 @@ public class PlayerIncomingInvites {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the incoming faction invites GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the incoming faction invites GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -104,7 +104,7 @@ public class PlayerIncomingInvites {
             }
 
             for (InviteData inviteData : data) {
-                itemData.setNAME(itemData.getNAME().replace("%faction_name%", inviteData.getFactionName()));
+                itemData.setNAME(itemData.getNAME().replace("faction_name", inviteData.getFactionName()));
                 items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getUniqueId()), inviteData.getPlayer(), inviteData));
             }
         });

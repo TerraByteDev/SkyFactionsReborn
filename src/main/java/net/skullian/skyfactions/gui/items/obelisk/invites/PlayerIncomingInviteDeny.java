@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.obelisk.invites;
 
 import java.util.concurrent.CompletableFuture;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -32,7 +33,7 @@ public class PlayerIncomingInviteDeny extends SkyItem {
         event.getInventory().close();
         FactionAPI.getFaction(DATA.getFactionName()).whenComplete((faction, ex) -> {
             if (faction == null) {
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "get the Faction", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "get the Faction", "FACTION_NOT_FOUND");
                 return;
             } else if (ex != null) {
                 ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);
@@ -40,7 +41,7 @@ public class PlayerIncomingInviteDeny extends SkyItem {
             }
 
             CompletableFuture.allOf(
-                    faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_DENY, "%player_name%", player.getName()),
+                    faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_DENY, "player_name", player.getName()),
                     SkyFactionsReborn.databaseHandler.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing")
             ).whenComplete((ignored, throwable) -> {
                 if (throwable != null) {
@@ -48,7 +49,7 @@ public class PlayerIncomingInviteDeny extends SkyItem {
                     return;
                 }
 
-                Messages.FACTION_INVITE_DENY_SUCCESS.send(player, player.locale().getLanguage(), "%faction_name%", faction.getName());
+                Messages.FACTION_INVITE_DENY_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", faction.getName());
             });
         });
     }

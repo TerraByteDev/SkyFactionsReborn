@@ -41,7 +41,7 @@ public class PlayerOutgoingRequestManageUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "manage your outgoing join request", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "manage your outgoing join request", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }

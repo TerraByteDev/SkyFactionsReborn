@@ -18,7 +18,7 @@ public class InvitePromptItem extends SkyItem {
         String data = (String) getOptionals()[0];
 
         return List.of(
-            "%faction_name%", data
+            "faction_name", data
         ).toArray();
     }
 }

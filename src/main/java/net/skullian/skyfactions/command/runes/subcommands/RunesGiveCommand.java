@@ -76,7 +76,7 @@ public class RunesGiveCommand extends CommandTemplate {
         if (type.equalsIgnoreCase("player")) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
         if (!offlinePlayer.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(sender, locale, "%player%", playerFactionName);
+            Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
         } else {
             IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, ex) -> {
                 if (ex != null) {
@@ -88,7 +88,7 @@ public class RunesGiveCommand extends CommandTemplate {
                     }
 
                     RunesAPI.addRunes(offlinePlayer.getUniqueId(), amount);
-                    Messages.RUNES_GIVE_SUCCESS.send(sender, locale, "%amount%", amount, "%name%", offlinePlayer.getName());
+                    Messages.RUNES_GIVE_SUCCESS.send(sender, locale, "amount", amount, "name", offlinePlayer.getName());
                 });
             }
         } else if (type.equalsIgnoreCase("faction")) {
@@ -98,12 +98,12 @@ public class RunesGiveCommand extends CommandTemplate {
                     ErrorHandler.handleError(sender, "get the specified Faction", "SQL_FACTION_GET", throwable);
                     return;
                 } else if (faction == null) {
-                    Messages.FACTION_NOT_FOUND.send(sender, locale, "%name%", playerFactionName);
+                    Messages.FACTION_NOT_FOUND.send(sender, locale, "name", playerFactionName);
                     return;
                 }
 
                 faction.addRunes(amount);
-                Messages.RUNES_GIVE_SUCCESS.send(sender, locale, "%amount%", amount, "%name%", faction.getName());
+                Messages.RUNES_GIVE_SUCCESS.send(sender, locale, "amount", amount, "name", faction.getName());
             });
         }
     }

@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.island.cmds;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -50,9 +51,9 @@ public class IslandTeleportCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (island == null) {
-                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
+                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             } else if (FactionAPI.isLocationInRegion(player.getLocation(), player.getUniqueId().toString())) {
-                Messages.ALREADY_ON_ISLAND.send(player, player.locale().getLanguage());
+                Messages.ALREADY_ON_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
@@ -65,7 +66,7 @@ public class IslandTeleportCommand extends CommandTemplate {
 
                 IslandAPI.onIslandLoad(player.getUniqueId());
             } else {
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "teleport you to your island", "%debug%", "WORLD_NOT_EXIST");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "teleport you to your island", "debug", "WORLD_NOT_EXIST");
             }
         });
     }

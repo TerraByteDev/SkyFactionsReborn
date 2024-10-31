@@ -15,6 +15,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.island.FactionIsland;
@@ -61,7 +62,7 @@ public class FactionAPI {
             IslandAPI.teleportPlayerToLocation(player, faction.getIsland().getCenter(world));
             onFactionLoad(faction, player);
         } else {
-            Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "teleport to your faction's island", "%debug%", "WORLD_NOT_EXIST");
+            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "teleport to your faction's island", "debug", "WORLD_NOT_EXIST");
         }
     }
 
@@ -89,7 +90,7 @@ public class FactionAPI {
                     return;
                 }
 
-                faction.createAuditLog(player.getUniqueId(), AuditLogType.FACTION_CREATE, "%player_name%", player.getName(), "%faction_name%", name);
+                faction.createAuditLog(player.getUniqueId(), AuditLogType.FACTION_CREATE, "player_name", player.getName(), "faction_name", name);
                 NotificationAPI.factionInviteStore.put(faction.getName(), 0);
                 factionCache.put(player.getUniqueId(), faction);
                 factionNameCache.put(faction.getName(), faction);
@@ -160,13 +161,13 @@ public class FactionAPI {
         int length = name.length();
         if (length >= minimumLength && length <= maximumLength) {
             if (!Settings.FACTION_CREATION_ALLOW_NUMBERS.getBoolean() && TextUtility.containsNumbers(name)) {
-                Messages.FACTION_NO_NUMBERS.send(player, player.locale().getLanguage());
+                Messages.FACTION_NO_NUMBERS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return false;
             } else if (!Settings.FACTION_CREATION_ALLOW_NON_ENGLISH.getBoolean() && !TextUtility.isEnglish(name)) {
-                Messages.FACTION_NON_ENGLISH.send(player, player.locale().getLanguage());
+                Messages.FACTION_NON_ENGLISH.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return false;
             } else if (!Settings.FACTION_CREATION_ALLOW_SYMBOLS.getBoolean() && TextUtility.hasSymbols(name)) {
-                Messages.FACTION_NO_SYMBOLS.send(player, player.locale().getLanguage());
+                Messages.FACTION_NO_SYMBOLS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return false;
             } else {
                 boolean regexMatch = false;
@@ -180,7 +181,7 @@ public class FactionAPI {
                 }
 
                 if (regexMatch) {
-                    Messages.FACTION_NAME_PROHIBITED.send(player, player.locale().getLanguage());
+                    Messages.FACTION_NAME_PROHIBITED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                     return false;
                 } else {
                     return true;
@@ -188,7 +189,7 @@ public class FactionAPI {
             }
 
         } else {
-            Messages.FACTION_NAME_LENGTH_LIMIT.send(player, player.locale().getLanguage(), "%min%", minimumLength, "%max%", maximumLength);
+            Messages.FACTION_NAME_LENGTH_LIMIT.send(player, PlayerHandler.getLocale(player.getUniqueId()), "min", minimumLength, "max", maximumLength);
             return false;
         }
     }
@@ -230,7 +231,7 @@ public class FactionAPI {
             IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
 
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
-            Messages.FACTION_CREATION_SUCCESS.send(player, player.locale().getLanguage());
+            Messages.FACTION_CREATION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
         });
     }
 

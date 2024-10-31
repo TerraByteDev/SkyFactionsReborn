@@ -50,7 +50,7 @@ public class SFNPCDisableCommand extends CommandTemplate {
                 return;
             }
 
-            Messages.NPC_DISABLED.send(sender, locale, "%count%", affected);
+            Messages.NPC_DISABLED.send(sender, locale, "count", affected);
             SLogger.info("Finished disabling all NPCs - [{}] NPCs removed.", affected);
         });   
     }

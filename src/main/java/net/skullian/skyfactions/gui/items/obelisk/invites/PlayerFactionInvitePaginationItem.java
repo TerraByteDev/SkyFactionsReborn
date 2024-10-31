@@ -29,8 +29,8 @@ public class PlayerFactionInvitePaginationItem extends SkyItem {
         InviteData data = (InviteData) getOptionals()[0];
 
         return List.of(
-            "%faction_name%", data.getFactionName(),
-            "%player_name%", data.getInviter().getName()
+            "faction_name", data.getFactionName(),
+            "player_name", data.getInviter().getName()
         ).toArray();
     }
 

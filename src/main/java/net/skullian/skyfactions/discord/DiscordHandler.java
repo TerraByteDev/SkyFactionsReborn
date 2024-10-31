@@ -98,8 +98,8 @@ public class DiscordHandler {
         SkyFactionsReborn.databaseHandler.getDiscordLink(victim).thenAccept(id -> {
             if (id != null && !id.equals("none")) {
                 EmbedBuilder embedBuilder = new EmbedBuilder()
-                        .setDescription(Messages.DISCORD_RAID_MESSAGE.getString(victim.locale().getLanguage()).replace("%attacker%", attacker.getName()))
-                        .setThumbnail(DiscordConfig.AVATAR_API.getString().replace("%player%", attacker.getUniqueId().toString()));
+                        .setDescription(Messages.DISCORD_RAID_MESSAGE.getString(victim.locale().getLanguage()).replace("attacker", attacker.getName()))
+                        .setThumbnail(DiscordConfig.AVATAR_API.getString().replace("player", attacker.getUniqueId().toString()));
 
                 RAID_NOTIFICATION_CHANNEL.sendMessage("<@" + id + ">").setEmbeds(embedBuilder.build()).queue();
             }

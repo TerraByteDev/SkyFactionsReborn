@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.island.cmds;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -60,7 +61,7 @@ public class IslandTrustCommand extends CommandTemplate {
         OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
         if (!target.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(player, player.locale().getLanguage(), "%player%", playerName);
+            Messages.UNKNOWN_PLAYER.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
             return;
         }
 
@@ -69,7 +70,7 @@ public class IslandTrustCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (island == null) {
-                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
+                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
@@ -80,7 +81,7 @@ public class IslandTrustCommand extends CommandTemplate {
                 }
 
                 if (isTrusted) {
-                    Messages.PLAYER_ALREADY_TRUSTED.send(player, player.locale().getLanguage());
+                    Messages.PLAYER_ALREADY_TRUSTED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 } else {
                     SkyFactionsReborn.databaseHandler.trustPlayer(target.getUniqueId(), island.getId()).whenComplete((result, exc) -> {
                         if (exc != null) {
@@ -88,7 +89,7 @@ public class IslandTrustCommand extends CommandTemplate {
                             return;
                         }
 
-                        Messages.TRUST_SUCCESS.send(player, player.locale().getLanguage(), "%player%", target.getName());
+                        Messages.TRUST_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", target.getName());
                     });
                 }
             });

@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command;
 
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.entity.Player;
 import java.util.*;
 
@@ -18,7 +19,7 @@ public class CommandsUtility {
         if (cooldowns.containsKey(player.getUniqueId())) {
             long secondsLeft = ((cooldowns.get(player.getUniqueId()) / 1000) + (cooldownDuration / 1000)) - (System.currentTimeMillis() / 1000);
             if (secondsLeft > 0) {
-                Messages.COOLDOWN.send(player, player.locale().getLanguage(), "%cooldown%", String.valueOf(secondsLeft));
+                Messages.COOLDOWN.send(player, PlayerHandler.getLocale(player.getUniqueId()), "cooldown", String.valueOf(secondsLeft));
                 return true;
             } else {
                 cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
@@ -35,7 +36,7 @@ public class CommandsUtility {
         }
 
         if (sendDeny) {
-            Messages.PERMISSION_DENY.send(player, player.locale().getLanguage());
+            Messages.PERMISSION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
         }
         return false;
     }

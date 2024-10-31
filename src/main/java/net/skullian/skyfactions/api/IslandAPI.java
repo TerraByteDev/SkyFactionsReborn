@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -89,7 +90,7 @@ public class IslandAPI {
             return;
         }
 
-        Messages.ISLAND_CREATING.send(player, player.locale().getLanguage());
+        Messages.ISLAND_CREATING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
         createRegion(player, island, world);
 
         CompletableFuture.allOf(
@@ -108,7 +109,7 @@ public class IslandAPI {
             teleportPlayerToLocation(player, island.getCenter(world));
 
             ObeliskHandler.spawnPlayerObelisk(player, island);
-            Messages.ISLAND_CREATED.send(player, player.locale().getLanguage());
+            Messages.ISLAND_CREATED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
         });
     }
@@ -207,10 +208,10 @@ public class IslandAPI {
                         return;
                     }
 
-                    Messages.ISLAND_DELETION_SUCCESS.send(player, player.locale().getLanguage());
+                    Messages.ISLAND_DELETION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 });
             } else {
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "delete your island", "%debug%", "WORLD_NOT_EXIST");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "delete your island", "debug", "WORLD_NOT_EXIST");
             }
         });
     }

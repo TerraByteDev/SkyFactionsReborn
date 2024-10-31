@@ -50,11 +50,12 @@ public class SFHelpCommand extends CommandTemplate {
         Messages.COMMAND_HEAD.send(sender, locale);
         if (handler.getSubCommands().isEmpty()) {
             Messages.NO_COMMANDS_FOUND.send(sender, locale);
-        }
-        for (int i = 0; i < handler.getSubCommands().size(); i++) {
-            if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, handler.getSubCommands().get(i).permission(), false))
-                continue;
-            Messages.COMMAND_INFO.send(sender, locale, "%command_syntax%", handler.getSubCommands().get(i).getSyntax(), "%command_name%", handler.getSubCommands().get(i).getName(), "%command_description%", handler.getSubCommands().get(i).getDescription());
+        } else {
+            for (CommandTemplate command : handler.getSubCommands().values()) {
+                if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, command.permission(), false))
+                    continue;
+                Messages.COMMAND_INFO.send(sender, locale, "command_syntax", command.getSyntax(), "command_name", command.getName(), "command_description", command.getDescription());
+            }
         }
         Messages.COMMAND_HEAD.send(sender, locale);
     }

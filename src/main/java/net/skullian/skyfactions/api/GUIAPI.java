@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -28,7 +29,7 @@ public class GUIAPI {
      * @throws IllegalArgumentException
      */
     public static GUIData getGUIData(String guiName, Player player) throws IllegalArgumentException {
-        YamlDocument config = GUIEnums.configs.getOrDefault(player.locale().getLanguage(), getFallbackLanguage()).get("guis/" + guiName);
+        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get("guis/" + guiName);
         if (config != null) {
             String guiTitle = config.getString("TITLE");
             String openSound = config.getString("OPEN_SOUND");
@@ -50,12 +51,12 @@ public class GUIAPI {
      * Get a specific GUI's configured item datas.
      *
      * @param guiName GUI 'path' in the config folder. E.g. "confirmations/create_island" corresponds to the "confirmations/create_island.yml"
-     * @param player  We only need this because there is a placeholder of %player_name%. Also for locale crap.
+     * @param player  We only need this because there is a placeholder of player_name. Also for locale crap.
      * @return {@link List<ItemData>}
      * @throws IllegalArgumentException
      */
     public static List<ItemData> getItemData(String guiName, Player player) throws IllegalArgumentException {
-        YamlDocument config = GUIEnums.configs.getOrDefault(player.locale().getLanguage(), getFallbackLanguage()).get("guis/" + guiName);
+        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get("guis/" + guiName);
         if (config != null) {
 
             Section itemsConfig = config.getSection("ITEMS");
@@ -66,7 +67,7 @@ public class GUIAPI {
 
                 char charValue = !isModel ? itemData.getString("char").charAt(0) : "x".charAt(0);
                 String material = itemData.getString("material");
-                String text = itemData.getString("text").replace("%player_name%", player.getName());
+                String text = itemData.getString("text").replace("player_name", player.getName());
                 String sound = itemData.getString("sound");
                 String texture = itemData.getString("skull");
                 int pitch = itemData.getInt("pitch");
@@ -88,7 +89,7 @@ public class GUIAPI {
      * @throws RuntimeException
      */
     public static List<PaginationItemData> getPaginationData(Player player) throws RuntimeException {
-        YamlDocument config = GUIEnums.configs.getOrDefault(player.locale().getLanguage(), getFallbackLanguage()).get("guis/pagination");
+        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get("guis/pagination");
         if (config != null) {
 
             Section itemsConfig = config.getSection("ITEMS");
@@ -99,7 +100,7 @@ public class GUIAPI {
                 char charValue = itemData.getString("char").charAt(0);
                 String material = itemData.getString("material");
                 String texture = itemData.getString("skull");
-                String itemName = itemData.getString("name").replace("%player_name%", player.getName());
+                String itemName = itemData.getString("name").replace("player_name", player.getName());
                 String sound = itemData.getString("sound");
                 int pitch = itemData.getInt("pitch");
                 String morePagesLore = itemData.getString("more_pages_lore");
@@ -118,7 +119,7 @@ public class GUIAPI {
         ItemStack stack;
         if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
             String texture = data.getBASE64_TEXTURE();
-            if (texture.equalsIgnoreCase("%player_skull%")) {
+            if (texture.equalsIgnoreCase("player_skull")) {
                 stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), playerUUID);
             } else {
                 stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
@@ -134,7 +135,7 @@ public class GUIAPI {
         ItemStack stack;
         if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
             String texture = data.getBASE64_TEXTURE();
-            if (texture.equalsIgnoreCase("%player_skull%")) {
+            if (texture.equalsIgnoreCase("player_skull")) {
                 stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), playerUUID);
             } else {
                 stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());

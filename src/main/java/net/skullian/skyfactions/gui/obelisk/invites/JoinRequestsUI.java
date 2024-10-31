@@ -47,7 +47,7 @@ public class JoinRequestsUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the faction join requests GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the faction join requests GUI", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }
@@ -107,7 +107,7 @@ public class JoinRequestsUI {
             }
 
             if (faction == null) {
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the faction join requests GUI", "%debug%", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the faction join requests GUI", "debug", "FACTION_NOT_FOUND");
                 return;
             }
             faction.getJoinRequests().whenComplete((data, ex) -> {
@@ -117,7 +117,7 @@ public class JoinRequestsUI {
                 }
 
                 for (InviteData inviteData : data) {
-                    itemData.setNAME(itemData.getNAME().replace("%player_name%", inviteData.getPlayer().getName()));
+                    itemData.setNAME(itemData.getNAME().replace("player_name", inviteData.getPlayer().getName()));
                     items.add(new FactionJoinRequestPaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getUniqueId()), inviteData.getPlayer(), inviteData));
                 }
             });

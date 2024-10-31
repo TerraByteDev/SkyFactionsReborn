@@ -44,7 +44,7 @@ public class OutgoingInvitesUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the outgoing invites GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the outgoing invites GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -103,7 +103,7 @@ public class OutgoingInvitesUI {
             }
 
             if (faction == null) {
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the outgoing invutes GUI", "%debug%", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the outgoing invutes GUI", "debug", "FACTION_NOT_FOUND");
                 return;
             }
 
@@ -114,7 +114,7 @@ public class OutgoingInvitesUI {
                 }
 
                 for (InviteData inviteData : data) {
-                    itemData.setNAME(itemData.getNAME().replace("%player_name%", inviteData.getPlayer().getName()));
+                    itemData.setNAME(itemData.getNAME().replace("player_name", inviteData.getPlayer().getName()));
                     items.add(new OutgoingInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getUniqueId()), inviteData));
                 }
             });

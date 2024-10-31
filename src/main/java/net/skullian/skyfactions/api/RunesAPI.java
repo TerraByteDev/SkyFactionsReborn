@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -34,13 +35,13 @@ public class RunesAPI {
      */
     public static boolean isStackProhibited(ItemStack stack, Player player) {
         if (!Runes.ALLOW_ENCHANTS.getBoolean() && hasEnchants(stack)) {
-            Messages.RUNE_ENCHANT_DENY.send(player, player.locale().getLanguage());
+            Messages.RUNE_ENCHANT_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             return true;
         } else if (!Runes.ALLOW_LORE.getBoolean() && hasLore(stack)) {
-            Messages.RUNE_GENERAL_DENY.send(player, player.locale().getLanguage());
+            Messages.RUNE_GENERAL_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             return true;
         } else if (!isAllowed(stack)) {
-            Messages.RUNE_GENERAL_DENY.send(player, player.locale().getLanguage());
+            Messages.RUNE_GENERAL_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             return true;
         } else {
             return false;
@@ -63,7 +64,7 @@ public class RunesAPI {
             if (faction != null) {
                 handleConversion(stacks, player, faction);
             } else {
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "convert to runes", "%debug%", "SQL_UNKNOWN_FACTION");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "convert to runes", "debug", "SQL_UNKNOWN_FACTION");
                 for (ItemStack stack : stacks) {
                     if (stack != null && !stack.getType().equals(Material.AIR)) {
                         player.getInventory().addItem(stack);
@@ -118,9 +119,9 @@ public class RunesAPI {
                 addRunes(player.getUniqueId(), total);
             }
 
-            Messages.RUNE_CONVERSION_SUCCESS.send(player, player.locale().getLanguage(), "%added%", total);
+            Messages.RUNE_CONVERSION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "added", total);
         } else {
-            Messages.RUNE_INSUFFICIENT_ITEMS.send(player, player.locale().getLanguage());
+            Messages.RUNE_INSUFFICIENT_ITEMS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
         }
     }
 
@@ -178,7 +179,7 @@ public class RunesAPI {
 
         if (container.has(defenceKey, PersistentDataType.STRING)) {
             String identifier = container.get(defenceKey, PersistentDataType.STRING);
-            DefenceStruct struct = DefencesFactory.defences.getOrDefault(player.locale().getLanguage(), DefencesFactory.getDefaultStruct()).get(identifier);
+            DefenceStruct struct = DefencesFactory.defences.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(identifier);
             if (struct != null) return struct.getSELL_COST();
         }
 

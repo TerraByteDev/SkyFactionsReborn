@@ -8,6 +8,7 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.gems.GemsCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -52,7 +53,7 @@ public class GemsBalanceCommand extends CommandTemplate {
 
             if (hasIsland) {
                 int gems = GemsAPI.getGems(player.getUniqueId());
-                Messages.GEMS_COUNT_MESSAGE.send(player, player.locale().getLanguage(), "%count%", gems);
+                Messages.GEMS_COUNT_MESSAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "count", gems);
             }
         });
     }

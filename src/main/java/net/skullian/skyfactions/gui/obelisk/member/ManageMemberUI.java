@@ -39,7 +39,7 @@ public class ManageMemberUI {
             window.open();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "manage a member", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "manage a member", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -52,7 +52,7 @@ public class ManageMemberUI {
                 }
 
                 if (faction == null) {
-                    Messages.ERROR.send(actor, actor.locale().getLanguage(), "%operation%", "manage a member", "%debug%", "FACTION_NOT_FOUND");
+                    Messages.ERROR.send(actor, actor.locale().getLanguage(), "operation", "manage a member", "debug", "FACTION_NOT_FOUND");
                 }
 
                 List<ItemData> data = GUIAPI.getItemData("obelisk/manage_member", player.getPlayer());

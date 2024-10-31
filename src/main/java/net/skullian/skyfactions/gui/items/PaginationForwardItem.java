@@ -37,7 +37,7 @@ public class PaginationForwardItem extends PageItem {
         ItemBuilder builder = new ItemBuilder(STACK)
                 .setDisplayName(TextUtility.legacyColor(NAME, null, null))
                 .addLoreLines(gui.hasNextPage()
-                ? TextUtility.legacyColor(MORE_PAGES_LORE.replace("%next_page%", String.valueOf(gui.getCurrentPage() + 2)).replace("%total_pages%", String.valueOf(gui.getPageAmount())), null, null)
+                ? TextUtility.legacyColor(MORE_PAGES_LORE.replace("next_page", String.valueOf(gui.getCurrentPage() + 2)).replace("total_pages", String.valueOf(gui.getPageAmount())), null, null)
                         : TextUtility.legacyColor(NO_PAGES_LORE, null, null));
 
         return builder;

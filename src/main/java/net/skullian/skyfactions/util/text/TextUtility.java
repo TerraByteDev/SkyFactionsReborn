@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -27,14 +28,15 @@ public class TextUtility {
     public static Component color(String string, String locale, OfflinePlayer player, Object... replacements) {
         YamlDocument config = Messages.configs.getOrDefault(locale, Messages.getFallbackDocument());
 
-        TagResolver[] resolvers = new TagResolver[(replacements.length / 2)];
+        TagResolver[] resolvers = new TagResolver[(replacements.length != 0 ? (replacements.length / 2) + 1 : 1)];
         for (int i = 0; i < replacements.length; i += 2) {
             if (i + 1 >= replacements.length) break;
-            resolvers[i - 1] = Placeholder.parsed(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
+            int index = i / 2;
+            resolvers[index] = Placeholder.parsed(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
         }
 
         String prefix = config.getString("Messages." + Messages.SERVER_NAME.getPath());
-        resolvers[resolvers.length] = Placeholder.parsed("server_name", prefix != null && !prefix.isEmpty() ? prefix : "");
+        resolvers[replacements.length != 0 ? (replacements.length / 2) : 0] = Placeholder.parsed("server_name", prefix != null && !prefix.isEmpty() ? prefix : "");
 
         if (DependencyHandler.isEnabled("PlaceholderAPI")) string = PlaceholderAPI.setPlaceholders(player, string);
         return MiniMessage.miniMessage().deserialize(string, resolvers);
@@ -97,7 +99,7 @@ public class TextUtility {
         }
 
         if (regexMatch) {
-            Messages.FACTION_NAME_PROHIBITED.send(player, player.locale().getLanguage());
+            Messages.FACTION_NAME_PROHIBITED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             return true;
         } else {
             return false;

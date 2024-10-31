@@ -12,6 +12,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -686,7 +687,7 @@ public class DatabaseHandler {
                 statement.setString(2, "none");
                 statement.setString(3, "none");
                 statement.setInt(4, 0);
-                statement.setString(5, player.locale().getLanguage());
+                statement.setString(5, PlayerHandler.getLocale(player.getUniqueId()));
 
                 statement.executeUpdate();
                 statement.close();

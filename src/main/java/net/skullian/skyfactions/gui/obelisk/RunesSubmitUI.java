@@ -58,7 +58,7 @@ public class RunesSubmitUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open your runes submit GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open your runes submit GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 

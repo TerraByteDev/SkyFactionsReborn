@@ -13,7 +13,7 @@ public class ErrorHandler {
 
     public static void handleError(CommandSender sender, String operation, String debug, Throwable err) {
         err.printStackTrace();
-        Messages.ERROR.send(sender, sender instanceof Player ? PlayerHandler.getLocale(((Player) sender).getUniqueId()) : Messages.getDefaulLocale(), "%operation%", operation, "%debug%", debug);
+        Messages.ERROR.send(sender, sender instanceof Player ? PlayerHandler.getLocale(((Player) sender).getUniqueId()) : Messages.getDefaulLocale(), "operation", operation, "debug", debug);
     }
 
 }

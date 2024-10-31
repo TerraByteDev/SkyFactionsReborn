@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.faction.cmds;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotation.specifier.Greedy;
@@ -51,18 +52,18 @@ public class FactionMOTDCommand extends CommandTemplate {
             }
 
             if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
+                Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             } else if (!faction.isOwner(player) || !faction.isModerator(player)) {
-                Messages.PERMISSION_DENY.send(player, player.locale().getLanguage());
+                Messages.PERMISSION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
-            Messages.MOTD_CHANGE_PROCESSING.send(player, player.locale().getLanguage());
+            Messages.MOTD_CHANGE_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
 
             if (!TextUtility.hasBlacklistedWords(player, motd)) {
                 faction.updateMOTD(motd, player);
-                Messages.MOTD_CHANGE_SUCCESS.send(player, player.locale().getLanguage());
+                Messages.MOTD_CHANGE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             }
         });
     }

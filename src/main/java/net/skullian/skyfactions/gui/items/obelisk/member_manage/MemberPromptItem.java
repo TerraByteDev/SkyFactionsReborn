@@ -19,7 +19,7 @@ public class MemberPromptItem extends SkyItem {
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[0];
 
         return List.of(
-            "%player_name%", subject.getName()
+            "player_name", subject.getName()
         ).toArray();
     }
 

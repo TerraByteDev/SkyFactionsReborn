@@ -38,7 +38,7 @@ public class PlayerManageIncomingInviteUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "manage an incoming Faction invite", "%debug%", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "manage an incoming Faction invite", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 

@@ -38,7 +38,7 @@ public class ObeliskRuneItem extends AsyncSkyItem {
             }
         }
 
-        return List.of("%runes%", runes).toArray();
+        return List.of("runes", runes).toArray();
     }
 
     @Override

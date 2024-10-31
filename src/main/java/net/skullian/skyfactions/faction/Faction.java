@@ -110,7 +110,7 @@ public class Faction {
      */
     public CompletableFuture<Void> updateMOTD(String MOTD, Player actor) {
         motd = MOTD;
-        return CompletableFuture.allOf(createAuditLog(actor.getUniqueId(), AuditLogType.MOTD_UPDATE, "%player_name%", actor.getName(), "%new_motd%", MOTD), SkyFactionsReborn.databaseHandler.setMOTD(name, MOTD));
+        return CompletableFuture.allOf(createAuditLog(actor.getUniqueId(), AuditLogType.MOTD_UPDATE, "player_name", actor.getName(), "new_motd", MOTD), SkyFactionsReborn.databaseHandler.setMOTD(name, MOTD));
     }
 
     /**
@@ -198,7 +198,7 @@ public class Faction {
                 return;
             }
             if (Settings.FACTION_MANAGE_BROADCAST_KICKS.getBoolean()) {
-                createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST,"%kicked%", player.getName());
+                createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST,"kicked", player.getName());
             }
         });
     }
@@ -216,7 +216,7 @@ public class Faction {
             }
 
             if (Settings.FACTION_MANAGE_BROADCAST_BANS.getBoolean()) {
-                createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST,"%banned%", player.getName());
+                createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST,"banned", player.getName());
             }
         });
     }
@@ -315,12 +315,12 @@ public class Faction {
     public CompletableFuture<Void> createInvite(OfflinePlayer player, Player inviter) {
         return CompletableFuture.allOf(
                 SkyFactionsReborn.databaseHandler.createInvite(player.getUniqueId(), name, "outgoing", inviter),
-                createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "%inviter%", inviter.getName(), "%player_name%", player.getName())
+                createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "inviter", inviter.getName(), "player_name", player.getName())
         ).whenComplete((ignored, ex) -> {
             if (player.isOnline()) {
                 Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), player.getPlayer().locale().getLanguage());
             } else {
-                NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "%player_name%", inviter.getName(), "%faction_name%", name);
+                NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "player_name", inviter.getName(), "faction_name", name);
             }
         });
     }
@@ -332,7 +332,7 @@ public class Faction {
      */
     public CompletableFuture<Void> createJoinRequest(OfflinePlayer player) {
         return CompletableFuture.allOf(
-                createAuditLog(player.getUniqueId(), AuditLogType.JOIN_REQUEST_CREATE, "%player_name%", player.getName()),
+                createAuditLog(player.getUniqueId(), AuditLogType.JOIN_REQUEST_CREATE, "player_name", player.getName()),
                 SkyFactionsReborn.databaseHandler.createInvite(player.getUniqueId(), name, "incoming", null)
         ).thenAccept((ignored) -> {
             List<OfflinePlayer> users = Stream.concat(getModerators().stream(), getAdmins().stream()).collect(Collectors.toList());
@@ -366,7 +366,7 @@ public class Faction {
      */
     public CompletableFuture<Void> revokeInvite(InviteData data, Player actor) {
         return CompletableFuture.allOf(
-                createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.INVITE_REVOKE, "%player%", actor.getName(), "%invited%", data.getPlayer().getName()),
+                createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.INVITE_REVOKE, "player", actor.getName(), "invited", data.getPlayer().getName()),
                 SkyFactionsReborn.databaseHandler.revokeInvite(data.getFactionName(), data.getPlayer().getUniqueId(), "outgoing")
         );
     }
@@ -379,7 +379,7 @@ public class Faction {
      */
     public CompletableFuture<Void> acceptJoinRequest(InviteData data, Player actor) {
         return CompletableFuture.allOf(
-                createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_ACCEPT, "%player%", data.getPlayer().getName(), "%inviter%", actor.getName()),
+                createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_ACCEPT, "player", data.getPlayer().getName(), "inviter", actor.getName()),
                 SkyFactionsReborn.databaseHandler.acceptJoinRequest(name, data.getPlayer().getUniqueId())
         );
     }
@@ -401,9 +401,9 @@ public class Faction {
      */
     public CompletableFuture<Void> rejectJoinRequest(InviteData data, Player actor) {
         return CompletableFuture.allOf(
-                createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "%faction_player%", actor.getName(), "%player%", data.getPlayer().getName()),
+                createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "faction_player", actor.getName(), "player", data.getPlayer().getName()),
                 SkyFactionsReborn.databaseHandler.revokeInvite(name, data.getPlayer().getUniqueId(), "incoming"),
-                NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "%player_name%", actor.getName(), "%faction_name%", name)
+                NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "player_name", actor.getName(), "faction_name", name)
         );
     }
 

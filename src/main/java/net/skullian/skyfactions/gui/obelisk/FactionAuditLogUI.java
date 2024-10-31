@@ -48,7 +48,7 @@ public class FactionAuditLogUI {
                 window.open();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "open the audit log GUI", "%debug%", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the audit log GUI", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }

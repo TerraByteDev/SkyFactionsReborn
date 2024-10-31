@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.obelisk.invites;
 
 import java.util.concurrent.CompletableFuture;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -36,7 +37,7 @@ public class PlayerIncomingInviteAccept extends SkyItem {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             } else if (isInFaction) {
-                Messages.ALREADY_IN_FACTION.send(player, player.locale().getLanguage());
+                Messages.ALREADY_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
@@ -49,14 +50,14 @@ public class PlayerIncomingInviteAccept extends SkyItem {
                 CompletableFuture.allOf(
                         SkyFactionsReborn.databaseHandler.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing"),
                         faction.addFactionMember(player.getUniqueId()),
-                        faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_ACCEPT, "%player_name%", player.getName())
+                        faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_ACCEPT, "player_name", player.getName())
                 ).whenComplete((ignored, exce) -> {
                     if (exce != null) {
                         ErrorHandler.handleError(player, "accept an invite", "SQL_INVITE_ACEPT", exce);
                         return;
                     }
 
-                    Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, player.locale().getLanguage(), "%faction_name%", player.getName());
+                    Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", player.getName());
                 });
             });
         });

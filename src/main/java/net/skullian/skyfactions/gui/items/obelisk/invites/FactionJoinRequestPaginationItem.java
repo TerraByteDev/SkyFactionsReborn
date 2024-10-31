@@ -30,8 +30,8 @@ public class FactionJoinRequestPaginationItem extends SkyItem {
         InviteData data = (InviteData) getOptionals()[1];
 
         return List.of(
-            "%player_name%", data.getPlayer().getName(),
-            "%timestamp%", TextUtility.formatExtendedElapsedTime(data.getTimestamp())
+            "player_name", data.getPlayer().getName(),
+            "timestamp", TextUtility.formatExtendedElapsedTime(data.getTimestamp())
         ).toArray();
     }
 

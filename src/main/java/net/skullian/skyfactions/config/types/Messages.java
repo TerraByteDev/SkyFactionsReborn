@@ -297,7 +297,7 @@ public enum Messages {
 
         Component message;
         if (value == null) {
-            message = TextUtility.color("%server_name%&r&7 Message not found: " + this.path, locale, null);
+            message = TextUtility.color("server_name&r&7 Message not found: " + this.path, locale, null);
         } else {
             message = value instanceof List ? TextUtility.fromList((List<?>) value, locale, null, replacements) : MiniMessage.miniMessage().deserialize(value.toString());
         }
@@ -331,7 +331,7 @@ public enum Messages {
         if (value == null) {
             message = TextUtility.color(SERVER_NAME.get(locale) + "&r&7 Message not found: " + this.path, locale, receiver instanceof Player ? (Player) receiver : null , replacements);
         } else {
-            message = value instanceof List ? TextUtility.fromList((List<?>) value, locale, receiver instanceof Player ? (Player) receiver : null, replacements) : MiniMessage.miniMessage().deserialize(value.toString());
+            message = value instanceof List ? TextUtility.fromList((List<?>) value, locale, receiver instanceof Player ? (Player) receiver : null, replacements) : TextUtility.color(String.valueOf(value), locale, receiver instanceof Player ? (Player) receiver : null, replacements);
         }
 
         receiver.sendMessage(message);

@@ -44,14 +44,14 @@ public class MemberPaginationItem extends SkyItem {
         String rankTitle = (String) getOptionals()[0];
 
         return List.of(
-            "%player_rank%", rankTitle
+            "player_rank", rankTitle
         ).toArray();
     }
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (SUBJECT.getUniqueId().equals(player.getUniqueId())) {
-            Messages.FACTION_MANAGE_SELF_DENY.send(player, player.locale().getLanguage());
+            Messages.FACTION_MANAGE_SELF_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
         } else {
             ManageMemberUI.promptPlayer(player, SUBJECT);
         }

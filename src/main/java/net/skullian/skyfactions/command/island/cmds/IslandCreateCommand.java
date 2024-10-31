@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.island.cmds;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
@@ -49,7 +50,7 @@ public class IslandCreateCommand extends CommandTemplate {
             }
 
             if (hasIsland) {
-                Messages.ISLAND_CREATION_DENY.send(player, player.locale().getLanguage());
+                Messages.ISLAND_CREATION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             } else {
                 IslandCreationConfirmationUI.promptPlayer(player);
             }

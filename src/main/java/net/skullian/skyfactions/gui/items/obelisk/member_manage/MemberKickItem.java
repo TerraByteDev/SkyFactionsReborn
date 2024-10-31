@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.gui.items.obelisk.member_manage;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -35,16 +36,16 @@ public class MemberKickItem extends SkyItem {
             if (faction != null) {
                 if (faction.getAllMembers().contains(SUBJECT)) {
                     // todo discord support & or announce in chat?
-                    faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_KICK, "%kicked%", SUBJECT.getName(), "%player%", player.getName());
+                    faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_KICK, "kicked", SUBJECT.getName(), "player", player.getName());
                     faction.kickPlayer(SUBJECT, player);
 
-                    Messages.FACTION_MANAGE_KICK_SUCCESS.send(player, player.locale().getLanguage(), "%player%", SUBJECT.getName());
+                    Messages.FACTION_MANAGE_KICK_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", SUBJECT.getName());
                 } else {
-                    Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "kick a player", "%debug%", "FACTION_MEMBER_UNKNOWN");
+                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "kick a player", "debug", "FACTION_MEMBER_UNKNOWN");
                     event.getInventory().close();
                 }
             } else {
-                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "kick a player", "%debug%", "FACTION_NOT_EXIST");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "kick a player", "debug", "FACTION_NOT_EXIST");
                 event.getInventory().close();
             }
         });

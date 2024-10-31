@@ -3,6 +3,7 @@ package net.skullian.skyfactions.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.antlr.v4.parse.ANTLRParser.prequelConstruct_return;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -37,7 +38,7 @@ public class DefenceAPI {
         NamespacedKey nameKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
 
         ItemMeta meta = stack.getItemMeta();
-        meta.displayName(TextUtility.color(defence.getNAME(), player.locale().getLanguage(), player));
+        meta.displayName(TextUtility.color(defence.getNAME(), PlayerHandler.getLocale(player.getUniqueId()), player));
         meta.getPersistentDataContainer().set(nameKey, PersistentDataType.STRING, defence.getIDENTIFIER());
 
         meta.lore(getFormattedLore(defence, defence.getITEM_LORE(), player));
@@ -76,15 +77,15 @@ public class DefenceAPI {
 
         for (String str : lore) {
             newLore.add(TextUtility.color(str
-                    .replace("%max_level%", maxLevel)
-                    .replace("%range%", range)
-                    .replace("%ammo%", ammo)
-                    .replace("%target_max%", targetMax)
-                    .replace("%damage%", damage)
-                    .replace("%cooldown%", cooldown)
-                    .replace("%healing%", healing)
-                    .replace("%distance%", distance)
-                    .replace("%cost%", String.valueOf(struct.getBUY_COST())), player.locale().getLanguage(), player));
+                    .replace("max_level", maxLevel)
+                    .replace("range", range)
+                    .replace("ammo", ammo)
+                    .replace("target_max", targetMax)
+                    .replace("damage", damage)
+                    .replace("cooldown", cooldown)
+                    .replace("healing", healing)
+                    .replace("distance", distance)
+                    .replace("cost", String.valueOf(struct.getBUY_COST())), PlayerHandler.getLocale(player.getUniqueId()), player));
         }
 
         return newLore;

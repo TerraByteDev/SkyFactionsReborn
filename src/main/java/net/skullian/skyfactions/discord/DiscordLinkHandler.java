@@ -27,10 +27,10 @@ public class DiscordLinkHandler extends ListenerAdapter {
 
                 SkyFactionsReborn.databaseHandler.registerDiscordLink(playerUUID, event.getUser().getId()).thenAccept(result -> {
                     if (player.isOnline()) {
-                        Messages.DISCORD_LINK_SUCCESS.send(player.getPlayer(), PlayerHandler.getLocale(player.getUniqueId()), "%discord_name%", event.getUser().getName());
+                        Messages.DISCORD_LINK_SUCCESS.send(player.getPlayer(), PlayerHandler.getLocale(player.getUniqueId()), "discord_name", event.getUser().getName());
                     }
 
-                    event.reply("").setEmbeds(buildEmbed(Color.GREEN, Messages.DISCORD_APP_LINK_SUCCESS.getString(Messages.getDefaulLocale()).replace("%player_name%", player.getName())).build()).queue();
+                    event.reply("").setEmbeds(buildEmbed(Color.GREEN, Messages.DISCORD_APP_LINK_SUCCESS.getString(Messages.getDefaulLocale()).replace("player_name", player.getName())).build()).queue();
                     SkyFactionsReborn.discordHandler.codes.remove(code);
                 });
             } else {

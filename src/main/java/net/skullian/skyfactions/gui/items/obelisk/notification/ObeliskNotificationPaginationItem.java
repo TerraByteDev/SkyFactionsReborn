@@ -32,10 +32,10 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
         String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
 
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("%notification_title%", DATA.getTitle()), locale, getPLAYER()));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("notification_title", DATA.getTitle()), locale, getPLAYER()));
 
         for (String loreLine : getDATA().getLORE()) {
-            if (loreLine.contains("%notification_description%")) {
+            if (loreLine.contains("notification_description")) {
                 for (String part : TextUtility.toParts(DATA.getDescription())) {
                     builder.addLoreLines(part);
                 }
@@ -44,7 +44,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
             }
 
             builder.addLoreLines(TextUtility.legacyColor(loreLine
-                    .replace("%timestamp%", Messages.replace(Messages.NOTIFICATION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "%time%", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+                    .replace("timestamp", Messages.replace(Messages.NOTIFICATION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "time", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
                     locale,
                     getPLAYER()
             ));
@@ -63,7 +63,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
                     return;
                 }
 
-                Messages.NOTIFICATION_DISMISS_SUCCESS.send(player, player.locale().getLanguage());
+                Messages.NOTIFICATION_DISMISS_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             });
         }
     }

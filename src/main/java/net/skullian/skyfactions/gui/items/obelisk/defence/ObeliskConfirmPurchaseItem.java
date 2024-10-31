@@ -81,10 +81,10 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
             }
 
             player.closeInventory();
-            Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "%operation%", "purchasing your defence");
+            Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "operation", "purchasing your defence");
 
             FACTION.subtractRunes(STRUCT.getBUY_COST());
-            Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "%operation%", "Purchasing your defence");
+            Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "operation", "Purchasing your defence");
             DefencesFactory.addDefence(player, STRUCT, FACTION);;
         } else if (TYPE.equals("player")) {
 
@@ -95,7 +95,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
             }
 
             player.closeInventory();
-            Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "%operation%", "Purchasing your defence");
+            Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "operation", "Purchasing your defence");
             DefencesFactory.addDefence(player, STRUCT, FACTION);
         }
 

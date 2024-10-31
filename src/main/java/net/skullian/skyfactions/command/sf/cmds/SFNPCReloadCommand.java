@@ -50,7 +50,7 @@ public class SFNPCReloadCommand extends CommandTemplate {
                 return;
             }
 
-            Messages.NPC_RELOADED.send(sender, locale, "%count%", affected);
+            Messages.NPC_RELOADED.send(sender, locale, "count", affected);
             SLogger.info("Finished reloading NPCs - [{}] NPCs affected.", affected);
         });   
     }

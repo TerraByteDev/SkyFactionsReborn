@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.gui.items.obelisk.invites;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -36,7 +37,7 @@ public class JoinRequestsTypeItem extends SkyItem {
                 }
 
                 if (joinRequest == null) {
-                    Messages.FACTION_JOIN_REQUEST_NOT_EXIST.send(player, player.locale().getLanguage());
+                    Messages.FACTION_JOIN_REQUEST_NOT_EXIST.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 } else {
                     PlayerOutgoingRequestManageUI.promptPlayer(player, joinRequest);
                 }

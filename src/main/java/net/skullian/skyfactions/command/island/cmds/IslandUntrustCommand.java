@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.island.cmds;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -60,7 +61,7 @@ public class IslandUntrustCommand extends CommandTemplate {
         OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
         if (!target.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(player, player.locale().getLanguage(), "%player%", playerName);
+            Messages.UNKNOWN_PLAYER.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
             return;
         }
 
@@ -69,7 +70,7 @@ public class IslandUntrustCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (is == null) {
-                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
+                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
@@ -86,10 +87,10 @@ public class IslandUntrustCommand extends CommandTemplate {
                             return;
                         }
 
-                        Messages.UNTRUST_SUCCESS.send(player, player.locale().getLanguage(), "%player%", target.getName());
+                        Messages.UNTRUST_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", target.getName());
                     });
                 } else {
-                    Messages.UNTRUST_FAILURE.send(player, player.locale().getLanguage());
+                    Messages.UNTRUST_FAILURE.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 }
             });
         });

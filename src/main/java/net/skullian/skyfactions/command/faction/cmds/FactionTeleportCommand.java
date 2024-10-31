@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.faction.cmds;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
@@ -47,7 +48,7 @@ public class FactionTeleportCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             } else if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
+                Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
             IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player.getUniqueId());

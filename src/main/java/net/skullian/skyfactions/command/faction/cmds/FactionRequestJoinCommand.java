@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.faction.cmds;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -51,7 +52,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "check if you were in a Faction", "SQL_FACTION_GET", ex);
                 return;
             } else if (isInFaction) {
-                Messages.ALREADY_IN_FACTION.send(player, player.locale().getLanguage());
+                Messages.ALREADY_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
@@ -60,10 +61,10 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     ErrorHandler.handleError(player, "check the Faction", "SQL_FACTION_GET", throwable);
                     return;
                 } else if (faction == null) {
-                    Messages.FACTION_NOT_FOUND.send(player, player.locale().getLanguage(), "%name%", factionName);
+                    Messages.FACTION_NOT_FOUND.send(player, PlayerHandler.getLocale(player.getUniqueId()), "name", factionName);
                     return;
                 } else if (faction.getAllMembers().contains(Bukkit.getOfflinePlayer(player.getUniqueId()))) {
-                    Messages.JOIN_REQUEST_SAME_FACTION.send(player, player.locale().getLanguage());
+                    Messages.JOIN_REQUEST_SAME_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                     return;
                 } else {
                     SkyFactionsReborn.databaseHandler.hasJoinRequest(player).whenComplete((hasJoinRequest, exc) -> {
@@ -73,7 +74,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                         }
 
                         if (hasJoinRequest) {
-                            Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player, player.locale().getLanguage());
+                            Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                             return;
                         }
                     });
@@ -85,7 +86,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                         return;
                     }
 
-                    Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, player.locale().getLanguage(), "%faction_name%", factionName);
+                    Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", factionName);
                     NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
                 });
             });

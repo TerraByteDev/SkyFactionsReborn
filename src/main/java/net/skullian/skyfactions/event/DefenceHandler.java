@@ -82,7 +82,7 @@ public class DefenceHandler implements Listener {
                     if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_FACTION_DEFENCES.getInt()) {
                         event.setCancelled(true);
 
-                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "%defence_max%", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
+                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "defence_max", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
                         SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
                         return;
                     }
@@ -91,7 +91,7 @@ public class DefenceHandler implements Listener {
                     if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_PLAYER_DEFENCES.getInt()) {
                         event.setCancelled(true);
 
-                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "%defence_max%", DefencesConfig.MAX_PLAYER_DEFENCES.getInt());
+                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "defence_max", DefencesConfig.MAX_PLAYER_DEFENCES.getInt());
                         SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
                         return;
                     }
@@ -107,7 +107,7 @@ public class DefenceHandler implements Listener {
                     Block belowBlock = placed.getWorld().getBlockAt(belowLoc);
                     if (!isAllowedBlock(belowBlock, defence)) {
                         event.setCancelled(true);
-                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("%server_name%", Messages.SERVER_NAME.getString(locale)), locale, player));
+                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("server_name", Messages.SERVER_NAME.getString(locale)), locale, player));
                         return;
                     }
 
@@ -248,8 +248,8 @@ public class DefenceHandler implements Listener {
 
             String deathMessage = data.getDEATH_MESSAGE();
             event.deathMessage(TextUtility.color(deathMessage
-                    .replaceAll("%player_name%", player.getName())
-                    .replaceAll("%defender%", "DEFENDER_NAME"), PlayerHandler.getLocale(player.getUniqueId()), player));
+                    .replaceAll("player_name", player.getName())
+                    .replaceAll("defender", "DEFENDER_NAME"), PlayerHandler.getLocale(player.getUniqueId()), player));
 
             removeDeadEntity(event.getPlayer(), data);
         }

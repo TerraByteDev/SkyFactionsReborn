@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.faction.cmds;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -44,18 +45,18 @@ public class FactionDonateCommand extends CommandTemplate {
                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                return;
            } else if (faction == null) {
-               Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
+               Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                return;
            }
 
            int gems = GemsAPI.getGems(player.getUniqueId());
            if (gems < amount) {
-               Messages.INSUFFICIENT_GEMS_COUNT.send(player, player.locale().getLanguage());
+               Messages.INSUFFICIENT_GEMS_COUNT.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                return;
            }
            GemsAPI.subtractGems(player.getUniqueId(), amount);
            faction.addGems(amount);
-           Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, player.locale().getLanguage(), "%amount%", amount);
+           Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "amount", amount);
         });
     }
 

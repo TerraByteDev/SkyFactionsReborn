@@ -46,21 +46,21 @@ public class NPCManager {
             if (faction == null) return; // probably only when a non-per-island npc is clicked.
 
             if (!faction.isInFaction(player.getUniqueId())) {
-                Messages.NPC_ACCESS_DENY.send(player, player.locale().getLanguage());
+                Messages.NPC_ACCESS_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
-            process(Messages.NPC_FACTION_ISLANDS_ACTIONS.getStringList(player.locale().getLanguage()), player);
+            process(Messages.NPC_FACTION_ISLANDS_ACTIONS.getStringList(PlayerHandler.getLocale(player.getUniqueId())), player);
         } else {
             UUID owner = playerNPCs.get(npc);
             if (owner == null) return;
 
             if (!owner.equals(player.getUniqueId())) {
-                Messages.NPC_ACCESS_DENY.send(player, player.locale().getLanguage());
+                Messages.NPC_ACCESS_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
-            process(Messages.NPC_PLAYER_ISLANDS_ACTIONS.getStringList(player.locale().getLanguage()), player);
+            process(Messages.NPC_PLAYER_ISLANDS_ACTIONS.getStringList(PlayerHandler.getLocale(player.getUniqueId())), player);
         }
     }
 
@@ -71,9 +71,9 @@ public class NPCManager {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         SkyNPC npc = factory.create(
             "player-" + island.getId(),
-            TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("%player_name%", player.getName()), PlayerHandler.getLocale(playerUUID), player),
+            TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", player.getName()), PlayerHandler.getLocale(playerUUID), player),
             getOffsetLocation(island.getCenter(Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString())), Settings.NPC_PLAYER_ISLANDS_OFFSET.getIntegerList()),
-            Settings.NPC_PLAYER_ISLANDS_SKIN.getString().replace("%player_name%", Bukkit.getOfflinePlayer(playerUUID).getName()),
+            Settings.NPC_PLAYER_ISLANDS_SKIN.getString().replace("player_name", Bukkit.getOfflinePlayer(playerUUID).getName()),
             EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()),
             false
         );
@@ -87,9 +87,9 @@ public class NPCManager {
 
         SkyNPC npc = factory.create(
             "faction-" + island.getId(),
-            TextUtility.legacyColor(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("%faction_name%", faction.getName()), faction.getLocale(), null),
+            TextUtility.legacyColor(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("faction_name", faction.getName()), faction.getLocale(), null),
             getOffsetLocation(island.getCenter(Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString())), Settings.NPC_FACTION_ISLANDS_OFFSET.getIntegerList()),
-            Settings.NPC_FACTION_ISLANDS_SKIN.getString().replace("%faction_owner%", faction.getOwner().getName()),
+            Settings.NPC_FACTION_ISLANDS_SKIN.getString().replace("faction_owner", faction.getOwner().getName()),
             EntityType.valueOf(Settings.NPC_FACTION_ISLANDS_ENTITY.getString()),
             true
         );
@@ -208,9 +208,9 @@ public class NPCManager {
                     }
 
                     OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
-                    npc.updateDisplayName(TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("%player_name%", owner.getName()), PlayerHandler.getLocale(uuid), owner));
+                    npc.updateDisplayName(TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", owner.getName()), PlayerHandler.getLocale(uuid), owner));
                     npc.updateEntityType(EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()));
-                    npc.updateSkin(Settings.NPC_PLAYER_ISLANDS_SKIN.toString().replace("%player_name%", owner.getName()));
+                    npc.updateSkin(Settings.NPC_PLAYER_ISLANDS_SKIN.toString().replace("player_name", owner.getName()));
 
                     affected.incrementAndGet();
                 });
@@ -234,9 +234,9 @@ public class NPCManager {
                         return;
                     }
 
-                    npc.updateDisplayName(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("%faction_name%", faction.getName()));
+                    npc.updateDisplayName(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("faction_name", faction.getName()));
                     npc.updateEntityType(EntityType.valueOf(Settings.NPC_FACTION_ISLANDS_ENTITY.getString()));
-                    npc.updateSkin(Settings.NPC_FACTION_ISLANDS_SKIN.getString().replace("%faction_owner%", faction.getOwner().getName()));
+                    npc.updateSkin(Settings.NPC_FACTION_ISLANDS_SKIN.getString().replace("faction_owner", faction.getOwner().getName()));
 
                     affected.incrementAndGet();
                 });

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -75,10 +76,10 @@ public class GemsAPI {
 
         ItemMeta meta = stack.getItemMeta();
         if (Settings.GEMS_CUSTOM_MODEL_DATA.getInt() != -1) meta.setCustomModelData(Settings.GEMS_CUSTOM_MODEL_DATA.getInt());
-        meta.displayName(TextUtility.color(Messages.GEMS_ITEM_NAME.getString(player.locale().getLanguage()), player.locale().getLanguage(), player));
-        if (!Messages.GEMS_ITEM_LORE.getStringList(player.locale().getLanguage()).isEmpty()) meta.lore(
-                Messages.GEMS_ITEM_LORE.getStringList(player.locale().getLanguage()).stream()
-                        .map(text -> TextUtility.color(text, player.locale().getLanguage(), player))
+        meta.displayName(TextUtility.color(Messages.GEMS_ITEM_NAME.getString(PlayerHandler.getLocale(player.getUniqueId())), PlayerHandler.getLocale(player.getUniqueId()), player));
+        if (!Messages.GEMS_ITEM_LORE.getStringList(PlayerHandler.getLocale(player.getUniqueId())).isEmpty()) meta.lore(
+                Messages.GEMS_ITEM_LORE.getStringList(PlayerHandler.getLocale(player.getUniqueId())).stream()
+                        .map(text -> TextUtility.color(text, PlayerHandler.getLocale(player.getUniqueId()), player))
                         .collect(Collectors.toList())
         );
 

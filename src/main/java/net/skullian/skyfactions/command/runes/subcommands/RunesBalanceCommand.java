@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.runes.subcommands;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
@@ -47,11 +48,11 @@ public class RunesBalanceCommand extends CommandTemplate {
                 ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (!hasIsland) {
-                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
+                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
             int runes = RunesAPI.getRunes(player.getUniqueId());
-            Messages.RUNES_BALANCE_MESSAGE.send(player, player.locale().getLanguage(), "%count%", runes);
+            Messages.RUNES_BALANCE_MESSAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "count", runes);
         });
     }
 

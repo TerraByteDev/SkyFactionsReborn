@@ -26,9 +26,9 @@ replay_pid*
 .idea
 dependency-reduced-pom.xml
 SkyFactionsReborn.iml
-target
 build
 *.java~
 .gradle/
 bin/
 .vscode/
+Server/

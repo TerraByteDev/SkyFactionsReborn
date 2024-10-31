@@ -6,6 +6,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -48,11 +49,11 @@ public class IslandDeleteCommand extends CommandTemplate {
         if (CommandsUtility.manageCooldown(player)) return;
         SkyFactionsReborn.databaseHandler.hasIsland(player.getUniqueId()).thenAccept(has -> {
             if (!has) {
-                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
+                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             } else {
 
                 if (confirm == null) {
-                    Messages.DELETION_CONFIRM.send(player, player.locale().getLanguage());
+                    Messages.DELETION_CONFIRM.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                     IslandAPI.awaitingDeletion.add(player.getUniqueId());
                 } else if (confirm != null) {
                     if (confirm.equalsIgnoreCase("confirm")) {
@@ -61,7 +62,7 @@ public class IslandDeleteCommand extends CommandTemplate {
                             World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
                             // todo migrate to gui command conf
                             if (hubWorld != null) {
-                                Messages.DELETION_PROCESSING.send(player, player.locale().getLanguage());
+                                Messages.DELETION_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
 
                                 SkyFactionsReborn.worldBorderApi.resetWorldBorderToGlobal(player); // reset the world border
                                 List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
@@ -71,13 +72,13 @@ public class IslandDeleteCommand extends CommandTemplate {
                                 IslandAPI.awaitingDeletion.remove(player.getUniqueId());
                                 IslandAPI.removePlayerIsland(player);
                             } else {
-                                Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "delete your island", "%debug%", "WORLD_NOT_EXIST");
+                                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "delete your island", "debug", "WORLD_NOT_EXIST");
                             }
                         } else {
-                            Messages.DELETION_BLOCK.send(player, player.locale().getLanguage());
+                            Messages.DELETION_BLOCK.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                         }
                     } else {
-                        Messages.INCORRECT_USAGE.send(player, player.locale().getLanguage(), "%usage%", getSyntax());
+                        Messages.INCORRECT_USAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "usage", getSyntax());
                     }
                 }
             }

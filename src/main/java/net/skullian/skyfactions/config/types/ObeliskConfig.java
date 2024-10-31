@@ -2,6 +2,7 @@ package net.skullian.skyfactions.config.types;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -43,9 +44,9 @@ public enum ObeliskConfig {
     }
 
     public static ItemBuilder getLoadingItem(Player player) {
-        ItemBuilder builder = new ItemBuilder(Material.getMaterial(Messages.LOADING_ITEM_MATERIAL.getString(player.locale().getLanguage()))).setDisplayName(TextUtility.legacyColor(Messages.LOADING_ITEM_TEXT.getString(player.locale().getLanguage()), player.locale().getLanguage(), player));
-        for (String str : Messages.LOADING_ITEM_LORE.getStringList(player.locale().getLanguage())) {
-            builder.addLoreLines(TextUtility.legacyColor(str, player.locale().getLanguage(), player));
+        ItemBuilder builder = new ItemBuilder(Material.getMaterial(Messages.LOADING_ITEM_MATERIAL.getString(PlayerHandler.getLocale(player.getUniqueId())))).setDisplayName(TextUtility.legacyColor(Messages.LOADING_ITEM_TEXT.getString(PlayerHandler.getLocale(player.getUniqueId())), PlayerHandler.getLocale(player.getUniqueId()), player));
+        for (String str : Messages.LOADING_ITEM_LORE.getStringList(PlayerHandler.getLocale(player.getUniqueId()))) {
+            builder.addLoreLines(TextUtility.legacyColor(str, PlayerHandler.getLocale(player.getUniqueId()), player));
         }
 
         return builder;

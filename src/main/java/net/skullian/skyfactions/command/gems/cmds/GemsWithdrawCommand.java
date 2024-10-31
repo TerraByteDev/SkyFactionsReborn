@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.gems.cmds;
 import java.util.Arrays;
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -63,15 +64,15 @@ public class GemsWithdrawCommand extends CommandTemplate {
 
                     GemsAPI.subtractGems(player.getUniqueId(), (parsedAmount - remainingItems));
 
-                    Messages.GEMS_WITHDRAW_SUCCESS.send(player, player.locale().getLanguage(), "%amount%", parsedAmount);
+                    Messages.GEMS_WITHDRAW_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "amount", parsedAmount);
                     if (remainingItems > 0) {
-                        Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player, player.locale().getLanguage());
+                        Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                     }
                 } catch (NumberFormatException exception) {
-                    Messages.INCORRECT_USAGE.send(player, player.locale().getLanguage(), "%usage%", getSyntax());
+                    Messages.INCORRECT_USAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "usage", getSyntax());
                 }
             } else {
-                Messages.NO_ISLAND.send(player, player.locale().getLanguage());
+                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             }
         });
 

@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.faction.cmds;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -64,19 +65,19 @@ public class FactionInviteCommand extends CommandTemplate {
             }
 
             if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
+                Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             } else if (playerName.equalsIgnoreCase(player.getName())) {
-                Messages.FACTION_INVITE_SELF_DENY.send(player, player.locale().getLanguage());
+                Messages.FACTION_INVITE_SELF_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
                 OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
                 if (!target.hasPlayedBefore()) {
-                    Messages.UNKNOWN_PLAYER.send(player, player.locale().getLanguage(), "%player%", playerName);
+                    Messages.UNKNOWN_PLAYER.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
 
                 } else if (faction.getAllMembers().contains(target)) {
-                    Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, player.locale().getLanguage());
+                    Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
 
                 } else {
                     faction.getOutgoingInvites().whenComplete((invites, throwable) -> {
@@ -87,14 +88,14 @@ public class FactionInviteCommand extends CommandTemplate {
 
                         for (InviteData invite : invites) {
                             if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
-                                Messages.FACTION_INVITE_DUPLICATE.send(player, player.locale().getLanguage());
+                                Messages.FACTION_INVITE_DUPLICATE.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                                 return;
                             }
                         }
                     });
 
                     faction.createInvite(target, player);
-                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, player.locale().getLanguage(), "%player_name%", target.getName());
+                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player_name", target.getName());
                 }
             });
     }

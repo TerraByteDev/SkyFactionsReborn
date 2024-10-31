@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.raid.cmds;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -46,7 +47,7 @@ public class RaidResetCooldown extends CommandTemplate {
                 return;
             }
 
-            player.sendMessage(TextUtility.color("&aSuccessfully reset your raid cooldown.", player.locale().getLanguage(), player));
+            player.sendMessage(TextUtility.color("&aSuccessfully reset your raid cooldown.", PlayerHandler.getLocale(player.getUniqueId()), player));
         });
     }
 

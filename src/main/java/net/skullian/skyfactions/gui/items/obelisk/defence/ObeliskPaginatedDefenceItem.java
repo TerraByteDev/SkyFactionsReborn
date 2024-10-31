@@ -46,16 +46,16 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
         String repairCost = DefencesFactory.solveFormula(struct.getREPAIR_COST(), 1);   
         
         return List.of(
-            "%max_level%", maxLevel,
-            "%range%", range,
-            "%ammo%", ammo,
-            "%target_max%", targetMax,
-            "%damage%", damage,
-            "%cooldown%", cooldown,
-            "%healing%", healing,
-            "%distance%", distance,
-            "%repair_cost%", repairCost,
-            "%cost%", String.valueOf(struct.getBUY_COST())
+            "max_level", maxLevel,
+            "range", range,
+            "ammo", ammo,
+            "target_max", targetMax,
+            "damage", damage,
+            "cooldown", cooldown,
+            "healing", healing,
+            "distance", distance,
+            "repair_cost", repairCost,
+            "cost", String.valueOf(struct.getBUY_COST())
         ).toArray();
     }
 

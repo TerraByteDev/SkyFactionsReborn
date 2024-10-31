@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.faction_leave;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -56,7 +57,7 @@ public class LeaveConfirmationItem extends SkyItem {
                                     Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
                                     IslandAPI.teleportPlayerToLocation(player, location);
                                 } else {
-                                    Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
+                                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "leave the faction", "debug", "WORLD_NOT_EXIST");
                                 }
                             }
                         });
@@ -64,13 +65,13 @@ public class LeaveConfirmationItem extends SkyItem {
                     }
 
                     faction.leaveFaction(Bukkit.getOfflinePlayer(player.getUniqueId()));
-                    Messages.FACTION_LEAVE_SUCCESS.send(player, player.locale().getLanguage(), "%faction_name%", faction.getName());
+                    Messages.FACTION_LEAVE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", faction.getName());
                 } else {
-                    Messages.ERROR.send(player, player.locale().getLanguage(), "%operation%", "leave the faction", "%debug%", "WORLD_NOT_EXIST");
+                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "leave the faction", "debug", "WORLD_NOT_EXIST");
 
                 }
             } else {
-                Messages.NOT_IN_FACTION.send(player, player.locale().getLanguage());
+                Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             }
         });
 

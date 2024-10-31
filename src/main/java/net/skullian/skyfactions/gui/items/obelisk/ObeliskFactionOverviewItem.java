@@ -22,11 +22,11 @@ public class ObeliskFactionOverviewItem extends AsyncSkyItem {
         Faction faction = FactionAPI.getFaction(getPLAYER().getUniqueId()).join();
 
         return List.of(
-            "%faction_name%", faction.getName(),
-            "%level%", faction.getLevel(),
-            "%member_count%", faction.getTotalMemberCount(),
-            "%rune_count%", faction.getRunes(),
-            "%gem_count%", faction.getRunes()
+            "faction_name", faction.getName(),
+            "level", faction.getLevel(),
+            "member_count", faction.getTotalMemberCount(),
+            "rune_count", faction.getRunes(),
+            "gem_count", faction.getRunes()
         ).toArray();
     }
 

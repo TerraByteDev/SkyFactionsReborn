@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.faction.cmds;
 
 import java.util.List;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotation.specifier.Greedy;
@@ -57,12 +58,12 @@ public class FactionBroadcastCommand extends CommandTemplate {
             if (faction != null) {
                 if (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player)) {
                     if (FactionAPI.hasValidName(player, message)) {
-                        faction.createAuditLog(player.getUniqueId(), AuditLogType.BROADCAST_CREATE, "%player_name%", player.getName());
+                        faction.createAuditLog(player.getUniqueId(), AuditLogType.BROADCAST_CREATE, "player_name", player.getName());
                         faction.createBroadcast(player, message);
                     }
 
                 } else {
-                    Messages.FACTION_ACTION_DENY.send(player, player.locale().getLanguage());
+                    Messages.FACTION_ACTION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 }
             }
         });

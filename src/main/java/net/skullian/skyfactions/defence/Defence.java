@@ -122,8 +122,8 @@ public abstract class Defence {
     public String getRandomActionMessage() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         List<String> messages = this.struct.getEFFECT_MESSAGES();
-        return messages.get(random.nextInt(messages.size())).replaceAll("%defence_name%", this.struct.getNAME())
-                .replaceAll("%damage%", String.valueOf(getDamage()));
+        return messages.get(random.nextInt(messages.size())).replaceAll("defence_name", this.struct.getNAME())
+                .replaceAll("damage", String.valueOf(getDamage()));
     }
 
     public String getRandomDeathMessage() {
@@ -300,7 +300,7 @@ public abstract class Defence {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
 
         TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName(), defence, data)
-                .setText(TextUtility.color(text.replace("%defence_name%", defence.getNAME()), Messages.getDefaulLocale(), null))
+                .setText(TextUtility.color(text.replace("defence_name", defence.getNAME()), Messages.getDefaulLocale(), null))
                 .setBillboard(Display.Billboard.VERTICAL)
                 .setSeeThroughBlocks(false)
                 .setShadow(true)
