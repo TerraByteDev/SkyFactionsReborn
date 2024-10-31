@@ -19,8 +19,8 @@ public class FactionPlayerJoinRequestRevoke extends SkyItem {
 
     private JoinRequestData DATA;
 
-    public FactionPlayerJoinRequestRevoke(ItemData data, ItemStack stack, JoinRequestData joinRequestData) {
-        super(data, stack, null, null);
+    public FactionPlayerJoinRequestRevoke(ItemData data, ItemStack stack, JoinRequestData joinRequestData, Player player) {
+        super(data, stack, player, null);
         
         this.DATA = joinRequestData;
     }

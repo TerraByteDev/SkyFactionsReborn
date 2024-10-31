@@ -21,8 +21,8 @@ public class ObeliskMemberManagementItem extends SkyItem {
 
     private Faction FACTION;
 
-    public ObeliskMemberManagementItem(ItemData data, ItemStack stack, Faction faction) {
-        super(data, stack, null, null);
+    public ObeliskMemberManagementItem(ItemData data, ItemStack stack, Faction faction, Player player) {
+        super(data, stack, player, null);
         this.FACTION = faction;
     }
 

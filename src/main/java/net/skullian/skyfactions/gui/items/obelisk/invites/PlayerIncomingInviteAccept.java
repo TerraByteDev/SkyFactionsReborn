@@ -22,8 +22,8 @@ public class PlayerIncomingInviteAccept extends SkyItem {
 
     private InviteData DATA;
 
-    public PlayerIncomingInviteAccept(ItemData data, ItemStack stack, InviteData inviteData) {
-        super(data, stack, null, null);
+    public PlayerIncomingInviteAccept(ItemData data, ItemStack stack, InviteData inviteData, Player player) {
+        super(data, stack, player, null);
         
         this.DATA = inviteData;
     }

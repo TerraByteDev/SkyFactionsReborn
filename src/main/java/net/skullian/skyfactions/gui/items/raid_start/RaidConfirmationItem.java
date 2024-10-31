@@ -12,8 +12,8 @@ import net.skullian.skyfactions.gui.items.impl.SkyItem;
 
 public class RaidConfirmationItem extends SkyItem {
 
-    public RaidConfirmationItem(ItemData data, ItemStack stack) {
-        super(data, stack, null, null);
+    public RaidConfirmationItem(ItemData data, ItemStack stack, Player player) {
+        super(data, stack, player, null);
     }
 
     @Override

@@ -43,10 +43,10 @@ public class SFInfoCommand extends CommandTemplate {
 
         Messages.COMMAND_HEAD.send(sender, locale);
         sender.sendMessage(TextUtility.color(
-                "&3Version: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getVersion() + "{/#00B0CA}&r\n" +
-                        "&3Authors: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "") + "{/#00B0CA}&r\n" +
-                        "&3Discord: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getWebsite() + "{/#00B0CA}&r\n" +
-                        "&3Contributors: &r{#15FB08}" + SkyFactionsReborn.getInstance().getDescription().getContributors().toString().replace("[", "").replace("]", "") + "{/#00B0CA}&r",
+                "<dark_aqua>Version: &r<gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getVersion() + "</gradient><reset>\n" +
+                        "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "") + "</gradient><reset>\n" +
+                        "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getWebsite() + "</gradient><reset>\n" +
+                        "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getContributors().toString().replace("[", "").replace("]", "") + "</gradient><reset>",
                         locale,
                         sender instanceof Player ? ((Player) sender) : null
         ));

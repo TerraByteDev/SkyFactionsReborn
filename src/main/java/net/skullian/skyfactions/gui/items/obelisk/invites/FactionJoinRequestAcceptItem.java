@@ -19,8 +19,8 @@ public class FactionJoinRequestAcceptItem extends SkyItem {
 
     private InviteData DATA;
 
-    public FactionJoinRequestAcceptItem(ItemData data, ItemStack stack, InviteData inviteData) {
-        super(data, stack, null, null);
+    public FactionJoinRequestAcceptItem(ItemData data, ItemStack stack, InviteData inviteData, Player player) {
+        super(data, stack, player, null);
 
         this.DATA = inviteData;
     }

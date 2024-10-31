@@ -22,8 +22,8 @@ import net.skullian.skyfactions.util.ErrorHandler;
 
 public class LeaveConfirmationItem extends SkyItem {
 
-    public LeaveConfirmationItem(ItemData data, ItemStack stack) {
-        super(data, stack, null, null);
+    public LeaveConfirmationItem(ItemData data, ItemStack stack, Player player) {
+        super(data, stack, player, null);
     }
 
     @Override

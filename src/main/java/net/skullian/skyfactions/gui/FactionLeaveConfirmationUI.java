@@ -48,17 +48,14 @@ public class FactionLeaveConfirmationUI {
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 
-                    case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                    case "PROMPT", "BORDER":
+                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
                     case "CONFIRM":
-                        builder.addIngredient(itemData.getCHARACTER(), new LeaveConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new LeaveConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
                     case "CANCEL":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
-                        break;
-                    case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
                 }
             }

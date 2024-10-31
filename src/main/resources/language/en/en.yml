@@ -38,7 +38,7 @@ Messages:
 
     # Possible placeholders: <command_syntax> - Syntax of Command (e.g. "/<command> help") // <command_name> - Command Name (e.g. "help") // <command_description> - Description of Command.
     # displayed when user uses /<command> help (or just does /<command>, which routes to /<command> help). It outlines all messages.
-    COMMAND_INFO: "{#15FB08}<command_syntax>{/#00B0CA}<reset><gold> - <dark_aqua><command_description>"
+    COMMAND_INFO: "<gradient:#15FB08:#00B0CA><command_syntax></gradient><reset><gold> - <dark_aqua><command_description>"
 
     # Sent when a player runs a command and there are no commands to show (e.g. they don't have perms to see them).
     NO_COMMANDS_FOUND: '<red><bold>No commands found!'

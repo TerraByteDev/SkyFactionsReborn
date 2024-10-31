@@ -60,8 +60,8 @@ public class JoinRequestsUI {
 
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
-                    case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                    case "PROMPT", "BORDER":
+                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
                     case "MODEL":
@@ -69,11 +69,7 @@ public class JoinRequestsUI {
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
-                        break;
-
-                    case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player));
                         break;
                 }
             }
@@ -118,7 +114,7 @@ public class JoinRequestsUI {
 
                 for (InviteData inviteData : data) {
                     itemData.setNAME(itemData.getNAME().replace("player_name", inviteData.getPlayer().getName()));
-                    items.add(new FactionJoinRequestPaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getUniqueId()), inviteData.getPlayer(), inviteData));
+                    items.add(new FactionJoinRequestPaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getPlayer().getUniqueId()), player, inviteData));
                 }
             });
         });

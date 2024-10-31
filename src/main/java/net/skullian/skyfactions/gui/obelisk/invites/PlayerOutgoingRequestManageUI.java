@@ -53,27 +53,27 @@ public class PlayerOutgoingRequestManageUI {
             switch (itemData.getITEM_ID()) {
 
                 case "PROMPT":
-                    builder.addIngredient(itemData.getCHARACTER(), new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest.getFactionName()));
+                    builder.addIngredient(itemData.getCHARACTER(), new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest.getFactionName(), player));
                     break;
 
                 case "ACCEPT":
                     if (joinRequest.isAccepted()) {
-                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestConfirmItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest));
+                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestConfirmItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player));
                     }
                     break;
 
                 case "DENY":
                     if (joinRequest.isAccepted()) {
-                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestDenyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest));
+                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestDenyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player));
                     }
                     break;
 
                 case "REVOKE":
-                    builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestRevoke(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest));
+                    builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestRevoke(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player));
                     break;
 
                 case "BORDER":
-                    builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                    builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                     break;
             }
         }

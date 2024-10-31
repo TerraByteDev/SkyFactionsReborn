@@ -23,8 +23,8 @@ public class FactionPlayerJoinRequestDenyItem extends SkyItem {
 
     private JoinRequestData DATA;
 
-    public FactionPlayerJoinRequestDenyItem(ItemData data, ItemStack stack, JoinRequestData joinRequestData) {
-        super(data, stack, null, null);
+    public FactionPlayerJoinRequestDenyItem(ItemData data, ItemStack stack, JoinRequestData joinRequestData, Player player) {
+        super(data, stack, player, null);
         
         this.DATA = joinRequestData;
     }

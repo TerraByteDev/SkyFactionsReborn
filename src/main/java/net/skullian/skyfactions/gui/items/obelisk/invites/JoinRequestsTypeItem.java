@@ -19,8 +19,8 @@ public class JoinRequestsTypeItem extends SkyItem {
 
     private String TYPE;
 
-    public JoinRequestsTypeItem(ItemData data, ItemStack stack, String type) {
-        super(data, stack, null, null);
+    public JoinRequestsTypeItem(ItemData data, ItemStack stack, String type, Player player) {
+        super(data, stack, player, null);
         
         this.TYPE = type;
     }

@@ -20,8 +20,8 @@ public class RuneSubmitItem extends SkyItem {
     private RunesSubmitUI UI;
     private String TYPE;
 
-    public RuneSubmitItem(ItemData data, ItemStack stack, String type, RunesSubmitUI ui) {
-        super(data, stack, null, null);
+    public RuneSubmitItem(ItemData data, ItemStack stack, String type, RunesSubmitUI ui, Player player) {
+        super(data, stack, player, null);
         this.UI = ui;
         this.TYPE = type;
     }

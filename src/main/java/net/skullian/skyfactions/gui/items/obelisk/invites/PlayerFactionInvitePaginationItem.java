@@ -18,8 +18,8 @@ public class PlayerFactionInvitePaginationItem extends SkyItem {
 
     private InviteData DATA;
 
-    public PlayerFactionInvitePaginationItem(ItemData data, ItemStack stack, OfflinePlayer player, InviteData inviteData) {
-        super(data, stack, null, List.of(inviteData).toArray());
+    public PlayerFactionInvitePaginationItem(ItemData data, ItemStack stack, Player player, InviteData inviteData) {
+        super(data, stack, player, List.of(inviteData).toArray());
 
         this.DATA = inviteData;
     }

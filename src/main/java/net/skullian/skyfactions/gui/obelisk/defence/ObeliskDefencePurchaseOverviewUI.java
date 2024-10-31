@@ -57,20 +57,16 @@ public class ObeliskDefencePurchaseOverviewUI {
 
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
-                    case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                    case "PROMPT", "BORDER":
+                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), obeliskType));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), obeliskType, player));
                         break;
 
                     case "MODEL":
                         builder.setContent(getItems(player, itemData, obeliskType, faction));
-                        break;
-
-                    case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
                         break;
                 }
             }
@@ -103,7 +99,7 @@ public class ObeliskDefencePurchaseOverviewUI {
             data.setMATERIAL(struct.getITEM_MATERIAL());
             data.setLORE(struct.getITEM_LORE());
 
-            items.add(new ObeliskPaginatedDefenceItem(data, GUIAPI.createItem(data, player.getUniqueId()), struct, true, obeliskType, faction));
+            items.add(new ObeliskPaginatedDefenceItem(data, GUIAPI.createItem(data, player.getUniqueId()), struct, true, obeliskType, faction, player));
         }
         return items;
     }

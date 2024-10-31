@@ -12,8 +12,8 @@ import net.skullian.skyfactions.gui.obelisk.invites.OutgoingInvitesUI;
 
 public class OutgoingInvitesTypeItem extends SkyItem {
 
-    public OutgoingInvitesTypeItem(ItemData data, ItemStack stack) {
-        super(data, stack, null, null);
+    public OutgoingInvitesTypeItem(ItemData data, ItemStack stack, Player player) {
+        super(data, stack, player, null);
     }
 
     @Override

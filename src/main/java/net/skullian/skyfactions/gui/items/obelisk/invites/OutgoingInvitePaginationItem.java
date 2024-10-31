@@ -21,8 +21,8 @@ public class OutgoingInvitePaginationItem extends SkyItem {
 
     private InviteData DATA;
 
-    public OutgoingInvitePaginationItem(ItemData data, ItemStack stack, InviteData inviteData) {
-        super(data, stack, null, List.of(inviteData).toArray());
+    public OutgoingInvitePaginationItem(ItemData data, ItemStack stack, InviteData inviteData, Player player) {
+        super(data, stack, player, List.of(inviteData).toArray());
         
         this.DATA = inviteData;
     }

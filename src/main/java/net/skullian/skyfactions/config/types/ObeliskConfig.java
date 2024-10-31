@@ -17,7 +17,7 @@ public enum ObeliskConfig {
 
     OBELISK_MATERIAL("Block.MATERIAL"),
     OBELISK_SPAWN_OFFSET("Block.SPAWN_OFFSET"),
-    OBELISK_CUSTOM_MODEL_DATA("Block.CUSTOM_MODEL_DATA");
+    OBELISK_CUSTOM_MODEL_DATA("Obelisk.LOADING.CUSTOM_MODEL_DATA");
 
     @Setter
     private static YamlDocument config;
@@ -44,6 +44,9 @@ public enum ObeliskConfig {
     }
 
     public static ItemBuilder getLoadingItem(Player player) {
+        System.out.println(Messages.LOADING_ITEM_MATERIAL.getPath());
+        System.out.println(Messages.LOADING_ITEM_MATERIAL.getString(PlayerHandler.getLocale(player.getUniqueId())));
+        System.out.println(Messages.LOADING_ITEM_TEXT.getString(PlayerHandler.getLocale(player.getUniqueId())));
         ItemBuilder builder = new ItemBuilder(Material.getMaterial(Messages.LOADING_ITEM_MATERIAL.getString(PlayerHandler.getLocale(player.getUniqueId())))).setDisplayName(TextUtility.legacyColor(Messages.LOADING_ITEM_TEXT.getString(PlayerHandler.getLocale(player.getUniqueId())), PlayerHandler.getLocale(player.getUniqueId()), player));
         for (String str : Messages.LOADING_ITEM_LORE.getStringList(PlayerHandler.getLocale(player.getUniqueId()))) {
             builder.addLoreLines(TextUtility.legacyColor(str, PlayerHandler.getLocale(player.getUniqueId()), player));

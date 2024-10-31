@@ -25,10 +25,6 @@ dependencies:
       load: BEFORE
       required: true
 
-    WorldBorderAPI:
-      load: BEFORE
-      required: true
-
     packetevents:
       load: BEFORE
       required: true

@@ -19,8 +19,8 @@ public class FactionJoinRequestPaginationItem extends SkyItem {
 
     private InviteData DATA;
 
-    public FactionJoinRequestPaginationItem(ItemData data, ItemStack stack, OfflinePlayer player, InviteData inviteData) {
-        super(data, stack, null, List.of(inviteData).toArray());
+    public FactionJoinRequestPaginationItem(ItemData data, ItemStack stack, Player player, InviteData inviteData) {
+        super(data, stack, player, List.of(inviteData).toArray());
 
         this.DATA = inviteData;
     }

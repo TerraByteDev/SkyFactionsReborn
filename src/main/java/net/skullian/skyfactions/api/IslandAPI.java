@@ -100,6 +100,7 @@ public class IslandAPI {
             if (ex != null) {
                 ErrorHandler.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
                 removePlayerIsland(player);
+                SkyFactionsReborn.databaseHandler.removeIsland(player);
                 return;
             }
 

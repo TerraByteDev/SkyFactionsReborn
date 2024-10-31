@@ -19,8 +19,8 @@ public class MemberBanItem extends SkyItem {
 
     private OfflinePlayer SUBJECT;
 
-    public MemberBanItem(ItemData data, ItemStack stack, OfflinePlayer player) {
-        super(data, stack, null, null);
+    public MemberBanItem(ItemData data, ItemStack stack, OfflinePlayer player, Player viewer) {
+        super(data, stack, viewer, null);
 
         this.SUBJECT = player;
     }

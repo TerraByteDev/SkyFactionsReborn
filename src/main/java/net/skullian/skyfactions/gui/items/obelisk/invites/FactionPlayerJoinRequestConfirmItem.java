@@ -21,8 +21,8 @@ import net.skullian.skyfactions.util.ErrorHandler;
 public class FactionPlayerJoinRequestConfirmItem extends SkyItem {
     private JoinRequestData DATA;
 
-    public FactionPlayerJoinRequestConfirmItem(ItemData data, ItemStack stack, JoinRequestData joinRequestData) {
-        super(data, stack, null, null);
+    public FactionPlayerJoinRequestConfirmItem(ItemData data, ItemStack stack, JoinRequestData joinRequestData, Player player) {
+        super(data, stack, player, null);
         
         this.DATA = joinRequestData;
     }

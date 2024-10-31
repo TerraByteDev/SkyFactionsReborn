@@ -5,7 +5,7 @@ api-version: 1.21
 authors: [ Skullians, nouish ]
 website: https://github.com/TerraByteDev/SkyFactionsReborn
 
-depend: [ "FastAsyncWorldEdit", "WorldGuard", "WorldBorderAPI", "packetevents" ]
+depend: [ "FastAsyncWorldEdit", "WorldGuard", "packetevents" ]
 softdepend:
   - JukeBox
   - PlaceholderAPI

@@ -48,23 +48,23 @@ public class PlayerManageIncomingInviteUI {
 
             switch (itemData.getITEM_ID()) {
                 case "PROMPT":
-                    builder.addIngredient(itemData.getCHARACTER(), new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData.getFactionName()));
+                    builder.addIngredient(itemData.getCHARACTER(), new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData.getFactionName(), player));
                     break;
 
                 case "ACCEPT":
-                    builder.addIngredient(itemData.getCHARACTER(), new PlayerIncomingInviteAccept(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData));
+                    builder.addIngredient(itemData.getCHARACTER(), new PlayerIncomingInviteAccept(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player));
                     break;
 
                 case "DENY":
-                    builder.addIngredient(itemData.getCHARACTER(), new PlayerIncomingInviteDeny(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData));
+                    builder.addIngredient(itemData.getCHARACTER(), new PlayerIncomingInviteDeny(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player));
                     break;
 
                 case "BACK":
-                    builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player"));
+                    builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", player));
                     break;
 
                 case "BORDER":
-                    builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                    builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                     break;
             }
         }

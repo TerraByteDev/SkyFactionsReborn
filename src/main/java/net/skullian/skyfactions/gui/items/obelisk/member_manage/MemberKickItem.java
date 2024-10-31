@@ -19,8 +19,8 @@ public class MemberKickItem extends SkyItem {
 
     private OfflinePlayer SUBJECT;
 
-    public MemberKickItem(ItemData data, ItemStack stack, OfflinePlayer player) {
-        super(data, stack, null, null);
+    public MemberKickItem(ItemData data, ItemStack stack, OfflinePlayer player, Player viewer) {
+        super(data, stack, viewer, null);
         
         this.SUBJECT = player;
     }

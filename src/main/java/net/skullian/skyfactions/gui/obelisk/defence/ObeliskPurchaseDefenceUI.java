@@ -50,7 +50,7 @@ public class ObeliskPurchaseDefenceUI {
                 switch (itemData.getITEM_ID()) {
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), obeliskType));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), obeliskType, player));
                         break;
 
                     case "CONFIRM":
@@ -58,11 +58,11 @@ public class ObeliskPurchaseDefenceUI {
                         break;
 
                     case "CANCEL":
-                        builder.addIngredient(itemData.getCHARACTER(), new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
                     case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
                     case "DEFENCE":
@@ -71,7 +71,7 @@ public class ObeliskPurchaseDefenceUI {
                         itemData.setMATERIAL(struct.getITEM_MATERIAL());
                         itemData.setLORE(struct.getITEM_LORE());
 
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskPaginatedDefenceItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), struct, false, obeliskType, faction));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskPaginatedDefenceItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), struct, false, obeliskType, faction, player));
                         break;
                 }
             }

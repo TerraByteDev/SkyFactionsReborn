@@ -22,8 +22,8 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
     private String TYPE;
     private Faction FACTION;
 
-    public ObeliskPaginatedDefenceItem(ItemData data, ItemStack stack, DefenceStruct struct, boolean shouldRedirect, String type, Faction faction) {
-        super(data, stack, null, List.of(struct).toArray());
+    public ObeliskPaginatedDefenceItem(ItemData data, ItemStack stack, DefenceStruct struct, boolean shouldRedirect, String type, Faction faction, Player player) {
+        super(data, stack, player, List.of(struct).toArray());
 
         this.STRUCT = struct;
         this.SHOULD_REDIRECT = shouldRedirect;

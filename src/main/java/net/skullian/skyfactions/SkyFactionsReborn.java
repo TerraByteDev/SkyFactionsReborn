@@ -2,6 +2,8 @@ package net.skullian.skyfactions;
 
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
+import com.github.yannicklamprecht.worldborder.impl.Border;
+import com.github.yannicklamprecht.worldborder.plugin.PersistenceWrapper;
 import com.jeff_media.customblockdata.CustomBlockData;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.tofaa.entitylib.APIConfig;
@@ -36,6 +38,7 @@ import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.xenondevs.invui.InvUI;
 
@@ -124,10 +127,10 @@ public final class SkyFactionsReborn extends JavaPlugin {
         discordHandler = new DiscordHandler();
         discordHandler.initialiseBot();
 
+        SLogger.info("Initialising WorldBorderAPI.");
         RegisteredServiceProvider<WorldBorderApi> worldBorderApiRegisteredServiceProvider = getServer().getServicesManager().getRegistration(WorldBorderApi.class);
         if (worldBorderApiRegisteredServiceProvider == null) {
-            DependencyHandler.alert("WorldBorderAPI");
-            SLogger.fatal("Disabling plugin.");
+            new RuntimeException("Failed to fetch WorldBorderAPI Service Provider. Is WorldBorderAPI installed?").printStackTrace();
             getServer().getPluginManager().disablePlugin(this);
             return;
         }

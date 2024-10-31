@@ -13,13 +13,13 @@ import net.skullian.skyfactions.gui.items.impl.SkyItem;
 
 public class CreationConfirmationItem extends SkyItem {
 
-    public CreationConfirmationItem(ItemData data, ItemStack stack) {
-        super(data, stack, null, null);
+    public CreationConfirmationItem(ItemData data, ItemStack stack, Player player) {
+        super(data, stack, player, null);
     }
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        IslandAPI.createIsland((Player) event.getWhoClicked());
+        IslandAPI.createIsland(player);
     }
 
 }

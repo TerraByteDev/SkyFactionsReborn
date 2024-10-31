@@ -57,8 +57,8 @@ public class PlayerIncomingInvites {
 
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
-                    case "PROMPT":
-                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                    case "PROMPT", "BORDER":
+                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
                     case "MODEL":
@@ -66,11 +66,7 @@ public class PlayerIncomingInvites {
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player"));
-                        break;
-
-                    case "BORDER":
-                        builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", player));
                         break;
                 }
             }
@@ -105,7 +101,7 @@ public class PlayerIncomingInvites {
 
             for (InviteData inviteData : data) {
                 itemData.setNAME(itemData.getNAME().replace("faction_name", inviteData.getFactionName()));
-                items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getUniqueId()), inviteData.getPlayer(), inviteData));
+                items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getUniqueId()), player, inviteData));
             }
         });
         return items;

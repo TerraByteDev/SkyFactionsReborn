@@ -59,26 +59,22 @@ public class ManageMemberUI {
                 for (ItemData itemData : data) {
                     switch (itemData.getITEM_ID()) {
 
-                        case "BORDER":
-                            builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
-                            break;
-
-                        case "PLAYER_HEAD":
-                            builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId())));
+                        case "BORDER", "PLAYER_HEAD":
+                            builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), actor));
                             break;
 
                         case "KICK":
-                            builder.addIngredient(itemData.getCHARACTER(), new MemberKickItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
+                            builder.addIngredient(itemData.getCHARACTER(), new MemberKickItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, actor));
                             break;
 
                         case "BAN":
                             if (faction.isOwner(actor) || faction.isAdmin(actor)) {
-                                builder.addIngredient(itemData.getCHARACTER(), new MemberBanItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
+                                builder.addIngredient(itemData.getCHARACTER(), new MemberBanItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, actor));
                             }
                             break;
 
                         case "BACK":
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction"));
+                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", actor));
                             break;
                     }
                 }
