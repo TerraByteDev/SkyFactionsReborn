@@ -87,12 +87,6 @@ public class DefencesFactory {
         error.printStackTrace();
         SkyFactionsReborn.getInstance().getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
     }
-
-    public static void onReload() {
-        defences.clear();
-        defenceTypes.clear();
-        defenceTypes.put("ARROW", "net.skullian.skyfactions.defence.defences.ArrowDefence");
-    }
     
     public static void register(File directory, String locale) {
         try {

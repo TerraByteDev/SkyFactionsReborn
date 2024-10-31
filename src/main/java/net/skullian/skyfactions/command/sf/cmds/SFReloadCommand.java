@@ -46,7 +46,6 @@ public class SFReloadCommand extends CommandTemplate {
         Messages.RELOADING.send(sender, locale);
 
         SkyFactionsReborn.configHandler.reloadFiles();
-        DefencesFactory.onReload();
 
         Messages.RELOADED.send(sender, locale);
         SLogger.warn("SkyFactionsReborn reloaded.");

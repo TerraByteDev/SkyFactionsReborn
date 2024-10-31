@@ -2,7 +2,7 @@
 CONFIG_VERSION: 1
 
 # Title of the GUI (Inventory)
-TITLE: "&eChoose Invite Type"
+TITLE: "<yellow>Choose Invite Type"
 OPEN_SOUND: "ui.button.click"
 OPEN_PITCH: 1
 
@@ -23,21 +23,21 @@ ITEMS:
   PROMPT:
     char: "p" # This is the character to use in the LAYOUT!
     material: "NETHER_STAR"
-    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
-    text: "&9Invite Type"
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    text: "<blue>Invite Type"
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
-      - "&eView either your incoming"
-      - "&ejoin requests, or outgoing"
-      - "&einvites."
+      - "<yellow>View either your incoming"
+      - "<yellow>join requests, or outgoing"
+      - "<yellow>invites."
 
   # Back button, return to the main Obelisk UI
   BACK:
     char: "b"
     material: "BARRIER"
     skull: ""
-    text: "&c&oBack"
+    text: "<red><italic>Back"
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
     lore: ""
@@ -47,24 +47,24 @@ ITEMS:
     char: "i"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTY4M2RjN2JjNmRiZGI1ZGM0MzFmYmUyOGRjNGI5YWU2MjViOWU1MzE3YTI5ZjJjNGVjZmU3YmY1YWU1NmMzOCJ9fX0="
-    text: "&bFaction Invites"
+    text: "<aqua>Faction Invites"
     sound: ""
     pitch: 1
     lore:
-      - "&eView, accept and deny"
-      - "&eyour incoming Faction invites."
+      - "<yellow>View, accept and deny"
+      - "<yellow>your incoming Faction invites."
 
   # View your outgoing join request to a Faction (if you have one).
   OUTGOING_JOIN_REQUEST:
     char: "o"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTc3YmI2NmZjNzNhOTdjZWZjYjNhNGJmZGNjYjEyMjgxZjQ0ZGQzMjZjY2QwZmYzOWQ0N2U5ODViZmVmZjM0MyJ9fX0="
-    text: "&bOutgoing Join Request"
+    text: "<aqua>Outgoing Join Request"
     sound: ""
     pitch: 1
     lore:
-      - "&eView and revoke your current"
-      - "&ejoin request to a Faction."
+      - "<yellow>View and revoke your current"
+      - "<yellow>join request to a Faction."
 
   BORDER:
     char: "#"

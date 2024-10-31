@@ -2,7 +2,7 @@
 CONFIG_VERSION: 1
 
 # Title of the GUI (Inventory)
-TITLE: "&9View Join Request"
+TITLE: "<blue>View Join Request"
 OPEN_SOUND: "ui.button.click"
 OPEN_PITCH: 1
 
@@ -28,8 +28,8 @@ ITEMS:
   PROMPT:
     char: "p" # This is the character to use in the LAYOUT!
     material: "PLAYER_HEAD"
-    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTczZGI5NmY3YjlmNzhlZGU5MjY5NDEwYzY1OTI4NWZjYTIwZWZiYzhkZmE5ZGVmZjRiYmU1NDM0OTNhNDQ0NSJ9fX0=" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
-    text: "&c&l%faction_name%" # Placeholders: %faction_name% - Name of the Faction you are requesting to join.
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTczZGI5NmY3YjlmNzhlZGU5MjY5NDEwYzY1OTI4NWZjYTIwZWZiYzhkZmE5ZGVmZjRiYmU1NDM0OTNhNDQ0NSJ9fX0=" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    text: "<red><bold><faction_name>" # Placeholders: <faction_name> - Name of the Faction you are requesting to join.
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
@@ -40,7 +40,7 @@ ITEMS:
     char: "b"
     material: "BARRIER"
     skull: ""
-    text: "&c&oBack"
+    text: "<red><italic>Back"
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
     lore: ""
@@ -52,44 +52,44 @@ ITEMS:
     char: "a"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWVmZDRjZmE5MTQzMzk4ZTExZWJjZTNmYjJlY2JiZjU2YTA3M2UzNTYzZjZlZjZhY2FlNGNiNzM5N2U1ODhiMiJ9fX0="
-    text: "&aAccept"
+    text: "<green>Accept"
     sound: ""
     pitch: 1
     lore:
-      - "&aYour join request was accepted!"
+      - "<green>Your join request was accepted!"
       - ""
-      - "&eClick me to confirm your join"
-      - "&erequest and join the Faction."
+      - "<yellow>Click me to confirm your join"
+      - "<yellow>request and join the Faction."
 
   # Revoke the join request altogether.
   REVOKE:
     char: "r"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTVlZmZjZTEwOWRlNTBmNTg1M2IwYzMyZGNjMWEyOGNmNjJhNTA0YjYxMGU3MWUyMmYxZmRlNmZjMWE0YjkzZCJ9fX0="
-    text: "&4Revoke"
+    text: "<dark_red>Revoke"
     sound: ""
     pitch: 1
     lore:
-      - "&eRevoke this join request."
-      - "&7This allows you to make another"
-      - "&7join request. This action is"
-      - "&7permanent and irreversible."
+      - "<yellow>Revoke this join request."
+      - "<gray>This allows you to make another"
+      - "<gray>join request. This action is"
+      - "<gray>permanent and irreversible."
 
   # If the join request was accepted by the Faction in question, you can choose to deny it instead.
   DENY:
     char: "d"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDZhZTIxMWI0NDAzYjg5NjNjNjc0NWYzYzk4ZWJlNzNhMmI0ZTk3YzQwYTc4YjJmZDQwM2EwOWMwZmNhZDZkIn19fQ=="
-    text: "&cDeny"
+    text: "<red>Deny"
     sound: ""
     pitch: 1
     lore:
-      - "&aYour join request was accepted."
+      - "<green>Your join request was accepted."
       - ""
-      - "&eIf you would like to deny the"
-      - "&eacceptance, click here."
-      - "&7This action is permanent and"
-      - "&7irreversible."
+      - "<yellow>If you would like to deny the"
+      - "<yellow>acceptance, click here."
+      - "<gray>This action is permanent and"
+      - "<gray>irreversible."
 
   BORDER:
     char: "#"

@@ -3,7 +3,7 @@ CONFIG_VERSION: 1
 
 # Name of the defence.
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
-NAME: "{#FF0034}&lLandmine{/#FF5300}"
+NAME: "<gradient:#FF0034:#FF5300><bold>Landmine</gradient>"
 
 # This is the unique identifier for the defence.
 # ONCE SPECIFIED, DO NOT CHANGE!
@@ -48,20 +48,20 @@ SOUNDS:
 # For FLAMETHROWER / ARROW / SOUL / POTION / SPRING / LANDMINE defence types, these message configs will be
 # randomly broadcasted on death from these defences.
 # Upon death, one of these messages will be broadcasted at random.
-# Placeholders: %player_name% - Player who died / %defender% - Defender (player or faction name).
+# Placeholders: <player_name> - Player who died / <defender> - Defender (player or faction name).
 
 # In a Healing defence type, this would be used for healing notifications.
-# Placeholders: %health_increase% - Health they were healed for.
+# Placeholders: <health_increase> - Health they were healed for.
 MESSAGES:
   # Messages (randomly) broadcasted upon death.
-  # Placeholders: %player_name% - Player who died / %defender% - Owner of the defence / island.
+  # Placeholders: <player_name> - Player who died / <defender> - Owner of the defence / island.
   DEATH:
-    - "{#E9C055}%player_name% &7met an explosive end while trying to fight [#E9C055}%defender%&7."
+    - "{#E9C055}<player_name> <gray>met an explosive end while trying to fight [#E9C055}<defender><gray>."
 
   # Sent to the player who was damaged.
-  # Placeholders: %damage% - Amount of damage dealt / %defence_name% - Name of the defence
+  # Placeholders: <damage> - Amount of damage dealt / <defence_name> - Name of the defence
   DAMAGE:
-    - "&4You were hit for &c%damage% damage&c by a &c%defence_name%!"
+    - "<dark_red>You were hit for <red><damage> damage<red> by a <red><defence_name>!"
 
 # All attributes related to the defence.
 # PLACEHOLDERS: level - The defence level.
@@ -83,7 +83,7 @@ ATTRIBUTES:
 PLACEMENT:
   # Sent when a player attempts to place a defence on a disallowed block.
   # These blocks (whitelist or blacklist) is specified in the defences.yml.
-  DEFENCE_INCORRECT_BLOCK: "%server_name%&c&l Hey!&r&7 You can only place this defence on &eFences, Walls and End Rods!"
+  DEFENCE_INCORRECT_BLOCK: "<server_name><red><bold> Hey!<reset><gray> You can only place this defence on <yellow>Fences, Walls and End Rods!"
 
   # Whether the BLOCK list is a whitelist of what the defence can be placed on, or a blacklist.
   WHITELIST: true
@@ -95,17 +95,17 @@ PLACEMENT:
 
 HOLOGRAMS:
   # Hologram that appears above the defence.
-  # Placeholders: %defence_name% - Name of the defence (specified in NAME variable at the top!)
+  # Placeholders: <defence_name> - Name of the defence (specified in NAME variable at the top!)
   # You can have multiple entries, each is a new line.
   # Lowest line will be the lowest hologram (closest to the top of the defence)
   TITLE_HOLOGRAM:
-    - "&7⌞&r%defence_name%&7⌝"
+    - "<gray>⌞<reset><defence_name><gray>⌝"
 
   # Appended to the bottom (or top if configured) of the hologram stack if the defence is out of stock.
-  OUT_OF_STOCK_LINE: "&cOut of Ammo!"
+  OUT_OF_STOCK_LINE: "<red>Out of Ammo!"
 
   # Appended to the top (default, or bottom if configured) of the hologram stack, showing the durability of the defence (100%)
-  DURABILITY_LINE: "&7Durability: &e%durability%%"
+  DURABILITY_LINE: "<gray>Durability: <yellow><durability>"
 
   # Append the OUT_OF_STOCK_LINE to the top of the hologram stack.
   STOCK_AT_TOP: false
@@ -172,30 +172,30 @@ ITEM:
   # Every new line is a new line of lore.
   # Follows message formatting.
   LORE:
-    - "&aA sneaky defence that will"
-    - "&asurprise your enemies with a bang."
+    - "<green>A sneaky defence that will"
+    - "<green>surprise your enemies with a bang."
     - ""
-    - "&c&lStats:"
-    - "&7○ &9Max Level:&6 %max_level%"
-    - "&7○ &9Range:&6 %range%"
-    - "&7○ &9Ammo:&6 %ammo%"
-    - "&7○ &9Max Targets:&6 %target_max%"
-    - "&7○ &9Damage:&6 %damage%"
-    - "&7○ &9Cooldown:&6 %cooldown%"
-    - "&7○ &9Repair Cost: &6%repair_cost%"
+    - "<red><bold>Stats:"
+    - "<gray>○ <blue>Max Level:<gold> <max_level>"
+    - "<gray>○ <blue>Range:<gold> <range>"
+    - "<gray>○ <blue>Ammo:<gold> <ammo>"
+    - "<gray>○ <blue>Max Targets:<gold> <target_max>"
+    - "<gray>○ <blue>Damage:<gold> <damage>"
+    - "<gray>○ <blue>Cooldown:<gold> <cooldown>"
+    - "<gray>○ <blue>Repair Cost: <gold><repair_cost>"
     - ""
-    - "&7○ &9Cost:&6 %cost%"
+    - "<gray>○ <blue>Cost:<gold> <cost>"
 
   # Lore description of the item when upgrading.
   UPGRADE_LORE:
-    - "&aUpgrading this defence will introduce the new statistics:"
+    - "<green>Upgrading this defence will introduce the new statistics:"
     - ""
-    - "&7○ &9Level:&a %old_level% &e>&a %new_level%"
-    - "&7○ &9Range:&a %old_range% &e>&a %new_range%"
-    - "&7○ &9Ammo:&a %old_ammo% &e>&a %new_ammo%"
-    - "&7○ &9Max Targets:&a %old_target_max% &e>&a %new_target_max%"
-    - "&7○ &9Damage:&a %old_damage% &e>&a %new_damage%"
-    - "&7○ &9Cooldown:&a %old_cooldown% &e>&a %new_damage%"
-    - "&7○ &9Repair Cost:&a %old_repair_cost% &e>&a %new_repair_cost%"
+    - "<gray>○ <blue>Level:<green> <old_level> <yellow>><green> <new_level>"
+    - "<gray>○ <blue>Range:<green> <old_range> <yellow>><green> <new_range>"
+    - "<gray>○ <blue>Ammo:<green> <old_ammo> <yellow>><green> <new_ammo>"
+    - "<gray>○ <blue>Max Targets:<green> <old_target_max> <yellow>><green> <new_target_max>"
+    - "<gray>○ <blue>Damage:<green> <old_damage> <yellow>><green> <new_damage>"
+    - "<gray>○ <blue>Cooldown:<green> <old_cooldown> <yellow>><green> <new_damage>"
+    - "<gray>○ <blue>Repair Cost:<green> <old_repair_cost> <yellow>><green> <new_repair_cost>"
     - ""
-    - "&7○ &9Upgrade Cost:&6 %cost%"
+    - "<gray>○ <blue>Upgrade Cost:<gold> <cost>"

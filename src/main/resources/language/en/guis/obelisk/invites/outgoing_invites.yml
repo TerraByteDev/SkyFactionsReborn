@@ -2,7 +2,7 @@
 CONFIG_VERSION: 1
 
 # Title of the GUI (Inventory)
-TITLE: "&9Manage Outgoing Invites"
+TITLE: "<blue>Manage Outgoing Invites"
 OPEN_SOUND: "ui.button.click"
 OPEN_PITCH: 1
 
@@ -34,20 +34,20 @@ ITEMS:
   PROMPT:
     char: "p" # This is the character to use in the LAYOUT!
     material: "NETHER_STAR"
-    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
-    text: "&9Outgoing Invites"
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    text: "<blue>Outgoing Invites"
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
-      - "&eView & revoke your"
-      - "&aoutgoing invites."
+      - "<yellow>View & revoke your"
+      - "<green>outgoing invites."
 
   # Back button, return to the main Obelisk UI
   BACK:
     char: "b"
     material: "BARRIER"
     skull: ""
-    text: "&c&oBack"
+    text: "<red><italic>Back"
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
     lore: ""
@@ -57,18 +57,18 @@ ITEMS:
   # You can customise the text, lore and sound though.
   MODEL:
     material: "PLAYER_HEAD"
-    skull: "%player_skull%"
-    text: "&9%player_name%" # Placeholders: %player_name% - Name of player.
+    skull: "<player_skull>"
+    text: "<blue><player_name>" # Placeholders: <player_name> - Name of player.
     sound: "ui.button.click" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
-    # Placeholders: %player_name% - Name of player invited / %inviter% - Play who invited them.
-    # Placeholders: %timestamp% - Timestamp of invite.
+    # Placeholders: <player_name> - Name of player invited / <inviter> - Play who invited them.
+    # Placeholders: <timestamp> - Timestamp of invite.
     lore:
-      - "&a%inviter% &einvited &a%player_name%"
-      - "&eto your Faction."
+      - "<green><inviter> <yellow>invited <green><player_name>"
+      - "<yellow>to your Faction."
       - ""
-      - "&7%timestamp% ago"
-      - "&c&oRight click to revoke."
+      - "<gray><timestamp> ago"
+      - "<red><italic>Right click to revoke."
 
   BORDER:
     char: "#"

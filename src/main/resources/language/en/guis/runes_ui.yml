@@ -28,20 +28,20 @@ ITEMS:
     char: "p"
     material: "NETHER_STAR"
     skull: ""
-    text: "&aInsert Blocks"
+    text: "<green>Insert Blocks"
     sound: ""
     pitch: 1
     lore:
-      - "&9Insert blocks into the"
-      - "&9area above, and receive"
-      - "&9runes in return!"
+      - "<blue>Insert blocks into the"
+      - "<blue>area above, and receive"
+      - "<blue>runes in return!"
 
   # Back button, return to the main Obelisk UI
   BACK:
     char: "b"
     material: "BARRIER"
     skull: ""
-    text: "&c&oBack"
+    text: "<red><italic>Back"
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
     lore: ""
@@ -51,12 +51,12 @@ ITEMS:
     char: "s"
     material: "GREEN_TERRACOTTA"
     skull: ""
-    text: "&a&lConvert"
+    text: "<green><bold>Convert"
     sound: "ui.button.click"
     pitch: 1
     lore:
-      - "&aConvert all blocks"
-      - "&asubmitted into runes."
+      - "<green>Convert all blocks"
+      - "<green>submitted into runes."
 
   BORDER:
     char: "#"

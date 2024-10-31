@@ -2,7 +2,7 @@
 CONFIG_VERSION: 1
 
 # Title of the GUI (Inventory)
-TITLE: "&aPurchase Defence"
+TITLE: "<green>Purchase Defence"
 OPEN_SOUND: "" # Already played in the overview config
 OPEN_PITCH: 1
 
@@ -28,26 +28,26 @@ LAYOUT:
 ITEMS:
 
   # Just a general prompt for what this GUI is about.
-  # Placeholders: %player_name% - Name of player who is being managed.
+  # Placeholders: <player_name> - Name of player who is being managed.
   DEFENCE:
     char: "d" # This is the character to use in the LAYOUT!
-    material: "%defence_material%" # Placeholders: %defence_material% - Configured item material of the defence.
-    skull: "%defence_skull%" # Placeholders: %defence_skull% - Skull texture of the defence, assuming the configured item material is a player head.
-    text: "%defence_name%"# Placeholders: %defence_name% - Name of the defence
+    material: "<defence_material>" # Placeholders: <defence_material> - Configured item material of the defence.
+    skull: "<defence_skull>" # Placeholders: <defence_skull> - Skull texture of the defence, assuming the configured item material is a player head.
+    text: "<defence_name>"# Placeholders: <defence_name> - Name of the defence
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
-    lore: # Placeholders: %defence_cost% - Cost of defence
-      - "&eAre you sure you would"
-      - "&elike to buy this defence?"
+    lore: # Placeholders: <defence_cost> - Cost of defence
+      - "<yellow>Are you sure you would"
+      - "<yellow>like to buy this defence?"
       - ""
-      - "&eCost: &a%defence_cost% Runes"
+      - "<yellow>Cost: <green><defence_cost> Runes"
 
   # Back button, return to the main Obelisk UI
   BACK:
     char: "b"
     material: "BARRIER"
     skull: ""
-    text: "&c&oBack"
+    text: "<red><italic>Back"
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
     lore: ""
@@ -56,18 +56,18 @@ ITEMS:
     char: "a"
     material: "LIME_TERRACOTTA"
     skull: ""
-    text: "&a&lConfirm"
+    text: "<green><bold>Confirm"
     sound: "" # Different sound configured in the config.yml under Sounds
     pitch: 1
-    lore: # Placeholders: %defence_cost% - Cost of defence in Runes.
-      - "&7This will cost you"
-      - "&7%defence_cost% Runes."
+    lore: # Placeholders: <defence_cost> - Cost of defence in Runes.
+      - "<gray>This will cost you"
+      - "<gray><defence_cost> Runes."
 
   CANCEL:
     char: "c"
     material: "RED_TERRACOTTA"
     skull: ""
-    text: "&c&lCancel"
+    text: "<red><bold>Cancel"
     sound: "block.note_block.bass"
     pitch: 1
     lore: ""

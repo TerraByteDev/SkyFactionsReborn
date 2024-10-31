@@ -2,7 +2,7 @@
 CONFIG_VERSION: 1
 
 # Title of the GUI (Inventory)
-TITLE: "&9Manage Join Requests"
+TITLE: "<blue>Manage Join Requests"
 OPEN_SOUND: "ui.button.click"
 OPEN_PITCH: 1
 
@@ -34,20 +34,20 @@ ITEMS:
   PROMPT:
     char: "p" # This is the character to use in the LAYOUT!
     material: "NETHER_STAR"
-    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
-    text: "&9Join Requests"
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    text: "<blue>Join Requests"
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
-      - "&eView & manage your"
-      - "&aincoming join requests."
+      - "<yellow>View & manage your"
+      - "<green>incoming join requests."
 
   # Back button, return to the main Obelisk UI
   BACK:
     char: "b"
     material: "BARRIER"
     skull: ""
-    text: "&c&oBack"
+    text: "<red><italic>Back"
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
     lore: ""
@@ -57,16 +57,16 @@ ITEMS:
   # You can customise the text, lore and sound though.
   MODEL:
     material: "PLAYER_HEAD"
-    skull: "%player_skull%"
-    text: "&9%player_name%" # Placeholders: %player_name% - Name of player.
+    skull: "<player_skull>"
+    text: "<blue><player_name>" # Placeholders: <player_name> - Name of player.
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
-    # Placeholders: %player_name% - Name of player / %timestamp% - Timestamp of the join request.
+    # Placeholders: <player_name> - Name of player / <timestamp> - Timestamp of the join request.
     lore:
-      - "&a%player_name%&e wants to"
-      - "&ejoin your faction."
+      - "<green><player_name><yellow> wants to"
+      - "<yellow>join your faction."
       - ""
-      - "&7%timestamp% ago"
+      - "<gray><timestamp> ago"
 
   BORDER:
     char: "#"

@@ -2,7 +2,7 @@
 CONFIG_VERSION: 1
 
 # Title of the GUI (Inventory)
-TITLE: "&9Notifications"
+TITLE: "<blue>Notifications"
 OPEN_SOUND: "ui.button.click"
 OPEN_PITCH: 1
 
@@ -35,21 +35,21 @@ ITEMS:
   PROMPT:
     char: "p" # This is the character to use in the LAYOUT!
     material: "NETHER_STAR"
-    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
-    text: "&6Audit Log"
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    text: "<gold>Audit Log"
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
-      - "&eView all unread notifications"
-      - "&efor things such as Faction invites,"
-      - "&eetc."
+      - "<yellow>View all unread notifications"
+      - "<yellow>for things such as Faction invites,"
+      - "<yellow>etc."
 
   # Back button, return to the main Obelisk UI
   BACK:
     char: "b"
     material: "BARRIER"
     skull: ""
-    text: "&c&oBack"
+    text: "<red><italic>Back"
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
     lore: ""
@@ -59,16 +59,16 @@ ITEMS:
   MODEL:
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjRiZDlkZDEyOGM5NGMxMGM5NDVlYWRhYTM0MmZjNmQ5NzY1ZjM3YjNkZjJlMzhmN2IwNTZkYzdjOTI3ZWQifX19"
-    text: "%notification_title%" # Placeholders: %notification_title% - Title of the notification (e.g. "Faction Invite")
+    text: "<notification_title>" # Placeholders: <notification_title> - Title of the notification (e.g. "Faction Invite")
     sound: "ui.button.click"
     pitch: 1
-    # Placeholders: %notification_description% - Description of the notification. The format & coloring is configured in messages.yml.
-    # Placeholders: %timestamp% - Timestamp of the audit log.
+    # Placeholders: <notification_description> - Description of the notification. The format & coloring is configured in messages.yml.
+    # Placeholders: <timestamp> - Timestamp of the audit log.
     lore:
-      - "%notification_description%"
-      - "&7%timestamp%"
+      - "<notification_description>"
+      - "<gray><timestamp>"
       - ""
-      - "&cRight click to dismiss."
+      - "<red>Right click to dismiss."
 
   BORDER:
     char: "#"

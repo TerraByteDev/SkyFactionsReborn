@@ -2,7 +2,7 @@
 CONFIG_VERSION: 1
 
 # Title of the GUI (Inventory)
-TITLE: "&c&lFaction Obelisk"
+TITLE: "<red><bold>Faction Obelisk"
 OPEN_SOUND: "ui.button.click"
 OPEN_PITCH: 1
 
@@ -25,31 +25,31 @@ ITEMS:
   FACTION:
     char: "p" # This is the character to use in the LAYOUT!
     material: "NETHER_STAR"
-    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: %player_skull% - Skull texture of the player.
-    text: "&c%faction_name%'s Obelisk" # Supported placeholders: %faction_name% - Faction's Name
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    text: "<red><faction_name>'s Obelisk" # Supported placeholders: <faction_name> - Faction's Name
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
-      # Placeholders: %level% - Current Faction Level / %member_count% - Total Member Count
-      # Placeholders: %rune_count% - Total Rune Count / %gem_count% - Total Gem Count
-      - "&9Stats&r"
-      - "&aLevel: &e%level%"
-      - "&aMember Count: &e%member_count%"
-      - "&aRunes: &e%rune_count%"
-      - "&aGems: &e%gem_count%"
+      # Placeholders: <level> - Current Faction Level / <member_count> - Total Member Count
+      # Placeholders: <rune_count> - Total Rune Count / <gem_count> - Total Gem Count
+      - "<blue>Stats<reset>"
+      - "<green>Level: <yellow><level>"
+      - "<green>Member Count: <yellow><member_count>"
+      - "<green>Runes: <yellow><rune_count>"
+      - "<green>Gems: <yellow><gem_count>"
 
   # Manage outgoing invites and invite requests.
   INVITES:
     char: "i"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjRiZDlkZDEyOGM5NGMxMGM5NDVlYWRhYTM0MmZjNmQ5NzY1ZjM3YjNkZjJlMzhmN2IwNTZkYzdjOTI3ZWQifX19"
-    text: "&9Invites"
+    text: "<blue>Invites"
     sound: ""
     pitch: 1
     lore:
-      - "&eView & manage your"
-      - "&aincoming join requests"
-      - "&eand &aoutgoing invites."
+      - "<yellow>View & manage your"
+      - "<green>incoming join requests"
+      - "<yellow>and <green>outgoing invites."
 
 
   # UI to convert select blocks into runes
@@ -57,52 +57,52 @@ ITEMS:
     char: "r"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmVkOTQzZDVhNWM1YTRkZWQxNTEzNjliYTI2MjJjYzc5MzNiNjEyNTI3MzNkMGU3YjUxMGQxMTdlYTY4MjE4YSJ9fX0="
-    text: "&aRune Conversion"
+    text: "<green>Rune Conversion"
     sound: "" # Only set as blank because the UI itself has an opening sound configured (default).
     pitch: 1
     lore:
-      # Placeholders: %runes% - Rune Count.
-      - "&eConvert select blocks"
-      - "&einto runes for purchases"
-      - "&elike&c defences!"
+      # Placeholders: <runes> - Rune Count.
+      - "<yellow>Convert select blocks"
+      - "<yellow>into runes for purchases"
+      - "<yellow>like<red> defences!"
       - ""
-      - "&eYou currently have &a&l%runes%&r&e runes"
+      - "<yellow>You currently have <green><bold><runes><reset><yellow> runes"
 
   # Place to see & buy defences.
   DEFENCES:
     char: "d"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2EzYjlkNzFiYjU5NDI2NTdkNjZhNjMwMzMyZGIyYjk2MTg5ZjI1MTI3MTBlYzhjMzE0OTIxOGM4NTNmZGRiNiJ9fX0="
-    text: "&c&lDefences"
+    text: "<red><bold>Defences"
     sound: ""
     pitch: 1
     lore:
-      - "&eView & buy defences"
-      - "&eto defend your island."
+      - "<yellow>View & buy defences"
+      - "<yellow>to defend your island."
 
   # Where you can view & manage your members.
   MEMBER_MANAGEMENT:
     char: "m"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTZiOWVkNDFkZThjODc1MmI4ZTllOWI1MDUyNDYzYzY0ZDVmY2RmNTIwZGE5M2I2NWM4MWI2YTEzNmIwMjdkMiJ9fX0="
-    text: "&e&lMembers"
+    text: "<yellow><bold>Members"
     sound: ""
     pitch: 1
     lore:
-      - "&eView & Manage your"
-      - "&eFaction members."
+      - "<yellow>View & Manage your"
+      - "<yellow>Faction members."
 
   AUDIT_LOGS:
     char: "a"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTdlZDY2ZjVhNzAyMDlkODIxMTY3ZDE1NmZkYmMwY2EzYmYxMWFkNTRlZDVkODZlNzVjMjY1ZjdlNTAyOWVjMSJ9fX0="
-    text: "&a&lAudit Logs"
+    text: "<green><bold>Audit Logs"
     sound: ""
     pitch: 1
     lore:
-      - "&eView audit logs of your"
-      - "&eFaction (e.g. player joins,"
-      - "&eplayer leaves, kicks, etc)."
+      - "<yellow>View audit logs of your"
+      - "<yellow>Faction (e.g. player joins,"
+      - "<yellow>player leaves, kicks, etc)."
 
   BORDER:
     char: "#"
