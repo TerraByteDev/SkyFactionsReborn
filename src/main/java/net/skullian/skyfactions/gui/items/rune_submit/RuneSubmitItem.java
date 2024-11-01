@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.gui.items.rune_submit;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.entity.Player;
@@ -13,23 +13,24 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.gui.obelisk.RunesSubmitUI;
+import xyz.xenondevs.invui.inventory.VirtualInventory;
 
 public class RuneSubmitItem extends SkyItem {
 
-    private RunesSubmitUI UI;
+    private VirtualInventory INVENTORY;
     private String TYPE;
 
-    public RuneSubmitItem(ItemData data, ItemStack stack, String type, RunesSubmitUI ui, Player player) {
+    public RuneSubmitItem(ItemData data, ItemStack stack, String type, VirtualInventory inventory, Player player) {
         super(data, stack, player, null);
-        this.UI = ui;
+        this.INVENTORY = inventory;
         this.TYPE = type;
     }
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        List<ItemStack> stacks = new ArrayList<>(UI.ITEMS.values());
-        UI.ITEMS.clear(); // clear so when the close handler triggers, it doesn't give items back
+        System.out.println(INVENTORY.getItems());
+        System.out.println(Arrays.toString(INVENTORY.getItems()));
+        List<ItemStack> stacks = Arrays.asList(INVENTORY.getItems());
 
         player.closeInventory();
         player.removeMetadata("rune_ui", SkyFactionsReborn.getInstance());

@@ -176,6 +176,8 @@ public class RunesAPI {
         int count = 0;
 
         for (ItemStack item : items) {
+            if (item == null || item.getType().equals(Material.AIR)) continue;
+
             NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
             PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
 

@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.gui.obelisk;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,12 +21,11 @@ import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.inventory.VirtualInventory;
-import xyz.xenondevs.invui.inventory.event.PlayerUpdateReason;
 import xyz.xenondevs.invui.window.Window;
 
 public class RunesSubmitUI {
 
-    public Map<Integer, ItemStack> ITEMS = new HashMap<>();
+    private VirtualInventory INVENTORY;
 
     public void promptPlayer(Player player, String type) {
         try {
@@ -40,7 +39,7 @@ public class RunesSubmitUI {
                     .addCloseHandler(new Runnable() {
                         @Override
                         public void run() {
-                            for (ItemStack item : ITEMS.values()) {
+                            for (ItemStack item : Arrays.asList(INVENTORY.getItems())) {
                                 if (item == null || item.getType().equals(Material.AIR)) return;
                                 Map<Integer, ItemStack> map = player.getInventory().addItem(item);
 
@@ -73,11 +72,11 @@ public class RunesSubmitUI {
 
             VirtualInventory inventory = new VirtualInventory(invSize);
             builder.addIngredient('.', inventory);
+            this.INVENTORY = inventory;
 
-            inventory.setPreUpdateHandler((handler) -> {
-                handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
-                if (!handler.isCancelled()) this.ITEMS.put(handler.getSlot(), handler.getNewItem());
-            });
+            //inventory.setPreUpdateHandler((handler) -> {
+            //    handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
+            //});
 
             List<ItemData> data = GUIAPI.getItemData("runes_ui", player);
             for (ItemData itemData : data) {
@@ -92,7 +91,7 @@ public class RunesSubmitUI {
                         break;
 
                     case "SUBMIT":
-                        builder.addIngredient(itemData.getCHARACTER(), new RuneSubmitItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), type, this, player));
+                        builder.addIngredient(itemData.getCHARACTER(), new RuneSubmitItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), type, inventory, player));
                         break;
                 }
             }
