@@ -2,7 +2,7 @@
 CONFIG_VERSION: 1
 
 # Title of the GUI (Inventory)
-TITLE: "{#A908FB}Runes Menu{#004FFF}"
+TITLE: "<gradient:#A908FB:#004FFF>Runes Menu"
 OPEN_SOUND: "ui.button.click"
 OPEN_PITCH: 1
 

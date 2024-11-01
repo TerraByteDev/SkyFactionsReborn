@@ -45,11 +45,11 @@ ITEMS:
     sound: ""
     pitch: 1
     lore:
-      # Placeholders: %notification_count% - Current unread notification count.
+      # Placeholders: <notification_count> - Current unread notification count.
       - "<yellow>View and Manage your"
       - "<yellow>unread Notifications."
       - ""
-      - "<gray>You currently have %notification_count% unread"
+      - "<gray>You currently have <notification_count> unread"
       - "<gray>Notifications."
 
   # UI to convert select blocks into runes

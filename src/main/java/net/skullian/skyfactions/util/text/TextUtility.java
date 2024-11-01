@@ -32,6 +32,7 @@ public class TextUtility {
         for (int i = 0; i < replacements.length; i += 2) {
             if (i + 1 >= replacements.length) break;
             int index = i / 2;
+
             resolvers[index] = Placeholder.parsed(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
         }
 
@@ -39,6 +40,7 @@ public class TextUtility {
         resolvers[replacements.length != 0 ? (replacements.length / 2) : 0] = Placeholder.parsed("server_name", prefix != null && !prefix.isEmpty() ? prefix : "");
 
         if (DependencyHandler.isEnabled("PlaceholderAPI")) string = PlaceholderAPI.setPlaceholders(player, string);
+
         return MiniMessage.miniMessage().deserialize(string, resolvers);
     }
 

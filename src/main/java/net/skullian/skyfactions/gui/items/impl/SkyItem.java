@@ -40,11 +40,12 @@ public abstract class SkyItem implements Item {
     public ItemProvider getItemProvider() {
         String locale = PlayerHandler.getLocale(PLAYER.getUniqueId());
 
+        Object[] replacements = replacements();
         ItemBuilder builder = new ItemBuilder(STACK)
-            .setDisplayName(replace(TextUtility.legacyColor(DATA.getNAME(), locale, getPLAYER())));
+            .setDisplayName(TextUtility.legacyColor(DATA.getNAME(), locale, getPLAYER(), replacements));
 
         for (String loreLine : DATA.getLORE()) {
-            builder.addLoreLines(replace(TextUtility.legacyColor(loreLine, locale, getPLAYER()), replacements()));
+            builder.addLoreLines(TextUtility.legacyColor(loreLine, locale, getPLAYER(), replacements));
         }
 
         return process(builder);
@@ -64,14 +65,6 @@ public abstract class SkyItem implements Item {
     public ItemBuilder process(ItemBuilder builder) { return builder; }
 
     public Object[] replacements() { return new Object[0]; }
-
-    public static String replace(String message, Object... replacements) {
-        for (int i = 0; i < replacements.length; i += 2) {
-            message = message.replace(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
-        }
-
-        return message;
-    }
 
     public void onClick(ClickType clickType, Player player, InventoryClickEvent event) {}
 

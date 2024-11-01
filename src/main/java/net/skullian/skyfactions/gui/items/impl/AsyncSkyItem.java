@@ -3,7 +3,6 @@ package net.skullian.skyfactions.gui.items.impl;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -32,7 +31,7 @@ public abstract class AsyncSkyItem implements Item {
     private ItemData DATA;
     private ItemStack STACK;
     private Player PLAYER;
-    private ItemProvider provider;
+    private volatile ItemProvider provider;
     private Object[] optionals;
 
     public AsyncSkyItem(ItemData data, ItemStack stack, Player player, Object[] optionals) {
@@ -42,22 +41,24 @@ public abstract class AsyncSkyItem implements Item {
         this.PLAYER = player;
 
         this.provider = ObeliskConfig.getLoadingItem(player);
-        Bukkit.getScheduler().runTaskAsynchronously(SkyFactionsReborn.getInstance(), () -> {
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             this.provider = new ItemProvider() {
                 @Override
                 public @NotNull ItemStack get(@Nullable String s) {
                     String locale = PlayerHandler.getLocale(PLAYER.getUniqueId());
 
+                    Object[] replacements = replacements();
                     ItemBuilder builder = new ItemBuilder(stack)
-                        .setDisplayName(replace(TextUtility.legacyColor(data.getNAME(), locale, PLAYER), replacements()));
-                    
+                        .setDisplayName(TextUtility.legacyColor(data.getNAME(), locale, PLAYER, replacements));
+
                     for (String loreLine : data.getLORE()) {
-                        builder.addLoreLines(replace(TextUtility.legacyColor(loreLine, locale, PLAYER)));
+                        builder.addLoreLines(TextUtility.legacyColor(loreLine, locale, PLAYER, replacements));
                     }
 
                     return process(builder).get();
                 }
             };
+            Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), this::notifyWindows);
         });
     }
 
@@ -73,22 +74,12 @@ public abstract class AsyncSkyItem implements Item {
         if (!DATA.getSOUND().equalsIgnoreCase("none")) {
             SoundUtil.playSound(player, DATA.getSOUND(), DATA.getPITCH(), 1f);
         }
+        onClick(clickType, player, event);
     }
 
     public ItemBuilder process(ItemBuilder builder) { return builder; }
 
     public Object[] replacements() { return new Object[0]; }
-
-    public static String replace(String message, Object... replacements) {
-        for (int i = 0; i < replacements.length; i += 2) {
-            if (replacements[i + 1] instanceof CompletableFuture<?>) {
-                replacements[i + 1] = ((CompletableFuture<?>) replacements[i + 1]).join();
-            }
-            message = message.replace(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
-        }
-
-        return message;
-    }
 
     // I only have this so I'm not duplicating the sound checks / playing.
     public void onClick(ClickType clickType, Player player, InventoryClickEvent event) {}

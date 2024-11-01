@@ -77,8 +77,6 @@ public class RunesAPI {
     public static void handleConversion(List<ItemStack> stacks, Player player, Faction faction) {
         int total = 0;
         Map<String, Integer> overrides = Runes.RUNE_OVERRIDES.getMap();
-        int forEach = Runes.BASE_FOR_EACH.getInt();
-        int returnForEach = Runes.BASE_RUNE_RETURN.getInt();
 
         List<ItemStack> remainingItems = new ArrayList<>();
 

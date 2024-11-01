@@ -67,7 +67,7 @@ public class GUIAPI {
 
                 char charValue = !isModel ? itemData.getString("char").charAt(0) : "x".charAt(0);
                 String material = itemData.getString("material");
-                String text = itemData.getString("text").replace("player_name", player.getName());
+                String text = itemData.getString("text").replace("<player_name>", player.getName());
                 String sound = itemData.getString("sound");
                 String texture = itemData.getString("skull");
                 int pitch = itemData.getInt("pitch");
@@ -100,7 +100,7 @@ public class GUIAPI {
                 char charValue = itemData.getString("char").charAt(0);
                 String material = itemData.getString("material");
                 String texture = itemData.getString("skull");
-                String itemName = itemData.getString("name").replace("player_name", player.getName());
+                String itemName = itemData.getString("name").replace("<player_name>", player.getName());
                 String sound = itemData.getString("sound");
                 int pitch = itemData.getInt("pitch");
                 String morePagesLore = itemData.getString("more_pages_lore");
@@ -116,32 +116,23 @@ public class GUIAPI {
     }
 
     public static ItemStack createItem(ItemData data, UUID playerUUID) {
-        ItemStack stack;
-        if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
-            String texture = data.getBASE64_TEXTURE();
-            if (texture.equalsIgnoreCase("player_skull")) {
-                stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), playerUUID);
-            } else {
-                stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
-            }
-        } else {
-            stack = new ItemStack(Material.getMaterial(data.getMATERIAL()));
-        }
-
-        return stack;
+        return create(data.getMATERIAL(), data.getBASE64_TEXTURE(), playerUUID);
     }
 
     public static ItemStack createItem(PaginationItemData data, UUID playerUUID) {
+        return create(data.getMATERIAL(), data.getBASE64_TEXTURE(), playerUUID);
+    }
+
+    private static ItemStack create(String material, String texture, UUID playerUUID) {
         ItemStack stack;
-        if (data.getMATERIAL().equalsIgnoreCase("PLAYER_HEAD")) {
-            String texture = data.getBASE64_TEXTURE();
-            if (texture.equalsIgnoreCase("player_skull")) {
+        if (material.equalsIgnoreCase("PLAYER_HEAD")) {
+            if (texture.equalsIgnoreCase("<player_skull>")) {
                 stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), playerUUID);
             } else {
-                stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), data.getBASE64_TEXTURE());
+                stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), texture);
             }
         } else {
-            stack = new ItemStack(Material.getMaterial(data.getMATERIAL()));
+            stack = new ItemStack(Material.getMaterial(material));
         }
 
         return stack;

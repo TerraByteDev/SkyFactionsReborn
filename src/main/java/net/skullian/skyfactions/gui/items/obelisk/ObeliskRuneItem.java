@@ -25,6 +25,7 @@ public class ObeliskRuneItem extends AsyncSkyItem {
         this.TYPE = type;
     }
 
+    @Override
     public Object[] replacements() {
         String type = (String) getOptionals()[0];
 
