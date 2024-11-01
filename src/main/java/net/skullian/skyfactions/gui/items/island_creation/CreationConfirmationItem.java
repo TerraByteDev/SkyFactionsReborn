@@ -19,6 +19,8 @@ public class CreationConfirmationItem extends SkyItem {
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+        event.getInventory().close();
+
         IslandAPI.createIsland(player);
     }
 
