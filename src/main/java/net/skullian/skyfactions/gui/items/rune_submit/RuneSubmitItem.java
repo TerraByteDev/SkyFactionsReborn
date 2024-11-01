@@ -28,11 +28,10 @@ public class RuneSubmitItem extends SkyItem {
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        player.closeInventory();
-
         List<ItemStack> stacks = new ArrayList<>(UI.ITEMS.values());
         UI.ITEMS.clear(); // clear so when the close handler triggers, it doesn't give items back
 
+        player.closeInventory();
         player.removeMetadata("rune_ui", SkyFactionsReborn.getInstance());
         if (TYPE.equals("player")) {
             RunesAPI.handleRuneConversion(stacks, player);
