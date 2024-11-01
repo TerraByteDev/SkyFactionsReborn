@@ -121,7 +121,7 @@ dependencies {
     compileOnly("org.incendo:cloud-annotations:2.0.0")
     compileOnly("lol.pyr:znpcsplus-api:2.0.0-SNAPSHOT")
     //errorprone("com.google.errorprone:error_prone_core:2.35.1")
-	compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
+	  compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
     compileOnly("de.oliver:FancyNpcs:2.3.1")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
 
