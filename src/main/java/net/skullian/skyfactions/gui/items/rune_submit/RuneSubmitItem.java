@@ -28,9 +28,11 @@ public class RuneSubmitItem extends SkyItem {
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        System.out.println(INVENTORY.getItems());
-        System.out.println(Arrays.toString(INVENTORY.getItems()));
         List<ItemStack> stacks = Arrays.asList(INVENTORY.getItems());
+
+        for (int i = 0; i < INVENTORY.getSize(); i++) {
+            INVENTORY.setItemSilently(i, null);
+        }
 
         player.closeInventory();
         player.removeMetadata("rune_ui", SkyFactionsReborn.getInstance());
