@@ -75,36 +75,37 @@ public class RunesAPI {
     }
 
     public static void handleConversion(List<ItemStack> stacks, Player player, Faction faction) {
-        int total = 0;
+        int total = getDefenceCost(stacks, player);
         Map<String, Integer> overrides = Runes.RUNE_OVERRIDES.getMap();
+
+        Map<Material, Integer> quantities = new HashMap<>();
+        for (ItemStack stack : stacks) {
+            if (stack == null || stack.getType().equals(Material.AIR)) continue;
+            quantities.put(stack.getType(), quantities.getOrDefault(stack.getType(), 0) + stack.getAmount());
+        }
 
         List<ItemStack> remainingItems = new ArrayList<>();
 
-        for (ItemStack stack : stacks) {
-            if (stack == null || stack.getType().equals(Material.AIR)) continue;
-            int defenceCost = getDefenceCost(stack, player);
-            if (defenceCost != -1) {
-                total += defenceCost;
-                continue;
-            }
+        for (Map.Entry<Material, Integer> entry : quantities.entrySet()) {
+            Material material = entry.getKey();
+            int quantity = entry.getValue();
 
             int tempForEach = Runes.BASE_FOR_EACH.getInt();
             int tempReturn = Runes.BASE_RUNE_RETURN.getInt();
-            
-            if (overrides.containsKey(stack.getType().name())) {
-                tempReturn = overrides.get(stack.getType().name());
+
+            if (overrides.containsKey(material.name())) {
+                tempReturn = overrides.get(material.name());
                 tempForEach = 1;
             }
-            
-            int quotient = stack.getAmount() / tempForEach;
-            int remainder = stack.getAmount() % tempForEach;
+
+            int quotient = quantity / tempForEach;
+            int remainder = quantity % tempForEach;
 
             int amount = quotient * tempReturn;
             total += amount;
 
             if (remainder > 0) {
-                ItemStack cloned = stack.clone();
-                cloned.setAmount(remainder);
+                ItemStack cloned = new ItemStack(material, remainder);
                 remainingItems.add(cloned);
             }
         }
@@ -171,17 +172,21 @@ public class RunesAPI {
         });
     }
 
-    private static int getDefenceCost(ItemStack item, Player player) {
-        NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
-        PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+    private static int getDefenceCost(List<ItemStack> items, Player player) {
+        int count = 0;
 
-        if (container.has(defenceKey, PersistentDataType.STRING)) {
-            String identifier = container.get(defenceKey, PersistentDataType.STRING);
-            DefenceStruct struct = DefencesFactory.defences.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(identifier);
-            if (struct != null) return struct.getSELL_COST();
+        for (ItemStack item : items) {
+            NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
+            PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+
+            if (container.has(defenceKey, PersistentDataType.STRING)) {
+                String identifier = container.get(defenceKey, PersistentDataType.STRING);
+                DefenceStruct struct = DefencesFactory.defences.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(identifier);
+                if (struct != null) count += struct.getSELL_COST();
+            }
         }
 
-        return -1;
+        return count;
     }
 
     private static boolean hasEnchants(ItemStack stack) {
