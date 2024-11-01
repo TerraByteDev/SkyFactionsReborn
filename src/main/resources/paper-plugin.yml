@@ -29,6 +29,10 @@ dependencies:
       load: BEFORE
       required: true
 
+    WorldBorderAPI:
+      load: BEFORE
+      required: true
+
     JukeBox:
       load: BEFORE
       required: false
@@ -56,4 +60,3 @@ dependencies:
     Vault:
       load: BEFORE
       required: false
-      
