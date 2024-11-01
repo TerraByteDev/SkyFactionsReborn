@@ -66,7 +66,7 @@ public class RunesSubmitUI {
             // yes very rudimentary
             int invSize = 0;
             for (String row : guiData.getLAYOUT()) {
-                invSize += row.length() - row.replace(".", "").length();
+                invSize += row.length() - row.replaceAll(".", "").length();
             }
 
             VirtualInventory inventory = new VirtualInventory(invSize);
