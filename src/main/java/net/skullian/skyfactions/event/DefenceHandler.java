@@ -135,15 +135,13 @@ public class DefenceHandler implements Listener {
     }
 
     private static Defence createDefence(DefenceData data, DefenceStruct defenceStruct, String owner, boolean isFaction, Optional<Player> player, Optional<BlockPlaceEvent> event, boolean isPlace, boolean shouldLoad) {
+        Defence instance = null;
         try {
             Class<?> clazz = Class.forName(DefencesFactory.defenceTypes.get(defenceStruct.getTYPE()));
             Constructor<?> constr = clazz.getConstructor(DefenceData.class, DefenceStruct.class);
 
-            Defence instance = (Defence) constr.newInstance(data, defenceStruct);
+            instance = (Defence) constr.newInstance(data, defenceStruct);
             if (shouldLoad) instance.onLoad(owner);
-
-            if (isFaction && isPlace) SkyFactionsReborn.databaseHandler.registerDefenceLocation(owner, instance.getDefenceLocation());
-                else if (!isFaction && isPlace) SkyFactionsReborn.databaseHandler.registerDefenceLocation(UUID.fromString(owner), instance.getDefenceLocation());
 
             if (isFaction && isPlace) SkyFactionsReborn.cacheService.registerDefence(FactionAPI.factionNameCache.get(owner), instance.getDefenceLocation());
                 else if (!isFaction && isPlace) SkyFactionsReborn.cacheService.registerDefence(UUID.fromString(owner), instance.getDefenceLocation());
@@ -152,6 +150,9 @@ public class DefenceHandler implements Listener {
 
             return instance;
         } catch (Exception error) {
+            if (instance != null && isFaction && isPlace) SkyFactionsReborn.cacheService.removeDefence(FactionAPI.factionNameCache.get(owner), instance.getDefenceLocation());
+                else if (instance != null && !isFaction && isPlace) SkyFactionsReborn.cacheService.removeDefence(UUID.fromString(owner), instance.getDefenceLocation());
+
             if (event.isPresent()) event.get().setCancelled(true);
             if (player.isPresent()) ErrorHandler.handleError(player.get(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
         }

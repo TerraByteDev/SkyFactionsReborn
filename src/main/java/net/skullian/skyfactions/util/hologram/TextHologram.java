@@ -1,9 +1,7 @@
 package net.skullian.skyfactions.util.hologram;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -84,7 +82,7 @@ public class TextHologram {
     private int backgroundColor;
     @Setter @Getter @Accessors(chain = true)
     private boolean seeThroughBlocks = false;
-    @Setter @Getter @Accessors(chain = true)
+    @Getter @Accessors(chain = true)
     private TextDisplay.TextAlignment alignment = TextDisplay.TextAlignment.CENTER;
     @Setter @Getter @Accessors(chain = true)
     private byte textOpacity = (byte) -1;
