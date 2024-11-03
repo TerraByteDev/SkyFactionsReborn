@@ -1,18 +1,14 @@
 package net.skullian.skyfactions.defence;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import net.skullian.skyfactions.api.FactionAPI;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -54,6 +50,18 @@ public abstract class Defence {
         if (defenceStruct == null)
             throw new NullPointerException("Could not find defence with the type of " + data.getTYPE());
         this.struct = defenceStruct;
+    }
+
+    public void remove() {
+        Block block = getDefenceLocation().getBlock();
+        PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
+        NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
+
+        container.remove(dataKey);
+        block.setType(Material.AIR);
+
+        if (data.isIS_FACTION()) SkyFactionsReborn.cacheService.removeDefence(FactionAPI.factionNameCache.get(data.getUUIDFactionName()), getDefenceLocation());
+            else SkyFactionsReborn.cacheService.removeDefence(UUID.fromString(data.getUUIDFactionName()), getDefenceLocation());
     }
 
     public void onShoot() {

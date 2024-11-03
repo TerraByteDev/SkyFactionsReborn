@@ -662,3 +662,7 @@ Messages:
     DEFENCE_PURCHASE_TITLE: "<yellow>Defence Purchased"
     DEFENCE_PURCHASE_DESCRIPTION: "<green><player_name> <yellow>purchased the <reset><defence_name><yellow> defence."
 
+    # Sent when a player (moderator, admin or owner) removes a defence.
+    # Placeholders: <player_name> - Player who removed it / <defence_name> - Configured name of the defence bought.
+    DEFENCE_REMOVAL_TITLE: "<red><bold>Defence Removed"
+    DEFENCE_REMOVAL_DESCRIPTION: "<green><player_name> <yellow>removed a <reset><defence_name><yellow> defence."

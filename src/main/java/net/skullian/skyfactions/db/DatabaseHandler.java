@@ -203,7 +203,7 @@ public class DatabaseHandler {
                      [factionName] TEXT NOT NULL,
                      [type] TEXT NOT NULL,
                      [uuid] TEXT NOT NULL,
-                     [description] TEXT NOT NULL,
+                     [replacements] TEXT NOT NULL,
                      [timestamp] INTEGER NOT NULL
                      ) STRICT;
                      """);
@@ -352,7 +352,7 @@ public class DatabaseHandler {
                      `factionName` VARCHAR(255) NOT NULL,
                      `type` VARCHAR(255) NOT NULL,
                      `uuid` VARCHAR(255) NOT NULL,
-                     `description` VARCHAR(255) NOT NULL,
+                     `replacements` VARCHAR(255) NOT NULL,
                      `timestamp` BIGINT NOT NULL
                      );
                      """);
@@ -1755,15 +1755,15 @@ public class DatabaseHandler {
 
     // ------------------ FACTION AUDIT LOGGING ------------------ //
 
-    public CompletableFuture<Void> createAuditLog(UUID playerUUID, String type, String description, String factionName) {
+    public CompletableFuture<Void> createAuditLog(UUID playerUUID, String type, String replacements, String factionName) {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = dataSource.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO auditLogs (factionName, type, uuid, description, timestamp) VALUES (?, ?, ?, ?, ?);")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO auditLogs (factionName, type, uuid, replacements, timestamp) VALUES (?, ?, ?, ?, ?);")) {
 
                 statement.setString(1, factionName);
                 statement.setString(2, type);
                 statement.setString(3, playerUUID.toString());
-                statement.setString(4, description);
+                statement.setString(4, replacements);
                 statement.setLong(5, System.currentTimeMillis());
 
                 statement.executeUpdate();
