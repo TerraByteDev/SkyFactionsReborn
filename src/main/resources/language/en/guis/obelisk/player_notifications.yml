@@ -62,7 +62,7 @@ ITEMS:
     text: "<notification_title>" # Placeholders: <notification_title> - Title of the notification (e.g. "Faction Invite")
     sound: "ui.button.click"
     pitch: 1
-    # Placeholders: <notification_description> - Description of the notification. The format & coloring is configured in messages.yml.
+    # Placeholders: <notification_description> - Description of the notification. The format & coloring is configured in the language files.
     # Placeholders: <timestamp> - Timestamp of the audit log.
     lore:
       - "<notification_description>"

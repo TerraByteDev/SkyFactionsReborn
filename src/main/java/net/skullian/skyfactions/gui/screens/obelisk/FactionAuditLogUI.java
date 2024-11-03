@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.gui.obelisk;
+package net.skullian.skyfactions.gui.screens.obelisk;
 
 import java.util.ArrayList;
 import java.util.List;

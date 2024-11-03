@@ -3,8 +3,10 @@ package net.skullian.skyfactions.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.event.PlayerHandler;
 import org.antlr.v4.parse.ANTLRParser.prequelConstruct_return;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -89,6 +91,12 @@ public class DefenceAPI {
         }
 
         return newLore;
+    }
+
+    public static Defence getDefenceFromData(DefenceData data) {
+        return getLoadedDefence(
+                new Location(Bukkit.getWorld(data.getWORLD_LOC()), data.getX(), data.getY(), data.getZ())
+        );
     }
 
     public static Defence getLoadedDefence(Location location) {

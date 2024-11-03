@@ -14,7 +14,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.gui.obelisk.member.MemberManagementUI;
+import net.skullian.skyfactions.gui.screens.obelisk.member.MemberManagementUI;
 import net.skullian.skyfactions.util.ErrorHandler;
 
 public class ObeliskMemberManagementItem extends SkyItem {

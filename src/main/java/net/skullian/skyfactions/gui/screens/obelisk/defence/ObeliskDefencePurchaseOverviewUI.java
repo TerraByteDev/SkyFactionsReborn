@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.gui.obelisk.defence;
+package net.skullian.skyfactions.gui.screens.obelisk.defence;
 
 import java.util.ArrayList;
 import java.util.List;

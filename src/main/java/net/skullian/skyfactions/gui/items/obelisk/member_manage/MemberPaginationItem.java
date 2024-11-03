@@ -13,7 +13,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.gui.obelisk.member.ManageMemberUI;
+import net.skullian.skyfactions.gui.screens.obelisk.member.ManageMemberUI;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 

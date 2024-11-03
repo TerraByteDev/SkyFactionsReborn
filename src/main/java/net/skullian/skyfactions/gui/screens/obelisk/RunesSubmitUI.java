@@ -1,9 +1,10 @@
-package net.skullian.skyfactions.gui.obelisk;
+package net.skullian.skyfactions.gui.screens.obelisk;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import net.skullian.skyfactions.api.RunesAPI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +43,6 @@ public class RunesSubmitUI {
                                 if (item == null || item.getType().equals(Material.AIR)) return;
                                 Map<Integer, ItemStack> map = player.getInventory().addItem(item);
 
-                                // if the player's inventory is full, drop the item.
                                 for (ItemStack stack : map.values()) {
                                     player.getWorld().dropItemNaturally(player.getLocation(), stack);
                                 }
@@ -75,9 +75,9 @@ public class RunesSubmitUI {
             builder.addIngredient('.', inventory);
             this.INVENTORY = inventory;
 
-            //inventory.setPreUpdateHandler((handler) -> {
-            //    handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
-            //});
+            inventory.setPreUpdateHandler((handler) -> {
+                handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
+            });
 
             List<ItemData> data = GUIAPI.getItemData("runes_ui", player);
             for (ItemData itemData : data) {

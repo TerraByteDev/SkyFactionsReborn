@@ -13,7 +13,7 @@ import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.gui.IslandCreationConfirmationUI;
+import net.skullian.skyfactions.gui.screens.confirmation.IslandCreationConfirmationUI;
 import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("island")

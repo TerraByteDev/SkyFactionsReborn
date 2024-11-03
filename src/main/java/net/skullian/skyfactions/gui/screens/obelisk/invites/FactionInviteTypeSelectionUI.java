@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.gui.obelisk.invites;
+package net.skullian.skyfactions.gui.screens.obelisk.invites;
 
 import java.util.List;
 
@@ -12,17 +12,17 @@ import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.JoinRequestsTypeItem;
-import net.skullian.skyfactions.gui.items.obelisk.invites.PlayerFactionInvitesTypeItem;
+import net.skullian.skyfactions.gui.items.obelisk.invites.OutgoingInvitesTypeItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.window.Window;
 
-public class PlayerInviteTypeSelectionUI {
+public class FactionInviteTypeSelectionUI {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/invites/player_invite_selection", player);
+            GUIData data = GUIAPI.getGUIData("obelisk/invites/invite_selection", player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player);
 
@@ -42,7 +42,7 @@ public class PlayerInviteTypeSelectionUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("obelisk/invites/player_invite_selection", player);
+            List<ItemData> data = GUIAPI.getItemData("obelisk/invites/invite_selection", player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 
@@ -50,16 +50,16 @@ public class PlayerInviteTypeSelectionUI {
                         builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
-                    case "OUTGOING_JOIN_REQUEST":
-                        builder.addIngredient(itemData.getCHARACTER(), new JoinRequestsTypeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", player));
+                    case "OUTGOING_INVITES":
+                        builder.addIngredient(itemData.getCHARACTER(), new OutgoingInvitesTypeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
                     case "INCOMING_INVITES":
-                        builder.addIngredient(itemData.getCHARACTER(), new PlayerFactionInvitesTypeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
+                        builder.addIngredient(itemData.getCHARACTER(), new JoinRequestsTypeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player));
                         break;
 
                     case "BACK":
-                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", player));
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player));
                         break;
                 }
             }
@@ -71,6 +71,4 @@ public class PlayerInviteTypeSelectionUI {
 
         return builder;
     }
-
-
 }

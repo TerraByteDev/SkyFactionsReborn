@@ -1,4 +1,9 @@
-package net.skullian.skyfactions.gui;
+package net.skullian.skyfactions.gui.screens.confirmation;
+
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
@@ -7,27 +12,21 @@ import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
-
-import net.skullian.skyfactions.gui.items.raid_start.RaidCancelItem;
-import net.skullian.skyfactions.gui.items.raid_start.RaidConfirmationItem;
+import net.skullian.skyfactions.gui.items.GeneralCancelItem;
+import net.skullian.skyfactions.gui.items.island_creation.CreationConfirmationItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.window.Window;
 
-import java.util.List;
-
-public class PlayerRaidConfirmationUI {
+public class IslandCreationConfirmationUI {
 
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("confirmations/start_raid", player);
+                GUIData data = GUIAPI.getGUIData("confirmations/create_island", player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
-
 
                 Window window = Window.single()
                         .setViewer(player)
@@ -39,22 +38,22 @@ public class PlayerRaidConfirmationUI {
                 window.open();
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "create your island", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("confirmations/start_raid", player);
+            List<ItemData> data = GUIAPI.getItemData("confirmations/create_island", player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 
                     case "CANCEL":
-                        builder.addIngredient(itemData.getCHARACTER(), new RaidCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
+                        builder.addIngredient(itemData.getCHARACTER(), new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
                     case "CONFIRM":
-                        builder.addIngredient(itemData.getCHARACTER(), new RaidConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
+                        builder.addIngredient(itemData.getCHARACTER(), new CreationConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
                     case "PROMPT", "BORDER":
                         builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
@@ -66,7 +65,7 @@ public class PlayerRaidConfirmationUI {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-
         return builder;
     }
+
 }

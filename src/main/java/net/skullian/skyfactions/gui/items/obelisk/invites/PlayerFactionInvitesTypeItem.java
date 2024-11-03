@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.gui.obelisk.invites.PlayerIncomingInvites;
+import net.skullian.skyfactions.gui.screens.obelisk.invites.PlayerIncomingInvites;
 
 public class PlayerFactionInvitesTypeItem extends SkyItem {
 

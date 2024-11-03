@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
-import net.skullian.skyfactions.gui.obelisk.PlayerObeliskNotificationUI;
+import net.skullian.skyfactions.gui.screens.obelisk.PlayerObeliskNotificationUI;
 import net.skullian.skyfactions.notification.NotificationData;
 
 public class ObeliskPlayerNotificationsItem extends AsyncSkyItem {

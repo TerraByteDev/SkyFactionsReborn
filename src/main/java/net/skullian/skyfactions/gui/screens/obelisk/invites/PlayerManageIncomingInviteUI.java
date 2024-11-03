@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.gui.obelisk.invites;
+package net.skullian.skyfactions.gui.screens.obelisk.invites;
 
 import java.util.List;
 

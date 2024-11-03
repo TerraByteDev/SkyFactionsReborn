@@ -13,7 +13,7 @@ import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.gui.FactionLeaveConfirmationUI;
+import net.skullian.skyfactions.gui.screens.confirmation.FactionLeaveConfirmationUI;
 import net.skullian.skyfactions.util.ErrorHandler;
 
 @Command("faction")

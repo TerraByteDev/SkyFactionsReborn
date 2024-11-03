@@ -30,7 +30,7 @@ public class AuditPaginationItem extends SkyItem {
                 .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("audit_title", DATA.getType()), locale, getPLAYER()));
 
         for (String loreLine : getDATA().getLORE()) {
-            if (loreLine.contains("audit_description")) {
+            if (loreLine.contains("<audit_description>")) {
                 for (String part : TextUtility.toParts(DATA.getDescription())) {
                     builder.addLoreLines(part);
                 }

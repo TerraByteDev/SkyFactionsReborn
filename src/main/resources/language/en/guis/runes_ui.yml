@@ -13,7 +13,7 @@ OPEN_PITCH: 1
 # Any other characters are shown below under ITEMS
 # Each character (#, p, y, n) corresponds to an item.
 
-# In this case, empty space is where players can input blocks.
+# In this case, the "." characters are where players can input blocks.
 LAYOUT:
   - "# # # # # # # # #"
   - "# . . . . . . . #"

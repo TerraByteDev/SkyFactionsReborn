@@ -11,8 +11,8 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.gui.obelisk.invites.JoinRequestsUI;
-import net.skullian.skyfactions.gui.obelisk.invites.PlayerOutgoingRequestManageUI;
+import net.skullian.skyfactions.gui.screens.obelisk.invites.JoinRequestsUI;
+import net.skullian.skyfactions.gui.screens.obelisk.invites.PlayerOutgoingRequestManageUI;
 import net.skullian.skyfactions.util.ErrorHandler;
 
 public class JoinRequestsTypeItem extends SkyItem {

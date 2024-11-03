@@ -13,7 +13,7 @@ import net.skullian.skyfactions.api.RaidAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.gui.PlayerRaidConfirmationUI;
+import net.skullian.skyfactions.gui.screens.confirmation.PlayerRaidConfirmationUI;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SoundUtil;
 

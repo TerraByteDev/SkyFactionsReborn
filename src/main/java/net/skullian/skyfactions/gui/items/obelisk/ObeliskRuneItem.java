@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.obelisk;
 
 import java.util.List;
 
+import net.skullian.skyfactions.gui.TempVirtual;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -13,7 +14,6 @@ import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
-import net.skullian.skyfactions.gui.obelisk.RunesSubmitUI;
 
 public class ObeliskRuneItem extends AsyncSkyItem {
 
@@ -44,7 +44,8 @@ public class ObeliskRuneItem extends AsyncSkyItem {
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        new RunesSubmitUI().promptPlayer(player, TYPE);
+        TempVirtual.promptPlayer(player);
+        //new RunesSubmitUI().promptPlayer(player, TYPE);
     }
 
 }

@@ -2,7 +2,6 @@ package net.skullian.skyfactions.gui.items.obelisk.invites;
 
 import java.util.List;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import net.skullian.skyfactions.db.InviteData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.gui.obelisk.invites.PlayerManageIncomingInviteUI;
+import net.skullian.skyfactions.gui.screens.obelisk.invites.PlayerManageIncomingInviteUI;
 
 public class PlayerFactionInvitePaginationItem extends SkyItem {
 

@@ -96,7 +96,7 @@ dependencies {
 
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.zaxxer:HikariCP:6.0.0")
-    compileOnly("xyz.xenondevs.invui:invui:1.39")
+    compileOnly("xyz.xenondevs.invui:invui:1.40")
 
     implementation(platform("com.intellectualsites.bom:bom-newest:1.50"))
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core")

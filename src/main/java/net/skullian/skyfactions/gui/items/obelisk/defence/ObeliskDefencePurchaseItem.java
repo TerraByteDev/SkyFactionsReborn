@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.gui.obelisk.defence.ObeliskDefencePurchaseOverviewUI;
+import net.skullian.skyfactions.gui.screens.obelisk.defence.ObeliskDefencePurchaseOverviewUI;
 
 public class ObeliskDefencePurchaseItem extends SkyItem {
 

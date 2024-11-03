@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.gui.obelisk;
+package net.skullian.skyfactions.gui.screens.obelisk;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;

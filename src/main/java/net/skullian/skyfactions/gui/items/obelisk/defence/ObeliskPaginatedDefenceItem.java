@@ -13,7 +13,7 @@ import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
-import net.skullian.skyfactions.gui.obelisk.defence.ObeliskPurchaseDefenceUI;
+import net.skullian.skyfactions.gui.screens.obelisk.defence.ObeliskPurchaseDefenceUI;
 
 public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
 

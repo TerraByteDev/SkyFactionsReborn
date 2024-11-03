@@ -11,8 +11,8 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.gui.obelisk.invites.FactionInviteTypeSelectionUI;
-import net.skullian.skyfactions.gui.obelisk.invites.PlayerInviteTypeSelectionUI;
+import net.skullian.skyfactions.gui.screens.obelisk.invites.FactionInviteTypeSelectionUI;
+import net.skullian.skyfactions.gui.screens.obelisk.invites.PlayerInviteTypeSelectionUI;
 
 public class ObeliskInvitesItem extends SkyItem {
 

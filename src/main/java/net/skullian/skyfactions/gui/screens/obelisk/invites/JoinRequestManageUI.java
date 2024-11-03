@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.gui.obelisk.invites;
+package net.skullian.skyfactions.gui.screens.obelisk.invites;
 
 import java.util.List;
 
@@ -6,25 +6,26 @@ import org.bukkit.entity.Player;
 
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.db.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
-import net.skullian.skyfactions.gui.items.obelisk.invites.JoinRequestsTypeItem;
-import net.skullian.skyfactions.gui.items.obelisk.invites.OutgoingInvitesTypeItem;
+import net.skullian.skyfactions.gui.items.obelisk.invites.FactionJoinRequestAcceptItem;
+import net.skullian.skyfactions.gui.items.obelisk.invites.FactionJoinRequestRejectItem;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.window.Window;
 
-public class FactionInviteTypeSelectionUI {
+public class JoinRequestManageUI {
 
-    public static void promptPlayer(Player player) {
+    public static void promptPlayer(Player player, InviteData inviteData) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/invites/invite_selection", player);
+            GUIData data = GUIAPI.getGUIData("obelisk/invites/join_request_manage", player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
-                    .setStructure(data.getLAYOUT()), player);
+                    .setStructure(data.getLAYOUT()), player, inviteData);
 
             Window window = Window.single()
                     .setViewer(player)
@@ -36,13 +37,13 @@ public class FactionInviteTypeSelectionUI {
             window.open();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the invite selection GUI", "debug", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the join request manage GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 
-    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
+    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, InviteData inviteData) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("obelisk/invites/invite_selection", player);
+            List<ItemData> data = GUIAPI.getItemData("obelisk/invites/join_request_manage", player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 
@@ -50,23 +51,22 @@ public class FactionInviteTypeSelectionUI {
                         builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
                         break;
 
-                    case "OUTGOING_INVITES":
-                        builder.addIngredient(itemData.getCHARACTER(), new OutgoingInvitesTypeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
-                        break;
-
-                    case "INCOMING_INVITES":
-                        builder.addIngredient(itemData.getCHARACTER(), new JoinRequestsTypeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player));
-                        break;
-
                     case "BACK":
                         builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player));
+                        break;
+
+                    case "REJECT":
+                        builder.addIngredient(itemData.getCHARACTER(), new FactionJoinRequestRejectItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player));
+                        break;
+
+                    case "ACCEPT":
+                        builder.addIngredient(itemData.getCHARACTER(), new FactionJoinRequestAcceptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player));
                         break;
                 }
             }
 
-            return builder;
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException error) {
+            error.printStackTrace();
         }
 
         return builder;
