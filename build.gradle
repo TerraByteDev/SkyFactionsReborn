@@ -113,7 +113,7 @@ dependencies {
     compileOnly("io.lumine:Mythic-Dist:5.7.2")
     compileOnly("net.objecthunter:exp4j:0.4.8")
     compileOnly("com.github.yannicklamprecht:worldborderapi:1.213.0:dev")
-    compileOnly("com.github.retrooper:packetevents-spigot:2.5.0")
+    compileOnly("com.github.retrooper:packetevents-spigot:2.6.0")
     implementation("com.github.Tofaa2.EntityLib:spigot:2.4.10-SNAPSHOT")
     compileOnly("dev.dejvokep:boosted-yaml:1.3.7")
     compileOnly("org.incendo:cloud-paper:2.0.0-SNAPSHOT")
