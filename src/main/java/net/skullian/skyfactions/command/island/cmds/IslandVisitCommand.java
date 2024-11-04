@@ -28,7 +28,7 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.island.IslandCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 @Command("island")
 public class IslandVisitCommand extends CommandTemplate {
@@ -87,7 +87,7 @@ public class IslandVisitCommand extends CommandTemplate {
 
         IslandAPI.getPlayerIsland(target.getUniqueId()).whenComplete((is, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get that player's island", "SQL_ISLAND_GET", ex);
+                ErrorUtil.handleError(player, "get that player's island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (is == null) {
                 Messages.VISIT_NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
@@ -100,9 +100,9 @@ public class IslandVisitCommand extends CommandTemplate {
             if ((RaidAPI.currentRaids.containsValue(player.getUniqueId()) || RaidAPI.processingRaid.containsValue(player.getUniqueId())) || (RaidAPI.currentRaids.containsValue(target.getUniqueId()) || RaidAPI.processingRaid.containsValue(target.getUniqueId()))) {
                 Messages.VISIT_IN_RAID.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             } else {
-                SkyFactionsReborn.databaseHandler.isPlayerTrusted(player.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
+                SkyFactionsReborn.databaseManager.isPlayerTrusted(player.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
                     if (throwable != null) {
-                        ErrorHandler.handleError(player, "check if your are trusted", "SQL_TRUST_GET", throwable);
+                        ErrorUtil.handleError(player, "check if your are trusted", "SQL_TRUST_GET", throwable);
                         return;
                     }
 

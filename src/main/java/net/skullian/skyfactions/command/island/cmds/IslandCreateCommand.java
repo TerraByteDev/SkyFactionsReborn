@@ -14,7 +14,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.screens.confirmation.IslandCreationConfirmationUI;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 @Command("island")
 public class IslandCreateCommand extends CommandTemplate {
@@ -45,7 +45,7 @@ public class IslandCreateCommand extends CommandTemplate {
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "create an island", "SQL_ISLAND_CHECK", ex);
+                ErrorUtil.handleError(player, "create an island", "SQL_ISLAND_CHECK", ex);
                 return;
             }
 

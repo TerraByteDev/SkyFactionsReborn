@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.db.cache;
+package net.skullian.skyfactions.database.cache;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,43 +59,43 @@ public class CacheEntry {
      * @return {@link CompletableFuture<Void>}
      */
     public CompletableFuture<Void> cache(String toCache, Faction faction) {
-        if (!SkyFactionsReborn.databaseHandler.isActive()) {
+        if (!SkyFactionsReborn.databaseManager.isActive()) {
             return CompletableFuture.completedFuture(null);
         }
         if (faction != null) {
             return CompletableFuture.allOf(
-                    SkyFactionsReborn.databaseHandler.addGems(toCache, gems).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.addGems(toCache, gems).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set gems of faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseHandler.addRunes(toCache, runes).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.addRunes(toCache, runes).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set runes of faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseHandler.registerDefenceLocations(toCache, defencesToRegister).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.registerDefenceLocations(toCache, defencesToRegister).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to register new defences for faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseHandler.removeDefences(toCache, defencesToRemove).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.removeDefences(toCache, defencesToRemove).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to remove defences for faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseHandler.setFactionLocale(toCache, newLocale).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.setFactionLocale(toCache, newLocale).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to update locale for faction " + faction.getName(), ex);
                     })
             );
         } else {
             UUID uuid = UUID.fromString(toCache);
             return CompletableFuture.allOf(
-                    SkyFactionsReborn.databaseHandler.addGems(uuid, gems).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.addGems(uuid, gems).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set gems of player " + uuid, ex);
                     }),
-                    SkyFactionsReborn.databaseHandler.addRunes(uuid, runes).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.addRunes(uuid, runes).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set runes of player " + uuid, ex);
                     }),
-                    SkyFactionsReborn.databaseHandler.registerDefenceLocations(uuid, defencesToRegister).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.registerDefenceLocations(uuid, defencesToRegister).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to register new defences for player " + uuid, ex);
                     }),
-                    SkyFactionsReborn.databaseHandler.removeDefences(uuid, defencesToRemove).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.removeDefences(uuid, defencesToRemove).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to remove defences for player " + uuid, ex);
                     }),
-                    SkyFactionsReborn.databaseHandler.setLocale(uuid, newLocale).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.setLocale(uuid, newLocale).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to update defendes for player " + uuid, ex);
                     })
             );

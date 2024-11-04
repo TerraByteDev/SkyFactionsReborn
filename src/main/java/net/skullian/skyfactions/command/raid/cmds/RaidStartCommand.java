@@ -14,7 +14,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.gui.screens.confirmation.PlayerRaidConfirmationUI;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 
 @Command("raid")
@@ -46,7 +46,7 @@ public class RaidStartCommand extends CommandTemplate {
 
         RaidAPI.getCooldownDuration(player).whenComplete((cooldown, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "start a raid", "SQL_RAID_COOLDOWN_GET", ex);
+                ErrorUtil.handleError(player, "start a raid", "SQL_RAID_COOLDOWN_GET", ex);
                 return;
             }
 

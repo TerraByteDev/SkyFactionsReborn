@@ -2,8 +2,6 @@ package net.skullian.skyfactions;
 
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
-import com.github.yannicklamprecht.worldborder.impl.Border;
-import com.github.yannicklamprecht.worldborder.plugin.PersistenceWrapper;
 import com.jeff_media.customblockdata.CustomBlockData;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.tofaa.entitylib.APIConfig;
@@ -14,7 +12,6 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.skullian.skyfactions.command.discord.DiscordCommandHandler;
 import net.skullian.skyfactions.command.faction.FactionCommandHandler;
 import net.skullian.skyfactions.command.gems.GemsCommandHandler;
@@ -25,8 +22,8 @@ import net.skullian.skyfactions.command.sf.SFCommandHandler;
 import net.skullian.skyfactions.config.ConfigFileHandler;
 import net.skullian.skyfactions.config.types.DiscordConfig;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.db.DatabaseHandler;
-import net.skullian.skyfactions.db.cache.CacheService;
+import net.skullian.skyfactions.database.DatabaseManager;
+import net.skullian.skyfactions.database.cache.CacheService;
 import net.skullian.skyfactions.defence.block.BrokenBlockService;
 import net.skullian.skyfactions.discord.DiscordHandler;
 import net.skullian.skyfactions.event.DefenceDestructionHandler;
@@ -38,7 +35,6 @@ import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.xenondevs.invui.InvUI;
 
@@ -53,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 public final class SkyFactionsReborn extends JavaPlugin {
 
     public static ConfigFileHandler configHandler;
-    public static DatabaseHandler databaseHandler;
+    public static DatabaseManager databaseManager;
     public static DiscordHandler discordHandler;
     public static WorldBorderApi worldBorderApi;
     public static CacheService cacheService;
@@ -193,12 +189,12 @@ public final class SkyFactionsReborn extends JavaPlugin {
             new File(getDataFolder(), "/data").mkdir();
 
             // Initialise the database.
-            databaseHandler = new DatabaseHandler();
-            databaseHandler.initialise(Settings.DATABASE_TYPE.getString());
+            databaseManager = new DatabaseManager();
+            databaseManager.initialise(Settings.DATABASE_TYPE.getString());
 
             // Cache the most recent ID.
-            databaseHandler.setIslandCachedNextID();
-            databaseHandler.setFactionCachedNextID();
+            databaseManager.setIslandCachedNextID();
+            databaseManager.setFactionCachedNextID();
         } catch (SQLException error) {
             SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             SLogger.fatal("There was an error initialising the database.");
@@ -212,8 +208,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
     private void closeDatabase() {
         try {
-            if (databaseHandler != null) {
-                databaseHandler.closeConnection();
+            if (databaseManager != null) {
+                databaseManager.closeConnection();
             }
         } catch (SQLException error) {
             SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");

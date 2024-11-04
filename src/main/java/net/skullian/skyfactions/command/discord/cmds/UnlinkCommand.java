@@ -6,7 +6,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
@@ -26,9 +26,9 @@ public class UnlinkCommand extends CommandTemplate {
                 return true;
             if (CommandsUtility.manageCooldown(player)) return true;
 
-            SkyFactionsReborn.databaseHandler.getDiscordLink(player).whenComplete((id, ex) -> {
+            SkyFactionsReborn.databaseManager.getDiscordLink(player).whenComplete((id, ex) -> {
                 if (ex != null) {
-                    ErrorHandler.handleError(player, "unlink your Discord", "SQL_DISCORD_UNLINK", ex);
+                    ErrorUtil.handleError(player, "unlink your Discord", "SQL_DISCORD_UNLINK", ex);
                     return;
                 }
 

@@ -56,7 +56,7 @@ public class NotificationAPI {
      */
     public static CompletableFuture<Void> createNotification(UUID playerUUID, NotificationType type, Object... replacements) {
         String locale = PlayerHandler.getLocale(playerUUID);
-        return SkyFactionsReborn.databaseHandler.createNotification(playerUUID, type.getTitle(locale, replacements), type.getDescription(locale, replacements));
+        return SkyFactionsReborn.databaseManager.createNotification(playerUUID, type.getTitle(locale, replacements), type.getDescription(locale, replacements));
     }
 
     /**
@@ -66,6 +66,6 @@ public class NotificationAPI {
      * @return {@link List<NotificationData>}
      */
     public static CompletableFuture<List<NotificationData>> getNotifications(OfflinePlayer player) {
-        return SkyFactionsReborn.databaseHandler.getNotifications(player);
+        return SkyFactionsReborn.databaseManager.getNotifications(player);
     }
 }

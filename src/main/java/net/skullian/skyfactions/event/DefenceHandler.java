@@ -42,7 +42,7 @@ import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.defence.struct.DefenceEntityDeathData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.hologram.TextHologram;
@@ -69,7 +69,7 @@ public class DefenceHandler implements Listener {
             returnOwnerDependingOnLocation(placed.getLocation(), player).whenComplete((owner, ex) -> {
                 boolean isFaction = isFaction(owner);
                 if (ex != null) {
-                    ErrorHandler.handleError(player, "place your defence", "SQL_FACTION_GET", ex);
+                    ErrorUtil.handleError(player, "place your defence", "SQL_FACTION_GET", ex);
                     event.setCancelled(true);
                     return;
                 } else if (owner == null) {
@@ -124,11 +124,11 @@ public class DefenceHandler implements Listener {
                         createDefence(data, defence, owner, isFaction, Optional.of(player), Optional.of(event), true, true);
                     } catch (Exception error) {
                         event.setCancelled(true);
-                        ErrorHandler.handleError(event.getPlayer(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
+                        ErrorUtil.handleError(event.getPlayer(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
                     }
                 }else {
                     event.setCancelled(true);
-                    ErrorHandler.handleError(player, "place your defence", "DEFENCE_PROCESSING_EXCEPTION", new IllegalArgumentException("Failed to find defence with the name of " + defenceIdentifier));
+                    ErrorUtil.handleError(player, "place your defence", "DEFENCE_PROCESSING_EXCEPTION", new IllegalArgumentException("Failed to find defence with the name of " + defenceIdentifier));
                 }
             });
         }
@@ -154,7 +154,7 @@ public class DefenceHandler implements Listener {
                 else if (instance != null && !isFaction && isPlace) SkyFactionsReborn.cacheService.removeDefence(UUID.fromString(owner), instance.getDefenceLocation());
 
             if (event.isPresent()) event.get().setCancelled(true);
-            if (player.isPresent()) ErrorHandler.handleError(player.get(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
+            if (player.isPresent()) ErrorUtil.handleError(player.get(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
         }
 
         return null;
@@ -295,7 +295,7 @@ public class DefenceHandler implements Listener {
 
     public static void addPlacedDefences(String factionName) {
         if (loadedFactionDefences.get(factionName) != null) return;
-        SkyFactionsReborn.databaseHandler.getDefenceLocations(factionName).whenComplete((locations, ex) -> {
+        SkyFactionsReborn.databaseManager.getDefenceLocations(factionName).whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -337,7 +337,7 @@ public class DefenceHandler implements Listener {
 
     public static void addPlacedDefences(Player player) {
         if (loadedPlayerDefences.get(player.getUniqueId()) != null) return;
-        SkyFactionsReborn.databaseHandler.getDefenceLocations(player.getUniqueId()).whenComplete((locations, ex) -> {
+        SkyFactionsReborn.databaseManager.getDefenceLocations(player.getUniqueId()).whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;

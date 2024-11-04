@@ -1,8 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    //id("net.ltgt.errorprone") version "4.1.0"
-    id("io.papermc.paperweight.userdev") version "1.7.4"
+    id 'io.papermc.paperweight.userdev' version '1.7.4'
     id 'com.gradleup.shadow' version '8.3.5'
     id 'java'
 }
@@ -120,10 +119,13 @@ dependencies {
     compileOnly("org.incendo:cloud-core:2.0.0")
     compileOnly("org.incendo:cloud-annotations:2.0.0")
     compileOnly("lol.pyr:znpcsplus-api:2.0.0-SNAPSHOT")
-    //errorprone("com.google.errorprone:error_prone_core:2.35.1")
-	  compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
+    compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
     compileOnly("de.oliver:FancyNpcs:2.4.0")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
+
+    compileOnly("org.jooq:jooq:3.19.15")
+    compileOnly("org.jooq:jooq-meta:3.19.15")
+    compileOnly("org.jooq:jooq-codegen:3.19.15")
 
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
@@ -151,4 +153,3 @@ processResources {
             "version": project.property("version")
     ]
 }
-

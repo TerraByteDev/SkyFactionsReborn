@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.db;
+package net.skullian.skyfactions.database;
 
 import java.io.File;
 import java.sql.Connection;
@@ -12,6 +12,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import net.skullian.skyfactions.database.struct.AuditLogData;
+import net.skullian.skyfactions.database.struct.InviteData;
+import net.skullian.skyfactions.database.struct.IslandRaidData;
 import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -42,13 +45,7 @@ public class DatabaseHandler {
     public int cachedPlayerIslandID;
     public int cachedFactionIslandID;
 
-    public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
-    }
-
     public void initialise(String type) throws SQLException {
-        SLogger.info("Setting up Database.");
-
         createDataSource(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data/data.sqlite3"), type);
     }
 

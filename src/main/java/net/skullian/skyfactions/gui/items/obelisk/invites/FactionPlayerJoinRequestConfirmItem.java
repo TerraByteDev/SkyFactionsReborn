@@ -16,7 +16,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.faction.JoinRequestData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 public class FactionPlayerJoinRequestConfirmItem extends SkyItem {
     private JoinRequestData DATA;
@@ -36,16 +36,16 @@ public class FactionPlayerJoinRequestConfirmItem extends SkyItem {
                 Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "get your Faction", "FACTION_NOT_FOUND");
                 return;
             } else if (ex != null) {
-                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             }
 
             CompletableFuture.allOf(
                     faction.addFactionMember(player.getUniqueId()),
-                    SkyFactionsReborn.databaseHandler.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming")
+                    SkyFactionsReborn.databaseManager.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming")
             ).whenComplete((ignored, exc) -> {
                 if (exc != null) {
-                    ErrorHandler.handleError(player, "accept a join request", "SQL_FACTION_GET", exc);
+                    ErrorUtil.handleError(player, "accept a join request", "SQL_FACTION_GET", exc);
                     return;
                 }
 

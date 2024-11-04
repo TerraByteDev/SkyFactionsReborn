@@ -10,7 +10,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.db.InviteData;
+import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
@@ -20,7 +20,7 @@ import net.skullian.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.FactionJoinRequestPaginationItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.PagedGui;
@@ -98,7 +98,7 @@ public class JoinRequestsUI {
         List<Item> items = new ArrayList<>();
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
             if (exc != null) {
-                ErrorHandler.handleError(player, "open the faction join requests GUI", "FACTION_NOT_FOUND", exc);
+                ErrorUtil.handleError(player, "open the faction join requests GUI", "FACTION_NOT_FOUND", exc);
                 return;
             }
 
@@ -108,7 +108,7 @@ public class JoinRequestsUI {
             }
             faction.getJoinRequests().whenComplete((data, ex) -> {
                 if (ex != null) {
-                    ErrorHandler.handleError(player, "open the faction join requests GUI", "FACTION_NOT_FOUND", exc);
+                    ErrorUtil.handleError(player, "open the faction join requests GUI", "FACTION_NOT_FOUND", exc);
                     return;
                 }
 

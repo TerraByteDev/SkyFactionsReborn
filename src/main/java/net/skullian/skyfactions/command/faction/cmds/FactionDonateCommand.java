@@ -15,7 +15,7 @@ import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 @Command("faction")
 public class FactionDonateCommand extends CommandTemplate {
@@ -42,7 +42,7 @@ public class FactionDonateCommand extends CommandTemplate {
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
            if (throwable != null) {
-               ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
+               ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                return;
            } else if (faction == null) {
                Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));

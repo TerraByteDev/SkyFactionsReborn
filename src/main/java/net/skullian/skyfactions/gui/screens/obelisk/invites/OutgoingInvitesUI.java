@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.db.InviteData;
+import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
@@ -18,7 +18,7 @@ import net.skullian.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.OutgoingInvitePaginationItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.PagedGui;
@@ -94,7 +94,7 @@ public class OutgoingInvitesUI {
         List<Item> items = new ArrayList<>();
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
             if (exc != null) {
-                ErrorHandler.handleError(player, "open the outgoing invites GUI", "GUI_LOAD_EXCEPTION", exc);
+                ErrorUtil.handleError(player, "open the outgoing invites GUI", "GUI_LOAD_EXCEPTION", exc);
                 return;
             }
 
@@ -105,7 +105,7 @@ public class OutgoingInvitesUI {
 
             faction.getOutgoingInvites().whenComplete((data, ex) -> {
                 if (ex != null) {
-                    ErrorHandler.handleError(player, "open the outgoing invites GUI", "GUI_LOAD_EXCEPTION", exc);
+                    ErrorUtil.handleError(player, "open the outgoing invites GUI", "GUI_LOAD_EXCEPTION", exc);
                     return;
                 }
 

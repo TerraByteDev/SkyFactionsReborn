@@ -14,7 +14,7 @@ import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 @Command("faction")
 public class FactionTeleportCommand extends CommandTemplate {
@@ -45,7 +45,7 @@ public class FactionTeleportCommand extends CommandTemplate {
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             } else if (faction == null) {
                 Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));

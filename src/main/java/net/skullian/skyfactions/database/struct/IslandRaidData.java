@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.db;
+package net.skullian.skyfactions.database.struct;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

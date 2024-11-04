@@ -47,7 +47,7 @@ public class IslandDeleteCommand extends CommandTemplate {
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
-        SkyFactionsReborn.databaseHandler.hasIsland(player.getUniqueId()).thenAccept(has -> {
+        SkyFactionsReborn.databaseManager.hasIsland(player.getUniqueId()).thenAccept(has -> {
             if (!has) {
                 Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             } else {

@@ -44,7 +44,7 @@ import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.event.DefenceHandler;
 import net.skullian.skyfactions.island.PlayerIsland;
 import net.skullian.skyfactions.obelisk.ObeliskHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.FileUtil;
 import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.SoundUtil;
@@ -56,7 +56,7 @@ public class IslandAPI {
 
     public static CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
         if (islands.containsKey(playerUUID)) return CompletableFuture.completedFuture(islands.get(playerUUID));
-        return SkyFactionsReborn.databaseHandler.getPlayerIsland(playerUUID).thenApply((island) -> {
+        return SkyFactionsReborn.databaseManager.islandDatabase.getPlayerIsland(playerUUID).thenApply((island) -> {
             islands.put(playerUUID, island);
 
             return island;
@@ -81,12 +81,12 @@ public class IslandAPI {
 
     public static void createIsland(Player player) {
 
-        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.databaseHandler.cachedPlayerIslandID);
-        SkyFactionsReborn.databaseHandler.cachedPlayerIslandID++;
+        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.databaseManager.islandDatabase.cachedPlayerIslandID);
+        SkyFactionsReborn.databaseManager.islandDatabase.cachedPlayerIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
         if (world == null) {
-            ErrorHandler.handleError(player, "create an island", "WORLD_NOT_EXIST", new IllegalArgumentException("Unknown World: " + Settings.ISLAND_PLAYER_WORLD.getString()));
+            ErrorUtil.handleError(player, "create an island", "WORLD_NOT_EXIST", new IllegalArgumentException("Unknown World: " + Settings.ISLAND_PLAYER_WORLD.getString()));
             return;
         }
 
@@ -94,13 +94,13 @@ public class IslandAPI {
         createRegion(player, island, world);
 
         CompletableFuture.allOf(
-                SkyFactionsReborn.databaseHandler.createIsland(player, island),
+                SkyFactionsReborn.databaseManager.islandDatabase.createIsland(player, island),
                 pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player")
         ).whenComplete((ignored, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
+                ErrorUtil.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
                 removePlayerIsland(player);
-                SkyFactionsReborn.databaseHandler.removeIsland(player);
+                SkyFactionsReborn.databaseManager.islandDatabase.removeIsland(player);
                 return;
             }
 
@@ -116,7 +116,7 @@ public class IslandAPI {
     }
 
     public static CompletableFuture<Boolean> hasIsland(UUID playerUUID) {
-        return SkyFactionsReborn.databaseHandler.hasIsland(playerUUID);
+        return SkyFactionsReborn.databaseManager.islandDatabase.hasIsland(playerUUID);
     }
 
     public static CompletableFuture<Boolean> pasteIslandSchematic(Player player, Location location, String worldName, String type) {
@@ -186,7 +186,7 @@ public class IslandAPI {
     public static void removePlayerIsland(Player player) {
         getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
+                ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             }
 
@@ -200,9 +200,9 @@ public class IslandAPI {
 
                 CompletableFuture.allOf(
                         cutRegion(region),
-                        SkyFactionsReborn.databaseHandler.removeIsland(player),
-                        SkyFactionsReborn.databaseHandler.removeAllTrustedPlayers(island.getId()),
-                        SkyFactionsReborn.databaseHandler.removeAllDefences(player.getUniqueId())
+                        SkyFactionsReborn.databaseManager.islandDatabase.removeIsland(player),
+                        SkyFactionsReborn.databaseManager.removeAllTrustedPlayers(island.getId()),
+                        SkyFactionsReborn.databaseManager.removeAllDefences(player.getUniqueId())
                 ).whenComplete((ignored, throwable) -> {
                     if (throwable != null) {
                         throwable.printStackTrace();

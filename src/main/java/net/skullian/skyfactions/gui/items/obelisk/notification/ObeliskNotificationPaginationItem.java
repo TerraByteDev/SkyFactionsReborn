@@ -12,7 +12,7 @@ import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.notification.NotificationData;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
@@ -57,9 +57,9 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (clickType.isRightClick()) {
             player.closeInventory();
-            SkyFactionsReborn.databaseHandler.removeNotification(player, DATA).whenComplete((ignored, ex) -> {
+            SkyFactionsReborn.databaseManager.removeNotification(player, DATA).whenComplete((ignored, ex) -> {
                 if (ex != null) {
-                    ErrorHandler.handleError(player, "remove a notification", "SQL_NOTIFICATION_REMOVE", ex);
+                    ErrorUtil.handleError(player, "remove a notification", "SQL_NOTIFICATION_REMOVE", ex);
                     return;
                 }
 
