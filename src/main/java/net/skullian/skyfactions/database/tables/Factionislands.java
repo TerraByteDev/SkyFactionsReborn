@@ -1,97 +1,94 @@
-
 package net.skullian.skyfactions.database.tables;
-
 
 import net.skullian.skyfactions.database.DefaultSchema;
 import net.skullian.skyfactions.database.Keys;
+import net.skullian.skyfactions.database.tables.records.FactionislandsRecord;
 import org.jooq.*;
-import org.jooq.Record;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 import java.util.Collection;
 
-
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
-public class FactionIslands extends TableImpl<Record> {
+public class Factionislands extends TableImpl<FactionislandsRecord> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>factionIslands</code>
      */
-    public static final FactionIslands FACTIONISLANDS = new FactionIslands();
+    public static final Factionislands FACTIONISLANDS = new Factionislands();
 
     /**
      * The class holding records for this type
      */
     @Override
-    public Class<Record> getRecordType() {
-        return Record.class;
+    public Class<FactionislandsRecord> getRecordType() {
+        return FactionislandsRecord.class;
     }
 
     /**
      * The column <code>factionIslands.id</code>.
      */
-    public final TableField<Record, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER, this, "");
+    public final TableField<FactionislandsRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>factionIslands.factionName</code>.
      */
-    public final TableField<Record, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<FactionislandsRecord, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>factionIslands.runes</code>.
      */
-    public final TableField<Record, Integer> RUNES = createField(DSL.name("runes"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<FactionislandsRecord, Integer> RUNES = createField(DSL.name("runes"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>factionIslands.defenceCount</code>.
      */
-    public final TableField<Record, Integer> DEFENCECOUNT = createField(DSL.name("defenceCount"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<FactionislandsRecord, Integer> DEFENCECOUNT = createField(DSL.name("defenceCount"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>factionIslands.gems</code>.
      */
-    public final TableField<Record, Integer> GEMS = createField(DSL.name("gems"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<FactionislandsRecord, Integer> GEMS = createField(DSL.name("gems"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>factionIslands.last_raided</code>.
      */
-    public final TableField<Record, Integer> LAST_RAIDED = createField(DSL.name("last_raided"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<FactionislandsRecord, Integer> LAST_RAIDED = createField(DSL.name("last_raided"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>factionIslands.last_raider</code>.
      */
-    public final TableField<Record, String> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<FactionislandsRecord, String> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.CLOB.nullable(false), this, "");
 
-    private FactionIslands(Name alias, Table<Record> aliased) {
+    private Factionislands(Name alias, Table<FactionislandsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private FactionIslands(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+    private Factionislands(Name alias, Table<FactionislandsRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
      * Create an aliased <code>factionIslands</code> table reference
      */
-    public FactionIslands(String alias) {
+    public Factionislands(String alias) {
         this(DSL.name(alias), FACTIONISLANDS);
     }
 
     /**
      * Create an aliased <code>factionIslands</code> table reference
      */
-    public FactionIslands(Name alias) {
+    public Factionislands(Name alias) {
         this(alias, FACTIONISLANDS);
     }
 
     /**
      * Create a <code>factionIslands</code> table reference
      */
-    public FactionIslands() {
+    public Factionislands() {
         this(DSL.name("factionIslands"), null);
     }
 
@@ -101,62 +98,62 @@ public class FactionIslands extends TableImpl<Record> {
     }
 
     @Override
-    public UniqueKey<Record> getPrimaryKey() {
+    public UniqueKey<FactionislandsRecord> getPrimaryKey() {
         return Keys.FACTIONISLANDS__PK_FACTIONISLANDS;
     }
 
     @Override
-    public FactionIslands as(String alias) {
-        return new FactionIslands(DSL.name(alias), this);
+    public Factionislands as(String alias) {
+        return new Factionislands(DSL.name(alias), this);
     }
 
     @Override
-    public FactionIslands as(Name alias) {
-        return new FactionIslands(alias, this);
+    public Factionislands as(Name alias) {
+        return new Factionislands(alias, this);
     }
 
     @Override
-    public FactionIslands as(Table<?> alias) {
-        return new FactionIslands(alias.getQualifiedName(), this);
-    }
-
-    /**
-     * Rename this table
-     */
-    @Override
-    public FactionIslands rename(String name) {
-        return new FactionIslands(DSL.name(name), null);
+    public Factionislands as(Table<?> alias) {
+        return new Factionislands(alias.getQualifiedName(), this);
     }
 
     /**
      * Rename this table
      */
     @Override
-    public FactionIslands rename(Name name) {
-        return new FactionIslands(name, null);
+    public Factionislands rename(String name) {
+        return new Factionislands(DSL.name(name), null);
     }
 
     /**
      * Rename this table
      */
     @Override
-    public FactionIslands rename(Table<?> name) {
-        return new FactionIslands(name.getQualifiedName(), null);
+    public Factionislands rename(Name name) {
+        return new Factionislands(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public Factionislands rename(Table<?> name) {
+        return new Factionislands(name.getQualifiedName(), null);
     }
 
     /**
      * Create an inline derived table from this table
      */
     @Override
-    public FactionIslands where(Condition condition) {
-        return new FactionIslands(getQualifiedName(), aliased() ? this : null, null, condition);
+    public Factionislands where(Condition condition) {
+        return new Factionislands(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
      * Create an inline derived table from this table
      */
     @Override
-    public FactionIslands where(Collection<? extends Condition> conditions) {
+    public Factionislands where(Collection<? extends Condition> conditions) {
         return where(DSL.and(conditions));
     }
 
@@ -164,7 +161,7 @@ public class FactionIslands extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public FactionIslands where(Condition... conditions) {
+    public Factionislands where(Condition... conditions) {
         return where(DSL.and(conditions));
     }
 
@@ -172,7 +169,7 @@ public class FactionIslands extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public FactionIslands where(Field<Boolean> condition) {
+    public Factionislands where(Field<Boolean> condition) {
         return where(DSL.condition(condition));
     }
 
@@ -181,7 +178,7 @@ public class FactionIslands extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public FactionIslands where(SQL condition) {
+    public Factionislands where(SQL condition) {
         return where(DSL.condition(condition));
     }
 
@@ -190,7 +187,7 @@ public class FactionIslands extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public FactionIslands where(@Stringly.SQL String condition) {
+    public Factionislands where(@Stringly.SQL String condition) {
         return where(DSL.condition(condition));
     }
 
@@ -199,7 +196,7 @@ public class FactionIslands extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public FactionIslands where(@Stringly.SQL String condition, Object... binds) {
+    public Factionislands where(@Stringly.SQL String condition, Object... binds) {
         return where(DSL.condition(condition, binds));
     }
 
@@ -208,7 +205,7 @@ public class FactionIslands extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public FactionIslands where(@Stringly.SQL String condition, QueryPart... parts) {
+    public Factionislands where(@Stringly.SQL String condition, QueryPart... parts) {
         return where(DSL.condition(condition, parts));
     }
 
@@ -216,7 +213,7 @@ public class FactionIslands extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public FactionIslands whereExists(Select<?> select) {
+    public Factionislands whereExists(Select<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -224,7 +221,7 @@ public class FactionIslands extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public FactionIslands whereNotExists(Select<?> select) {
+    public Factionislands whereNotExists(Select<?> select) {
         return where(DSL.notExists(select));
     }
 }

@@ -1,20 +1,17 @@
-
 package net.skullian.skyfactions.database.tables;
-
 
 import net.skullian.skyfactions.database.DefaultSchema;
 import net.skullian.skyfactions.database.Keys;
+import net.skullian.skyfactions.database.tables.records.IslandsRecord;
 import org.jooq.*;
-import org.jooq.Record;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 import java.util.Collection;
 
-
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
-public class Islands extends TableImpl<Record> {
+public class Islands extends TableImpl<IslandsRecord> {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,55 +24,55 @@ public class Islands extends TableImpl<Record> {
      * The class holding records for this type
      */
     @Override
-    public Class<Record> getRecordType() {
-        return Record.class;
+    public Class<IslandsRecord> getRecordType() {
+        return IslandsRecord.class;
     }
 
     /**
      * The column <code>islands.id</code>.
      */
-    public final TableField<Record, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER, this, "");
+    public final TableField<IslandsRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>islands.uuid</code>.
      */
-    public final TableField<Record, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<IslandsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>islands.level</code>.
      */
-    public final TableField<Record, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<IslandsRecord, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>islands.gems</code>.
      */
-    public final TableField<Record, Integer> GEMS = createField(DSL.name("gems"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<IslandsRecord, Integer> GEMS = createField(DSL.name("gems"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>islands.runes</code>.
      */
-    public final TableField<Record, Integer> RUNES = createField(DSL.name("runes"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<IslandsRecord, Integer> RUNES = createField(DSL.name("runes"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>islands.defenceCount</code>.
      */
-    public final TableField<Record, Integer> DEFENCECOUNT = createField(DSL.name("defenceCount"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<IslandsRecord, Integer> DEFENCECOUNT = createField(DSL.name("defenceCount"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>islands.last_raided</code>.
      */
-    public final TableField<Record, Long> LAST_RAIDED = createField(DSL.name("last_raided"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<IslandsRecord, Long> LAST_RAIDED = createField(DSL.name("last_raided"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>islands.last_raider</code>.
      */
-    public final TableField<Record, String> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<IslandsRecord, String> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.CLOB.nullable(false), this, "");
 
-    private Islands(Name alias, Table<Record> aliased) {
+    private Islands(Name alias, Table<IslandsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Islands(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+    private Islands(Name alias, Table<IslandsRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
@@ -106,7 +103,7 @@ public class Islands extends TableImpl<Record> {
     }
 
     @Override
-    public UniqueKey<Record> getPrimaryKey() {
+    public UniqueKey<IslandsRecord> getPrimaryKey() {
         return Keys.ISLANDS__PK_ISLANDS;
     }
 

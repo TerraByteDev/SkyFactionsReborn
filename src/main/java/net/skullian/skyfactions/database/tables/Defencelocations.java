@@ -1,91 +1,87 @@
-
 package net.skullian.skyfactions.database.tables;
-
-
 import net.skullian.skyfactions.database.DefaultSchema;
+import net.skullian.skyfactions.database.tables.records.DefencelocationsRecord;
 import org.jooq.*;
-import org.jooq.Record;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 import java.util.Collection;
 
-
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
-public class DefenceLocations extends TableImpl<Record> {
+public class Defencelocations extends TableImpl<DefencelocationsRecord> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>defenceLocations</code>
      */
-    public static final DefenceLocations DEFENCELOCATIONS = new DefenceLocations();
+    public static final Defencelocations DEFENCELOCATIONS = new Defencelocations();
 
     /**
      * The class holding records for this type
      */
     @Override
-    public Class<Record> getRecordType() {
-        return Record.class;
+    public Class<DefencelocationsRecord> getRecordType() {
+        return DefencelocationsRecord.class;
     }
 
     /**
      * The column <code>defenceLocations.uuid</code>.
      */
-    public final TableField<Record, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<DefencelocationsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>defenceLocations.type</code>.
      */
-    public final TableField<Record, String> TYPE = createField(DSL.name("type"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<DefencelocationsRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>defenceLocations.factionName</code>.
      */
-    public final TableField<Record, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<DefencelocationsRecord, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>defenceLocations.x</code>.
      */
-    public final TableField<Record, Integer> X = createField(DSL.name("x"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<DefencelocationsRecord, Integer> X = createField(DSL.name("x"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>defenceLocations.y</code>.
      */
-    public final TableField<Record, Integer> Y = createField(DSL.name("y"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<DefencelocationsRecord, Integer> Y = createField(DSL.name("y"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>defenceLocations.z</code>.
      */
-    public final TableField<Record, Integer> Z = createField(DSL.name("z"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<DefencelocationsRecord, Integer> Z = createField(DSL.name("z"), SQLDataType.INTEGER.nullable(false), this, "");
 
-    private DefenceLocations(Name alias, Table<Record> aliased) {
+    private Defencelocations(Name alias, Table<DefencelocationsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private DefenceLocations(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+    private Defencelocations(Name alias, Table<DefencelocationsRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
      * Create an aliased <code>defenceLocations</code> table reference
      */
-    public DefenceLocations(String alias) {
+    public Defencelocations(String alias) {
         this(DSL.name(alias), DEFENCELOCATIONS);
     }
 
     /**
      * Create an aliased <code>defenceLocations</code> table reference
      */
-    public DefenceLocations(Name alias) {
+    public Defencelocations(Name alias) {
         this(alias, DEFENCELOCATIONS);
     }
 
     /**
      * Create a <code>defenceLocations</code> table reference
      */
-    public DefenceLocations() {
+    public Defencelocations() {
         this(DSL.name("defenceLocations"), null);
     }
 
@@ -95,57 +91,57 @@ public class DefenceLocations extends TableImpl<Record> {
     }
 
     @Override
-    public DefenceLocations as(String alias) {
-        return new DefenceLocations(DSL.name(alias), this);
+    public Defencelocations as(String alias) {
+        return new Defencelocations(DSL.name(alias), this);
     }
 
     @Override
-    public DefenceLocations as(Name alias) {
-        return new DefenceLocations(alias, this);
+    public Defencelocations as(Name alias) {
+        return new Defencelocations(alias, this);
     }
 
     @Override
-    public DefenceLocations as(Table<?> alias) {
-        return new DefenceLocations(alias.getQualifiedName(), this);
-    }
-
-    /**
-     * Rename this table
-     */
-    @Override
-    public DefenceLocations rename(String name) {
-        return new DefenceLocations(DSL.name(name), null);
+    public Defencelocations as(Table<?> alias) {
+        return new Defencelocations(alias.getQualifiedName(), this);
     }
 
     /**
      * Rename this table
      */
     @Override
-    public DefenceLocations rename(Name name) {
-        return new DefenceLocations(name, null);
+    public Defencelocations rename(String name) {
+        return new Defencelocations(DSL.name(name), null);
     }
 
     /**
      * Rename this table
      */
     @Override
-    public DefenceLocations rename(Table<?> name) {
-        return new DefenceLocations(name.getQualifiedName(), null);
+    public Defencelocations rename(Name name) {
+        return new Defencelocations(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public Defencelocations rename(Table<?> name) {
+        return new Defencelocations(name.getQualifiedName(), null);
     }
 
     /**
      * Create an inline derived table from this table
      */
     @Override
-    public DefenceLocations where(Condition condition) {
-        return new DefenceLocations(getQualifiedName(), aliased() ? this : null, null, condition);
+    public Defencelocations where(Condition condition) {
+        return new Defencelocations(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
      * Create an inline derived table from this table
      */
     @Override
-    public DefenceLocations where(Collection<? extends Condition> conditions) {
+    public Defencelocations where(Collection<? extends Condition> conditions) {
         return where(DSL.and(conditions));
     }
 
@@ -153,7 +149,7 @@ public class DefenceLocations extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public DefenceLocations where(Condition... conditions) {
+    public Defencelocations where(Condition... conditions) {
         return where(DSL.and(conditions));
     }
 
@@ -161,7 +157,7 @@ public class DefenceLocations extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public DefenceLocations where(Field<Boolean> condition) {
+    public Defencelocations where(Field<Boolean> condition) {
         return where(DSL.condition(condition));
     }
 
@@ -170,7 +166,7 @@ public class DefenceLocations extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public DefenceLocations where(SQL condition) {
+    public Defencelocations where(SQL condition) {
         return where(DSL.condition(condition));
     }
 
@@ -179,7 +175,7 @@ public class DefenceLocations extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public DefenceLocations where(@Stringly.SQL String condition) {
+    public Defencelocations where(@Stringly.SQL String condition) {
         return where(DSL.condition(condition));
     }
 
@@ -188,7 +184,7 @@ public class DefenceLocations extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public DefenceLocations where(@Stringly.SQL String condition, Object... binds) {
+    public Defencelocations where(@Stringly.SQL String condition, Object... binds) {
         return where(DSL.condition(condition, binds));
     }
 
@@ -197,7 +193,7 @@ public class DefenceLocations extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public DefenceLocations where(@Stringly.SQL String condition, QueryPart... parts) {
+    public Defencelocations where(@Stringly.SQL String condition, QueryPart... parts) {
         return where(DSL.condition(condition, parts));
     }
 
@@ -205,7 +201,7 @@ public class DefenceLocations extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public DefenceLocations whereExists(Select<?> select) {
+    public Defencelocations whereExists(Select<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -213,7 +209,7 @@ public class DefenceLocations extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public DefenceLocations whereNotExists(Select<?> select) {
+    public Defencelocations whereNotExists(Select<?> select) {
         return where(DSL.notExists(select));
     }
 }

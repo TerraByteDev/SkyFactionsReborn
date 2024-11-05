@@ -1,20 +1,17 @@
-
 package net.skullian.skyfactions.database.tables;
-
 
 import net.skullian.skyfactions.database.DefaultSchema;
 import net.skullian.skyfactions.database.Keys;
+import net.skullian.skyfactions.database.tables.records.FactionsRecord;
 import org.jooq.*;
-import org.jooq.Record;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 import java.util.Collection;
 
-
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
-public class Factions extends TableImpl<Record> {
+public class Factions extends TableImpl<FactionsRecord> {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,40 +24,40 @@ public class Factions extends TableImpl<Record> {
      * The class holding records for this type
      */
     @Override
-    public Class<Record> getRecordType() {
-        return Record.class;
+    public Class<FactionsRecord> getRecordType() {
+        return FactionsRecord.class;
     }
 
     /**
      * The column <code>factions.name</code>.
      */
-    public final TableField<Record, String> NAME = createField(DSL.name("name"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<FactionsRecord, String> NAME = createField(DSL.name("name"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>factions.motd</code>.
      */
-    public final TableField<Record, String> MOTD = createField(DSL.name("motd"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<FactionsRecord, String> MOTD = createField(DSL.name("motd"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>factions.level</code>.
      */
-    public final TableField<Record, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<FactionsRecord, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>factions.last_raid</code>.
      */
-    public final TableField<Record, Integer> LAST_RAID = createField(DSL.name("last_raid"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<FactionsRecord, Integer> LAST_RAID = createField(DSL.name("last_raid"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>factions.locale</code>.
      */
-    public final TableField<Record, String> LOCALE = createField(DSL.name("locale"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<FactionsRecord, String> LOCALE = createField(DSL.name("locale"), SQLDataType.CLOB.nullable(false), this, "");
 
-    private Factions(Name alias, Table<Record> aliased) {
+    private Factions(Name alias, Table<FactionsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Factions(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+    private Factions(Name alias, Table<FactionsRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
@@ -91,7 +88,7 @@ public class Factions extends TableImpl<Record> {
     }
 
     @Override
-    public UniqueKey<Record> getPrimaryKey() {
+    public UniqueKey<FactionsRecord> getPrimaryKey() {
         return Keys.FACTIONS__PK_FACTIONS;
     }
 

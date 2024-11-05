@@ -5,7 +5,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.database.impl.IslandDatabase;
+import net.skullian.skyfactions.database.impl.PlayerIslandDatabase;
+import net.skullian.skyfactions.database.tables.*;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
@@ -23,19 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.jooq.impl.SQLDataType.*;
-
 public class DatabaseManager {
 
     private transient DSLContext ctx;
     public boolean closed;
 
-    public IslandDatabase islandDatabase;
+    public PlayerIslandDatabase islandDatabase;
 
     public void initialise(String type) throws SQLException {
         createDataSource(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data/data.sqlite3"), type);
 
-        this.islandDatabase = new IslandDatabase(this.ctx);
+        this.islandDatabase = new PlayerIslandDatabase(this.ctx);
     }
 
     private void createDataSource(
@@ -118,96 +117,48 @@ public class DatabaseManager {
     private void setupTables() {
         SLogger.info("Creating SQL Tables.");
 
-         ctx.createTable("islands")
-                .column("id", INTEGER)
-                .column("uuid", VARCHAR)
-                .column("level", INTEGER)
-                .column("gems", INTEGER)
-                .column("runes", INTEGER)
-                .column("defenceCount", INTEGER)
-                .column("last_raided", BIGINT)
-                .column("last_raider", VARCHAR)
-                .primaryKey("id")
+         ctx.createTable(Islands.ISLANDS)
+                .primaryKey(Islands.ISLANDS.ID)
                 .execute();
 
-        ctx.createTable("playerData")
-                .column("uuid", VARCHAR)
-                .column("faction", VARCHAR)
-                .column("discord_id", VARCHAR)
-                .column("last_raid", BIGINT)
-                .column("locale", VARCHAR)
-                .primaryKey("uuid")
+        ctx.createTable(Playerdata.PLAYERDATA)
+                .primaryKey(Playerdata.PLAYERDATA.UUID)
                 .execute();
 
-        ctx.createTable("factionIslands")
-                .column("id", INTEGER)
-                .column("factionName", VARCHAR)
-                .column("runes", INTEGER)
-                .column("defenceCount", INTEGER)
-                .column("gems", INTEGER)
-                .column("last_raided", BIGINT)
-                .column("last_raider", VARCHAR)
-                .primaryKey("id")
+        ctx.createTable(Factionislands.FACTIONISLANDS)
+                .primaryKey(Factionislands.FACTIONISLANDS.ID)
                 .execute();
 
-        ctx.createTable("factions")
-                .column("name", VARCHAR)
-                .column("motd", VARCHAR)
-                .column("level", INTEGER)
-                .column("last_raid", BIGINT)
-                .column("locale", VARCHAR)
-                .primaryKey("name")
+        ctx.createTable(Factions.FACTIONS)
+                .primaryKey(Factions.FACTIONS.NAME)
                 .execute();
 
-        ctx.createTable("factionMembers")
-                .column("factionName", VARCHAR)
-                .column("uuid", VARCHAR)
-                .column("rank", VARCHAR)
-                .primaryKey("uuid")
+        ctx.createTable(Factionmembers.FACTIONMEMBERS)
+                .primaryKey(Factionmembers.FACTIONMEMBERS.UUID)
                 .execute();
 
-        ctx.createTable("trustedPlayers")
-                .column("island_id", INTEGER)
-                .column("uuid", VARCHAR)
-                .primaryKey("island_id")
+        ctx.createTable(Trustedplayers.TRUSTEDPLAYERS)
+                .primaryKey(Trustedplayers.TRUSTEDPLAYERS.ISLAND_ID)
                 .execute();
 
-        ctx.createTable("defenceLocations")
-                .column("uuid", VARCHAR)
-                .column("type", VARCHAR)
-                .column("factionName", VARCHAR)
-                .column("x", INTEGER)
-                .column("y", INTEGER)
-                .column("z", INTEGER)
+        // no primary key as there can be multiple instances
+        ctx.createTable(Defencelocations.DEFENCELOCATIONS)
                 .execute();
 
-        ctx.createTable("auditLogs")
-                .column("factionName", VARCHAR)
-                .column("type", VARCHAR)
-                .column("uuid", VARCHAR)
-                .column("replacements", VARCHAR)
-                .column("timestamp", BIGINT)
+        // no primary key for same reason as above
+        ctx.createTable(Auditlogs.AUDITLOGS)
                 .execute();
 
-        ctx.createTable("factionBans")
-                .column("factionName", VARCHAR)
-                .column("uuid", VARCHAR)
+        // no primary, same reason
+        ctx.createTable(Factionbans.FACTIONBANS)
                 .execute();
 
-        ctx.createTable("factionInvites")
-                .column("factionName", VARCHAR)
-                .column("uuid", VARCHAR)
-                .column("inviter", VARCHAR)
-                .column("type", VARCHAR)
-                .column("accepted", INTEGER)
-                .column("timestamp", BIGINT)
+        // guess what? no primary, same reason
+        ctx.createTable(Factioninvites.FACTIONINVITES)
                 .execute();
 
-        ctx.createTable("notifications")
-                .column("uuid", VARCHAR)
-                .column("type", VARCHAR)
-                .column("description", VARCHAR)
-                .column("timestamp", BIGINT)
+        // aaand same as before!
+        ctx.createTable(Notifications.NOTIFICATIONS)
                 .execute();
     }
 

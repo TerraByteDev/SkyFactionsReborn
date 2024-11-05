@@ -11,5 +11,5 @@ public class IslandRaidData {
 
     private int id;
     private String uuid;
-    private int last_raided;
+    private long last_raided;
 }

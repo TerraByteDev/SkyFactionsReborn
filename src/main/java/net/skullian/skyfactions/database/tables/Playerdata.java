@@ -1,87 +1,84 @@
-
 package net.skullian.skyfactions.database.tables;
-
 
 import net.skullian.skyfactions.database.DefaultSchema;
 import net.skullian.skyfactions.database.Keys;
+import net.skullian.skyfactions.database.tables.records.PlayerdataRecord;
 import org.jooq.*;
-import org.jooq.Record;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 import java.util.Collection;
 
-
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
-public class PlayerData extends TableImpl<Record> {
+public class Playerdata extends TableImpl<PlayerdataRecord> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * The reference instance of <code>playerData</code>
      */
-    public static final PlayerData PLAYERDATA = new PlayerData();
+    public static final Playerdata PLAYERDATA = new Playerdata();
 
     /**
      * The class holding records for this type
      */
     @Override
-    public Class<Record> getRecordType() {
-        return Record.class;
+    public Class<PlayerdataRecord> getRecordType() {
+        return PlayerdataRecord.class;
     }
 
     /**
      * The column <code>playerData.uuid</code>.
      */
-    public final TableField<Record, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<PlayerdataRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>playerData.faction</code>.
      */
-    public final TableField<Record, String> FACTION = createField(DSL.name("faction"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<PlayerdataRecord, String> FACTION = createField(DSL.name("faction"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>playerData.discord_id</code>.
      */
-    public final TableField<Record, String> DISCORD_ID = createField(DSL.name("discord_id"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<PlayerdataRecord, String> DISCORD_ID = createField(DSL.name("discord_id"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>playerData.last_raid</code>.
      */
-    public final TableField<Record, Integer> LAST_RAID = createField(DSL.name("last_raid"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<PlayerdataRecord, Long> LAST_RAID = createField(DSL.name("last_raid"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>playerData.locale</code>.
      */
-    public final TableField<Record, String> LOCALE = createField(DSL.name("locale"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<PlayerdataRecord, String> LOCALE = createField(DSL.name("locale"), SQLDataType.CLOB.nullable(false), this, "");
 
-    private PlayerData(Name alias, Table<Record> aliased) {
+    private Playerdata(Name alias, Table<PlayerdataRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private PlayerData(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+    private Playerdata(Name alias, Table<PlayerdataRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
      * Create an aliased <code>playerData</code> table reference
      */
-    public PlayerData(String alias) {
+    public Playerdata(String alias) {
         this(DSL.name(alias), PLAYERDATA);
     }
 
     /**
      * Create an aliased <code>playerData</code> table reference
      */
-    public PlayerData(Name alias) {
+    public Playerdata(Name alias) {
         this(alias, PLAYERDATA);
     }
 
     /**
      * Create a <code>playerData</code> table reference
      */
-    public PlayerData() {
+    public Playerdata() {
         this(DSL.name("playerData"), null);
     }
 
@@ -91,62 +88,62 @@ public class PlayerData extends TableImpl<Record> {
     }
 
     @Override
-    public UniqueKey<Record> getPrimaryKey() {
+    public UniqueKey<PlayerdataRecord> getPrimaryKey() {
         return Keys.PLAYERDATA__PK_PLAYERDATA;
     }
 
     @Override
-    public PlayerData as(String alias) {
-        return new PlayerData(DSL.name(alias), this);
+    public Playerdata as(String alias) {
+        return new Playerdata(DSL.name(alias), this);
     }
 
     @Override
-    public PlayerData as(Name alias) {
-        return new PlayerData(alias, this);
+    public Playerdata as(Name alias) {
+        return new Playerdata(alias, this);
     }
 
     @Override
-    public PlayerData as(Table<?> alias) {
-        return new PlayerData(alias.getQualifiedName(), this);
-    }
-
-    /**
-     * Rename this table
-     */
-    @Override
-    public PlayerData rename(String name) {
-        return new PlayerData(DSL.name(name), null);
+    public Playerdata as(Table<?> alias) {
+        return new Playerdata(alias.getQualifiedName(), this);
     }
 
     /**
      * Rename this table
      */
     @Override
-    public PlayerData rename(Name name) {
-        return new PlayerData(name, null);
+    public Playerdata rename(String name) {
+        return new Playerdata(DSL.name(name), null);
     }
 
     /**
      * Rename this table
      */
     @Override
-    public PlayerData rename(Table<?> name) {
-        return new PlayerData(name.getQualifiedName(), null);
+    public Playerdata rename(Name name) {
+        return new Playerdata(name, null);
+    }
+
+    /**
+     * Rename this table
+     */
+    @Override
+    public Playerdata rename(Table<?> name) {
+        return new Playerdata(name.getQualifiedName(), null);
     }
 
     /**
      * Create an inline derived table from this table
      */
     @Override
-    public PlayerData where(Condition condition) {
-        return new PlayerData(getQualifiedName(), aliased() ? this : null, null, condition);
+    public Playerdata where(Condition condition) {
+        return new Playerdata(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
      * Create an inline derived table from this table
      */
     @Override
-    public PlayerData where(Collection<? extends Condition> conditions) {
+    public Playerdata where(Collection<? extends Condition> conditions) {
         return where(DSL.and(conditions));
     }
 
@@ -154,7 +151,7 @@ public class PlayerData extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public PlayerData where(Condition... conditions) {
+    public Playerdata where(Condition... conditions) {
         return where(DSL.and(conditions));
     }
 
@@ -162,7 +159,7 @@ public class PlayerData extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public PlayerData where(Field<Boolean> condition) {
+    public Playerdata where(Field<Boolean> condition) {
         return where(DSL.condition(condition));
     }
 
@@ -171,7 +168,7 @@ public class PlayerData extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public PlayerData where(SQL condition) {
+    public Playerdata where(SQL condition) {
         return where(DSL.condition(condition));
     }
 
@@ -180,7 +177,7 @@ public class PlayerData extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public PlayerData where(@Stringly.SQL String condition) {
+    public Playerdata where(@Stringly.SQL String condition) {
         return where(DSL.condition(condition));
     }
 
@@ -189,7 +186,7 @@ public class PlayerData extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public PlayerData where(@Stringly.SQL String condition, Object... binds) {
+    public Playerdata where(@Stringly.SQL String condition, Object... binds) {
         return where(DSL.condition(condition, binds));
     }
 
@@ -198,7 +195,7 @@ public class PlayerData extends TableImpl<Record> {
      */
     @Override
     @PlainSQL
-    public PlayerData where(@Stringly.SQL String condition, QueryPart... parts) {
+    public Playerdata where(@Stringly.SQL String condition, QueryPart... parts) {
         return where(DSL.condition(condition, parts));
     }
 
@@ -206,7 +203,7 @@ public class PlayerData extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public PlayerData whereExists(Select<?> select) {
+    public Playerdata whereExists(Select<?> select) {
         return where(DSL.exists(select));
     }
 
@@ -214,7 +211,7 @@ public class PlayerData extends TableImpl<Record> {
      * Create an inline derived table from this table
      */
     @Override
-    public PlayerData whereNotExists(Select<?> select) {
+    public Playerdata whereNotExists(Select<?> select) {
         return where(DSL.notExists(select));
     }
 }

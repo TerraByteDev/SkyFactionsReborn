@@ -1,19 +1,16 @@
-
 package net.skullian.skyfactions.database.tables;
 
-
 import net.skullian.skyfactions.database.DefaultSchema;
+import net.skullian.skyfactions.database.tables.records.NotificationsRecord;
 import org.jooq.*;
-import org.jooq.Record;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
 import java.util.Collection;
 
-
 @SuppressWarnings({ "all", "unchecked", "rawtypes", "this-escape" })
-public class Notifications extends TableImpl<Record> {
+public class Notifications extends TableImpl<NotificationsRecord> {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,35 +23,35 @@ public class Notifications extends TableImpl<Record> {
      * The class holding records for this type
      */
     @Override
-    public Class<Record> getRecordType() {
-        return Record.class;
+    public Class<NotificationsRecord> getRecordType() {
+        return NotificationsRecord.class;
     }
 
     /**
      * The column <code>notifications.uuid</code>.
      */
-    public final TableField<Record, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<NotificationsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>notifications.type</code>.
      */
-    public final TableField<Record, String> TYPE = createField(DSL.name("type"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<NotificationsRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>notifications.description</code>.
      */
-    public final TableField<Record, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<NotificationsRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>notifications.timestamp</code>.
      */
-    public final TableField<Record, Integer> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<NotificationsRecord, Long> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.BIGINT.nullable(false), this, "");
 
-    private Notifications(Name alias, Table<Record> aliased) {
+    private Notifications(Name alias, Table<NotificationsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Notifications(Name alias, Table<Record> aliased, Field<?>[] parameters, Condition where) {
+    private Notifications(Name alias, Table<NotificationsRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
