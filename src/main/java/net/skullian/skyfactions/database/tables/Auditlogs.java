@@ -45,7 +45,7 @@ public class Auditlogs extends TableImpl<AuditlogsRecord> {
     /**
      * The column <code>auditLogs.description</code>.
      */
-    public final TableField<AuditlogsRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<AuditlogsRecord, String> REPLACEMENTS = createField(DSL.name("replacements"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>auditLogs.timestamp</code>.

@@ -5,7 +5,9 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.database.impl.PlayerIslandDatabase;
+import net.skullian.skyfactions.database.impl.*;
+import net.skullian.skyfactions.database.impl.faction.FactionIslandDatabaseManager;
+import net.skullian.skyfactions.database.impl.faction.FactionsDatabaseManager;
 import net.skullian.skyfactions.database.tables.*;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
@@ -29,12 +31,20 @@ public class DatabaseManager {
     private transient DSLContext ctx;
     public boolean closed;
 
-    public PlayerIslandDatabase islandDatabase;
+    public CurrencyDatabaseManager currencyManager;
+    public FactionIslandDatabaseManager factionIslandManager;
+    public FactionsDatabaseManager factionsManager;
+    public PlayerIslandsDatabaseManager playerIslandManager;
+    public PlayerDatabaseManager playerManager;
 
     public void initialise(String type) throws SQLException {
         createDataSource(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data/data.sqlite3"), type);
 
-        this.islandDatabase = new PlayerIslandDatabase(this.ctx);
+        this.currencyManager = new CurrencyDatabaseManager(this.ctx);
+        this.factionIslandManager = new FactionIslandDatabaseManager(this.ctx);
+        this.factionsManager = new FactionsDatabaseManager(this.ctx);
+        this.playerIslandManager = new PlayerIslandsDatabaseManager(this.ctx);
+        this.playerManager = new PlayerDatabaseManager(this.ctx);
     }
 
     private void createDataSource(

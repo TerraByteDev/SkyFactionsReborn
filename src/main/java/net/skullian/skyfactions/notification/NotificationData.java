@@ -11,7 +11,7 @@ public class NotificationData {
 
     private UUID uuid;
     private String title;
-    private String description;
+    private Object[] replacements;
     private long timestamp;
 
 }

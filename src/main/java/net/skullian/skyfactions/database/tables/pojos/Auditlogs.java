@@ -10,14 +10,14 @@ public class Auditlogs implements Serializable {
     private final String factionname;
     private final String type;
     private final String uuid;
-    private final String description;
+    private final String replacements;
     private final Long timestamp;
 
     public Auditlogs(Auditlogs value) {
         this.factionname = value.factionname;
         this.type = value.type;
         this.uuid = value.uuid;
-        this.description = value.description;
+        this.replacements = value.replacements;
         this.timestamp = value.timestamp;
     }
 
@@ -25,13 +25,13 @@ public class Auditlogs implements Serializable {
         String factionname,
         String type,
         String uuid,
-        String description,
+        String replacements,
         Long timestamp
     ) {
         this.factionname = factionname;
         this.type = type;
         this.uuid = uuid;
-        this.description = description;
+        this.replacements = replacements;
         this.timestamp = timestamp;
     }
 
@@ -57,10 +57,10 @@ public class Auditlogs implements Serializable {
     }
 
     /**
-     * Getter for <code>auditLogs.description</code>.
+     * Getter for <code>auditLogs.replacements</code>.
      */
-    public String getDescription() {
-        return this.description;
+    public String getReplacements() {
+        return this.replacements;
     }
 
     /**
@@ -97,11 +97,11 @@ public class Auditlogs implements Serializable {
         }
         else if (!this.uuid.equals(other.uuid))
             return false;
-        if (this.description == null) {
-            if (other.description != null)
+        if (this.replacements == null) {
+            if (other.replacements != null)
                 return false;
         }
-        else if (!this.description.equals(other.description))
+        else if (!this.replacements.equals(other.replacements))
             return false;
         if (this.timestamp == null) {
             if (other.timestamp != null)
@@ -119,7 +119,7 @@ public class Auditlogs implements Serializable {
         result = prime * result + ((this.factionname == null) ? 0 : this.factionname.hashCode());
         result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
-        result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + ((this.replacements == null) ? 0 : this.replacements.hashCode());
         result = prime * result + ((this.timestamp == null) ? 0 : this.timestamp.hashCode());
         return result;
     }
@@ -131,7 +131,7 @@ public class Auditlogs implements Serializable {
         sb.append(factionname);
         sb.append(", ").append(type);
         sb.append(", ").append(uuid);
-        sb.append(", ").append(description);
+        sb.append(", ").append(replacements);
         sb.append(", ").append(timestamp);
 
         sb.append(")");

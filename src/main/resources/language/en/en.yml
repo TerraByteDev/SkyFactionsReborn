@@ -509,6 +509,17 @@ Messages:
       JOIN_REQUEST_ACCEPT_TITLE: "<green><bold>Join Request Accepted"
       JOIN_REQUEST_ACCEPT_DESCRIPTION: "<green><player_name> <yellow>accepted your join/request to <green><faction_name>./<gray>See the invite section of your/Obelisk for more info."
 
+      # Notification for when a player is kicked from their faction.
+      # Placeholders: <faction_name> - Player who was kicked.
+      FACTION_KICKED_TITLE: "<red><bold>Kicked from Faction"
+      FACTION_KICKED_DESCRIPTION: "<yellow>You were kicked from your Faction <red><faction_name>!"
+
+      # Notification for when a player is banned from their faction.
+      # Placeholders: <faction_name> - Player who was banned.
+      FACTION_BANNED_TITLE: "<red><bold>Banned from Faction"
+      FACTION_BANNED_DESCRIPTION: "<yellow>You were banned from your Faction <red><faction_name>!"
+
+
   Obelisk:
     # Sent when a player tries to access another player's or Faction's Obelisk (e.g. when visiting).
     ACCESS_DENY: "<server_name> <red><bold>Hey!<reset><gray> You cannot access this Obelisk!"

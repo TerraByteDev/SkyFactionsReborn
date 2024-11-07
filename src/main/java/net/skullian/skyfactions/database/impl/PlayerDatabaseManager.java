@@ -1,27 +1,20 @@
 package net.skullian.skyfactions.database.impl;
 
-import net.skullian.skyfactions.database.struct.IslandRaidData;
 import net.skullian.skyfactions.database.tables.PlayerData;
-import net.skullian.skyfactions.database.tables.Playerdata;
-import net.skullian.skyfactions.database.tables.records.IslandsRecord;
-import net.skullian.skyfactions.database.tables.records.PlayerdataRecord;
 import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.entity.Player;
 import org.jooq.DSLContext;
-import org.jooq.Result;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static net.skullian.skyfactions.database.Tables.PLAYERDATA;
 
-public class PlayerDatabase {
+public class PlayerDatabaseManager {
 
     private final DSLContext ctx;
 
-    public PlayerDatabase(DSLContext ctx) {
+    public PlayerDatabaseManager(DSLContext ctx) {
         this.ctx = ctx;
     }
 

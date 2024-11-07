@@ -54,17 +54,17 @@ public class AuditlogsRecord extends TableRecordImpl<AuditlogsRecord> {
     }
 
     /**
-     * Setter for <code>auditLogs.description</code>.
+     * Setter for <code>auditLogs.replacements</code>.
      */
-    public AuditlogsRecord setDescription(String value) {
+    public AuditlogsRecord setReplacements(String value) {
         set(3, value);
         return this;
     }
 
     /**
-     * Getter for <code>auditLogs.description</code>.
+     * Getter for <code>auditLogs.replacements</code>.
      */
-    public String getDescription() {
+    public String getReplacements() {
         return (String) get(3);
     }
 
@@ -97,13 +97,13 @@ public class AuditlogsRecord extends TableRecordImpl<AuditlogsRecord> {
     /**
      * Create a detached, initialised AuditlogsRecord
      */
-    public AuditlogsRecord(String factionname, String type, String uuid, String description, Long timestamp) {
+    public AuditlogsRecord(String factionname, String type, String uuid, String replacements, Long timestamp) {
         super(Auditlogs.AUDITLOGS);
 
         setFactionname(factionname);
         setType(type);
         setUuid(uuid);
-        setDescription(description);
+        setReplacements(replacements);
         setTimestamp(timestamp);
         resetChangedOnNotNull();
     }
@@ -118,7 +118,7 @@ public class AuditlogsRecord extends TableRecordImpl<AuditlogsRecord> {
             setFactionname(value.getFactionname());
             setType(value.getType());
             setUuid(value.getUuid());
-            setDescription(value.getDescription());
+            setReplacements(value.getDescription());
             setTimestamp(value.getTimestamp());
             resetChangedOnNotNull();
         }

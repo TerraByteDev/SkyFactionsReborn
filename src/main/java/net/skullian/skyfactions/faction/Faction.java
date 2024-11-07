@@ -32,7 +32,7 @@ public class Faction {
 
     private FactionIsland island;
     private String name;
-    private int last_raid;
+    private long last_raid;
     private int level;
     private OfflinePlayer owner;
     private List<OfflinePlayer> admins;

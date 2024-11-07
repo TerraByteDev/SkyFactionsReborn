@@ -50,7 +50,7 @@ public class Factioninvites extends TableImpl<FactioninvitesRecord> {
     /**
      * The column <code>factionInvites.accepted</code>.
      */
-    public final TableField<FactioninvitesRecord, Integer> ACCEPTED = createField(DSL.name("accepted"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<FactioninvitesRecord, Boolean> ACCEPTED = createField(DSL.name("accepted"), SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
      * The column <code>factionInvites.timestamp</code>.

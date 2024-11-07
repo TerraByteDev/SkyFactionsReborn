@@ -38,9 +38,9 @@ public class Notifications extends TableImpl<NotificationsRecord> {
     public final TableField<NotificationsRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>notifications.description</code>.
+     * The column <code>notifications.replacements</code>.
      */
-    public final TableField<NotificationsRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<NotificationsRecord, String> REPLACEMENTS = createField(DSL.name("replacements"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>notifications.timestamp</code>.

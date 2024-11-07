@@ -146,7 +146,7 @@ java {
 jooq {
     configurations {
         main {
-            generateSchemaSourceOnCompilation = true
+            generateSchemaSourceOnCompilation = false
 
             generationTool {
                 logging = Logging.DEBUG
@@ -168,7 +168,7 @@ jooq {
                         fluentSetters = true
                     }
                     target {
-                        packageName = 'net.skullian.skyfactions.database.tables'
+                        packageName = 'net.skullian.skyfactions.database'
                         directory = 'src/main/java/test'  // default (can be omitted)
                     }
                     strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'

@@ -41,15 +41,15 @@ public class NotificationsRecord extends TableRecordImpl<NotificationsRecord> {
     /**
      * Setter for <code>notifications.description</code>.
      */
-    public NotificationsRecord setDescription(String value) {
+    public NotificationsRecord setReplacements(String value) {
         set(2, value);
         return this;
     }
 
     /**
-     * Getter for <code>notifications.description</code>.
+     * Getter for <code>notifications.replacements</code>.
      */
-    public String getDescription() {
+    public String getReplacements() {
         return (String) get(2);
     }
 
@@ -82,12 +82,12 @@ public class NotificationsRecord extends TableRecordImpl<NotificationsRecord> {
     /**
      * Create a detached, initialised NotificationsRecord
      */
-    public NotificationsRecord(String uuid, String type, String description, Long timestamp) {
+    public NotificationsRecord(String uuid, String type, String replacements, Long timestamp) {
         super(Notifications.NOTIFICATIONS);
 
         setUuid(uuid);
         setType(type);
-        setDescription(description);
+        setReplacements(replacements);
         setTimestamp(timestamp);
         resetChangedOnNotNull();
     }
@@ -101,7 +101,7 @@ public class NotificationsRecord extends TableRecordImpl<NotificationsRecord> {
         if (value != null) {
             setUuid(value.getUuid());
             setType(value.getType());
-            setDescription(value.getDescription());
+            setReplacements(value.getReplacements());
             setTimestamp(value.getTimestamp());
             resetChangedOnNotNull();
         }

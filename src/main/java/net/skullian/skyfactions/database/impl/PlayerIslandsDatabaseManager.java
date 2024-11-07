@@ -21,13 +21,13 @@ import java.util.concurrent.CompletableFuture;
 import static net.skullian.skyfactions.database.tables.Islands.ISLANDS;
 import static net.skullian.skyfactions.database.tables.Trustedplayers.TRUSTEDPLAYERS;
 
-public class PlayerIslandDatabase {
+public class PlayerIslandsDatabaseManager {
 
     private final DSLContext ctx;
 
     public int cachedPlayerIslandID;
 
-    public PlayerIslandDatabase(DSLContext ctx) {
+    public PlayerIslandsDatabaseManager(DSLContext ctx) {
         this.ctx = ctx;
         setIslandCachedNextID();
     }
@@ -60,13 +60,11 @@ public class PlayerIslandDatabase {
 
     public CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
-           Result<IslandsRecord> result = ctx.selectFrom(ISLANDS)
+           IslandsRecord result = ctx.selectFrom(ISLANDS)
                    .where(ISLANDS.UUID.eq(playerUUID.toString()))
-                   .fetch();
+                   .fetchOne();
 
-           if (result.isEmpty()) return null;
-
-           return new PlayerIsland(result.getFirst().getValue(ISLANDS.ID));
+           return result != null ? new PlayerIsland(result.getId()) : null;
         });
     }
 
@@ -76,8 +74,8 @@ public class PlayerIslandDatabase {
                     .from(ISLANDS)
                     .fetchOneInto(Integer.class);
 
-            if (result == null) this.cachedPlayerIslandID = 0;
-                else this.cachedPlayerIslandID = result;
+            if (result == null) this.cachedPlayerIslandID = 1;
+                else this.cachedPlayerIslandID = (result + 1);
         });
     }
 

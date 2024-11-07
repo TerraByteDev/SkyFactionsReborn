@@ -203,10 +203,17 @@ public class TextUtility {
         return formattedTime.toString();
     }
 
-    public static List<String> toParts(String string) {
-        String[] parts = string.split("/");
-        List<String> partsList = Arrays.asList(parts);
-        return partsList;
+    public static String toString(List<String> array) {
+        return String.join("-SEPARATOR-", array).trim();
+    }
+
+    public static ArrayList<String> toArray(String arrayString) {
+        String[] array = arrayString.split("-SEPARATOR-");
+        return new ArrayList<>(Arrays.asList(array));
+    }
+
+    public static Object[] toParts(String string) {
+        return string.split("/");
     }
 
 }

@@ -56,7 +56,7 @@ public class Factionislands extends TableImpl<FactionislandsRecord> {
     /**
      * The column <code>factionIslands.last_raided</code>.
      */
-    public final TableField<FactionislandsRecord, Integer> LAST_RAIDED = createField(DSL.name("last_raided"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<FactionislandsRecord, Long> LAST_RAIDED = createField(DSL.name("last_raided"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>factionIslands.last_raider</code>.

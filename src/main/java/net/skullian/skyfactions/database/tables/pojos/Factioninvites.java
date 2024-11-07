@@ -11,7 +11,7 @@ public class Factioninvites implements Serializable {
     private final String uuid;
     private final String inviter;
     private final String type;
-    private final Integer accepted;
+    private final Boolean accepted;
     private final Long timestamp;
 
     public Factioninvites(Factioninvites value) {
@@ -28,7 +28,7 @@ public class Factioninvites implements Serializable {
         String uuid,
         String inviter,
         String type,
-        Integer accepted,
+        Boolean accepted,
         Long timestamp
     ) {
         this.factionname = factionname;
@@ -70,7 +70,7 @@ public class Factioninvites implements Serializable {
     /**
      * Getter for <code>factionInvites.accepted</code>.
      */
-    public Integer getAccepted() {
+    public Boolean getAccepted() {
         return this.accepted;
     }
 

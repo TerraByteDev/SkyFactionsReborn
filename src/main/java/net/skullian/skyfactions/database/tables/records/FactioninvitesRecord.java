@@ -71,7 +71,7 @@ public class FactioninvitesRecord extends TableRecordImpl<FactioninvitesRecord> 
     /**
      * Setter for <code>factionInvites.accepted</code>.
      */
-    public FactioninvitesRecord setAccepted(Integer value) {
+    public FactioninvitesRecord setAccepted(Boolean value) {
         set(4, value);
         return this;
     }
@@ -79,8 +79,8 @@ public class FactioninvitesRecord extends TableRecordImpl<FactioninvitesRecord> 
     /**
      * Getter for <code>factionInvites.accepted</code>.
      */
-    public Integer getAccepted() {
-        return (Integer) get(4);
+    public Boolean getAccepted() {
+        return (Boolean) get(4);
     }
 
     /**
@@ -112,7 +112,7 @@ public class FactioninvitesRecord extends TableRecordImpl<FactioninvitesRecord> 
     /**
      * Create a detached, initialised FactioninvitesRecord
      */
-    public FactioninvitesRecord(String factionname, String uuid, String inviter, String type, Integer accepted, Long timestamp) {
+    public FactioninvitesRecord(String factionname, String uuid, String inviter, String type, Boolean accepted, Long timestamp) {
         super(Factioninvites.FACTIONINVITES);
 
         setFactionname(factionname);

@@ -11,13 +11,13 @@ public class Notifications implements Serializable {
 
     private final String uuid;
     private final String type;
-    private final String description;
+    private final String replacements;
     private final Long timestamp;
 
     public Notifications(Notifications value) {
         this.uuid = value.uuid;
         this.type = value.type;
-        this.description = value.description;
+        this.replacements = value.replacements;
         this.timestamp = value.timestamp;
     }
 
@@ -29,7 +29,7 @@ public class Notifications implements Serializable {
     ) {
         this.uuid = uuid;
         this.type = type;
-        this.description = description;
+        this.replacements = description;
         this.timestamp = timestamp;
     }
 
@@ -48,10 +48,10 @@ public class Notifications implements Serializable {
     }
 
     /**
-     * Getter for <code>notifications.description</code>.
+     * Getter for <code>notifications.replacements</code>.
      */
-    public String getDescription() {
-        return this.description;
+    public String getReplacements() {
+        return this.replacements;
     }
 
     /**
@@ -82,11 +82,11 @@ public class Notifications implements Serializable {
         }
         else if (!this.type.equals(other.type))
             return false;
-        if (this.description == null) {
-            if (other.description != null)
+        if (this.replacements == null) {
+            if (other.replacements != null)
                 return false;
         }
-        else if (!this.description.equals(other.description))
+        else if (!this.replacements.equals(other.replacements))
             return false;
         if (this.timestamp == null) {
             if (other.timestamp != null)
@@ -103,7 +103,7 @@ public class Notifications implements Serializable {
         int result = 1;
         result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
         result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
-        result = prime * result + ((this.description == null) ? 0 : this.description.hashCode());
+        result = prime * result + ((this.replacements == null) ? 0 : this.replacements.hashCode());
         result = prime * result + ((this.timestamp == null) ? 0 : this.timestamp.hashCode());
         return result;
     }
@@ -114,7 +114,7 @@ public class Notifications implements Serializable {
 
         sb.append(uuid);
         sb.append(", ").append(type);
-        sb.append(", ").append(description);
+        sb.append(", ").append(replacements);
         sb.append(", ").append(timestamp);
 
         sb.append(")");
