@@ -251,6 +251,9 @@ Messages:
     # Sent when a player removes a defence via the GUI.
     DEFENCE_REMOVE_SUCCESS: "<server_name><green> Successfully removed defence."
 
+    # Sent when a player tries to access the
+    DEFENCE_INSUFFICIENT_PERMISSIONS: "<server_name><red> Hey!<reset><yellow> You don't have the sufficient rank to do that!"
+
   Gems:
     # Sent when the player runs /gems or /gems balance
     GEM_COUNT: "<yellow>You have: <green><bold><count><reset><yellow> Gems."

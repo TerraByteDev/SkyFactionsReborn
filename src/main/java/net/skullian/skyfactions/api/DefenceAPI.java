@@ -109,4 +109,9 @@ public class DefenceAPI {
                         .findFirst()
                         .orElse(null));
     }
+
+    public static void returnDefence(DefenceStruct struct, Player player) {
+        ItemStack stack = DefenceAPI.createDefenceStack(struct, player);
+        player.getInventory().addItem(stack);
+    }
 }

@@ -6,6 +6,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
@@ -14,6 +15,7 @@ import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.window.Window;
 
@@ -21,12 +23,12 @@ import java.util.List;
 
 public class DefenceManageUI {
 
-    public static void promptPlayer(Player player, DefenceData defenceData, DefenceStruct struct) {
+    public static void promptPlayer(Player player, DefenceData defenceData, DefenceStruct struct, Faction faction) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
                 GUIData data = GUIAPI.getGUIData("defence/management_ui", player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
-                        .setStructure(data.getLAYOUT()), player, struct, defenceData);
+                        .setStructure(data.getLAYOUT()), player, struct, defenceData, faction);
 
                 Window window = Window.single()
                         .setViewer(player)
@@ -43,7 +45,7 @@ public class DefenceManageUI {
         });
     }
 
-    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, DefenceStruct struct, DefenceData defenceData) {
+    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, DefenceStruct struct, DefenceData defenceData, @Nullable Faction faction) {
         try {
             List<ItemData> data = GUIAPI.getItemData("defence/management_ui", player);
             for (ItemData itemData : data) {
@@ -67,6 +69,10 @@ public class DefenceManageUI {
 
                     case "UPGRADE":
                         builder.addIngredient(itemData.getCHARACTER(), new DefenceUpgradeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, struct, defenceData));
+                        break;
+
+                    case "REMOVE":
+                        builder.addIngredient(itemData.getCHARACTER(), new DefenceRemoveItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, struct, defenceData, faction));
                         break;
 
                     case "BORDER":

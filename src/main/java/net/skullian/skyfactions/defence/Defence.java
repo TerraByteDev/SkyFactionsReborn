@@ -52,16 +52,18 @@ public abstract class Defence {
         this.struct = defenceStruct;
     }
 
-    public void remove() {
-        Block block = getDefenceLocation().getBlock();
-        PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
-        NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
+    public CompletableFuture<Void> remove() {
+        return CompletableFuture.runAsync(() -> {
+            Block block = getDefenceLocation().getBlock();
+            PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
+            NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
 
-        container.remove(dataKey);
-        block.setType(Material.AIR);
+            container.remove(dataKey);
+            block.setType(Material.AIR);
 
-        if (data.isIS_FACTION()) SkyFactionsReborn.cacheService.removeDefence(FactionAPI.factionNameCache.get(data.getUUIDFactionName()), getDefenceLocation());
-            else SkyFactionsReborn.cacheService.removeDefence(UUID.fromString(data.getUUIDFactionName()), getDefenceLocation());
+            if (data.isIS_FACTION()) SkyFactionsReborn.cacheService.removeDefence(FactionAPI.factionNameCache.get(data.getUUIDFactionName()), getDefenceLocation());
+                else SkyFactionsReborn.cacheService.removeDefence(UUID.fromString(data.getUUIDFactionName()), getDefenceLocation());
+        });
     }
 
     public void onShoot() {

@@ -130,6 +130,10 @@ Global:
 # These names are just the actual ranks, but not the configured message names of each rank.
 # See the FACTION_TITLES config in the language configs at around Line 360.
 Permissions:
+
+  # Which ranks should be able to purchase defences?
+  PURCHASE_DEFENCE: ["moderator", "admin", "owner"]
+
   # Which ranks can place defences?
   PLACE_DEFENCE: ["fighter", "moderator", "admin", "owner"]
 
