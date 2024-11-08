@@ -48,8 +48,8 @@ Hub:
 # Configuration for cooldowns.
 # You do NOT want these to be too low, definitely not 0. These will avoid database spam and anything else.
 Cooldowns:
-  COMMAND: 5000
-  GUI_ITEM: 5000
+  COMMAND: 5000 # Cooldown for commands
+  GUI_ITEM: 1500 # Global cooldown mfor all items
 
 # Configuration for all sounds (apart from GUI item clicks, they are configured in their respective GUI config files)
 # Set the sound to "NONE" to disable it.

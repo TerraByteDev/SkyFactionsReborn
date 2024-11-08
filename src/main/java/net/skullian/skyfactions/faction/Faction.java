@@ -216,6 +216,7 @@ public class Faction {
                 return;
             }
 
+            createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_BAN, "banned", player.getName(), "player", actor.getName());
             if (Settings.FACTION_MANAGE_BROADCAST_BANS.getBoolean()) {
                 createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST,"banned", player.getName());
             }
@@ -458,7 +459,9 @@ public class Faction {
             case "fighter":
                 fighters.add(player);
                 break;
-
+            case "members":
+                members.add(player);
+                break;
         }
     }
 }
