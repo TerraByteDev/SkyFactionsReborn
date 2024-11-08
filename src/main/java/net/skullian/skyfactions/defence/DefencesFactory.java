@@ -318,11 +318,4 @@ public class DefencesFactory {
 
         return matchingMaterials;
     }
-
-    @EventHandler
-    public void onArmorEquip(ArmorEquipEvent event) {
-        if (DefenceAPI.isDefence(event.getNewArmorPiece())) {
-            event.setCancelled(true);
-        }
-    }
 }

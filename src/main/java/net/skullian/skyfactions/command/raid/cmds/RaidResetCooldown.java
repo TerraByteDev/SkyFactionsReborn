@@ -41,7 +41,7 @@ public class RaidResetCooldown extends CommandTemplate {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
 
-        SkyFactionsReborn.databaseManager.updateLastRaid(player, 0).whenComplete((ignored, throwable) -> {
+        SkyFactionsReborn.databaseManager.playerManager.updateLastRaid(player, 0).whenComplete((ignored, throwable) -> {
             if (throwable != null) {
                 ErrorUtil.handleError(player, "reset your raid cooldown", "SQL_RAID_UPDATE", throwable);
                 return;

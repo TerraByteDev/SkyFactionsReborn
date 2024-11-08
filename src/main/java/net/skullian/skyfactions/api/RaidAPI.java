@@ -39,7 +39,7 @@ public class RaidAPI {
 
     public static CompletableFuture<String> getCooldownDuration(Player player) {
         long cooldownDurationInMilliseconds = Settings.RAIDING_COOLDOWN.getInt();
-        return SkyFactionsReborn.databaseManager.getLastRaid(player).thenApply((lastTime) -> {
+        return SkyFactionsReborn.databaseManager.playerManager.getLastRaid(player).thenApply((lastTime) -> {
             long currentTime = System.currentTimeMillis();
 
             if (currentTime - lastTime >= cooldownDurationInMilliseconds) {
@@ -97,7 +97,7 @@ public class RaidAPI {
             alertPlayer(def, attacker);
             teleportToPreparationArea(def);
 
-            IslandAPI.getPlayerIsland(def.getUniqueId()).thenAccept(is -> SkyFactionsReborn.databaseManager.setIslandCooldown(is, System.currentTimeMillis())).exceptionally(ex -> {
+            IslandAPI.getPlayerIsland(def.getUniqueId()).thenAccept(is -> SkyFactionsReborn.databaseManager.playerIslandManager.setIslandCooldown(is, System.currentTimeMillis())).exceptionally(ex -> {
                 cancel.set(true);
 
                 ex.printStackTrace();
@@ -143,7 +143,7 @@ public class RaidAPI {
         try {
             int required = Settings.RAIDING_COST.getInt();
             AtomicInteger currentGems = new AtomicInteger();
-            SkyFactionsReborn.databaseManager.getGems(player.getUniqueId()).thenAccept(currentGems::set).exceptionally(ex -> {
+            SkyFactionsReborn.databaseManager.currencyManager.getGems(player.getUniqueId()).thenAccept(currentGems::set).exceptionally(ex -> {
                 ex.printStackTrace();
                 Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "check your gem count", "debug", "SQL_GEMS_GET");
                 return null;
@@ -166,7 +166,7 @@ public class RaidAPI {
     public static IslandRaidData getRandomRaidable(Player player) {
         try {
             AtomicReference<List<IslandRaidData>> data = new AtomicReference<>(new ArrayList<>());
-            SkyFactionsReborn.databaseManager.getRaidablePlayers(player).thenAccept(data::set).exceptionally(ex -> {
+            SkyFactionsReborn.databaseManager.playerIslandManager.getRaidableIslands(player).thenAccept(data::set).exceptionally(ex -> {
                 ex.printStackTrace();
                 Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
                 return null;
@@ -247,15 +247,15 @@ public class RaidAPI {
             }
         }
 
-        SkyFactionsReborn.databaseManager.updateLastRaid(player, 0).exceptionally(ex -> {
+        SkyFactionsReborn.databaseManager.playerManager.updateLastRaid(player, 0).exceptionally(ex -> {
             ex.printStackTrace();
             Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "handle raid errors", "debug", "SQL_RAID_UPDATE");
             return null;
         });
-        SkyFactionsReborn.databaseManager.addGems(player.getUniqueId(), Settings.RAIDING_COST.getInt()).join();
+        SkyFactionsReborn.databaseManager.currencyManager.modifyGems(player.getUniqueId(), Settings.RAIDING_COST.getInt(), false).join();
 
         if (isDefendant) {
-            IslandAPI.getPlayerIsland(player.getUniqueId()).thenAccept(island -> SkyFactionsReborn.databaseManager.setIslandCooldown(island, 0).exceptionally(ex -> {
+            IslandAPI.getPlayerIsland(player.getUniqueId()).thenAccept(island -> SkyFactionsReborn.databaseManager.playerIslandManager.setIslandCooldown(island, 0).exceptionally(ex -> {
                 ex.printStackTrace();
                 Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "handle raid errors", "debug", "SQL_ISLAND_COOLDOWN");
                 return null;

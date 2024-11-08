@@ -93,7 +93,7 @@ public class PlayerIncomingInvites {
 
     private static List<Item> getItems(Player player, ItemData itemData) {
         List<Item> items = new ArrayList<>();
-        SkyFactionsReborn.databaseManager.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((data, ex) -> {
+        SkyFactionsReborn.databaseManager.factionInvitesManager.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((data, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your invites", "SQL_INVITE_GET", ex);
                 return;

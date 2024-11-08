@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.database.impl;
 
-import net.skullian.skyfactions.database.tables.PlayerData;
 import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.entity.Player;
 import org.jooq.DSLContext;
@@ -31,11 +30,11 @@ public class PlayerDatabaseManager {
         });
     }
 
-    public CompletableFuture<Void> registerDiscordLink(Player player, String discordID) {
+    public CompletableFuture<Void> registerDiscordLink(UUID playerUUID, String discordID) {
         return CompletableFuture.runAsync(() -> {
             ctx.update(PLAYERDATA)
                     .set(PLAYERDATA.DISCORD_ID, discordID)
-                    .where(PLAYERDATA.UUID.eq(player.getUniqueId().toString()))
+                    .where(PLAYERDATA.UUID.eq(playerUUID.toString()))
                     .execute();
         });
     }

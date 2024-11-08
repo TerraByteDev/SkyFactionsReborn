@@ -26,7 +26,7 @@ public class UnlinkCommand extends CommandTemplate {
                 return true;
             if (CommandsUtility.manageCooldown(player)) return true;
 
-            SkyFactionsReborn.databaseManager.getDiscordLink(player).whenComplete((id, ex) -> {
+            SkyFactionsReborn.databaseManager.playerManager.getDiscordID(player).whenComplete((id, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "unlink your Discord", "SQL_DISCORD_UNLINK", ex);
                     return;

@@ -193,8 +193,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
             databaseManager.initialise(Settings.DATABASE_TYPE.getString());
 
             // Cache the most recent ID.
-            databaseManager.setIslandCachedNextID();
-            databaseManager.setFactionCachedNextID();
         } catch (SQLException error) {
             SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             SLogger.fatal("There was an error initialising the database.");
@@ -207,16 +205,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
     }
 
     private void closeDatabase() {
-        try {
-            if (databaseManager != null) {
-                databaseManager.closeConnection();
-            }
-        } catch (SQLException error) {
-            SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
-            SLogger.fatal("There was an error initialising the database.");
-            SLogger.fatal("Please check the database for any configuration mistakes.");
-            SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
-            error.printStackTrace();
+        if (databaseManager != null) {
+            databaseManager.closeConnection();
         }
     }
 

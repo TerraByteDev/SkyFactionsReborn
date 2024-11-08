@@ -30,7 +30,7 @@ public class JoinRequestsTypeItem extends SkyItem {
         if (TYPE.equals("faction")) {
             JoinRequestsUI.promptPlayer(player);
         } else if (TYPE.equals("player")) {
-            SkyFactionsReborn.databaseManager.getPlayerOutgoingJoinRequest(player).whenComplete((joinRequest, ex) -> {
+            SkyFactionsReborn.databaseManager.factionInvitesManager.getPlayerOutgoingJoinRequest(player).whenComplete((joinRequest, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "get your outgoing join request", "SQL_JOIN_REQUEST_GET", ex);
                     return;

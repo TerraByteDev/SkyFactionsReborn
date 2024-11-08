@@ -5,6 +5,7 @@ import net.skullian.skyfactions.database.tables.records.FactionbansRecord;
 import net.skullian.skyfactions.database.tables.records.FactionislandsRecord;
 import net.skullian.skyfactions.database.tables.records.FactionmembersRecord;
 import net.skullian.skyfactions.database.tables.records.FactionsRecord;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.faction.RankType;
 import org.bukkit.Bukkit;
@@ -35,7 +36,7 @@ public class FactionsDatabaseManager {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(FACTIONS)
                     .columns(FACTIONS.NAME, FACTIONS.MOTD, FACTIONS.LEVEL, FACTIONS.LAST_RAID, FACTIONS.LOCALE)
-                    .values(factionName, "&aNone", 1, 0, "none")
+                    .values(factionName, "&aNone", 1, 0, PlayerHandler.getLocale(factionOwner.getUniqueId()))
                     .execute();
 
             ctx.insertInto(FACTIONMEMBERS)
@@ -113,12 +114,19 @@ public class FactionsDatabaseManager {
         });
     }
 
+    public CompletableFuture<Void> updateFactionLocale(String factionName, String newLocale) {
+        return CompletableFuture.runAsync(() -> {
+            ctx.update(FACTIONS)
+                    .set(FACTIONS.LOCALE, newLocale)
+                    .execute();
+        });
+    }
 
 
     // ------------------ MEMBERS  ------------------ //
 
-    public CompletableFuture<Void> addOrUpdateFactionMember(UUID playerUUID, String factionName, RankType type) {
-        return CompletableFuture.runAsync(() -> {
+    public CompletableFuture<String> addOrUpdateFactionMember(UUID playerUUID, String factionName, RankType type) {
+        return CompletableFuture.supplyAsync(() -> {
             ctx.insertInto(FACTIONMEMBERS)
                     .columns(FACTIONMEMBERS.FACTIONNAME, FACTIONMEMBERS.UUID, FACTIONMEMBERS.RANK)
                     .values(factionName, playerUUID.toString(), "member")
@@ -126,6 +134,10 @@ public class FactionsDatabaseManager {
                     .doUpdate()
                     .set(FACTIONMEMBERS.RANK, type.getRankValue())
                     .execute();
+
+            return ctx.select(FACTIONMEMBERS.RANK)
+                    .where(FACTIONMEMBERS.FACTIONNAME.eq(factionName), FACTIONMEMBERS.UUID.eq(playerUUID.toString()))
+                    .fetchOneInto(String.class);
         });
     }
 

@@ -78,6 +78,19 @@ public class DefencesDatabaseManager {
         });
     }
 
+    public CompletableFuture<Void> removeDefenceLocations(List<Location> locations, String owner, boolean isFaction) {
+        return CompletableFuture.runAsync(() -> {
+            ctx.transaction((Configuration trx) -> {
+                for (Location location : locations) {
+                    trx.dsl().deleteFrom(DEFENCELOCATIONS)
+                            .where((isFaction ? DEFENCELOCATIONS.FACTIONNAME.eq(owner) : DEFENCELOCATIONS.UUID.eq(owner)), (isFaction ? DEFENCELOCATIONS.TYPE.eq("faction") : DEFENCELOCATIONS.TYPE.eq("player")),
+                                    DEFENCELOCATIONS.X.eq(location.getBlockX()), DEFENCELOCATIONS.Y.eq(location.getBlockY()), DEFENCELOCATIONS.Z.eq(location.getBlockZ()))
+                            .execute();
+                }
+            });
+        });
+    }
+
     public CompletableFuture<Void> removeAllDefences(String owner, boolean isFaction) {
         return CompletableFuture.runAsync(() -> {
             ctx.deleteFrom(DEFENCELOCATIONS)

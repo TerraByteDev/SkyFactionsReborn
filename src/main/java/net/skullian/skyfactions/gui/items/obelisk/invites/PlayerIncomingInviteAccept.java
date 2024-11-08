@@ -48,7 +48,7 @@ public class PlayerIncomingInviteAccept extends SkyItem {
                 }
 
                 CompletableFuture.allOf(
-                        SkyFactionsReborn.databaseManager.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing"),
+                        SkyFactionsReborn.databaseManager.factionInvitesManager.revokeInvite(player.getUniqueId(), DATA.getFactionName(), "outgoing"),
                         faction.addFactionMember(player.getUniqueId()),
                         faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_ACCEPT, "player_name", player.getName())
                 ).whenComplete((ignored, exce) -> {

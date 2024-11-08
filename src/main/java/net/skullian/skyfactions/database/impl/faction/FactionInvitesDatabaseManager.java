@@ -16,11 +16,11 @@ import java.util.concurrent.CompletableFuture;
 
 import static net.skullian.skyfactions.database.tables.Factioninvites.FACTIONINVITES;
 
-public class FactionInvitesManager {
+public class FactionInvitesDatabaseManager {
 
     private final DSLContext ctx;
 
-    public FactionInvitesManager(DSLContext ctx) {
+    public FactionInvitesDatabaseManager(DSLContext ctx) {
         this.ctx = ctx;
     }
 
@@ -101,6 +101,10 @@ public class FactionInvitesManager {
                     .where(FACTIONINVITES.FACTIONNAME.eq(factionName), FACTIONINVITES.UUID.eq(playerUUID.toString()), FACTIONINVITES.TYPE.eq("incoming"))
                     .execute();
         });
+    }
+
+    public CompletableFuture<Boolean> hasJoinRequest(UUID playerUUID) {
+        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTIONINVITES, FACTIONINVITES.UUID.eq(playerUUID.toString()), FACTIONINVITES.TYPE.eq("incoming")));
     }
 
     public CompletableFuture<Void> revokeInvite(UUID playerUUID, String factionName, String type) {

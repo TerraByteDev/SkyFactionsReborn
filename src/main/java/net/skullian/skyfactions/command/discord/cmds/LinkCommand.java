@@ -27,7 +27,7 @@ public class LinkCommand extends CommandTemplate {
                 return true;
             if (CommandsUtility.manageCooldown(player)) return true;
 
-            SkyFactionsReborn.databaseManager.getDiscordLink(player).whenComplete((id, ex) -> {
+            SkyFactionsReborn.databaseManager.playerManager.getDiscordID(player).whenComplete((id, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "link your Discord", "SQL_GET_DISCORD", ex);
                     return;

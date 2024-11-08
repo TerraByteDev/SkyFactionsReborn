@@ -162,7 +162,7 @@ public class RunesAPI {
     }
 
     public static void cachePlayer(UUID playerUUID) {
-        SkyFactionsReborn.databaseManager.getRunes(playerUUID).whenComplete((runes, ex) -> {
+        SkyFactionsReborn.databaseManager.currencyManager.getRunes(playerUUID).whenComplete((runes, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;

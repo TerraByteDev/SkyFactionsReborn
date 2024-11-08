@@ -61,7 +61,7 @@ public class GemsAPI {
     }
 
     public static void cachePlayer(UUID playerUUID) {
-        SkyFactionsReborn.databaseManager.getGems(playerUUID).whenComplete((gems, ex) -> {
+        SkyFactionsReborn.databaseManager.currencyManager.getGems(playerUUID).whenComplete((gems, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;

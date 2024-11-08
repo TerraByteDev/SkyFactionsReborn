@@ -25,7 +25,7 @@ public class DiscordLinkHandler extends ListenerAdapter {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
 
 
-                SkyFactionsReborn.databaseManager.registerDiscordLink(playerUUID, event.getUser().getId()).thenAccept(result -> {
+                SkyFactionsReborn.databaseManager.playerManager.registerDiscordLink(playerUUID, event.getUser().getId()).thenAccept(result -> {
                     if (player.isOnline()) {
                         Messages.DISCORD_LINK_SUCCESS.send(player.getPlayer(), PlayerHandler.getLocale(player.getUniqueId()), "discord_name", event.getUser().getName());
                     }

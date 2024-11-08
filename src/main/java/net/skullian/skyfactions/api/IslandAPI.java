@@ -56,7 +56,7 @@ public class IslandAPI {
 
     public static CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
         if (islands.containsKey(playerUUID)) return CompletableFuture.completedFuture(islands.get(playerUUID));
-        return SkyFactionsReborn.databaseManager.islandDatabase.getPlayerIsland(playerUUID).thenApply((island) -> {
+        return SkyFactionsReborn.databaseManager.playerIslandManager.getPlayerIsland(playerUUID).thenApply((island) -> {
             islands.put(playerUUID, island);
 
             return island;
@@ -81,8 +81,8 @@ public class IslandAPI {
 
     public static void createIsland(Player player) {
 
-        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.databaseManager.islandDatabase.cachedPlayerIslandID);
-        SkyFactionsReborn.databaseManager.islandDatabase.cachedPlayerIslandID++;
+        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.databaseManager.playerIslandManager.cachedPlayerIslandID);
+        SkyFactionsReborn.databaseManager.playerIslandManager.cachedPlayerIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
         if (world == null) {
@@ -94,13 +94,13 @@ public class IslandAPI {
         createRegion(player, island, world);
 
         CompletableFuture.allOf(
-                SkyFactionsReborn.databaseManager.islandDatabase.createIsland(player, island),
+                SkyFactionsReborn.databaseManager.playerIslandManager.createIsland(player, island),
                 pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player")
         ).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
                 removePlayerIsland(player);
-                SkyFactionsReborn.databaseManager.islandDatabase.removeIsland(player);
+                SkyFactionsReborn.databaseManager.playerIslandManager.removeIsland(player);
                 return;
             }
 
@@ -116,7 +116,7 @@ public class IslandAPI {
     }
 
     public static CompletableFuture<Boolean> hasIsland(UUID playerUUID) {
-        return SkyFactionsReborn.databaseManager.islandDatabase.hasIsland(playerUUID);
+        return SkyFactionsReborn.databaseManager.playerIslandManager.hasIsland(playerUUID);
     }
 
     public static CompletableFuture<Boolean> pasteIslandSchematic(Player player, Location location, String worldName, String type) {
@@ -200,9 +200,9 @@ public class IslandAPI {
 
                 CompletableFuture.allOf(
                         cutRegion(region),
-                        SkyFactionsReborn.databaseManager.islandDatabase.removeIsland(player),
-                        SkyFactionsReborn.databaseManager.removeAllTrustedPlayers(island.getId()),
-                        SkyFactionsReborn.databaseManager.removeAllDefences(player.getUniqueId())
+                        SkyFactionsReborn.databaseManager.playerIslandManager.removeIsland(player),
+                        SkyFactionsReborn.databaseManager.playerIslandManager.removeAllTrustedPlayers(island.getId()),
+                        SkyFactionsReborn.databaseManager.defencesManager.removeAllDefences(player.getUniqueId().toString(), false)
                 ).whenComplete((ignored, throwable) -> {
                     if (throwable != null) {
                         throwable.printStackTrace();

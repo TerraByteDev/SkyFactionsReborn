@@ -6,6 +6,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.impl.*;
+import net.skullian.skyfactions.database.impl.faction.FactionAuditLogDatabaseManager;
+import net.skullian.skyfactions.database.impl.faction.FactionInvitesDatabaseManager;
 import net.skullian.skyfactions.database.impl.faction.FactionIslandDatabaseManager;
 import net.skullian.skyfactions.database.impl.faction.FactionsDatabaseManager;
 import net.skullian.skyfactions.database.tables.*;
@@ -29,22 +31,33 @@ import java.util.concurrent.TimeUnit;
 public class DatabaseManager {
 
     private transient DSLContext ctx;
+    private transient HikariDataSource dataSource;
     public boolean closed;
 
     public CurrencyDatabaseManager currencyManager;
-    public FactionIslandDatabaseManager factionIslandManager;
-    public FactionsDatabaseManager factionsManager;
+    public DefencesDatabaseManager defencesManager;
+    public NotificationDatabaseManager notificationManager;
     public PlayerIslandsDatabaseManager playerIslandManager;
     public PlayerDatabaseManager playerManager;
+
+    public FactionAuditLogDatabaseManager factionAuditLogManager;
+    public FactionInvitesDatabaseManager factionInvitesManager;
+    public FactionIslandDatabaseManager factionIslandManager;
+    public FactionsDatabaseManager factionsManager;
 
     public void initialise(String type) throws SQLException {
         createDataSource(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data/data.sqlite3"), type);
 
         this.currencyManager = new CurrencyDatabaseManager(this.ctx);
-        this.factionIslandManager = new FactionIslandDatabaseManager(this.ctx);
-        this.factionsManager = new FactionsDatabaseManager(this.ctx);
+        this.defencesManager = new DefencesDatabaseManager(this.ctx);
+        this.notificationManager = new NotificationDatabaseManager(this.ctx);
         this.playerIslandManager = new PlayerIslandsDatabaseManager(this.ctx);
         this.playerManager = new PlayerDatabaseManager(this.ctx);
+
+        this.factionAuditLogManager = new FactionAuditLogDatabaseManager(this.ctx);
+        this.factionInvitesManager = new FactionInvitesDatabaseManager(this.ctx);
+        this.factionIslandManager = new FactionIslandDatabaseManager(this.ctx);
+        this.factionsManager = new FactionsDatabaseManager(this.ctx);
     }
 
     private void createDataSource(
@@ -65,6 +78,7 @@ public class DatabaseManager {
             sqliteConfig.setMaximumPoolSize(1);
 
             HikariDataSource dataSource = new HikariDataSource(sqliteConfig);
+            dataSource.close();
 
             SLogger.info("Using SQLite Database.");
 
@@ -170,6 +184,11 @@ public class DatabaseManager {
         // aaand same as before!
         ctx.createTable(Notifications.NOTIFICATIONS)
                 .execute();
+    }
+
+    public void closeConnection() {
+        this.dataSource.close();
+        ctx = null;
     }
 
     // ------------------ MISC ------------------ //

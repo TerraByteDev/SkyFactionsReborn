@@ -67,7 +67,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     Messages.JOIN_REQUEST_SAME_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                     return;
                 } else {
-                    SkyFactionsReborn.databaseManager.hasJoinRequest(player).whenComplete((hasJoinRequest, exc) -> {
+                    SkyFactionsReborn.databaseManager.factionInvitesManager.hasJoinRequest(player.getUniqueId()).whenComplete((hasJoinRequest, exc) -> {
                         if (exc != null) {
                             ErrorUtil.handleError(player, "check if you have a join request", "SQL_JOIN_REQUEST_GET", exc);
                             return;
@@ -75,20 +75,19 @@ public class FactionRequestJoinCommand extends CommandTemplate {
 
                         if (hasJoinRequest) {
                             Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-                            return;
+                        } else {
+                            faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((ignored, exc2) -> {
+                                if (exc2 != null) {
+                                    ErrorUtil.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc2);
+                                    return;
+                                }
+
+                                Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", factionName);
+                                NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
+                            });
                         }
                     });
                 }
-
-                faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((ignored, exc) -> {
-                    if (exc != null) {
-                        ErrorUtil.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc);
-                        return;
-                    }
-
-                    Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", factionName);
-                    NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
-                });
             });
         });
 

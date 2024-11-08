@@ -7,6 +7,7 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -47,39 +48,39 @@ public class IslandDeleteCommand extends CommandTemplate {
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
         if (CommandsUtility.manageCooldown(player)) return;
-        SkyFactionsReborn.databaseManager.hasIsland(player.getUniqueId()).thenAccept(has -> {
-            if (!has) {
-                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-            } else {
+        IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
+            if (ex != null) {
+                ErrorUtil.handleError(sender, "check if you have an island", "SQL_ISLAND_CHECK", ex);
+                return;
+            }
 
-                if (confirm == null) {
-                    Messages.DELETION_CONFIRM.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-                    IslandAPI.awaitingDeletion.add(player.getUniqueId());
-                } else if (confirm != null) {
-                    if (confirm.equalsIgnoreCase("confirm")) {
+            if (confirm == null) {
+                Messages.DELETION_CONFIRM.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                IslandAPI.awaitingDeletion.add(player.getUniqueId());
+            } else if (confirm != null) {
+                if (confirm.equalsIgnoreCase("confirm")) {
 
-                        if (IslandAPI.awaitingDeletion.contains(player.getUniqueId())) {
-                            World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
-                            // todo migrate to gui command conf
-                            if (hubWorld != null) {
-                                Messages.DELETION_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                    if (IslandAPI.awaitingDeletion.contains(player.getUniqueId())) {
+                        World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
+                        // todo migrate to gui command conf
+                        if (hubWorld != null) {
+                            Messages.DELETION_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
 
-                                SkyFactionsReborn.worldBorderApi.resetWorldBorderToGlobal(player); // reset the world border
-                                List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
-                                Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
-                                IslandAPI.teleportPlayerToLocation(player, location);
+                            SkyFactionsReborn.worldBorderApi.resetWorldBorderToGlobal(player); // reset the world border
+                            List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
+                            Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
+                            IslandAPI.teleportPlayerToLocation(player, location);
 
-                                IslandAPI.awaitingDeletion.remove(player.getUniqueId());
-                                IslandAPI.removePlayerIsland(player);
-                            } else {
-                                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "delete your island", "debug", "WORLD_NOT_EXIST");
-                            }
+                            IslandAPI.awaitingDeletion.remove(player.getUniqueId());
+                            IslandAPI.removePlayerIsland(player);
                         } else {
-                            Messages.DELETION_BLOCK.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "delete your island", "debug", "WORLD_NOT_EXIST");
                         }
                     } else {
-                        Messages.INCORRECT_USAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "usage", getSyntax());
+                        Messages.DELETION_BLOCK.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                     }
+                } else {
+                    Messages.INCORRECT_USAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "usage", getSyntax());
                 }
             }
         });

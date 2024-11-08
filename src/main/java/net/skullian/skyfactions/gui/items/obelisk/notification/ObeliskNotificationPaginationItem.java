@@ -1,5 +1,7 @@
 package net.skullian.skyfactions.gui.items.obelisk.notification;
 
+import net.kyori.adventure.text.Component;
+import net.skullian.skyfactions.faction.AuditLogType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -31,12 +33,15 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
     public ItemProvider getItemProvider() {
         String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
 
+        String title = AuditLogType.valueOf(DATA.getType()).getTitle(getPLAYER(), DATA.getReplacements());
+        String description = AuditLogType.valueOf(DATA.getType()).getDescription(getPLAYER(), DATA.getReplacements());
+
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("notification_title", DATA.getTitle()), locale, getPLAYER()));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("notification_title", title), locale, getPLAYER()));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("notification_description")) {
-                for (String part : TextUtility.toParts(DATA.getDescription())) {
+                for (String part : TextUtility.toParts(description)) {
                     builder.addLoreLines(part);
                 }
 
@@ -57,7 +62,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (clickType.isRightClick()) {
             player.closeInventory();
-            SkyFactionsReborn.databaseManager.removeNotification(player, DATA).whenComplete((ignored, ex) -> {
+            SkyFactionsReborn.databaseManager.notificationManager.removeNotification(player, DATA).whenComplete((ignored, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "remove a notification", "SQL_NOTIFICATION_REMOVE", ex);
                     return;

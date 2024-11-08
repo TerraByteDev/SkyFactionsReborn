@@ -118,7 +118,7 @@ public class AuditlogsRecord extends TableRecordImpl<AuditlogsRecord> {
             setFactionname(value.getFactionname());
             setType(value.getType());
             setUuid(value.getUuid());
-            setReplacements(value.getDescription());
+            setReplacements(value.getReplacements());
             setTimestamp(value.getTimestamp());
             resetChangedOnNotNull();
         }

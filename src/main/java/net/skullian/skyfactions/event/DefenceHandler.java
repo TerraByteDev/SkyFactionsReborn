@@ -10,6 +10,8 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.lumine.mythic.bukkit.utils.events.extra.ArmorEquipEvent;
+import net.skullian.skyfactions.database.tables.Defencelocations;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -295,7 +297,7 @@ public class DefenceHandler implements Listener {
 
     public static void addPlacedDefences(String factionName) {
         if (loadedFactionDefences.get(factionName) != null) return;
-        SkyFactionsReborn.databaseManager.getDefenceLocations(factionName).whenComplete((locations, ex) -> {
+        SkyFactionsReborn.databaseManager.defencesManager.getDefenceLocations(Defencelocations.DEFENCELOCATIONS.FACTIONNAME.eq(factionName), "faction").whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -337,7 +339,7 @@ public class DefenceHandler implements Listener {
 
     public static void addPlacedDefences(Player player) {
         if (loadedPlayerDefences.get(player.getUniqueId()) != null) return;
-        SkyFactionsReborn.databaseManager.getDefenceLocations(player.getUniqueId()).whenComplete((locations, ex) -> {
+        SkyFactionsReborn.databaseManager.defencesManager.getDefenceLocations(Defencelocations.DEFENCELOCATIONS.UUID.eq(player.getUniqueId().toString()), "player").whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -384,5 +386,12 @@ public class DefenceHandler implements Listener {
         loadedFactionDefences.values().stream()
                 .flatMap(List::stream)
                 .forEach(Defence::refresh);
+    }
+
+    @EventHandler
+    public void onArmorEquip(ArmorEquipEvent event) {
+        if (DefenceAPI.isDefence(event.getNewArmorPiece())) {
+            event.setCancelled(true);
+        }
     }
 }

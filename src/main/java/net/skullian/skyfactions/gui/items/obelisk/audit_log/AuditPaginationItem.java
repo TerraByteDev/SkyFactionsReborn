@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.gui.items.obelisk.audit_log;
 
+import net.skullian.skyfactions.faction.AuditLogType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,12 +26,15 @@ public class AuditPaginationItem extends SkyItem {
     public ItemProvider getItemProvider() {
         String locale = Messages.getDefaulLocale(); // todo make audit system language compat
 
+        String title = AuditLogType.valueOf(DATA.getType()).getTitle(getPLAYER(), DATA.getReplacements());
+        String description = AuditLogType.valueOf(DATA.getType()).getDescription(getPLAYER(), DATA.getReplacements());
+
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("audit_title", DATA.getType()), locale, getPLAYER()));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("audit_title", title), locale, getPLAYER()));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("<audit_description>")) {
-                for (String part : TextUtility.toParts(DATA.getDescription())) {
+                for (String part : TextUtility.toParts(description)) {
                     builder.addLoreLines(part);
                 }
 

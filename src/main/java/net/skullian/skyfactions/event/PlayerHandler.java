@@ -35,12 +35,12 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (!SkyFactionsReborn.databaseManager.isActive()) {
+        if (SkyFactionsReborn.databaseManager.closed) {
             event.getPlayer().kick();
             throw new RuntimeException("Database is closed! Cannot allow player to join without risking dupes.");
         };
 
-        SkyFactionsReborn.databaseManager.playerIsRegistered(event.getPlayer()).whenComplete((isRegistered, ex) -> {
+        SkyFactionsReborn.databaseManager.playerManager.isPlayerRegistered(event.getPlayer()).whenComplete((isRegistered, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -48,10 +48,10 @@ public class PlayerHandler implements Listener {
 
             if (!isRegistered) {
                 SLogger.info("Player [{}] has not joined before. Syncing with database.", event.getPlayer().getName());
-                SkyFactionsReborn.databaseManager.registerPlayer(event.getPlayer());
+                SkyFactionsReborn.databaseManager.playerManager.registerPlayer(event.getPlayer());
                 locales.put(event.getPlayer().getUniqueId(), event.getPlayer().locale().getLanguage());
             } else {
-                SkyFactionsReborn.databaseManager.getPlayerLocale(event.getPlayer().getUniqueId()).whenComplete((locale, ex2) -> {
+                SkyFactionsReborn.databaseManager.playerManager.getPlayerLocale(event.getPlayer().getUniqueId()).whenComplete((locale, ex2) -> {
                     if (ex2 != null) {
                         ex2.printStackTrace();
                         return;

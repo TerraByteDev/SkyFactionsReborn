@@ -31,7 +31,7 @@ public class FactionIslandDatabaseManager {
         });
     }
 
-    public CompletableFuture<Void> createFactionIslands(String factionName, FactionIsland island) {
+    public CompletableFuture<Void> createFactionIsland(String factionName, FactionIsland island) {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(FACTIONISLANDS)
                     .columns(FACTIONISLANDS.ID, FACTIONISLANDS.FACTIONNAME, FACTIONISLANDS.RUNES, FACTIONISLANDS.DEFENCECOUNT, FACTIONISLANDS.GEMS, FACTIONISLANDS.LAST_RAIDED, FACTIONISLANDS.LAST_RAIDER)

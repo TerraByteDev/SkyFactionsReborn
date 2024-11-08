@@ -42,7 +42,7 @@ public class PlayerIncomingInviteDeny extends SkyItem {
 
             CompletableFuture.allOf(
                     faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_DENY, "player_name", player.getName()),
-                    SkyFactionsReborn.databaseManager.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing")
+                    SkyFactionsReborn.databaseManager.factionInvitesManager.revokeInvite(player.getUniqueId(), DATA.getFactionName(), "outgoing")
             ).whenComplete((ignored, throwable) -> {
                 if (throwable != null) {
                     ErrorUtil.handleError(player, "deny an invite", "SQL_INVITE_DENY", throwable);

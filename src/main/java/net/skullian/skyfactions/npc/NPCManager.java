@@ -189,7 +189,7 @@ public class NPCManager {
             if (remove && Settings.NPC_INTEGRATION_ENABLED.getBoolean()) throw new RuntimeException("Attempted to disable NPCs when the integration is still enabled in the config!");
                 else if (!remove && !Settings.NPC_INTEGRATION_ENABLED.getBoolean()) throw new RuntimeException("Attempted to reload NPCs when the integration is not enabled in the config!");
             
-            for (int i = 0; i < SkyFactionsReborn.databaseManager.cachedPlayerIslandID; i++) {
+            for (int i = 0; i < SkyFactionsReborn.databaseManager.playerIslandManager.cachedPlayerIslandID; i++) {
                 final int islandID = i;
 
                 SkyNPC npc = factory.getNPC("player-" + i, false);
@@ -200,7 +200,7 @@ public class NPCManager {
                     continue;
                 }
 
-                SkyFactionsReborn.databaseManager.getOwnerOfIsland(new PlayerIsland(i)).whenComplete((uuid, ex) -> {
+                SkyFactionsReborn.databaseManager.playerIslandManager.getOwnerOfIsland(new PlayerIsland(i)).whenComplete((uuid, ex) -> {
                     if (ex != null) {
                         SLogger.fatal("Failed to get owner of island [{}] in order to refresh their NPC.", islandID);
                         ex.printStackTrace();
@@ -216,7 +216,7 @@ public class NPCManager {
                 });
             }
 
-            for (int i = 0; i < SkyFactionsReborn.databaseManager.cachedFactionIslandID; i++) {
+            for (int i = 0; i < SkyFactionsReborn.databaseManager.factionIslandManager.cachedFactionIslandID; i++) {
                 final int islandID = i;
 
                 SkyNPC npc = factory.getNPC("faction-" + i, true);
@@ -227,7 +227,7 @@ public class NPCManager {
                     continue;
                 }
 
-                SkyFactionsReborn.databaseManager.getFactionByIslandID(i).whenComplete((faction, ex) -> {
+                SkyFactionsReborn.databaseManager.factionsManager.getFactionByIslandID(i).whenComplete((faction, ex) -> {
                     if (ex != null) {
                         SLogger.fatal("Failed to get faction owner of island [{}] in ordeemto refresh their NPCs.", islandID);
                         ex.printStackTrace();

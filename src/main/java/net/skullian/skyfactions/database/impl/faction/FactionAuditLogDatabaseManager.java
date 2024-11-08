@@ -22,7 +22,7 @@ public class FactionAuditLogDatabaseManager {
         this.ctx = ctx;
     }
 
-    public CompletableFuture<Void> createAudiLog(UUID playerUUID, String type, String replacements, String factionName) {
+    public CompletableFuture<Void> createAuditLog(UUID playerUUID, String type, String replacements, String factionName) {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(AUDITLOGS)
                     .columns(AUDITLOGS.FACTIONNAME, AUDITLOGS.TYPE, AUDITLOGS.UUID, AUDITLOGS.REPLACEMENTS, AUDITLOGS.TIMESTAMP)
@@ -44,7 +44,7 @@ public class FactionAuditLogDatabaseManager {
                         Bukkit.getOfflinePlayer(UUID.fromString(log.getUuid())),
                         log.getFactionname(),
                         log.getType(),
-                        TextUtility.toParts(log.getReplacements()),
+                        TextUtility.convertFromString(log.getReplacements()),
                         log.getTimestamp()
                 ));
             }

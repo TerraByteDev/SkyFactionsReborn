@@ -51,7 +51,7 @@ public class NotificationDatabaseManager {
                 data.add(new NotificationData(
                         player.getUniqueId(),
                         notification.getType(),
-                        TextUtility.toParts(notification.getReplacements()),
+                        TextUtility.convertFromString(notification.getReplacements()),
                         notification.getTimestamp()
                 ));
             }
