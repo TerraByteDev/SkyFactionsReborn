@@ -16,10 +16,12 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
+import org.jooq.DataType;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultExecuteListenerProvider;
+import org.jooq.impl.SQLDataType;
 import org.sqlite.JDBC;
 
 import java.io.File;
@@ -149,48 +151,59 @@ public class DatabaseManager {
     private void setupTables() {
         SLogger.info("Creating SQL Tables.");
 
-        ctx.createTable(Islands.ISLANDS)
+        ctx.createTableIfNotExists(Islands.ISLANDS)
+                .columns(Islands.ISLANDS.fields())
                 .primaryKey(Islands.ISLANDS.ID)
                 .execute();
 
-        ctx.createTable(Playerdata.PLAYERDATA)
+        ctx.createTableIfNotExists(Playerdata.PLAYERDATA)
+                .columns(Playerdata.PLAYERDATA.fields())
                 .primaryKey(Playerdata.PLAYERDATA.UUID)
                 .execute();
 
-        ctx.createTable(Factionislands.FACTIONISLANDS)
+        ctx.createTableIfNotExists(Factionislands.FACTIONISLANDS)
+                .columns(Factionislands.FACTIONISLANDS.fields())
                 .primaryKey(Factionislands.FACTIONISLANDS.ID)
                 .execute();
 
-        ctx.createTable(Factions.FACTIONS)
+        ctx.createTableIfNotExists(Factions.FACTIONS)
+                .columns(Factions.FACTIONS.fields())
                 .primaryKey(Factions.FACTIONS.NAME)
                 .execute();
 
-        ctx.createTable(Factionmembers.FACTIONMEMBERS)
+        ctx.createTableIfNotExists(Factionmembers.FACTIONMEMBERS)
+                .columns(Factionmembers.FACTIONMEMBERS.fields())
                 .primaryKey(Factionmembers.FACTIONMEMBERS.UUID)
                 .execute();
 
-        ctx.createTable(Trustedplayers.TRUSTEDPLAYERS)
+        ctx.createTableIfNotExists(Trustedplayers.TRUSTEDPLAYERS)
+                .columns(Trustedplayers.TRUSTEDPLAYERS.fields())
                 .primaryKey(Trustedplayers.TRUSTEDPLAYERS.ISLAND_ID)
                 .execute();
 
         // no primary key as there can be multiple instances
-        ctx.createTable(Defencelocations.DEFENCELOCATIONS)
+        ctx.createTableIfNotExists(Defencelocations.DEFENCELOCATIONS)
+                .columns(Defencelocations.DEFENCELOCATIONS.fields())
                 .execute();
 
         // no primary key for same reason as above
-        ctx.createTable(Auditlogs.AUDITLOGS)
+        ctx.createTableIfNotExists(Auditlogs.AUDITLOGS)
+                .columns(Auditlogs.AUDITLOGS.fields())
                 .execute();
 
         // no primary, same reason
-        ctx.createTable(Factionbans.FACTIONBANS)
+        ctx.createTableIfNotExists(Factionbans.FACTIONBANS)
+                .columns(Factionbans.FACTIONBANS.fields())
                 .execute();
 
         // guess what? no primary, same reason
-        ctx.createTable(Factioninvites.FACTIONINVITES)
+        ctx.createTableIfNotExists(Factioninvites.FACTIONINVITES)
+                .columns(Factioninvites.FACTIONINVITES.fields())
                 .execute();
 
         // aaand same as before!
-        ctx.createTable(Notifications.NOTIFICATIONS)
+        ctx.createTableIfNotExists(Notifications.NOTIFICATIONS)
+                .columns(Notifications.NOTIFICATIONS.fields())
                 .execute();
     }
 
