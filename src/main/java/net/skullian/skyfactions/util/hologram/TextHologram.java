@@ -47,9 +47,9 @@ import net.skullian.skyfactions.util.text.TextUtility;
 public class TextHologram {
 
     @Getter @Accessors(chain = true)
-    private long updateTaskPeriod = 20L * 3;
+    private final long updateTaskPeriod = 20L * 3;
     @Getter @Accessors(chain = true)
-    private double nearbyEntityScanningDistance = 40.0;
+    private final double nearbyEntityScanningDistance = 40.0;
     @Getter
     private final String id;
 
@@ -83,7 +83,7 @@ public class TextHologram {
     @Setter @Getter @Accessors(chain = true)
     private boolean seeThroughBlocks = false;
     @Getter @Accessors(chain = true)
-    private TextDisplay.TextAlignment alignment = TextDisplay.TextAlignment.CENTER;
+    private final TextDisplay.TextAlignment alignment = TextDisplay.TextAlignment.CENTER;
     @Setter @Getter @Accessors(chain = true)
     private byte textOpacity = (byte) -1;
 
@@ -103,7 +103,7 @@ public class TextHologram {
     private BukkitTask task;
 
     @Getter
-    private DefenceStruct defence;
+    private final DefenceStruct defence;
 
     @Getter
     @Setter

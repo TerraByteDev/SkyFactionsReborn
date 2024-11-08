@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.command.island.cmds;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
@@ -10,7 +11,6 @@ import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -38,7 +38,7 @@ public class IslandDeleteCommand extends CommandTemplate {
     }
 
     @Command("delete [confirm]")
-    @Permission(value = { "skyfactions.island.delete", "skyfactions.island" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.island.delete", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack,
             @Argument(value = "confirm") @Nullable String confirm
@@ -46,7 +46,6 @@ public class IslandDeleteCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
         SkyFactionsReborn.databaseHandler.hasIsland(player.getUniqueId()).thenAccept(has -> {
             if (!has) {
                 Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));

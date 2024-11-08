@@ -1,9 +1,13 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.db.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -15,13 +19,8 @@ import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.db.InviteData;
-import net.skullian.skyfactions.util.ErrorHandler;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Command("faction")
 public class FactionInviteCommand extends CommandTemplate {
@@ -48,7 +47,7 @@ public class FactionInviteCommand extends CommandTemplate {
     }
 
     @Command("invite <player>")
-    @Permission(value = { "skyfactions.faction.invite", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.faction.invite", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack,
             @Argument(value = "player", suggestions = "playerFactionName") String playerName
@@ -56,7 +55,6 @@ public class FactionInviteCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
@@ -72,32 +70,32 @@ public class FactionInviteCommand extends CommandTemplate {
                 return;
             }
 
-                OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
-                if (!target.hasPlayedBefore()) {
-                    Messages.UNKNOWN_PLAYER.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
+            OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
+            if (!target.hasPlayedBefore()) {
+                Messages.UNKNOWN_PLAYER.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
 
-                } else if (faction.getAllMembers().contains(target)) {
-                    Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            } else if (faction.getAllMembers().contains(target)) {
+                Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
 
-                } else {
-                    faction.getOutgoingInvites().whenComplete((invites, throwable) -> {
-                        if (throwable != null) {
-                            ErrorHandler.handleError(player, "get Faction invites", "SQL_FACTION_GET", throwable);
+            } else {
+                faction.getOutgoingInvites().whenComplete((invites, throwable) -> {
+                    if (throwable != null) {
+                        ErrorHandler.handleError(player, "get Faction invites", "SQL_FACTION_GET", throwable);
+                        return;
+                    }
+
+                    for (InviteData invite : invites) {
+                        if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
+                            Messages.FACTION_INVITE_DUPLICATE.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                             return;
                         }
+                    }
+                });
 
-                        for (InviteData invite : invites) {
-                            if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
-                                Messages.FACTION_INVITE_DUPLICATE.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-                                return;
-                            }
-                        }
-                    });
-
-                    faction.createInvite(target, player);
-                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player_name", target.getName());
-                }
-            });
+                faction.createInvite(target, player);
+                Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player_name", target.getName());
+            }
+        });
     }
 
     public static List<String> permissions = List.of("skyfactions.faction.invite", "skyfactions.faction");

@@ -22,7 +22,7 @@ Messages:
   PERMISSION_DENY: '<server_name> <red><bold>Hey!<reset><gray> You are not allowed to execute this command.' # Sent when a player tries to run a command they do not have permission for.
   RELOADING: '<server_name><reset><gray> Reloading SkyFactions, please wait...' # Message sent when the plugin is being reloaded.
   RELOADED: '<server_name><reset><green> Plugin reloaded!' # Message sent when plugin is finished reloading.
-  COOLDOWN: '<server_name><reset><gray> You must wait <red><bold><cooldown><reset><gray> seconds to use this command.' # When the player tries to use a command that is on cooldown (configured in config.yml!).
+  COOLDOWN: '<server_name><reset><gray> You must wait <red><bold><cooldown><reset><gray> seconds before continuing.' # When the player tries to use a command or item that is on cooldown (configured in config.yml!).
   INCORRECT_USAGE: '<server_name><reset><gray> Incorrect usage of command. Usage: <red><bold><usage>' # Sent when the player uses a command with improper syntax.
   UNKNOWN_PLAYER: "<server_name><reset><gray> Unknown player: <red><bold><player>" # Sent when a command is ran on an unknown player (when applicable).
   PLEASE_WAIT: "<server_name><reset><gray> <operation>, please wait..." # Sent when the plugin is processing a request. Everything is fully async so responses aren't guaranteed to be immediate.

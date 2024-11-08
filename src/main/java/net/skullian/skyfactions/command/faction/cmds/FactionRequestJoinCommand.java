@@ -1,15 +1,5 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import java.util.List;
-
-import net.skullian.skyfactions.event.PlayerHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.annotations.Argument;
-import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.annotations.Permission;
-
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
@@ -17,7 +7,16 @@ import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
+
+import java.util.List;
 
 @Command("faction")
 public class FactionRequestJoinCommand extends CommandTemplate {
@@ -37,7 +36,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
     }
 
     @Command("requestjoin <factionName>")
-    @Permission(value = { "skyfactions.faction.requestjoin", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.faction.requestjoin", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack,
             @Argument(value = "factionName") String factionName
@@ -45,7 +44,6 @@ public class FactionRequestJoinCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
             if (ex != null) {

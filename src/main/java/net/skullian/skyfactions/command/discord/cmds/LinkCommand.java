@@ -17,7 +17,7 @@ import java.util.List;
 
 public class LinkCommand extends CommandTemplate {
     @Command("link")
-    @Permission(value = { "skyfactions.command.link" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.command.link"}, mode = Permission.Mode.ANY_OF)
     public boolean handleLink(
             CommandSourceStack commandSourceStack
     ) {
@@ -25,7 +25,6 @@ public class LinkCommand extends CommandTemplate {
         if (sender instanceof Player player) {
             if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true))
                 return true;
-            if (CommandsUtility.manageCooldown(player)) return true;
 
             SkyFactionsReborn.databaseHandler.getDiscordLink(player).whenComplete((id, ex) -> {
                 if (ex != null) {

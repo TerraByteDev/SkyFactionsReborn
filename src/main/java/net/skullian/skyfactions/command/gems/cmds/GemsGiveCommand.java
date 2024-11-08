@@ -1,16 +1,15 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.command.gems.GemsCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -22,11 +21,10 @@ import org.incendo.cloud.context.CommandInput;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Command("gems")
-public class GemsGiveCommand extends CommandTemplate{
+public class GemsGiveCommand extends CommandTemplate {
 
     @Override
     public String getName() {
@@ -62,7 +60,7 @@ public class GemsGiveCommand extends CommandTemplate{
     }
 
     @Command("give <type> <playerFactionName> <amount>")
-    @Permission(value = { "skyfactions.gems.give" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.gems.give"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack,
             @Argument(value = "type", suggestions = "giveTypeSelection") String type,
@@ -71,7 +69,6 @@ public class GemsGiveCommand extends CommandTemplate{
     ) {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
-        if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
         if (type.equalsIgnoreCase("player")) {

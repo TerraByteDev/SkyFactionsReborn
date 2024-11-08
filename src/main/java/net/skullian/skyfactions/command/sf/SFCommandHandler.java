@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.sf;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.skullian.skyfactions.util.CooldownManager;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
@@ -29,6 +30,7 @@ public class SFCommandHandler implements CommandHandler {
         this.manager = PaperCommandManager.builder()
                 .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
                 .buildOnEnable(SkyFactionsReborn.getInstance());
+        this.manager.registerCommandPostProcessor(new CooldownManager.CooldownPostprocessor<>());
 
         this.parser = new AnnotationParser<>(
                 manager,

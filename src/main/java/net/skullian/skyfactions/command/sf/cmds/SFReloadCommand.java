@@ -1,19 +1,17 @@
 package net.skullian.skyfactions.command.sf.cmds;
 
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.annotations.Permission;
-
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.util.SLogger;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
+
+import java.util.List;
 
 @Command("sf")
 public class SFReloadCommand extends CommandTemplate {
@@ -33,13 +31,12 @@ public class SFReloadCommand extends CommandTemplate {
     }
 
     @Command("reload")
-    @Permission(value = { "skyfactions.reload" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.reload"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack
     ) {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
-        if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
         SLogger.warn("[{}] is reloading SkyFactionsReborn.", sender.getName());

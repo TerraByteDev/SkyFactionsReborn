@@ -16,7 +16,7 @@ import java.util.List;
 
 public class UnlinkCommand extends CommandTemplate {
     @Command("unlink")
-    @Permission(value = { "skyfactions.command.unlink" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.command.unlink"}, mode = Permission.Mode.ANY_OF)
     public boolean handleUnlink(
             CommandSourceStack commandSourceStack
     ) {
@@ -24,7 +24,6 @@ public class UnlinkCommand extends CommandTemplate {
         if (sender instanceof Player player) {
             if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord"), true))
                 return true;
-            if (CommandsUtility.manageCooldown(player)) return true;
 
             SkyFactionsReborn.databaseHandler.getDiscordLink(player).whenComplete((id, ex) -> {
                 if (ex != null) {

@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.command.runes.subcommands;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.RunesAPI;
@@ -9,7 +10,6 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -21,7 +21,6 @@ import org.incendo.cloud.context.CommandInput;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Command("runes")
@@ -60,7 +59,7 @@ public class RunesGiveCommand extends CommandTemplate {
     }
 
     @Command("give <type> <playerFactionName> <amount> ")
-    @Permission(value = { "skyfactions.runes.give" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.runes.give"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack,
             @Argument(value = "type", suggestions = "giveTypeSelection") String type,
@@ -70,17 +69,16 @@ public class RunesGiveCommand extends CommandTemplate {
     ) {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
-        if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
         if (type.equalsIgnoreCase("player")) {
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
-        if (!offlinePlayer.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
-        } else {
-            IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, ex) -> {
-                if (ex != null) {
-                    ErrorHandler.handleError(sender, "check if the player had an island", "SQL_ISLAND_GET", ex);
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
+            if (!offlinePlayer.hasPlayedBefore()) {
+                Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
+            } else {
+                IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, ex) -> {
+                    if (ex != null) {
+                        ErrorHandler.handleError(sender, "check if the player had an island", "SQL_ISLAND_GET", ex);
                         return;
                     } else if (!hasIsland) {
                         Messages.PLAYER_HAS_NO_ISLAND.send(sender, locale);

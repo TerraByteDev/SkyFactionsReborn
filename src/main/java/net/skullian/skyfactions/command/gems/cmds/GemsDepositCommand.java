@@ -8,7 +8,6 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorHandler;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -16,9 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Command("gems")
 public class GemsDepositCommand extends CommandTemplate {
@@ -45,7 +42,6 @@ public class GemsDepositCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {
             if (throwable != null) {
