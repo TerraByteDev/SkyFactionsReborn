@@ -5,7 +5,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,9 +40,9 @@ public class RaidResetCooldown extends CommandTemplate {
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
-        SkyFactionsReborn.databaseHandler.updateLastRaid(player, 0).whenComplete((ignored, throwable) -> {
+        SkyFactionsReborn.databaseManager.playerManager.updateLastRaid(player, 0).whenComplete((ignored, throwable) -> {
             if (throwable != null) {
-                ErrorHandler.handleError(player, "reset your raid cooldown", "SQL_RAID_UPDATE", throwable);
+                ErrorUtil.handleError(player, "reset your raid cooldown", "SQL_RAID_UPDATE", throwable);
                 return;
             }
 

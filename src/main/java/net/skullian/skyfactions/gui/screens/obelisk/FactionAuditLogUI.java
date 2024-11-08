@@ -11,7 +11,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.db.AuditLogData;
+import net.skullian.skyfactions.database.struct.AuditLogData;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;

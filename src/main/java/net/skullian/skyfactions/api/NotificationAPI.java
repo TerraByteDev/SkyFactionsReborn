@@ -11,11 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class NotificationAPI {
@@ -55,8 +51,7 @@ public class NotificationAPI {
      * @param replacements Replacements for the notification title / desc.
      */
     public static CompletableFuture<Void> createNotification(UUID playerUUID, NotificationType type, Object... replacements) {
-        String locale = PlayerHandler.getLocale(playerUUID);
-        return SkyFactionsReborn.databaseHandler.createNotification(playerUUID, type.getTitle(locale, replacements), type.getDescription(locale, replacements));
+        return SkyFactionsReborn.databaseManager.notificationManager.createNotification(playerUUID, type.name(), Arrays.toString(replacements));
     }
 
     /**
@@ -66,6 +61,6 @@ public class NotificationAPI {
      * @return {@link List<NotificationData>}
      */
     public static CompletableFuture<List<NotificationData>> getNotifications(OfflinePlayer player) {
-        return SkyFactionsReborn.databaseHandler.getNotifications(player);
+        return SkyFactionsReborn.databaseManager.notificationManager.getNotifications(player);
     }
 }

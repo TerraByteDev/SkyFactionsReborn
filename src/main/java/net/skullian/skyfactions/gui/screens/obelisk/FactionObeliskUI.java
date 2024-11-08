@@ -10,7 +10,7 @@ import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.*;
 import net.skullian.skyfactions.gui.items.obelisk.defence.ObeliskDefencePurchaseItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -49,7 +49,7 @@ public class FactionObeliskUI {
             List<ItemData> data = GUIAPI.getItemData("obelisk/faction_obelisk", player);
             FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
                 if (exc != null) {
-                    ErrorHandler.handleError(player, "open your obelisk", "GUI_LOAD_EXCEPTION", exc);
+                    ErrorUtil.handleError(player, "open your obelisk", "GUI_LOAD_EXCEPTION", exc);
                     return;
                 } else if (faction == null) {
                     Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open your obelisk", "debug", "FACTION_NOT_FOUND");

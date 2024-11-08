@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import net.skullian.skyfactions.db.InviteData;
+import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.gui.screens.obelisk.invites.PlayerManageIncomingInviteUI;

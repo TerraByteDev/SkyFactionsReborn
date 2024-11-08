@@ -20,7 +20,7 @@ import net.skullian.skyfactions.config.types.Runes;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.faction.Faction;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 public class RunesAPI {
 
@@ -57,7 +57,7 @@ public class RunesAPI {
     public static void handleRuneFactionConversion(List<ItemStack> stacks, Player player) {
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "convert your items to runes", "SQL_FACTION_GET", ex);
+                ErrorUtil.handleError(player, "convert your items to runes", "SQL_FACTION_GET", ex);
                 return;
             }
 
@@ -162,7 +162,7 @@ public class RunesAPI {
     }
 
     public static void cachePlayer(UUID playerUUID) {
-        SkyFactionsReborn.databaseHandler.getRunes(playerUUID).whenComplete((runes, ex) -> {
+        SkyFactionsReborn.databaseManager.currencyManager.getRunes(playerUUID).whenComplete((runes, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;

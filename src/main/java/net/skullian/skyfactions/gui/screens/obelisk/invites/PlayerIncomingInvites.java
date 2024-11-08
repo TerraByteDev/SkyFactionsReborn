@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.db.InviteData;
+import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
@@ -19,7 +19,7 @@ import net.skullian.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.PlayerFactionInvitePaginationItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.PagedGui;
@@ -93,9 +93,9 @@ public class PlayerIncomingInvites {
 
     private static List<Item> getItems(Player player, ItemData itemData) {
         List<Item> items = new ArrayList<>();
-        SkyFactionsReborn.databaseHandler.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((data, ex) -> {
+        SkyFactionsReborn.databaseManager.factionInvitesManager.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((data, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get your invites", "SQL_INVITE_GET", ex);
+                ErrorUtil.handleError(player, "get your invites", "SQL_INVITE_GET", ex);
                 return;
             }
 

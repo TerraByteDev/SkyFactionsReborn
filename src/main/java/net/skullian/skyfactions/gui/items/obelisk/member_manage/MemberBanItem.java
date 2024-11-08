@@ -13,7 +13,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 public class MemberBanItem extends SkyItem {
 
@@ -29,7 +29,7 @@ public class MemberBanItem extends SkyItem {
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
             if (exc != null) {
-                ErrorHandler.handleError(player, "ban a player", "SQL_FACTION_GET", exc);
+                ErrorUtil.handleError(player, "ban a player", "SQL_FACTION_GET", exc);
                 return;
             }
 
