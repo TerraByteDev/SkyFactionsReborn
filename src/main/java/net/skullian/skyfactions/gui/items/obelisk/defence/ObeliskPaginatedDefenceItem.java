@@ -2,6 +2,9 @@ package net.skullian.skyfactions.gui.items.obelisk.defence;
 
 import java.util.List;
 
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -14,6 +17,7 @@ import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
 import net.skullian.skyfactions.gui.screens.obelisk.defence.ObeliskPurchaseDefenceUI;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
 
@@ -57,6 +61,17 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
             "repair_cost", repairCost,
             "cost", String.valueOf(struct.getBUY_COST())
         ).toArray();
+    }
+
+    @Override
+    public ItemBuilder process(ItemBuilder builder) {
+        if (getPLAYER().getInventory().firstEmpty() == -1) {
+            for (String line : Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(getPLAYER().locale().getLanguage())) {
+                builder.addLoreLines(TextUtility.legacyColor(line, PlayerHandler.getLocale(getPLAYER().getUniqueId()), getPLAYER()));
+            }
+        }
+
+        return builder;
     }
 
     @Override
