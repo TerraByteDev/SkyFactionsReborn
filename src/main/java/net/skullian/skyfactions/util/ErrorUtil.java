@@ -17,7 +17,7 @@ public class ErrorUtil {
         Messages.ERROR.send(sender, sender instanceof Player ? PlayerHandler.getLocale(((Player) sender).getUniqueId()) : Messages.getDefaulLocale(), "operation", operation, "debug", debug);
     }
 
-    public static void handleError(SQLException error) {
+    public static void handleError(Exception error) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             SLogger.fatal("There was an error while performing database actions:");

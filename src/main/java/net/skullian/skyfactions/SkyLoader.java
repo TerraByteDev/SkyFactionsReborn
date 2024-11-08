@@ -46,6 +46,8 @@ public class SkyLoader implements PluginLoader {
         centralResolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-annotations:2.0.0"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("net.objecthunter:exp4j:0.4.8"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("net.kyori:adventure-text-minimessage:4.17.0"), null));
+        centralResolver.addDependency(new Dependency(new DefaultArtifact("org.jooq:jooq:3.19.15"), null));
+        centralResolver.addDependency(new Dependency(new DefaultArtifact("org.jooq:jooq-meta:3.19.15"), null));
 
         pluginClasspathBuilder.addLibrary(centralResolver);
         pluginClasspathBuilder.addLibrary(invUIResolver);

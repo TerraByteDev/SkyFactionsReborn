@@ -9,7 +9,7 @@ import org.jooq.ExecuteListener;
 public class DatabaseExecutionListener implements ExecuteListener {
     @Override
     public void start(ExecuteContext ctx) {
-        SLogger.success("Successfully connected to Database.");
+        SLogger.info("Successfully connected to Database.");
         SkyFactionsReborn.databaseManager.closed = false;
     }
 
@@ -21,6 +21,6 @@ public class DatabaseExecutionListener implements ExecuteListener {
 
     @Override
     public void exception(ExecuteContext ctx) {
-        ErrorUtil.handleError(ctx.sqlException());
+        ErrorUtil.handleError(ctx.exception());
     }
 }

@@ -65,6 +65,10 @@ public class DatabaseManager {
 
         Configuration configuration = new DefaultConfiguration().set(new DefaultExecuteListenerProvider(new DatabaseExecutionListener()));
 
+        System.setProperty("org.jooq.no-tips", "true");
+        System.setProperty("org.jooq.no-logo", "true");
+
+
         if (type.equals("sqlite")) {
 
             HikariConfig sqliteConfig = new HikariConfig();
@@ -78,13 +82,13 @@ public class DatabaseManager {
             sqliteConfig.setMaximumPoolSize(1);
 
             HikariDataSource dataSource = new HikariDataSource(sqliteConfig);
-            dataSource.close();
-
             SLogger.info("Using SQLite Database.");
 
             configuration
                     .set(dataSource)
                     .set(SQLDialect.SQLITE);
+
+            this.dataSource = dataSource;
             this.ctx = DSL.using(configuration);
         } else if (type.equals("sql")) {
 
@@ -132,16 +136,20 @@ public class DatabaseManager {
             configuration
                     .set(dataSource)
                     .set(SQLDialect.MYSQL);
+
+            this.dataSource = dataSource;
             this.ctx = DSL.using(dataSource, SQLDialect.MYSQL);
         } else {
             throw new IllegalStateException("Unknown database type: " + type);
         }
+
+        setupTables();
     }
 
     private void setupTables() {
         SLogger.info("Creating SQL Tables.");
 
-         ctx.createTable(Islands.ISLANDS)
+        ctx.createTable(Islands.ISLANDS)
                 .primaryKey(Islands.ISLANDS.ID)
                 .execute();
 

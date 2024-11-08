@@ -6,8 +6,6 @@ public class SLogger {
 
     public static final ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
 
-    public static void success(Object message, Object... args) { LOGGER.info("\u001B[32m" + message + "\u001B[0m", args); }
-
     public static void info(Object message, Object... args) {
         LOGGER.info("\u001B[34m" + message + "\u001B[0m", args);
     }

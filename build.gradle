@@ -1,11 +1,9 @@
 import org.apache.tools.ant.filters.ReplaceTokens
-import org.jooq.meta.jaxb.Logging
 
 plugins {
     id 'io.papermc.paperweight.userdev' version '1.7.4'
     id 'com.gradleup.shadow' version '8.3.5'
     id 'java'
-    id 'nu.studer.jooq' version '9.0'
 }
 
 group = 'net.skullian.skyfactions'
@@ -127,7 +125,6 @@ dependencies {
 
     compileOnly("org.jooq:jooq:3.19.15")
     compileOnly("org.jooq:jooq-meta:3.19.15")
-    jooqGenerator("org.xerial:sqlite-jdbc:3.47.0.0")
 
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
@@ -143,7 +140,7 @@ java {
 }
 
 
-jooq {
+/*jooq {
     configurations {
         main {
             generateSchemaSourceOnCompilation = false
@@ -176,7 +173,7 @@ jooq {
             }
         }
     }
-}
+}*/
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
