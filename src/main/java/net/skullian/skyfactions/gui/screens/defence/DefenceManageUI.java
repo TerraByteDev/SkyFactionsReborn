@@ -56,19 +56,19 @@ public class DefenceManageUI {
                         break;
 
                     case "AMMO":
-                        builder.addIngredient(itemData.getCHARACTER(), new DefenceAmmoItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, defenceData));
+                        builder.addIngredient(itemData.getCHARACTER(), new DefenceAmmoItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, defenceData, faction));
                         break;
 
                     case "PASSIVE_TOGGLE":
-                        builder.addIngredient(itemData.getCHARACTER(), new DefencePassiveToggleItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, defenceData));
+                        builder.addIngredient(itemData.getCHARACTER(), new DefencePassiveToggleItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, defenceData, faction));
                         break;
 
                     case "HOSTILE_TOGGLE":
-                        builder.addIngredient(itemData.getCHARACTER(), new DefenceHostileToggleItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, defenceData));
+                        builder.addIngredient(itemData.getCHARACTER(), new DefenceHostileToggleItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, defenceData, faction));
                         break;
 
                     case "UPGRADE":
-                        builder.addIngredient(itemData.getCHARACTER(), new DefenceUpgradeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, struct, defenceData));
+                        builder.addIngredient(itemData.getCHARACTER(), new DefenceUpgradeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, struct, defenceData, faction));
                         break;
 
                     case "REMOVE":

@@ -409,10 +409,10 @@ public class Faction {
         );
     }
 
-    /*
+    /**
      * Get the configured rank title of a member.
      * @param playerUUID UUID of the player {@link UUID}
-     * 
+     *
      * @return The rank of the player. {@link Component}
      */
     public Component getRank(UUID playerUUID) {
@@ -426,6 +426,18 @@ public class Faction {
         if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString(locale), locale, player);
 
         return Component.text("N/A");
+    }
+
+    public RankType getRankType(UUID playerUUID) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
+
+        if (owner.equals(player)) return RankType.OWNER;
+        if (admins.contains(player)) return RankType.ADMIN;
+        if (moderators.contains(player)) return RankType.MODERATOR;
+        if (fighters.contains(player)) return RankType.FIGHTER;
+        if (members.contains(player)) return RankType.MEMBER;
+
+        return null;
     }
 
     public boolean isInFaction(UUID playerUUID) {
