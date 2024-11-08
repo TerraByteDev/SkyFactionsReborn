@@ -10,8 +10,8 @@ import java.util.UUID;
 public class NotificationData {
 
     private UUID uuid;
-    private String title;
-    private String description;
+    private String type;
+    private Object[] replacements;
     private long timestamp;
 
 }

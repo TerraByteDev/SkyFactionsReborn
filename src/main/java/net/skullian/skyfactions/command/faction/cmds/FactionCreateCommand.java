@@ -8,7 +8,7 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -49,7 +49,7 @@ public class FactionCreateCommand extends CommandTemplate {
 
         FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             }
 
@@ -58,7 +58,7 @@ public class FactionCreateCommand extends CommandTemplate {
             } else {
                 FactionAPI.getFaction(name).whenComplete((faction, exc) -> {
                     if (exc != null) {
-                        ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", exc);
+                        ErrorUtil.handleError(player, "get the Faction", "SQL_FACTION_GET", exc);
                         return;
                     }
 

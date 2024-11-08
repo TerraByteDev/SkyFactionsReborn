@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.db.InviteData;
+import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 public class PlayerIncomingInviteDeny extends SkyItem {
 
@@ -36,16 +36,16 @@ public class PlayerIncomingInviteDeny extends SkyItem {
                 Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "get the Faction", "FACTION_NOT_FOUND");
                 return;
             } else if (ex != null) {
-                ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);
+                ErrorUtil.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);
                 return;
             }
 
             CompletableFuture.allOf(
                     faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_DENY, "player_name", player.getName()),
-                    SkyFactionsReborn.databaseHandler.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "outgoing")
+                    SkyFactionsReborn.databaseManager.factionInvitesManager.revokeInvite(player.getUniqueId(), DATA.getFactionName(), "outgoing")
             ).whenComplete((ignored, throwable) -> {
                 if (throwable != null) {
-                    ErrorHandler.handleError(player, "deny an invite", "SQL_INVITE_DENY", throwable);
+                    ErrorUtil.handleError(player, "deny an invite", "SQL_INVITE_DENY", throwable);
                     return;
                 }
 

@@ -18,7 +18,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 public class LeaveConfirmationItem extends SkyItem {
 
@@ -32,7 +32,7 @@ public class LeaveConfirmationItem extends SkyItem {
         // We do this again in case they get kicked before the confirmation.
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             }
 
@@ -43,7 +43,7 @@ public class LeaveConfirmationItem extends SkyItem {
 
                         IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, exc) -> {
                             if (exc != null) {
-                                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", exc);
+                                ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", exc);
                                 return;
                             }
 

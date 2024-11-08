@@ -13,7 +13,7 @@ import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.gui.screens.obelisk.invites.JoinRequestsUI;
 import net.skullian.skyfactions.gui.screens.obelisk.invites.PlayerOutgoingRequestManageUI;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 public class JoinRequestsTypeItem extends SkyItem {
 
@@ -30,9 +30,9 @@ public class JoinRequestsTypeItem extends SkyItem {
         if (TYPE.equals("faction")) {
             JoinRequestsUI.promptPlayer(player);
         } else if (TYPE.equals("player")) {
-            SkyFactionsReborn.databaseHandler.getPlayerOutgoingJoinRequest(player).whenComplete((joinRequest, ex) -> {
+            SkyFactionsReborn.databaseManager.factionInvitesManager.getPlayerOutgoingJoinRequest(player).whenComplete((joinRequest, ex) -> {
                 if (ex != null) {
-                    ErrorHandler.handleError(player, "get your outgoing join request", "SQL_JOIN_REQUEST_GET", ex);
+                    ErrorUtil.handleError(player, "get your outgoing join request", "SQL_JOIN_REQUEST_GET", ex);
                     return;
                 }
 

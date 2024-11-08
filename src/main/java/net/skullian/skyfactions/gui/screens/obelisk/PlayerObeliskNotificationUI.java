@@ -19,7 +19,7 @@ import net.skullian.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.notification.ObeliskNotificationPaginationItem;
 import net.skullian.skyfactions.notification.NotificationData;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.PagedGui;
@@ -97,7 +97,7 @@ public class PlayerObeliskNotificationUI {
         List<Item> items = new ArrayList<>();
         NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(player.getUniqueId())).handle((notifications, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "open the notifications GUI", "SQL_NOTIFICATION_GET", ex);
+                ErrorUtil.handleError(player, "open the notifications GUI", "SQL_NOTIFICATION_GET", ex);
                 return items;
             }
             

@@ -11,7 +11,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SLogger;
 
 @Command("sf")
@@ -45,7 +45,7 @@ public class SFNPCReloadCommand extends CommandTemplate {
 
         SkyFactionsReborn.npcManager.updateNPCs(false).whenComplete((affected, exc) -> {
             if (exc != null) {
-                ErrorHandler.handleError(sender, "update NPCs", "NPC_RELOAD_EXCEPTION", exc);
+                ErrorUtil.handleError(sender, "update NPCs", "NPC_RELOAD_EXCEPTION", exc);
                 return;
             }
 

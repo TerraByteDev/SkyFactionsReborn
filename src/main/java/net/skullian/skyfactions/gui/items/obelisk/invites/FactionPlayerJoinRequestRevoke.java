@@ -13,7 +13,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.faction.JoinRequestData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 public class FactionPlayerJoinRequestRevoke extends SkyItem {
 
@@ -29,9 +29,9 @@ public class FactionPlayerJoinRequestRevoke extends SkyItem {
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.getInventory().close();
 
-        SkyFactionsReborn.databaseHandler.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming").whenComplete((ignored, ex) -> {
+        SkyFactionsReborn.databaseManager.factionInvitesManager.revokeInvite(player.getUniqueId(), DATA.getFactionName(), "incoming").whenComplete((ignored, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "revoke a Faction join request", "SQL_JOIN_REQUEST_REJECT", ex);
+                ErrorUtil.handleError(player, "revoke a Faction join request", "SQL_JOIN_REQUEST_REJECT", ex);
                 return;
             }
 

@@ -1,18 +1,18 @@
-package net.skullian.skyfactions.db;
-
-import org.bukkit.OfflinePlayer;
+package net.skullian.skyfactions.database.struct;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.bukkit.OfflinePlayer;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class InviteData {
+public class AuditLogData {
 
     private OfflinePlayer player;
-    private OfflinePlayer inviter;
     private String factionName;
     private String type;
+    private Object[] replacements;
     private long timestamp;
-
 }

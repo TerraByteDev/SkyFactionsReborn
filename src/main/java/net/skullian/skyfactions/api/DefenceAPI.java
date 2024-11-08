@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.event.PlayerHandler;
-import org.antlr.v4.parse.ANTLRParser.prequelConstruct_return;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
