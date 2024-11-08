@@ -65,7 +65,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     Messages.JOIN_REQUEST_SAME_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                     return;
                 } else {
-                    SkyFactionsReborn.databaseHandler.hasJoinRequest(player).whenComplete((hasJoinRequest, exc) -> {
+                    SkyFactionsReborn.databaseManager.factionInvitesManager.hasJoinRequest(player.getUniqueId()).whenComplete((hasJoinRequest, exc) -> {
                         if (exc != null) {
                             ErrorHandler.handleError(player, "check if you have a join request", "SQL_JOIN_REQUEST_GET", exc);
                             return;

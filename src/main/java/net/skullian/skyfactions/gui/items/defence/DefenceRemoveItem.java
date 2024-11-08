@@ -32,6 +32,6 @@ public class DefenceRemoveItem extends SkyItem {
         defence.disable();
 
         defence.remove();
-//        DefencesFactory.addDefence();
+//      DefencesFactory.addDefence();
     }
 }
