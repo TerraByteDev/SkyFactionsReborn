@@ -1,10 +1,13 @@
 package net.skullian.skyfactions.event;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.api.NotificationAPI;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.util.CooldownManager;
+import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -16,13 +19,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitTask;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.api.NotificationAPI;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.util.SLogger;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class PlayerHandler implements Listener {
@@ -38,7 +38,8 @@ public class PlayerHandler implements Listener {
         if (!SkyFactionsReborn.databaseHandler.isActive()) {
             event.getPlayer().kick();
             throw new RuntimeException("Database is closed! Cannot allow player to join without risking dupes.");
-        };
+        }
+        ;
 
         SkyFactionsReborn.databaseHandler.playerIsRegistered(event.getPlayer()).whenComplete((isRegistered, ex) -> {
             if (ex != null) {
@@ -98,12 +99,16 @@ public class PlayerHandler implements Listener {
         if (task != null) task.cancel();
 
         IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
+
+        CooldownManager.ITEMS.remove(event.getPlayer());
+        CooldownManager.COMMANDS.remove(event.getPlayer());
     }
 
     @EventHandler
     public void playerRespawn(PlayerRespawnEvent event) {
         if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
-            if (FactionAPI.isLocationInRegion(event.getPlayer().getLocation(), event.getPlayer().getUniqueId().toString())) IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
+            if (FactionAPI.isLocationInRegion(event.getPlayer().getLocation(), event.getPlayer().getUniqueId().toString()))
+                IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
             IslandAPI.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
                 if (ex != null) {
                     SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());

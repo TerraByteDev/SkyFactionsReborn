@@ -45,10 +45,11 @@ Hub:
   # Also where players are teleported when they do /hub or their island is deleted.
   HUB_LOCATION: [ 0, 64, 0 ]
 
-# Configuration for commands.
-Commands:
-  # You do NOT want this to be too low, definitely not 0. This will avoid database spam and anything else.
-  COOLDOWN: 5000
+# Configuration for cooldowns.
+# You do NOT want these to be too low, definitely not 0. These will avoid database spam and anything else.
+Cooldowns:
+  COMMAND: 5000
+  GUI_ITEM: 5000
 
 # Configuration for all sounds (apart from GUI item clicks, they are configured in their respective GUI config files)
 # Set the sound to "NONE" to disable it.
@@ -159,10 +160,10 @@ NPC:
   # will spawn, relative to the center of the island.
   OFFSETS:
     # How far from the center of player islands should the NPC be spawned?
-    PLAYER_ISLANDS: [2, 0, 2] # [x, y, z]
+    PLAYER_ISLANDS: [ 2, 0, 2 ] # [x, y, z]
     
     # How far from the center of faction islands should the NPC be spawned?
-    FACTION_ISLANDS: [2, 0, 2] # [x, y, z]
+    FACTION_ISLANDS: [ 2, 0, 2 ] # [x, y, z]
 
 # Island grid generation algorithm configuration
 Generation:
@@ -192,7 +193,7 @@ Gems:
   MATERIAL: "EMERALD"
 
   # Item lore for the gem.
-  ITEM_LORE: [] # No lore for me!
+  ITEM_LORE: [ ] # No lore for me!
 
   # Custom Model Data / ID for the block (if you want it). Keep at -1 to disable the feature.
   CUSTOM_MODEL_DATA: -1

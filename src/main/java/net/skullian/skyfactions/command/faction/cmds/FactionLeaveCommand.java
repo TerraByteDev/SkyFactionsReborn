@@ -1,20 +1,19 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import java.util.List;
-
-import net.skullian.skyfactions.event.PlayerHandler;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.annotations.Permission;
-
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.screens.confirmation.FactionLeaveConfirmationUI;
 import net.skullian.skyfactions.util.ErrorHandler;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
+
+import java.util.List;
 
 @Command("faction")
 public class FactionLeaveCommand extends CommandTemplate {
@@ -34,14 +33,13 @@ public class FactionLeaveCommand extends CommandTemplate {
     }
 
     @Command("leave")
-    @Permission(value = { "skyfactions.faction.leave", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.faction.leave", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack
     ) {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {

@@ -1,17 +1,16 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.annotations.Permission;
-
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.gems.GemsCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
+
+import java.util.List;
 
 @Command("gems")
 public class GemsHelpCommand extends CommandTemplate {
@@ -38,13 +37,12 @@ public class GemsHelpCommand extends CommandTemplate {
     }
 
     @Command("help")
-    @Permission(value = { "skyfactions.gems.help", "skyfactions.gems" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.gems.help", "skyfactions.gems"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack
     ) {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
-        if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
         Messages.COMMAND_HEAD.send(sender, locale);

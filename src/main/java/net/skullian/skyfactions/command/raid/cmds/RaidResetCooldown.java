@@ -1,12 +1,12 @@
 package net.skullian.skyfactions.command.raid.cmds;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
@@ -32,14 +32,13 @@ public class RaidResetCooldown extends CommandTemplate {
     }
 
     @Command("resetcooldown")
-    @Permission(value = { "skyfactions.raid.resetcooldown" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.raid.resetcooldown"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack
     ) {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         SkyFactionsReborn.databaseHandler.updateLastRaid(player, 0).whenComplete((ignored, throwable) -> {
             if (throwable != null) {

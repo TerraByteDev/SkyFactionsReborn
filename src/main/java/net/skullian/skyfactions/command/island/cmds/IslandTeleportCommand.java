@@ -1,15 +1,5 @@
 package net.skullian.skyfactions.command.island.cmds;
 
-import java.util.List;
-
-import net.skullian.skyfactions.event.PlayerHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.annotations.Permission;
-
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
@@ -17,7 +7,16 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
+
+import java.util.List;
 
 @Command("island")
 public class IslandTeleportCommand extends CommandTemplate {
@@ -37,14 +36,13 @@ public class IslandTeleportCommand extends CommandTemplate {
     }
 
     @Command("teleport")
-    @Permission(value = { "skyfactions.island.teleport", "skyfactions.island" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.island.teleport", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack
     ) {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {

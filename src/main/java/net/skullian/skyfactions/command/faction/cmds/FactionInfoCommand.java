@@ -1,9 +1,14 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.faction.Faction;
+import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,14 +17,8 @@ import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 import org.jetbrains.annotations.Nullable;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.faction.Faction;
-import net.skullian.skyfactions.util.ErrorHandler;
-import net.skullian.skyfactions.util.text.TextUtility;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Command("faction")
 public class FactionInfoCommand extends CommandTemplate {
@@ -39,7 +38,7 @@ public class FactionInfoCommand extends CommandTemplate {
     }
 
     @Command("info [name]")
-    @Permission(value = { "skyfactions.faction.info", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.faction.info", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack,
             @Argument(value = "name") @Nullable String name
@@ -47,7 +46,6 @@ public class FactionInfoCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         if (name == null) {
             FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {

@@ -38,7 +38,6 @@ public class SFNPCDisableCommand extends CommandTemplate {
     ) {
         CommandSender sender = commandSourceStack.getSender();
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
-        if ((sender instanceof Player) && CommandsUtility.manageCooldown((Player) sender)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
         SLogger.warn("[{}] is disabling SkyFactions NPCs.", sender.getName());

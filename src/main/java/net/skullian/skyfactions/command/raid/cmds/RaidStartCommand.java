@@ -1,21 +1,20 @@
 package net.skullian.skyfactions.command.raid.cmds;
 
-import java.util.List;
-
-import net.skullian.skyfactions.event.PlayerHandler;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.annotations.Permission;
-
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.RaidAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.screens.confirmation.PlayerRaidConfirmationUI;
 import net.skullian.skyfactions.util.ErrorHandler;
 import net.skullian.skyfactions.util.SoundUtil;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
+
+import java.util.List;
 
 @Command("raid")
 public class RaidStartCommand extends CommandTemplate {
@@ -35,14 +34,13 @@ public class RaidStartCommand extends CommandTemplate {
     }
 
     @Command("start")
-    @Permission(value = { "skyfactions.raid.start", "skyfactions.raid" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.raid.start", "skyfactions.raid"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack
     ) {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         RaidAPI.getCooldownDuration(player).whenComplete((cooldown, ex) -> {
             if (ex != null) {
