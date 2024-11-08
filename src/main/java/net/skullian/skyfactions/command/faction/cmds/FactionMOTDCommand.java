@@ -6,7 +6,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -46,7 +46,7 @@ public class FactionMOTDCommand extends CommandTemplate {
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
             }
 
             if (faction == null) {

@@ -7,7 +7,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -46,7 +46,7 @@ public class FactionDonateCommand extends CommandTemplate {
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
             if (throwable != null) {
-                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
+                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                 return;
             } else if (faction == null) {
                 Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));

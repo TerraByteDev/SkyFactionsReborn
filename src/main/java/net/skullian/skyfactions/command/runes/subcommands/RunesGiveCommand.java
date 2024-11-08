@@ -7,7 +7,7 @@ import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -78,7 +78,7 @@ public class RunesGiveCommand extends CommandTemplate {
             } else {
                 IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, ex) -> {
                     if (ex != null) {
-                        ErrorHandler.handleError(sender, "check if the player had an island", "SQL_ISLAND_GET", ex);
+                        ErrorUtil.handleError(sender, "check if the player had an island", "SQL_ISLAND_GET", ex);
                         return;
                     } else if (!hasIsland) {
                         Messages.PLAYER_HAS_NO_ISLAND.send(sender, locale);
@@ -93,7 +93,7 @@ public class RunesGiveCommand extends CommandTemplate {
 
             FactionAPI.getFaction(playerFactionName).whenComplete((faction, throwable) -> {
                 if (throwable != null) {
-                    ErrorHandler.handleError(sender, "get the specified Faction", "SQL_FACTION_GET", throwable);
+                    ErrorUtil.handleError(sender, "get the specified Faction", "SQL_FACTION_GET", throwable);
                     return;
                 } else if (faction == null) {
                     Messages.FACTION_NOT_FOUND.send(sender, locale, "name", playerFactionName);

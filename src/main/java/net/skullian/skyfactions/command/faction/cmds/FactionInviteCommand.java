@@ -5,9 +5,9 @@ import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.db.InviteData;
+import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -58,7 +58,7 @@ public class FactionInviteCommand extends CommandTemplate {
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             }
 
@@ -80,7 +80,7 @@ public class FactionInviteCommand extends CommandTemplate {
             } else {
                 faction.getOutgoingInvites().whenComplete((invites, throwable) -> {
                     if (throwable != null) {
-                        ErrorHandler.handleError(player, "get Faction invites", "SQL_FACTION_GET", throwable);
+                        ErrorUtil.handleError(player, "get Faction invites", "SQL_FACTION_GET", throwable);
                         return;
                     }
 

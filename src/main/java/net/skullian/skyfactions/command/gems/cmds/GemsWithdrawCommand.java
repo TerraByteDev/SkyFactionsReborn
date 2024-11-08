@@ -7,7 +7,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -47,7 +47,7 @@ public class GemsWithdrawCommand extends CommandTemplate {
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {
             if (throwable != null) {
-                ErrorHandler.handleError(player, "get your island", "SQL_GEMS_GET", throwable);
+                ErrorUtil.handleError(player, "get your island", "SQL_GEMS_GET", throwable);
                 return;
             }
 
