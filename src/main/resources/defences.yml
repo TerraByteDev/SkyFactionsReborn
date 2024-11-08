@@ -131,14 +131,14 @@ Global:
 # See the FACTION_TITLES config in the language configs at around Line 360.
 Permissions:
   # Which ranks can place defences?
-  PLACE_DEFENCE: ["fighter, moderator, admin, owner"]
+  PLACE_DEFENCE: ["fighter", "moderator", "admin", "owner"]
 
   # Which ranks should be able to open the defence management menu outright?
-  ACCESS_DEFENCE: ["fighter, moderator, admin, owner"]
+  ACCESS_DEFENCE: ["fighter", "moderator", "admin", "owner"]
 
   # Which ranks should be able to replenish ammo?
   # Bearing in mind this will use the Faction's runes supply.
-  REPLENISH_AMMO: ["fighter, moderator, admin, owner"]
+  REPLENISH_AMMO: ["fighter", "moderator", "admin", "owner"]
 
   # Which ranks can upgrade the defence?
   # Bear in mind this will use the Faction's runes supply.
@@ -146,4 +146,7 @@ Permissions:
 
   # Which ranks should be able to remove the defence completely?
   # This does create an audit log entry ^^
-  REMOVE_DEFENCE: ["moderator, admin, owner"]
+  REMOVE_DEFENCE: ["moderator", "admin", "owner"]
+
+  # Which ranks should be able to toggle passive / hostile entity targeting?
+  TOGGLE_ENTITY_TARGETING: ["moderator", "admin", "owner"]
