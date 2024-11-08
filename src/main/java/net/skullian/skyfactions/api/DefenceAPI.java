@@ -125,7 +125,7 @@ public class DefenceAPI {
     public static ItemBuilder processPermissions(ItemBuilder builder, Player player) {
         String locale = PlayerHandler.getLocale(player.getUniqueId());
 
-        for (String line : Messages.DEFENCE_INSUFFICIENT_PERMISSIONS_LORE.getStringList()) {
+        for (String line : Messages.DEFENCE_INSUFFICIENT_PERMISSIONS_LORE.getStringList(locale)) {
             builder.addLoreLines(TextUtility.legacyColor(line, locale, player));
         }
 
