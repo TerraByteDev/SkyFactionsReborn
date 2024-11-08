@@ -2,7 +2,6 @@ package net.skullian.skyfactions.gui.items.defence;
 
 import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.defence.Defence;
-import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.gui.data.ItemData;
@@ -33,6 +32,6 @@ public class DefenceRemoveItem extends SkyItem {
         defence.disable();
 
         defence.remove();
-        //DefencesFactory.addDefence();
+//        DefencesFactory.addDefence();
     }
 }

@@ -1,15 +1,5 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import java.util.List;
-
-import net.skullian.skyfactions.event.PlayerHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.annotations.Argument;
-import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.annotations.Permission;
-
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
@@ -17,7 +7,16 @@ import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorUtil;
+import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.util.ErrorHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.incendo.cloud.annotations.Argument;
+import org.incendo.cloud.annotations.Command;
+import org.incendo.cloud.annotations.Permission;
+
+import java.util.List;
 
 @Command("faction")
 public class FactionRequestJoinCommand extends CommandTemplate {
@@ -37,7 +36,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
     }
 
     @Command("requestjoin <factionName>")
-    @Permission(value = { "skyfactions.faction.requestjoin", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.faction.requestjoin", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack,
             @Argument(value = "factionName") String factionName
@@ -45,11 +44,10 @@ public class FactionRequestJoinCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
             if (ex != null) {
-                ErrorUtil.handleError(player, "check if you were in a Faction", "SQL_FACTION_GET", ex);
+                ErrorHandler.handleError(player, "check if you were in a Faction", "SQL_FACTION_GET", ex);
                 return;
             } else if (isInFaction) {
                 Messages.ALREADY_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
@@ -58,7 +56,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
 
             FactionAPI.getFaction(factionName).whenComplete((faction, throwable) -> {
                 if (throwable != null) {
-                    ErrorUtil.handleError(player, "check the Faction", "SQL_FACTION_GET", throwable);
+                    ErrorHandler.handleError(player, "check the Faction", "SQL_FACTION_GET", throwable);
                     return;
                 } else if (faction == null) {
                     Messages.FACTION_NOT_FOUND.send(player, PlayerHandler.getLocale(player.getUniqueId()), "name", factionName);
@@ -67,27 +65,28 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     Messages.JOIN_REQUEST_SAME_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                     return;
                 } else {
-                    SkyFactionsReborn.databaseManager.factionInvitesManager.hasJoinRequest(player.getUniqueId()).whenComplete((hasJoinRequest, exc) -> {
+                    SkyFactionsReborn.databaseHandler.hasJoinRequest(player).whenComplete((hasJoinRequest, exc) -> {
                         if (exc != null) {
-                            ErrorUtil.handleError(player, "check if you have a join request", "SQL_JOIN_REQUEST_GET", exc);
+                            ErrorHandler.handleError(player, "check if you have a join request", "SQL_JOIN_REQUEST_GET", exc);
                             return;
                         }
 
                         if (hasJoinRequest) {
                             Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-                        } else {
-                            faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((ignored, exc2) -> {
-                                if (exc2 != null) {
-                                    ErrorUtil.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc2);
-                                    return;
-                                }
-
-                                Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", factionName);
-                                NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
-                            });
+                            return;
                         }
                     });
                 }
+
+                faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((ignored, exc) -> {
+                    if (exc != null) {
+                        ErrorHandler.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc);
+                        return;
+                    }
+
+                    Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", factionName);
+                    NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
+                });
             });
         });
 

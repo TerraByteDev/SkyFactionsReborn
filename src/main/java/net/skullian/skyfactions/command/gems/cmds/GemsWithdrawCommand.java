@@ -1,9 +1,13 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
-import java.util.Arrays;
-import java.util.List;
-
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.GemsAPI;
+import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,13 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.api.GemsAPI;
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorUtil;
+import java.util.Arrays;
+import java.util.List;
 
 @Command("gems")
 public class GemsWithdrawCommand extends CommandTemplate {
@@ -45,11 +44,10 @@ public class GemsWithdrawCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {
             if (throwable != null) {
-                ErrorUtil.handleError(player, "get your island", "SQL_GEMS_GET", throwable);
+                ErrorHandler.handleError(player, "get your island", "SQL_GEMS_GET", throwable);
                 return;
             }
 

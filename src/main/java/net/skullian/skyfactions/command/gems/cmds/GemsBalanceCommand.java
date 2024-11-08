@@ -1,13 +1,13 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorUtil;
+import net.skullian.skyfactions.util.ErrorHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
@@ -34,18 +34,17 @@ public class GemsBalanceCommand extends CommandTemplate {
     }
 
     @Command("balance")
-    @Permission(value = { "skyfactions.gems.balance", "skyfactions.gems" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.gems.balance", "skyfactions.gems"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack
     ) {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
             if (ex != null) {
-                ErrorUtil.handleError(player, "get your island", "SQL_GEMS_GET", ex);
+                ErrorHandler.handleError(player, "get your island", "SQL_GEMS_GET", ex);
                 return;
             }
 

@@ -7,14 +7,12 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.raid.cmds.RaidHelpCommand;
 import net.skullian.skyfactions.command.raid.cmds.RaidResetCooldown;
 import net.skullian.skyfactions.command.raid.cmds.RaidStartCommand;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.util.CooldownManager;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
 import org.incendo.cloud.paper.PaperCommandManager;
-import org.stringtemplate.v4.compiler.STParser.templateAndEOF_return;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +26,7 @@ public class RaidCommandHandler implements CommandHandler {
         this.manager = PaperCommandManager.builder()
                 .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
                 .buildOnEnable(SkyFactionsReborn.getInstance());
+        this.manager.registerCommandPostProcessor(new CooldownManager.CooldownPostprocessor<>());
 
         this.parser = new AnnotationParser<>(
                 manager,

@@ -1,8 +1,13 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import java.util.List;
-
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.command.CommandTemplate;
+import net.skullian.skyfactions.command.CommandsUtility;
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotation.specifier.Greedy;
@@ -10,13 +15,7 @@ import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.command.CommandTemplate;
-import net.skullian.skyfactions.command.CommandsUtility;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
+import java.util.List;
 
 @Command("faction")
 public class FactionMOTDCommand extends CommandTemplate {
@@ -36,7 +35,7 @@ public class FactionMOTDCommand extends CommandTemplate {
     }
 
     @Command("motd <motd>")
-    @Permission(value = { "skyfactions.faction.motd", "skyfactions.faction" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.faction.motd", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSourceStack commandSourceStack,
             @Argument(value = "motd") @Greedy String motd
@@ -44,11 +43,10 @@ public class FactionMOTDCommand extends CommandTemplate {
         CommandSender sender = commandSourceStack.getSender();
         if (!(sender instanceof Player player)) return;
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        if (CommandsUtility.manageCooldown(player)) return;
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
-                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
             }
 
             if (faction == null) {
