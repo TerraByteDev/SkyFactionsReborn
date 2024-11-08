@@ -210,11 +210,18 @@ Messages:
       - "<red><italic>You do not have enough"
       - "<red><italic>Runes to do this!"
 
-      # Appended to the end of the defence purchase confirmation item if the player doesn't have enough space in their inventory.
+    # Appended to the end of the defence purchase confirmation item if the player doesn't have enough space in their inventory.
     INSUFFICIENT_INVENTORY_LORE:
       - ""
       - "<red><italic>You do not have enough"
       - "<red><italic>space in your inventory!"
+
+    # Appended to the end of certain defence control UI elements when the viewer does not have permissions to use that function.
+    # Example: Remove the defence while being a fighter.
+    INSUFFICIENT_PERMISSIONS_LORE:
+      - ""
+      - "<red><italic>You do not have the sufficient"
+      - "<red><italic>rank to do this!"
 
     # Sent when a player successfully purchases a defence.
     # Placeholders: <defence_name> - Name of the defence purchased
@@ -240,6 +247,9 @@ Messages:
     # Sent when a player tries to place too many defences.
     # Placeholders: <defence_max> - Configured (in defences.yml) maximum defence count for players / factions.
     TOO_MANY_DEFENCES: "<server_name><red><bold> Hey!<reset><yellow> You have too many defences! <gray>(Max <defence_max>)"
+
+    # Sent when a player removes a defence via the GUI.
+    DEFENCE_REMOVE_SUCCESS: "<server_name><green> Successfully removed defence."
 
   Gems:
     # Sent when the player runs /gems or /gems balance

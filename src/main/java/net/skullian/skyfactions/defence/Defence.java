@@ -174,42 +174,61 @@ public abstract class Defence {
     }
 
     public CompletableFuture<List<LivingEntity>> getRandomEntity(World defenceWorld) {
-        if (targetedEntities.size() == getMaxSimEntities()) return CompletableFuture.completedFuture(targetedEntities);
+        if (isMaxEntitiesReached()) return CompletableFuture.completedFuture(targetedEntities);
 
-        Location location = new Location(defenceWorld, data.getX(), data.getY(), data.getZ());
+        Location location = getDefenceLocation();
         int radius = getRadius();
 
         Collection<LivingEntity> nearbyEntities = defenceWorld.getNearbyLivingEntities(location, radius, radius, radius);
-        if (nearbyEntities.isEmpty()) return CompletableFuture.completedFuture(new ArrayList<LivingEntity>());
+        if (nearbyEntities.isEmpty()) return CompletableFuture.completedFuture(new ArrayList<>());
 
+        List<LivingEntity> filteredEntities = filterEntities(nearbyEntities);
+        List<LivingEntity> chosenEntities = selectRandomEntities(filteredEntities);
+
+        chosenEntities.addAll(targetedEntities);
+        return CompletableFuture.completedFuture(chosenEntities);
+    }
+
+    private boolean isMaxEntitiesReached() {
+        return targetedEntities.size() == getMaxSimEntities();
+    }
+
+    private List<LivingEntity> filterEntities(Collection<LivingEntity> entities) {
         List<LivingEntity> filteredEntities = new ArrayList<>();
-        targetedEntities.removeIf(currentlyTargeted -> !nearbyEntities.contains(currentlyTargeted));
-
         List<String> allowedEntities = compileAllowedEntities();
         boolean shouldBlockNPCS = shouldBlockNPCs(allowedEntities);
         List<String> blockedMythicMobs = getBlockedMythicMobs(allowedEntities);
-        for (LivingEntity entity : nearbyEntities) {
-            if (!entity.isVisibleByDefault()) continue;
-            if (entity.isInvisible()) continue;
-            if (shouldBlockNPCS && entity.hasMetadata("NPC")) continue;
-            if (entity instanceof Player) continue; // TODO: check if raid is ongoing, if so target them
-            if (blockedMythicMobs != null && isBlockedMythicMob(entity, blockedMythicMobs)) continue;
 
-            if (allowedEntities.contains(entity.getType().name()) && !filteredEntities.contains(entity)) {
+        targetedEntities.removeIf(currentlyTargeted -> !entities.contains(currentlyTargeted));
+
+        for (LivingEntity entity : entities) {
+            if (isEntityAllowed(entity, allowedEntities, shouldBlockNPCS, blockedMythicMobs)) {
                 filteredEntities.add(entity);
             }
         }
 
+        return filteredEntities;
+    }
+
+    private boolean isEntityAllowed(LivingEntity entity, List<String> allowedEntities, boolean shouldBlockNPCS, List<String> blockedMythicMobs) {
+        return entity.isVisibleByDefault() &&
+                !entity.isInvisible() &&
+                !(shouldBlockNPCS && entity.hasMetadata("NPC")) &&
+                !(entity instanceof Player) && // TODO: check if raid is ongoing, if so target them
+                !isBlockedMythicMob(entity, blockedMythicMobs) &&
+                allowedEntities.contains(entity.getType().name());
+    }
+
+    private List<LivingEntity> selectRandomEntities(List<LivingEntity> entities) {
         List<LivingEntity> chosenEntities = new ArrayList<>();
-        if (!filteredEntities.isEmpty()) {
-            for (int i = 0; i < (getMaxSimEntities() - targetedEntities.size()); i++) {
-                ThreadLocalRandom random = ThreadLocalRandom.current();
-                chosenEntities.add(filteredEntities.get(random.nextInt(filteredEntities.size())));
-            }
+        int maxEntities = getMaxSimEntities() - targetedEntities.size();
+
+        for (int i = 0; i < maxEntities; i++) {
+            ThreadLocalRandom random = ThreadLocalRandom.current();
+            chosenEntities.add(entities.get(random.nextInt(entities.size())));
         }
 
-        chosenEntities.addAll(targetedEntities);
-        return CompletableFuture.completedFuture(chosenEntities);
+        return chosenEntities;
     }
 
     public List<String> compileAllowedEntities() {
