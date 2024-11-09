@@ -62,7 +62,7 @@ Messages:
     # Sent when a player runs /island delete confirm and the deletion is processing.
     DELETION_PROCESSING: "<server_name><reset><yellow> Deleting your island, please wait..."
     # Sent when the player initially runs /island delete, and has to rerun the command below.
-    CONFIRM_DELETION: "<server_name><reset><gray> Please run<red><bold> /island delete confirm<reset><gray> to confirm deletion of your island."
+    CONFIRM_DELETION: "<server_name><reset><gray> Please run<red><bold> /island delete confirm<reset><gray> to confirm deletion of your island.<newline><red><italic>This will wipe your inventory, enderchest, runes and gems!"
     # Sent when the player runs /island delete confirm and the island has been removed.
     DELETION_SUCCESS: "<server_name><reset><gray> Your island has been successfully deleted."
     # Sent when the player runs /island delete confirm before they run /island delete (2 step!)
