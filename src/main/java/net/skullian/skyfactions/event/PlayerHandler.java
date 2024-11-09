@@ -11,6 +11,7 @@ import net.skullian.skyfactions.util.CooldownManager;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,11 +20,13 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitTask;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 
 public class PlayerHandler implements Listener {
@@ -40,7 +43,6 @@ public class PlayerHandler implements Listener {
             event.getPlayer().kick();
             throw new RuntimeException("Database is closed! Cannot allow player to join without risking dupes.");
         }
-        ;
 
         SkyFactionsReborn.databaseManager.playerManager.isPlayerRegistered(event.getPlayer()).whenComplete((isRegistered, ex) -> {
             if (ex != null) {
@@ -91,6 +93,27 @@ public class PlayerHandler implements Listener {
 
         SLogger.info("Initialising Notification Task for {}", event.getPlayer().getName());
         NotificationAPI.createCycle(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerSpawnLocationEvent(PlayerSpawnLocationEvent event) {
+        FactionAPI.isInFaction(event.getPlayer()).whenComplete((is, ex) -> {
+            if (ex != null) {
+                event.setSpawnLocation(IslandAPI.getHubLocation());
+                ex.printStackTrace();
+            } else if (!is && event.getSpawnLocation().getWorld().getName().equals(Settings.ISLAND_FACTION_WORLD.getString())) {
+                event.setSpawnLocation(IslandAPI.getHubLocation());
+            }
+        });
+
+        IslandAPI.hasIsland(event.getPlayer().getUniqueId()).whenComplete((is, ex) -> {
+            if (ex != null) {
+                event.setSpawnLocation(IslandAPI.getHubLocation());
+                ex.printStackTrace();
+            } else if (!is && event.getSpawnLocation().getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString())) {
+                event.setSpawnLocation(IslandAPI.getHubLocation());
+            }
+        });
     }
 
     @EventHandler

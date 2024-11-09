@@ -63,6 +63,13 @@ public class IslandAPI {
         });
     }
 
+    public static Location getHubLocation() {
+        World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
+
+        List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
+        return new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
+    }
+
     // for PlaceholderAPI
     public static void cacheData(Player player) {
         if (!GemsAPI.playerGems.containsKey(player.getUniqueId())) GemsAPI.cachePlayer(player.getUniqueId());
