@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -36,10 +37,9 @@ public class RaidStartCommand extends CommandTemplate {
     @Command("start")
     @Permission(value = {"skyfactions.raid.start", "skyfactions.raid"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack
+            PlayerSource commandSourceStack
     ) {
-        CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player player)) return;
+        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         RaidAPI.getCooldownDuration(player).whenComplete((cooldown, ex) -> {

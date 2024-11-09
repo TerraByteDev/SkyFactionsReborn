@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -35,10 +36,9 @@ public class IslandCreateCommand extends CommandTemplate {
     @Command("create")
     @Permission(value = {"skyfactions.island.create", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack
+            PlayerSource commandSourceStack
     ) {
-        CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player player)) return;
+        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {

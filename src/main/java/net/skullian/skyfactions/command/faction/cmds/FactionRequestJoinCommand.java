@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -38,11 +39,10 @@ public class FactionRequestJoinCommand extends CommandTemplate {
     @Command("requestjoin <factionName>")
     @Permission(value = {"skyfactions.faction.requestjoin", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack,
+            PlayerSource commandSourceStack,
             @Argument(value = "factionName") String factionName
     ) {
-        CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player player)) return;
+        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {

@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -38,11 +39,10 @@ public class FactionCreateCommand extends CommandTemplate {
     @Command("create <name>")
     @Permission(value = {"skyfactions.faction.create", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack,
+            PlayerSource commandSourceStack,
             @Argument(value = "name") String name
     ) {
-        CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player player)) return;
+        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         Messages.FACTION_CREATION_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));

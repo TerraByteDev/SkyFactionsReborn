@@ -18,6 +18,7 @@ import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,11 +50,10 @@ public class IslandUntrustCommand extends CommandTemplate {
     @Command("untrust <player>")
     @Permission(value = {"skyfactions.island.untrust", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack,
+            PlayerSource commandSourceStack,
             @Argument(value = "player", suggestions = "onlinePlayers") String playerName
     ) {
-        CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player player)) return;
+        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);

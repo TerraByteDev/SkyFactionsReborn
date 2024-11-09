@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -40,11 +41,10 @@ public class FactionInfoCommand extends CommandTemplate {
     @Command("info [name]")
     @Permission(value = {"skyfactions.faction.info", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack,
+            PlayerSource commandSourceStack,
             @Argument(value = "name") @Nullable String name
     ) {
-        CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player player)) return;
+        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         if (name == null) {

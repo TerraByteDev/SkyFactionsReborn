@@ -15,6 +15,7 @@ import org.incendo.cloud.annotation.specifier.Greedy;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -41,11 +42,10 @@ public class FactionBroadcastCommand extends CommandTemplate {
     @Command("broadcast <message>")
     @Permission(value = {"skyfactions.faction.broadcast", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack,
+            PlayerSource commandSourceStack,
             @Argument(value = "message") @Greedy String message
     ) {
-        CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player player)) return;
+        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {

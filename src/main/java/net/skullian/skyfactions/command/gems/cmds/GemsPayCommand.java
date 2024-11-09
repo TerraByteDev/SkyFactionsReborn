@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -37,17 +38,16 @@ public class GemsPayCommand extends CommandTemplate {
     @Command("pay <player> <amount>")
     @Permission(value = {"skyfactions.gems.pay", "skyfactions.gems"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack,
+            PlayerSource commandSourceStack,
             @Argument(value = "player") String playerName,
             @Argument(value = "amount") int amount
     ) {
-        CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player player)) return;
+        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
         if (!offlinePlayer.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(sender, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
+            Messages.UNKNOWN_PLAYER.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
         } else {
 
             int playerGemCount = GemsAPI.getGems(player.getUniqueId());

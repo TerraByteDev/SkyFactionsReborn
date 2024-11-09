@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -41,16 +42,15 @@ public class IslandDeleteCommand extends CommandTemplate {
     @Command("delete [confirm]")
     @Permission(value = {"skyfactions.island.delete", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack,
+            PlayerSource commandSourceStack,
             @Argument(value = "confirm") @Nullable String confirm
     ) {
-        CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player player)) return;
+        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
             if (ex != null) {
-                ErrorUtil.handleError(sender, "check if you have an island", "SQL_ISLAND_CHECK", ex);
+                ErrorUtil.handleError(player, "check if you have an island", "SQL_ISLAND_CHECK", ex);
                 return;
             }
 

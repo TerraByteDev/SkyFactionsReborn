@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.command.discord.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.dv8tion.jda.api.entities.User;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
@@ -8,10 +7,10 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -19,10 +18,9 @@ public class LinkCommand extends CommandTemplate {
     @Command("link")
     @Permission(value = {"skyfactions.command.link"}, mode = Permission.Mode.ANY_OF)
     public boolean handleLink(
-            CommandSourceStack commandSourceStack
+            PlayerSource commandSourceStack
     ) {
-        CommandSender sender = commandSourceStack.getSender();
-        if (sender instanceof Player player) {
+        Player player = commandSourceStack.source();
             if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true))
                 return true;
 
@@ -40,7 +38,6 @@ public class LinkCommand extends CommandTemplate {
                     Messages.DISCORD_ALREADY_LINKED.send(player, PlayerHandler.getLocale(player.getUniqueId()), "discord_name", retrivedUser.getName());
                 }
             });
-        }
 
         return true;
     }

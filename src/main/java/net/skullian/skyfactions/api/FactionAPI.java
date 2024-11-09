@@ -29,10 +29,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
@@ -40,6 +37,8 @@ public class FactionAPI {
 
     public static Map<UUID, Faction> factionCache = new HashMap<>();
     public static Map<String, Faction> factionNameCache = new HashMap<>();
+
+    public static HashSet<Faction> awaitingDeletion = new HashSet<>();
 
     public static void handleFactionWorldBorder(Player player, FactionIsland island) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {

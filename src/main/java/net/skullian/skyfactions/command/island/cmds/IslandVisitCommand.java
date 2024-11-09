@@ -23,6 +23,7 @@ import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -63,11 +64,10 @@ public class IslandVisitCommand extends CommandTemplate {
     @Command("visit <player>")
     @Permission(value = {"skyfactions.island.visit", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack,
+            PlayerSource commandSourceStack,
             @Argument(value = "player", suggestions = "onlinePlayers") String playerName
     ) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        CommandSender sender = commandSourceStack.getSender();
-        if (!(sender instanceof Player player)) return;
+        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         Messages.VISIT_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
