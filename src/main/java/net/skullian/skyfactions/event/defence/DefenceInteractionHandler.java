@@ -6,11 +6,9 @@ import java.util.UUID;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.event.armor.ArmorEquipEvent;
 import net.skullian.skyfactions.gui.screens.defence.DefenceManageUI;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +20,6 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.defence.Defence;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class DefenceInteractionHandler implements Listener {
 
@@ -49,8 +46,7 @@ public class DefenceInteractionHandler implements Listener {
 
     @EventHandler
     public void onArmorEquip(ArmorEquipEvent event) {
-        ItemStack newArmor = (event.getNewArmorPiece() != null ? event.getNewArmorPiece() : null);
-        if (DefenceAPI.isDefence(newArmor)) {
+        if (DefenceAPI.isDefence(event.getItem())) {
             event.setCancelled(true);
         }
     }

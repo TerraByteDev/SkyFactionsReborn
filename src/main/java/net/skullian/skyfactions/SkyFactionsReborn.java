@@ -115,7 +115,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
         new SFCommandHandler();
 
         SLogger.info("Registering Events.");
-        getServer().getPluginManager().registerEvents(new ArmorListener(DefencesFactory.cachedMaterials), this);
+        getServer().getPluginManager().registerEvents(new ArmorListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
         getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
         getServer().getPluginManager().registerEvents(new DefenceDamageHandler(), this);
