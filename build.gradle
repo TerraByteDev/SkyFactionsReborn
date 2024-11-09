@@ -138,7 +138,7 @@ dependencies {
     compileOnly("de.oliver:FancyNpcs:2.4.0")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
     compileOnly("me.RockinChaos.itemjoin:ItemJoin:6.1.0-RELEASE")
-    compileOnly("io.th0rgal:oraxen:1.167.0")
+    compileOnly("io.th0rgal:oraxen:1.183.0")
     compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.1")
 
     compileOnly("org.jooq:jooq:3.19.15")
