@@ -3,9 +3,10 @@ package net.skullian.skyfactions.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.event.PlayerHandler;
-import org.antlr.v4.parse.ANTLRParser.prequelConstruct_return;
+import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,6 +27,7 @@ import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.event.DefenceHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 public class DefenceAPI {
 
@@ -109,5 +111,24 @@ public class DefenceAPI {
                         .filter(d -> d.getDefenceLocation().equals(location))
                         .findFirst()
                         .orElse(null));
+    }
+
+    public static void returnDefence(DefenceStruct struct, Player player) {
+        ItemStack stack = DefenceAPI.createDefenceStack(struct, player);
+        player.getInventory().addItem(stack);
+    }
+
+    public static boolean hasPermissions(List<String> permissions, Player player, Faction faction) {
+        return permissions.contains(faction.getRankType(player.getUniqueId()).getRankValue());
+    }
+
+    public static ItemBuilder processPermissions(ItemBuilder builder, Player player) {
+        String locale = PlayerHandler.getLocale(player.getUniqueId());
+
+        for (String line : Messages.DEFENCE_INSUFFICIENT_PERMISSIONS_LORE.getStringList(locale)) {
+            builder.addLoreLines(TextUtility.legacyColor(line, locale, player));
+        }
+
+        return builder;
     }
 }

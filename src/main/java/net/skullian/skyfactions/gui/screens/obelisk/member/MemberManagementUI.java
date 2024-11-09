@@ -20,7 +20,7 @@ import net.skullian.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.member_manage.MemberPaginationItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.PagedGui;
@@ -98,7 +98,7 @@ public class MemberManagementUI {
         List<Item> items = new ArrayList<>();
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
             if (exc != null) {
-                ErrorHandler.handleError(player, "open the member management GUI", "GUI_LOAD_EXCEPTION", exc);
+                ErrorUtil.handleError(player, "open the member management GUI", "GUI_LOAD_EXCEPTION", exc);
                 return;
             }
             String locale = PlayerHandler.getLocale(player.getUniqueId());

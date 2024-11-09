@@ -1,5 +1,21 @@
 package net.skullian.skyfactions.api;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+import net.skullian.skyfactions.event.PlayerHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -25,20 +41,13 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.event.DefenceHandler;
-import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.island.PlayerIsland;
 import net.skullian.skyfactions.obelisk.ObeliskHandler;
-import net.skullian.skyfactions.util.*;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import net.skullian.skyfactions.util.ErrorUtil;
+import net.skullian.skyfactions.util.PlayerUtil;
+import net.skullian.skyfactions.util.FileUtil;
+import net.skullian.skyfactions.util.SLogger;
+import net.skullian.skyfactions.util.SoundUtil;
 
 public class IslandAPI {
 
@@ -47,7 +56,7 @@ public class IslandAPI {
 
     public static CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
         if (islands.containsKey(playerUUID)) return CompletableFuture.completedFuture(islands.get(playerUUID));
-        return SkyFactionsReborn.databaseHandler.getPlayerIsland(playerUUID).thenApply((island) -> {
+        return SkyFactionsReborn.databaseManager.playerIslandManager.getPlayerIsland(playerUUID).thenApply((island) -> {
             islands.put(playerUUID, island);
 
             return island;
@@ -72,12 +81,12 @@ public class IslandAPI {
 
     public static void createIsland(Player player) {
 
-        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.databaseHandler.cachedPlayerIslandID);
-        SkyFactionsReborn.databaseHandler.cachedPlayerIslandID++;
+        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.databaseManager.playerIslandManager.cachedPlayerIslandID);
+        SkyFactionsReborn.databaseManager.playerIslandManager.cachedPlayerIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
         if (world == null) {
-            ErrorHandler.handleError(player, "create an island", "WORLD_NOT_EXIST", new IllegalArgumentException("Unknown World: " + Settings.ISLAND_PLAYER_WORLD.getString()));
+            ErrorUtil.handleError(player, "create an island", "WORLD_NOT_EXIST", new IllegalArgumentException("Unknown World: " + Settings.ISLAND_PLAYER_WORLD.getString()));
             return;
         }
 
@@ -85,13 +94,13 @@ public class IslandAPI {
         createRegion(player, island, world);
 
         CompletableFuture.allOf(
-                SkyFactionsReborn.databaseHandler.createIsland(player, island),
+                SkyFactionsReborn.databaseManager.playerIslandManager.createIsland(player, island),
                 pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player")
         ).whenComplete((ignored, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
+                ErrorUtil.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
                 removePlayerIsland(player);
-                SkyFactionsReborn.databaseHandler.removeIsland(player);
+                SkyFactionsReborn.databaseManager.playerIslandManager.removeIsland(player);
                 return;
             }
 
@@ -107,7 +116,7 @@ public class IslandAPI {
     }
 
     public static CompletableFuture<Boolean> hasIsland(UUID playerUUID) {
-        return SkyFactionsReborn.databaseHandler.hasIsland(playerUUID);
+        return SkyFactionsReborn.databaseManager.playerIslandManager.hasIsland(playerUUID);
     }
 
     public static CompletableFuture<Boolean> pasteIslandSchematic(Player player, Location location, String worldName, String type) {
@@ -177,7 +186,7 @@ public class IslandAPI {
     public static void removePlayerIsland(Player player) {
         getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
+                ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             }
 
@@ -191,9 +200,9 @@ public class IslandAPI {
 
                 CompletableFuture.allOf(
                         cutRegion(region),
-                        SkyFactionsReborn.databaseHandler.removeIsland(player),
-                        SkyFactionsReborn.databaseHandler.removeAllTrustedPlayers(island.getId()),
-                        SkyFactionsReborn.databaseHandler.removeAllDefences(player.getUniqueId())
+                        SkyFactionsReborn.databaseManager.playerIslandManager.removeIsland(player),
+                        SkyFactionsReborn.databaseManager.playerIslandManager.removeAllTrustedPlayers(island.getId()),
+                        SkyFactionsReborn.databaseManager.defencesManager.removeAllDefences(player.getUniqueId().toString(), false)
                 ).whenComplete((ignored, throwable) -> {
                     if (throwable != null) {
                         throwable.printStackTrace();
@@ -233,8 +242,7 @@ public class IslandAPI {
     }
 
     public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID) {
-        if (operation == FactionAPI.DefenceOperation.DISABLE && !FactionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), playerUUID.toString()))
-            return;
+        if (operation == FactionAPI.DefenceOperation.DISABLE && !FactionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), playerUUID.toString())) return;
 
         List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(playerUUID);
         if (defences == null || defences.isEmpty()) return;

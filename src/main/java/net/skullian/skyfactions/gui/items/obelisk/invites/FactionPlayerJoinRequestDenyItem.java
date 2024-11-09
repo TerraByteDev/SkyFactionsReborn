@@ -17,7 +17,7 @@ import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.JoinRequestData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 
 public class FactionPlayerJoinRequestDenyItem extends SkyItem {
 
@@ -38,16 +38,16 @@ public class FactionPlayerJoinRequestDenyItem extends SkyItem {
                 Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "get your Faction", "FACTION_NOT_FOUND");
                 return;
             } else if (ex != null) {
-                ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             }
 
             CompletableFuture.allOf(
                     faction.createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_JOIN_REQUEST_REVOKE, "player_name", player.getName()),
-                    SkyFactionsReborn.databaseHandler.revokeInvite(DATA.getFactionName(), player.getUniqueId(), "incoming")
+                    SkyFactionsReborn.databaseManager.factionInvitesManager.revokeInvite(player.getUniqueId(), DATA.getFactionName(), "incoming")
             ).whenComplete((ignored, exc) -> {
                 if (exc != null) {
-                    ErrorHandler.handleError(player, "deny a join request", "SQL_JOIN_REQUEST_REVOKE", exc);
+                    ErrorUtil.handleError(player, "deny a join request", "SQL_JOIN_REQUEST_REVOKE", exc);
                     return;
                 }
 

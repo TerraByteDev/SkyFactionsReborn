@@ -203,6 +203,21 @@ public class TextUtility {
         return formattedTime.toString();
     }
 
+    public static Object[] convertFromString(String str) {
+        if (str == null || str.isEmpty()) {
+            return new Object[0];
+        }
+
+        String[] parts = str.split(",");
+        Object[] result = new Object[parts.length];
+
+        for (int i = 0; i < parts.length; i++) {
+            result[i] = parts[i].trim(); // Remove leading/trailing whitespace
+        }
+
+        return result;
+    }
+
     public static List<String> toParts(String string) {
         String[] parts = string.split("/");
         List<String> partsList = Arrays.asList(parts);

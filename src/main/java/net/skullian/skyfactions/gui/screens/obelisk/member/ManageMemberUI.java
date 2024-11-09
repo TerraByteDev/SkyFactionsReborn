@@ -15,7 +15,7 @@ import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.member_manage.MemberBanItem;
 import net.skullian.skyfactions.gui.items.obelisk.member_manage.MemberKickItem;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.Gui;
@@ -47,7 +47,7 @@ public class ManageMemberUI {
         try {
             FactionAPI.getFaction(actor.getUniqueId()).whenComplete((faction, exc) -> {
                 if (exc != null) {
-                    ErrorHandler.handleError(actor, "manage a member", "GUI_LOAD_EXCEPTION", exc);
+                    ErrorUtil.handleError(actor, "manage a member", "GUI_LOAD_EXCEPTION", exc);
                     return;
                 }
 

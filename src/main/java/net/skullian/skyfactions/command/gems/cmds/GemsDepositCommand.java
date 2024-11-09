@@ -7,7 +7,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -45,7 +45,7 @@ public class GemsDepositCommand extends CommandTemplate {
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {
             if (throwable != null) {
-                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", throwable);
+                ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", throwable);
                 return;
             } else if (!hasIsland) {
                 Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));

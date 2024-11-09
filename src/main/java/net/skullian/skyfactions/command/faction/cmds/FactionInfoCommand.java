@@ -7,7 +7,7 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.Faction;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -50,7 +50,7 @@ public class FactionInfoCommand extends CommandTemplate {
         if (name == null) {
             FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
                 if (ex != null) {
-                    ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                    ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                     return;
                 }
 
@@ -60,7 +60,7 @@ public class FactionInfoCommand extends CommandTemplate {
 
                     FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
                         if (throwable != null) {
-                            ErrorHandler.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
+                            ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                             return;
                         }
 
@@ -73,7 +73,7 @@ public class FactionInfoCommand extends CommandTemplate {
         } else {
             FactionAPI.getFaction(name).whenComplete((faction, ex) -> {
                 if (ex != null) {
-                    ErrorHandler.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);
+                    ErrorUtil.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);
                     return;
                 }
 

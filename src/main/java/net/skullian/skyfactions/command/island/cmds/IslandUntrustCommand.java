@@ -7,7 +7,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -65,23 +65,23 @@ public class IslandUntrustCommand extends CommandTemplate {
 
         IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((is, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
+                ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (is == null) {
                 Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
-            SkyFactionsReborn.databaseHandler.isPlayerTrusted(target.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
+            SkyFactionsReborn.databaseManager.playerIslandManager.isPlayerTrusted(target.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
                 if (throwable != null) {
-                    ErrorHandler.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", throwable);
+                    ErrorUtil.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", throwable);
                     return;
                 }
 
                 if (isTrusted) {
-                    SkyFactionsReborn.databaseHandler.removeTrust(target.getUniqueId(), is.getId()).whenComplete((ignored, exc) -> {
+                    SkyFactionsReborn.databaseManager.playerIslandManager.removePlayerTrust(target.getUniqueId(), is.getId()).whenComplete((ignored, exc) -> {
                         if (exc != null) {
-                            ErrorHandler.handleError(player, "untrust a player", "SQL_TRUST_REMOVE", exc);
+                            ErrorUtil.handleError(player, "untrust a player", "SQL_TRUST_REMOVE", exc);
                             return;
                         }
 

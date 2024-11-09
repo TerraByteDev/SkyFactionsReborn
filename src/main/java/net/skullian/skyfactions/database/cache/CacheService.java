@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.db.cache;
+package net.skullian.skyfactions.database.cache;
 
 import java.util.HashMap;
 import java.util.Map;

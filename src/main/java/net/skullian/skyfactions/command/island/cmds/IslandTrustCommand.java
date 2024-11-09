@@ -7,7 +7,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -65,25 +65,25 @@ public class IslandTrustCommand extends CommandTemplate {
 
         IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
+                ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (island == null) {
                 Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }
 
-            SkyFactionsReborn.databaseHandler.isPlayerTrusted(target.getUniqueId(), island.getId()).whenComplete((isTrusted, throwable) -> {
+            SkyFactionsReborn.databaseManager.playerIslandManager.isPlayerTrusted(target.getUniqueId(), island.getId()).whenComplete((isTrusted, throwable) -> {
                 if (throwable != null) {
-                    ErrorHandler.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", throwable);
+                    ErrorUtil.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", throwable);
                     return;
                 }
 
                 if (isTrusted) {
                     Messages.PLAYER_ALREADY_TRUSTED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 } else {
-                    SkyFactionsReborn.databaseHandler.trustPlayer(target.getUniqueId(), island.getId()).whenComplete((result, exc) -> {
+                    SkyFactionsReborn.databaseManager.playerIslandManager.trustPlayer(target.getUniqueId(), island.getId()).whenComplete((result, exc) -> {
                         if (exc != null) {
-                            ErrorHandler.handleError(player, "trust a player", "SQL_TRUST_ADD", exc);
+                            ErrorUtil.handleError(player, "trust a player", "SQL_TRUST_ADD", exc);
                             return;
                         }
 

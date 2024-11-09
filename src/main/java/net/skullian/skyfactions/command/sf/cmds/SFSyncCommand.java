@@ -11,7 +11,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.util.ErrorHandler;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SLogger;
 
 @Command("sf")
@@ -43,7 +43,7 @@ public class SFSyncCommand extends CommandTemplate {
 
         SkyFactionsReborn.cacheService.cacheOnce().whenComplete((ignored, ex) -> {
             if (ex != null) {
-                ErrorHandler.handleError(sender, "force a database sync", "SQL_CACHE_FAILURE", ex);
+                ErrorUtil.handleError(sender, "force a database sync", "SQL_CACHE_FAILURE", ex);
                 return;
             }
 

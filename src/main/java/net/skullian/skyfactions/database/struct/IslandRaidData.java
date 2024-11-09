@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.db;
+package net.skullian.skyfactions.database.struct;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,5 +11,5 @@ public class IslandRaidData {
 
     private int id;
     private String uuid;
-    private int last_raided;
+    private long last_raided;
 }
