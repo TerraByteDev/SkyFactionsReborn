@@ -36,7 +36,6 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
-
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
@@ -45,6 +44,7 @@ import net.skullian.skyfactions.event.DefenceHandler;
 import net.skullian.skyfactions.island.PlayerIsland;
 import net.skullian.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
+import net.skullian.skyfactions.util.PlayerUtil;
 import net.skullian.skyfactions.util.FileUtil;
 import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.SoundUtil;
@@ -208,6 +208,9 @@ public class IslandAPI {
                         throwable.printStackTrace();
                         return;
                     }
+
+                    PlayerUtil.clearInventory(player);
+                    PlayerUtil.clearEnderChest(player);
 
                     Messages.ISLAND_DELETION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 });

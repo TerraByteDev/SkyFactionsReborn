@@ -86,9 +86,14 @@ repositories {
         url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
     }
 
-    maven{
+    maven {
         name = "FancyNPCs Repository"
         url = "https://repo.fancyplugins.de/releases"
+    }
+
+    maven {
+        name = "CraftationGaming Chaos"
+        url = "https://repo.craftationgaming.com/chaos"
     }
 }
 
@@ -127,6 +132,7 @@ dependencies {
     compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
     compileOnly("de.oliver:FancyNpcs:2.4.0")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
+    compileOnly("me.RockinChaos.itemjoin:ItemJoin:6.1.0-RELEASE")
 
     compileOnly("org.jooq:jooq:3.19.15")
 

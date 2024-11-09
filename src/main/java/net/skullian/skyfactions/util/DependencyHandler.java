@@ -1,13 +1,13 @@
 package net.skullian.skyfactions.util;
 
-import java.util.ArrayList;
-
+import net.milkbowl.vault.permission.Permission;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.hooks.ItemJoinHook;
+import net.skullian.skyfactions.hooks.PlaceholderManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import net.milkbowl.vault.permission.Permission;
-import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.papi.PlaceholderManager;
+import java.util.ArrayList;
 
 public class DependencyHandler {
     public static Permission vaultPermissions;
@@ -51,8 +51,14 @@ public class DependencyHandler {
             vaultPermissions = serviceProvider.getProvider();
 
             enabledDeps.add("Vault");
-            SLogger.info("Found {} installed on the server.", "\001B[33mFancyNPCs\u001B[34m");
+            SLogger.info("Found {} installed on the server.", "\001B[33mVault\u001B[34m");
         } else alert("Vault");
+
+        if (isPluginEnabled("ItemJoin")) {
+            enabledDeps.add("ItemJoin");
+            ItemJoinHook.init();
+            SLogger.info("Found {} installed on the server.", "\001B[33mItemJoin\u001B[34m");
+        } else alert("ItemJoin");
     }
 
     public static boolean isEnabled(String name) {
