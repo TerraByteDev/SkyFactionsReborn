@@ -64,3 +64,12 @@ dependencies:
     ItemJoin:
       load: BEFORE
       required: false
+
+    ItemsAdder:
+      load: BEFORE
+      required: false
+
+    Oraxen:
+      load: BEFORE
+      required: false
+

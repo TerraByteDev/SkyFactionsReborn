@@ -29,6 +29,9 @@ RUNES:
 FILTERS:
   ALLOW_LORE: true # Allow items with custom lore.
   ALLOW_ENCHANTS: true # Allow items with enchants.
+  ALLOW_ORAXEN_ITEMS: false # Allow the outright selling of Oraxen items. Unless overriden in the OVERRIDES section with their respective ID, the prices will be default.
+  ALLOW_ITEMSADDER_ITEMS: false # Allows the outright selling of ItemsAdder items. Read the line above.
+
   MATERIALS:
     # If enabled, all items in LIST will not be convertible. If disabled, only items in LIST will be convertible.
     # The OVERRIDES entries bypass this.
@@ -50,6 +53,9 @@ FILTERS:
 # Override the default configuration for certain blocks / items.
 # FOR_EACH does not apply here.
 # Runes given PER ITEM.
+# FOR ITEMSADDER / ORAXEN COMPATIBILITY:
+# Specify the ID of the item, beginning with the prefix "ITEMSADDER:" or "ORAXEN:"
+# E.g. "ITEMSADDER:ITEM_ID: 5" would give 5 runes per itemsadder item (with the id of ITEM_ID).
 OVERRIDES:
   COAL: 1
   COAL_ORE: 3

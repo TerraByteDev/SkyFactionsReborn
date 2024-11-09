@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import dev.lone.itemsadder.api.CustomStack;
+import io.th0rgal.oraxen.api.OraxenItems;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.util.DependencyHandler;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -16,7 +19,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.config.types.Runes;
+import net.skullian.skyfactions.config.types.RunesConfig;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.faction.Faction;
@@ -34,14 +37,18 @@ public class RunesAPI {
      * @return {@link Boolean}
      */
     public static boolean isStackProhibited(ItemStack stack, Player player) {
-        if (!Runes.ALLOW_ENCHANTS.getBoolean() && hasEnchants(stack)) {
+        if (!RunesConfig.ALLOW_ENCHANTS.getBoolean() && hasEnchants(stack)) {
             Messages.RUNE_ENCHANT_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             return true;
-        } else if (!Runes.ALLOW_LORE.getBoolean() && hasLore(stack)) {
+        } else if (!RunesConfig.ALLOW_LORE.getBoolean() && hasLore(stack)) {
             Messages.RUNE_GENERAL_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             return true;
         } else if (!isAllowed(stack)) {
             Messages.RUNE_GENERAL_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            return true;
+        } else if (!RunesConfig.ALLOW_ITEMSADDER_ITEMS.getBoolean() && CustomStack.byItemStack(stack) != null) {
+            return true;
+        } else if (!RunesConfig.ALLOW_ORAXEN_ITEMS.getBoolean() && OraxenItems.getIdByItem(stack) != null) {
             return true;
         } else {
             return false;
@@ -76,7 +83,7 @@ public class RunesAPI {
 
     public static void handleConversion(List<ItemStack> stacks, Player player, Faction faction) {
         int total = getDefenceCost(stacks, player);
-        Map<String, Integer> overrides = Runes.RUNE_OVERRIDES.getMap();
+        Map<String, Integer> overrides = RunesConfig.RUNE_OVERRIDES.getMap();
 
         Map<Material, Integer> quantities = new HashMap<>();
         for (ItemStack stack : stacks) {
@@ -90,8 +97,8 @@ public class RunesAPI {
             Material material = entry.getKey();
             int quantity = entry.getValue();
 
-            int tempForEach = Runes.BASE_FOR_EACH.getInt();
-            int tempReturn = Runes.BASE_RUNE_RETURN.getInt();
+            int tempForEach = RunesConfig.BASE_FOR_EACH.getInt();
+            int tempReturn = RunesConfig.BASE_RUNE_RETURN.getInt();
 
             if (overrides.containsKey(material.name())) {
                 tempReturn = overrides.get(material.name());
@@ -207,16 +214,30 @@ public class RunesAPI {
         if (stack == null || stack.getType().equals(Material.AIR) || DefenceAPI.isDefence(stack)) return true;
         if (DefenceAPI.isDefence(stack)) return true;
 
-        List<String> list = Runes.MATERIALS_LIST.getList();
-        boolean isBlacklist = Runes.MATERIALS_IS_BLACKLIST.getBoolean();
+        List<String> list = RunesConfig.MATERIALS_LIST.getList();
+        boolean isBlacklist = RunesConfig.MATERIALS_IS_BLACKLIST.getBoolean();
 
-        if (isBlacklist && list.contains(stack.getType().name())) {
+        String identifier = getItemID(stack);
+
+        if (isBlacklist && list.contains(identifier)) {
             return false;
-        } else if (!isBlacklist && !list.contains(stack.getType().name())) {
-            return false;
-        } else {
-            return true;
+        } else return isBlacklist || list.contains(identifier);
+    }
+
+    private static String getItemID(ItemStack stack) {
+        if (DependencyHandler.isEnabled("ItemsAdder")) {
+
+            CustomStack itemsAdderStack = CustomStack.byItemStack(stack);
+            if (itemsAdderStack != null) return "ITEMSADDER:" + itemsAdderStack.getId();
+
+        } else if (DependencyHandler.isEnabled("Oraxen")) {
+
+            String oraxenID = OraxenItems.getIdByItem(stack);
+            if (oraxenID != null) return oraxenID;
+
         }
+
+        return stack.getType().name();
     }
 
     private static void returnItems(List<ItemStack> stacks, Player player) {

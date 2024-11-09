@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.skullian.skyfactions.hooks.VaultAPIHook;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -133,13 +134,13 @@ public class NPCManager {
 
                 case "[givepermission]":
                     if (DependencyHandler.isEnabled("Vault")) {
-                        DependencyHandler.vaultPermissions.playerAdd(player, cmd);
+                        VaultAPIHook.addPermission(player, cmd);
                     } else SLogger.warn("Attempted to give player a permission node on NPC interact when Vault is not present!");
                     break;
 
                 case "[removepermission]":
                     if (DependencyHandler.isEnabled("Vault")) {
-                        DependencyHandler.vaultPermissions.playerRemove(player, cmd);
+                        VaultAPIHook.removePermission(player, cmd);
                     } else SLogger.warn("Attempted to remove a permission node from a player on NPC interact when Vault is not present!");
                     break;
 

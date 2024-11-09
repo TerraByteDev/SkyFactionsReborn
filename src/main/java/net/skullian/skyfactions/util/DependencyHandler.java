@@ -1,16 +1,13 @@
 package net.skullian.skyfactions.util;
 
-import net.milkbowl.vault.permission.Permission;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.hooks.ItemJoinHook;
 import net.skullian.skyfactions.hooks.PlaceholderManager;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.RegisteredServiceProvider;
+import net.skullian.skyfactions.hooks.VaultAPIHook;
 
 import java.util.ArrayList;
 
 public class DependencyHandler {
-    public static Permission vaultPermissions;
 
     public static ArrayList<String> enabledDeps = new ArrayList<>();
 
@@ -47,18 +44,26 @@ public class DependencyHandler {
         } else alert("FancyNPCs");
 
         if (isPluginEnabled("Vault")) {
-            RegisteredServiceProvider<Permission> serviceProvider = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
-            vaultPermissions = serviceProvider.getProvider();
-
-            enabledDeps.add("Vault");
             SLogger.info("Found {} installed on the server.", "\001B[33mVault\u001B[34m");
+            VaultAPIHook.init();
+            enabledDeps.add("Vault");
         } else alert("Vault");
 
         if (isPluginEnabled("ItemJoin")) {
+            SLogger.info("Found {} installed on the server.", "\001B[33mItemJoin\u001B[34m");
             enabledDeps.add("ItemJoin");
             ItemJoinHook.init();
-            SLogger.info("Found {} installed on the server.", "\001B[33mItemJoin\u001B[34m");
         } else alert("ItemJoin");
+
+        if (isPluginEnabled("ItemsAdder")) {
+            SLogger.info("Found {} installed on the server.", "\001B[33mItemsAdder\u001B[34m");
+            enabledDeps.add("ItemsAdder");
+        } else alert("ItemsAdder");
+
+        if (isPluginEnabled("Oraxen")) {
+            SLogger.info("Found {} installed on the server.", "\001B[33mOraxen\u001B[34m");
+            enabledDeps.add("Oraxen");
+        }
     }
 
     public static boolean isEnabled(String name) {

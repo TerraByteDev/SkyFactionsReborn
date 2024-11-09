@@ -10,13 +10,15 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public enum Runes {
+public enum RunesConfig {
 
     BASE_FOR_EACH("RUNES.FOR_EACH"),
     BASE_RUNE_RETURN("RUNES.GIVE"),
 
     ALLOW_LORE("FILTERS.ALLOW_LORE"),
     ALLOW_ENCHANTS("FILTERS.ALLOW_ENCHANTS"),
+    ALLOW_ORAXEN_ITEMS("FILTERS.ALLOW_ORAXEN_ITEMS"),
+    ALLOW_ITEMSADDER_ITEMS("FILTERS.ALLOW_ITEMSADDER_ITEMS"),
     MATERIALS_IS_BLACKLIST("FILTERS.MATERIALS.IS_BLACKLIST"),
     MATERIALS_LIST("FILTERS.MATERIALS.LIST"),
 
@@ -26,7 +28,7 @@ public enum Runes {
     private static YamlDocument config;
     private final String path;
 
-    Runes(String path) {
+    RunesConfig(String path) {
         this.path = path;
     }
 

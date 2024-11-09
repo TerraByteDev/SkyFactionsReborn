@@ -10,7 +10,7 @@ import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.DiscordConfig;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.ObeliskConfig;
-import net.skullian.skyfactions.config.types.Runes;
+import net.skullian.skyfactions.config.types.RunesConfig;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.event.DefenceHandler;
@@ -38,7 +38,7 @@ public class ConfigFileHandler {
         DefencesFactory.registerDefaultDefences();
         Messages.load();
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
-        Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
+        RunesConfig.setConfig(getFile(ConfigTypes.RUNES).getConfig());
         DiscordConfig.setConfig(getFile(ConfigTypes.DISCORD).getConfig());
     }
 
@@ -52,7 +52,7 @@ public class ConfigFileHandler {
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         Messages.load();
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
-        Runes.setConfig(getFile(ConfigTypes.RUNES).getConfig());
+        RunesConfig.setConfig(getFile(ConfigTypes.RUNES).getConfig());
         DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
         DiscordConfig.setConfig(getFile(ConfigTypes.DISCORD).getConfig());
 
