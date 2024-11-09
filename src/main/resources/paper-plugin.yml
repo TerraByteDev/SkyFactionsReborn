@@ -60,3 +60,7 @@ dependencies:
     Vault:
       load: BEFORE
       required: false
+
+    ItemJoin:
+      load: BEFORE
+      required: false

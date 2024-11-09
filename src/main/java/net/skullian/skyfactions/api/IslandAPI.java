@@ -1,21 +1,5 @@
 package net.skullian.skyfactions.api;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-
-import net.skullian.skyfactions.event.PlayerHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -36,18 +20,25 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
-
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.island.PlayerIsland;
 import net.skullian.skyfactions.obelisk.ObeliskHandler;
-import net.skullian.skyfactions.util.ErrorHandler;
-import net.skullian.skyfactions.util.FileUtil;
-import net.skullian.skyfactions.util.SLogger;
-import net.skullian.skyfactions.util.SoundUtil;
+import net.skullian.skyfactions.util.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class IslandAPI {
 
@@ -209,6 +200,9 @@ public class IslandAPI {
                         return;
                     }
 
+                    PlayerUtil.clearInventory(player);
+                    PlayerUtil.clearEnderChest(player);
+
                     Messages.ISLAND_DELETION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 });
             } else {
@@ -239,7 +233,8 @@ public class IslandAPI {
     }
 
     public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID) {
-        if (operation == FactionAPI.DefenceOperation.DISABLE && !FactionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), playerUUID.toString())) return;
+        if (operation == FactionAPI.DefenceOperation.DISABLE && !FactionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), playerUUID.toString()))
+            return;
 
         List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(playerUUID);
         if (defences == null || defences.isEmpty()) return;

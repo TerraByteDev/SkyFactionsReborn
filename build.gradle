@@ -74,7 +74,7 @@ repositories {
 
     maven {
         name = "JitPack"
-        url "https://jitpack.io" 
+        url "https://jitpack.io"
     }
 
     maven {
@@ -82,9 +82,14 @@ repositories {
         url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
     }
 
-    maven{
+    maven {
         name = "FancyNPCs Repository"
         url = "https://repo.fancyplugins.de/releases"
+    }
+
+    maven {
+        name = "CraftationGaming Chaos"
+        url = "https://repo.craftationgaming.com/chaos"
     }
 }
 
@@ -121,9 +126,10 @@ dependencies {
     compileOnly("org.incendo:cloud-annotations:2.0.0")
     compileOnly("lol.pyr:znpcsplus-api:2.0.0-SNAPSHOT")
     //errorprone("com.google.errorprone:error_prone_core:2.35.1")
-	  compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
+    compileOnly("net.kyori:adventure-text-minimessage:4.17.0")
     compileOnly("de.oliver:FancyNpcs:2.4.0")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
+    compileOnly("me.RockinChaos.itemjoin:ItemJoin:6.1.0-RELEASE")
 
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
