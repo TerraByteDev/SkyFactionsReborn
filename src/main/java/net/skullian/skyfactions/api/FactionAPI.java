@@ -14,7 +14,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
-import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.Faction;
@@ -292,7 +292,7 @@ public class FactionAPI {
                 return;
             } else if (operation == DefenceOperation.DISABLE && !isLocationInRegion(player.getLocation(), faction.getName())) return;
 
-            List<Defence> defences = DefenceHandler.loadedFactionDefences.get(faction.getName());
+            List<Defence> defences = DefencePlacementHandler.loadedFactionDefences.get(faction.getName());
             if (defences != null && !defences.isEmpty()) {
                 for (Defence defence : defences) {
                     if (operation == DefenceOperation.ENABLE) {

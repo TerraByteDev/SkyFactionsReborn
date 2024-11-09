@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.event;
+package net.skullian.skyfactions.event.defence;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -11,22 +11,15 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.lumine.mythic.bukkit.utils.events.extra.ArmorEquipEvent;
 import net.skullian.skyfactions.database.tables.Defencelocations;
+import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.damage.DamageType;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -43,7 +36,6 @@ import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceData;
-import net.skullian.skyfactions.defence.struct.DefenceEntityDeathData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SLogger;
@@ -51,12 +43,11 @@ import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.hologram.TextHologram;
 import net.skullian.skyfactions.util.text.TextUtility;
 
-public class DefenceHandler implements Listener {
+public class DefencePlacementHandler implements Listener {
     public static Map<String, List<Defence>> loadedFactionDefences = new HashMap<>();
     public static Map<UUID, List<Defence>> loadedPlayerDefences = new HashMap<>();
 
     public static Map<String, TextHologram> hologramsMap = new ConcurrentHashMap<>();
-    public static Map<UUID, Map<DamageType, DefenceEntityDeathData>> toDie = new HashMap<>();
 
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {
@@ -70,7 +61,7 @@ public class DefenceHandler implements Listener {
         if (container.has(defenceKey, PersistentDataType.STRING)) {
             Block placed = event.getBlockPlaced();
             returnOwnerDependingOnLocation(placed.getLocation(), player).whenComplete((owner, ex) -> {
-                boolean isFaction = isFaction(owner);
+                boolean isFaction = DefenceAPI.isFaction(owner);
                 if (ex != null) {
                     ErrorUtil.handleError(player, "place your defence", "SQL_FACTION_GET", ex);
                     event.setCancelled(true);
@@ -87,7 +78,7 @@ public class DefenceHandler implements Listener {
                             ErrorUtil.handleError(player, "place your defence", "SQL_FACTION_GET", throwable);
                             event.setCancelled(true);
                             return;
-                        } else if (!DefencesConfig.PERMISSION_PLACE_DEFENCE.getList().contains(faction.getRankType(player.getUniqueId()).getRankValue())) {
+                        } else if (!DefenceAPI.hasPermissions(DefencesConfig.PERMISSION_PLACE_DEFENCE.getList(), player, faction)) {
                             Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, locale);
                             return;
                         }
@@ -200,15 +191,6 @@ public class DefenceHandler implements Listener {
         }
     }
 
-    public static boolean isFaction(String uuid) {
-        try {
-            UUID.fromString(uuid);
-            return false; // is player uuid
-        } catch (Exception ignored) {
-            return true; // is false
-        }
-    }
-
     private CompletableFuture<String> returnOwnerDependingOnLocation(Location location, Player player) {
         if (location.getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString()) && FactionAPI.isLocationInRegion(location, player.getUniqueId().toString())) {
             return CompletableFuture.completedFuture(player.getUniqueId().toString());
@@ -221,88 +203,6 @@ public class DefenceHandler implements Listener {
         }
 
         return CompletableFuture.completedFuture(null);
-    }
-
-    @EventHandler
-    public void onDefenceBreak(BlockBreakEvent event) {
-        if (DefenceAPI.isDefence(event.getBlock().getLocation())) {
-            event.setCancelled(true);
-            Messages.DEFENCE_DESTROY_DENY.send(event.getPlayer(), event.getPlayer().locale().getLanguage());
-        }
-    }
-
-    @EventHandler
-    public void onProjectileEntityHit(ProjectileHitEvent event) {
-        if (event.getHitEntity() == null) return;
-
-        if (!(event.getHitEntity() instanceof LivingEntity hitEntity)) return;
-
-        NamespacedKey damageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-damage");
-        NamespacedKey messageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "damage-message");
-
-        PersistentDataContainer container = event.getEntity().getPersistentDataContainer();
-        if (container.has(damageKey, PersistentDataType.INTEGER)) {
-            event.setCancelled(true);
-            event.getEntity().remove();
-
-            int damage = container.get(damageKey, PersistentDataType.INTEGER);
-
-            hitEntity.damage(damage);
-            hitEntity.knockback(0.5f, 0.5f, 0.5f);
-
-            if (hitEntity.getType().equals(EntityType.PLAYER) && container.has(messageKey, PersistentDataType.STRING)) {
-                String message = container.get(messageKey, PersistentDataType.STRING);
-                Player player = (Player) hitEntity;
-                hitEntity.sendMessage(TextUtility.color(message, PlayerHandler.getLocale(player.getUniqueId()), player));
-            }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerDeathFromDefence(PlayerDeathEvent event) {
-        Player player = event.getPlayer();
-        if (toDie.containsKey(player.getUniqueId())) {
-
-            DefenceEntityDeathData data = getData(player.getUniqueId(), event.getDamageSource().getDamageType());
-            if (data == null) return;
-
-            String deathMessage = data.getDEATH_MESSAGE();
-            event.deathMessage(TextUtility.color(deathMessage
-                    .replaceAll("player_name", player.getName())
-                    .replaceAll("defender", "DEFENDER_NAME"), PlayerHandler.getLocale(player.getUniqueId()), player));
-
-            removeDeadEntity(event.getPlayer(), data);
-        }
-    }
-
-    @EventHandler
-    public void onEntityDeathFromDefence(EntityDeathEvent event) {
-        LivingEntity entity = event.getEntity();
-        if (entity instanceof Player) return;
-
-        DefenceEntityDeathData data = getData(entity.getUniqueId(), event.getDamageSource().getDamageType());
-        if (data == null) return;
-
-        removeDeadEntity(entity, data);
-    }
-
-    private void removeDeadEntity(LivingEntity entity, DefenceEntityDeathData data) {
-        for (Defence defence : getDefencesFromData(data)) {
-            if (defence.getDefenceLocation().equals(data.getDEFENCE_LOCATION())) {
-                defence.removeDeadEntity(entity);
-            }
-        }
-    }
-
-    private List<Defence> getDefencesFromData(DefenceEntityDeathData data) {
-        if (isFaction(data.getOWNER())) return loadedFactionDefences.get(data.getOWNER());
-            else return loadedPlayerDefences.get(UUID.fromString(data.getOWNER()));
-    }
-
-    private DefenceEntityDeathData getData(UUID uuid, DamageType type) {
-        Map<DamageType, DefenceEntityDeathData> map = toDie.get(uuid);
-        if (map == null) return null;
-        return map.get(type);
     }
 
     private boolean isAllowedBlock(Block block, DefenceStruct defenceStruct) {
@@ -403,12 +303,5 @@ public class DefenceHandler implements Listener {
         loadedFactionDefences.values().stream()
                 .flatMap(List::stream)
                 .forEach(Defence::refresh);
-    }
-
-    @EventHandler
-    public void onArmorEquip(ArmorEquipEvent event) {
-        if (DefenceAPI.isDefence(event.getNewArmorPiece())) {
-            event.setCancelled(true);
-        }
     }
 }

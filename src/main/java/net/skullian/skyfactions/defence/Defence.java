@@ -29,7 +29,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.hologram.TextHologram;
@@ -84,7 +84,7 @@ public abstract class Defence {
             ObjectMapper mapper = new ObjectMapper();
             container.set(dataKey, PersistentDataType.STRING, mapper.writeValueAsString(data));
 
-            DefenceHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName())).setData(data);
+            DefencePlacementHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName())).setData(data);
         } catch (JsonProcessingException exception) {
             SLogger.fatal("Error when trying to update PDC Defence Data for Defence [{}].", getHologramID(data.getUUIDFactionName()), exception);
         }
@@ -282,7 +282,7 @@ public abstract class Defence {
     }
 
     public void onLoad(String playerUUIDorFactionName) {
-        if (!DefenceHandler.hologramsMap.containsKey(getHologramID(playerUUIDorFactionName))) {
+        if (!DefencePlacementHandler.hologramsMap.containsKey(getHologramID(playerUUIDorFactionName))) {
             createHologram(getDefenceLocation(), struct, playerUUIDorFactionName);
         }
 
@@ -300,10 +300,10 @@ public abstract class Defence {
         targetedEntities.clear();
 
         String id = getHologramID(data.getUUIDFactionName());
-        TextHologram holo = DefenceHandler.hologramsMap.get(id);
+        TextHologram holo = DefencePlacementHandler.hologramsMap.get(id);
         if (holo == null) return;
         holo.kill();
-        DefenceHandler.hologramsMap.remove(id);
+        DefencePlacementHandler.hologramsMap.remove(id);
     }
 
     public boolean isEnabled() {
@@ -336,7 +336,7 @@ public abstract class Defence {
                 .setScale(1.0F, 1.0F, 1.0F);
 
         hologram.spawn(location.add(0.5, -0.2, 0.5));
-        DefenceHandler.hologramsMap.put(hologram.getId(), hologram);
+        DefencePlacementHandler.hologramsMap.put(hologram.getId(), hologram);
     }
 
     public void refresh() {

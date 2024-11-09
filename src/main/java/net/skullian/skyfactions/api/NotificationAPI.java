@@ -2,8 +2,7 @@ package net.skullian.skyfactions.api;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.DefenceHandler;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.notification.NotificationData;
 import net.skullian.skyfactions.notification.NotificationTask;
 import net.skullian.skyfactions.notification.NotificationType;
@@ -26,7 +25,7 @@ public class NotificationAPI {
                 return;
             }
             if (faction != null && !factionInviteStore.containsKey(faction.getName())) {
-                DefenceHandler.addPlacedDefences(faction.getName());
+                DefencePlacementHandler.addPlacedDefences(faction.getName());
 
                 faction.getJoinRequests().whenComplete((requests, exc) -> {
                     if (exc != null) {

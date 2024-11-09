@@ -40,7 +40,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
-import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.island.PlayerIsland;
 import net.skullian.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
@@ -244,7 +244,7 @@ public class IslandAPI {
     public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID) {
         if (operation == FactionAPI.DefenceOperation.DISABLE && !FactionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), playerUUID.toString())) return;
 
-        List<Defence> defences = DefenceHandler.loadedPlayerDefences.get(playerUUID);
+        List<Defence> defences = DefencePlacementHandler.loadedPlayerDefences.get(playerUUID);
         if (defences == null || defences.isEmpty()) return;
 
         for (Defence defence : defences) {

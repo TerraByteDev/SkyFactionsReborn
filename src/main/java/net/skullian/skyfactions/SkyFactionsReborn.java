@@ -24,10 +24,13 @@ import net.skullian.skyfactions.config.types.DiscordConfig;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.DatabaseManager;
 import net.skullian.skyfactions.database.cache.CacheService;
+import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.block.BrokenBlockService;
 import net.skullian.skyfactions.discord.DiscordHandler;
-import net.skullian.skyfactions.event.DefenceDestructionHandler;
-import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.event.armor.ArmorListener;
+import net.skullian.skyfactions.event.defence.DefenceDamageHandler;
+import net.skullian.skyfactions.event.defence.DefenceInteractionHandler;
+import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.event.ObeliskInteractionListener;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.npc.NPCManager;
@@ -112,10 +115,12 @@ public final class SkyFactionsReborn extends JavaPlugin {
         new SFCommandHandler();
 
         SLogger.info("Registering Events.");
+        getServer().getPluginManager().registerEvents(new ArmorListener(DefencesFactory.cachedMaterials), this);
         getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
         getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
-        getServer().getPluginManager().registerEvents(new DefenceHandler(), this);
-        getServer().getPluginManager().registerEvents(new DefenceDestructionHandler(), this);
+        getServer().getPluginManager().registerEvents(new DefenceDamageHandler(), this);
+        getServer().getPluginManager().registerEvents(new DefencePlacementHandler(), this);
+        getServer().getPluginManager().registerEvents(new DefenceInteractionHandler(), this);
 
         // We store an instance of the DiscordHandler class as that is how other internals
         // access methods related to Discord (e.g. raid notifications).

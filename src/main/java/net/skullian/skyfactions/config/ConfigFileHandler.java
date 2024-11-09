@@ -13,7 +13,7 @@ import net.skullian.skyfactions.config.types.ObeliskConfig;
 import net.skullian.skyfactions.config.types.RunesConfig;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.DefencesFactory;
-import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 
 public class ConfigFileHandler {
 
@@ -56,7 +56,7 @@ public class ConfigFileHandler {
         DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
         DiscordConfig.setConfig(getFile(ConfigTypes.DISCORD).getConfig());
 
-        DefenceHandler.refresh();
+        DefencePlacementHandler.refresh();
     }
 
     public void registerFile(ConfigTypes type, ConfigHandler handler) {

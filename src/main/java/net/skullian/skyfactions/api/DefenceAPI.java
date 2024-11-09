@@ -2,6 +2,7 @@ package net.skullian.skyfactions.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.defence.struct.DefenceData;
@@ -25,7 +26,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.event.DefenceHandler;
+import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
@@ -102,11 +103,11 @@ public class DefenceAPI {
     }
 
     public static Defence getLoadedDefence(Location location) {
-        return DefenceHandler.loadedFactionDefences.values().stream()
+        return DefencePlacementHandler.loadedFactionDefences.values().stream()
                 .flatMap(List::stream)
                 .filter(d -> d.getDefenceLocation().equals(location))
                 .findFirst()
-                .orElseGet(() -> DefenceHandler.loadedPlayerDefences.values().stream()
+                .orElseGet(() -> DefencePlacementHandler.loadedPlayerDefences.values().stream()
                         .flatMap(List::stream)
                         .filter(d -> d.getDefenceLocation().equals(location))
                         .findFirst()
@@ -130,5 +131,20 @@ public class DefenceAPI {
         }
 
         return builder;
+    }
+
+    public static boolean isDefenceMaterial(Block block) {
+        return DefencesFactory.defences.values().stream()
+                .flatMap(inner -> inner.values().stream())
+                .anyMatch(struct -> struct.getBLOCK_MATERIAL().equals(block.getType().name()));
+    }
+
+    public static boolean isFaction(String uuid) {
+        try {
+            UUID.fromString(uuid);
+            return false; // is player uuid
+        } catch (Exception ignored) {
+            return true; // is false
+        }
     }
 }

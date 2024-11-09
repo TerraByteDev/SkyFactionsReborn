@@ -6,6 +6,7 @@ import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.util.CooldownManager;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
@@ -73,7 +74,7 @@ public class PlayerHandler implements Listener {
             }
 
             if (island != null) {
-                DefenceHandler.addPlacedDefences(event.getPlayer());
+                DefencePlacementHandler.addPlacedDefences(event.getPlayer());
                 if (Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean()) {
 
                     World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
