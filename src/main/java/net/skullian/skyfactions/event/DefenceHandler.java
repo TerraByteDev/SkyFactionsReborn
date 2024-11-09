@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.lumine.mythic.bukkit.utils.events.extra.ArmorEquipEvent;
 import net.skullian.skyfactions.database.tables.Defencelocations;
@@ -79,15 +80,28 @@ public class DefenceHandler implements Listener {
                     return;
                 }
 
+                AtomicBoolean shouldContinue = new AtomicBoolean(false);
                 if (isFaction) {
-                    List<Defence> loadedDefences = loadedFactionDefences.get(owner);
-                    if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_FACTION_DEFENCES.getInt()) {
-                        event.setCancelled(true);
+                    FactionAPI.getFaction(owner).whenComplete((faction, throwable) -> {
+                        if (throwable != null) {
+                            ErrorUtil.handleError(player, "place your defence", "SQL_FACTION_GET", throwable);
+                            event.setCancelled(true);
+                            return;
+                        } else if (!DefencesConfig.PERMISSION_PLACE_DEFENCE.getList().contains(faction.getRankType(player.getUniqueId()).getRankValue())) {
+                            Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, locale);
+                            return;
+                        }
 
-                        Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "defence_max", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
-                        SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
-                        return;
-                    }
+                        List<Defence> loadedDefences = loadedFactionDefences.get(owner);
+                        if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_FACTION_DEFENCES.getInt()) {
+                            event.setCancelled(true);
+
+                            Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "defence_max", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
+                            SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
+                        }
+
+                        shouldContinue.set(true);
+                    });
                 } else {
                     List<Defence> loadedDefences = loadedPlayerDefences.get(UUID.fromString(owner));
                     if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_PLAYER_DEFENCES.getInt()) {
@@ -97,8 +111,11 @@ public class DefenceHandler implements Listener {
                         SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
                         return;
                     }
+
+                    shouldContinue.set(true);
                 }
 
+                if (!shouldContinue.get()) return;
                 String defenceIdentifier = container.get(defenceKey, PersistentDataType.STRING);
 
                 DefenceStruct defence = DefencesFactory.defences.getOrDefault(locale, DefencesFactory.getDefaultStruct()).get(defenceIdentifier);
