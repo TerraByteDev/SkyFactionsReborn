@@ -85,23 +85,24 @@ public class RunesAPI {
         int total = getDefenceCost(stacks, player);
         Map<String, Integer> overrides = RunesConfig.RUNE_OVERRIDES.getMap();
 
-        Map<Material, Integer> quantities = new HashMap<>();
+        Map<ItemStack, Integer> quantities = new HashMap<>();
         for (ItemStack stack : stacks) {
             if (stack == null || stack.getType().equals(Material.AIR)) continue;
-            quantities.put(stack.getType(), quantities.getOrDefault(stack.getType(), 0) + stack.getAmount());
+            quantities.put(stack, quantities.getOrDefault(stack, 0) + stack.getAmount());
         }
 
         List<ItemStack> remainingItems = new ArrayList<>();
 
-        for (Map.Entry<Material, Integer> entry : quantities.entrySet()) {
-            Material material = entry.getKey();
+        for (Map.Entry<ItemStack, Integer> entry : quantities.entrySet()) {
+            ItemStack stack = entry.getKey();
             int quantity = entry.getValue();
 
             int tempForEach = RunesConfig.BASE_FOR_EACH.getInt();
             int tempReturn = RunesConfig.BASE_RUNE_RETURN.getInt();
 
-            if (overrides.containsKey(material.name())) {
-                tempReturn = overrides.get(material.name());
+            String id = getItemID(stack);
+            if (overrides.containsKey(id)) {
+                tempReturn = overrides.get(id);
                 tempForEach = 1;
             }
 
@@ -112,7 +113,8 @@ public class RunesAPI {
             total += amount;
 
             if (remainder > 0) {
-                ItemStack cloned = new ItemStack(material, remainder);
+                ItemStack cloned = stack.clone();
+                cloned.setAmount(remainder);
                 remainingItems.add(cloned);
             }
         }
