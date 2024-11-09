@@ -334,7 +334,6 @@ Messages:
       # Sent when a player successfully creates a new faction.
       FACTION_CREATE_SUCCESS: "<server_name><green> Successfully created your faction!"
 
-
     FACTION_INFO:
       # Message sent when the player runs /faction info. Each entry is a new line.
 
@@ -479,6 +478,10 @@ Messages:
       # Sent to the player when they denied a Faction's invite.
       # Placeholders: <faction_name> - Name of the Faction.
       FACTION_INVITE_DENY_SUCCESS: "<server_name> <yellow>You successfully denied <green><faction_name>'s <yellow>invite."
+
+      # Sent to online players (of the Faction) when a new player joins the Faction.
+      # Placeholders: <player_name> - Name of the player who joined.
+      FACTION_JOIN_BROADCAST: "<green><player_name> <yellow>Has joined the Faction!"
 
   Notifications:
     # Sent when a player has a pending Faction invitation in their Obelisk.

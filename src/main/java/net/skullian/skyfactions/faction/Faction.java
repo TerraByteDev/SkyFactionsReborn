@@ -266,8 +266,10 @@ public class Faction {
      */
     public CompletableFuture<Void> addFactionMember(UUID playerUUID) {
         return SkyFactionsReborn.databaseManager.factionsManager.addOrUpdateFactionMember(playerUUID, name, RankType.MEMBER).thenAccept((ignored) -> {
-            members.add(Bukkit.getOfflinePlayer(playerUUID));
-            createAuditLog(playerUUID, AuditLogType.PLAYER_JOIN, "player joined the faction temporary message");
+            OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
+            members.add(player);
+            createAuditLog(playerUUID, AuditLogType.PLAYER_JOIN, "player_name", player.getName());
+            createBroadcast(player, Messages.FACTION_JOIN_BROADCAST, "player_name", player.getName());
         });
     }
 
