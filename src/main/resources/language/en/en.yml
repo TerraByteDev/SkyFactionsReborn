@@ -494,6 +494,9 @@ Messages:
       # Sent when the faction owner initially runs /faction disband and must confirm it.
       FACTION_DISBAND_COMMAND_CONFIRM: "<server_name> <yellow>Are you sure you want to disband the Faction? Run <red>/faction disband confirm<yellow> to confirm<newline><grey>You will lose all progress, all players will be removed from the Faction."
 
+      # Sent once the Faction was successfully disbanded.
+      FACTION_DISBAND_SUCCESS: "<server_name> <green>Successfully disbanded your Faction."
+
       # Sent when the player tries to run '/faction disband confirm' before running '/faction disband'.
       FACTION_DISBAND_COMMAND_BLOCK: "<server>name> <red><bold>Hey! <reset><grey>You must run <red>/faction disband <yellow>before doing that."
 

@@ -2,6 +2,8 @@ package net.skullian.skyfactions.api;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -13,12 +15,14 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.database.tables.Notifications;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.island.FactionIsland;
+import net.skullian.skyfactions.notification.NotificationType;
 import net.skullian.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
@@ -58,7 +62,7 @@ public class FactionAPI {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
 
         if (world != null) {
-            IslandAPI.teleportPlayerToLocation(player, faction.getIsland().getCenter(world));
+            RegionAPI.teleportPlayerToLocation(player, faction.getIsland().getCenter(world));
             onFactionLoad(faction, player);
         } else {
             Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "teleport to your faction's island", "debug", "WORLD_NOT_EXIST");
@@ -95,6 +99,52 @@ public class FactionAPI {
                 factionNameCache.put(faction.getName(), faction);
             });
         });
+    }
+
+    public static void disbandFaction(Player player, Faction faction) {
+        FactionIsland island = faction.getIsland();
+        Region region = getFactionRegion(faction);
+
+        World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
+        if (world != null && region != null) {
+            faction.createBroadcast(player, Messages.FACTION_DISBAND_BROADCAST);
+            onFactionDisband(faction);
+
+            CompletableFuture.allOf(
+                    RegionAPI.cutRegion(region),
+                    SkyFactionsReborn.databaseManager.factionsManager.removeFaction(faction.getName()),
+                    SkyFactionsReborn.databaseManager.defencesManager.removeAllDefences(faction.getName(), true)
+            ).whenComplete((ignored, ex) -> {
+                if (ex != null) {
+                    ErrorUtil.handleError(player, "disband your faction", "SQL_FACTION_DISBAND", ex);
+                    return;
+                }
+
+                Messages.FACTION_DISBAND_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            });
+        }
+    }
+
+    private static void onFactionDisband(Faction faction) {
+        for (OfflinePlayer member : faction.getAllMembers()) {
+            NotificationAPI.createNotification(member.getUniqueId(), NotificationType.FACTION_DISBANDED);
+
+            if (member.isOnline() && RegionAPI.isLocationInRegion(member.getPlayer().getLocation(), "SFR_FACTION_" + faction.getName())) {
+                RegionAPI.teleportPlayerToLocation(member.getPlayer(), RegionAPI.getHubLocation());
+            }
+        }
+    }
+
+    public static Region getFactionRegion(Faction faction) {
+        World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
+        if (world != null) {
+            BlockVector3 bottom = BukkitAdapter.asBlockVector(faction.getIsland().getPosition1(null));
+            BlockVector3 top = BukkitAdapter.asBlockVector(faction.getIsland().getPosition2(null));
+
+            return new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
+        }
+
+        return null;
     }
 
     /**
@@ -217,7 +267,7 @@ public class FactionAPI {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
         createRegion(player, island, world, faction_name);
 
-        CompletableFuture.allOf(SkyFactionsReborn.databaseManager.factionIslandManager.createFactionIsland(faction_name, island), IslandAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction")).whenComplete((unused, ex) -> {
+        CompletableFuture.allOf(SkyFactionsReborn.databaseManager.factionIslandManager.createFactionIsland(faction_name, island), RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction")).whenComplete((unused, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -227,7 +277,7 @@ public class FactionAPI {
 
             handleFactionWorldBorder(player, island);
             IslandAPI.modifyDefenceOperation(DefenceOperation.DISABLE, player.getUniqueId());
-            IslandAPI.teleportPlayerToLocation(player, island.getCenter(world));
+            RegionAPI.teleportPlayerToLocation(player, island.getCenter(world));
 
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
             Messages.FACTION_CREATION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
@@ -256,29 +306,6 @@ public class FactionAPI {
         return false;
     }
 
-    /**
-     * Check if a location is in a certain region.
-     *
-     * @param bukkitLoc  Location to check.
-     * @param regionName Name of region.
-     * @return {@link Boolean}
-     */
-    public static boolean isLocationInRegion(Location bukkitLoc, String regionName) {
-
-        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        com.sk89q.worldedit.util.Location location = BukkitAdapter.adapt(bukkitLoc);
-        RegionQuery query = container.createQuery();
-        ApplicableRegionSet set = query.getApplicableRegions(location);
-
-        for (ProtectedRegion region : set) {
-            if (region.getId().equalsIgnoreCase(regionName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public static void onFactionLoad(Faction faction, Player player) {
         SkyFactionsReborn.npcManager.spawnNPC(faction, faction.getIsland());
         modifyDefenceOperation(DefenceOperation.ENABLE, player);
@@ -289,7 +316,7 @@ public class FactionAPI {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
-            } else if (operation == DefenceOperation.DISABLE && !isLocationInRegion(player.getLocation(), faction.getName())) return;
+            } else if (operation == DefenceOperation.DISABLE && !RegionAPI.isLocationInRegion(player.getLocation(), faction.getName())) return;
 
             List<Defence> defences = DefencePlacementHandler.loadedFactionDefences.get(faction.getName());
             if (defences != null && !defences.isEmpty()) {

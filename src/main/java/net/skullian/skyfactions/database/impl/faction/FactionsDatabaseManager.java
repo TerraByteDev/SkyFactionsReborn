@@ -11,6 +11,7 @@ import net.skullian.skyfactions.faction.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 
@@ -23,6 +24,7 @@ import static net.skullian.skyfactions.database.tables.Factions.FACTIONS;
 import static net.skullian.skyfactions.database.tables.Factionmembers.FACTIONMEMBERS;
 import static net.skullian.skyfactions.database.tables.Factionislands.FACTIONISLANDS;
 import static net.skullian.skyfactions.database.tables.Factionbans.FACTIONBANS;
+import static net.skullian.skyfactions.database.tables.Factioninvites.FACTIONINVITES;
 
 public class FactionsDatabaseManager {
 
@@ -110,6 +112,7 @@ public class FactionsDatabaseManager {
         return CompletableFuture.runAsync(() -> {
             ctx.update(FACTIONS)
                     .set(FACTIONS.MOTD, newMOTD)
+                    .where(FACTIONS.NAME.eq(factionName))
                     .execute();
         });
     }
@@ -118,7 +121,34 @@ public class FactionsDatabaseManager {
         return CompletableFuture.runAsync(() -> {
             ctx.update(FACTIONS)
                     .set(FACTIONS.LOCALE, newLocale)
+                    .where(FACTIONS.NAME.eq(factionName))
                     .execute();
+        });
+    }
+
+    public CompletableFuture<Void> removeFaction(String factionName) {
+        return CompletableFuture.runAsync(() -> {
+            ctx.transaction((Configuration trx) -> {
+                trx.dsl().deleteFrom(FACTIONISLANDS)
+                        .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
+                        .execute();
+
+                trx.dsl().deleteFrom(FACTIONMEMBERS)
+                        .where(FACTIONMEMBERS.FACTIONNAME.eq(factionName))
+                        .execute();
+
+                trx.dsl().deleteFrom(FACTIONBANS)
+                        .where(FACTIONBANS.FACTIONNAME.eq(factionName))
+                        .execute();
+
+                trx.dsl().deleteFrom(FACTIONISLANDS)
+                        .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
+                        .execute();
+
+                trx.dsl().deleteFrom(FACTIONINVITES)
+                        .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
+                        .execute();
+            });
         });
     }
 

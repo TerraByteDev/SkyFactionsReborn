@@ -72,6 +72,7 @@ public class FactionCommandHandler implements CommandHandler {
         register(new FactionMOTDCommand());
         register(new FactionRequestJoinCommand());
         register(new FactionTeleportCommand());
+        register(new FactionDisbandCommand());
     }
 
     @Override

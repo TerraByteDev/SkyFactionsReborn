@@ -1,8 +1,5 @@
 package net.skullian.skyfactions.api;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,30 +9,13 @@ import java.util.concurrent.CompletableFuture;
 
 import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
-import com.sk89q.worldedit.function.operation.Operation;
-import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.session.ClipboardHolder;
-import com.sk89q.worldedit.world.block.BlockType;
-import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.domains.DefaultDomain;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
@@ -45,8 +25,6 @@ import net.skullian.skyfactions.island.PlayerIsland;
 import net.skullian.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.PlayerUtil;
-import net.skullian.skyfactions.util.FileUtil;
-import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.SoundUtil;
 
 public class IslandAPI {
@@ -63,27 +41,11 @@ public class IslandAPI {
         });
     }
 
-    public static Location getHubLocation() {
-        World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
-
-        List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
-        return new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
-    }
-
     // for PlaceholderAPI
     public static void cacheData(Player player) {
         if (!GemsAPI.playerGems.containsKey(player.getUniqueId())) GemsAPI.cachePlayer(player.getUniqueId());
         if (!RunesAPI.playerRunes.containsKey(player.getUniqueId())) RunesAPI.cachePlayer(player.getUniqueId());
         if (!FactionAPI.factionCache.containsKey(player.getUniqueId())) FactionAPI.getFaction(player.getUniqueId());
-    }
-
-    public static void handlePlayerJoinBorder(Player player, PlayerIsland island) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-            World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-            if (islandWorld == null) return;
-
-            SkyFactionsReborn.worldBorderApi.setBorder(player, (island.getSize() * 2), island.getCenter(islandWorld));
-        });
     }
 
     public static void createIsland(Player player) {
@@ -98,11 +60,11 @@ public class IslandAPI {
         }
 
         Messages.ISLAND_CREATING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-        createRegion(player, island, world);
+        RegionAPI.createRegion(player, island.getPosition1(world), island.getPosition2(world), world, player.getUniqueId().toString());
 
         CompletableFuture.allOf(
                 SkyFactionsReborn.databaseManager.playerIslandManager.createIsland(player, island),
-                pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player")
+                RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player")
         ).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
@@ -113,8 +75,8 @@ public class IslandAPI {
 
             islands.put(player.getUniqueId(), island);
 
-            IslandAPI.handlePlayerJoinBorder(player, island); // shift join border
-            teleportPlayerToLocation(player, island.getCenter(world));
+            RegionAPI.modifyWorldBorder(player, island.getCenter(world), island.getSize()); // shift join border
+            RegionAPI.teleportPlayerToLocation(player, island.getCenter(world));
 
             ObeliskHandler.spawnPlayerObelisk(player, island);
             Messages.ISLAND_CREATED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
@@ -124,70 +86,6 @@ public class IslandAPI {
 
     public static CompletableFuture<Boolean> hasIsland(UUID playerUUID) {
         return SkyFactionsReborn.databaseManager.playerIslandManager.hasIsland(playerUUID);
-    }
-
-    public static CompletableFuture<Boolean> pasteIslandSchematic(Player player, Location location, String worldName, String type) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                World world = Bukkit.getWorld(worldName);
-                if (world == null) {
-                    SLogger.fatal("Could not find world: {}", worldName);
-                    throw new RuntimeException("Could not find world " + worldName);
-                } else {
-                    File schemFile = null;
-                    if (type.equals("player")) {
-                        schemFile = FileUtil.getSchematicFile(Settings.ISLAND_PLAYER_SCHEMATIC.getString());
-                    } else if (type.equals("faction")) {
-                        schemFile = FileUtil.getSchematicFile(Settings.ISLAND_FACTION_SCHEMATIC.getString());
-                    }
-                    if (schemFile == null)
-                        throw new RuntimeException("Could not find schematic file when attempting to paste island schematic!");
-
-                    com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(world);
-                    Clipboard clipboard;
-                    ClipboardFormat format = ClipboardFormats.findByFile(schemFile);
-                    try (ClipboardReader reader = format.getReader(new FileInputStream(schemFile))) {
-                        clipboard = reader.read();
-                    }
-
-                    try (EditSession editSession = WorldEdit.getInstance().newEditSession(weWorld)) {
-                        Operation operation = new ClipboardHolder(clipboard)
-                                .createPaste(editSession)
-                                .to(BukkitAdapter.adapt(location).toBlockPoint())
-                                .build();
-                        SLogger.warn("Pasting schematic [{}] in world [{}] for player [{}].", schemFile.getName(), world.getName(), player.getName());
-
-                        Operations.complete(operation);
-                    }
-
-                    return true;
-                }
-            } catch (IOException e) {
-                SLogger.fatal("Error pasting island schematic", e);
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    public static void teleportPlayerToLocation(Player player, Location location) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> player.teleport(location));
-    }
-
-    private static void createRegion(Player player, PlayerIsland island, World world) {
-        Location corner1 = island.getPosition1(null);
-        Location corner2 = island.getPosition2(null);
-
-        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regionManager = container.get(BukkitAdapter.adapt(world));
-        BlockVector3 min = BlockVector3.at(corner1.getBlockX(), -64, corner1.getBlockZ());
-        BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 320, corner2.getBlockZ());
-        ProtectedRegion region = new ProtectedCuboidRegion(player.getUniqueId().toString(), min, max);
-
-        DefaultDomain owners = region.getOwners();
-        owners.addPlayer(player.getUniqueId());
-
-        region.setOwners(owners);
-        regionManager.addRegion(region);
     }
 
     public static void removePlayerIsland(Player player) {
@@ -203,10 +101,9 @@ public class IslandAPI {
                 BlockVector3 top = BukkitAdapter.asBlockVector(island.getPosition2(null));
 
                 Region region = new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
-                cutRegion(region);
 
                 CompletableFuture.allOf(
-                        cutRegion(region),
+                        RegionAPI.cutRegion(region),
                         SkyFactionsReborn.databaseManager.playerIslandManager.removeIsland(player),
                         SkyFactionsReborn.databaseManager.playerIslandManager.removeAllTrustedPlayers(island.getId()),
                         SkyFactionsReborn.databaseManager.defencesManager.removeAllDefences(player.getUniqueId().toString(), false)
@@ -227,14 +124,6 @@ public class IslandAPI {
         });
     }
 
-    private static CompletableFuture<Void> cutRegion(Region region) {
-        return CompletableFuture.runAsync(() -> {
-            try (EditSession editSession = WorldEdit.getInstance().newEditSession(region.getWorld())) {
-                editSession.setBlocks(region, BlockType.REGISTRY.get("air"));
-            }
-        });
-    }
-
     public static void onIslandLoad(UUID playerUUID) {
         modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, playerUUID);
 
@@ -249,7 +138,7 @@ public class IslandAPI {
     }
 
     public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID) {
-        if (operation == FactionAPI.DefenceOperation.DISABLE && !FactionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), playerUUID.toString())) return;
+        if (operation == FactionAPI.DefenceOperation.DISABLE && !RegionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), playerUUID.toString())) return;
 
         List<Defence> defences = DefencePlacementHandler.loadedPlayerDefences.get(playerUUID);
         if (defences == null || defences.isEmpty()) return;
