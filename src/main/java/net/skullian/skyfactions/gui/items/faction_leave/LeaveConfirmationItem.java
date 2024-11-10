@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.faction_leave;
 
 import java.util.List;
 
+import net.skullian.skyfactions.api.RegionAPI;
 import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -49,13 +50,13 @@ public class LeaveConfirmationItem extends SkyItem {
 
                             World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                             if (island != null && islandWorld != null) {
-                                IslandAPI.teleportPlayerToLocation(player, island.getCenter(islandWorld));
+                                RegionAPI.teleportPlayerToLocation(player, island.getCenter(islandWorld));
                             } else {
                                 World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
                                 if (hubWorld != null) {
                                     List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
                                     Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
-                                    IslandAPI.teleportPlayerToLocation(player, location);
+                                    RegionAPI.teleportPlayerToLocation(player, location);
                                 } else {
                                     Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "leave the faction", "debug", "WORLD_NOT_EXIST");
                                 }

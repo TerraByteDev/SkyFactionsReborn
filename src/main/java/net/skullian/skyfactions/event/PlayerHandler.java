@@ -4,6 +4,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.NotificationAPI;
+import net.skullian.skyfactions.api.RegionAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
@@ -83,8 +84,8 @@ public class PlayerHandler implements Listener {
                     if (world != null) {
                         Location centerLocation = island.getCenter(world);
 
-                        IslandAPI.handlePlayerJoinBorder(event.getPlayer(), island);
-                        IslandAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
+                        RegionAPI.modifyWorldBorder(event.getPlayer(), island.getCenter(world), island.getSize());
+                        RegionAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
 
                     }
                 }
@@ -97,21 +98,22 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerSpawnLocationEvent(PlayerSpawnLocationEvent event) {
+        Location hubLoc = RegionAPI.getHubLocation();
         FactionAPI.isInFaction(event.getPlayer()).whenComplete((is, ex) -> {
             if (ex != null) {
-                event.setSpawnLocation(IslandAPI.getHubLocation());
+                event.setSpawnLocation(hubLoc);
                 ex.printStackTrace();
             } else if (!is && event.getSpawnLocation().getWorld().getName().equals(Settings.ISLAND_FACTION_WORLD.getString())) {
-                event.setSpawnLocation(IslandAPI.getHubLocation());
+                event.setSpawnLocation(hubLoc);
             }
         });
 
         IslandAPI.hasIsland(event.getPlayer().getUniqueId()).whenComplete((is, ex) -> {
             if (ex != null) {
-                event.setSpawnLocation(IslandAPI.getHubLocation());
+                event.setSpawnLocation(hubLoc);
                 ex.printStackTrace();
             } else if (!is && event.getSpawnLocation().getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString())) {
-                event.setSpawnLocation(IslandAPI.getHubLocation());
+                event.setSpawnLocation(hubLoc);
             }
         });
     }
@@ -131,7 +133,7 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void playerRespawn(PlayerRespawnEvent event) {
         if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
-            if (FactionAPI.isLocationInRegion(event.getPlayer().getLocation(), event.getPlayer().getUniqueId().toString()))
+            if (RegionAPI.isLocationInRegion(event.getPlayer().getLocation(), event.getPlayer().getUniqueId().toString()))
                 IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
             IslandAPI.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
                 if (ex != null) {

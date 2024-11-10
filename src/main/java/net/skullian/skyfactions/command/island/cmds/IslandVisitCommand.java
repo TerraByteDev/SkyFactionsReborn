@@ -5,6 +5,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.RaidAPI;
+import net.skullian.skyfactions.api.RegionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.island.IslandCommandHandler;
@@ -90,7 +91,7 @@ public class IslandVisitCommand extends CommandTemplate {
             } else if (is == null) {
                 Messages.VISIT_NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
-            } else if (FactionAPI.isLocationInRegion(player.getLocation(), target.getUniqueId().toString())) {
+            } else if (RegionAPI.isLocationInRegion(player.getLocation(), target.getUniqueId().toString())) {
                 Messages.VISIT_ALREADY_ON_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", target.getName());
                 return;
             }
@@ -111,8 +112,8 @@ public class IslandVisitCommand extends CommandTemplate {
                         if (isTrusted) {
                             IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player.getUniqueId());
 
-                            IslandAPI.handlePlayerJoinBorder(player, is); // shift the worldborder
-                            IslandAPI.teleportPlayerToLocation(player, is.getCenter(world));
+                            RegionAPI.modifyWorldBorder(player, is.getCenter(world), is.getSize()); // shift the worldborder
+                            RegionAPI.teleportPlayerToLocation(player, is.getCenter(world));
 
                             IslandAPI.onIslandLoad(target.getUniqueId());
                         } else {

@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.island.cmds;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.api.RegionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
@@ -69,7 +70,7 @@ public class IslandDeleteCommand extends CommandTemplate {
                             SkyFactionsReborn.worldBorderApi.resetWorldBorderToGlobal(player); // reset the world border
                             List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
                             Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
-                            IslandAPI.teleportPlayerToLocation(player, location);
+                            RegionAPI.teleportPlayerToLocation(player, location);
 
                             IslandAPI.awaitingDeletion.remove(player.getUniqueId());
                             IslandAPI.removePlayerIsland(player);

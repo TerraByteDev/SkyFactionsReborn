@@ -115,10 +115,10 @@ public class RaidAPI {
                     World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                     if (islandWorld != null && island != null) {
                         Location returnLoc = island.getCenter(islandWorld);
-                        IslandAPI.teleportPlayerToLocation(def, returnLoc);
+                        RegionAPI.teleportPlayerToLocation(def, returnLoc);
 
                         returnLoc.setY(Settings.RAIDING_SPAWN_HEIGHT.getInt());
-                        IslandAPI.teleportPlayerToLocation(attacker, returnLoc);
+                        RegionAPI.teleportPlayerToLocation(attacker, returnLoc);
 
                         showCountdown(uuid, attacker).thenAccept(re -> {
                             SoundUtil.playMusic(def, attacker);

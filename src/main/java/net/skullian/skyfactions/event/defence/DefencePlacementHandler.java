@@ -11,6 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import net.skullian.skyfactions.api.RegionAPI;
 import net.skullian.skyfactions.database.tables.Defencelocations;
 import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Location;
@@ -192,11 +193,11 @@ public class DefencePlacementHandler implements Listener {
     }
 
     private CompletableFuture<String> returnOwnerDependingOnLocation(Location location, Player player) {
-        if (location.getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString()) && FactionAPI.isLocationInRegion(location, player.getUniqueId().toString())) {
+        if (location.getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString()) && RegionAPI.isLocationInRegion(location, player.getUniqueId().toString())) {
             return CompletableFuture.completedFuture(player.getUniqueId().toString());
         } else if (location.getWorld().getName().equals(Settings.ISLAND_FACTION_WORLD.getString())) {
             return FactionAPI.getFaction(player.getUniqueId()).thenApply((faction) -> {
-                if (faction != null && FactionAPI.isLocationInRegion(location, faction.getName())) {
+                if (faction != null && RegionAPI.isLocationInRegion(location, faction.getName())) {
                     return faction.getName();
                 } else return null;
             });

@@ -97,9 +97,6 @@ public class RegionAPI {
 
     public static void modifyWorldBorder(Player player, Location center, int size) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-            World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-            if (islandWorld == null) return;
-
             SkyFactionsReborn.worldBorderApi.setBorder(player, (size * 2), center);
         });
     }
