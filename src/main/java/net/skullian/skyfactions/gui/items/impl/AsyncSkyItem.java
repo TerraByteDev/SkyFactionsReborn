@@ -10,6 +10,7 @@ import net.skullian.skyfactions.util.CooldownManager;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -42,9 +43,6 @@ public abstract class AsyncSkyItem implements Item {
         this.DATA = data;
         this.STACK = stack;
         this.PLAYER = player;
-
-        System.out.println("DATA: " + DATA.getNAME());
-        System.out.println("data: " + data.getNAME());
 
         this.provider = ObeliskConfig.getLoadingItem(player);
         Bukkit.getScheduler().runTaskAsynchronously(SkyFactionsReborn.getInstance(), () -> {

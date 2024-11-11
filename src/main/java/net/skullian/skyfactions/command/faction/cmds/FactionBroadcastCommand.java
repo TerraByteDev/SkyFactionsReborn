@@ -6,6 +6,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.faction.FactionCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.util.ErrorUtil;
@@ -54,14 +55,13 @@ public class FactionBroadcastCommand extends CommandTemplate {
             }
 
             if (faction != null) {
-                if (faction.isOwner(player) || faction.isAdmin(player) || faction.isModerator(player)) {
+                if (!Settings.FACTION_CREATE_BROADCAST_PERMISSIONS.getList().contains(faction.getRankType(player.getUniqueId()).getRankValue())) {
+                    Messages.FACTION_ACTION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                } else {
                     if (FactionAPI.hasValidName(player, message)) {
                         faction.createAuditLog(player.getUniqueId(), AuditLogType.BROADCAST_CREATE, "player_name", player.getName());
                         faction.createBroadcast(player, message);
                     }
-
-                } else {
-                    Messages.FACTION_ACTION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 }
             }
         });

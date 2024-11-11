@@ -34,7 +34,7 @@ public class DefenceUpgradeItem extends SkyItem {
 
     @Override
     public ItemBuilder process(ItemBuilder builder) {
-        if (getOptionals()[2] != null) {
+        if (!(getOptionals()[2] instanceof String)) {
             Faction faction = (Faction) getOptionals()[2];
 
             if (DefenceAPI.hasPermissions(DefencesConfig.PERMISSION_UPGRADE_DEFENCE.getList(), getPLAYER(), faction)) this.HAS_PERMISSIONS = true;

@@ -224,4 +224,14 @@ public class TextUtility {
         return partsList;
     }
 
+    public static List<String> merge(List<String>... lists) {
+        List<String> mergedList = new ArrayList<>();
+
+        for (List<String> list : lists) {
+            mergedList.addAll(list);
+        }
+
+        return mergedList;
+    }
+
 }

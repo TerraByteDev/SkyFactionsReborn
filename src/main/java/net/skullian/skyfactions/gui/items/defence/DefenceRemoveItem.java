@@ -32,7 +32,7 @@ public class DefenceRemoveItem extends SkyItem {
 
     @Override
     public ItemBuilder process(ItemBuilder builder) {
-        if (getOptionals()[2] != null) {
+        if (!(getOptionals()[2] instanceof String)) {
             Faction faction = (Faction) getOptionals()[2];
 
             if (DefenceAPI.hasPermissions(DefencesConfig.PERMISSION_REMOVE_DEFENCE.getList(), getPLAYER(), faction)) this.HAS_PERMISSIONS = true;
@@ -63,7 +63,7 @@ public class DefenceRemoveItem extends SkyItem {
             DefenceAPI.returnDefence(struct, getPLAYER());
             Messages.DEFENCE_REMOVE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
 
-            if (getOptionals()[2] != null) {
+            if (!(getOptionals()[2] instanceof String)) {
                 Faction faction = (Faction) getOptionals()[2];
                 faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_REMOVAL, "player_name", player.getName(), "defence_name", struct.getNAME());
             }

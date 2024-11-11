@@ -5,6 +5,7 @@ import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
@@ -51,7 +52,7 @@ public class FactionMOTDCommand extends CommandTemplate {
             if (faction == null) {
                 Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
-            } else if (!faction.isOwner(player) || !faction.isModerator(player)) {
+            } else if (!Settings.FACTION_MODIFY_MOTD_PERMISSIONS.getList().contains(faction.getRankType(player.getUniqueId()).getRankValue())) {
                 Messages.PERMISSION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
             }

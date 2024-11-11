@@ -30,7 +30,7 @@ public class GUIAPI {
      * @throws IllegalArgumentException
      */
     public static GUIData getGUIData(String guiName, Player player) throws IllegalArgumentException {
-        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get("guis/" + guiName);
+        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get(guiName);
         if (config != null) {
             String guiTitle = config.getString("TITLE");
             String openSound = config.getString("OPEN_SOUND");
@@ -57,7 +57,7 @@ public class GUIAPI {
      * @throws IllegalArgumentException
      */
     public static List<ItemData> getItemData(String guiName, OfflinePlayer player) throws IllegalArgumentException {
-        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get("guis/" + guiName);
+        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get(guiName);
         if (config != null) {
 
             Section itemsConfig = config.getSection("ITEMS");
@@ -90,7 +90,7 @@ public class GUIAPI {
      * @throws RuntimeException
      */
     public static List<PaginationItemData> getPaginationData(Player player) throws RuntimeException {
-        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get("guis/pagination");
+        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get("pagination");
         if (config != null) {
 
             Section itemsConfig = config.getSection("ITEMS");

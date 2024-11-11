@@ -269,6 +269,29 @@ Factions:
     # Can be regex patterns or just strings.
     BLACKLISTED_NAMES: [ cunt, retard, motherfucker, motherfuck, anus, anal, cock, dick, whore, suck, twat, shit, faggot, bitch, "butt|ass(?:hole)?", "^fag$", "nigg(?:a|er)", "tit(?:s|z|ies)?", "boob(?:s|z|ies)?" ]
 
+  # Configure who can do certain actions.
+  # Possible Ranks: "owner", "admin", "moderator", "fighter", "member"
+  # Some permission configs are in the defences.yml configuration.
+  RANKS:
+
+    # Who can ban other members?
+    BAN: ["owner", "admin"]
+
+    # Who can ban other members?
+    KICK: ["owner", "admin", "moderator"]
+
+    # Who can promote and demote members?
+    MANAGE_RANK: ["owner", "admin"]
+
+    # Who can change the Faction MOTD? (Persistent)
+    MODIFY_MOTD: ["owner", "admin"]
+
+    # Who can manage faction invites? (Create, accept, deny)
+    MANAGE_INVITES: ["owner", "admin"]
+
+    # Who can create new broadcasts?
+    CREATE_BROADCAST: ["owner", "admin", "moderator"]
+
   FACTION_MANAGE:
 
     # Whether to broadcast kicks, and the reason for it.
@@ -276,6 +299,11 @@ Factions:
 
     # Whether to broadcast bans, and the reason for it.
     BROADCAST_BANS: true
+
+    MANAGE_RANK:
+      # As a special aesthetic effect, show the selected item as enchanted.
+      SHOW_ENCHANTED: true
+
 
 # Notifications notify the player of things like pending invites (faction join requests, or player faction invites).
 Notifications:

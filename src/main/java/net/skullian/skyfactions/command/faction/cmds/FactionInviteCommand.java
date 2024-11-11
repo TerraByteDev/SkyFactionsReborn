@@ -5,6 +5,7 @@ import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
@@ -54,6 +55,7 @@ public class FactionInviteCommand extends CommandTemplate {
             @Argument(value = "target", suggestions = "playerFactionName") String playerName
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = PlayerHandler.getLocale(player.getUniqueId());
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
@@ -62,19 +64,22 @@ public class FactionInviteCommand extends CommandTemplate {
             }
 
             if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.NOT_IN_FACTION.send(player, locale);
+                return;
+            } else if (!Settings.FACTION_MANAGE_INVITES_PERMISSIONS.getList().contains(faction.getRankType(player.getUniqueId()).getRankValue())) {
+                Messages.PERMISSION_DENY.send(player, locale);
                 return;
             } else if (playerName.equalsIgnoreCase(player.getName())) {
-                Messages.FACTION_INVITE_SELF_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.FACTION_INVITE_SELF_DENY.send(player, locale);
                 return;
             }
 
             OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
             if (!target.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
+                Messages.UNKNOWN_PLAYER.send(player, locale, "player", playerName);
 
             } else if (faction.getAllMembers().contains(target)) {
-                Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, locale);
 
             } else {
                 faction.getOutgoingInvites().whenComplete((invites, throwable) -> {
@@ -85,14 +90,14 @@ public class FactionInviteCommand extends CommandTemplate {
 
                     for (InviteData invite : invites) {
                         if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
-                            Messages.FACTION_INVITE_DUPLICATE.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                            Messages.FACTION_INVITE_DUPLICATE.send(player, locale);
                             return;
                         }
                     }
                 });
 
                 faction.createInvite(target, player);
-                Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player_name", target.getName());
+                Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, locale, "player_name", target.getName());
             }
         });
     }

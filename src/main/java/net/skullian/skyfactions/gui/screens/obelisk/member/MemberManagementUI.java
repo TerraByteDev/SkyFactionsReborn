@@ -111,23 +111,23 @@ public class MemberManagementUI {
             List<OfflinePlayer> members = faction.getMembers();
 
             data.setNAME(data.getNAME().replace("player_name", owner.getName()));
-            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, owner.getUniqueId()), Messages.FACTION_OWNER_TITLE.getString(locale), owner, player));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, owner.getUniqueId()), Messages.FACTION_OWNER_TITLE.getString(locale), owner, player, faction));
 
             for (OfflinePlayer admin : admins) {
                 data.setNAME(data.getNAME().replace("player_name", admin.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, admin.getUniqueId()), Messages.FACTION_ADMIN_TITLE.getString(locale), admin, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, admin.getUniqueId()), Messages.FACTION_ADMIN_TITLE.getString(locale), admin, player, faction));
             }
             for (OfflinePlayer moderator : moderators) {
                 data.setNAME(data.getNAME().replace("player_name", moderator.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, moderator.getUniqueId()), Messages.FACTION_MODERATOR_TITLE.getString(locale), moderator, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, moderator.getUniqueId()), Messages.FACTION_MODERATOR_TITLE.getString(locale), moderator, player, faction));
             }
             for (OfflinePlayer fighter : fighters) {
                 data.setNAME(data.getNAME().replace("player_name", fighter.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, fighter.getUniqueId()), Messages.FACTION_FIGHTER_TITLE.getString(locale), fighter, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, fighter.getUniqueId()), Messages.FACTION_FIGHTER_TITLE.getString(locale), fighter, player, faction));
             }
             for (OfflinePlayer member : members) {
                 data.setNAME(data.getNAME().replace("player_name", member.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), Messages.FACTION_MEMBER_TITLE.getString(locale), member, player));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), Messages.FACTION_MEMBER_TITLE.getString(locale), member, player, faction));
             }
         });
         return items;

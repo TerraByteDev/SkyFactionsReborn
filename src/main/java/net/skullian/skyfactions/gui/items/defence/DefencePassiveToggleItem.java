@@ -40,12 +40,12 @@ public class DefencePassiveToggleItem extends SkyItem {
 
     @Override
     public ItemBuilder process(ItemBuilder builder) {
-        if (getOptionals()[2] != null) {
+        if (!(getOptionals()[2] instanceof String)) {
             Faction faction = (Faction) getOptionals()[1];
 
             if (DefenceAPI.hasPermissions(DefencesConfig.PERMISSION_TOGGLE_ENTITY_TARGETING.getList(), getPLAYER(), faction)) this.HAS_PERMISSIONS = true;
             else return DefenceAPI.processPermissions(builder, getPLAYER());
-        }
+        } else this.HAS_PERMISSIONS = true;
 
         return builder;
     }

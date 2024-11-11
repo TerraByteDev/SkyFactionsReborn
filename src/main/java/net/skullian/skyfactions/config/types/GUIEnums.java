@@ -17,6 +17,7 @@ public enum GUIEnums {
     OBELISK_FACTION_GUI("obelisk/faction_obelisk"),
     OBELISK_MEMBER_MANAGEMENT_GUI("obelisk/member/member_management"),
     OBELISK_MANAGE_MEMBER_GUI("obelisk/member/manage_member"),
+    OBELISK_MANAGE_MEMBER_RANK_GUI("obelisk/member/manage_member_rank"),
     OBELISK_AUDIT_LOG_GUI("obelisk/audit_log"),
     OBELISK_INVITE_SELECTION_GUI("obelisk/invites/invite_selection"),
     OBELISK_INVITE_INCOMING_GUI("obelisk/invites/incoming_requests"),

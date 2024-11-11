@@ -26,9 +26,7 @@ public class ObeliskDefencePurchaseItem extends SkyItem {
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (TYPE.equals("faction")) {
-            if (FACTION.isOwner(player) || FACTION.isModerator(player) || FACTION.isAdmin(player)) {
-                ObeliskDefencePurchaseOverviewUI.promptPlayer(player, TYPE, FACTION);
-            }
+            ObeliskDefencePurchaseOverviewUI.promptPlayer(player, TYPE, FACTION);
         } else if (TYPE.equals("player")) ObeliskDefencePurchaseOverviewUI.promptPlayer(player, TYPE, null);
 
     }

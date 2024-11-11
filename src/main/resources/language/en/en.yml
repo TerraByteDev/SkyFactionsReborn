@@ -305,7 +305,7 @@ Messages:
     # Placeholders: <name> - Faction Name.
     FACTION_NOT_FOUND: "<server_name><red> Could not find faction with a name of <name>."
 
-    # Sent when a player tries to do faction-related commands that require you to have the proper permissions (e.g. kick when a member).
+    # Sent when a player tries to do faction-related commands (or access portions of the ui) that require you to have the proper permissions (e.g. kick when a member).
     ACTION_DENY: "<server_name><red><bold> Hey!<reset><gray> You do not have the sufficient permissions to do this."
 
     FACTION_CREATION:
@@ -408,6 +408,9 @@ Messages:
       # If BROADCAST_BANS is enabled in the config, this is what will be broadcast.
       # Placeholders: <banned> - Player who was banned.
       BAN_BROADCAST: "<red><bold><banned> <reset><yellow>has been banned from the Faction."
+
+      # Added onto the title of the rank item when updating a player's rank (assuming they're using the placeholder '<is_selected>')
+      SELECTED: "<green><italic>(Selected)"
 
     FACTION_INVITE:
 

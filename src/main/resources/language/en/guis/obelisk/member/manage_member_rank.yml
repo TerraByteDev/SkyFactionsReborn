@@ -1,0 +1,117 @@
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
+# Title of the GUI (Inventory)
+TITLE: "<red>Manage <player_name>'s Rank"
+OPEN_SOUND: "ui.button.click"
+OPEN_PITCH: 1
+
+# This allows you to customise the shape of the GUI.
+# You can only have a maximum of 54 slots (9 x 6).
+# Each character represents an item / slot.
+# '.' represents an empty slot.
+# Any other characters are shown below under ITEMS
+# Each character corresponds to an item.
+
+# This GUI is where Faction owners / admins can manage a faction member's rank.
+
+LAYOUT:
+  - "b # # # p # # # #"
+  - "# m f m a . . c #"
+  - "# # # # # # # # c"
+
+ITEMS:
+
+  # Just a general prompt for what this GUI is about.
+  # Placeholders: <player_name> - Name of player who is being managed.
+  PLAYER_HEAD:
+    char: "p" # This is the character to use in the LAYOUT!
+    material: "PLAYER_HEAD"
+    skull: "<player_skull>" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    text: "<red><player_name>"
+    sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
+    pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
+    lore:
+      - "<yellow>Manage this player."
+
+  # Back button, return to the main Obelisk UI
+  BACK:
+    char: "b"
+    material: "BARRIER"
+    skull: ""
+    text: "<red><italic>Back"
+    sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
+    pitch: 1
+    lore: ""
+
+  # Member Rank.
+  MEMBER:
+    char: "m"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWUwOTJiN2NhODk4ZThlZjk2MGVkZTFkMGZiYzgxYmI3NDRjNmZjOTY2MjNkNDM0MTk2OTNiNGI0OWY2NTgxIn19fQ=="
+    text: "<is_selected> <reset><gray>Member" # Possible placeholders: <is_selected> - Will show "(Selected)" if they have it selected.
+    sound: "ui.button.click"
+    pitch: 1
+    lore:
+      - "<yellow>Just an ordinary Faction member."
+      - "<yellow>They will have no permissions other"
+      - "<yellow>than being able to participate in Raids."
+
+  # Fighter Rank.
+  FIGHTER:
+    char: "m"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFjYWI0NjdjNjY5NDRiN2Q1MjE0MTA1OTYxZjg0ODkyOGFlYWQ2Nzk0MGQ4MTBkN2Q3OTcwNjAyMzc5MThkNyJ9fX0="
+    text: "%display_selected% <reset><gray>Fighter" # Possible placeholders: <is_selected> - Will show "(Selected)" if they have it selected.
+    sound: "ui.button.click"
+    pitch: 1
+    lore:
+      - "<yellow>Similar to a normal Faction member, but"
+      - "<yellow>they can also manage certain parts of defences."
+
+  # Moderator Rank.
+  MODERATOR:
+    char: "m"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGRlMWRkNzBlNTRmNDUzYWFmZjExZGU3ZTUxZDJmYjQ5ZTI2NDFlNDkxYTY5YjZhYzFlOWY2YTRjNmJjZDM5YSJ9fX0="
+    text: "%display_selected% <reset><gray>Moderator" # Possible placeholders: <is_selected> - Will show "(Selected)" if they have it selected.
+    sound: "ui.button.click"
+    pitch: 1
+    lore:
+      - "<yellow>These members can manage more defence functions"
+      - "<yellow>and can also manage other members (moderate)."
+
+  # Admin Rank.
+  ADMIN:
+    char: "m"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGVhMzg1ZGM2MTJhMzAxZmJlOGZhMzA5NDc3MWI0NWM0ODhkOTYwZmVjZWUwYWY4NDVkNDM3NjM2NTcwMmQ0ZCJ9fX0="
+    text: "%display_selected% <reset><gray>Admin" # Possible placeholders: <is_selected> - Will show "(Selected)" if they have it selected.
+    sound: "ui.button.click"
+    pitch: 1
+    lore:
+      - "<yellow>These have the most permissions (apart from"
+      - "<yellow>the owner. They can manage members, manage"
+      - "<yellow>all defences, raids, and more."
+
+  # Confirm button for updating the rank of the player.
+  CONFIRM:
+    char: "c"
+    material: "LIME_TERRACOTTA"
+    skull: ""
+    text: "<green><bold>Confirm"
+    sound: "ui.button.click"
+    pitch: 1
+    lore:
+      - "<yellow>Are you sure you want to update"
+      - "<yellow>this player's rank?"
+
+  BORDER:
+    char: "#"
+    material: "GRAY_STAINED_GLASS_PANE"
+    skull: ""
+    text: " " # No text
+    sound: "none"
+    pitch: 1
+    lore: "" # Empty lore
+

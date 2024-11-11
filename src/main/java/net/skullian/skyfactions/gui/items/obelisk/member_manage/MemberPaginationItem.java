@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.obelisk.member_manage;
 
 import java.util.List;
 
+import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -21,8 +22,8 @@ public class MemberPaginationItem extends SkyItem {
 
     private OfflinePlayer SUBJECT;
 
-    public MemberPaginationItem(ItemData data, ItemStack stack, String rankTitle, OfflinePlayer player, Player actor) {
-        super(data, stack, actor, List.of(rankTitle, player).toArray());
+    public MemberPaginationItem(ItemData data, ItemStack stack, String rankTitle, OfflinePlayer player, Player actor, Faction faction) {
+        super(data, stack, actor, List.of(rankTitle, player, faction).toArray());
 
         this.SUBJECT = player;
     }
@@ -50,10 +51,13 @@ public class MemberPaginationItem extends SkyItem {
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+        Faction faction = (Faction) getOptionals()[2];
+
         if (SUBJECT.getUniqueId().equals(player.getUniqueId())) {
             Messages.FACTION_MANAGE_SELF_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            // todo, block higher ranks
         } else {
-            ManageMemberUI.promptPlayer(player, SUBJECT);
+            ManageMemberUI.promptPlayer(player, SUBJECT, faction);
         }
     }
 }

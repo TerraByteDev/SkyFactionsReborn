@@ -81,7 +81,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
 
             if (DefenceAPI.hasPermissions(DefencesConfig.PERMISSION_PURCHASE_DEFENCE.getList(), getPLAYER(), faction)) this.HAS_PERMISSIONS = true;
                 else return DefenceAPI.processPermissions(builder, getPLAYER());
-        }
+        } else HAS_PERMISSIONS = true;
 
 
         return builder;
