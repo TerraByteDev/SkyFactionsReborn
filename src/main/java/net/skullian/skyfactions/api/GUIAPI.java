@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -55,7 +56,7 @@ public class GUIAPI {
      * @return {@link List<ItemData>}
      * @throws IllegalArgumentException
      */
-    public static List<ItemData> getItemData(String guiName, Player player) throws IllegalArgumentException {
+    public static List<ItemData> getItemData(String guiName, OfflinePlayer player) throws IllegalArgumentException {
         YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get("guis/" + guiName);
         if (config != null) {
 

@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.screens.obelisk.invites;
 
 import java.util.List;
 
+import net.skullian.skyfactions.config.types.GUIEnums;
 import org.bukkit.entity.Player;
 
 import net.skullian.skyfactions.api.GUIAPI;
@@ -24,7 +25,7 @@ public class PlayerManageIncomingInviteUI {
 
     public static void promptPlayer(Player player, InviteData inviteData) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/invites/player_invite_manage", player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PLAYER_INVITE_MANAGE_GUI.getInternalPath(), player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player, inviteData);
 
@@ -43,7 +44,7 @@ public class PlayerManageIncomingInviteUI {
     }
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, InviteData inviteData) {
-        List<ItemData> data = GUIAPI.getItemData("obelisk/invites/player_invite_manage", player);
+        List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PLAYER_INVITE_MANAGE_GUI.getInternalPath(), player);
         for (ItemData itemData : data) {
 
             switch (itemData.getITEM_ID()) {

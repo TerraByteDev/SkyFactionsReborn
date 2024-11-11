@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.screens.obelisk.invites;
 
 import java.util.List;
 
+import net.skullian.skyfactions.config.types.GUIEnums;
 import org.bukkit.entity.Player;
 
 import net.skullian.skyfactions.api.GUIAPI;
@@ -22,7 +23,7 @@ public class FactionInviteTypeSelectionUI {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/invites/invite_selection", player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_INVITE_SELECTION_GUI.getInternalPath(), player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player);
 
@@ -42,7 +43,7 @@ public class FactionInviteTypeSelectionUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("obelisk/invites/invite_selection", player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_INVITE_SELECTION_GUI.getInternalPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

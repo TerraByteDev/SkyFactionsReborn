@@ -3,6 +3,7 @@ package net.skullian.skyfactions.gui.screens.obelisk.invites;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.skullian.skyfactions.config.types.GUIEnums;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -33,7 +34,7 @@ public class JoinRequestsUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("obelisk/invites/incoming_requests", player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_INVITE_INCOMING_GUI.getInternalPath(), player);
                 PagedGui.Builder gui = registerItems(PagedGui.items()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -55,7 +56,7 @@ public class JoinRequestsUI {
     private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player) {
         try {
             builder.addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL);
-            List<ItemData> data = GUIAPI.getItemData("obelisk/invites/incoming_requests", player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_INVITE_INCOMING_GUI.getInternalPath(), player);
             List<PaginationItemData> paginationData = GUIAPI.getPaginationData(player);
 
             for (ItemData itemData : data) {

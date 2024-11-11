@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.screens.confirmation;
 
 import java.util.List;
 
+import net.skullian.skyfactions.config.types.GUIEnums;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -24,7 +25,7 @@ public class IslandCreationConfirmationUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("confirmations/create_island", player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.CREATE_ISLAND_GUI.getInternalPath(), player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -45,7 +46,7 @@ public class IslandCreationConfirmationUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("confirmations/create_island", player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.CREATE_ISLAND_GUI.getInternalPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

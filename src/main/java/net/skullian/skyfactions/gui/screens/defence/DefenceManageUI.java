@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.screens.defence;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
+import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
@@ -26,7 +27,7 @@ public class DefenceManageUI {
     public static void promptPlayer(Player player, DefenceData defenceData, DefenceStruct struct, Faction faction) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("defence/management_ui", player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.DEFENCE_MANAGEMENT_UI.getInternalPath(), player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player, struct, defenceData, faction);
 
@@ -47,7 +48,7 @@ public class DefenceManageUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, DefenceStruct struct, DefenceData defenceData, @Nullable Faction faction) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("defence/management_ui", player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.DEFENCE_MANAGEMENT_UI.getInternalPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.screens.obelisk;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
+import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
@@ -26,7 +27,7 @@ public class PlayerObeliskUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("obelisk/player_obelisk", player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PLAYER_GUI.getInternalPath(), player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -47,7 +48,7 @@ public class PlayerObeliskUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("obelisk/player_obelisk", player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PLAYER_GUI.getInternalPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.screens.confirmation;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
+import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.gui.data.GUIData;
@@ -23,7 +24,7 @@ public class FactionLeaveConfirmationUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData("confirmations/faction_leave", player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.FACTION_LEAVE_GUI.getInternalPath(), player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -44,7 +45,7 @@ public class FactionLeaveConfirmationUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("confirmations/create_island", player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.FACTION_LEAVE_GUI.getInternalPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.screens.obelisk.defence;
 
 import java.util.List;
 
+import net.skullian.skyfactions.config.types.GUIEnums;
 import org.bukkit.entity.Player;
 
 import net.skullian.skyfactions.api.GUIAPI;
@@ -25,7 +26,7 @@ public class ObeliskPurchaseDefenceUI {
 
     public static void promptPlayer(Player player, String obeliskType, DefenceStruct struct, Faction faction) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/defences/purchase_defence", player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PURCHASE_DEFENCE_GUI.getInternalPath(), player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player, obeliskType, struct, faction);
 
@@ -45,7 +46,7 @@ public class ObeliskPurchaseDefenceUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, String obeliskType, DefenceStruct struct, Faction faction) {
         try {
-            List<ItemData> data = GUIAPI.getItemData("obelisk/defences/purchase_defence", player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PURCHASE_DEFENCE_GUI.getInternalPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

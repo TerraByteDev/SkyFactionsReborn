@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.skullian.skyfactions.api.RunesAPI;
+import net.skullian.skyfactions.config.types.GUIEnums;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +30,7 @@ public class RunesSubmitUI {
 
     public void promptPlayer(Player player, String type) {
         try {
-            GUIData data = GUIAPI.getGUIData("runes_ui", player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.RUNES_SUBMIT_GUI.getInternalPath(), player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player, type, data);
 
@@ -79,7 +80,7 @@ public class RunesSubmitUI {
                 handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
             });
 
-            List<ItemData> data = GUIAPI.getItemData("runes_ui", player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.RUNES_SUBMIT_GUI.getInternalPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

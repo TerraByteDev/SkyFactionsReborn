@@ -3,6 +3,7 @@ package net.skullian.skyfactions.gui.screens.obelisk;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.skullian.skyfactions.config.types.GUIEnums;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -31,7 +32,7 @@ public class PlayerObeliskNotificationUI {
 
     public static void promptPlayer(Player player) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/player_notifications", player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PLAYER_NOTIFICATIONS_GUI.getInternalPath(), player);
             PagedGui.Builder gui = registerItems(PagedGui.items()
                     .setStructure(data.getLAYOUT()), player);
 
@@ -52,7 +53,7 @@ public class PlayerObeliskNotificationUI {
     private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player) {
         try {
             builder.addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL);
-            List<ItemData> data = GUIAPI.getItemData("obelisk/player_notifications", player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PLAYER_NOTIFICATIONS_GUI.getInternalPath(), player);
             List<PaginationItemData> paginationData = GUIAPI.getPaginationData(player);
 
             for (ItemData itemData : data) {

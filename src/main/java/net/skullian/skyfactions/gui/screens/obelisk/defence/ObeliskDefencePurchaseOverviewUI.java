@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.skullian.skyfactions.config.types.GUIEnums;
 import org.bukkit.entity.Player;
 
 import net.skullian.skyfactions.api.GUIAPI;
@@ -31,7 +32,7 @@ public class ObeliskDefencePurchaseOverviewUI {
 
     public static void promptPlayer(Player player, String obeliskType, Faction faction) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/defences/defence_purchase_overview", player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_DEFENCE_PURCHASE_OVERVIEW_GUI.getInternalPath(), player);
             PagedGui.Builder gui = registerItems(PagedGui.items()
                     .setStructure(data.getLAYOUT()), player, obeliskType, faction);
 
@@ -52,7 +53,7 @@ public class ObeliskDefencePurchaseOverviewUI {
     private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player, String obeliskType, Faction faction) {
         try {
             builder.addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL);
-            List<ItemData> data = GUIAPI.getItemData("obelisk/defences/defence_purchase_overview", player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_DEFENCE_PURCHASE_OVERVIEW_GUI.getInternalPath(), player);
             List<PaginationItemData> paginationData = GUIAPI.getPaginationData(player);
 
             for (ItemData itemData : data) {

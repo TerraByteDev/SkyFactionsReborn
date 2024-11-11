@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.screens.obelisk.member;
 
 import java.util.List;
 
+import net.skullian.skyfactions.config.types.GUIEnums;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -25,7 +26,7 @@ public class ManageMemberUI {
 
     public static void promptPlayer(Player player, OfflinePlayer subject) {
         try {
-            GUIData data = GUIAPI.getGUIData("obelisk/manage_member", player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_MANAGE_MEMBER_GUI.getInternalPath(), player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), subject, player);
 
@@ -55,7 +56,7 @@ public class ManageMemberUI {
                     Messages.ERROR.send(actor, actor.locale().getLanguage(), "operation", "manage a member", "debug", "FACTION_NOT_FOUND");
                 }
 
-                List<ItemData> data = GUIAPI.getItemData("obelisk/manage_member", player.getPlayer());
+                List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_MANAGE_MEMBER_GUI.getInternalPath(), player);
                 for (ItemData itemData : data) {
                     switch (itemData.getITEM_ID()) {
 

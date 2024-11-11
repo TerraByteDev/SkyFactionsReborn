@@ -252,7 +252,7 @@ Messages:
     DEFENCE_REMOVE_SUCCESS: "<server_name><green> Successfully removed defence."
 
     # Sent when a player tries to access the
-    DEFENCE_INSUFFICIENT_PERMISSIONS: "<server_name><red> Hey!<reset><yellow> You don't have the sufficient rank to do that!"
+    DEFENCE_INSUFFICIENT_PERMISSIONS: "<server_name><red><bold> Hey!<reset><yellow> You don't have the sufficient rank to do that!"
 
   Gems:
     # Sent when the player runs /gems or /gems balance

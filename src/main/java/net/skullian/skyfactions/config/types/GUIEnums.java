@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
+import lombok.Getter;
 
 public enum GUIEnums {
 
@@ -14,8 +15,8 @@ public enum GUIEnums {
 
     OBELISK_PLAYER_GUI("guis/obelisk/player_obelisk"),
     OBELISK_FACTION_GUI("guis/obelisk/faction_obelisk"),
-    OBELISK_MEMBER_MANAGEMENT_GUI("guis/obelisk/member_management"),
-    OBELISK_MANAGE_MEMBER_GUI("guis/obelisk/manage_member"),
+    OBELISK_MEMBER_MANAGEMENT_GUI("guis/obelisk/member/member_management"),
+    OBELISK_MANAGE_MEMBER_GUI("guis/obelisk/member/manage_member"),
     OBELISK_AUDIT_LOG_GUI("guis/obelisk/audit_log"),
     OBELISK_INVITE_SELECTION_GUI("guis/obelisk/invites/invite_selection"),
     OBELISK_INVITE_INCOMING_GUI("guis/obelisk/invites/incoming_requests"),
@@ -33,7 +34,7 @@ public enum GUIEnums {
 
     PAGINATION_MODEL("guis/pagination");
 
-
+    @Getter
     private final String path;
     public static final Map<String, Map<String, YamlDocument>> configs = new HashMap<>();
 
@@ -44,4 +45,6 @@ public enum GUIEnums {
     public String getConfigPath() {
         return path;
     }
+
+    public String getInternalPath() { return path.replace("guis/", ""); }
 }
