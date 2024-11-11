@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import net.skullian.skyfactions.config.types.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;
@@ -59,7 +60,7 @@ public class CacheService {
     }
 
     public void enable() {
-        this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), this::cacheOnce, 0L, 6000);
+        this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), this::cacheOnce, Settings.CACHE_SAVE_INTERVAL.getInt() * 20L, Settings.CACHE_SAVE_INTERVAL.getInt() * 20L);
     }
 
     public CompletableFuture<Void> disable() {

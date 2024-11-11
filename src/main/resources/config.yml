@@ -30,6 +30,15 @@ Database:
   # Only applies for MySQL!
   MAX_LIFETIME: 30
 
+  # Because SkyFactions is very heavy on the database, we use a cache service.
+  # This will cache all island data modification, and will push it to the database at once.
+  # The cache service will also run on server stop.
+  # This means the database is not being repetitively interfaced with.
+  # There are more cache systems used internally, such as caching playerdata on join.
+  # You can modify the cache save interval here.
+  # It is in seconds -> Default 10 minutes (600 seconds)
+  CACHE_SAVE_INTERVAL: 600
+
 # This plugin has multi-language support.
 # This means players in different locations are sent plugin messages in their native language.
 Language:
