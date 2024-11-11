@@ -26,7 +26,7 @@ public class ObeliskPurchaseDefenceUI {
 
     public static void promptPlayer(Player player, String obeliskType, DefenceStruct struct, Faction faction) {
         try {
-            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PURCHASE_DEFENCE_GUI.getInternalPath(), player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PURCHASE_DEFENCE_GUI.getPath(), player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player, obeliskType, struct, faction);
 
@@ -46,7 +46,7 @@ public class ObeliskPurchaseDefenceUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, String obeliskType, DefenceStruct struct, Faction faction) {
         try {
-            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PURCHASE_DEFENCE_GUI.getInternalPath(), player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PURCHASE_DEFENCE_GUI.getPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

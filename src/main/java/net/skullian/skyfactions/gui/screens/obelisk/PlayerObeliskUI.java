@@ -27,7 +27,7 @@ public class PlayerObeliskUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PLAYER_GUI.getInternalPath(), player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PLAYER_GUI.getPath(), player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -48,7 +48,7 @@ public class PlayerObeliskUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PLAYER_GUI.getInternalPath(), player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PLAYER_GUI.getPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

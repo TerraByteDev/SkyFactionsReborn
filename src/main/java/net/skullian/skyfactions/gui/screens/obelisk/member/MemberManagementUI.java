@@ -34,7 +34,7 @@ public class MemberManagementUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_MEMBER_MANAGEMENT_GUI.getInternalPath(), player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_MEMBER_MANAGEMENT_GUI.getPath(), player);
                 PagedGui.Builder gui = registerItems(PagedGui.items()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -56,7 +56,7 @@ public class MemberManagementUI {
     private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player) {
         try {
             builder.addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL);
-            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_MEMBER_MANAGEMENT_GUI.getInternalPath(), player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_MEMBER_MANAGEMENT_GUI.getPath(), player);
             List<PaginationItemData> paginationData = GUIAPI.getPaginationData(player);
 
             for (ItemData itemData : data) {

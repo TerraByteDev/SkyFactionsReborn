@@ -26,7 +26,7 @@ public class ManageMemberUI {
 
     public static void promptPlayer(Player player, OfflinePlayer subject) {
         try {
-            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_MANAGE_MEMBER_GUI.getInternalPath(), player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_MANAGE_MEMBER_GUI.getPath(), player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), subject, player);
 
@@ -56,7 +56,7 @@ public class ManageMemberUI {
                     Messages.ERROR.send(actor, actor.locale().getLanguage(), "operation", "manage a member", "debug", "FACTION_NOT_FOUND");
                 }
 
-                List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_MANAGE_MEMBER_GUI.getInternalPath(), player);
+                List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_MANAGE_MEMBER_GUI.getPath(), player);
                 for (ItemData itemData : data) {
                     switch (itemData.getITEM_ID()) {
 

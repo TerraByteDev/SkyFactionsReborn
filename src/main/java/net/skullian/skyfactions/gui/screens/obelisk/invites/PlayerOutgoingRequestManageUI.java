@@ -28,7 +28,7 @@ public class PlayerOutgoingRequestManageUI {
     public static void promptPlayer(Player player, JoinRequestData joinRequest) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_INVITE_OUTGOING_GUI.getInternalPath(), player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_INVITE_OUTGOING_GUI.getPath(), player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player, joinRequest);
 
@@ -49,7 +49,7 @@ public class PlayerOutgoingRequestManageUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, JoinRequestData joinRequest) {
 
-        List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_INVITE_OUTGOING_GUI.getInternalPath(), player);
+        List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_INVITE_OUTGOING_GUI.getPath(), player);
         for (ItemData itemData : data) {
             switch (itemData.getITEM_ID()) {
 

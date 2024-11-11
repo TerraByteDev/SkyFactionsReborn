@@ -24,7 +24,7 @@ public class FactionLeaveConfirmationUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData(GUIEnums.FACTION_LEAVE_GUI.getInternalPath(), player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.FACTION_LEAVE_GUI.getPath(), player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -45,7 +45,7 @@ public class FactionLeaveConfirmationUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData(GUIEnums.FACTION_LEAVE_GUI.getInternalPath(), player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.FACTION_LEAVE_GUI.getPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

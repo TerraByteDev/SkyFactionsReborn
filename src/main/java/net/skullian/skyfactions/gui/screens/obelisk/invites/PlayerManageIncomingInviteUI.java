@@ -25,7 +25,7 @@ public class PlayerManageIncomingInviteUI {
 
     public static void promptPlayer(Player player, InviteData inviteData) {
         try {
-            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PLAYER_INVITE_MANAGE_GUI.getInternalPath(), player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PLAYER_INVITE_MANAGE_GUI.getPath(), player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player, inviteData);
 
@@ -44,7 +44,7 @@ public class PlayerManageIncomingInviteUI {
     }
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, InviteData inviteData) {
-        List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PLAYER_INVITE_MANAGE_GUI.getInternalPath(), player);
+        List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PLAYER_INVITE_MANAGE_GUI.getPath(), player);
         for (ItemData itemData : data) {
 
             switch (itemData.getITEM_ID()) {

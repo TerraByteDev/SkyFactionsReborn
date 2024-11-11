@@ -27,7 +27,7 @@ public class DefenceManageUI {
     public static void promptPlayer(Player player, DefenceData defenceData, DefenceStruct struct, Faction faction) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData(GUIEnums.DEFENCE_MANAGEMENT_UI.getInternalPath(), player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.DEFENCE_MANAGEMENT_UI.getPath(), player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player, struct, defenceData, faction);
 
@@ -48,7 +48,7 @@ public class DefenceManageUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, DefenceStruct struct, DefenceData defenceData, @Nullable Faction faction) {
         try {
-            List<ItemData> data = GUIAPI.getItemData(GUIEnums.DEFENCE_MANAGEMENT_UI.getInternalPath(), player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.DEFENCE_MANAGEMENT_UI.getPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

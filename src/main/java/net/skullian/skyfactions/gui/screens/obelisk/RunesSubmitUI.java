@@ -30,7 +30,7 @@ public class RunesSubmitUI {
 
     public void promptPlayer(Player player, String type) {
         try {
-            GUIData data = GUIAPI.getGUIData(GUIEnums.RUNES_SUBMIT_GUI.getInternalPath(), player);
+            GUIData data = GUIAPI.getGUIData(GUIEnums.RUNES_SUBMIT_GUI.getPath(), player);
             Gui.Builder.Normal gui = registerItems(Gui.normal()
                     .setStructure(data.getLAYOUT()), player, type, data);
 
@@ -80,7 +80,7 @@ public class RunesSubmitUI {
                 handler.setCancelled(RunesAPI.isStackProhibited(handler.getNewItem(), player));
             });
 
-            List<ItemData> data = GUIAPI.getItemData(GUIEnums.RUNES_SUBMIT_GUI.getInternalPath(), player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.RUNES_SUBMIT_GUI.getPath(), player);
             for (ItemData itemData : data) {
                 switch (itemData.getITEM_ID()) {
 

@@ -26,7 +26,7 @@ public class FactionObeliskUI {
     public static void promptPlayer(Player player) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_FACTION_GUI.getInternalPath(), player);
+                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_FACTION_GUI.getPath(), player);
                 Gui.Builder.Normal gui = registerItems(Gui.normal()
                         .setStructure(data.getLAYOUT()), player);
 
@@ -47,7 +47,7 @@ public class FactionObeliskUI {
 
     private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
         try {
-            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_FACTION_GUI.getInternalPath(), player);
+            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_FACTION_GUI.getPath(), player);
             FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
                 if (exc != null) {
                     ErrorUtil.handleError(player, "open your obelisk", "GUI_LOAD_EXCEPTION", exc);
