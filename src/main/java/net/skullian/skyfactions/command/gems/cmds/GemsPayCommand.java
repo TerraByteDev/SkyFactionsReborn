@@ -35,14 +35,13 @@ public class GemsPayCommand extends CommandTemplate {
         return "/gems pay <player> <amount>";
     }
 
-    @Command("pay <player> <amount>")
+    @Command("pay <target> <amount>")
     @Permission(value = {"skyfactions.gems.pay", "skyfactions.gems"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack,
-            @Argument(value = "player") String playerName,
+            Player player,
+            @Argument(value = "target") String playerName,
             @Argument(value = "amount") int amount
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);

@@ -41,10 +41,9 @@ public class FactionInfoCommand extends CommandTemplate {
     @Command("info [name]")
     @Permission(value = {"skyfactions.faction.info", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack,
+            Player player,
             @Argument(value = "name") @Nullable String name
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         if (name == null) {

@@ -47,13 +47,12 @@ public class IslandTrustCommand extends CommandTemplate {
                 .collect(Collectors.toList());
     }
 
-    @Command("trust <player>")
+    @Command("trust <target>")
     @Permission(value = {"skyfactions.island.trust", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack,
-            @Argument(value = "player", suggestions = "onlinePlayers") String playerName
+            Player player,
+            @Argument(value = "target", suggestions = "onlinePlayers") String playerName
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);

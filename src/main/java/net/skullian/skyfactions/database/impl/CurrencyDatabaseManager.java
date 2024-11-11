@@ -20,12 +20,14 @@ public class CurrencyDatabaseManager {
 
     public CompletableFuture<Integer> getGems(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.GEMS)
+                .from(ISLANDS)
                 .where(ISLANDS.UUID.eq(playerUUID.toString()))
                 .fetchOneInto(Integer.class));
     }
 
     public CompletableFuture<Integer> getGems(String factionName) {
         return CompletableFuture.supplyAsync(() -> ctx.select(FACTIONISLANDS.GEMS)
+                .from(FACTIONISLANDS)
                 .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
                 .fetchOneInto(Integer.class));
     }
@@ -57,12 +59,14 @@ public class CurrencyDatabaseManager {
 
     public CompletableFuture<Integer> getRunes(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.RUNES)
+                .from(ISLANDS)
                 .where(ISLANDS.UUID.eq(playerUUID.toString()))
                 .fetchOneInto(Integer.class));
     }
 
     public CompletableFuture<Integer> getRunes(String factionName) {
         return CompletableFuture.supplyAsync(() -> ctx.select(FACTIONISLANDS.RUNES)
+                .from(FACTIONISLANDS)
                 .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
                 .fetchOneInto(Integer.class));
     }

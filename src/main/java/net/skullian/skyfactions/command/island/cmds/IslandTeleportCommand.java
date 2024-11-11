@@ -40,9 +40,8 @@ public class IslandTeleportCommand extends CommandTemplate {
     @Command("teleport")
     @Permission(value = {"skyfactions.island.teleport", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack
+            Player player
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {

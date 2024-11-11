@@ -17,24 +17,23 @@ public class UnlinkCommand extends CommandTemplate {
     @Command("unlink")
     @Permission(value = {"skyfactions.command.unlink"}, mode = Permission.Mode.ANY_OF)
     public boolean handleUnlink(
-            PlayerSource commandSourceStack
+            Player player
     ) {
-        Player player = commandSourceStack.source();
-            if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord"), true))
-                return true;
+        if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord"), true))
+            return true;
 
-            SkyFactionsReborn.databaseManager.playerManager.getDiscordID(player).whenComplete((id, ex) -> {
-                if (ex != null) {
-                    ErrorUtil.handleError(player, "unlink your Discord", "SQL_DISCORD_UNLINK", ex);
-                    return;
-                }
+        SkyFactionsReborn.databaseManager.playerManager.getDiscordID(player).whenComplete((id, ex) -> {
+            if (ex != null) {
+                ErrorUtil.handleError(player, "unlink your Discord", "SQL_DISCORD_UNLINK", ex);
+                return;
+            }
 
-                if (id == null) {
-                    Messages.DISCORD_NOT_LINKED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-                } else {
-                    Messages.DISCORD_UNLINK_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-                }
-            });
+            if (id == null) {
+                Messages.DISCORD_NOT_LINKED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            } else {
+                Messages.DISCORD_UNLINK_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            }
+        });
         return true;
     }
 

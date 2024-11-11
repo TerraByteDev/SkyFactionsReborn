@@ -94,12 +94,18 @@ public class ObeliskDefencePurchaseOverviewUI {
 
         for (Map.Entry<String, DefenceStruct> defence : DefencesFactory.defences.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).entrySet()) {
             DefenceStruct struct = defence.getValue();
-            data.setNAME(struct.getNAME());
-            data.setBASE64_TEXTURE(struct.getITEM_SKULL());
-            data.setMATERIAL(struct.getITEM_MATERIAL());
-            data.setLORE(struct.getITEM_LORE());
+            ItemData newData = new ItemData(
+                    data.getITEM_ID(),
+                    data.getCHARACTER(),
+                    struct.getNAME(),
+                    struct.getITEM_MATERIAL(),
+                    struct.getITEM_SKULL(),
+                    data.getSOUND(),
+                    data.getPITCH(),
+                    struct.getITEM_LORE()
+            );
 
-            items.add(new ObeliskPaginatedDefenceItem(data, GUIAPI.createItem(data, player.getUniqueId()), struct, true, obeliskType, faction, player));
+            items.add(new ObeliskPaginatedDefenceItem(newData, GUIAPI.createItem(newData, player.getUniqueId()), struct, true, obeliskType, faction, player));
         }
         return items;
     }

@@ -47,13 +47,12 @@ public class FactionInviteCommand extends CommandTemplate {
                 .collect(Collectors.toList());
     }
 
-    @Command("invite <player>")
+    @Command("invite <target>")
     @Permission(value = {"skyfactions.faction.invite", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack,
-            @Argument(value = "player", suggestions = "playerFactionName") String playerName
+            Player player,
+            @Argument(value = "target", suggestions = "playerFactionName") String playerName
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {

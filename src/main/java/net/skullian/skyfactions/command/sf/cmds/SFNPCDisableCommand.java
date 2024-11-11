@@ -34,9 +34,9 @@ public class SFNPCDisableCommand extends CommandTemplate {
 
     @Command("disablenpcs")
     public void perform(
-        CommandSourceStack commandSourceStack
+        CommandSender sender
     ) {
-        CommandSender sender = commandSourceStack.getSender();
+        
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 

@@ -37,10 +37,9 @@ public class GemsDepositCommand extends CommandTemplate {
 
     @Command("deposit <amount>")
     public void run(
-            PlayerSource commandSourceStack,
+            Player player,
             @Argument(value = "amount") String amount
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {

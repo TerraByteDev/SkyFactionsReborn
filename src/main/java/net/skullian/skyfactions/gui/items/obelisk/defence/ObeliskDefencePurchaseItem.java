@@ -29,7 +29,7 @@ public class ObeliskDefencePurchaseItem extends SkyItem {
             if (FACTION.isOwner(player) || FACTION.isModerator(player) || FACTION.isAdmin(player)) {
                 ObeliskDefencePurchaseOverviewUI.promptPlayer(player, TYPE, FACTION);
             }
-        } else if (TYPE.equals("player")) ObeliskDefencePurchaseOverviewUI.promptPlayer(player, TYPE, FACTION);
+        } else if (TYPE.equals("player")) ObeliskDefencePurchaseOverviewUI.promptPlayer(player, TYPE, null);
 
     }
 }

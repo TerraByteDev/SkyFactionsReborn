@@ -3,7 +3,7 @@ CONFIG_VERSION: 1
 
 # Name of the defence.
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
-NAME: "<gradient:#D62929:FF6700><bold>Flamethrower</gradient>"
+NAME: "<gradient:#D62929:#FF6700><bold>Flamethrower</gradient>"
 
 # This is the unique identifier for the defence.
 # ONCE SPECIFIED, DO NOT CHANGE!

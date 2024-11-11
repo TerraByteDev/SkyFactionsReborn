@@ -38,10 +38,9 @@ public class FactionDonateCommand extends CommandTemplate {
     @Command("donate <amount>")
     @Permission(value = {"skyfactions.faction.donate", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack,
+            Player player,
             @Argument("amount") int amount
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {

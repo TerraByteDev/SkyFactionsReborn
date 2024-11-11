@@ -38,10 +38,9 @@ public class FactionMOTDCommand extends CommandTemplate {
     @Command("motd <motd>")
     @Permission(value = {"skyfactions.faction.motd", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack,
+            Player player,
             @Argument(value = "motd") @Greedy String motd
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {

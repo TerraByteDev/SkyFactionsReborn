@@ -2,7 +2,6 @@ package net.skullian.skyfactions.database.impl.faction;
 
 import net.skullian.skyfactions.database.tables.records.FactionislandsRecord;
 import net.skullian.skyfactions.island.FactionIsland;
-import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 

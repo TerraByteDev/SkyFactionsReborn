@@ -104,6 +104,7 @@ public class FactionsDatabaseManager {
 
     public CompletableFuture<String> getFactionMOTD(String factionName) {
         return CompletableFuture.supplyAsync(() -> ctx.select(FACTIONS.MOTD)
+                .from(FACTIONS)
                 .where(FACTIONS.NAME.eq(factionName))
                 .fetchOneInto(String.class));
     }
@@ -166,6 +167,7 @@ public class FactionsDatabaseManager {
                     .execute();
 
             return ctx.select(FACTIONMEMBERS.RANK)
+                    .from(FACTIONMEMBERS)
                     .where(FACTIONMEMBERS.FACTIONNAME.eq(factionName), FACTIONMEMBERS.UUID.eq(playerUUID.toString()))
                     .fetchOneInto(String.class);
         });

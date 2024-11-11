@@ -33,9 +33,9 @@ public class SFSyncCommand extends CommandTemplate {
 
     @Command("sync")
     public void perform(
-            CommandSourceStack commandSourceStack
+            CommandSender sender
     ) {
-        CommandSender sender = commandSourceStack.getSender();
+        
         if ((sender instanceof Player) &&!CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 

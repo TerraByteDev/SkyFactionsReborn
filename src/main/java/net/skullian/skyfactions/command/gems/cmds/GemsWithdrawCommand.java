@@ -39,10 +39,9 @@ public class GemsWithdrawCommand extends CommandTemplate {
 
     @Command("withdraw <amount>")
     public void run(
-            PlayerSource commandSourceStack,
+            Player player,
             @Argument(value = "amount") String amount
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {

@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.skullian.skyfactions.util.CooldownManager;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
+import org.incendo.cloud.paper.LegacyPaperCommandManager;
 import org.incendo.cloud.paper.PaperCommandManager;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -19,22 +22,24 @@ import net.skullian.skyfactions.command.sf.cmds.SFNPCDisableCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFNPCReloadCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFReloadCommand;
 import net.skullian.skyfactions.command.sf.cmds.SFSyncCommand;
+import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 public class SFCommandHandler implements CommandHandler {
 
-    PaperCommandManager<CommandSourceStack> manager;
-    AnnotationParser<CommandSourceStack> parser;
+    LegacyPaperCommandManager<CommandSender> manager;
+    AnnotationParser<CommandSender> parser;
     Map<String, CommandTemplate> subcommands = new HashMap<>();
 
     public SFCommandHandler() {
-        this.manager = PaperCommandManager.builder()
-                .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
-                .buildOnEnable(SkyFactionsReborn.getInstance());
+        this.manager = LegacyPaperCommandManager.createNative(
+                SkyFactionsReborn.getInstance(),
+                ExecutionCoordinator.simpleCoordinator()
+        );
         this.manager.registerCommandPostProcessor(new CooldownManager.CooldownPostprocessor<>());
 
         this.parser = new AnnotationParser<>(
                 manager,
-                CommandSourceStack.class,
+                CommandSender.class,
                 params -> SimpleCommandMeta.empty()
         );
 
@@ -47,13 +52,8 @@ public class SFCommandHandler implements CommandHandler {
     }
 
     @Override
-    public PaperCommandManager<CommandSourceStack> getManager() {
+    public LegacyPaperCommandManager<CommandSender> getManager() {
         return this.manager;
-    }
-
-    @Override
-    public AnnotationParser<CommandSourceStack> getParser() {
-        return this.parser;
     }
 
     @Override
@@ -62,17 +62,17 @@ public class SFCommandHandler implements CommandHandler {
     }
 
     @Override
-    public void registerSubCommands(AnnotationParser<CommandSourceStack> parser) {
-        register(new SFHelpCommand(this));
-        register(new SFInfoCommand());
-        register(new SFReloadCommand());
-        register(new SFSyncCommand());
-        register(new SFNPCReloadCommand());
-        register(new SFNPCDisableCommand());
+    public void registerSubCommands(AnnotationParser<CommandSender> parser) {
+        register(new SFHelpCommand(this), parser);
+        register(new SFInfoCommand(), parser);
+        register(new SFReloadCommand(), parser);
+        register(new SFSyncCommand(), parser);
+        register(new SFNPCReloadCommand(), parser);
+        register(new SFNPCDisableCommand(), parser);
     }
 
     @Override
-    public void register(CommandTemplate template) {
+    public void register(CommandTemplate template, AnnotationParser<?> parser) {
         parser.parse(template);
         subcommands.put(template.getName(), template);
     }

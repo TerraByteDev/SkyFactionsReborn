@@ -37,9 +37,8 @@ public class RaidStartCommand extends CommandTemplate {
     @Command("start")
     @Permission(value = {"skyfactions.raid.start", "skyfactions.raid"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack
+            Player player
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         RaidAPI.getCooldownDuration(player).whenComplete((cooldown, ex) -> {

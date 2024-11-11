@@ -32,7 +32,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
     private boolean HAS_PERMISSIONS = false;
 
     public ObeliskPaginatedDefenceItem(ItemData data, ItemStack stack, DefenceStruct struct, boolean shouldRedirect, String type, Faction faction, Player player) {
-        super(data, stack, player, List.of(struct, faction).toArray());
+        super(data, stack, player, List.of(struct, (faction != null ? faction : "")).toArray());
 
         this.STRUCT = struct;
         this.SHOULD_REDIRECT = shouldRedirect;
@@ -76,7 +76,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
             }
         }
 
-        if (getOptionals()[1] != null) {
+        if (getOptionals()[1] != "") {
             Faction faction  = (Faction) getOptionals()[1];
 
             if (DefenceAPI.hasPermissions(DefencesConfig.PERMISSION_PURCHASE_DEFENCE.getList(), getPLAYER(), faction)) this.HAS_PERMISSIONS = true;

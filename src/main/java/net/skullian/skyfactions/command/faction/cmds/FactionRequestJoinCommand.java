@@ -39,10 +39,9 @@ public class FactionRequestJoinCommand extends CommandTemplate {
     @Command("requestjoin <factionName>")
     @Permission(value = {"skyfactions.faction.requestjoin", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack,
+            Player player,
             @Argument(value = "factionName") String factionName
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {

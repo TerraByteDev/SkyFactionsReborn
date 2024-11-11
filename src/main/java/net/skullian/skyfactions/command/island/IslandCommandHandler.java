@@ -1,34 +1,35 @@
 package net.skullian.skyfactions.command.island;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandHandler;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.island.cmds.*;
 import net.skullian.skyfactions.util.CooldownManager;
+import org.bukkit.command.CommandSender;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
-import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class IslandCommandHandler implements CommandHandler {
 
-    PaperCommandManager<CommandSourceStack> manager;
-    AnnotationParser<CommandSourceStack> parser;
+    LegacyPaperCommandManager<CommandSender> manager;
+    AnnotationParser<CommandSender> parser;
     Map<String, CommandTemplate> subcommands = new HashMap<>();
 
     public IslandCommandHandler() {
-        this.manager = PaperCommandManager.builder()
-                .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
-                .buildOnEnable(SkyFactionsReborn.getInstance());
+        this.manager = LegacyPaperCommandManager.createNative(
+                SkyFactionsReborn.getInstance(),
+                ExecutionCoordinator.simpleCoordinator()
+        );
         this.manager.registerCommandPostProcessor(new CooldownManager.CooldownPostprocessor<>());
 
         this.parser = new AnnotationParser<>(
                 manager,
-                CommandSourceStack.class,
+                CommandSender.class,
                 params -> SimpleCommandMeta.empty()
         );
 
@@ -41,13 +42,8 @@ public class IslandCommandHandler implements CommandHandler {
     }
 
     @Override
-    public PaperCommandManager<CommandSourceStack> getManager() {
+    public LegacyPaperCommandManager<CommandSender> getManager() {
         return this.manager;
-    }
-
-    @Override
-    public AnnotationParser<CommandSourceStack> getParser() {
-        return this.parser;
     }
 
     @Override
@@ -56,18 +52,18 @@ public class IslandCommandHandler implements CommandHandler {
     }
 
     @Override
-    public void registerSubCommands(AnnotationParser<CommandSourceStack> parser) {
-        register(new IslandCreateCommand());
-        register(new IslandDeleteCommand());
-        register(new IslandHelpCommand(this));
-        register(new IslandTeleportCommand());
-        register(new IslandTrustCommand());
-        register(new IslandUntrustCommand());
-        register(new IslandVisitCommand(this));
+    public void registerSubCommands(AnnotationParser<CommandSender> parser) {
+        register(new IslandHelpCommand(this), parser);
+        register(new IslandCreateCommand(), parser);
+        register(new IslandDeleteCommand(), parser);
+        register(new IslandTeleportCommand(), parser);
+        register(new IslandTrustCommand(), parser);
+        register(new IslandUntrustCommand(), parser);
+        register(new IslandVisitCommand(this), parser);
     }
 
     @Override
-    public void register(CommandTemplate template) {
+    public void register(CommandTemplate template, AnnotationParser<?> parser) {
         parser.parse(template);
         subcommands.put(template.getName(), template);
     }

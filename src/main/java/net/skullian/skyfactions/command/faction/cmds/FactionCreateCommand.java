@@ -39,10 +39,9 @@ public class FactionCreateCommand extends CommandTemplate {
     @Command("create <name>")
     @Permission(value = {"skyfactions.faction.create", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack,
+            Player player,
             @Argument(value = "name") String name
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         Messages.FACTION_CREATION_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));

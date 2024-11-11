@@ -61,13 +61,13 @@ public class RunesGiveCommand extends CommandTemplate {
     @Command("give <type> <playerFactionName> <amount> ")
     @Permission(value = {"skyfactions.runes.give"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSourceStack commandSourceStack,
+            CommandSender sender,
             @Argument(value = "type", suggestions = "giveTypeSelection") String type,
             @Argument(value = "playerFactionName", suggestions = "playerFactionName") String playerFactionName,
             @Argument(value = "amount") int amount
 
     ) {
-        CommandSender sender = commandSourceStack.getSender();
+        
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 

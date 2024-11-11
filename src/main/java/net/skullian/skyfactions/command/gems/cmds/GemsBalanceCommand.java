@@ -37,9 +37,8 @@ public class GemsBalanceCommand extends CommandTemplate {
     @Command("balance")
     @Permission(value = {"skyfactions.gems.balance", "skyfactions.gems"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack
+            Player player
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {

@@ -33,10 +33,9 @@ public class FactionDisbandCommand extends CommandTemplate {
 
     @Command("disband [confirm]")
     public void perform(
-            PlayerSource commandSourceStack,
+            Player player,
             @Argument(value = "confirm") @Nullable String confirm
     ) {
-        Player player = commandSourceStack.source();
         String locale = PlayerHandler.getLocale(player.getUniqueId());
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {

@@ -18,9 +18,9 @@ public class LinkCommand extends CommandTemplate {
     @Command("link")
     @Permission(value = {"skyfactions.command.link"}, mode = Permission.Mode.ANY_OF)
     public boolean handleLink(
-            PlayerSource commandSourceStack
+            Player player
     ) {
-        Player player = commandSourceStack.source();
+
             if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true))
                 return true;
 

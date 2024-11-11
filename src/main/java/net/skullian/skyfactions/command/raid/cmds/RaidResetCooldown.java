@@ -35,9 +35,8 @@ public class RaidResetCooldown extends CommandTemplate {
     @Command("resetcooldown")
     @Permission(value = {"skyfactions.raid.resetcooldown"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack
+            Player player
     ) {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         SkyFactionsReborn.databaseManager.playerManager.updateLastRaid(player, 0).whenComplete((ignored, throwable) -> {

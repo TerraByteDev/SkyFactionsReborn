@@ -62,13 +62,12 @@ public class IslandVisitCommand extends CommandTemplate {
                 .collect(Collectors.toList());
     }
 
-    @Command("visit <player>")
+    @Command("visit <target>")
     @Permission(value = {"skyfactions.island.visit", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            PlayerSource commandSourceStack,
-            @Argument(value = "player", suggestions = "onlinePlayers") String playerName
+            Player player,
+            @Argument(value = "target", suggestions = "onlinePlayers") String playerName
     ) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Player player = commandSourceStack.source();
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         Messages.VISIT_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
@@ -81,7 +80,7 @@ public class IslandVisitCommand extends CommandTemplate {
             CommandTemplate template = this.handler.getSubCommands().get("teleport");
             Method method = template.getClass().getDeclaredMethod("perform");
 
-            method.invoke(template, commandSourceStack);
+            method.invoke(template, player);
         }
 
         IslandAPI.getPlayerIsland(target.getUniqueId()).whenComplete((is, ex) -> {

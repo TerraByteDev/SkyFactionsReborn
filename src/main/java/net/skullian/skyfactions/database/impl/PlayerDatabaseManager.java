@@ -41,12 +41,14 @@ public class PlayerDatabaseManager {
 
     public CompletableFuture<String> getDiscordID(Player player) {
         return CompletableFuture.supplyAsync(() -> ctx.select(PLAYERDATA.DISCORD_ID)
+                .from(PLAYERDATA)
                 .where(PLAYERDATA.UUID.eq(player.getUniqueId().toString()))
                 .fetchOneInto(String.class));
     }
 
     public CompletableFuture<Long> getLastRaid(Player player) {
         return CompletableFuture.supplyAsync(() -> ctx.select(PLAYERDATA.LAST_RAID)
+                .from(PLAYERDATA)
                 .where(PLAYERDATA.UUID.eq(player.getUniqueId().toString()))
                 .fetchOneInto(Long.class));
     }
@@ -62,6 +64,7 @@ public class PlayerDatabaseManager {
 
     public CompletableFuture<String> getPlayerLocale(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> ctx.select(PLAYERDATA.LOCALE)
+                .from(PLAYERDATA)
                 .where(PLAYERDATA.UUID.eq(uuid.toString()))
                 .fetchOneInto(String.class));
     }

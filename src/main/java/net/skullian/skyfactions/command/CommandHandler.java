@@ -1,8 +1,8 @@
 package net.skullian.skyfactions.command;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
+import org.bukkit.command.CommandSender;
 import org.incendo.cloud.annotations.AnnotationParser;
-import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -10,14 +10,12 @@ import java.util.Map;
 public interface CommandHandler {
     CommandHandler getHandler();
 
-    PaperCommandManager<CommandSourceStack> getManager();
-
-    AnnotationParser<CommandSourceStack> getParser();
+    LegacyPaperCommandManager<CommandSender> getManager();
 
     Map<String, CommandTemplate> getSubCommands();
 
-    void registerSubCommands(AnnotationParser<CommandSourceStack> parser);
+    void registerSubCommands(AnnotationParser<CommandSender> parser);
 
-    void register(CommandTemplate template);
+    void register(CommandTemplate template, AnnotationParser<?> parser);
 
 }

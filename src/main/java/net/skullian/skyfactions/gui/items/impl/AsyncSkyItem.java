@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.item.Item;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.item.impl.AsyncItem;
 import xyz.xenondevs.invui.window.AbstractWindow;
 import xyz.xenondevs.invui.window.Window;
 
@@ -42,18 +43,21 @@ public abstract class AsyncSkyItem implements Item {
         this.STACK = stack;
         this.PLAYER = player;
 
+        System.out.println("DATA: " + DATA.getNAME());
+        System.out.println("data: " + data.getNAME());
+
         this.provider = ObeliskConfig.getLoadingItem(player);
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(SkyFactionsReborn.getInstance(), () -> {
             this.provider = new ItemProvider() {
                 @Override
                 public @NotNull ItemStack get(@Nullable String s) {
                     String locale = PlayerHandler.getLocale(PLAYER.getUniqueId());
-
                     Object[] replacements = replacements();
-                    ItemBuilder builder = new ItemBuilder(stack)
-                            .setDisplayName(TextUtility.legacyColor(data.getNAME(), locale, PLAYER, replacements));
+                    System.out.println(DATA);
+                    ItemBuilder builder = new ItemBuilder(STACK)
+                            .setDisplayName(TextUtility.legacyColor(DATA.getNAME(), locale, PLAYER, replacements));
 
-                    for (String loreLine : data.getLORE()) {
+                    for (String loreLine : DATA.getLORE()) {
                         builder.addLoreLines(TextUtility.legacyColor(loreLine, locale, PLAYER, replacements));
                     }
 
