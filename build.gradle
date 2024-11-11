@@ -110,7 +110,7 @@ dependencies {
 
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.zaxxer:HikariCP:6.1.0")
-    compileOnly("xyz.xenondevs.invui:invui:1.40")
+    compileOnly("xyz.xenondevs.invui:invui:1.41")
 
     implementation(platform("com.intellectualsites.bom:bom-newest:1.50"))
     compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core")
@@ -118,7 +118,7 @@ dependencies {
 
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.1.0-SNAPSHOT")
     compileOnly("org.xerial:sqlite-jdbc:3.47.0.0")
-    compileOnly("net.dv8tion:JDA:5.2.0")
+    compileOnly("net.dv8tion:JDA:5.2.1")
     compileOnly("fr.skytasul:jukebox:1.20.8")
     compileOnly("com.github.koca2000:NoteBlockAPI:1.6.2")
     compileOnly("com.fasterxml.jackson.core:jackson-databind:2.18.1")
@@ -138,7 +138,7 @@ dependencies {
     compileOnly("de.oliver:FancyNpcs:2.4.0")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
     compileOnly("me.RockinChaos.itemjoin:ItemJoin:6.1.0-RELEASE")
-    compileOnly("io.th0rgal:oraxen:1.183.0")
+    compileOnly("io.th0rgal:oraxen:1.184.0")
     compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.1")
 
     compileOnly("org.jooq:jooq:3.19.15")
