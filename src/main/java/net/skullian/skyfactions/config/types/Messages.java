@@ -307,7 +307,7 @@ public enum Messages {
             YamlDocument doc = YamlDocument.create(new File(dir,  "guis/" + enumEntry.getPath() + ".yml"), SkyFactionsReborn.getInstance().getResource(String.format("language/%s/%s.yml", locale, "guis/" + enumEntry.getPath() + ".yml")),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
-            docs.put(enumEntry.getConfigPath(), doc);
+            docs.put(enumEntry.getPath(), doc);
         }
 
         GUIEnums.configs.put(locale, docs);
