@@ -26,7 +26,9 @@ import xyz.xenondevs.invui.window.Window;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -89,6 +91,15 @@ public abstract class AsyncSkyItem implements Item {
 
     public Object[] replacements() {
         return new Object[0];
+    }
+
+    public String[] toList(List<String> strings) {
+        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
+        List<String> formatted = strings.stream()
+                .map(string -> TextUtility.legacyColor(string, locale, getPLAYER()))
+                .collect(Collectors.toList());
+
+        return formatted.toArray(new String[formatted.size()]);
     }
 
     // I only have this so I'm not duplicating the sound checks / playing.

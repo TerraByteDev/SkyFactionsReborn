@@ -71,9 +71,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
     @Override
     public ItemBuilder process(ItemBuilder builder) {
         if (getPLAYER().getInventory().firstEmpty() == -1) {
-            for (String line : Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(getPLAYER().locale().getLanguage())) {
-                builder.addLoreLines(TextUtility.legacyColor(line, PlayerHandler.getLocale(getPLAYER().getUniqueId()), getPLAYER()));
-            }
+            builder.addLoreLines(toList(Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(PlayerHandler.getLocale(getPLAYER().getUniqueId()))));
         }
 
         if (!(getOptionals()[1] instanceof String)) {

@@ -25,18 +25,18 @@ public class AuditPaginationItem extends SkyItem {
 
     @Override
     public ItemProvider getItemProvider() {
-        String locale = Messages.getDefaulLocale(); // todo make audit system language compat
+        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
 
         String title = AuditLogType.valueOf(DATA.getType()).getTitle(getPLAYER(), DATA.getReplacements());
         String description = AuditLogType.valueOf(DATA.getType()).getDescription(getPLAYER(), DATA.getReplacements());
 
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("audit_title", title), locale, getPLAYER()));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME(), locale, getPLAYER(), "audit_title", title));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("<audit_description>")) {
                 for (String part : TextUtility.toParts(description)) {
-                    builder.addLoreLines(part);
+                    builder.addLoreLines(TextUtility.legacyColor(part, locale, getPLAYER()));
                 }
 
                 continue;
