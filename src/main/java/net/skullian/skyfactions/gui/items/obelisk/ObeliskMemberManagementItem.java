@@ -31,30 +31,14 @@ public class ObeliskMemberManagementItem extends SkyItem {
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        if (FACTION.isOwner(player) || FACTION.isAdmin(player) || FACTION.isModerator(player)) {
-
-            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
-                if (ex != null) {
-                    ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
-                    return;
-                } else if (faction == null) {
-                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "get your Faction", "FACTION_NOT_FOUND");
-                    return;
-                } else if (!TextUtility.merge(Settings.FACTION_KICK_PERMISSIONS.getList(), Settings.FACTION_BAN_PERMISSIONS.getList(), Settings.FACTION_MANAGE_RANK_PERMISSIONS.getList()).contains(faction.getRankType(player.getUniqueId()).getRankValue())) {
-                    Messages.PERMISSION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-                    return;
-                }
-
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
-                if (faction.getOwner().equals(offlinePlayer) || faction.getAdmins().contains(offlinePlayer)) {
-                    MemberManagementUI.promptPlayer(player);
-                } else {
-                    Messages.OBELISK_GUI_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()), "rank", Messages.FACTION_ADMIN_TITLE.get(PlayerHandler.getLocale(player.getUniqueId())));
-                }
-            });
+        if (FACTION == null) {
+            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "get your Faction", "FACTION_NOT_FOUND");
+            return;
+        } else if (!TextUtility.merge(Settings.FACTION_KICK_PERMISSIONS.getList(), Settings.FACTION_BAN_PERMISSIONS.getList(), Settings.FACTION_MANAGE_RANK_PERMISSIONS.getList()).contains(FACTION.getRankType(player.getUniqueId()).getRankValue())) {
+            Messages.OBELISK_GUI_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()), "rank", Messages.FACTION_ADMIN_TITLE.get(PlayerHandler.getLocale(player.getUniqueId())));
+            return;
         } else {
-            SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
-            Messages.OBELISK_GUI_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()), "rank", Messages.FACTION_MODERATOR_TITLE.get(PlayerHandler.getLocale(player.getUniqueId())));
+            MemberManagementUI.promptPlayer(player);
         }
     }
 

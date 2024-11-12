@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.gui.items.obelisk.audit_log;
 
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.AuditLogType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

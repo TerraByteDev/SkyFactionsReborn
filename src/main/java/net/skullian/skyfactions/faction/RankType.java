@@ -4,13 +4,18 @@ import lombok.Getter;
 
 public enum RankType {
 
-    OWNER("owner"),
-    ADMIN("admin"),
-    MODERATOR("moderator"),
-    FIGHTER("fighter"),
-    MEMBER("member");
+    OWNER("owner", 1),
+    ADMIN("admin", 2),
+    MODERATOR("moderator", 3),
+    FIGHTER("fighter", 4),
+    MEMBER("member", 5);
 
     @Getter
     private final String rankValue;
-    RankType(String path) { this.rankValue = path; }
+    @Getter
+    private final int order;
+    RankType(String path, int order) {
+        this.rankValue = path;
+        this.order = order;
+    }
 }

@@ -4,10 +4,10 @@ import java.util.List;
 
 import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.faction.Faction;
+import net.skullian.skyfactions.gui.items.obelisk.member_manage.MemberRankItem;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
@@ -17,7 +17,6 @@ import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.member_manage.MemberBanItem;
 import net.skullian.skyfactions.gui.items.obelisk.member_manage.MemberKickItem;
-import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.Gui;
@@ -61,9 +60,11 @@ public class ManageMemberUI {
                         break;
 
                     case "BAN":
-                        if (faction.isOwner(actor) || faction.isAdmin(actor)) {
-                            builder.addIngredient(itemData.getCHARACTER(), new MemberBanItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, actor));
-                            }
+                        builder.addIngredient(itemData.getCHARACTER(), new MemberBanItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, actor));
+                        break;
+
+                    case "RANK":
+                        builder.addIngredient(itemData.getCHARACTER(), new MemberRankItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, actor, faction));
                         break;
 
                     case "BACK":

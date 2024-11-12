@@ -1,6 +1,8 @@
 package net.skullian.skyfactions.gui.items.obelisk.member_manage;
 
+import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -14,15 +16,29 @@ import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.util.ErrorUtil;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
+
+import java.util.List;
 
 public class MemberKickItem extends SkyItem {
 
     private OfflinePlayer SUBJECT;
 
-    public MemberKickItem(ItemData data, ItemStack stack, OfflinePlayer player, Player viewer) {
-        super(data, stack, viewer, null);
+    public MemberKickItem(ItemData data, ItemStack stack, OfflinePlayer player, Player viewer, Faction faction) {
+        super(data, stack, viewer, List.of(faction).toArray());
         
         this.SUBJECT = player;
+    }
+
+    @Override
+    public ItemBuilder process(ItemBuilder builder) {
+        Faction faction = (Faction) getOptionals()[0];
+
+        if (!Settings.FACTION_KICK_PERMISSIONS.getList().contains(faction.getRankType(getPLAYER().getUniqueId()).getRankValue())) {
+            builder.addLoreLines(toList(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(PlayerHandler.getLocale(getPLAYER().getUniqueId()))));
+        }
+
+        return builder;
     }
 
     @Override

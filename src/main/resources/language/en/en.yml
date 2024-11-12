@@ -391,7 +391,22 @@ Messages:
       MANAGE_SELF_DENY: "<server_name><red><bold> Hey!<reset><gray> You cannot manage yourself!"
 
       # Put in the lore line of the management UI for yourself.
-      MANAGE_SELF_DENY_LORE: "<red>You cannot manage yourself!"
+      MANAGE_SELF_DENY_LORE:
+        - "<red>You cannot manage yourself!"
+
+      # Sent when a player tries to moderate a member who has a higher rank.
+      MANAGE_HIGHER_RANKS_DENY: "<server_name><red> You cannot manage those who are a higher rank than you!"
+
+      # Appended to the bottom of the lore of the management UI for members with a higher rank.
+      MANAGE_HIGHER_RANKS_DENY_LORE:
+        - "<red>You cannot manage this member!"
+
+      # Sent when a player tries to kick someone when they are not given permission (configured in config.yml RANKS section in FACTIONS).
+      MANAGE_NO_PERMISSIONS: "<server_name><red> You do not have permissions for this action!"
+
+      # Appended the bottom of the lore of the management UI member item when you do not have permissions for that action (e.g. Ban).
+      MANAGE_NO_PERMISSIONS_LORE:
+        - "<server_name><red> You do not have permissions for this!"
 
       # Sent to the player (admin, moderator, owner) when they successfully kick a player.
       # Placeholders: <player> - Player who was kicked.

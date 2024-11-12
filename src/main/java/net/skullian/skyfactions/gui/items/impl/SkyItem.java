@@ -20,7 +20,9 @@ import xyz.xenondevs.invui.window.Window;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -75,6 +77,15 @@ public abstract class SkyItem implements Item {
     }
 
     public void onClick(ClickType clickType, Player player, InventoryClickEvent event) {
+    }
+
+    public String[] toList(List<String> strings) {
+        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
+        List<String> formatted = strings.stream()
+                .map(string -> TextUtility.legacyColor(string, locale, getPLAYER()))
+                .collect(Collectors.toList());
+
+        return formatted.toArray(new String[formatted.size()]);
     }
 
     private final Set<AbstractWindow> windows = new HashSet<>();

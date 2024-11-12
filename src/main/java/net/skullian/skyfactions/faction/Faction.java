@@ -419,7 +419,7 @@ public class Faction {
      */
     public Component getRank(UUID playerUUID) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
-        String locale = player.isOnline() ? player.getPlayer().locale().getLanguage() : Messages.getDefaulLocale();
+        String locale = player.isOnline() ? PlayerHandler.getLocale(player.getUniqueId()) : Messages.getDefaulLocale();
 
         if (owner.equals(player)) return TextUtility.color(Messages.FACTION_OWNER_TITLE.getString(locale), locale, player);
         if (admins.contains(player)) return TextUtility.color(Messages.FACTION_ADMIN_TITLE.getString(locale), locale, player);
@@ -427,7 +427,7 @@ public class Faction {
         if (fighters.contains(player)) return TextUtility.color(Messages.FACTION_FIGHTER_TITLE.getString(locale), locale, player);
         if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString(locale), locale, player);
 
-        return Component.text("N/A");
+        return Component.text("<red>N/A");
     }
 
     public RankType getRankType(UUID playerUUID) {
