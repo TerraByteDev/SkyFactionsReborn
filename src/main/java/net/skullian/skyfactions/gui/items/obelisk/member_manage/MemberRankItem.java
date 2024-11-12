@@ -6,6 +6,7 @@ import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.gui.screens.obelisk.member.MemberManageRankUI;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -35,6 +36,8 @@ public class MemberRankItem extends SkyItem {
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        // todo
+        Faction faction = (Faction) getOptionals()[0];
+        OfflinePlayer subject = (OfflinePlayer) getOptionals()[1];
+        new MemberManageRankUI().promptPlayer(player, faction, subject);
     }
 }

@@ -56,11 +56,11 @@ public class ManageMemberUI {
                         break;
 
                     case "KICK":
-                        builder.addIngredient(itemData.getCHARACTER(), new MemberKickItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, actor));
+                        builder.addIngredient(itemData.getCHARACTER(), new MemberKickItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, actor, faction));
                         break;
 
                     case "BAN":
-                        builder.addIngredient(itemData.getCHARACTER(), new MemberBanItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, actor));
+                        builder.addIngredient(itemData.getCHARACTER(), new MemberBanItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, actor, faction));
                         break;
 
                     case "RANK":
