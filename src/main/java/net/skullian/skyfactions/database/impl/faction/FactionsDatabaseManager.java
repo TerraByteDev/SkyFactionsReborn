@@ -38,7 +38,7 @@ public class FactionsDatabaseManager {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(FACTIONS)
                     .columns(FACTIONS.NAME, FACTIONS.MOTD, FACTIONS.LEVEL, FACTIONS.LAST_RAID, FACTIONS.LOCALE)
-                    .values(factionName, "&aNone", 1, 0, PlayerHandler.getLocale(factionOwner.getUniqueId()))
+                    .values(factionName, "<red>None", 1, (long) 0, PlayerHandler.getLocale(factionOwner.getUniqueId()))
                     .execute();
 
             ctx.insertInto(FACTIONMEMBERS)
@@ -120,6 +120,7 @@ public class FactionsDatabaseManager {
 
     public CompletableFuture<Void> updateFactionLocale(String factionName, String newLocale) {
         return CompletableFuture.runAsync(() -> {
+            if (newLocale == null) return;
             ctx.update(FACTIONS)
                     .set(FACTIONS.LOCALE, newLocale)
                     .where(FACTIONS.NAME.eq(factionName))

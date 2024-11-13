@@ -74,6 +74,8 @@ public class IslandAPI {
             }
 
             islands.put(player.getUniqueId(), island);
+            RunesAPI.playerRunes.put(player.getUniqueId(), 0);
+            GemsAPI.playerGems.put(player.getUniqueId(), 0);
 
             RegionAPI.modifyWorldBorder(player, island.getCenter(world), island.getSize()); // shift join border
             RegionAPI.teleportPlayerToLocation(player, island.getCenter(world));
@@ -86,6 +88,18 @@ public class IslandAPI {
 
     public static CompletableFuture<Boolean> hasIsland(UUID playerUUID) {
         return SkyFactionsReborn.databaseManager.playerIslandManager.hasIsland(playerUUID);
+    }
+
+    public static void onIslandRemove(Player player) {
+        RegionAPI.teleportPlayerToLocation(player, RegionAPI.getHubLocation());
+        SkyFactionsReborn.worldBorderApi.resetWorldBorderToGlobal(player);
+
+        // reset runes and gems.
+        RunesAPI.playerRunes.remove(player.getUniqueId());
+        GemsAPI.playerGems.remove(player.getUniqueId());
+
+        removePlayerIsland(player);
+        awaitingDeletion.remove(player.getUniqueId());
     }
 
     public static void removePlayerIsland(Player player) {

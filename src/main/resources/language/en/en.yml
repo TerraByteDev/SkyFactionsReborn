@@ -325,6 +325,8 @@ Messages:
       NAME_PROHIBITED: "<server_name><red> Your name contains prohibited words."
       # Sent when a player tries to create a faction that already exists with the same name.
       DUPLICATE_NAME: "<server_name> <red>A Faction already exists with that name!"
+      # Sent when a player tries to create a faction when they do not have a player island.
+      PLAYER_ISLAND_REQUIRED: "<server_name><red><bold> Hey!<reset><gray> You must have a player island before creating your own Faction!"
 
 
       # Sent when a player tries to create a faction but does not have enough runes.

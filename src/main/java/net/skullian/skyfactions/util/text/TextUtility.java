@@ -54,7 +54,6 @@ public class TextUtility {
         List<Component> components = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             components.add(color(list.get(i).toString(), locale, player, replacements));
-            if (i + 1 != list.size()) components.add(Component.text(""));
         }
 
         return Component.join(JoinConfiguration.newlines(), components);
@@ -212,7 +211,7 @@ public class TextUtility {
         Object[] result = new Object[parts.length];
 
         for (int i = 0; i < parts.length; i++) {
-            result[i] = parts[i].trim(); // Remove leading/trailing whitespace
+            result[i] = parts[i].trim().replace("[", "").replace("]", ""); // Remove leading/trailing whitespace
         }
 
         return result;
@@ -233,5 +232,4 @@ public class TextUtility {
 
         return mergedList;
     }
-
 }

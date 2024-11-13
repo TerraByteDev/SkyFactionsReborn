@@ -64,19 +64,19 @@ public class CacheEntry {
         }
         if (faction != null) {
             return CompletableFuture.allOf(
-                    SkyFactionsReborn.databaseManager.currencyManager.modifyGems(toCache, gems, false).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.currencyManager.modifyGems(faction.getName(), gems, false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set gems of faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseManager.currencyManager.modifyRunes(toCache, runes, false).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.currencyManager.modifyRunes(faction.getName(), runes, false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set runes of faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseManager.defencesManager.registerDefenceLocations(defencesToRegister, toCache, true).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.defencesManager.registerDefenceLocations(defencesToRegister, faction.getName(), true).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to register new defences for faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseManager.defencesManager.removeDefenceLocations(defencesToRemove, toCache, true).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.defencesManager.removeDefenceLocations(defencesToRemove, faction.getName(), true).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to remove defences for faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseManager.factionsManager.updateFactionLocale(toCache, newLocale).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.factionsManager.updateFactionLocale(faction.getName(), newLocale).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to update locale for faction " + faction.getName(), ex);
                     })
             );

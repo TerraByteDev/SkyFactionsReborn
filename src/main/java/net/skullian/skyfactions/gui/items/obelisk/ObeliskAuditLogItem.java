@@ -35,7 +35,7 @@ public class ObeliskAuditLogItem extends SkyItem {
 
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
             if (faction.getOwner().equals(offlinePlayer) || faction.getAdmins().contains(offlinePlayer)) {
-                FactionAuditLogUI.promptPlayer(player);
+                FactionAuditLogUI.promptPlayer(player, faction);
             } else {
                 Messages.OBELISK_GUI_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()), "rank", Messages.FACTION_ADMIN_TITLE.get(PlayerHandler.getLocale(player.getUniqueId())));
             }

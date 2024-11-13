@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.database.impl;
 
+import net.skullian.skyfactions.database.tables.records.FactionislandsRecord;
 import org.jooq.DSLContext;
 
 import java.util.UUID;

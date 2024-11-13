@@ -36,12 +36,12 @@ public enum AuditLogType {
         this.description = description;
     }
 
-    public String getTitle(Player player, Object... replacements) {
-        return LegacyComponentSerializer.legacySection().serialize(title.get(PlayerHandler.getLocale(player.getUniqueId()), replacements));
+    public String getTitle(Player player) {
+        return title.getString(PlayerHandler.getLocale(player.getUniqueId()));
     }
 
-    public String getDescription(Player player, Object... replacements) {
-        return LegacyComponentSerializer.legacySection().serialize(description.get(PlayerHandler.getLocale(player.getUniqueId()), replacements));
+    public String getDescription(Player player) {
+        return description.getString(PlayerHandler.getLocale(player.getUniqueId()));
     }
 
 

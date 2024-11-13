@@ -32,29 +32,36 @@ import xyz.xenondevs.invui.window.Window;
 
 public class FactionAuditLogUI {
 
-    public static void promptPlayer(Player player) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-            try {
-                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_AUDIT_LOG_GUI.getPath(), player);
-                PagedGui.Builder gui = registerItems(PagedGui.items()
-                        .setStructure(data.getLAYOUT()), player);
-
-                Window window = Window.single()
-                        .setViewer(player)
-                        .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
-                        .setGui(gui)
-                        .build();
-
-                SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
-                window.open();
-            } catch (IllegalArgumentException error) {
-                error.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the audit log GUI", "debug", "GUI_LOAD_EXCEPTION");
+    public static void promptPlayer(Player player, Faction faction) {
+        faction.getAuditLogs().whenComplete((auditLogData, throwable) -> {
+            if (throwable != null) {
+                throwable.printStackTrace();
+                return;
             }
+
+            Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+                try {
+                    GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_AUDIT_LOG_GUI.getPath(), player);
+                    PagedGui.Builder gui = registerItems(PagedGui.items()
+                            .setStructure(data.getLAYOUT()), player, faction, auditLogData);
+
+                    Window window = Window.single()
+                            .setViewer(player)
+                            .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
+                            .setGui(gui)
+                            .build();
+
+                    SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
+                    window.open();
+                } catch (IllegalArgumentException error) {
+                    error.printStackTrace();
+                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the audit log GUI", "debug", "GUI_LOAD_EXCEPTION");
+                }
+            });
         });
     }
 
-    private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player) {
+    private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player, Faction faction, List<AuditLogData> auditLogData) {
         try {
             builder.addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL);
             List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_AUDIT_LOG_GUI.getPath(), player);
@@ -71,7 +78,7 @@ public class FactionAuditLogUI {
                         break;
 
                     case "MODEL":
-                        builder.setContent(getItems(player, itemData));
+                        builder.setContent(getItems(player, itemData, faction, auditLogData));
                         break;
                 }
             }
@@ -94,17 +101,12 @@ public class FactionAuditLogUI {
         return builder;
     }
 
-    private static List<Item> getItems(Player player, ItemData data) {
+    private static List<Item> getItems(Player player, ItemData data, Faction faction, List<AuditLogData> auditLogData) {
         List<Item> items = new ArrayList<>();
 
-        CompletableFuture.runAsync(() -> {
-            Faction faction = FactionAPI.getFaction(player.getUniqueId()).join();
-            List<AuditLogData> auditLogData = faction.getAuditLogs().join();
-
-            for (AuditLogData auditLog : auditLogData) {
-                items.add(new AuditPaginationItem(data, GUIAPI.createItem(data, auditLog.getPlayer().getUniqueId()), auditLog, player));
-            }
-        });
+        for (AuditLogData auditLog : auditLogData) {
+            items.add(new AuditPaginationItem(data, GUIAPI.createItem(data, auditLog.getPlayer().getUniqueId()), auditLog, player));
+        }
 
         return items;
     }

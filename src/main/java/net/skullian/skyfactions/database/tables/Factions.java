@@ -46,7 +46,7 @@ public class Factions extends TableImpl<FactionsRecord> {
     /**
      * The column <code>factions.last_raid</code>.
      */
-    public final TableField<FactionsRecord, Integer> LAST_RAID = createField(DSL.name("last_raid"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<FactionsRecord, Long> LAST_RAID = createField(DSL.name("last_raid"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>factions.locale</code>.

@@ -53,7 +53,6 @@ public abstract class AsyncSkyItem implements Item {
                 public @NotNull ItemStack get(@Nullable String s) {
                     String locale = PlayerHandler.getLocale(PLAYER.getUniqueId());
                     Object[] replacements = replacements();
-                    System.out.println(DATA);
                     ItemBuilder builder = new ItemBuilder(STACK)
                             .setDisplayName(TextUtility.legacyColor(DATA.getNAME(), locale, PLAYER, replacements));
 

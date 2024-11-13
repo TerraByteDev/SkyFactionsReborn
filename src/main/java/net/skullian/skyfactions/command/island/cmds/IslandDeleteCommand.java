@@ -66,13 +66,7 @@ public class IslandDeleteCommand extends CommandTemplate {
                         if (hubWorld != null) {
                             Messages.DELETION_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
 
-                            SkyFactionsReborn.worldBorderApi.resetWorldBorderToGlobal(player); // reset the world border
-                            List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
-                            Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
-                            RegionAPI.teleportPlayerToLocation(player, location);
-
-                            IslandAPI.awaitingDeletion.remove(player.getUniqueId());
-                            IslandAPI.removePlayerIsland(player);
+                            IslandAPI.onIslandRemove(player);
                         } else {
                             Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "delete your island", "debug", "WORLD_NOT_EXIST");
                         }
