@@ -93,7 +93,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
         } else if (params.equalsIgnoreCase("faction_rank")) {
             if (player == null) return "UNKNOWN PLAYER";
             if (FactionAPI.factionCache.containsKey(player.getUniqueId()))
-                return LegacyComponentSerializer.legacySection().serialize(FactionAPI.factionCache.get(player.getUniqueId()).getRank(player.getUniqueId()));
+                return TextUtility.legacyColor(FactionAPI.factionCache.get(player.getUniqueId()).getRank(player.getUniqueId()), PlayerHandler.getLocale(player.getUniqueId()), player);
             else return TextUtility.legacyColor("&cN/A", locale, player);
         }
         return null;

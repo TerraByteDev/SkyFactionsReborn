@@ -1,10 +1,9 @@
 package net.skullian.skyfactions.database.cache;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import net.skullian.skyfactions.faction.RankType;
 import org.bukkit.Location;
 
 import lombok.Getter;
@@ -21,6 +20,7 @@ public class CacheEntry {
     private List<Location> defencesToRegister = new ArrayList<>();
     private List<Location> defencesToRemove = new ArrayList<>();
     private String newLocale;
+    private Map<UUID, RankType> newRanks = new HashMap<>();
 
     public void addRunes(int amount) {
         runes += amount;
@@ -52,6 +52,10 @@ public class CacheEntry {
         newLocale = locale;
     }
 
+    public void setNewRank(UUID playerUUID, RankType rankType) {
+        newRanks.put(playerUUID, rankType);
+    }
+
     /**
      *
      * @param toCache - UUID
@@ -78,6 +82,9 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.databaseManager.factionsManager.updateFactionLocale(faction.getName(), newLocale).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to update locale for faction " + faction.getName(), ex);
+                    }),
+                    SkyFactionsReborn.databaseManager.factionsManager.updateFactionMemberRanks(faction.getName(), newRanks).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to update ranks for faction " + faction.getName(), ex);
                     })
             );
         } else {

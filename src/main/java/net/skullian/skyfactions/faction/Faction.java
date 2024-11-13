@@ -71,11 +71,10 @@ public class Faction {
      * @param player  Player in question.
      * @param newRank {@link RankType} New Rank of the player.
      */
-    public CompletableFuture<String> modifyPlayerRank(OfflinePlayer player, RankType newRank) {
-        return SkyFactionsReborn.databaseManager.factionsManager.addOrUpdateFactionMember(player.getUniqueId(), name, newRank).thenApply((oldRank) -> {
-            cache(player, oldRank, newRank);
-            return newRank.getRankValue(); // or some other string value
-        });
+    public void modifyPlayerRank(OfflinePlayer player, RankType newRank) {
+        RankType oldRank = getRankType(player.getUniqueId());
+        SkyFactionsReborn.cacheService.updatePlayerRank(this, player.getUniqueId(), newRank);
+        cache(player, oldRank.getRankValue(), newRank);
     }
 
     /**
@@ -415,19 +414,19 @@ public class Faction {
      * Get the configured rank title of a member.
      * @param playerUUID UUID of the player {@link UUID}
      *
-     * @return The rank of the player. {@link Component}
+     * @return The rank of the player. {@link String}
      */
-    public Component getRank(UUID playerUUID) {
+    public String getRank(UUID playerUUID) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         String locale = player.isOnline() ? PlayerHandler.getLocale(player.getUniqueId()) : Messages.getDefaulLocale();
 
-        if (owner.equals(player)) return TextUtility.color(Messages.FACTION_OWNER_TITLE.getString(locale), locale, player);
-        if (admins.contains(player)) return TextUtility.color(Messages.FACTION_ADMIN_TITLE.getString(locale), locale, player);
-        if (moderators.contains(player)) return TextUtility.color(Messages.FACTION_MODERATOR_TITLE.getString(locale), locale, player);
-        if (fighters.contains(player)) return TextUtility.color(Messages.FACTION_FIGHTER_TITLE.getString(locale), locale, player);
-        if (members.contains(player)) return TextUtility.color(Messages.FACTION_MEMBER_TITLE.getString(locale), locale, player);
+        if (owner.equals(player)) return Messages.FACTION_OWNER_TITLE.getString(locale);
+        if (admins.contains(player)) return Messages.FACTION_ADMIN_TITLE.getString(locale);
+        if (moderators.contains(player)) return Messages.FACTION_MODERATOR_TITLE.getString(locale);
+        if (fighters.contains(player)) return Messages.FACTION_FIGHTER_TITLE.getString(locale);
+        if (members.contains(player)) return Messages.FACTION_MEMBER_TITLE.getString(locale);
 
-        return Component.text("<red>N/A");
+        return "<red>N/A";
     }
 
     public RankType getRankType(UUID playerUUID) {

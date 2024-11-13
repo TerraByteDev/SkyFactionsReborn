@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.faction.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;
@@ -144,5 +145,10 @@ public class CacheService {
     public void updateLocale(Faction faction, String locale) {
         CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
         entry.setLocale(locale);
+    }
+
+    public void updatePlayerRank(Faction faction, UUID playerUUID, RankType newRank) {
+        CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
+        entry.setNewRank(playerUUID, newRank);
     }
 }

@@ -1,9 +1,11 @@
 package net.skullian.skyfactions.gui.items.obelisk.member_manage.rank;
 
+import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.Faction;
+import net.skullian.skyfactions.faction.RankType;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.gui.screens.obelisk.member.MemberManageRankUI;
@@ -21,11 +23,12 @@ import java.util.List;
 
 public class MemberRankChangeItem extends SkyItem {
     @Setter
-    private String TYPE = "N/A";
+    private RankType TYPE;
+
     private MemberManageRankUI UI;
 
-    public MemberRankChangeItem(ItemData data, ItemStack stack, Player player, String type, Faction faction, OfflinePlayer subject, MemberManageRankUI ui) {
-        super(data, stack, player, List.of(type, faction, subject).toArray());
+    public MemberRankChangeItem(ItemData data, ItemStack stack, Player player, RankType thisType, Faction faction, OfflinePlayer subject, MemberManageRankUI ui) {
+        super(data, stack, player, List.of(thisType, faction, subject).toArray());
 
         this.UI = ui;
     }
@@ -34,9 +37,10 @@ public class MemberRankChangeItem extends SkyItem {
     public ItemBuilder process(ItemBuilder builder) {
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[2];
         Faction faction = (Faction) getOptionals()[1];
-        String type = TYPE.equals("N/A") ? (String) getOptionals()[0] : TYPE;
+        RankType thisType = (RankType) getOptionals()[0];
+        RankType selectedType = TYPE != null ? TYPE : thisType;
 
-        if (faction.getRankType(subject.getUniqueId()).getRankValue().equalsIgnoreCase(type)) {
+        if (selectedType.equals(thisType) || (TYPE == null && faction.getRankType(subject.getUniqueId()).equals(thisType))) {
             builder.addEnchantment(Enchantment.LURE, 1, false);
             builder.getItemFlags().add(ItemFlag.HIDE_ENCHANTS);
         }
@@ -57,7 +61,7 @@ public class MemberRankChangeItem extends SkyItem {
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         player.getInventory().close();
-        String type = (String) getOptionals()[0];
+        RankType type = (RankType) getOptionals()[0];
 
         UI.onSelect(type);
         notifyWindows();
