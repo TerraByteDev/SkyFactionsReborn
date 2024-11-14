@@ -33,3 +33,4 @@ bin/
 .vscode/
 Server/
 run/
+assets/data.sqlite3

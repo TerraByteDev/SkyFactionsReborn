@@ -4,7 +4,20 @@
 package net.skullian.skyfactions.database;
 
 
-import net.skullian.skyfactions.database.tables.*;
+import net.skullian.skyfactions.database.tables.Auditlogs;
+import net.skullian.skyfactions.database.tables.Defencelocations;
+import net.skullian.skyfactions.database.tables.ElectionVotes;
+import net.skullian.skyfactions.database.tables.FactionElections;
+import net.skullian.skyfactions.database.tables.Factionbans;
+import net.skullian.skyfactions.database.tables.Factioninvites;
+import net.skullian.skyfactions.database.tables.Factionislands;
+import net.skullian.skyfactions.database.tables.Factionmembers;
+import net.skullian.skyfactions.database.tables.Factions;
+import net.skullian.skyfactions.database.tables.FlywaySchemaHistory;
+import net.skullian.skyfactions.database.tables.Islands;
+import net.skullian.skyfactions.database.tables.Notifications;
+import net.skullian.skyfactions.database.tables.Playerdata;
+import net.skullian.skyfactions.database.tables.Trustedplayers;
 
 
 /**
@@ -22,6 +35,16 @@ public class Tables {
      * The table <code>defenceLocations</code>.
      */
     public static final Defencelocations DEFENCELOCATIONS = Defencelocations.DEFENCELOCATIONS;
+
+    /**
+     * The table <code>election_votes</code>.
+     */
+    public static final ElectionVotes ELECTION_VOTES = ElectionVotes.ELECTION_VOTES;
+
+    /**
+     * The table <code>faction_elections</code>.
+     */
+    public static final FactionElections FACTION_ELECTIONS = FactionElections.FACTION_ELECTIONS;
 
     /**
      * The table <code>factionBans</code>.
@@ -47,6 +70,11 @@ public class Tables {
      * The table <code>factions</code>.
      */
     public static final Factions FACTIONS = Factions.FACTIONS;
+
+    /**
+     * The table <code>flyway_schema_history</code>.
+     */
+    public static final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
 
     /**
      * The table <code>islands</code>.

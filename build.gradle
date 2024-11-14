@@ -1,10 +1,19 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
+buildscript {
+    dependencies {
+        classpath 'org.xerial:sqlite-jdbc:3.47.0.0'
+    }
+}
+
 plugins {
     id 'io.papermc.paperweight.userdev' version '1.7.4'
     id 'com.gradleup.shadow' version '8.3.5'
     id 'java'
     id "xyz.jpenilla.run-paper" version "2.3.1"
+    id 'org.flywaydb.flyway' version '10.21.0'
+    id "org.jooq.jooq-codegen-gradle" version "3.19.15"
+//    id 'nu.studer.jooq' version '9.0'
 }
 
 group = 'net.skullian.skyfactions'
@@ -142,10 +151,14 @@ dependencies {
     compileOnly("io.th0rgal:oraxen:1.184.0")
     compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.1")
 
-    compileOnly("org.jooq:jooq:3.19.15")
-
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
+
+    compileOnly("org.jooq:jooq:3.19.15")
+//    jooqGenerator("org.xerial:sqlite-jdbc:3.47.0.0")
+    jooqCodegen("org.xerial:sqlite-jdbc:3.47.0.0")
 }
+
+
 tasks {
     runServer {
         downloadPlugins {
@@ -177,41 +190,119 @@ java {
     }
 }
 
+configurations {
+    flywayMigration
+}
 
-/*jooq {
-    configurations {
-        main {
-            generateSchemaSourceOnCompilation = false
+flyway {
+    configurations = ['flywayMigration']
+    url = 'jdbc:sqlite:file:./assets/data.sqlite3'
+    user = 'sa'
+    password = ''
+}
 
-            generationTool {
-                logging = Logging.DEBUG
-                jdbc {
-                    driver = "org.sqlite.JDBC"
-                    url = 'jdbc:sqlite:./assets/data.sqlite3'
-                    user = "sa"
-                    password = ""
-                }
-                generator {
-                    name = 'org.jooq.codegen.DefaultGenerator'
-                    database {
-                        name = 'org.jooq.meta.sqlite.SQLiteDatabase'
-                    }
-                    generate {
-                        deprecated = false
-                        records = true
-                        immutablePojos = true
-                        fluentSetters = true
-                    }
-                    target {
-                        packageName = 'net.skullian.skyfactions.database'
-                        directory = 'src/main/java/test'  // default (can be omitted)
-                    }
-                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
-                }
+jooq {
+    configuration {
+        logging = org.jooq.meta.jaxb.Logging.DEBUG
+        jdbc {
+            driver = 'org.sqlite.JDBC'
+            url = flyway.url
+            user = flyway.user
+            password = flyway.password
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            database {
+                name = 'org.jooq.meta.sqlite.SQLiteDatabase'
+                includes = '.*'
+                excludes = ''
+            }
+            generate {
+                deprecated = false
+                records = true
+                immutablePojos = true
+                fluentSetters = true
+            }
+            target {
+                packageName = 'net.skullian.skyfactions.database'
+                directory = 'src/main/java/'
+                clean = false
             }
         }
     }
-}*/
+}
+
+//jooq {
+//    configurations {
+//        main {
+//            generateSchemaSourceOnCompilation = false
+//            generationTool {
+//                logging = org.jooq.meta.jaxb.Logging.DEBUG
+//                jdbc {
+//                    driver = 'org.sqlite.JDBC'
+//                    url = flyway.url
+//                    user = flyway.user
+//                    password = flyway.password
+//                }
+//                generator {
+//                    name = 'org.jooq.codegen.DefaultGenerator'
+//                    database {
+//                        name = 'org.jooq.meta.sqlite.SQLiteDatabase'
+//                        includes = '.*'
+//                        excludes = ''
+//                    }
+////                    database {
+////                        name = "org.jooq.meta.extensions.ddl.DDLDatabase"
+////                        properties {
+////                            property {
+////                                key = "scripts"
+////                                value = "src/main/resources/db/schema.sql"
+////                            }
+////                            property {
+////                                key = "sort"
+////                                value = "flyway"
+////                            }
+////                            property {
+////                                key = "unqualifiedSchema"
+////                                value = "none"
+////                            }
+////                            property {
+////                                key = "defaultNameCase"
+////                                value = "as_is"
+////                            }
+////                        }
+////                    }
+//                    generate {
+//                        deprecated = false
+//                        records = true
+//                        immutablePojos = true
+//                        fluentSetters = true
+//                    }
+//                    target {
+//                        packageName = 'net.skullian.skyfactions.database'
+//                        directory = 'src/main/java/'
+//                    }
+//                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+//                }
+//            }
+//        }
+//    }
+//}
+
+//tasks.named('generateJooq').configure {
+//    dependsOn tasks.named('flywayMigrate')
+//    inputs.files(fileTree('src/main/resources/db/migration'))
+//            .withPropertyName('migrations')
+//            .withPathSensitivity(PathSensitivity.RELATIVE)
+//    allInputsDeclared = true
+//}
+
+tasks.named('jooqCodegen').configure {
+    dependsOn tasks.named('flywayMigrate')
+    inputs.files(fileTree('src/main/resources/db/migration'))
+            .withPropertyName('migrations')
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
