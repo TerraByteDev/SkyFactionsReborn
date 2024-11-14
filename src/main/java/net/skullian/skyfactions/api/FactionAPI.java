@@ -187,7 +187,7 @@ public class FactionAPI {
      */
     public static CompletableFuture<Faction> getFaction(String name) {
         if (factionNameCache.containsKey(name)) return CompletableFuture.completedFuture(getCachedFaction(name));
-        
+
         return SkyFactionsReborn.databaseManager.factionsManager.getFaction(name).whenComplete((faction, ex) -> {
             if (ex != null) ex.printStackTrace();
             if (faction == null) return;

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 import net.skullian.skyfactions.hooks.VaultAPIHook;
 import org.bukkit.Bukkit;
@@ -185,64 +186,59 @@ public class NPCManager {
 
     public CompletableFuture<Integer> updateNPCs(boolean remove) {
         return CompletableFuture.supplyAsync(() -> {
-
             AtomicInteger affected = new AtomicInteger(0);
-            if (remove && Settings.NPC_INTEGRATION_ENABLED.getBoolean()) throw new RuntimeException("Attempted to disable NPCs when the integration is still enabled in the config!");
-                else if (!remove && !Settings.NPC_INTEGRATION_ENABLED.getBoolean()) throw new RuntimeException("Attempted to reload NPCs when the integration is not enabled in the config!");
-            
-            for (int i = 0; i < SkyFactionsReborn.databaseManager.playerIslandManager.cachedPlayerIslandID; i++) {
-                final int islandID = i;
-
-                SkyNPC npc = factory.getNPC("player-" + i, false);
-                if (npc == null) continue;
-                if (remove) {
-                    npc.remove();
-                    affected.incrementAndGet();
-                    continue;
-                }
-
-                SkyFactionsReborn.databaseManager.playerIslandManager.getOwnerOfIsland(new PlayerIsland(i)).whenComplete((uuid, ex) -> {
-                    if (ex != null) {
-                        SLogger.fatal("Failed to get owner of island [{}] in order to refresh their NPC.", islandID);
-                        ex.printStackTrace();
-                        return;
-                    }
-
-                    OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
-                    npc.updateDisplayName(TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", owner.getName()), PlayerHandler.getLocale(uuid), owner));
-                    npc.updateEntityType(EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()));
-                    npc.updateSkin(Settings.NPC_PLAYER_ISLANDS_SKIN.toString().replace("player_name", owner.getName()));
-
-                    affected.incrementAndGet();
-                });
+            if (remove && Settings.NPC_INTEGRATION_ENABLED.getBoolean()) {
+                throw new RuntimeException("Attempted to disable NPCs when the integration is still enabled in the config!");
+            } else if (!remove && !Settings.NPC_INTEGRATION_ENABLED.getBoolean()) {
+                throw new RuntimeException("Attempted to reload NPCs when the integration is not enabled in the config!");
             }
 
-            for (int i = 0; i < SkyFactionsReborn.databaseManager.factionIslandManager.cachedFactionIslandID; i++) {
-                final int islandID = i;
+            IntStream.range(0, SkyFactionsReborn.databaseManager.playerIslandManager.cachedPlayerIslandID)
+                    .forEach(i -> {
+                        SkyNPC npc = factory.getNPC("player-" + i, false);
+                        if (npc == null) return;
+                        if (remove) {
+                            npc.remove();
+                            affected.incrementAndGet();
+                            return;
+                        }
+                        SkyFactionsReborn.databaseManager.playerIslandManager.getOwnerOfIsland(new PlayerIsland(i))
+                                .whenComplete((uuid, ex) -> {
+                                    if (ex != null) {
+                                        SLogger.fatal("Failed to get owner of island [{}] in order to refresh their NPC.", i);
+                                        ex.printStackTrace();
+                                        return;
+                                    }
+                                    OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
+                                    npc.updateDisplayName(TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", owner.getName()), PlayerHandler.getLocale(uuid), owner));
+                                    npc.updateEntityType(EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()));
+                                    npc.updateSkin(Settings.NPC_PLAYER_ISLANDS_SKIN.toString().replace("player_name", owner.getName()));
+                                    affected.incrementAndGet();
+                                });
+                    });
 
-                SkyNPC npc = factory.getNPC("faction-" + i, true);
-                if (npc == null) continue;
-                if (remove) {
-                    npc.remove();
-                    affected.incrementAndGet();
-                    continue;
-                }
-
-                SkyFactionsReborn.databaseManager.factionsManager.getFactionByIslandID(i).whenComplete((faction, ex) -> {
-                    if (ex != null) {
-                        SLogger.fatal("Failed to get faction owner of island [{}] in ordeemto refresh their NPCs.", islandID);
-                        ex.printStackTrace();
-                        return;
-                    }
-
-                    npc.updateDisplayName(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("faction_name", faction.getName()));
-                    npc.updateEntityType(EntityType.valueOf(Settings.NPC_FACTION_ISLANDS_ENTITY.getString()));
-                    npc.updateSkin(Settings.NPC_FACTION_ISLANDS_SKIN.getString().replace("faction_owner", faction.getOwner().getName()));
-
-                    affected.incrementAndGet();
-                });
-
-            }
+            IntStream.range(0, SkyFactionsReborn.databaseManager.factionIslandManager.cachedFactionIslandID)
+                    .forEach(i -> {
+                        SkyNPC npc = factory.getNPC("faction-" + i, true);
+                        if (npc == null) return;
+                        if (remove) {
+                            npc.remove();
+                            affected.incrementAndGet();
+                            return;
+                        }
+                        SkyFactionsReborn.databaseManager.factionsManager.getFactionByIslandID(i)
+                                .whenComplete((faction, ex) -> {
+                                    if (ex != null) {
+                                        SLogger.fatal("Failed to get faction owner of island [{}] in order to refresh their NPCs.", i);
+                                        ex.printStackTrace();
+                                        return;
+                                    }
+                                    npc.updateDisplayName(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("faction_name", faction.getName()));
+                                    npc.updateEntityType(EntityType.valueOf(Settings.NPC_FACTION_ISLANDS_ENTITY.getString()));
+                                    npc.updateSkin(Settings.NPC_FACTION_ISLANDS_SKIN.getString().replace("faction_owner", faction.getOwner().getName()));
+                                    affected.incrementAndGet();
+                                });
+                    });
 
             return affected.get();
         });
