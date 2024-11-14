@@ -42,6 +42,7 @@ public class MemberBanItem extends SkyItem {
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         Faction faction = (Faction) getOptionals()[0];
+        event.getInventory().close();
 
         if (faction.getAllMembers().contains(SUBJECT)) {
             faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_BAN, "banned", SUBJECT.getName(), "player", player.getName());
