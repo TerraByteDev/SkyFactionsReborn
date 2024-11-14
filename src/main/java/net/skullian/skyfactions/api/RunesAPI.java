@@ -46,9 +46,9 @@ public class RunesAPI {
         } else if (!isAllowed(stack)) {
             Messages.RUNE_GENERAL_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             return true;
-        } else if (!RunesConfig.ALLOW_ITEMSADDER_ITEMS.getBoolean() && CustomStack.byItemStack(stack) != null) {
+        } else if (DependencyHandler.isEnabled("ItemsAdder") && !RunesConfig.ALLOW_ITEMSADDER_ITEMS.getBoolean() && CustomStack.byItemStack(stack) != null) {
             return true;
-        } else if (!RunesConfig.ALLOW_ORAXEN_ITEMS.getBoolean() && OraxenItems.getIdByItem(stack) != null) {
+        } else if (DependencyHandler.isEnabled("Oraxen") && !RunesConfig.ALLOW_ORAXEN_ITEMS.getBoolean() && OraxenItems.getIdByItem(stack) != null) {
             return true;
         } else {
             return false;

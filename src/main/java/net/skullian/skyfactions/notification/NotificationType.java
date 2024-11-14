@@ -21,12 +21,12 @@ public enum NotificationType {
         this.description = description;
     }
 
-    public String getTitle(String locale, Object... replacements) {
-        return LegacyComponentSerializer.legacySection().serialize(title.get(locale, replacements));
+    public String getTitle(String locale) {
+        return title.getString(locale);
     }
 
-    public String getDescription(String locale, Object... replacements) {
-        return LegacyComponentSerializer.legacySection().serialize(description.get(locale, replacements));
+    public String getDescription(String locale) {
+        return description.getString(locale);
     }
 
 }

@@ -1,7 +1,6 @@
 package net.skullian.skyfactions.gui.items.obelisk.notification;
 
-import net.kyori.adventure.text.Component;
-import net.skullian.skyfactions.faction.AuditLogType;
+import net.skullian.skyfactions.notification.NotificationType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -33,11 +32,11 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
     public ItemProvider getItemProvider() {
         String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
 
-        String title = AuditLogType.valueOf(DATA.getType()).getTitle(getPLAYER(), DATA.getReplacements());
-        String description = AuditLogType.valueOf(DATA.getType()).getDescription(getPLAYER(), DATA.getReplacements());
+        String title = NotificationType.valueOf(DATA.getType()).getTitle(locale);
+        String description = NotificationType.valueOf(DATA.getType()).getDescription(locale);
 
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("notification_title", title), locale, getPLAYER()));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("notification_title", title), locale, getPLAYER(), DATA.getReplacements()));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("notification_description")) {

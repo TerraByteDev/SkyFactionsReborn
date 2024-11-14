@@ -32,7 +32,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
     private boolean HAS_PERMISSIONS = false;
 
     public ObeliskPaginatedDefenceItem(ItemData data, ItemStack stack, DefenceStruct struct, boolean shouldRedirect, String type, Faction faction, Player player) {
-        super(data, stack, player, List.of(struct, (faction != null ? faction : "")).toArray());
+        super(data, stack, player, List.of(struct, faction != null ? faction : "", type).toArray());
 
         this.STRUCT = struct;
         this.SHOULD_REDIRECT = shouldRedirect;
@@ -74,7 +74,8 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
             builder.addLoreLines(toList(Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(PlayerHandler.getLocale(getPLAYER().getUniqueId()))));
         }
 
-        if (!(getOptionals()[1] instanceof String)) {
+        String type = (String) getOptionals()[2];
+        if (type.equalsIgnoreCase("faction")) {
             Faction faction  = (Faction) getOptionals()[1];
 
             if (DefenceAPI.hasPermissions(DefencesConfig.PERMISSION_PURCHASE_DEFENCE.getList(), getPLAYER(), faction)) this.HAS_PERMISSIONS = true;
@@ -89,7 +90,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (SHOULD_REDIRECT && HAS_PERMISSIONS) {
             ObeliskPurchaseDefenceUI.promptPlayer(player, TYPE, STRUCT, FACTION);
-        } else {
+        } else if (!HAS_PERMISSIONS) {
             SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
             Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
         }

@@ -325,6 +325,8 @@ Messages:
       NAME_PROHIBITED: "<server_name><red> Your name contains prohibited words."
       # Sent when a player tries to create a faction that already exists with the same name.
       DUPLICATE_NAME: "<server_name> <red>A Faction already exists with that name!"
+      # Sent when a player tries to create a faction when they do not have a player island.
+      PLAYER_ISLAND_REQUIRED: "<server_name><red><bold> Hey!<reset><gray> You must have a player island before creating your own Faction!"
 
 
       # Sent when a player tries to create a faction but does not have enough runes.
@@ -426,6 +428,10 @@ Messages:
 
       # Added onto the title of the rank item when updating a player's rank (assuming they're using the placeholder '<is_selected>')
       SELECTED: "<green><italic>(Selected)"
+
+      # Sent when a player's rank is successfully changed (in the faction rank manage UI, assuming they have permission).
+      # Placeholders: <player_name> - Name of the player whose rank was changed / <new_rank> - New rank of the player.
+      RANK_CHANGE_SUCCESS: "<server_name> <reset><yellow>Successfully changed <green><player_name>'s<yellow> rank to <green><new_rank>."
 
     FACTION_INVITE:
 

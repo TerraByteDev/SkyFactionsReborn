@@ -17,6 +17,7 @@ import org.jooq.Result;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -38,7 +39,7 @@ public class FactionsDatabaseManager {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(FACTIONS)
                     .columns(FACTIONS.NAME, FACTIONS.MOTD, FACTIONS.LEVEL, FACTIONS.LAST_RAID, FACTIONS.LOCALE)
-                    .values(factionName, "&aNone", 1, 0, PlayerHandler.getLocale(factionOwner.getUniqueId()))
+                    .values(factionName, "<red>None", 1, (long) 0, PlayerHandler.getLocale(factionOwner.getUniqueId()))
                     .execute();
 
             ctx.insertInto(FACTIONMEMBERS)
@@ -120,6 +121,7 @@ public class FactionsDatabaseManager {
 
     public CompletableFuture<Void> updateFactionLocale(String factionName, String newLocale) {
         return CompletableFuture.runAsync(() -> {
+            if (newLocale == null) return;
             ctx.update(FACTIONS)
                     .set(FACTIONS.LOCALE, newLocale)
                     .where(FACTIONS.NAME.eq(factionName))
@@ -156,20 +158,26 @@ public class FactionsDatabaseManager {
 
     // ------------------ MEMBERS  ------------------ //
 
-    public CompletableFuture<String> addOrUpdateFactionMember(UUID playerUUID, String factionName, RankType type) {
-        return CompletableFuture.supplyAsync(() -> {
-            ctx.insertInto(FACTIONMEMBERS)
-                    .columns(FACTIONMEMBERS.FACTIONNAME, FACTIONMEMBERS.UUID, FACTIONMEMBERS.RANK)
-                    .values(factionName, playerUUID.toString(), "member")
-                    .onConflict(FACTIONMEMBERS.UUID)
-                    .doUpdate()
-                    .set(FACTIONMEMBERS.RANK, type.getRankValue())
-                    .execute();
+    public CompletableFuture<Void> addOrUpdateFactionMember(UUID playerUUID, String factionName, RankType type) {
+        return CompletableFuture.runAsync(() -> ctx.insertInto(FACTIONMEMBERS)
+                .columns(FACTIONMEMBERS.FACTIONNAME, FACTIONMEMBERS.UUID, FACTIONMEMBERS.RANK)
+                .values(factionName, playerUUID.toString(), "member")
+                .onConflict(FACTIONMEMBERS.UUID)
+                .doUpdate()
+                .set(FACTIONMEMBERS.RANK, type.getRankValue())
+                .execute());
+    }
 
-            return ctx.select(FACTIONMEMBERS.RANK)
-                    .from(FACTIONMEMBERS)
-                    .where(FACTIONMEMBERS.FACTIONNAME.eq(factionName), FACTIONMEMBERS.UUID.eq(playerUUID.toString()))
-                    .fetchOneInto(String.class);
+    public CompletableFuture<Void> updateFactionMemberRanks(String factionName, Map<UUID, RankType> ranks) {
+        return CompletableFuture.runAsync(() -> {
+            ctx.transaction((Configuration trx) -> {
+                for (Map.Entry<UUID, RankType> entry : ranks.entrySet()) {
+                    trx.dsl().update(FACTIONMEMBERS)
+                            .set(FACTIONMEMBERS.RANK, entry.getValue().getRankValue())
+                            .where(FACTIONMEMBERS.UUID.eq(entry.getKey().toString()), FACTIONMEMBERS.FACTIONNAME.eq(factionName))
+                            .execute();
+                }
+            });
         });
     }
 

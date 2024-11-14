@@ -19,6 +19,7 @@ public class ErrorUtil {
 
     public static void handleError(Exception error) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+            error.printStackTrace();
             SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             SLogger.fatal("There was an error while performing database actions:");
             SLogger.fatal(error.getMessage());

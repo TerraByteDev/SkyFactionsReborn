@@ -106,7 +106,7 @@ public class MemberManagementUI {
 
             for (OfflinePlayer member : faction.getAllMembers()) {
                 data.setNAME(data.getNAME().replace("player_name", member.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), MiniMessage.miniMessage().serialize(faction.getRank(member.getUniqueId())), member, player, faction));
+                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), TextUtility.legacyColor(faction.getRank(member.getUniqueId()), PlayerHandler.getLocale(player.getUniqueId()), member), member, player, faction));
             }
         });
         return items;

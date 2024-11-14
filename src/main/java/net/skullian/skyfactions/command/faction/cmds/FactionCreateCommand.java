@@ -2,6 +2,7 @@ package net.skullian.skyfactions.command.faction.cmds;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
@@ -43,43 +44,54 @@ public class FactionCreateCommand extends CommandTemplate {
             @Argument(value = "name") String name
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = PlayerHandler.getLocale(player.getUniqueId());
 
-        Messages.FACTION_CREATION_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+        Messages.FACTION_CREATION_PROCESSING.send(player, locale);
 
-        FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
-            if (ex != null) {
-                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+        IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {
+            if (throwable != null) {
+                ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", throwable);
+                return;
+            } else if (!hasIsland) {
+                Messages.FACTION_PLAYER_ISLAND_REQUIRED.send(player, locale);
                 return;
             }
 
-            if (isInFaction) {
-                Messages.ALREADY_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-            } else {
-                FactionAPI.getFaction(name).whenComplete((faction, exc) -> {
-                    if (exc != null) {
-                        ErrorUtil.handleError(player, "get the Faction", "SQL_FACTION_GET", exc);
-                        return;
-                    }
+            FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
+                if (ex != null) {
+                    ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                    return;
+                }
 
-                    if (faction != null) {
-                        Messages.FACTION_CREATION_NAME_DUPLICATE.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-                    } else {
-                        if (FactionAPI.hasValidName(player, name)) {
-                            int cost = Settings.FACTION_CREATION_COST.getInt();
-                            if (cost > 0) {
-                                int runes = RunesAPI.getRunes(player.getUniqueId());
+                if (isInFaction) {
+                    Messages.ALREADY_IN_FACTION.send(player, locale);
+                } else {
+                    FactionAPI.getFaction(name).whenComplete((faction, exc) -> {
+                        if (exc != null) {
+                            ErrorUtil.handleError(player, "get the Faction", "SQL_FACTION_GET", exc);
+                            return;
+                        }
 
-                                if (runes < cost) {
-                                    Messages.FACTION_INSUFFICIENT_FUNDS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "creation_cost", cost);
-                                } else {
-                                    RunesAPI.removeRunes(player.getUniqueId(), cost);
-                                    FactionAPI.createFaction(player, name);
+                        if (faction != null) {
+                            Messages.FACTION_CREATION_NAME_DUPLICATE.send(player, locale);
+                        } else {
+                            if (FactionAPI.hasValidName(player, name)) {
+                                int cost = Settings.FACTION_CREATION_COST.getInt();
+                                if (cost > 0) {
+                                    int runes = RunesAPI.getRunes(player.getUniqueId());
+
+                                    if (runes < cost) {
+                                        Messages.FACTION_INSUFFICIENT_FUNDS.send(player, locale, "creation_cost", cost);
+                                    } else {
+                                        RunesAPI.removeRunes(player.getUniqueId(), cost);
+                                        FactionAPI.createFaction(player, name);
+                                    }
                                 }
                             }
                         }
-                    }
-                });
-            }
+                    });
+                }
+            });
         });
     }
 

@@ -1,10 +1,9 @@
 package net.skullian.skyfactions.database.cache;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import net.skullian.skyfactions.faction.RankType;
 import org.bukkit.Location;
 
 import lombok.Getter;
@@ -21,6 +20,7 @@ public class CacheEntry {
     private List<Location> defencesToRegister = new ArrayList<>();
     private List<Location> defencesToRemove = new ArrayList<>();
     private String newLocale;
+    private Map<UUID, RankType> newRanks = new HashMap<>();
 
     public void addRunes(int amount) {
         runes += amount;
@@ -52,6 +52,10 @@ public class CacheEntry {
         newLocale = locale;
     }
 
+    public void setNewRank(UUID playerUUID, RankType rankType) {
+        newRanks.put(playerUUID, rankType);
+    }
+
     /**
      *
      * @param toCache - UUID
@@ -64,20 +68,23 @@ public class CacheEntry {
         }
         if (faction != null) {
             return CompletableFuture.allOf(
-                    SkyFactionsReborn.databaseManager.currencyManager.modifyGems(toCache, gems, false).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.currencyManager.modifyGems(faction.getName(), gems, false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set gems of faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseManager.currencyManager.modifyRunes(toCache, runes, false).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.currencyManager.modifyRunes(faction.getName(), runes, false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set runes of faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseManager.defencesManager.registerDefenceLocations(defencesToRegister, toCache, true).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.defencesManager.registerDefenceLocations(defencesToRegister, faction.getName(), true).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to register new defences for faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseManager.defencesManager.removeDefenceLocations(defencesToRemove, toCache, true).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.defencesManager.removeDefenceLocations(defencesToRemove, faction.getName(), true).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to remove defences for faction " + faction.getName(), ex);
                     }),
-                    SkyFactionsReborn.databaseManager.factionsManager.updateFactionLocale(toCache, newLocale).exceptionally((ex) -> {
+                    SkyFactionsReborn.databaseManager.factionsManager.updateFactionLocale(faction.getName(), newLocale).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to update locale for faction " + faction.getName(), ex);
+                    }),
+                    SkyFactionsReborn.databaseManager.factionsManager.updateFactionMemberRanks(faction.getName(), newRanks).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to update ranks for faction " + faction.getName(), ex);
                     })
             );
         } else {

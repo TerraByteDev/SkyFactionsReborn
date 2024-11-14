@@ -3,8 +3,10 @@ package net.skullian.skyfactions.util.text;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.OfflinePlayer;
@@ -54,7 +56,6 @@ public class TextUtility {
         List<Component> components = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             components.add(color(list.get(i).toString(), locale, player, replacements));
-            if (i + 1 != list.size()) components.add(Component.text(""));
         }
 
         return Component.join(JoinConfiguration.newlines(), components);
@@ -130,19 +131,8 @@ public class TextUtility {
     public static boolean containsNumbers(@NotNull CharSequence seq) {
         if (seq == null) {
             return false;
-        } else {
-            int length = seq.length();
-            if (length != 0) {
-                for (int i = 0; i < length; i++) {
-                    char character = seq.charAt(i);
-                    if (Character.isDigit(character)) {
-                        return true;
-                    }
-                }
-
-            }
-            return false;
         }
+        return seq.chars().anyMatch(Character::isDigit);
     }
 
     public static boolean isEnglishDigitOrLetter(char character) {
@@ -159,47 +149,29 @@ public class TextUtility {
 
     public static String formatExtendedElapsedTime(long previousTime) {
         long currentTime = System.currentTimeMillis();
-
         Duration duration = Duration.ofMillis(currentTime - previousTime);
         long days = duration.toDaysPart();
         long hours = duration.toHoursPart();
         long minutes = duration.toMinutesPart();
         long seconds = duration.toSecondsPart();
-
         StringBuilder formattedTime = new StringBuilder();
         boolean hasContent = false;
 
         if (days > 0) {
-            formattedTime.append(days).append(" day");
-            if (days > 1) {
-                formattedTime.append("s");
-            }
-            formattedTime.append(", ");
+            formattedTime.append(days).append(" day").append(days > 1 ? "s" : "").append(", ");
             hasContent = true;
         }
         if (hours > 0 || hasContent) {
-            formattedTime.append(hours).append(" hour");
-            if (hours > 1) {
-                formattedTime.append("s");
-            }
-            formattedTime.append(", ");
+            formattedTime.append(hours).append(" hour").append(hours > 1 ? "s" : "").append(", ");
             hasContent = true;
         }
         if (minutes > 0 || hasContent) {
-            formattedTime.append(minutes).append(" minute");
-            if (minutes > 1) {
-                formattedTime.append("s");
-            }
-            formattedTime.append(", ");
+            formattedTime.append(minutes).append(" minute").append(minutes > 1 ? "s" : "").append(", ");
             hasContent = true;
         }
         if (seconds > 0 || !hasContent) {
-            formattedTime.append(seconds).append(" second");
-            if (seconds > 1) {
-                formattedTime.append("s");
-            }
+            formattedTime.append(seconds).append(" second").append(seconds > 1 ? "s" : "");
         }
-
         return formattedTime.toString();
     }
 
@@ -207,31 +179,18 @@ public class TextUtility {
         if (str == null || str.isEmpty()) {
             return new Object[0];
         }
-
-        String[] parts = str.split(",");
-        Object[] result = new Object[parts.length];
-
-        for (int i = 0; i < parts.length; i++) {
-            result[i] = parts[i].trim(); // Remove leading/trailing whitespace
-        }
-
-        return result;
+        return Arrays.stream(str.split(","))
+                .map(part -> part.trim().replace("[", "").replace("]", ""))
+                .toArray();
     }
 
     public static List<String> toParts(String string) {
-        String[] parts = string.split("/");
-        List<String> partsList = Arrays.asList(parts);
-        return partsList;
+        return Arrays.asList(string.split("/"));
     }
 
     public static List<String> merge(List<String>... lists) {
-        List<String> mergedList = new ArrayList<>();
-
-        for (List<String> list : lists) {
-            mergedList.addAll(list);
-        }
-
-        return mergedList;
+        return Arrays.stream(lists)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
-
 }

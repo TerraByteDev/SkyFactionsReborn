@@ -27,25 +27,26 @@ public class AuditPaginationItem extends SkyItem {
     public ItemProvider getItemProvider() {
         String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
 
-        String title = AuditLogType.valueOf(DATA.getType()).getTitle(getPLAYER(), DATA.getReplacements());
-        String description = AuditLogType.valueOf(DATA.getType()).getDescription(getPLAYER(), DATA.getReplacements());
+        String title = AuditLogType.valueOf(DATA.getType()).getTitle(getPLAYER());
+        String description = AuditLogType.valueOf(DATA.getType()).getDescription(getPLAYER());
 
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME(), locale, getPLAYER(), "audit_title", title));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("<audit_title>", title), locale, getPLAYER(), DATA.getReplacements()));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("<audit_description>")) {
                 for (String part : TextUtility.toParts(description)) {
-                    builder.addLoreLines(TextUtility.legacyColor(part, locale, getPLAYER()));
+                    builder.addLoreLines(TextUtility.legacyColor(part, locale, getPLAYER(), DATA.getReplacements()));
                 }
 
                 continue;
             }
 
-            builder.addLoreLines(TextUtility.legacyColor(loreLine
-                    .replace("timestamp", Messages.replace(Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "time", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+            builder.addLoreLines(TextUtility.legacyColor(loreLine,
                     locale,
-                    getPLAYER()
+                    getPLAYER(),
+                    "timestamp",
+                    Messages.replace(Messages.AUDIT_FACTION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "<time>", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))
             ));
         }
 

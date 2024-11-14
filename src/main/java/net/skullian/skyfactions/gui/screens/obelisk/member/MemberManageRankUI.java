@@ -5,6 +5,7 @@ import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.Faction;
+import net.skullian.skyfactions.faction.RankType;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
@@ -55,14 +56,14 @@ public class MemberManageRankUI {
                         break;
 
                     case "MEMBER", "FIGHTER", "MODERATOR", "ADMIN":
-                        MemberRankChangeItem item = new MemberRankChangeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, itemData.getITEM_ID(), faction, subject, this);
+                        MemberRankChangeItem item = new MemberRankChangeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, RankType.valueOf(itemData.getITEM_ID()), faction, subject, this);
                         builder.addIngredient(itemData.getCHARACTER(), item);
 
                         this.items.add(item);
                         break;
 
                     case "CONFIRM":
-                        MemberRankChangeConfirmationItem confirmationItem = new MemberRankChangeConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, faction, subject, faction.getRankType(player.getUniqueId()).getRankValue());
+                        MemberRankChangeConfirmationItem confirmationItem = new MemberRankChangeConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, faction, subject, faction.getRankType(player.getUniqueId()));
                         builder.addIngredient(itemData.getCHARACTER(), confirmationItem);
 
                         this.confirmItem = confirmationItem;
@@ -76,7 +77,7 @@ public class MemberManageRankUI {
         return builder;
     }
 
-    public void onSelect(String newRank) {
+    public void onSelect(RankType newRank) {
         confirmItem.setSELECTED(newRank);
         for (MemberRankChangeItem item : this.items) {
             item.setTYPE(newRank);

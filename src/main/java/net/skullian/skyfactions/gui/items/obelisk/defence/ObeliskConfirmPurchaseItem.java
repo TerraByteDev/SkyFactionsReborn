@@ -28,7 +28,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
     private Faction FACTION;
 
     public ObeliskConfirmPurchaseItem(ItemData data, ItemStack stack, String type, DefenceStruct struct, Faction faction, Player player) {
-        super(data, stack, player, List.of(type, faction, struct).toArray());
+        super(data, stack, player, List.of(type, faction != null ? faction : "", struct).toArray());
 
         this.TYPE = type;
         this.STRUCT = struct;
@@ -38,11 +38,11 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
     @Override
     public ItemBuilder process(ItemBuilder builder) {
         String type = (String) getOptionals()[0];
-        Faction faction = (Faction) getOptionals()[1];
         DefenceStruct struct = (DefenceStruct) getOptionals()[2];
         String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
 
         if (type.equals("faction")) {
+            Faction faction = (Faction) getOptionals()[1];
             if (faction.getRunes() < struct.getBUY_COST()) {
                 builder.addLoreLines(toList(Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList(locale)));
             }
@@ -54,10 +54,18 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
         }
 
         if (getPLAYER().getInventory().firstEmpty() == -1) {
-            builder.addLoreLines(Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getString(locale));
+            builder.addLoreLines(toList(Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(locale)));
         }
 
         return builder;
+    }
+
+    @Override
+    public Object[] replacements() {
+        DefenceStruct struct = (DefenceStruct) getOptionals()[2];
+        return List.of(
+                "defence_cost", struct.getBUY_COST()
+        ).toArray();
     }
 
     @Override

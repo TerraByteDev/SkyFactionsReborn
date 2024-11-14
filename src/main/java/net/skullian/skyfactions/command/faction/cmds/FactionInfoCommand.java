@@ -90,8 +90,7 @@ public class FactionInfoCommand extends CommandTemplate {
         Messages.FACTION_INFO_LIST.send(player,
                 PlayerHandler.getLocale(player.getUniqueId()),
                 "faction_name", faction.getName(),
-                "motd", TextUtility.color(faction.getMOTD(), PlayerHandler.getLocale(player.getUniqueId()), player),
-
+                "motd", faction.getMOTD(),
                 "owner", faction.getOwner().getName(),
                 "admins", buildString(faction.getAdmins()),
                 "moderators", buildString(faction.getModerators()),
@@ -102,12 +101,12 @@ public class FactionInfoCommand extends CommandTemplate {
 
     private String buildString(List<OfflinePlayer> list) {
         if (list.size() <= 0) {
-            return "&aNone";
+            return "<red>None";
         } else if (list.size() > 0) {
             return String.join(", ", list.stream().map(OfflinePlayer::getName).collect(Collectors.toList()));
         }
 
-        return "&aNone";
+        return "<red>None";
     }
 
     public static List<String> permissions = List.of("skyfactions.faction.info", "skyfactions.faction");
