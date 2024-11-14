@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 
 public class FactionAPI {
 
-    public static Map<UUID, Faction> factionCache = new HashMap<>();
+    public static Map<UUID, String> factionCache = new HashMap<>();
     public static Map<String, Faction> factionNameCache = new HashMap<>();
 
     public static HashSet<Faction> awaitingDeletion = new HashSet<>();
@@ -95,7 +95,7 @@ public class FactionAPI {
 
                 faction.createAuditLog(player.getUniqueId(), AuditLogType.FACTION_CREATE, "player_name", player.getName(), "faction_name", name);
                 NotificationAPI.factionInviteStore.put(faction.getName(), 0);
-                factionCache.put(player.getUniqueId(), faction);
+                factionCache.put(player.getUniqueId(), faction.getName());
                 factionNameCache.put(faction.getName(), faction);
             });
         });
@@ -167,14 +167,14 @@ public class FactionAPI {
      */
     public static CompletableFuture<Faction> getFaction(UUID playerUUID) {
         if (factionCache.containsKey(playerUUID))
-            return CompletableFuture.completedFuture(factionCache.get(playerUUID));
+            return CompletableFuture.completedFuture(getCachedFaction(playerUUID));
 
 
         return SkyFactionsReborn.databaseManager.factionsManager.getFaction(playerUUID).whenComplete((faction, ex) -> {
             if (ex != null) ex.printStackTrace();
             if (faction == null) return;
 
-            factionCache.put(playerUUID, faction);
+            factionCache.put(playerUUID, faction.getName());
             factionNameCache.put(faction.getName(), faction);
         });
     }
@@ -186,7 +186,8 @@ public class FactionAPI {
      * @return {@link Faction}
      */
     public static CompletableFuture<Faction> getFaction(String name) {
-        if (factionNameCache.containsKey(name)) return CompletableFuture.completedFuture(factionNameCache.get(name));
+        if (factionNameCache.containsKey(name)) return CompletableFuture.completedFuture(getCachedFaction(name));
+        
         return SkyFactionsReborn.databaseManager.factionsManager.getFaction(name).whenComplete((faction, ex) -> {
             if (ex != null) ex.printStackTrace();
             if (faction == null) return;
@@ -194,9 +195,29 @@ public class FactionAPI {
             factionNameCache.put(faction.getName(), faction);
             for (OfflinePlayer player : faction.getAllMembers()) {
                 if (!player.isOnline()) return;
-                factionCache.put(player.getUniqueId(), faction);
+                factionCache.put(player.getUniqueId(), faction.getName());
             }
         });
+    }
+
+    /**
+     * Get an already cached Faction.
+     *
+     * @param name Name of the Faction
+     * @return {@link Faction}
+     */
+    public static Faction getCachedFaction(String name) {
+        return factionNameCache.get(name);
+    }
+
+    /**
+     * Get an already cached Faction.
+     *
+     * @param playerUUID UUID of a faction member
+     * @return {@link Faction}
+     */
+    public static Faction getCachedFaction(UUID playerUUID) {
+        return factionNameCache.get(factionCache.get(playerUUID));
     }
 
     /**
