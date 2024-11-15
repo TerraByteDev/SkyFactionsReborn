@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.util.hologram;
+package net.skullian.skyfactions.defence.hologram;
 
 import lombok.Getter;
 import lombok.Setter;

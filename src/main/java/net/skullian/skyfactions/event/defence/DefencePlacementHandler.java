@@ -41,14 +41,14 @@ import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.hologram.TextHologram;
+import net.skullian.skyfactions.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.util.text.TextUtility;
 
 public class DefencePlacementHandler implements Listener {
     public static Map<String, List<Defence>> loadedFactionDefences = new HashMap<>();
     public static Map<UUID, List<Defence>> loadedPlayerDefences = new HashMap<>();
 
-    public static Map<String, TextHologram> hologramsMap = new ConcurrentHashMap<>();
+    public static Map<String, DefenceTextHologram> hologramsMap = new ConcurrentHashMap<>();
 
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {

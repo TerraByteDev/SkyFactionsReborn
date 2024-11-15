@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.util.hologram;
+package net.skullian.skyfactions.defence.hologram;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.text.TextUtility;
 
-public class TextHologram {
+public class DefenceTextHologram {
 
     @Getter @Accessors(chain = true)
     private final long updateTaskPeriod = 20L * 3;
@@ -112,7 +112,7 @@ public class TextHologram {
     @Getter
     private int durability; 
 
-    public TextHologram(String id, RenderMode renderMode, String owner, DefenceStruct defence, DefenceData data) {
+    public DefenceTextHologram(String id, RenderMode renderMode, String owner, DefenceStruct defence, DefenceData data) {
         this.renderMode = renderMode;
         validateId(id);
         this.defence = defence;
@@ -122,7 +122,7 @@ public class TextHologram {
         startRunnable();
     }
 
-    public TextHologram(String id, String owner, DefenceStruct defence, DefenceData data) {
+    public DefenceTextHologram(String id, String owner, DefenceStruct defence, DefenceData data) {
         this(id, RenderMode.NEARBY, owner, defence, data);
     }
 
@@ -156,7 +156,7 @@ public class TextHologram {
         update();
     }
 
-    public TextHologram update() {
+    public DefenceTextHologram update() {
         SkyFactionsReborn.getInstance().getServer().getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             updateAffectedPlayers();
             TextDisplayMeta meta = createMeta();
@@ -200,7 +200,7 @@ public class TextHologram {
         return meta;
     }
 
-    private TextHologram setAlignment(TextDisplayMeta meta) {
+    private DefenceTextHologram setAlignment(TextDisplayMeta meta) {
         switch (this.alignment) {
             case LEFT -> meta.setAlignLeft(true);
             case RIGHT -> meta.setAlignRight(true);
@@ -222,29 +222,29 @@ public class TextHologram {
         this.dead = true;
     }
 
-    public TextHologram teleport(Location location) {
+    public DefenceTextHologram teleport(Location location) {
         WrapperPlayServerEntityTeleport packet = new WrapperPlayServerEntityTeleport(this.entityID, SpigotConversionUtil.fromBukkitLocation(location), false);
         this.location = location;
         sendPacket(packet);
         return this;
     }
 
-    public TextHologram addAllViewers(List<Player> viewerList) {
+    public DefenceTextHologram addAllViewers(List<Player> viewerList) {
         this.viewers.addAll(viewerList);
         return this;
     }
 
-    public TextHologram addViewer(Player player) {
+    public DefenceTextHologram addViewer(Player player) {
         this.viewers.add(player);
         return this;
     }
 
-    public TextHologram removeViewer(Player player) {
+    public DefenceTextHologram removeViewer(Player player) {
         this.viewers.remove(player);
         return this;
     }
 
-    public TextHologram removeAllViewers() {
+    public DefenceTextHologram removeAllViewers() {
         this.viewers.clear();
         return this;
     }
@@ -253,22 +253,22 @@ public class TextHologram {
         return new Vector3F(this.translation.x, this.translation.y, this.translation.z);
     }
 
-    public TextHologram setLeftRotation(float x, float y, float z, float w) {
+    public DefenceTextHologram setLeftRotation(float x, float y, float z, float w) {
         this.leftRotation = new Quaternion4f(x, y, z, w);
         return this;
     }
 
-    public TextHologram setRightRotation(float x, float y, float z, float w) {
+    public DefenceTextHologram setRightRotation(float x, float y, float z, float w) {
         this.rightRotation = new Quaternion4f(x, y, z, w);
         return this;
     }
 
-    public TextHologram setTranslation(float x, float y, float z) {
+    public DefenceTextHologram setTranslation(float x, float y, float z) {
         this.translation = new Vector3f(x, y, z);
         return this;
     }
 
-    public TextHologram setTranslation(Vector3F translation) {
+    public DefenceTextHologram setTranslation(Vector3F translation) {
         this.translation = new Vector3f(translation.x, translation.y, translation.z);
         return this;
     }
@@ -277,12 +277,12 @@ public class TextHologram {
         return new Vector3F(this.scale.x, this.scale.y, this.scale.z);
     }
 
-    public TextHologram setScale(float x, float y, float z) {
+    public DefenceTextHologram setScale(float x, float y, float z) {
         this.scale = new Vector3f(x, y, z);
         return this;
     }
 
-    public TextHologram setScale(Vector3F scale) {
+    public DefenceTextHologram setScale(Vector3F scale) {
         this.scale = new Vector3f(scale.x, scale.y, scale.z);
         return this;
     }
@@ -299,12 +299,12 @@ public class TextHologram {
         return ChatColor.stripColor(getText());
     }
 
-    public TextHologram setText(String text) {
+    public DefenceTextHologram setText(String text) {
         this.text = TextUtility.color(text, Messages.getDefaulLocale(), null);
         return this;
     }
 
-    public TextHologram setText(Component component) {
+    public DefenceTextHologram setText(Component component) {
         this.text = component;
         return this;
     }

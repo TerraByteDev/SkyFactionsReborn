@@ -32,7 +32,7 @@ import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.SLogger;
-import net.skullian.skyfactions.util.hologram.TextHologram;
+import net.skullian.skyfactions.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.util.text.TextUtility;
 
 @Getter
@@ -300,7 +300,7 @@ public abstract class Defence {
         targetedEntities.clear();
 
         String id = getHologramID(data.getUUIDFactionName());
-        TextHologram holo = DefencePlacementHandler.hologramsMap.get(id);
+        DefenceTextHologram holo = DefencePlacementHandler.hologramsMap.get(id);
         if (holo == null) return;
         holo.kill();
         DefencePlacementHandler.hologramsMap.remove(id);
@@ -328,7 +328,7 @@ public abstract class Defence {
     public void createHologram(Location location, DefenceStruct defence, String playerUUIDorFactionName) {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
 
-        TextHologram hologram = new TextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName(), defence, data)
+        DefenceTextHologram hologram = new DefenceTextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), DefenceTextHologram.RenderMode.ALL, data.getUUIDFactionName(), defence, data)
                 .setText(TextUtility.color(text.replace("defence_name", defence.getNAME()), Messages.getDefaulLocale(), null))
                 .setBillboard(Display.Billboard.VERTICAL)
                 .setSeeThroughBlocks(false)
