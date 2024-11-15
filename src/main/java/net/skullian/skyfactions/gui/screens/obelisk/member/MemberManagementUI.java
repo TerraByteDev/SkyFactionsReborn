@@ -100,7 +100,7 @@ public class MemberManagementUI {
         List<Item> items = new ArrayList<>();
 
         for (OfflinePlayer member : faction.getAllMembers()) {
-            data.setNAME(data.getNAME().replace("player_name", member.getName()));
+            data.setNAME(data.getNAME().replace(player.getName(), member.getName())); // guiapi will auto
             items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), faction.getRank(member.getUniqueId()), member, player, faction));
         }
 
