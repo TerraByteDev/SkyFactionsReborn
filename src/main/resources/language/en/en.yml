@@ -590,11 +590,6 @@ Messages:
       FACTION_DISBANDED_TITLE: "<red><bold>Faction Disbanded"
       FACTION_DISBANDED_DESCRIPTION: "<yellow>The Faction was disbanded by/<red><player_name> while you were offline."
 
-      # Notification for when a player's rank is updated while they are offline.
-      # Placeholders: <new_rank> - New rank of the player / <player_name> - Player who updated your rank.
-      FACTION_RANK_UPDATED_TITLE: "<green>Rank Updated"
-      FACTION_RANK_UPDATED_DESCRIPTION: "<yellow>You rank was updated to <new_rank> by <green><player_name>."
-
 
   Obelisk:
     # Sent when a player tries to access another player's or Faction's Obelisk (e.g. when visiting).

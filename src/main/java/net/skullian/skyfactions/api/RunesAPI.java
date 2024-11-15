@@ -177,7 +177,6 @@ public class RunesAPI {
                 return;
             }
 
-            System.out.println("FETCHED RUNES: " + runes);
             playerRunes.put(playerUUID, runes);
         });
     }
