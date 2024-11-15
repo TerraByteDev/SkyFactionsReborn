@@ -16,7 +16,7 @@ plugins {
 }
 
 group = 'net.skullian.skyfactions'
-version = "${plugin_version}"
+version = '1.21.1-v1.0.0-ALPHA'
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
