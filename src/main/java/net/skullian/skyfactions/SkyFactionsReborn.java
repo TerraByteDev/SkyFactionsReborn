@@ -24,6 +24,7 @@ import net.skullian.skyfactions.config.types.DiscordConfig;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.DatabaseManager;
 import net.skullian.skyfactions.database.cache.CacheService;
+import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.block.BrokenBlockService;
 import net.skullian.skyfactions.discord.DiscordHandler;
 import net.skullian.skyfactions.event.armor.ArmorListener;
