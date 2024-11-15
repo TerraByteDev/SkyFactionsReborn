@@ -66,7 +66,7 @@ public class FactionsRecord extends UpdatableRecordImpl<FactionsRecord> {
     /**
      * Setter for <code>factions.last_raid</code>.
      */
-    public FactionsRecord setLastRaid(Integer value) {
+    public FactionsRecord setLastRaid(Long value) {
         set(3, value);
         return this;
     }
@@ -74,8 +74,8 @@ public class FactionsRecord extends UpdatableRecordImpl<FactionsRecord> {
     /**
      * Getter for <code>factions.last_raid</code>.
      */
-    public Integer getLastRaid() {
-        return (Integer) get(3);
+    public Long getLastRaid() {
+        return (Long) get(3);
     }
 
     /**
@@ -116,7 +116,7 @@ public class FactionsRecord extends UpdatableRecordImpl<FactionsRecord> {
     /**
      * Create a detached, initialised FactionsRecord
      */
-    public FactionsRecord(String name, String motd, Integer level, Integer lastRaid, String locale) {
+    public FactionsRecord(String name, String motd, Integer level, Long lastRaid, String locale) {
         super(Factions.FACTIONS);
 
         setName(name);

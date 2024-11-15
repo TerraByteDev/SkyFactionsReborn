@@ -18,7 +18,7 @@ public class Factions implements Serializable {
     private final String name;
     private final String motd;
     private final Integer level;
-    private final Integer lastRaid;
+    private final Long lastRaid;
     private final String locale;
 
     public Factions(Factions value) {
@@ -33,7 +33,7 @@ public class Factions implements Serializable {
         String name,
         String motd,
         Integer level,
-        Integer lastRaid,
+        Long lastRaid,
         String locale
     ) {
         this.name = name;
@@ -67,7 +67,7 @@ public class Factions implements Serializable {
     /**
      * Getter for <code>factions.last_raid</code>.
      */
-    public Integer getLastRaid() {
+    public Long getLastRaid() {
         return this.lastRaid;
     }
 

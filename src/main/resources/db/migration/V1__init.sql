@@ -59,7 +59,7 @@ create table if not exists factions
         primary key,
     motd      clob not null,
     level     int  not null,
-    last_raid int  not null,
+    last_raid int8 not null,
     locale    clob not null
 );
 
@@ -93,7 +93,6 @@ create table if not exists playerData
     last_raid  int8 not null,
     locale     clob not null
 );
-
 
 create table if not exists trustedPlayers
 (
