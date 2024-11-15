@@ -37,10 +37,12 @@ public class MemberRankChangeItem extends SkyItem {
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[2];
         Faction faction = (Faction) getOptionals()[1];
         RankType thisType = (RankType) getOptionals()[0];
-        RankType selectedType = TYPE != null ? TYPE : thisType;
-        System.out.println("CURRENT TYPE: " + TYPE);
 
-        if (faction.getRankType(subject.getUniqueId()).equals(selectedType)) {
+        System.out.println("SELECTED TYPE: " + TYPE);
+        System.out.println("THIS TYPE: " + thisType);
+
+        if ((TYPE == null && faction.getRankType(subject.getUniqueId()).equals(thisType) || (thisType.equals(TYPE)))) {
+            System.out.println("YAHHHH! " + thisType);
             builder.addEnchantment(Enchantment.LURE, 1, false);
             builder.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
@@ -55,7 +57,7 @@ public class MemberRankChangeItem extends SkyItem {
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[2];
 
         return List.of(
-                "is_selected", faction.getRankType(subject.getUniqueId()).equals(type) ? Messages.FACTION_MANAGE_RANK_SELECTED.getString(PlayerHandler.getLocale(getPLAYER().getUniqueId()))
+                "is_selected", ((TYPE == null && faction.getRankType(subject.getUniqueId()).equals(type)) || (type.equals(TYPE))) ? Messages.FACTION_MANAGE_RANK_SELECTED.getString(PlayerHandler.getLocale(getPLAYER().getUniqueId()))
                         : ""
         ).toArray();
     }

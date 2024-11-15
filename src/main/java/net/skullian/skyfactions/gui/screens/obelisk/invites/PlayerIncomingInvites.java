@@ -104,7 +104,7 @@ public class PlayerIncomingInvites {
     private static List<Item> getItems(Player player, ItemData itemData, List<InviteData> data) {
         List<Item> items = new ArrayList<>();
         for (InviteData inviteData : data) {
-            itemData.setNAME(itemData.getNAME().replace("faction_name", inviteData.getFactionName()));
+            itemData.setNAME(itemData.getNAME().replace("<faction_name>", inviteData.getFactionName()));
             items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getUniqueId()), player, inviteData));
         }
 

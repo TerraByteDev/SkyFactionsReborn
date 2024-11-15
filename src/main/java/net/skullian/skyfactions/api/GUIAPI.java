@@ -32,7 +32,7 @@ public class GUIAPI {
     public static GUIData getGUIData(String guiName, Player player) throws IllegalArgumentException {
         YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get(guiName);
         if (config != null) {
-            String guiTitle = config.getString("TITLE");
+            String guiTitle = config.getString("TITLE").replace("<player_name>", player.getName());
             String openSound = config.getString("OPEN_SOUND");
             int openPitch = config.getInt("OPEN_PITCH");
             List<String> layout = config.getStringList("LAYOUT");

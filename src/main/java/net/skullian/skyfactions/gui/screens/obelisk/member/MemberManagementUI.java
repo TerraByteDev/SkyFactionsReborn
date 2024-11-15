@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.skullian.skyfactions.config.types.GUIEnums;
+import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -22,7 +23,6 @@ import net.skullian.skyfactions.gui.items.PaginationBackItem;
 import net.skullian.skyfactions.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.member_manage.MemberPaginationItem;
-import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.gui.PagedGui;
@@ -32,12 +32,12 @@ import xyz.xenondevs.invui.window.Window;
 
 public class MemberManagementUI {
 
-    public static void promptPlayer(Player player) {
+    public static void promptPlayer(Player player, Faction faction) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
                 GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_MEMBER_MANAGEMENT_GUI.getPath(), player);
                 PagedGui.Builder gui = registerItems(PagedGui.items()
-                        .setStructure(data.getLAYOUT()), player);
+                        .setStructure(data.getLAYOUT()), player, faction);
 
                 Window window = Window.single()
                         .setViewer(player)
@@ -54,7 +54,7 @@ public class MemberManagementUI {
         });
     }
 
-    private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player) {
+    private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player, Faction faction) {
         try {
             builder.addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL);
             List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_MEMBER_MANAGEMENT_GUI.getPath(), player);
@@ -67,7 +67,7 @@ public class MemberManagementUI {
                         break;
 
                     case "MODEL":
-                        builder.setContent(getItems(player, itemData));
+                        builder.setContent(getItems(player, itemData, faction));
                         break;
 
                     case "BACK":
@@ -96,19 +96,14 @@ public class MemberManagementUI {
         return builder;
     }
 
-    private static List<Item> getItems(Player player, ItemData data) {
+    private static List<Item> getItems(Player player, ItemData data, Faction faction) {
         List<Item> items = new ArrayList<>();
-        FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
-            if (exc != null) {
-                ErrorUtil.handleError(player, "open the member management GUI", "GUI_LOAD_EXCEPTION", exc);
-                return;
-            }
 
-            for (OfflinePlayer member : faction.getAllMembers()) {
-                data.setNAME(data.getNAME().replace("player_name", member.getName()));
-                items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), faction.getRank(member.getUniqueId()), member, player, faction));
-            }
-        });
+        for (OfflinePlayer member : faction.getAllMembers()) {
+            data.setNAME(data.getNAME().replace("player_name", member.getName()));
+            items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), faction.getRank(member.getUniqueId()), member, player, faction));
+        }
+
         return items;
     }
 }

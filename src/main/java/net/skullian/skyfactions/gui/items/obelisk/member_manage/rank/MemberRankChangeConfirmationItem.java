@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.obelisk.member_manage.rank;
 
 import lombok.Setter;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.faction.RankType;
 import net.skullian.skyfactions.gui.data.ItemData;
@@ -29,12 +30,13 @@ public class MemberRankChangeConfirmationItem extends SkyItem {
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (SELECTED == null) return;
+        player.closeInventory();
 
         Faction faction = (Faction) getOptionals()[0];
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[1];
 
         faction.modifyPlayerRank(subject, SELECTED);
-        Messages.RANK_CHANGE_SUCCESS.send(player, "player_name", subject.getName(), "new_rank", faction.getRank(subject.getUniqueId()));
+        Messages.RANK_CHANGE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player_name", subject.getName(), "new_rank", faction.getRank(subject.getUniqueId()));
     }
 
 

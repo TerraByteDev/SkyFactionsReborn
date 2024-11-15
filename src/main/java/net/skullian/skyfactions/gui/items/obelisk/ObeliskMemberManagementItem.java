@@ -36,7 +36,7 @@ public class ObeliskMemberManagementItem extends SkyItem {
         } else if (!TextUtility.merge(Settings.FACTION_KICK_PERMISSIONS.getList(), Settings.FACTION_BAN_PERMISSIONS.getList(), Settings.FACTION_MANAGE_RANK_PERMISSIONS.getList()).contains(FACTION.getRankType(player.getUniqueId()).getRankValue())) {
             Messages.OBELISK_GUI_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()), "rank", Messages.FACTION_ADMIN_TITLE.get(PlayerHandler.getLocale(player.getUniqueId())));
         } else {
-            MemberManagementUI.promptPlayer(player);
+            MemberManagementUI.promptPlayer(player, FACTION);
         }
     }
 
