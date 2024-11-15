@@ -50,7 +50,7 @@ public class GemsBalanceCommand extends CommandTemplate {
             if (hasIsland) {
                 int gems = GemsAPI.getGems(player.getUniqueId());
                 Messages.GEMS_COUNT_MESSAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "count", gems);
-            }
+            } else Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
         });
     }
 
