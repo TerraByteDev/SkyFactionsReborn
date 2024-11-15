@@ -126,6 +126,7 @@ dependencies {
     compileOnly("io.lumine:Mythic-Dist:${mythicmobs}")
     compileOnly("net.objecthunter:exp4j:${exp4j}")
     compileOnly("com.github.yannicklamprecht:worldborderapi:${worldborderapi}:dev")
+    implementation("com.github.yannicklamprecht:worldborderapi:${worldborderapi}")
     compileOnly("com.github.retrooper:packetevents-spigot:${packetevents}")
     implementation("me.tofaa.entitylib:spigot:${entitylib}")
     compileOnly("dev.dejvokep:boosted-yaml:${boostedyaml}")

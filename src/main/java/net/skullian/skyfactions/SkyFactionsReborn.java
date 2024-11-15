@@ -2,6 +2,8 @@ package net.skullian.skyfactions;
 
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
+import com.github.yannicklamprecht.worldborder.impl.Border;
+import com.github.yannicklamprecht.worldborder.plugin.PersistenceWrapper;
 import com.jeff_media.customblockdata.CustomBlockData;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.tofaa.entitylib.APIConfig;
@@ -24,7 +26,6 @@ import net.skullian.skyfactions.config.types.DiscordConfig;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.DatabaseManager;
 import net.skullian.skyfactions.database.cache.CacheService;
-import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.block.BrokenBlockService;
 import net.skullian.skyfactions.discord.DiscordHandler;
 import net.skullian.skyfactions.event.armor.ArmorListener;
@@ -38,6 +39,7 @@ import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.xenondevs.invui.InvUI;
 
@@ -84,6 +86,10 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public void onEnable() {
 
         print();
+
+        WorldBorderApi worldBorder = new PersistenceWrapper(this, new Border());
+        getServer().getServicesManager().register(WorldBorderApi.class, worldBorder, this, ServicePriority.High);
+
         // Store an instance of the ConfigHandler class in case it is needed.
         // Primarily used for the discord integration.
         SLogger.info("Initialising Configs.");
