@@ -9,6 +9,7 @@ import net.skullian.skyfactions.faction.RankType;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
+import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.member_manage.rank.MemberRankChangeConfirmationItem;
 import net.skullian.skyfactions.gui.items.obelisk.member_manage.rank.MemberRankChangeItem;
 import net.skullian.skyfactions.util.SoundUtil;
@@ -67,6 +68,10 @@ public class MemberManageRankUI {
                         builder.addIngredient(itemData.getCHARACTER(), confirmationItem);
 
                         this.confirmItem = confirmationItem;
+                        break;
+
+                    case "BACK":
+                        builder.addIngredient(itemData.getCHARACTER(), new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player));
                         break;
                 }
             }

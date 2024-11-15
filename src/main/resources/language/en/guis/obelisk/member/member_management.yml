@@ -59,7 +59,7 @@ ITEMS:
     material: "PLAYER_HEAD"
     skull: "<player_skull>"
     text: "<blue><player_name>" # Placeholders: <player_name> - Name of player.
-    sound: "ui.button.click"
+    sound: "" # Sound already configured in manage_member.yml
     pitch: 1
     # Placeholders: <player_rank> - Rank of player.
     lore:

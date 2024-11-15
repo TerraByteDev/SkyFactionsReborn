@@ -161,7 +161,7 @@ public class FactionsDatabaseManager {
     public CompletableFuture<Void> addOrUpdateFactionMember(UUID playerUUID, String factionName, RankType type) {
         return CompletableFuture.runAsync(() -> ctx.insertInto(FACTIONMEMBERS)
                 .columns(FACTIONMEMBERS.FACTIONNAME, FACTIONMEMBERS.UUID, FACTIONMEMBERS.RANK)
-                .values(factionName, playerUUID.toString(), "member")
+                .values(factionName, playerUUID.toString(), type.getRankValue())
                 .onConflict(FACTIONMEMBERS.UUID)
                 .doUpdate()
                 .set(FACTIONMEMBERS.RANK, type.getRankValue())

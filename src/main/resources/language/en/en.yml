@@ -427,7 +427,7 @@ Messages:
       BAN_BROADCAST: "<red><bold><banned> <reset><yellow>has been banned from the Faction."
 
       # Added onto the title of the rank item when updating a player's rank (assuming they're using the placeholder '<is_selected>')
-      SELECTED: "<green><italic>(Selected)"
+      SELECTED: "<green><italic>(Selected) " # Purposefully leave a space here. Essential.
 
       # Sent when a player's rank is successfully changed (in the faction rank manage UI, assuming they have permission).
       # Placeholders: <player_name> - Name of the player whose rank was changed / <new_rank> - New rank of the player.

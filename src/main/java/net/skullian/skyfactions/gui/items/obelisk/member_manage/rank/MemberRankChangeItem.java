@@ -29,7 +29,6 @@ public class MemberRankChangeItem extends SkyItem {
 
     public MemberRankChangeItem(ItemData data, ItemStack stack, Player player, RankType thisType, Faction faction, OfflinePlayer subject, MemberManageRankUI ui) {
         super(data, stack, player, List.of(thisType, faction, subject).toArray());
-
         this.UI = ui;
     }
 
@@ -40,9 +39,10 @@ public class MemberRankChangeItem extends SkyItem {
         RankType thisType = (RankType) getOptionals()[0];
         RankType selectedType = TYPE != null ? TYPE : thisType;
 
-        if (selectedType.equals(thisType) || (TYPE == null && faction.getRankType(subject.getUniqueId()).equals(thisType))) {
+        if (faction.getRankType(subject.getUniqueId()).equals(selectedType)) {
+            System.out.println("whoah!!!! adding enchant");
             builder.addEnchantment(Enchantment.LURE, 1, false);
-            builder.getItemFlags().add(ItemFlag.HIDE_ENCHANTS);
+            //builder.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
 
         return builder;
@@ -50,17 +50,18 @@ public class MemberRankChangeItem extends SkyItem {
 
     @Override
     public Object[] replacements() {
-        String type = (String) getOptionals()[0];
+        RankType type = (RankType) getOptionals()[0];
         Faction faction = (Faction) getOptionals()[1];
+        OfflinePlayer subject = (OfflinePlayer) getOptionals()[2];
+
         return List.of(
-                "is_selected", faction.getRankType(getPLAYER().getUniqueId()).getRankValue().equalsIgnoreCase(type) ? Messages.FACTION_MANAGE_RANK_SELECTED.getString(PlayerHandler.getLocale(getPLAYER().getUniqueId()))
+                "is_selected", faction.getRankType(subject.getUniqueId()).equals(type) ? Messages.FACTION_MANAGE_RANK_SELECTED.getString(PlayerHandler.getLocale(getPLAYER().getUniqueId()))
                         : ""
         ).toArray();
     }
 
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        player.getInventory().close();
         RankType type = (RankType) getOptionals()[0];
 
         UI.onSelect(type);
