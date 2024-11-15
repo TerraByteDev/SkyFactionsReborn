@@ -98,7 +98,7 @@ Island:
   FACTION_ISLAND_SCHEMATIC: 'faction_island.schem'
 
   # Whether to teleport the player to their island when they join.
-  TELEPORT_ON_JOIN: true
+  TELEPORT_ON_JOIN: false
 
   # Whether to teleport the player to their island on death / respawn.
   TELEPORT_ON_DEATH: true
