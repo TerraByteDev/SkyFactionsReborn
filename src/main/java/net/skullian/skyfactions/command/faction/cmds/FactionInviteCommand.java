@@ -77,10 +77,10 @@ public class FactionInviteCommand extends CommandTemplate {
             OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
             if (!target.hasPlayedBefore()) {
                 Messages.UNKNOWN_PLAYER.send(player, locale, "player", playerName);
-
             } else if (faction.getAllMembers().contains(target)) {
                 Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, locale);
-
+            } else if (faction.isPlayerBanned(target)) {
+                Messages.FACTION_INVITE_PLAYER_BANNED.send(player, locale);
             } else {
                 faction.getOutgoingInvites().whenComplete((invites, throwable) -> {
                     if (throwable != null) {

@@ -25,7 +25,6 @@ import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.island.FactionIsland;
 import net.skullian.skyfactions.notification.NotificationType;
-import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 
 @AllArgsConstructor
@@ -45,6 +44,7 @@ public class Faction {
     public int runes;
     public int gems;
     public String locale;
+    public List<OfflinePlayer> bannedPlayers;
 
     public int getRunes() {
         if (SkyFactionsReborn.cacheService.factionsToCache.containsKey(this)) return (runes += SkyFactionsReborn.cacheService.factionsToCache.get(this).getRunes());
@@ -216,6 +216,7 @@ public class Faction {
      */
     public void banPlayer(OfflinePlayer player, Player actor) {
         SkyFactionsReborn.cacheService.banFactionMember(this, player);
+        bannedPlayers.add(player);
         createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_BAN, "banned", player.getName(), "player", actor.getName());
         if (Settings.FACTION_MANAGE_BROADCAST_BANS.getBoolean()) {
             createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST,"<banned>", player.getName());
@@ -228,6 +229,7 @@ public class Faction {
      * @param player {@link OfflinePlayer}
      */
     public void unbanPlayer(OfflinePlayer player) {
+        bannedPlayers.remove(player);
         SkyFactionsReborn.cacheService.unbanFactionMember(this, player); // todo audit log & ban viewing
     }
 
@@ -235,8 +237,8 @@ public class Faction {
      * @param player Player to check ban status of [{@link Player}]
      * @return {@link Boolean}
      */
-    public CompletableFuture<Boolean> isPlayerBanned(OfflinePlayer player) {
-        return SkyFactionsReborn.databaseManager.factionsManager.isPlayerBanned(player, name);
+    public boolean isPlayerBanned(OfflinePlayer player) {
+        return bannedPlayers.contains(player);
     }
 
     /**

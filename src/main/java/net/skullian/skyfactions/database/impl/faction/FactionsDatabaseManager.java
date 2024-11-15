@@ -69,7 +69,8 @@ public class FactionsDatabaseManager {
                             getFactionMOTD(factionName).join(),
                             SkyFactionsReborn.databaseManager.currencyManager.getRunes(factionName).join(),
                             SkyFactionsReborn.databaseManager.currencyManager.getGems(factionName).join(),
-                            result.getLocale()
+                            result.getLocale(),
+                            getBannedPlayers(factionName).join()
                     ) : null;
         });
     }

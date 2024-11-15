@@ -451,6 +451,12 @@ Messages:
       # Sent when a player tries to invite a player to their Faction, when they have already been invited.
       INVITE_DUPLICATE: "<server_name> <red>You have already invited that player!"
 
+      # Sent when a player tries to invite a player to their Faction, when they are banned from that Faction.
+      INVITE_PLAYER_BANNED: "<server_name> <red><bold>Hey! <reset><gray>That player is banned from your Faction!"
+
+      # Sent when a player tries to request to join a Faction when they are banned from it.
+      REQUEST_JOIN_BANNED: "<server_name> <red><bold>Hey! <reset><gray>You are banned from that Faction!"
+
       # Sent to all Faction moderators, admins and owner (if online) when someone requests to join their Faction.
       JOIN_REQUEST_NOTIFICATION: "<server_name> <green>You have a new Faction join request. Check your Obelisk."
 
