@@ -71,6 +71,7 @@ public class PlayerDatabaseManager {
 
     public CompletableFuture<Void> setPlayerLocale(UUID uuid, String locale) {
         return CompletableFuture.runAsync(() -> {
+            if (locale == null) return;
             ctx.update(PLAYERDATA)
                     .set(PLAYERDATA.LOCALE, locale)
                     .where(PLAYERDATA.UUID.eq(uuid.toString()))

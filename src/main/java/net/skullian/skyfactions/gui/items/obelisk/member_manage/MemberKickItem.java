@@ -44,6 +44,7 @@ public class MemberKickItem extends SkyItem {
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
+            event.getInventory().close();
             if (exc != null) {
                 ErrorUtil.handleError(player, "kick a player", "SQL_FACTION_GET", exc);
                 return;

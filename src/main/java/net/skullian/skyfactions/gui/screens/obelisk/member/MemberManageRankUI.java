@@ -34,7 +34,7 @@ public class MemberManageRankUI {
 
             Window window = Window.single()
                     .setViewer(player)
-                    .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
+                    .setTitle(TextUtility.legacyColor(data.getTITLE().replaceAll("<player_name>", subject.getName()), PlayerHandler.getLocale(player.getUniqueId()), player))
                     .setGui(gui)
                     .build();
 

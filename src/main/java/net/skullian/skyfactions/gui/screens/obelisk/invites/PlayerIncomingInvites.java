@@ -31,26 +31,35 @@ import xyz.xenondevs.invui.window.Window;
 public class PlayerIncomingInvites {
 
     public static void promptPlayer(Player player) {
-        try {
-            GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PLAYER_INCOMING_INVITES_GUI.getPath(), player);
-            PagedGui.Builder gui = registerItems(PagedGui.items()
-                    .setStructure(data.getLAYOUT()), player);
+        SkyFactionsReborn.databaseManager.factionInvitesManager.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((inviteData, ex) -> {
+            Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+                if (ex != null) {
+                    ErrorUtil.handleError(player, "get your invites", "SQL_INVITE_GET", ex);
+                    return;
+                }
 
-            Window window = Window.single()
-                    .setViewer(player)
-                    .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
-                    .setGui(gui)
-                    .build();
+                try {
+                    GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_PLAYER_INCOMING_INVITES_GUI.getPath(), player);
+                    PagedGui.Builder gui = registerItems(PagedGui.items()
+                            .setStructure(data.getLAYOUT()), player, inviteData);
 
-            SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
-            window.open();
-        } catch (IllegalArgumentException error) {
-            error.printStackTrace();
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the incoming faction invites GUI", "debug", "GUI_LOAD_EXCEPTION");
-        }
+                    Window window = Window.single()
+                            .setViewer(player)
+                            .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
+                            .setGui(gui)
+                            .build();
+
+                    SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
+                    window.open();
+                } catch (IllegalArgumentException error) {
+                    error.printStackTrace();
+                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the incoming faction invites GUI", "debug", "GUI_LOAD_EXCEPTION");
+                }
+            });
+        });
     }
 
-    private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player) {
+    private static PagedGui.Builder registerItems(PagedGui.Builder builder, Player player, List<InviteData> inviteData) {
         try {
             builder.addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL);
             List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_PLAYER_INCOMING_INVITES_GUI.getPath(), player);
@@ -63,7 +72,7 @@ public class PlayerIncomingInvites {
                         break;
 
                     case "MODEL":
-                        builder.setContent(getItems(player, itemData));
+                        builder.setContent(getItems(player, itemData, inviteData));
                         break;
 
                     case "BACK":
@@ -92,19 +101,13 @@ public class PlayerIncomingInvites {
         return builder;
     }
 
-    private static List<Item> getItems(Player player, ItemData itemData) {
+    private static List<Item> getItems(Player player, ItemData itemData, List<InviteData> data) {
         List<Item> items = new ArrayList<>();
-        SkyFactionsReborn.databaseManager.factionInvitesManager.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((data, ex) -> {
-            if (ex != null) {
-                ErrorUtil.handleError(player, "get your invites", "SQL_INVITE_GET", ex);
-                return;
-            }
+        for (InviteData inviteData : data) {
+            itemData.setNAME(itemData.getNAME().replace("faction_name", inviteData.getFactionName()));
+            items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getUniqueId()), player, inviteData));
+        }
 
-            for (InviteData inviteData : data) {
-                itemData.setNAME(itemData.getNAME().replace("faction_name", inviteData.getFactionName()));
-                items.add(new PlayerFactionInvitePaginationItem(itemData, GUIAPI.createItem(itemData, inviteData.getInviter().getUniqueId()), player, inviteData));
-            }
-        });
         return items;
     }
 

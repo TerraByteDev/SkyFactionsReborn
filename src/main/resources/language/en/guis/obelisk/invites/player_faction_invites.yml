@@ -58,7 +58,7 @@ ITEMS:
   MODEL:
     material: "PLAYER_HEAD"
     skull: "<player_skull>"
-    text: "<blue><faction_name>" # Placeholders: <player_name> - Name of the player who invited you to their Faction.
+    text: "<blue><faction_name>" # Placeholders: <faction_name> - Name of the faction who is inviting you.
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
     # Placeholders: <player_name> - Name of player / <faction_name> - Name of Faction.

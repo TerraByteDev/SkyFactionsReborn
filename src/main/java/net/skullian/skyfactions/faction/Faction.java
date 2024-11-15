@@ -198,7 +198,7 @@ public class Faction {
                 return;
             }
             if (Settings.FACTION_MANAGE_BROADCAST_KICKS.getBoolean()) {
-                createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST,"kicked", player.getName());
+                createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST,"<kicked>", player.getName());
             }
         });
     }
@@ -217,7 +217,7 @@ public class Faction {
 
             createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_BAN, "banned", player.getName(), "player", actor.getName());
             if (Settings.FACTION_MANAGE_BROADCAST_BANS.getBoolean()) {
-                createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST,"banned", player.getName());
+                createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST,"<banned>", player.getName());
             }
         });
     }
@@ -268,7 +268,7 @@ public class Faction {
             OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
             members.add(player);
             createAuditLog(playerUUID, AuditLogType.PLAYER_JOIN, "player_name", player.getName());
-            createBroadcast(player, Messages.FACTION_JOIN_BROADCAST, "player_name", player.getName());
+            createBroadcast(player, Messages.FACTION_JOIN_BROADCAST, "<player_name>", player.getName());
         });
     }
 
