@@ -79,9 +79,9 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     if (hasJoinRequest) {
                         Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player, locale);
                     } else {
-                        faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((ignored, exc) -> {
-                            if (exc != null) {
-                                ErrorUtil.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc);
+                        faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((ignored, exc2) -> {
+                            if (exc2 != null) {
+                                ErrorUtil.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc2);
                                 return;
                             }
 
