@@ -8,6 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import net.skullian.skyfactions.api.FactionAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -182,6 +183,16 @@ public class Faction {
         SkyFactionsReborn.cacheService.addGems(this, addition);
     }
 
+    /**
+     * Removes gems to the Factions' gem balance.
+     *
+     * @param subtraction Gems to remove [{@link Integer}]
+     */
+    public void subtractGems(int subtraction) {
+        gems -= subtraction;
+        SkyFactionsReborn.cacheService.subtractGems(this, subtraction);
+    }
+
     public void updateLocale(String newLocale) {
         SkyFactionsReborn.cacheService.updateLocale(this, newLocale);
     }
@@ -191,16 +202,11 @@ public class Faction {
      *
      * @param player Player to kick [{@link Player}]
      */
-    public CompletableFuture<Void> kickPlayer(OfflinePlayer player, Player actor) {
-        return SkyFactionsReborn.databaseManager.factionsManager.kickPlayer(player, name).whenComplete((ignored, ex) -> {
-            if (ex != null) {
-                ErrorUtil.handleError(actor, "kick a member from the Faction", "SQL_FACTION_KICK", ex);
-                return;
-            }
-            if (Settings.FACTION_MANAGE_BROADCAST_KICKS.getBoolean()) {
-                createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST,"<kicked>", player.getName());
-            }
-        });
+    public void kickPlayer(OfflinePlayer player, Player actor) {
+        SkyFactionsReborn.cacheService.removeFactionMember(this, player);
+        if (Settings.FACTION_MANAGE_BROADCAST_KICKS.getBoolean()) {
+            createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST,"<kicked>", player.getName());
+        }
     }
 
     /**
@@ -208,18 +214,12 @@ public class Faction {
      *
      * @param player Player to ban [{@link Player}]
      */
-    public CompletableFuture<Void> banPlayer(OfflinePlayer player, Player actor) {
-        return SkyFactionsReborn.databaseManager.factionsManager.banPlayer(player, name).whenComplete((ignored, ex) -> {
-            if (ex != null) {
-                ErrorUtil.handleError(actor, "ban a member from the Faction", "SQL_FACTION_BAN", ex);
-                return;
-            }
-
-            createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_BAN, "banned", player.getName(), "player", actor.getName());
-            if (Settings.FACTION_MANAGE_BROADCAST_BANS.getBoolean()) {
-                createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST,"<banned>", player.getName());
-            }
-        });
+    public void banPlayer(OfflinePlayer player, Player actor) {
+        SkyFactionsReborn.cacheService.banFactionMember(this, player);
+        createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_BAN, "banned", player.getName(), "player", actor.getName());
+        if (Settings.FACTION_MANAGE_BROADCAST_BANS.getBoolean()) {
+            createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST,"<banned>", player.getName());
+        }
     }
 
     /**
@@ -227,8 +227,8 @@ public class Faction {
      *
      * @param player {@link OfflinePlayer}
      */
-    public CompletableFuture<Void> unbanPlayer(OfflinePlayer player) {
-        return SkyFactionsReborn.databaseManager.factionsManager.unbanPlayer(player, name);
+    public void unbanPlayer(OfflinePlayer player) {
+        SkyFactionsReborn.cacheService.unbanFactionMember(this, player); // todo audit log & ban viewing
     }
 
     /**
@@ -253,23 +253,21 @@ public class Faction {
      *
      * @param player Player who is leaving [{@link Player}]
      */
-    public CompletableFuture<Void> leaveFaction(OfflinePlayer player) {
-        // todo rem
-        return SkyFactionsReborn.databaseManager.factionsManager.removeFromFaction(player, name);
+    public void leaveFaction(OfflinePlayer player) {
+        removeFromFaction(player);
+        SkyFactionsReborn.cacheService.removeFactionMember(this, player);
     }
 
     /**
      * Add a new member to the Faction.
      *
-     * @param playerUUID UUID of the player to add [{@link Player}]
+     * @param player UUID of the player to add [{@link OfflinePlayer}]
      */
-    public CompletableFuture<Void> addFactionMember(UUID playerUUID) {
-        return SkyFactionsReborn.databaseManager.factionsManager.addOrUpdateFactionMember(playerUUID, name, RankType.MEMBER).thenAccept((ignored) -> {
-            OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
-            members.add(player);
-            createAuditLog(playerUUID, AuditLogType.PLAYER_JOIN, "player_name", player.getName());
-            createBroadcast(player, Messages.FACTION_JOIN_BROADCAST, "<player_name>", player.getName());
-        });
+    public void addFactionMember(OfflinePlayer player) {
+        SkyFactionsReborn.cacheService.addFactionMember(this, player);
+        members.add(player);
+        createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_JOIN, "player_name", player.getName());
+        createBroadcast(player, Messages.FACTION_JOIN_BROADCAST, "<player_name>", player.getName());
     }
 
     /**
@@ -475,6 +473,18 @@ public class Faction {
             case "members":
                 members.add(player);
                 break;
+        }
+    }
+
+    private void removeFromFaction(OfflinePlayer player) {
+        FactionAPI.factionCache.remove(player.getUniqueId());
+        if (owner.equals(player)) {
+            owner = null;
+        } else {
+            admins.remove(player);
+            moderators.remove(player);
+            fighters.remove(player);
+            members.remove(player);
         }
     }
 }

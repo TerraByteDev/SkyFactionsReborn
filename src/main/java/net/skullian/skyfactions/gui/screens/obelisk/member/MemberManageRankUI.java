@@ -86,6 +86,7 @@ public class MemberManageRankUI {
         confirmItem.setSELECTED(newRank);
         for (MemberRankChangeItem item : this.items) {
             item.setTYPE(newRank);
+            item.onSelect();
         }
     }
 }

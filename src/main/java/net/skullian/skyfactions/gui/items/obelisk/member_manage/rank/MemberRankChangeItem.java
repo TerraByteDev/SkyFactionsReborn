@@ -38,11 +38,11 @@ public class MemberRankChangeItem extends SkyItem {
         Faction faction = (Faction) getOptionals()[1];
         RankType thisType = (RankType) getOptionals()[0];
         RankType selectedType = TYPE != null ? TYPE : thisType;
+        System.out.println("CURRENT TYPE: " + TYPE);
 
         if (faction.getRankType(subject.getUniqueId()).equals(selectedType)) {
-            System.out.println("whoah!!!! adding enchant");
             builder.addEnchantment(Enchantment.LURE, 1, false);
-            //builder.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            builder.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
 
         return builder;
@@ -60,11 +60,14 @@ public class MemberRankChangeItem extends SkyItem {
         ).toArray();
     }
 
+    public void onSelect() {
+        notifyWindows();
+    }
+
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         RankType type = (RankType) getOptionals()[0];
 
         UI.onSelect(type);
-        notifyWindows();
     }
 }

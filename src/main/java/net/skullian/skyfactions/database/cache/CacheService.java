@@ -10,6 +10,7 @@ import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.faction.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitTask;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
@@ -150,5 +151,25 @@ public class CacheService {
     public void updatePlayerRank(Faction faction, UUID playerUUID, RankType newRank) {
         CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
         entry.setNewRank(playerUUID, newRank);
+    }
+
+    public void addFactionMember(Faction faction, OfflinePlayer player) {
+        CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
+        entry.addMember(player);
+    }
+
+    public void removeFactionMember(Faction faction, OfflinePlayer player) {
+        CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
+        entry.removeMember(player);
+    }
+
+    public void banFactionMember(Faction faction, OfflinePlayer player) {
+        CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
+        entry.banMember(player);
+    }
+
+    public void unbanFactionMember(Faction faction, OfflinePlayer player) {
+        CacheEntry entry = factionsToCache.computeIfAbsent(faction, k -> new CacheEntry());
+        entry.unbanMember(player);
     }
 }

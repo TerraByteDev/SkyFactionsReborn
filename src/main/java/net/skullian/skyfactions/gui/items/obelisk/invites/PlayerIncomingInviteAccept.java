@@ -49,14 +49,13 @@ public class PlayerIncomingInviteAccept extends SkyItem {
 
                 CompletableFuture.allOf(
                         SkyFactionsReborn.databaseManager.factionInvitesManager.revokeInvite(player.getUniqueId(), DATA.getFactionName(), "outgoing"),
-                        faction.addFactionMember(player.getUniqueId()),
                         faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_ACCEPT, "player_name", player.getName())
                 ).whenComplete((ignored, exce) -> {
                     if (exce != null) {
                         ErrorUtil.handleError(player, "accept an invite", "SQL_INVITE_ACEPT", exce);
                         return;
                     }
-
+                    faction.addFactionMember(player);
                     Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", player.getName());
                 });
             });

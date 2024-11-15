@@ -158,14 +158,17 @@ public class FactionsDatabaseManager {
 
     // ------------------ MEMBERS  ------------------ //
 
-    public CompletableFuture<Void> addOrUpdateFactionMember(UUID playerUUID, String factionName, RankType type) {
-        return CompletableFuture.runAsync(() -> ctx.insertInto(FACTIONMEMBERS)
-                .columns(FACTIONMEMBERS.FACTIONNAME, FACTIONMEMBERS.UUID, FACTIONMEMBERS.RANK)
-                .values(factionName, playerUUID.toString(), type.getRankValue())
-                .onConflict(FACTIONMEMBERS.UUID)
-                .doUpdate()
-                .set(FACTIONMEMBERS.RANK, type.getRankValue())
-                .execute());
+    public CompletableFuture<Void> addFactionMembers(List<OfflinePlayer> players, String factionName) {
+        return CompletableFuture.runAsync(() -> {
+            ctx.transaction((Configuration trx) -> {
+                for (OfflinePlayer player : players) {
+                    trx.dsl().insertInto(FACTIONMEMBERS)
+                            .columns(FACTIONMEMBERS.FACTIONNAME, FACTIONMEMBERS.UUID, FACTIONMEMBERS.RANK)
+                            .values(factionName, player.getUniqueId().toString(), "member")
+                            .execute();
+                }
+            });
+        });
     }
 
     public CompletableFuture<Void> updateFactionMemberRanks(String factionName, Map<UUID, RankType> ranks) {
@@ -183,14 +186,6 @@ public class FactionsDatabaseManager {
 
     public CompletableFuture<Boolean> isInFaction(Player player) {
         return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTIONMEMBERS, FACTIONMEMBERS.UUID.eq(player.getUniqueId().toString())));
-    }
-
-    public CompletableFuture<Void> removeFromFaction(OfflinePlayer player, String factionName) {
-        return CompletableFuture.runAsync(() -> {
-            ctx.deleteFrom(FACTIONMEMBERS)
-                    .where(FACTIONMEMBERS.UUID.eq(player.getUniqueId().toString()), FACTIONMEMBERS.FACTIONNAME.eq(factionName))
-                    .execute();
-        });
     }
 
     public CompletableFuture<OfflinePlayer> getFactionOwner(String factionName) {
@@ -222,22 +217,42 @@ public class FactionsDatabaseManager {
 
     // ------------------ ADMINISTRATION  ------------------ //
 
-    public CompletableFuture<Void> kickPlayer(OfflinePlayer player, String factionName) {
+    public CompletableFuture<Void> removeMembers(List<OfflinePlayer> players, String factionName) {
         return CompletableFuture.runAsync(() -> {
-            ctx.deleteFrom(FACTIONMEMBERS)
-                    .where(FACTIONMEMBERS.UUID.eq(player.getUniqueId().toString()), FACTIONMEMBERS.FACTIONNAME.eq(factionName))
-                    .execute();
+             ctx.transaction((Configuration trx) -> {
+                    for (OfflinePlayer player : players) {
+                        trx.dsl().deleteFrom(FACTIONMEMBERS)
+                                .where(FACTIONMEMBERS.UUID.eq(player.getUniqueId().toString()), FACTIONMEMBERS.FACTIONNAME.eq(factionName))
+                                .execute();
+                    }
+             });
         });
     }
 
-    public CompletableFuture<Void> banPlayer(OfflinePlayer player, String factionName) {
+    public CompletableFuture<Void> banMembers(List<OfflinePlayer> players, String factionName) {
         return CompletableFuture.runAsync(() -> {
-            kickPlayer(player, factionName).join();
+            ctx.transaction((Configuration trx) -> {
+                removeMembers(players, factionName).join();
 
-            ctx.insertInto(FACTIONBANS)
-                    .columns(FACTIONBANS.FACTIONNAME, FACTIONBANS.UUID)
-                    .values(factionName, player.getUniqueId().toString())
-                    .execute();
+                for (OfflinePlayer player : players) {
+                    trx.dsl().insertInto(FACTIONBANS)
+                            .columns(FACTIONBANS.FACTIONNAME, FACTIONBANS.UUID)
+                            .values(factionName, player.getUniqueId().toString())
+                            .execute();
+                }
+            });
+        });
+    }
+
+    public CompletableFuture<Void> unbanMembers(List<OfflinePlayer> players, String factionName) {
+        return CompletableFuture.runAsync(() -> {
+            ctx.transaction((Configuration trx) -> {
+                for (OfflinePlayer player : players) {
+                    trx.dsl().deleteFrom(FACTIONBANS)
+                            .where(FACTIONBANS.UUID.eq(player.getUniqueId().toString()), FACTIONBANS.FACTIONNAME.eq(factionName))
+                            .execute();
+                }
+            });
         });
     }
 
@@ -260,13 +275,4 @@ public class FactionsDatabaseManager {
     public CompletableFuture<Boolean> isPlayerBanned(OfflinePlayer player, String factionName) {
         return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTIONBANS, FACTIONBANS.FACTIONNAME.eq(factionName), FACTIONBANS.UUID.eq(player.getUniqueId().toString())));
     }
-
-    public CompletableFuture<Void> unbanPlayer(OfflinePlayer player, String factionName) {
-        return CompletableFuture.runAsync(() -> {
-            ctx.deleteFrom(FACTIONBANS)
-                    .where(FACTIONBANS.UUID.eq(player.getUniqueId().toString()), FACTIONBANS.FACTIONNAME.eq(factionName))
-                    .execute();
-        });
-    }
-
 }

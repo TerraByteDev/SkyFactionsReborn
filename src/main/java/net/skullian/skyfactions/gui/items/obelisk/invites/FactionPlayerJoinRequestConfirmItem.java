@@ -41,14 +41,13 @@ public class FactionPlayerJoinRequestConfirmItem extends SkyItem {
             }
 
             CompletableFuture.allOf(
-                    faction.addFactionMember(player.getUniqueId()),
                     SkyFactionsReborn.databaseManager.factionInvitesManager.revokeInvite(player.getUniqueId(), DATA.getFactionName(), "incoming")
             ).whenComplete((ignored, exc) -> {
                 if (exc != null) {
                     ErrorUtil.handleError(player, "accept a join request", "SQL_FACTION_GET", exc);
                     return;
                 }
-
+                faction.addFactionMember(player);
                 Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
                 NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
             });
