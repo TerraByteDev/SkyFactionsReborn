@@ -32,3 +32,5 @@ build
 bin/
 .vscode/
 Server/
+run/
+assets/data.sqlite3

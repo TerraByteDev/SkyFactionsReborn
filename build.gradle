@@ -1,9 +1,19 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
+buildscript {
+    dependencies {
+        classpath 'org.xerial:sqlite-jdbc:3.47.0.0'
+    }
+}
+
 plugins {
     id 'io.papermc.paperweight.userdev' version '1.7.4'
     id 'com.gradleup.shadow' version '8.3.5'
     id 'java'
+    id "xyz.jpenilla.run-paper" version "2.3.1"
+    id 'org.flywaydb.flyway' version '10.21.0'
+    id "org.jooq.jooq-codegen-gradle" version "3.19.15"
+//    id 'nu.studer.jooq' version '9.0'
 }
 
 group = 'net.skullian.skyfactions'
@@ -73,7 +83,7 @@ repositories {
 
     maven {
         name = "JitPack"
-        url "https://jitpack.io" 
+        url "https://jitpack.io"
     }
 
     maven {
@@ -141,9 +151,33 @@ dependencies {
     compileOnly("io.th0rgal:oraxen:1.184.0")
     compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.1")
 
-    compileOnly("org.jooq:jooq:3.19.15")
-
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
+
+    compileOnly("org.jooq:jooq:3.19.15")
+//    jooqGenerator("org.xerial:sqlite-jdbc:3.47.0.0")
+    jooqCodegen("org.xerial:sqlite-jdbc:3.47.0.0")
+}
+
+
+tasks {
+    runServer {
+        downloadPlugins {
+            modrinth("FastAsyncWorldEdit", "2.12.0")
+            modrinth("ViaVersion", "5.1.1")
+            modrinth("PacketEvents", "2.6.0")
+            modrinth("pworlds", "2.0.12")
+
+            hangar("PlaceholderAPI", "2.11.6")
+
+            github("yannicklamprecht", "WorldBorderAPI", "1.211.0", "worldborderapi-1.211.0.jar")
+            github("xtkq-is-not-available", "VoidGen", "v2.2.1", "VoidGen-2.2.1.jar")
+            github("MilkBowl", "Vault", "1.7.3", "Vault.jar")
+
+            url("https://ci.enginehub.org/repository/download/bt11/25367:id/worldguard-bukkit-7.0.12-dist.jar?branch=version/7.0.x&guest=1")
+            url("https://download.luckperms.net/1561/bukkit/loader/LuckPerms-Bukkit-5.4.146.jar")
+        }
+        minecraftVersion("1.21")
+    }
 }
 
 def targetJavaVersion = 21
@@ -156,41 +190,119 @@ java {
     }
 }
 
+configurations {
+    flywayMigration
+}
 
-/*jooq {
-    configurations {
-        main {
-            generateSchemaSourceOnCompilation = false
+flyway {
+    configurations = ['flywayMigration']
+    url = 'jdbc:sqlite:file:./assets/data.sqlite3'
+    user = 'sa'
+    password = ''
+}
 
-            generationTool {
-                logging = Logging.DEBUG
-                jdbc {
-                    driver = "org.sqlite.JDBC"
-                    url = 'jdbc:sqlite:./assets/data.sqlite3'
-                    user = "sa"
-                    password = ""
-                }
-                generator {
-                    name = 'org.jooq.codegen.DefaultGenerator'
-                    database {
-                        name = 'org.jooq.meta.sqlite.SQLiteDatabase'
-                    }
-                    generate {
-                        deprecated = false
-                        records = true
-                        immutablePojos = true
-                        fluentSetters = true
-                    }
-                    target {
-                        packageName = 'net.skullian.skyfactions.database'
-                        directory = 'src/main/java/test'  // default (can be omitted)
-                    }
-                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
-                }
+jooq {
+    configuration {
+        logging = org.jooq.meta.jaxb.Logging.DEBUG
+        jdbc {
+            driver = 'org.sqlite.JDBC'
+            url = flyway.url
+            user = flyway.user
+            password = flyway.password
+        }
+        generator {
+            name = 'org.jooq.codegen.DefaultGenerator'
+            database {
+                name = 'org.jooq.meta.sqlite.SQLiteDatabase'
+                includes = '.*'
+                excludes = ''
+            }
+            generate {
+                deprecated = false
+                records = true
+                immutablePojos = true
+                fluentSetters = true
+            }
+            target {
+                packageName = 'net.skullian.skyfactions.database'
+                directory = 'src/main/java/'
+                clean = false
             }
         }
     }
-}*/
+}
+
+//jooq {
+//    configurations {
+//        main {
+//            generateSchemaSourceOnCompilation = false
+//            generationTool {
+//                logging = org.jooq.meta.jaxb.Logging.DEBUG
+//                jdbc {
+//                    driver = 'org.sqlite.JDBC'
+//                    url = flyway.url
+//                    user = flyway.user
+//                    password = flyway.password
+//                }
+//                generator {
+//                    name = 'org.jooq.codegen.DefaultGenerator'
+//                    database {
+//                        name = 'org.jooq.meta.sqlite.SQLiteDatabase'
+//                        includes = '.*'
+//                        excludes = ''
+//                    }
+////                    database {
+////                        name = "org.jooq.meta.extensions.ddl.DDLDatabase"
+////                        properties {
+////                            property {
+////                                key = "scripts"
+////                                value = "src/main/resources/db/schema.sql"
+////                            }
+////                            property {
+////                                key = "sort"
+////                                value = "flyway"
+////                            }
+////                            property {
+////                                key = "unqualifiedSchema"
+////                                value = "none"
+////                            }
+////                            property {
+////                                key = "defaultNameCase"
+////                                value = "as_is"
+////                            }
+////                        }
+////                    }
+//                    generate {
+//                        deprecated = false
+//                        records = true
+//                        immutablePojos = true
+//                        fluentSetters = true
+//                    }
+//                    target {
+//                        packageName = 'net.skullian.skyfactions.database'
+//                        directory = 'src/main/java/'
+//                    }
+//                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+//                }
+//            }
+//        }
+//    }
+//}
+
+//tasks.named('generateJooq').configure {
+//    dependsOn tasks.named('flywayMigrate')
+//    inputs.files(fileTree('src/main/resources/db/migration'))
+//            .withPropertyName('migrations')
+//            .withPathSensitivity(PathSensitivity.RELATIVE)
+//    allInputsDeclared = true
+//}
+
+tasks.named('jooqCodegen').configure {
+    dependsOn tasks.named('flywayMigrate')
+    inputs.files(fileTree('src/main/resources/db/migration'))
+            .withPropertyName('migrations')
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
