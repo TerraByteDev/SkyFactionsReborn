@@ -92,7 +92,7 @@ public class IslandAPI {
 
     public static void onIslandRemove(Player player) {
         RegionAPI.teleportPlayerToLocation(player, RegionAPI.getHubLocation());
-        SkyFactionsReborn.worldBorderApi.resetWorldBorderToGlobal(player);
+        SkyFactionsReborn.worldBorderApi.resetBorder(player);
 
         // reset runes and gems.
         RunesAPI.playerRunes.remove(player.getUniqueId());

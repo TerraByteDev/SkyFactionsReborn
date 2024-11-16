@@ -1,9 +1,6 @@
 package net.skullian.skyfactions;
 
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.yannicklamprecht.worldborder.api.WorldBorderApi;
-import com.github.yannicklamprecht.worldborder.impl.Border;
-import com.github.yannicklamprecht.worldborder.plugin.PersistenceWrapper;
 import com.jeff_media.customblockdata.CustomBlockData;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.tofaa.entitylib.APIConfig;
@@ -14,6 +11,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.skullian.skyfactions.api.WorldBorderAPI;
 import net.skullian.skyfactions.command.discord.DiscordCommandHandler;
 import net.skullian.skyfactions.command.faction.FactionCommandHandler;
 import net.skullian.skyfactions.command.gems.GemsCommandHandler;
@@ -37,6 +35,9 @@ import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.npc.NPCManager;
 import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.SLogger;
+import net.skullian.skyfactions.util.worldborder.BorderAPI;
+import net.skullian.skyfactions.util.worldborder.persistence.Border;
+import net.skullian.skyfactions.util.worldborder.persistence.BorderPersistence;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
@@ -56,7 +57,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public static ConfigFileHandler configHandler;
     public static DatabaseManager databaseManager;
     public static DiscordHandler discordHandler;
-    public static WorldBorderApi worldBorderApi;
+    public static BorderAPI worldBorderApi;
     public static CacheService cacheService;
     public static BrokenBlockService blockService = new BrokenBlockService();
     public static NPCManager npcManager;
@@ -87,8 +88,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
         print();
 
-        WorldBorderApi worldBorder = new PersistenceWrapper(this, new Border());
-        getServer().getServicesManager().register(WorldBorderApi.class, worldBorder, this, ServicePriority.High);
+        BorderAPI api = new BorderPersistence(new Border());
+        getServer().getServicesManager().register(BorderAPI.class, api, this, ServicePriority.High);
 
         // Store an instance of the ConfigHandler class in case it is needed.
         // Primarily used for the discord integration.
@@ -134,8 +135,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
         discordHandler = new DiscordHandler();
         discordHandler.initialiseBot();
 
-        SLogger.info("Initialising WorldBorderAPI.");
-        RegisteredServiceProvider<WorldBorderApi> worldBorderApiRegisteredServiceProvider = getServer().getServicesManager().getRegistration(WorldBorderApi.class);
+        SLogger.info("Initialising local border api instance.");
+        RegisteredServiceProvider<BorderAPI> worldBorderApiRegisteredServiceProvider = getServer().getServicesManager().getRegistration(BorderAPI.class);
         if (worldBorderApiRegisteredServiceProvider == null) {
             new RuntimeException("Failed to fetch WorldBorderAPI Service Provider. Is WorldBorderAPI installed?").printStackTrace();
             getServer().getPluginManager().disablePlugin(this);

@@ -26,6 +26,7 @@ import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.island.PlayerIsland;
 import net.skullian.skyfactions.util.FileUtil;
 import net.skullian.skyfactions.util.SLogger;
+import net.skullian.skyfactions.util.worldborder.WorldBorder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -97,7 +98,7 @@ public class RegionAPI {
 
     public static void modifyWorldBorder(Player player, Location center, int size) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-            SkyFactionsReborn.worldBorderApi.setBorder(player, (size * 2), center);
+            SkyFactionsReborn.worldBorderApi.setWorldBorder(player, (size * 2), new WorldBorder.BorderPos(center.getX(), center.getZ()));
         });
     }
 

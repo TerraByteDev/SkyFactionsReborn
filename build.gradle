@@ -125,8 +125,6 @@ dependencies {
     compileOnly("com.jeff-media:custom-block-data:${customblockdata}")
     compileOnly("io.lumine:Mythic-Dist:${mythicmobs}")
     compileOnly("net.objecthunter:exp4j:${exp4j}")
-    compileOnly("com.github.yannicklamprecht:worldborderapi:${worldborderapi}:dev")
-    implementation("com.github.yannicklamprecht:worldborderapi:${worldborderapi}")
     compileOnly("com.github.retrooper:packetevents-spigot:${packetevents}")
     implementation("me.tofaa.entitylib:spigot:${entitylib}")
     compileOnly("dev.dejvokep:boosted-yaml:${boostedyaml}")
@@ -156,7 +154,6 @@ tasks {
 
             hangar("PlaceholderAPI", "2.11.6")
 
-            github("yannicklamprecht", "WorldBorderAPI", "1.211.0", "worldborderapi-1.211.0.jar")
             github("xtkq-is-not-available", "VoidGen", "v2.2.1", "VoidGen-2.2.1.jar")
             github("MilkBowl", "Vault", "1.7.3", "Vault.jar")
 

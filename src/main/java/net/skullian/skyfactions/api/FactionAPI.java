@@ -27,6 +27,7 @@ import net.skullian.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
+import net.skullian.skyfactions.util.worldborder.WorldBorder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -48,8 +49,9 @@ public class FactionAPI {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
             if (world == null) return;
+            Location center = island.getCenter(world);
 
-            SkyFactionsReborn.worldBorderApi.setBorder(player, (island.getSize() * 2), island.getCenter(world));
+            SkyFactionsReborn.worldBorderApi.setWorldBorder(player, (island.getSize() * 2), new WorldBorder.BorderPos(center.getX(), center.getZ()));
         });
     }
 

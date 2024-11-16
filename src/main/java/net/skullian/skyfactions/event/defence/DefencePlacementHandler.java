@@ -164,8 +164,8 @@ public class DefencePlacementHandler implements Listener {
             if (instance != null && isFaction && isPlace) SkyFactionsReborn.cacheService.removeDefence(FactionAPI.factionNameCache.get(owner), instance.getDefenceLocation());
                 else if (instance != null && !isFaction && isPlace) SkyFactionsReborn.cacheService.removeDefence(UUID.fromString(owner), instance.getDefenceLocation());
 
-            if (event.isPresent()) event.get().setCancelled(true);
-            if (player.isPresent()) ErrorUtil.handleError(player.get(), "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error);
+            event.ifPresent(blockPlaceEvent -> blockPlaceEvent.setCancelled(true));
+            player.ifPresent(value -> ErrorUtil.handleError(value, "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error));
         }
 
         return null;
@@ -224,7 +224,6 @@ public class DefencePlacementHandler implements Listener {
             List<Defence> defences = new ArrayList<>();
             for (Location location : locations) {
                 Block block = location.getBlock();
-                if (block == null) continue;
 
                 NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
                 NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
@@ -266,7 +265,6 @@ public class DefencePlacementHandler implements Listener {
             List<Defence> defences = new ArrayList<>();
             for (Location location : locations) {
                 Block block = location.getBlock();
-                if (block == null) continue;
 
                 NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
                 NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
