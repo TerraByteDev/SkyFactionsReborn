@@ -59,8 +59,8 @@ public class IslandTeleportCommand extends CommandTemplate {
             if (world != null) {
                 FactionAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player);
 
-                RegionAPI.modifyWorldBorder(player, island.getCenter(world), island.getSize()); // shift join border
                 RegionAPI.teleportPlayerToLocation(player, island.getCenter(world));
+                RegionAPI.modifyWorldBorder(player, island.getCenter(world), island.getSize()); // shift join border
 
                 IslandAPI.onIslandLoad(player.getUniqueId());
             } else {

@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.faction.cmds;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.api.RegionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
@@ -47,11 +48,15 @@ public class FactionTeleportCommand extends CommandTemplate {
             } else if (faction == null) {
                 Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
                 return;
+            } else if (RegionAPI.isLocationInRegion(player.getLocation(), faction.getName())) {
+                Messages.ALREADY_ON_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                return;
             }
+
             IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player.getUniqueId());
 
-            FactionAPI.handleFactionWorldBorder(player, faction.getIsland());
             FactionAPI.teleportToFactionIsland(player, faction);
+            FactionAPI.handleFactionWorldBorder(player, faction.getIsland());
         });
     }
 

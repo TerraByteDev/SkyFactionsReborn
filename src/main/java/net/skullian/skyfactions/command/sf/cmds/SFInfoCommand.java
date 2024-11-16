@@ -42,7 +42,7 @@ public class SFInfoCommand extends CommandTemplate {
 
         Messages.COMMAND_HEAD.send(sender, locale);
         sender.sendMessage(TextUtility.color(
-                "<dark_aqua>Version: &r<gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getVersion() + "</gradient><reset>\n" +
+                "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getVersion() + "</gradient><reset>\n" +
                         "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "") + "</gradient><reset>\n" +
                         "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getWebsite() + "</gradient><reset>\n" +
                         "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getContributors().toString().replace("[", "").replace("]", "") + "</gradient><reset>",
