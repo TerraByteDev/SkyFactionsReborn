@@ -61,7 +61,7 @@ ITEMS:
   # By default, the item is the player's head, and you shouldn't change this unless you're... insane?
   # You can customise the text, lore and sound though.
   TOP:
-    char: "t
+    char: "t"
     material: "PLAYER_HEAD"
     skull: "<player_skull>"
     text: "<blue>Most voted" # Placeholders: <player_name> - Name of player.
