@@ -7,7 +7,6 @@ import net.skullian.skyfactions.util.worldborder.WorldBorderInterface;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
 import java.util.function.Function;
 
 public class WorldBorderAPI implements BorderAPI {
