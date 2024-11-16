@@ -6,22 +6,17 @@ import com.zaxxer.hikari.HikariDataSource;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.impl.*;
-import net.skullian.skyfactions.database.impl.faction.FactionAuditLogDatabaseManager;
-import net.skullian.skyfactions.database.impl.faction.FactionInvitesDatabaseManager;
-import net.skullian.skyfactions.database.impl.faction.FactionIslandDatabaseManager;
-import net.skullian.skyfactions.database.impl.faction.FactionsDatabaseManager;
+import net.skullian.skyfactions.database.impl.faction.*;
 import net.skullian.skyfactions.database.tables.*;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
-import org.jooq.DataType;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultExecuteListenerProvider;
-import org.jooq.impl.SQLDataType;
 import org.sqlite.JDBC;
 
 import java.io.File;
@@ -46,6 +41,7 @@ public class DatabaseManager {
     public FactionInvitesDatabaseManager factionInvitesManager;
     public FactionIslandDatabaseManager factionIslandManager;
     public FactionsDatabaseManager factionsManager;
+    public FactionElectionManager electionManager;
 
     public void initialise(String type) throws SQLException {
         createDataSource(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data/data.sqlite3"), type);
@@ -60,6 +56,7 @@ public class DatabaseManager {
         this.factionInvitesManager = new FactionInvitesDatabaseManager(this.ctx);
         this.factionIslandManager = new FactionIslandDatabaseManager(this.ctx);
         this.factionsManager = new FactionsDatabaseManager(this.ctx);
+        this.electionManager = new FactionElectionManager(this.ctx);
     }
 
     private void createDataSource(
@@ -204,6 +201,11 @@ public class DatabaseManager {
         // aaand same as before!
         ctx.createTableIfNotExists(Notifications.NOTIFICATIONS)
                 .columns(Notifications.NOTIFICATIONS.fields())
+                .execute();
+
+        ctx.createTableIfNotExists(FactionElections.FACTION_ELECTIONS)
+                .columns(FactionElections.FACTION_ELECTIONS.fields())
+                .primaryKey(FactionElections.FACTION_ELECTIONS.ID)
                 .execute();
     }
 

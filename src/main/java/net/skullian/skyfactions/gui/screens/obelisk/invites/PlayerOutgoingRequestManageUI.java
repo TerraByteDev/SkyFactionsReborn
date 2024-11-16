@@ -1,45 +1,41 @@
 package net.skullian.skyfactions.gui.screens.obelisk.invites;
 
-import java.util.List;
-
-import net.skullian.skyfactions.config.types.GUIEnums;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
+import lombok.Builder;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
+import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.JoinRequestData;
-import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
+import net.skullian.skyfactions.gui.items.AirItem;
 import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestConfirmItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestDenyItem;
 import net.skullian.skyfactions.gui.items.obelisk.invites.FactionPlayerJoinRequestRevoke;
 import net.skullian.skyfactions.gui.items.obelisk.invites.InvitePromptItem;
-import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
-import xyz.xenondevs.invui.gui.Gui;
-import xyz.xenondevs.invui.window.Window;
+import net.skullian.skyfactions.gui.screens.Screen;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import xyz.xenondevs.invui.item.Item;
 
-public class PlayerOutgoingRequestManageUI {
+public class PlayerOutgoingRequestManageUI extends Screen {
+    private final JoinRequestData joinRequest;
+
+    @Builder
+    public PlayerOutgoingRequestManageUI(Player player, JoinRequestData joinRequest) {
+        super(player, GUIEnums.OBELISK_INVITE_OUTGOING_GUI.getPath());
+        this.joinRequest = joinRequest;
+
+        initWindow();
+    }
 
     public static void promptPlayer(Player player, JoinRequestData joinRequest) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
-                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_INVITE_OUTGOING_GUI.getPath(), player);
-                Gui.Builder.Normal gui = registerItems(Gui.normal()
-                        .setStructure(data.getLAYOUT()), player, joinRequest);
-
-                Window window = Window.single()
-                        .setViewer(player)
-                        .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
-                        .setGui(gui)
-                        .build();
-
-                SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
-                window.open();
+                PlayerOutgoingRequestManageUI.builder().player(player).joinRequest(joinRequest).build().show();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
                 Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "manage your outgoing join request", "debug", "GUI_LOAD_EXCEPTION");
@@ -47,38 +43,20 @@ public class PlayerOutgoingRequestManageUI {
         });
     }
 
-    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player, JoinRequestData joinRequest) {
-
-        List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_INVITE_OUTGOING_GUI.getPath(), player);
-        for (ItemData itemData : data) {
-            switch (itemData.getITEM_ID()) {
-
-                case "PROMPT":
-                    builder.addIngredient(itemData.getCHARACTER(), new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest.getFactionName(), player));
-                    break;
-
-                case "ACCEPT":
-                    if (joinRequest.isAccepted()) {
-                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestConfirmItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player));
-                    }
-                    break;
-
-                case "DENY":
-                    if (joinRequest.isAccepted()) {
-                        builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestDenyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player));
-                    }
-                    break;
-
-                case "REVOKE":
-                    builder.addIngredient(itemData.getCHARACTER(), new FactionPlayerJoinRequestRevoke(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player));
-                    break;
-
-                case "BORDER":
-                    builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
-                    break;
-            }
-        }
-
-        return builder;
+    @Nullable
+    @Override
+    protected Item handleItem(@NotNull ItemData itemData) {
+        return switch (itemData.getITEM_ID()) {
+            case "PROMPT" ->
+                    new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest.getFactionName(), player);
+            case "ACCEPT" -> joinRequest.isAccepted() ?
+                    new FactionPlayerJoinRequestConfirmItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player) : new AirItem(player);
+            case "DENY" -> joinRequest.isAccepted() ?
+                    new FactionPlayerJoinRequestDenyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player) : new AirItem(player);
+            case "REVOKE" ->
+                    new FactionPlayerJoinRequestRevoke(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player);
+            case "BORDER" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            default -> null;
+        };
     }
 }

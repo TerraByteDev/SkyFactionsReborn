@@ -38,6 +38,6 @@ public class MemberRankItem extends SkyItem {
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         Faction faction = (Faction) getOptionals()[0];
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[1];
-        new MemberManageRankUI().promptPlayer(player, faction, subject);
+        MemberManageRankUI.promptPlayer(player, faction, subject);
     }
 }

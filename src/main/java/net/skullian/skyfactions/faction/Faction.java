@@ -1,22 +1,10 @@
 package net.skullian.skyfactions.faction;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import net.skullian.skyfactions.api.FactionAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
@@ -26,6 +14,17 @@ import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.island.FactionIsland;
 import net.skullian.skyfactions.notification.NotificationType;
 import net.skullian.skyfactions.util.text.TextUtility;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Getter
@@ -44,16 +43,19 @@ public class Faction {
     public int runes;
     public int gems;
     public String locale;
+    private boolean electionRunning;
     public List<OfflinePlayer> bannedPlayers;
 
     public int getRunes() {
-        if (SkyFactionsReborn.cacheService.factionsToCache.containsKey(this)) return (runes += SkyFactionsReborn.cacheService.factionsToCache.get(this).getRunes());
-            else return runes;
+        if (SkyFactionsReborn.cacheService.factionsToCache.containsKey(this))
+            return (runes += SkyFactionsReborn.cacheService.factionsToCache.get(this).getRunes());
+        else return runes;
     }
 
     public int getGems() {
-        if (SkyFactionsReborn.cacheService.factionsToCache.containsKey(this)) return (gems += SkyFactionsReborn.cacheService.factionsToCache.get(this).getGems());
-            else return gems;
+        if (SkyFactionsReborn.cacheService.factionsToCache.containsKey(this))
+            return (gems += SkyFactionsReborn.cacheService.factionsToCache.get(this).getGems());
+        else return gems;
     }
 
     /**
@@ -127,9 +129,9 @@ public class Faction {
                 String locale = PlayerHandler.getLocale(player.getUniqueId());
 
                 Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
-                    Messages.replace(message.getString(locale), locale, player.getPlayer(), replacements)
+                        Messages.replace(message.getString(locale), locale, player.getPlayer(), replacements)
                 );
-        
+
                 player.getPlayer().sendMessage(model);
             }
         }
@@ -147,8 +149,8 @@ public class Faction {
                 String locale = PlayerHandler.getLocale(player.getUniqueId());
 
                 Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
-                    Messages.replace(message, locale, player.getPlayer()));
-                
+                        Messages.replace(message, locale, player.getPlayer()));
+
                 player.getPlayer().sendMessage(model);
             }
         }
@@ -206,7 +208,7 @@ public class Faction {
     public void kickPlayer(OfflinePlayer player, Player actor) {
         SkyFactionsReborn.cacheService.removeFactionMember(this, player);
         if (Settings.FACTION_MANAGE_BROADCAST_KICKS.getBoolean()) {
-            createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST,"<kicked>", player.getName());
+            createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST, "<kicked>", player.getName());
         }
     }
 
@@ -220,7 +222,7 @@ public class Faction {
         bannedPlayers.add(player);
         createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_BAN, "banned", player.getName(), "player", actor.getName());
         if (Settings.FACTION_MANAGE_BROADCAST_BANS.getBoolean()) {
-            createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST,"<banned>", player.getName());
+            createBroadcast(actor, Messages.FACTION_MANAGE_BAN_BROADCAST, "<banned>", player.getName());
         }
     }
 
@@ -413,8 +415,8 @@ public class Faction {
 
     /**
      * Get the configured rank title of a member.
-     * @param playerUUID UUID of the player {@link UUID}
      *
+     * @param playerUUID UUID of the player {@link UUID}
      * @return The rank of the player. {@link String}
      */
     public String getRank(UUID playerUUID) {
@@ -444,7 +446,7 @@ public class Faction {
 
     public boolean isInFaction(UUID playerUUID) {
         return getAllMembers().stream()
-            .anyMatch(player -> player.getUniqueId().equals(playerUUID));
+                .anyMatch(player -> player.getUniqueId().equals(playerUUID));
     }
 
     private void cache(OfflinePlayer player, String oldRank, RankType newType) {
