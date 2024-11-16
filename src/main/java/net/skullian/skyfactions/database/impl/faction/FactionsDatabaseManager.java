@@ -21,11 +21,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import static net.skullian.skyfactions.database.tables.Factions.FACTIONS;
-import static net.skullian.skyfactions.database.tables.Factionmembers.FACTIONMEMBERS;
-import static net.skullian.skyfactions.database.tables.Factionislands.FACTIONISLANDS;
 import static net.skullian.skyfactions.database.tables.Factionbans.FACTIONBANS;
 import static net.skullian.skyfactions.database.tables.Factioninvites.FACTIONINVITES;
+import static net.skullian.skyfactions.database.tables.Factionislands.FACTIONISLANDS;
+import static net.skullian.skyfactions.database.tables.Factionmembers.FACTIONMEMBERS;
+import static net.skullian.skyfactions.database.tables.Factions.FACTIONS;
 
 public class FactionsDatabaseManager {
 
@@ -70,6 +70,7 @@ public class FactionsDatabaseManager {
                             SkyFactionsReborn.databaseManager.currencyManager.getRunes(factionName).join(),
                             SkyFactionsReborn.databaseManager.currencyManager.getGems(factionName).join(),
                             result.getLocale(),
+                            SkyFactionsReborn.databaseManager.electionManager.isElectionRunning(factionName).join(),
                             getBannedPlayers(factionName).join()
                     ) : null;
         });
@@ -220,13 +221,13 @@ public class FactionsDatabaseManager {
 
     public CompletableFuture<Void> removeMembers(List<OfflinePlayer> players, String factionName) {
         return CompletableFuture.runAsync(() -> {
-             ctx.transaction((Configuration trx) -> {
-                    for (OfflinePlayer player : players) {
-                        trx.dsl().deleteFrom(FACTIONMEMBERS)
-                                .where(FACTIONMEMBERS.UUID.eq(player.getUniqueId().toString()), FACTIONMEMBERS.FACTIONNAME.eq(factionName))
-                                .execute();
-                    }
-             });
+            ctx.transaction((Configuration trx) -> {
+                for (OfflinePlayer player : players) {
+                    trx.dsl().deleteFrom(FACTIONMEMBERS)
+                            .where(FACTIONMEMBERS.UUID.eq(player.getUniqueId().toString()), FACTIONMEMBERS.FACTIONNAME.eq(factionName))
+                            .execute();
+                }
+            });
         });
     }
 

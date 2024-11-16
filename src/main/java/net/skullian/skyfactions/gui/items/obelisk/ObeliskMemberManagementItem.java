@@ -1,24 +1,18 @@
 package net.skullian.skyfactions.gui.items.obelisk;
 
+import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.util.SoundUtil;
+import net.skullian.skyfactions.faction.Faction;
+import net.skullian.skyfactions.gui.data.ItemData;
+import net.skullian.skyfactions.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.gui.screens.obelisk.member.MemberManagementUI;
 import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.faction.Faction;
-import net.skullian.skyfactions.gui.data.ItemData;
-import net.skullian.skyfactions.gui.items.impl.SkyItem;
-import net.skullian.skyfactions.gui.screens.obelisk.member.MemberManagementUI;
-import net.skullian.skyfactions.util.ErrorUtil;
 
 public class ObeliskMemberManagementItem extends SkyItem {
 

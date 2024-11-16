@@ -1,10 +1,10 @@
 package net.skullian.skyfactions.config.types;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import dev.dejvokep.boostedyaml.YamlDocument;
 import lombok.Getter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public enum GUIEnums {
 
@@ -15,6 +15,7 @@ public enum GUIEnums {
 
     OBELISK_PLAYER_GUI("obelisk/player_obelisk"),
     OBELISK_FACTION_GUI("obelisk/faction_obelisk"),
+    OBELISK_FACTION_ELECTION_GUI("obelisk/faction_election"),
     OBELISK_MEMBER_MANAGEMENT_GUI("obelisk/member/member_management"),
     OBELISK_MANAGE_MEMBER_GUI("obelisk/member/manage_member"),
     OBELISK_MANAGE_MEMBER_RANK_GUI("obelisk/member/manage_member_rank"),

@@ -17,7 +17,7 @@ LAYOUT:
   - "# # # # p # # # #"
   - "# . . . . . . . #"
   - "# . . . r i . . #"
-  - "# . . a d m . . #"
+  - "# . . a d m . e #"
   - "# # # # # # # # #"
 
 ITEMS:
@@ -103,6 +103,17 @@ ITEMS:
       - "<yellow>View audit logs of your"
       - "<yellow>Faction (e.g. player joins,"
       - "<yellow>player leaves, kicks, etc)."
+
+  ELECTION:
+    char: "e"
+    material: "PLAYER_HEAD"
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTZiOWVkNDFkZThjODc1MmI4ZTllOWI1MDUyNDYzYzY0ZDVmY2RmNTIwZGE5M2I2NWM4MWI2YTEzNmIwMjdkMiJ9fX0="
+    text: "<yellow><bold>Election"
+    sound: ""
+    pitch: 1
+    lore:
+      - "<yellow>Oh no, Leader abandoned us"
+      - "<yellow>Let's elect a new leader"
 
   BORDER:
     char: "#"

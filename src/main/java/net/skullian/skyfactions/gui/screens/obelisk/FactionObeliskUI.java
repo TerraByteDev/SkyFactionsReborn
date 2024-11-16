@@ -1,101 +1,82 @@
 package net.skullian.skyfactions.gui.screens.obelisk;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
+import lombok.Builder;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.gui.data.GUIData;
+import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
+import net.skullian.skyfactions.gui.items.AirItem;
 import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.*;
 import net.skullian.skyfactions.gui.items.obelisk.defence.ObeliskDefencePurchaseItem;
+import net.skullian.skyfactions.gui.items.obelisk.election.ObeliskFactionElectionMenuItem;
+import net.skullian.skyfactions.gui.screens.Screen;
 import net.skullian.skyfactions.util.ErrorUtil;
-import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import xyz.xenondevs.invui.gui.Gui;
-import xyz.xenondevs.invui.window.Window;
+import org.jetbrains.annotations.NotNull;
+import xyz.xenondevs.invui.item.Item;
 
-import java.util.List;
+public class FactionObeliskUI extends Screen {
+    private final Faction faction;
 
-public class FactionObeliskUI {
+    @Builder
+    public FactionObeliskUI(Player player, Faction faction) {
+        super(player, GUIEnums.OBELISK_FACTION_GUI.getPath());
+        this.faction = faction;
+
+        initWindow();
+    }
 
     public static void promptPlayer(Player player) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+        FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
+            if (exc != null) {
+                ErrorUtil.handleError(player, "open faction obelisk", "GUI_LOAD_EXCEPTION", exc);
+                return;
+            }
+
+            if (faction == null) {
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open faction obelisk", "debug", "FACTION_NOT_FOUND");
+                return;
+            }
+
             try {
-                GUIData data = GUIAPI.getGUIData(GUIEnums.OBELISK_FACTION_GUI.getPath(), player);
-                Gui.Builder.Normal gui = registerItems(Gui.normal()
-                        .setStructure(data.getLAYOUT()), player);
-
-                Window window = Window.single()
-                        .setViewer(player)
-                        .setTitle(TextUtility.legacyColor(data.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
-                        .setGui(gui)
-                        .build();
-
-                SoundUtil.playSound(player, data.getOPEN_SOUND(), data.getOPEN_PITCH(), 1f);
-                window.open();
-            } catch (IllegalArgumentException error) {
-                error.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open your obelisk", "debug", "GUI_LOAD_EXCEPTION");
+                FactionObeliskUI.builder().player(player).faction(faction).build().show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open faction obelisk", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }
 
-    private static Gui.Builder.Normal registerItems(Gui.Builder.Normal builder, Player player) {
-        try {
-            List<ItemData> data = GUIAPI.getItemData(GUIEnums.OBELISK_FACTION_GUI.getPath(), player);
-            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
-                if (exc != null) {
-                    ErrorUtil.handleError(player, "open your obelisk", "GUI_LOAD_EXCEPTION", exc);
-                    return;
-                } else if (faction == null) {
-                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open your obelisk", "debug", "FACTION_NOT_FOUND");
-                    return;
-                }
+    @Override
+    protected Item handleItem(@NotNull ItemData itemData) {
+        return switch (itemData.getITEM_ID()) {
+            case "FACTION" ->
+                    new ObeliskFactionOverviewItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "DEFENCES" ->
+                    new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction, player);
 
-                for (ItemData itemData : data) {
-                    switch (itemData.getITEM_ID()) {
+            case "RUNES_CONVERSION" ->
+                    new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player);
 
-                        case "FACTION":
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskFactionOverviewItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
-                            break;
+            case "MEMBER_MANAGEMENT" ->
+                    new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), faction, player);
 
-                        case "DEFENCES":
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction, player));
-                            break;
+            case "AUDIT_LOGS" ->
+                    new ObeliskAuditLogItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
 
-                        case "RUNES_CONVERSION":
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player));
-                            break;
+            case "INVITES" ->
+                    new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction, player);
 
-                        case "MEMBER_MANAGEMENT":
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), faction, player));
-                            break;
+            case "ELECTION" -> faction.isElectionRunning() ?
+                    new ObeliskFactionElectionMenuItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), faction, player) :
+                    new AirItem(player);
 
-                        case "AUDIT_LOGS":
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskAuditLogItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
-                            break;
-
-                        case "INVITES":
-                            builder.addIngredient(itemData.getCHARACTER(), new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction, player));
-                            break;
-
-                        case "BORDER":
-                            builder.addIngredient(itemData.getCHARACTER(), new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player));
-                            break;
-                    }
-                }
-            });
-
-            return builder;
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-
-        return builder;
+            case "BORDER" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            default -> null;
+        };
     }
 }
