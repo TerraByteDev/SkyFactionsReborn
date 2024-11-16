@@ -40,16 +40,17 @@ public class FactionTeleportCommand extends CommandTemplate {
             Player player
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = PlayerHandler.getLocale(player.getUniqueId());
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             } else if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.NOT_IN_FACTION.send(player, locale);
                 return;
             } else if (RegionAPI.isLocationInRegion(player.getLocation(), faction.getName())) {
-                Messages.ALREADY_ON_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.ALREADY_ON_ISLAND.send(player, locale);
                 return;
             }
 
