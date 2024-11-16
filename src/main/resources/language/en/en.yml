@@ -585,10 +585,15 @@ Messages:
       FACTION_BANNED_TITLE: "<red><bold>Banned from Faction"
       FACTION_BANNED_DESCRIPTION: "<yellow>You were banned from your Faction <red><faction_name>!"
 
-      # Notification for when a Faction is disbanded while the member is offline.
+      # Notification for when a Faction is disbanded.
       # Placeholders: <player_name> - Player who disbanded the Faction.
       FACTION_DISBANDED_TITLE: "<red><bold>Faction Disbanded"
       FACTION_DISBANDED_DESCRIPTION: "<yellow>The Faction was disbanded by/<red><player_name> while you were offline."
+
+      # Notification for when a player's rank is updated.
+      # Placeholders: <new_rank> - New rank of the player / <player_name> - Player who updated your rank.
+      FACTION_RANK_UPDATED_TITLE: "<green>Rank Updated"
+      FACTION_RANK_UPDATED_DESCRIPTION: "<yellow>You rank was updated to <new_rank> by <green><player_name>."
 
 
   Obelisk:

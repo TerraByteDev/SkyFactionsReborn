@@ -72,10 +72,11 @@ public class Faction {
      * @param player  Player in question.
      * @param newRank {@link RankType} New Rank of the player.
      */
-    public void modifyPlayerRank(OfflinePlayer player, RankType newRank) {
+    public void modifyPlayerRank(OfflinePlayer player, RankType newRank, Player actor) {
         RankType oldRank = getRankType(player.getUniqueId());
         SkyFactionsReborn.cacheService.updatePlayerRank(this, player.getUniqueId(), newRank);
         cache(player, oldRank.getRankValue(), newRank);
+        NotificationAPI.createNotification(player.getUniqueId(), NotificationType.RANK_UPDATED, "new_rank", getRank(player.getUniqueId()), "player_name", actor.getName());
     }
 
     /**

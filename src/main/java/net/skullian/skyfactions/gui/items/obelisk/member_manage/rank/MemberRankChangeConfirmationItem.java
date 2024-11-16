@@ -35,7 +35,7 @@ public class MemberRankChangeConfirmationItem extends SkyItem {
         Faction faction = (Faction) getOptionals()[0];
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[1];
 
-        faction.modifyPlayerRank(subject, SELECTED);
+        faction.modifyPlayerRank(subject, SELECTED, player);
         Messages.RANK_CHANGE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player_name", subject.getName(), "new_rank", faction.getRank(subject.getUniqueId()));
     }
 
