@@ -47,8 +47,9 @@ public abstract class Defence {
 
     public Defence(DefenceData defenceData, DefenceStruct defenceStruct) {
         this.data = defenceData;
-        if (defenceStruct == null)
+        if (defenceStruct == null) {
             throw new NullPointerException("Could not find defence with the type of " + data.getTYPE());
+        }
         this.struct = defenceStruct;
     }
 
@@ -61,8 +62,11 @@ public abstract class Defence {
             container.remove(dataKey);
             block.setType(Material.AIR);
 
-            if (data.isIS_FACTION()) SkyFactionsReborn.cacheService.removeDefence(FactionAPI.factionNameCache.get(data.getUUIDFactionName()), getDefenceLocation());
-                else SkyFactionsReborn.cacheService.removeDefence(UUID.fromString(data.getUUIDFactionName()), getDefenceLocation());
+            if (data.isIS_FACTION()) {
+                SkyFactionsReborn.cacheService.removeDefence(FactionAPI.factionNameCache.get(data.getUUIDFactionName()), getDefenceLocation());
+            } else {
+                SkyFactionsReborn.cacheService.removeDefence(UUID.fromString(data.getUUIDFactionName()), getDefenceLocation());
+            }
         });
     }
 
@@ -72,7 +76,7 @@ public abstract class Defence {
     }
 
     public void damage(Optional<Integer> amount) {
-        this.data.setDURABILITY((Math.max(this.data.getDURABILITY() - (amount.orElseGet(this::getExplosionDamage)), 0)));
+        this.data.setDURABILITY(Math.max(this.data.getDURABILITY() - amount.orElseGet(this::getExplosionDamage), 0));
         updatePDC();
     }
 
@@ -95,44 +99,43 @@ public abstract class Defence {
     }
 
     public int getRadius() {
-        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getRANGE(), this.data.getLEVEL());
-        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+        return parseFormula(this.struct.getATTRIBUTES().getRANGE());
     }
 
     public int getDamage() {
-        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getDAMAGE(), this.data.getLEVEL());
-        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+        return parseFormula(this.struct.getATTRIBUTES().getDAMAGE());
     }
 
-    public int getDistance() { // for springs
-        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getDISTANCE(), this.data.getLEVEL());
-        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+    public int getDistance() {
+        return parseFormula(this.struct.getATTRIBUTES().getDISTANCE());
     }
 
-    public int getHealing() { // for healing defences
-        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getHEALING(), this.data.getLEVEL());
-        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+    public int getHealing() {
+        return parseFormula(this.struct.getATTRIBUTES().getHEALING());
     }
 
     public int getMaxSimEntities() {
-        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getMAX_TARGETS(), this.data.getLEVEL());
-        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+        return parseFormula(this.struct.getATTRIBUTES().getMAX_TARGETS());
     }
 
     public int getRate() {
-        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getCOOLDOWN(), this.data.getLEVEL());
-        return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
+        return parseFormula(this.struct.getATTRIBUTES().getCOOLDOWN());
     }
 
     public int getExplosionDamage() {
-        String solved = DefencesFactory.solveFormula(this.struct.getATTRIBUTES().getEXPLOSION_DAMAGE_PERCENT(), this.data.getLEVEL());
+        return parseFormula(this.struct.getATTRIBUTES().getEXPLOSION_DAMAGE_PERCENT());
+    }
+
+    private int parseFormula(String formula) {
+        String solved = DefencesFactory.solveFormula(formula, this.data.getLEVEL());
         return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
     }
 
     public String getRandomActionMessage() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
         List<String> messages = this.struct.getEFFECT_MESSAGES();
-        return messages.get(random.nextInt(messages.size())).replaceAll("defence_name", this.struct.getNAME())
+        return messages.get(random.nextInt(messages.size()))
+                .replaceAll("defence_name", this.struct.getNAME())
                 .replaceAll("damage", String.valueOf(getDamage()));
     }
 
@@ -150,11 +153,8 @@ public abstract class Defence {
         return getData().getDURABILITY() != 0;
     }
 
-        
     public boolean checkAmmo() {
-        if (getData().getAMMO() == 0 || this.noAmmoNotified) return false;
-
-        return true;
+        return getData().getAMMO() != 0 && !this.noAmmoNotified;
     }
 
     public void applyPDC(Entity entity) {
@@ -164,9 +164,7 @@ public abstract class Defence {
         container.set(damageKey, PersistentDataType.INTEGER, getDamage());
 
         if (entity.getType().equals(EntityType.PLAYER)) {
-            // better than the eventhandler searching itself, store the ranadom damage / action msg here.
             NamespacedKey messageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "damage-message");
-
             container.set(messageKey, PersistentDataType.STRING, getRandomActionMessage());
         }
     }
@@ -176,16 +174,23 @@ public abstract class Defence {
     }
 
     public CompletableFuture<List<LivingEntity>> getRandomEntity(World defenceWorld) {
-        if (isMaxEntitiesReached()) return CompletableFuture.completedFuture(targetedEntities);
+        if (isMaxEntitiesReached()) {
+            return CompletableFuture.completedFuture(targetedEntities);
+        }
 
         Location location = getDefenceLocation();
         int radius = getRadius();
 
-        Collection<LivingEntity> nearbyEntities = defenceWorld.getNearbyLivingEntities(location, radius, radius, radius);
-        if (nearbyEntities.isEmpty()) return CompletableFuture.completedFuture(new ArrayList<>());
+        List<LivingEntity> filteredEntities = defenceWorld.getNearbyLivingEntities(location, radius, radius, radius).stream()
+                .filter(this::isEntityAllowed)
+                .collect(Collectors.toList());
 
-        List<LivingEntity> filteredEntities = filterEntities(nearbyEntities);
-        List<LivingEntity> chosenEntities = selectRandomEntities(filteredEntities);
+        List<LivingEntity> chosenEntities = ThreadLocalRandom.current()
+                .ints(0, filteredEntities.size())
+                .distinct()
+                .limit(getMaxSimEntities() - targetedEntities.size())
+                .mapToObj(filteredEntities::get)
+                .collect(Collectors.toList());
 
         chosenEntities.addAll(targetedEntities);
         return CompletableFuture.completedFuture(chosenEntities);
@@ -195,28 +200,15 @@ public abstract class Defence {
         return targetedEntities.size() == getMaxSimEntities();
     }
 
-    private List<LivingEntity> filterEntities(Collection<LivingEntity> entities) {
-        List<LivingEntity> filteredEntities = new ArrayList<>();
+    private boolean isEntityAllowed(LivingEntity entity) {
         List<String> allowedEntities = compileAllowedEntities();
         boolean shouldBlockNPCS = shouldBlockNPCs(allowedEntities);
         List<String> blockedMythicMobs = getBlockedMythicMobs(allowedEntities);
 
-        targetedEntities.removeIf(currentlyTargeted -> !entities.contains(currentlyTargeted));
-
-        for (LivingEntity entity : entities) {
-            if (isEntityAllowed(entity, allowedEntities, shouldBlockNPCS, blockedMythicMobs)) {
-                filteredEntities.add(entity);
-            }
-        }
-
-        return filteredEntities;
-    }
-
-    private boolean isEntityAllowed(LivingEntity entity, List<String> allowedEntities, boolean shouldBlockNPCS, List<String> blockedMythicMobs) {
         return entity.isVisibleByDefault() &&
                 !entity.isInvisible() &&
                 !(shouldBlockNPCS && entity.hasMetadata("NPC")) &&
-                !(entity instanceof Player) && // TODO: check if raid is ongoing, if so target them
+                !(entity instanceof Player) &&
                 !isBlockedMythicMob(entity, blockedMythicMobs) &&
                 allowedEntities.contains(entity.getType().name());
     }
@@ -237,9 +229,15 @@ public abstract class Defence {
         List<String> allowedEntities = new ArrayList<>();
 
         DefenceEntityStruct entityStruct = struct.getENTITY_CONFIG();
-        if (canTargetPassive()) allowedEntities.addAll(entityStruct.getPASSIVE_LIST());
-        if (canTargetHostile()) allowedEntities.addAll(entityStruct.getHOSTILE_LIST());
-        if (entityStruct.isIS_WHITELIST()) allowedEntities.addAll(entityStruct.getENTITY_LIST());
+        if (canTargetPassive()) {
+            allowedEntities.addAll(entityStruct.getPASSIVE_LIST());
+        }
+        if (canTargetHostile()) {
+            allowedEntities.addAll(entityStruct.getHOSTILE_LIST());
+        }
+        if (entityStruct.isIS_WHITELIST()) {
+            allowedEntities.addAll(entityStruct.getENTITY_LIST());
+        }
 
         return allowedEntities;
     }
@@ -248,7 +246,6 @@ public abstract class Defence {
         return entities.contains("NPC");
     }
 
-    // acts as a boolean too
     public List<String> getBlockedMythicMobs(List<String> entities) {
         if (DependencyHandler.enabledDeps.contains("MythicMobs")) {
             return entities.stream()
@@ -260,21 +257,29 @@ public abstract class Defence {
     }
 
     public boolean isBlockedMythicMob(LivingEntity entity, List<String> blockedIdentifiers) {
-        AtomicBoolean isblocked = new AtomicBoolean(false);
+        AtomicBoolean isBlocked = new AtomicBoolean(false);
         MythicBukkit.inst().getMobManager().getActiveMob(entity.getUniqueId()).ifPresent(mm -> {
-            if (blockedIdentifiers.contains("mythicmobs:*")) isblocked.set(true);
-            if (blockedIdentifiers.contains(mm.getMobType())) isblocked.set(true);
+            if (blockedIdentifiers.contains("mythicmobs:*")) {
+                isBlocked.set(true);
+            }
+            if (blockedIdentifiers.contains(mm.getMobType())) {
+                isBlocked.set(true);
+            }
         });
 
-        return isblocked.get();
+        return isBlocked.get();
     }
 
     public boolean canTargetPassive() {
-        return struct.getENTITY_CONFIG().isALLOW_PASSIVE_TARGETING() && data.getLEVEL() >= struct.getATTRIBUTES().getPASSIVE_MOBS_TARGET_LEVEL() && data.isTARGET_PASSIVE();
+        return struct.getENTITY_CONFIG().isALLOW_PASSIVE_TARGETING() &&
+                data.getLEVEL() >= struct.getATTRIBUTES().getPASSIVE_MOBS_TARGET_LEVEL() &&
+                data.isTARGET_PASSIVE();
     }
 
     public boolean canTargetHostile() {
-        return struct.getENTITY_CONFIG().isALLOW_HOSTILE_TARGETING() && data.getLEVEL() >= struct.getATTRIBUTES().getHOSTILE_MOBS_TARGET_LEVEL() && data.isTARGET_PASSIVE();
+        return struct.getENTITY_CONFIG().isALLOW_HOSTILE_TARGETING() &&
+                data.getLEVEL() >= struct.getATTRIBUTES().getHOSTILE_MOBS_TARGET_LEVEL() &&
+                data.isTARGET_PASSIVE();
     }
 
     public void removeDeadEntity(LivingEntity entity) {
@@ -286,7 +291,9 @@ public abstract class Defence {
             createHologram(getDefenceLocation(), struct, playerUUIDorFactionName);
         }
 
-        if (task != -1) return; // safety, so it doesn't get enables multiple times
+        if (task != -1) {
+            return;
+        }
         enable();
     }
 
@@ -301,7 +308,9 @@ public abstract class Defence {
 
         String id = getHologramID(data.getUUIDFactionName());
         DefenceTextHologram holo = DefencePlacementHandler.hologramsMap.get(id);
-        if (holo == null) return;
+        if (holo == null) {
+            return;
+        }
         holo.kill();
         DefencePlacementHandler.hologramsMap.remove(id);
     }
@@ -366,7 +375,7 @@ public abstract class Defence {
                 "TRIDENT",
                 "WIND_CHARGE",
                 "WITHER_SKULL"
-        ); // yes this is hardcoded
+        );
 
         return allowed.contains(configuredProjectile);
     }

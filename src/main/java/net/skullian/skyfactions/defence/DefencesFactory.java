@@ -8,11 +8,8 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.bukkit.Material;
@@ -176,84 +173,80 @@ public class DefencesFactory {
 
     private static List<DefenceEffectStruct> getEffects(YamlDocument config) {
         Section section = config.getSection("EFFECTS");
-        List<DefenceEffectStruct> effectStructs = new ArrayList<>();
+        if (section == null) return Collections.emptyList();
 
-        if (section == null) return effectStructs;
-        for (String name : section.getRoutesAsStrings(false)) {
-            Section effect = section.getSection(name);
-            String effectType = effect.getString("EFFECT");
-            int defenceLevel = effect.getInt("DEFENCE_LEVEL");
-            int effectLevel = effect.getInt("EFFECT_LEVEL");
-            int duration = effect.getInt("DURATION");
-
-            effectStructs.add(new DefenceEffectStruct(effectType, defenceLevel, effectLevel, duration));
-        }
-
-        return effectStructs;
+        return section.getRoutesAsStrings(false).stream()
+                .map(name -> {
+                    Section effect = section.getSection(name);
+                    return new DefenceEffectStruct(
+                            effect.getString("EFFECT"),
+                            effect.getInt("DEFENCE_LEVEL"),
+                            effect.getInt("EFFECT_LEVEL"),
+                            effect.getInt("DURATION")
+                    );
+                })
+                .collect(Collectors.toList());
     }
 
     private static DefenceEntityStruct getEntityConfiguration(YamlDocument config) {
         boolean OVERRIDE = config.getBoolean("ENTITIES.OVERRIDE_GLOBAL_CONFIG");
 
-        boolean ALLOW_HOSTILE = config.getBoolean("ENTITIES.ALLOW_HOSTILE_TARGETING");
-        boolean ALLOW_TOGGLE_HOSTILE = config.getBoolean("ENTITIES.ALLOW_TOGGLE_HOSTILE_TARGETING");
-        boolean TARGET_HOSTILE = config.getBoolean("ENTITIES.TARGET_HOSTILE_ON_DEFAULT");
-
-        boolean ALLOW_PASSIVE = config.getBoolean("ENTITIES.ALLOW_PASSIVE_TARGETING");
-        boolean ALLOW_TOGGLE_PASSIVE = config.getBoolean("ENTITIES.ALLOW_TOGGLE_PASSIVE_TARGETING");
-        boolean TARGET_PASSIVE = config.getBoolean("ENTITIES.TARGET_PASSIVE_ON_DEFAULT");
-
-        boolean ALLOW_ATTACK_PLAYERS = config.getBoolean("ENTITIES.ALLOW_ATTACK_PLAYERS");
-
-        boolean IS_WHITELIST = config.getBoolean("ENTITIES.WHITELIST");
-
         List<String> PASSIVE_LIST = new ArrayList<>();
         List<String> HOSTILE_LIST = new ArrayList<>();
         List<String> ENTITY_LIST = new ArrayList<>();
-        if (!OVERRIDE && ALLOW_HOSTILE)
-            HOSTILE_LIST.addAll(DefencesConfig.GLOBAL_HOSTILE_ENTITIES.getList());
-        if (!OVERRIDE && ALLOW_PASSIVE)
-            PASSIVE_LIST.addAll(DefencesConfig.GLOBAL_PASSIVE_ENTITIES.getList());
 
-        if (!OVERRIDE) ENTITY_LIST.addAll(DefencesConfig.GLOBAL_ENTITIES_ENTITY_LIST.getList());
+        if (!OVERRIDE) {
+            if (config.getBoolean("ENTITIES.ALLOW_HOSTILE_TARGETING")) {
+                HOSTILE_LIST.addAll(DefencesConfig.GLOBAL_HOSTILE_ENTITIES.getList());
+            }
+            if (config.getBoolean("ENTITIES.ALLOW_PASSIVE_TARGETING")) {
+                PASSIVE_LIST.addAll(DefencesConfig.GLOBAL_PASSIVE_ENTITIES.getList());
+            }
+            ENTITY_LIST.addAll(DefencesConfig.GLOBAL_ENTITIES_ENTITY_LIST.getList());
+        }
 
-        if (IS_WHITELIST) ENTITY_LIST.addAll(config.getStringList("ENTITIES.ENTITY_LIST"));
+        if (config.getBoolean("ENTITIES.WHITELIST")) {
+            ENTITY_LIST.addAll(config.getStringList("ENTITIES.ENTITY_LIST"));
+        }
 
-        return new DefenceEntityStruct(OVERRIDE, ALLOW_HOSTILE, ALLOW_TOGGLE_HOSTILE, TARGET_HOSTILE, ALLOW_PASSIVE, ALLOW_TOGGLE_PASSIVE, TARGET_PASSIVE,
-                ALLOW_ATTACK_PLAYERS, IS_WHITELIST, PASSIVE_LIST, HOSTILE_LIST, ENTITY_LIST);
+        return new DefenceEntityStruct(
+                OVERRIDE,
+                config.getBoolean("ENTITIES.ALLOW_HOSTILE_TARGETING"),
+                config.getBoolean("ENTITIES.ALLOW_TOGGLE_HOSTILE_TARGETING"),
+                config.getBoolean("ENTITIES.TARGET_HOSTILE_ON_DEFAULT"),
+                config.getBoolean("ENTITIES.ALLOW_PASSIVE_TARGETING"),
+                config.getBoolean("ENTITIES.ALLOW_TOGGLE_PASSIVE_TARGETING"),
+                config.getBoolean("ENTITIES.TARGET_PASSIVE_ON_DEFAULT"),
+                config.getBoolean("ENTITIES.ALLOW_ATTACK_PLAYERS"),
+                config.getBoolean("ENTITIES.WHITELIST"),
+                PASSIVE_LIST,
+                HOSTILE_LIST,
+                ENTITY_LIST
+        );
     }
 
     private static DefenceAttributeStruct getAttributes(YamlDocument config) {
-        String RANGE = config.getString("ATTRIBUTES.RANGE");
-        String COOLDOWN = config.getString("ATTRIBUTES.COOLDOWN");
-        String TARGET_MAX = config.getString("ATTRIBUTES.TARGET_MAX");
-        String MAX_AMMO = config.getString("ATTRIBUTES.MAX_AMMO");
-        String UPGRADE_COST = config.getString("UPGRADE_COST");
-        String DAMAGE = config.getString("ATTRIBUTES.DAMAGE");
-        String DISTANCE = config.getString("ATTRIBUTES.DISTANCE");
-        String HEALING = config.getString("ATTRIBUTES.HEALING");
-
-        String EXPLOSION_DAMAGE_PERCENT = config.getString("ATTRIBUTES.EXPLOSION_DAMAGE_PERCENT");
-
-        int HOSTILE_MOBS_TARGET_LEVEL = config.getInt("ATTRIBUTES.TARGET_HOSTILE_MOBS_LEVEL");
-        int PASSIVE_MOBS_TARGET_LEVEL = config.getInt("ATTRIBUTES.TARGET_PASSIVE_MOBS_LEVEL");
-
-        return new DefenceAttributeStruct(RANGE, COOLDOWN, TARGET_MAX, MAX_AMMO, UPGRADE_COST, DAMAGE, DISTANCE, HEALING, EXPLOSION_DAMAGE_PERCENT, HOSTILE_MOBS_TARGET_LEVEL, PASSIVE_MOBS_TARGET_LEVEL);
+        return new DefenceAttributeStruct(
+                config.getString("ATTRIBUTES.RANGE"),
+                config.getString("ATTRIBUTES.COOLDOWN"),
+                config.getString("ATTRIBUTES.TARGET_MAX"),
+                config.getString("ATTRIBUTES.MAX_AMMO"),
+                config.getString("UPGRADE_COST"),
+                config.getString("ATTRIBUTES.DAMAGE"),
+                config.getString("ATTRIBUTES.DISTANCE"),
+                config.getString("ATTRIBUTES.HEALING"),
+                config.getString("ATTRIBUTES.EXPLOSION_DAMAGE_PERCENT"),
+                config.getInt("ATTRIBUTES.TARGET_HOSTILE_MOBS_LEVEL"),
+                config.getInt("ATTRIBUTES.TARGET_PASSIVE_MOBS_LEVEL")
+        );
     }
 
     private static Map<String, String> getXPFormulas(YamlDocument config) {
         Section drops = config.getSection("EXPERIENCE_DROPS");
-        // Mob Name / Expression
-        Map<String, String> formulas = new HashMap<>();
-        if (drops == null) return formulas;
+        if (drops == null) return Collections.emptyMap();
 
-        for (String mobType : drops.getRoutesAsStrings(false)) {
-            String dropExpression = drops.getString(mobType);
-
-            formulas.put(mobType, dropExpression);
-        }
-
-        return formulas;
+        return drops.getRoutesAsStrings(false).stream()
+                .collect(Collectors.toMap(mobType -> mobType, drops::getString));
     }
 
     public static String solveFormula(String formula, int level) {
@@ -297,25 +290,20 @@ public class DefencesFactory {
     }
 
     private static List<String> getPlacementBlocks(YamlDocument config) {
-        List<String> matchingMaterials = new ArrayList<>();
-        List<String> list = config.getStringList("PLACEMENT.BLOCKS");
+        return config.getStringList("PLACEMENT.BLOCKS").stream()
+                .flatMap(block -> {
+                    boolean isWildCard = block.startsWith("*");
+                    String cleaned = isWildCard ? block.substring(1) : block;
+                    Material match = Material.matchMaterial(cleaned);
 
-        for (String block : list) {
-            boolean isWildCard = block.startsWith("*");
-            String cleaned = isWildCard ? block.substring(1) : block;
-
-            Material match = Material.matchMaterial(cleaned);
-            if (match != null) {
-                matchingMaterials.add(match.name());
-            } else {
-                for (Material material : Material.values()) {
-                    if (material.name().toLowerCase().contains(cleaned.toLowerCase())) {
-                        matchingMaterials.add(material.name());
+                    if (match != null) {
+                        return Stream.of(match.name());
+                    } else {
+                        return Arrays.stream(Material.values())
+                                .filter(material -> material.name().toLowerCase().contains(cleaned.toLowerCase()))
+                                .map(Material::name);
                     }
-                }
-            }
-        }
-
-        return matchingMaterials;
+                })
+                .collect(Collectors.toList());
     }
 }

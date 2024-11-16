@@ -100,7 +100,8 @@ public class MemberManagementUI {
         List<Item> items = new ArrayList<>();
 
         for (OfflinePlayer member : faction.getAllMembers()) {
-            data.setNAME(data.getNAME().replace(player.getName(), member.getName())); // guiapi will auto
+            // please god, let this be the last ever fucking hack in this plugin
+            data.setNAME(data.getNAME().replace(player.getName(), member.getName())); // guiapi will auto place the gui viewer's name, so we just replace it here hehe
             items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), faction.getRank(member.getUniqueId()), member, player, faction));
         }
 
