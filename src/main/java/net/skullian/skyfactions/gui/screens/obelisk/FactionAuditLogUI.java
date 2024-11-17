@@ -36,24 +36,14 @@ public class FactionAuditLogUI extends PaginatedScreen {
     }
 
     public static void promptPlayer(Player player, Faction faction) {
-        faction.getAuditLogs().whenComplete((auditLogData, throwable) -> {
-            if (throwable != null) {
-                ErrorUtil.handleError(player, "open faction audit log", "GUI_LOAD_EXCEPTION", throwable);
-                return;
-            }
+        List<AuditLogData> auditLogData = faction.getAuditLogs();
 
-            if (auditLogData == null) {
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open faction audit log", "debug", "AUDIT_LOG_DATA_NULL");
-                return;
-            }
-
-            try {
-                FactionAuditLogUI.builder().player(player).auditLogData(auditLogData).build().show();
-            } catch (Exception e) {
-                e.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open faction audit log", "debug", "GUI_LOAD_EXCEPTION");
-            }
-        });
+        try {
+            FactionAuditLogUI.builder().player(player).auditLogData(auditLogData).build().show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open faction audit log", "debug", "GUI_LOAD_EXCEPTION");
+        }
     }
 
     @Nullable

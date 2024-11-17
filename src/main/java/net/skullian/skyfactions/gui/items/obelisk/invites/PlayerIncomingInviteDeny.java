@@ -40,14 +40,8 @@ public class PlayerIncomingInviteDeny extends SkyItem {
                 return;
             }
 
-            faction.revokeInvite(DATA, AuditLogType.INVITE_DENY, "player_name", player.getName()).whenComplete((ignored, throwable) -> {
-                if (throwable != null) {
-                    ErrorUtil.handleError(player, "deny an invite", "SQL_INVITE_DENY", throwable);
-                    return;
-                }
-
-                Messages.FACTION_INVITE_DENY_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", faction.getName());
-            });
+            faction.revokeInvite(DATA, AuditLogType.INVITE_DENY, "player_name", player.getName());
+            Messages.FACTION_INVITE_DENY_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", faction.getName());
         });
     }
 

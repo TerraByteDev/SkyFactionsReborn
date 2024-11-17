@@ -38,15 +38,10 @@ public class FactionPlayerJoinRequestRevoke extends SkyItem {
                 return;
             }
 
-            faction.revokeInvite(faction.toInviteData(DATA, player), AuditLogType.PLAYER_JOIN_REQUEST_REVOKE, "player_name", player.getName()).whenComplete((ignored, ex) -> {
-                if (ex != null) {
-                    ErrorUtil.handleError(player, "revoke a Faction join request", "SQL_JOIN_REQUEST_REJECT", ex);
-                    return;
-                }
+            faction.revokeInvite(faction.toInviteData(DATA, player), AuditLogType.PLAYER_JOIN_REQUEST_REVOKE, "player_name", player.getName());
 
-                Messages.FACTION_JOIN_REQUEST_REVOKE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
-                NotificationAPI.factionInviteStore.replace(DATA.getFactionName(), (NotificationAPI.factionInviteStore.get(DATA.getFactionName()) - 1));
-            });
+            Messages.FACTION_JOIN_REQUEST_REVOKE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
+            NotificationAPI.factionInviteStore.replace(DATA.getFactionName(), (NotificationAPI.factionInviteStore.get(DATA.getFactionName()) - 1));
         });
     }
 }

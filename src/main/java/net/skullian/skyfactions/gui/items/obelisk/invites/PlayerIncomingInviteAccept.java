@@ -47,14 +47,10 @@ public class PlayerIncomingInviteAccept extends SkyItem {
                     return;
                 }
 
-                faction.revokeInvite(DATA, AuditLogType.INVITE_ACCEPT, "player_name", player.getName()).whenComplete((ignored, exce) -> {
-                    if (exce != null) {
-                        ErrorUtil.handleError(player, "accept an invite", "SQL_INVITE_ACEPT", exce);
-                        return;
-                    }
-                    faction.addFactionMember(player);
-                    Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", player.getName());
-                });
+                faction.revokeInvite(DATA, AuditLogType.INVITE_ACCEPT, "player_name", player.getName());
+                faction.addFactionMember(player);
+
+                Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", player.getName());
             });
         });
     }

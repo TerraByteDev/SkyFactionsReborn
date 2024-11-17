@@ -84,15 +84,10 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                             System.currentTimeMillis()
                     );
 
-                    faction.createJoinRequest(joinRequest).whenComplete((ignored, exc2) -> {
-                        if (exc2 != null) {
-                            ErrorUtil.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc2);
-                            return;
-                        }
+                    faction.createJoinRequest(joinRequest);
 
-                        Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, locale, "faction_name", factionName);
-                        NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
-                    });
+                    Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, locale, "faction_name", factionName);
+                    NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
                 }
             });
         });

@@ -40,7 +40,7 @@ public class FactionInvitesDatabaseManager {
         });
     }
 
-    public CompletableFuture<List<InviteData>> getAlInvites(String factionName) {
+    public CompletableFuture<List<InviteData>> getAllInvites(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
             Result<FactioninvitesRecord> results = ctx.selectFrom(FACTIONINVITES)
                     .where(FACTIONINVITES.FACTIONNAME.eq(factionName))

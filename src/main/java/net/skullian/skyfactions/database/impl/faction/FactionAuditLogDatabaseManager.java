@@ -4,10 +4,12 @@ import net.skullian.skyfactions.database.struct.AuditLogData;
 import net.skullian.skyfactions.database.tables.records.AuditlogsRecord;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
+import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -22,12 +24,16 @@ public class FactionAuditLogDatabaseManager {
         this.ctx = ctx;
     }
 
-    public CompletableFuture<Void> createAuditLog(UUID playerUUID, String type, String replacements, String factionName) {
+    public CompletableFuture<Void> createAuditLogs(List<AuditLogData> auditLogs) {
         return CompletableFuture.runAsync(() -> {
-            ctx.insertInto(AUDITLOGS)
-                    .columns(AUDITLOGS.FACTIONNAME, AUDITLOGS.TYPE, AUDITLOGS.UUID, AUDITLOGS.REPLACEMENTS, AUDITLOGS.TIMESTAMP)
-                    .values(factionName, type, playerUUID.toString(), replacements, System.currentTimeMillis())
-                    .execute();
+            ctx.transaction((Configuration trx) -> {
+                for (AuditLogData auditLog : auditLogs) {
+                    trx.dsl().insertInto(AUDITLOGS)
+                            .columns(AUDITLOGS.FACTIONNAME, AUDITLOGS.TYPE, AUDITLOGS.UUID, AUDITLOGS.REPLACEMENTS, AUDITLOGS.TIMESTAMP)
+                            .values(auditLog.getFactionName(), auditLog.getType(), auditLog.getPlayer().getUniqueId().toString(), Arrays.toString(auditLog.getReplacements()), System.currentTimeMillis())
+                            .execute();
+                }
+            });
         });
     }
 

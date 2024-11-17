@@ -42,15 +42,10 @@ public class FactionPlayerJoinRequestDenyItem extends SkyItem {
                 return;
             }
 
-            faction.revokeInvite(faction.toInviteData(DATA, player), AuditLogType.PLAYER_JOIN, "player_name", player.getName()).whenComplete((ignored, exc) -> {
-                if (exc != null) {
-                    ErrorUtil.handleError(player, "deny a join request", "SQL_JOIN_REQUEST_REVOKE", exc);
-                    return;
-                }
+            faction.revokeInvite(faction.toInviteData(DATA, player), AuditLogType.PLAYER_JOIN, "player_name", player.getName());
 
-                NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
-                Messages.FACTION_JOIN_REQUEST_DENY_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
-            });
+            NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
+            Messages.FACTION_JOIN_REQUEST_DENY_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
         });
     }
 

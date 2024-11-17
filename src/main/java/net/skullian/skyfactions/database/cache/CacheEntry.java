@@ -3,6 +3,7 @@ package net.skullian.skyfactions.database.cache;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import net.skullian.skyfactions.database.struct.AuditLogData;
 import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.faction.RankType;
 import org.bukkit.Location;
@@ -30,6 +31,7 @@ public class CacheEntry {
     private final List<OfflinePlayer> membersToUnban = new ArrayList<>(); // Faction Exclusive
     private final List<InviteData> invitesToCreate = new ArrayList<>(); // Faction Exclusive
     private final List<InviteData> invitesToRemove = new ArrayList<>(); // Faction Exclusive
+    private final List<AuditLogData> auditLogsToAdd = new ArrayList<>(); // Faction Exclusive
 
     public void addRunes(int amount) {
         runes += amount;
@@ -95,6 +97,10 @@ public class CacheEntry {
         invitesToRemove.add(inviteData);
     }
 
+    public void addAuditLog(AuditLogData auditLog) {
+        auditLogsToAdd.add(auditLog);
+    }
+
     /**
      *
      * @param toCache - UUID of player to cache (only used when the entry is for a player)
@@ -142,7 +148,10 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().removeInvites(invitesToRemove).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to remove invites for faction " + factionName, ex);
-                    })
+                    }),
+                    SkyFactionsReborn.getDatabaseManager().getFactionAuditLogManager().createAuditLogs(auditLogsToAdd).exceptionally((ex -> {
+                        throw new RuntimeException("Failed to create audit logs for faction " + factionName, ex);
+                    }))
             );
         } else {
             UUID uuid = UUID.fromString(toCache);

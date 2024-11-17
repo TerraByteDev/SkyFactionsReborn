@@ -47,6 +47,7 @@ public class Faction {
     public List<OfflinePlayer> bannedPlayers;
     public long lastRenamed;
     public List<InviteData> invites;
+    public List<AuditLogData> auditLogs;
 
     public int getRunes() {
         if (SkyFactionsReborn.getCacheService().getFactionsToCache().containsKey(getName()))
@@ -115,8 +116,9 @@ public class Faction {
      * @return {@link String}
      */
     public CompletableFuture<Void> updateMOTD(String MOTD, Player actor) {
-        motd = MOTD;
-        return CompletableFuture.allOf(createAuditLog(actor.getUniqueId(), AuditLogType.MOTD_UPDATE, "player_name", actor.getName(), "new_motd", MOTD), SkyFactionsReborn.getDatabaseManager().getFactionsManager().updateFactionMOTD(name, MOTD));
+        this.motd = MOTD;
+        createAuditLog(actor.getUniqueId(), AuditLogType.MOTD_UPDATE, "player_name", actor.getName(), "new_motd", MOTD);
+        return SkyFactionsReborn.getDatabaseManager().getFactionsManager().updateFactionMOTD(name, MOTD);
     }
 
     /**
@@ -278,23 +280,24 @@ public class Faction {
     }
 
     /**
-     * Get all audit logs (player join, kick, leave, ban, etc.) of the Faction.
-     *
-     * @return {@link List<AuditLogData>}
-     */
-    public CompletableFuture<List<AuditLogData>> getAuditLogs() {
-        return SkyFactionsReborn.getDatabaseManager().getFactionAuditLogManager().getAuditLogs(name);
-    }
-
-    /**
      * Create an audit log for the Faction.
      *
      * @param playerUUID   UUID of the player in question [{@link UUID}]
      * @param type         {@link AuditLogType} Type of audit log.
      * @param replacements Values to replace.
      */
-    public CompletableFuture<Void> createAuditLog(UUID playerUUID, AuditLogType type, Object... replacements) {
-        return SkyFactionsReborn.getDatabaseManager().getFactionAuditLogManager().createAuditLog(playerUUID, type.name(), Arrays.toString(replacements), name);
+    public void createAuditLog(UUID playerUUID, AuditLogType type, Object... replacements) {
+        SkyFactionsReborn.getCacheService().getEntry(this).addAuditLog(createData(playerUUID, type, replacements));
+    }
+
+    private AuditLogData createData(UUID playerUUID, AuditLogType type, Object... replacements) {
+        return new AuditLogData(
+                Bukkit.getOfflinePlayer(playerUUID),
+                getName(),
+                type.name(),
+                replacements,
+                System.currentTimeMillis()
+        );
     }
 
     /**
@@ -337,22 +340,19 @@ public class Faction {
      *
      * @param data Data of the invite [{@link InviteData}]
      */
-    public CompletableFuture<Void> createInvite(InviteData data) {
+    public void createInvite(InviteData data) {
         OfflinePlayer player = data.getPlayer();
         OfflinePlayer inviter = data.getInviter();
 
         invites.add(data);
         SkyFactionsReborn.getCacheService().getEntry(this).createInvite(data);
-        return createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "inviter", inviter.getName(), "player_name", player.getName()).whenComplete((ignored, ex) -> {
-            if (ex != null) {
-                ex.printStackTrace();
-                return;
-            } else if (player.isOnline()) {
-                Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), PlayerHandler.getLocale(player.getUniqueId()));
-            } else {
-                NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "player_name", inviter.getName(), "faction_name", name);
-            }
-        });
+        createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "inviter", inviter.getName(), "player_name", player.getName());
+
+        if (player.isOnline()) {
+            Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), PlayerHandler.getLocale(player.getUniqueId()));
+        } else {
+            NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "player_name", inviter.getName(), "faction_name", name);
+        }
     }
 
     /**
@@ -360,26 +360,21 @@ public class Faction {
      *
      * @param data Data of the join request [{@link InviteData}]
      */
-    public CompletableFuture<Void> createJoinRequest(InviteData data) {
+    public void createJoinRequest(InviteData data) {
         OfflinePlayer player = data.getPlayer();
 
         invites.add(data);
         SkyFactionsReborn.getCacheService().getEntry(this).createInvite(data);
-        return createAuditLog(player.getUniqueId(), AuditLogType.JOIN_REQUEST_CREATE, "player_name", player.getName()).whenComplete((ignored, ex) -> {
-            if (ex != null) {
-                ex.printStackTrace();
-                return;
-            }
+        createAuditLog(player.getUniqueId(), AuditLogType.JOIN_REQUEST_CREATE, "player_name", player.getName());
 
-            List<OfflinePlayer> users = Stream.concat(getModerators().stream(), getAdmins().stream()).collect(Collectors.toList());
-            users.add(getOwner());
+        List<OfflinePlayer> users = Stream.concat(getModerators().stream(), getAdmins().stream()).collect(Collectors.toList());
+        users.add(getOwner());
 
-            for (OfflinePlayer user : users) {
-                if (user.isOnline()) {
-                    Messages.JOIN_REQUEST_NOTIFICATION.send(user.getPlayer(), user.getPlayer().locale().getLanguage());
-                }
+        for (OfflinePlayer user : users) {
+            if (user.isOnline()) {
+                Messages.JOIN_REQUEST_NOTIFICATION.send(user.getPlayer(), user.getPlayer().locale().getLanguage());
             }
-        });
+        }
     }
 
     public boolean isOwner(Player player) {
@@ -401,14 +396,12 @@ public class Faction {
      * @param type Type of the audit log to be created [{@link AuditLogType}]
      * @param replacements Values to replace in the audit log.
      */
-    public CompletableFuture<Void> revokeInvite(InviteData data, AuditLogType type, Object... replacements) {
+    public void revokeInvite(InviteData data, AuditLogType type, Object... replacements) {
         OfflinePlayer player = data.getPlayer();
 
         invites.remove(data);
         SkyFactionsReborn.getCacheService().getEntry(this).removeInvite(data);
-        return createAuditLog(player.getUniqueId(), type, replacements).whenComplete((ignored, ex) -> {
-            if (ex != null) ex.printStackTrace();
-        });
+        createAuditLog(player.getUniqueId(), type, replacements);
     }
 
     /**
@@ -429,10 +422,9 @@ public class Faction {
     public CompletableFuture<Void> rejectJoinRequest(InviteData data, Player actor) {
         invites.remove(data);
         SkyFactionsReborn.getCacheService().getEntry(this).removeInvite(data);
-        return CompletableFuture.allOf(
-                createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "faction_player", actor.getName(), "player", data.getPlayer().getName()),
-                NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "player_name", actor.getName(), "faction_name", name)
-        );
+        createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "faction_player", actor.getName(), "player", data.getPlayer().getName());
+
+        return NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "player_name", actor.getName(), "faction_name", name);
     }
 
     public InviteData toInviteData(JoinRequestData data, OfflinePlayer player) {

@@ -26,6 +26,7 @@ import static net.skullian.skyfactions.database.tables.Factioninvites.FACTIONINV
 import static net.skullian.skyfactions.database.tables.Factionislands.FACTIONISLANDS;
 import static net.skullian.skyfactions.database.tables.Factionmembers.FACTIONMEMBERS;
 import static net.skullian.skyfactions.database.tables.Factions.FACTIONS;
+import static net.skullian.skyfactions.database.tables.Auditlogs.AUDITLOGS;
 
 public class FactionsDatabaseManager {
 
@@ -73,7 +74,8 @@ public class FactionsDatabaseManager {
                             SkyFactionsReborn.getDatabaseManager().getElectionManager().isElectionRunning(factionName).join(),
                             getBannedPlayers(factionName).join(),
                             result.getLastRenamed(),
-                            SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().getAlInvites(factionName).join()
+                            SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().getAllInvites(factionName).join(),
+                            SkyFactionsReborn.getDatabaseManager().getFactionAuditLogManager().getAuditLogs(factionName).join()
                     ) : null;
         });
     }
@@ -154,6 +156,10 @@ public class FactionsDatabaseManager {
 
                 trx.dsl().deleteFrom(FACTIONINVITES)
                         .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
+                        .execute();
+
+                trx.dsl().deleteFrom(AUDITLOGS)
+                        .where(AUDITLOGS.FACTIONNAME.eq(factionName))
                         .execute();
             });
         });
