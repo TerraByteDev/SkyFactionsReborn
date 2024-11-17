@@ -258,11 +258,11 @@ Factions:
   FACTION_CREATION:
 
     # Cooldown for faction creation (in milliseconds).
-    # We don't put players on cooldown WHEN they delete, because then players have to wait to make a new island.
-    # By putting a cooldown on deletion (upon creating an island), players have an actual island to play on for whatever reason, rather
+    # We don't put players on cooldown WHEN they create, because then players have to wait to make a new faction.
+    # By putting a cooldown on deletion (upon creating an island), players have an actual faction island to play on for whatever reason, rather
     # than being stuck in the actual lobby. Fun right?
     # This also prevents players from spamming and causing lag.
-    CREATION_COOLDOWN: 10800000 # 3 Hours
+    DELETION_COOLDOWN: 10800000 # 3 Hours
 
     # Cost of creating a faction in player runes.
     # Set this to 0 if you wish it to be free.
