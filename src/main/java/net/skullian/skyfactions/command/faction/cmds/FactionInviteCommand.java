@@ -82,29 +82,25 @@ public class FactionInviteCommand extends CommandTemplate {
             } else if (faction.isPlayerBanned(target)) {
                 Messages.FACTION_INVITE_PLAYER_BANNED.send(player, locale);
             } else {
-                faction.getOutgoingInvites().whenComplete((invites, throwable) -> {
-                    if (throwable != null) {
-                        ErrorUtil.handleError(player, "get Faction invites", "SQL_FACTION_GET", throwable);
+
+                List<InviteData> invites = faction.getOutgoingInvites();
+                for (InviteData invite : invites) {
+                    if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
+                        Messages.FACTION_INVITE_DUPLICATE.send(player, locale);
                         return;
                     }
+                }
 
-                    for (InviteData invite : invites) {
-                        if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
-                            Messages.FACTION_INVITE_DUPLICATE.send(player, locale);
-                            return;
-                        }
-                    }
+                InviteData newInvite = new InviteData(
+                        target,
+                        player,
+                        faction.getName(),
+                        "outgoing",
+                        System.currentTimeMillis()
+                );
+                faction.createInvite(newInvite);
+                Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, locale, "player_name", target.getName());
 
-                    InviteData newInvite = new InviteData(
-                            target,
-                            player,
-                            faction.getName(),
-                            "outgoing",
-                            System.currentTimeMillis()
-                    );
-                    faction.createInvite(newInvite);
-                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, locale, "player_name", target.getName());
-                });
             }
         });
     }

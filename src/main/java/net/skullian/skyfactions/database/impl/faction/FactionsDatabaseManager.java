@@ -72,7 +72,8 @@ public class FactionsDatabaseManager {
                             result.getLocale(),
                             SkyFactionsReborn.getDatabaseManager().getElectionManager().isElectionRunning(factionName).join(),
                             getBannedPlayers(factionName).join(),
-                            result.getLastRenamed()
+                            result.getLastRenamed(),
+                            SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().getAlInvites(factionName).join()
                     ) : null;
         });
     }

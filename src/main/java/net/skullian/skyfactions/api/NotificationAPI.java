@@ -2,7 +2,9 @@ package net.skullian.skyfactions.api;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
+import net.skullian.skyfactions.faction.JoinRequestData;
 import net.skullian.skyfactions.notification.NotificationData;
 import net.skullian.skyfactions.notification.NotificationTask;
 import net.skullian.skyfactions.notification.NotificationType;
@@ -27,17 +29,11 @@ public class NotificationAPI {
             if (faction != null && !factionInviteStore.containsKey(faction.getName())) {
                 DefencePlacementHandler.addPlacedDefences(faction.getName());
 
-                faction.getJoinRequests().whenComplete((requests, exc) -> {
-                    if (exc != null) {
-                        exc.printStackTrace();
-                        return;
-                    }
+                List<InviteData> requests = faction.getJoinRequests();
+                factionInviteStore.put(faction.getName(), requests.size());
 
-                    factionInviteStore.put(faction.getName(), requests.size());
-
-                    BukkitTask task = NotificationTask.initialise(player, true).runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), 0L, (Settings.NOTIFICATIONS_INTERVAL.getInt() * 20L));
-                    tasks.put(player.getUniqueId(), task);
-                });
+                BukkitTask task = NotificationTask.initialise(player, true).runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), 0L, (Settings.NOTIFICATIONS_INTERVAL.getInt() * 20L));
+                tasks.put(player.getUniqueId(), task);
             }
         });
     }

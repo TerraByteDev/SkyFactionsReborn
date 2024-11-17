@@ -40,20 +40,10 @@ public class FactionInvitesDatabaseManager {
         });
     }
 
-    public CompletableFuture<JoinRequestData> getPlayerOutgoingJoinRequest(Player player) {
-        return CompletableFuture.supplyAsync(() -> {
-            FactioninvitesRecord result = ctx.selectFrom(FACTIONINVITES)
-                    .where(FACTIONINVITES.UUID.eq(player.getUniqueId().toString()), FACTIONINVITES.TYPE.eq("incoming"))
-                    .fetchOne();
-
-            return result != null ? new JoinRequestData(result.getFactionname(), true, result.getTimestamp()) : null;
-        });
-    }
-
-    public CompletableFuture<List<InviteData>> getInvitesOfType(String factionName, String type) {
+    public CompletableFuture<List<InviteData>> getAlInvites(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
             Result<FactioninvitesRecord> results = ctx.selectFrom(FACTIONINVITES)
-                    .where(FACTIONINVITES.FACTIONNAME.eq(factionName), FACTIONINVITES.TYPE.eq(type))
+                    .where(FACTIONINVITES.FACTIONNAME.eq(factionName))
                     .orderBy(FACTIONINVITES.TIMESTAMP.desc())
                     .fetch();
 
@@ -105,9 +95,4 @@ public class FactionInvitesDatabaseManager {
             });
         });
     }
-
-    public CompletableFuture<Boolean> hasJoinRequest(UUID playerUUID) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTIONINVITES, FACTIONINVITES.UUID.eq(playerUUID.toString()), FACTIONINVITES.TYPE.eq("incoming")));
-    }
-
 }

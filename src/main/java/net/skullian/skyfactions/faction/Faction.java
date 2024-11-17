@@ -46,6 +46,7 @@ public class Faction {
     private boolean electionRunning;
     public List<OfflinePlayer> bannedPlayers;
     public long lastRenamed;
+    public List<InviteData> invites;
 
     public int getRunes() {
         if (SkyFactionsReborn.getCacheService().getFactionsToCache().containsKey(getName()))
@@ -301,8 +302,10 @@ public class Faction {
      *
      * @return {@link List<InviteData>}
      */
-    public CompletableFuture<List<InviteData>> getJoinRequests() {
-        return SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().getInvitesOfType(name, "incoming");
+    public List<InviteData> getJoinRequests() {
+        return invites.stream()
+                .filter(invite -> invite.getType().equals("incoming"))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -310,8 +313,23 @@ public class Faction {
      *
      * @return {@link List<InviteData>}
      */
-    public CompletableFuture<List<InviteData>> getOutgoingInvites() {
-        return SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().getInvitesOfType(name, "outgoing");
+    public List<InviteData> getOutgoingInvites() {
+        return invites.stream()
+                .filter(invite -> invite.getType().equals("outgoing"))
+                .collect(Collectors.toList());
+    }
+
+    public JoinRequestData getPlayerJoinRequest(Player player) {
+        InviteData data = invites.stream()
+                .filter(invite -> invite.getPlayer().getUniqueId().equals(player.getUniqueId()))
+                .findFirst()
+                .orElse(null);
+
+        return data != null ? new JoinRequestData(
+                data.getFactionName(),
+                false,
+                data.getTimestamp()
+        ) : null;
     }
 
     /**
@@ -323,6 +341,7 @@ public class Faction {
         OfflinePlayer player = data.getPlayer();
         OfflinePlayer inviter = data.getInviter();
 
+        invites.add(data);
         SkyFactionsReborn.getCacheService().getEntry(this).createInvite(data);
         return createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "inviter", inviter.getName(), "player_name", player.getName()).whenComplete((ignored, ex) -> {
             if (ex != null) {
@@ -344,6 +363,7 @@ public class Faction {
     public CompletableFuture<Void> createJoinRequest(InviteData data) {
         OfflinePlayer player = data.getPlayer();
 
+        invites.add(data);
         SkyFactionsReborn.getCacheService().getEntry(this).createInvite(data);
         return createAuditLog(player.getUniqueId(), AuditLogType.JOIN_REQUEST_CREATE, "player_name", player.getName()).whenComplete((ignored, ex) -> {
             if (ex != null) {
@@ -384,6 +404,7 @@ public class Faction {
     public CompletableFuture<Void> revokeInvite(InviteData data, AuditLogType type, Object... replacements) {
         OfflinePlayer player = data.getPlayer();
 
+        invites.remove(data);
         SkyFactionsReborn.getCacheService().getEntry(this).removeInvite(data);
         return createAuditLog(player.getUniqueId(), type, replacements).whenComplete((ignored, ex) -> {
             if (ex != null) ex.printStackTrace();
@@ -406,6 +427,7 @@ public class Faction {
      * @param actor Player who rejected the invite [{@link Player}]
      */
     public CompletableFuture<Void> rejectJoinRequest(InviteData data, Player actor) {
+        invites.remove(data);
         SkyFactionsReborn.getCacheService().getEntry(this).removeInvite(data);
         return CompletableFuture.allOf(
                 createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "faction_player", actor.getName(), "player", data.getPlayer().getName()),

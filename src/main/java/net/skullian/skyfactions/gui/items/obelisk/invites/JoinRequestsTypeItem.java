@@ -1,7 +1,9 @@
 package net.skullian.skyfactions.gui.items.obelisk.invites;
 
+import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.faction.JoinRequestData;
 import net.skullian.skyfactions.util.SoundUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -32,12 +34,13 @@ public class JoinRequestsTypeItem extends SkyItem {
         if (TYPE.equals("faction")) {
             JoinRequestsUI.promptPlayer(player);
         } else if (TYPE.equals("player")) {
-            SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().getPlayerOutgoingJoinRequest(player).whenComplete((joinRequest, ex) -> {
+            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "get your outgoing join request", "SQL_JOIN_REQUEST_GET", ex);
                     return;
                 }
 
+                JoinRequestData joinRequest = faction.getPlayerJoinRequest(player);
                 if (joinRequest == null) {
                     SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
                     Messages.FACTION_JOIN_REQUEST_NOT_EXIST.send(player, PlayerHandler.getLocale(player.getUniqueId()));

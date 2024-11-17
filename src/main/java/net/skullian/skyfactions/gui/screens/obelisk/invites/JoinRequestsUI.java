@@ -47,19 +47,13 @@ public class JoinRequestsUI extends PaginatedScreen {
                 return;
             }
 
-            faction.getJoinRequests().whenComplete((inviteData, ex) -> {
-                if (ex != null) {
-                    ErrorUtil.handleError(player, "open the faction join requests GUI", "FACTION_NOT_FOUND", exc);
-                    return;
-                }
-
-                try {
-                    JoinRequestsUI.builder().player(player).inviteData(inviteData).build().show();
-                } catch (IllegalArgumentException error) {
-                    error.printStackTrace();
-                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the faction join requests GUI", "debug", "GUI_LOAD_EXCEPTION");
-                }
-            });
+            List<InviteData> joinRequests = faction.getJoinRequests();
+            try {
+                JoinRequestsUI.builder().player(player).inviteData(joinRequests).build().show();
+            } catch (IllegalArgumentException error) {
+                error.printStackTrace();
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the faction join requests GUI", "debug", "GUI_LOAD_EXCEPTION");
+            }
         });
     }
 

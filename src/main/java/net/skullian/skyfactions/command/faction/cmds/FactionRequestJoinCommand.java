@@ -9,6 +9,7 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.faction.JoinRequestData;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -71,34 +72,28 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     return;
                 }
 
-                SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().hasJoinRequest(player.getUniqueId()).whenComplete((hasJoinRequest, exc) -> {
-                    if (exc != null) {
-                        ErrorUtil.handleError(player, "check if you have a join request", "SQL_JOIN_REQUEST_GET", exc);
-                        return;
-                    }
+                JoinRequestData fetchedRequest = faction.getPlayerJoinRequest(player);
+                if (fetchedRequest != null) {
+                    Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player, locale);
+                } else {
+                    InviteData joinRequest = new InviteData(
+                            player,
+                            null,
+                            faction.getName(),
+                            "incoming",
+                            System.currentTimeMillis()
+                    );
 
-                    if (hasJoinRequest) {
-                        Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player, locale);
-                    } else {
-                        InviteData joinRequest = new InviteData(
-                                player,
-                                null,
-                                faction.getName(),
-                                "incoming",
-                                System.currentTimeMillis()
-                        );
+                    faction.createJoinRequest(joinRequest).whenComplete((ignored, exc2) -> {
+                        if (exc2 != null) {
+                            ErrorUtil.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc2);
+                            return;
+                        }
 
-                        faction.createJoinRequest(joinRequest).whenComplete((ignored, exc2) -> {
-                            if (exc2 != null) {
-                                ErrorUtil.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc2);
-                                return;
-                            }
-
-                            Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, locale, "faction_name", factionName);
-                            NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
-                        });
-                    }
-                });
+                        Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, locale, "faction_name", factionName);
+                        NotificationAPI.factionInviteStore.replace(factionName, (NotificationAPI.factionInviteStore.get(factionName) + 1));
+                    });
+                }
             });
         });
 

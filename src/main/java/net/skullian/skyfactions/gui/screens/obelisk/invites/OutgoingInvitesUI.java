@@ -47,19 +47,13 @@ public class OutgoingInvitesUI extends PaginatedScreen {
                 return;
             }
 
-            faction.getOutgoingInvites().whenComplete((inviteData, ex) -> {
-                if (ex != null) {
-                    ErrorUtil.handleError(player, "open the outgoing invites GUI", "GUI_LOAD_EXCEPTION", exc);
-                    return;
-                }
-
-                try {
-                    OutgoingInvitesUI.builder().player(player).inviteData(inviteData).build().show();
-                } catch (IllegalArgumentException error) {
-                    error.printStackTrace();
-                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the outgoing invites GUI", "debug", "GUI_LOAD_EXCEPTION");
-                }
-            });
+            List<InviteData> outgoingInvites = faction.getOutgoingInvites();
+            try {
+                OutgoingInvitesUI.builder().player(player).inviteData(outgoingInvites).build().show();
+            } catch (IllegalArgumentException error) {
+                error.printStackTrace();
+                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the outgoing invites GUI", "debug", "GUI_LOAD_EXCEPTION");
+            }
         });
     }
 
