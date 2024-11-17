@@ -11,6 +11,7 @@ import lombok.Setter;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 public class CacheEntry {
@@ -83,63 +84,63 @@ public class CacheEntry {
 
     /**
      *
-     * @param toCache - UUID
-     * @param faction - explanatory
+     * @param toCache - UUID of player to cache (only used when the entry is for a player)
+     * @param factionName - explanatory. same reason as above.
      * @return {@link CompletableFuture<Void>}
      */
-    public CompletableFuture<Void> cache(String toCache, Faction faction) {
-        if (SkyFactionsReborn.databaseManager.closed) {
+    public CompletableFuture<Void> cache(@Nullable String toCache, @Nullable String factionName) {
+        if (SkyFactionsReborn.getDatabaseManager().closed) {
             return CompletableFuture.completedFuture(null);
         }
-        if (faction != null) {
+        if (factionName != null) {
             return CompletableFuture.allOf(
-                    SkyFactionsReborn.databaseManager.currencyManager.modifyGems(faction.getName(), gems, false).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to set gems of faction " + faction.getName(), ex);
+                    SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyGems(factionName, gems, false).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to set gems of faction " + factionName, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.currencyManager.modifyRunes(faction.getName(), runes, false).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to set runes of faction " + faction.getName(), ex);
+                    SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyRunes(factionName, runes, false).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to set runes of faction " + factionName, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.defencesManager.registerDefenceLocations(defencesToRegister, faction.getName(), true).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to register new defences for faction " + faction.getName(), ex);
+                    SkyFactionsReborn.getDatabaseManager().getDefencesManager().registerDefenceLocations(defencesToRegister, factionName, true).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to register new defences for faction " + factionName, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.defencesManager.removeDefenceLocations(defencesToRemove, faction.getName(), true).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to remove defences for faction " + faction.getName(), ex);
+                    SkyFactionsReborn.getDatabaseManager().getDefencesManager().removeDefenceLocations(defencesToRemove, factionName, true).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to remove defences for faction " + factionName, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.factionsManager.updateFactionLocale(faction.getName(), newLocale).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to update locale for faction " + faction.getName(), ex);
+                    SkyFactionsReborn.getDatabaseManager().getFactionsManager().updateFactionLocale(factionName, newLocale).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to update locale for faction " + factionName, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.factionsManager.updateFactionMemberRanks(faction.getName(), newRanks).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to update ranks for faction " + faction.getName(), ex);
+                    SkyFactionsReborn.getDatabaseManager().getFactionsManager().updateFactionMemberRanks(factionName, newRanks).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to update ranks for faction " + factionName, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.factionsManager.addFactionMembers(membersToAdd, faction.getName()).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to add players to faction " + faction.getName(), ex);
+                    SkyFactionsReborn.getDatabaseManager().getFactionsManager().addFactionMembers(membersToAdd, factionName).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to add players to faction " + factionName, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.factionsManager.removeMembers(membersToRemove, faction.getName()).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to kick players from faction " + faction.getName(), ex);
+                    SkyFactionsReborn.getDatabaseManager().getFactionsManager().removeMembers(membersToRemove, factionName).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to kick players from faction " + factionName, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.factionsManager.banMembers(membersToBan, faction.getName()).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to ban players from faction " + faction.getName(), ex);
+                    SkyFactionsReborn.getDatabaseManager().getFactionsManager().banMembers(membersToBan, factionName).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to ban players from faction " + factionName, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.factionsManager.unbanMembers(membersToUnban, faction.getName()).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to unban players from faction " + faction.getName(), ex);
+                    SkyFactionsReborn.getDatabaseManager().getFactionsManager().unbanMembers(membersToUnban, factionName).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to unban players from faction " + factionName, ex);
                     })
             );
         } else {
             UUID uuid = UUID.fromString(toCache);
             return CompletableFuture.allOf(
-                    SkyFactionsReborn.databaseManager.currencyManager.modifyGems(uuid.toString(), gems, false).exceptionally((ex) -> {
+                    SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyGems(uuid.toString(), gems, false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set gems of player " + uuid, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.currencyManager.modifyRunes(uuid.toString(), runes, false).exceptionally((ex) -> {
+                    SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyRunes(uuid.toString(), runes, false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set runes of player " + uuid, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.defencesManager.registerDefenceLocations(defencesToRegister, uuid.toString(), false).exceptionally((ex) -> {
+                    SkyFactionsReborn.getDatabaseManager().getDefencesManager().registerDefenceLocations(defencesToRegister, uuid.toString(), false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to register new defences for player " + uuid, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.defencesManager.registerDefenceLocations(defencesToRemove, uuid.toString(), false).exceptionally((ex) -> {
+                    SkyFactionsReborn.getDatabaseManager().getDefencesManager().registerDefenceLocations(defencesToRemove, uuid.toString(), false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to remove defences for player " + uuid, ex);
                     }),
-                    SkyFactionsReborn.databaseManager.playerManager.setPlayerLocale(uuid, newLocale).exceptionally((ex) -> {
+                    SkyFactionsReborn.getDatabaseManager().getPlayerManager().setPlayerLocale(uuid, newLocale).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to update defendes for player " + uuid, ex);
                     })
             );

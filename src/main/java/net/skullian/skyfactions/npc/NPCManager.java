@@ -193,7 +193,7 @@ public class NPCManager {
                 throw new RuntimeException("Attempted to reload NPCs when the integration is not enabled in the config!");
             }
 
-            IntStream.range(0, SkyFactionsReborn.databaseManager.playerIslandManager.cachedPlayerIslandID)
+            IntStream.range(0, SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().cachedPlayerIslandID)
                     .forEach(i -> {
                         SkyNPC npc = factory.getNPC("player-" + i, false);
                         if (npc == null) return;
@@ -202,7 +202,7 @@ public class NPCManager {
                             affected.incrementAndGet();
                             return;
                         }
-                        SkyFactionsReborn.databaseManager.playerIslandManager.getOwnerOfIsland(new PlayerIsland(i))
+                        SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().getOwnerOfIsland(new PlayerIsland(i))
                                 .whenComplete((uuid, ex) -> {
                                     if (ex != null) {
                                         SLogger.fatal("Failed to get owner of island [{}] in order to refresh their NPC.", i);
@@ -217,7 +217,7 @@ public class NPCManager {
                                 });
                     });
 
-            IntStream.range(0, SkyFactionsReborn.databaseManager.factionIslandManager.cachedFactionIslandID)
+            IntStream.range(0, SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().cachedFactionIslandID)
                     .forEach(i -> {
                         SkyNPC npc = factory.getNPC("faction-" + i, true);
                         if (npc == null) return;
@@ -226,7 +226,7 @@ public class NPCManager {
                             affected.incrementAndGet();
                             return;
                         }
-                        SkyFactionsReborn.databaseManager.factionsManager.getFactionByIslandID(i)
+                        SkyFactionsReborn.getDatabaseManager().getFactionsManager().getFactionByIslandID(i)
                                 .whenComplete((faction, ex) -> {
                                     if (ex != null) {
                                         SLogger.fatal("Failed to get faction owner of island [{}] in order to refresh their NPCs.", i);

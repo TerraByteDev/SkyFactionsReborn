@@ -218,7 +218,7 @@ jooq {
 
 tasks.named('jooqCodegen').configure {
     dependsOn tasks.named('flywayMigrate')
-    inputs.files(fileTree('src/main/resources/db/migration'))
+            inputs.files(fileTree('src/main/resources/db/migration'))
             .withPropertyName('migrations')
             .withPathSensitivity(PathSensitivity.RELATIVE)
 }

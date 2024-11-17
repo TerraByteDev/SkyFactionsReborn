@@ -20,6 +20,7 @@ public class Factions implements Serializable {
     private final Integer level;
     private final Long lastRaid;
     private final String locale;
+    private final Long lastRenamed;
 
     public Factions(Factions value) {
         this.name = value.name;
@@ -27,6 +28,7 @@ public class Factions implements Serializable {
         this.level = value.level;
         this.lastRaid = value.lastRaid;
         this.locale = value.locale;
+        this.lastRenamed = value.lastRenamed;
     }
 
     public Factions(
@@ -34,13 +36,15 @@ public class Factions implements Serializable {
         String motd,
         Integer level,
         Long lastRaid,
-        String locale
+        String locale,
+        Long lastRenamed
     ) {
         this.name = name;
         this.motd = motd;
         this.level = level;
         this.lastRaid = lastRaid;
         this.locale = locale;
+        this.lastRenamed = lastRenamed;
     }
 
     /**
@@ -76,6 +80,13 @@ public class Factions implements Serializable {
      */
     public String getLocale() {
         return this.locale;
+    }
+
+    /**
+     * Getter for <code>factions.last_renamed</code>.
+     */
+    public Long getLastRenamed() {
+        return this.lastRenamed;
     }
 
     @Override
@@ -117,6 +128,12 @@ public class Factions implements Serializable {
         }
         else if (!this.locale.equals(other.locale))
             return false;
+        if (this.lastRenamed == null) {
+            if (other.lastRenamed != null)
+                return false;
+        }
+        else if (!this.lastRenamed.equals(other.lastRenamed))
+            return false;
         return true;
     }
 
@@ -129,6 +146,7 @@ public class Factions implements Serializable {
         result = prime * result + ((this.level == null) ? 0 : this.level.hashCode());
         result = prime * result + ((this.lastRaid == null) ? 0 : this.lastRaid.hashCode());
         result = prime * result + ((this.locale == null) ? 0 : this.locale.hashCode());
+        result = prime * result + ((this.lastRenamed == null) ? 0 : this.lastRenamed.hashCode());
         return result;
     }
 
@@ -141,6 +159,7 @@ public class Factions implements Serializable {
         sb.append(", ").append(level);
         sb.append(", ").append(lastRaid);
         sb.append(", ").append(locale);
+        sb.append(", ").append(lastRenamed);
 
         sb.append(")");
         return sb.toString();

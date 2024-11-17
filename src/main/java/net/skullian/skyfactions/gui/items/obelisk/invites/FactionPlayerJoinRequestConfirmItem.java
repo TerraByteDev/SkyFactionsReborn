@@ -41,7 +41,7 @@ public class FactionPlayerJoinRequestConfirmItem extends SkyItem {
             }
 
             CompletableFuture.allOf(
-                    SkyFactionsReborn.databaseManager.factionInvitesManager.revokeInvite(player.getUniqueId(), DATA.getFactionName(), "incoming")
+                    SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().revokeInvite(player.getUniqueId(), DATA.getFactionName(), "incoming")
             ).whenComplete((ignored, exc) -> {
                 if (exc != null) {
                     ErrorUtil.handleError(player, "accept a join request", "SQL_FACTION_GET", exc);

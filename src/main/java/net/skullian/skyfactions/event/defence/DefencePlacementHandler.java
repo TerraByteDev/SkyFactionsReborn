@@ -154,15 +154,15 @@ public class DefencePlacementHandler implements Listener {
             instance = (Defence) constr.newInstance(data, defenceStruct);
             if (shouldLoad) instance.onLoad(owner);
 
-            if (isFaction && isPlace) SkyFactionsReborn.cacheService.registerDefence(FactionAPI.factionNameCache.get(owner), instance.getDefenceLocation());
-                else if (!isFaction && isPlace) SkyFactionsReborn.cacheService.registerDefence(UUID.fromString(owner), instance.getDefenceLocation());
+            if (isFaction && isPlace) SkyFactionsReborn.getCacheService().registerDefence(FactionAPI.factionNameCache.get(owner), instance.getDefenceLocation());
+                else if (!isFaction && isPlace) SkyFactionsReborn.getCacheService().registerDefence(UUID.fromString(owner), instance.getDefenceLocation());
 
             addIntoMap(owner, isFaction, instance);
 
             return instance;
         } catch (Exception error) {
-            if (instance != null && isFaction && isPlace) SkyFactionsReborn.cacheService.removeDefence(FactionAPI.factionNameCache.get(owner), instance.getDefenceLocation());
-                else if (instance != null && !isFaction && isPlace) SkyFactionsReborn.cacheService.removeDefence(UUID.fromString(owner), instance.getDefenceLocation());
+            if (instance != null && isFaction && isPlace) SkyFactionsReborn.getCacheService().removeDefence(FactionAPI.factionNameCache.get(owner), instance.getDefenceLocation());
+                else if (instance != null && !isFaction && isPlace) SkyFactionsReborn.getCacheService().removeDefence(UUID.fromString(owner), instance.getDefenceLocation());
 
             event.ifPresent(blockPlaceEvent -> blockPlaceEvent.setCancelled(true));
             player.ifPresent(value -> ErrorUtil.handleError(value, "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error));
@@ -215,7 +215,7 @@ public class DefencePlacementHandler implements Listener {
 
     public static void addPlacedDefences(String factionName) {
         if (loadedFactionDefences.get(factionName) != null) return;
-        SkyFactionsReborn.databaseManager.defencesManager.getDefenceLocations(Defencelocations.DEFENCELOCATIONS.FACTIONNAME.eq(factionName), "faction").whenComplete((locations, ex) -> {
+        SkyFactionsReborn.getDatabaseManager().getDefencesManager().getDefenceLocations(Defencelocations.DEFENCELOCATIONS.FACTIONNAME.eq(factionName), "faction").whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -256,7 +256,7 @@ public class DefencePlacementHandler implements Listener {
 
     public static void addPlacedDefences(Player player) {
         if (loadedPlayerDefences.get(player.getUniqueId()) != null) return;
-        SkyFactionsReborn.databaseManager.defencesManager.getDefenceLocations(Defencelocations.DEFENCELOCATIONS.UUID.eq(player.getUniqueId().toString()), "player").whenComplete((locations, ex) -> {
+        SkyFactionsReborn.getDatabaseManager().getDefencesManager().getDefenceLocations(Defencelocations.DEFENCELOCATIONS.UUID.eq(player.getUniqueId().toString()), "player").whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;

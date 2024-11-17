@@ -34,7 +34,7 @@ public class IslandAPI {
 
     public static CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
         if (islands.containsKey(playerUUID)) return CompletableFuture.completedFuture(islands.get(playerUUID));
-        return SkyFactionsReborn.databaseManager.playerIslandManager.getPlayerIsland(playerUUID).thenApply((island) -> {
+        return SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().getPlayerIsland(playerUUID).thenApply((island) -> {
             islands.put(playerUUID, island);
 
             return island;
@@ -50,8 +50,8 @@ public class IslandAPI {
 
     public static void createIsland(Player player) {
 
-        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.databaseManager.playerIslandManager.cachedPlayerIslandID);
-        SkyFactionsReborn.databaseManager.playerIslandManager.cachedPlayerIslandID++;
+        PlayerIsland island = new PlayerIsland(SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().cachedPlayerIslandID);
+        SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().cachedPlayerIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
         if (world == null) {
@@ -63,13 +63,13 @@ public class IslandAPI {
         RegionAPI.createRegion(player, island.getPosition1(world), island.getPosition2(world), world, player.getUniqueId().toString());
 
         CompletableFuture.allOf(
-                SkyFactionsReborn.databaseManager.playerIslandManager.createIsland(player, island),
+                SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().createIsland(player, island),
                 RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player")
         ).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
                 removePlayerIsland(player);
-                SkyFactionsReborn.databaseManager.playerIslandManager.removeIsland(player);
+                SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().removeIsland(player);
                 return;
             }
 
@@ -87,12 +87,12 @@ public class IslandAPI {
     }
 
     public static CompletableFuture<Boolean> hasIsland(UUID playerUUID) {
-        return SkyFactionsReborn.databaseManager.playerIslandManager.hasIsland(playerUUID);
+        return SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().hasIsland(playerUUID);
     }
 
     public static void onIslandRemove(Player player) {
         RegionAPI.teleportPlayerToLocation(player, RegionAPI.getHubLocation());
-        SkyFactionsReborn.worldBorderApi.resetBorder(player);
+        SkyFactionsReborn.getWorldBorderApi().resetBorder(player);
 
         // reset runes and gems.
         RunesAPI.playerRunes.remove(player.getUniqueId());
@@ -118,9 +118,9 @@ public class IslandAPI {
 
                 CompletableFuture.allOf(
                         RegionAPI.cutRegion(region),
-                        SkyFactionsReborn.databaseManager.playerIslandManager.removeIsland(player),
-                        SkyFactionsReborn.databaseManager.playerIslandManager.removeAllTrustedPlayers(island.getId()),
-                        SkyFactionsReborn.databaseManager.defencesManager.removeAllDefences(player.getUniqueId().toString(), false)
+                        SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().removeIsland(player),
+                        SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().removeAllTrustedPlayers(island.getId()),
+                        SkyFactionsReborn.getDatabaseManager().getDefencesManager().removeAllDefences(player.getUniqueId().toString(), false)
                 ).whenComplete((ignored, throwable) -> {
                     if (throwable != null) {
                         throwable.printStackTrace();
@@ -147,7 +147,7 @@ public class IslandAPI {
                 return;
             }
 
-            SkyFactionsReborn.npcManager.spawnNPC(playerUUID, island);
+            SkyFactionsReborn.getNpcManager().spawnNPC(playerUUID, island);
         });
     }
 

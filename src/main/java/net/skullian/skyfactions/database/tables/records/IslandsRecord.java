@@ -138,6 +138,21 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
         return (String) get(7);
     }
 
+    /**
+     * Setter for <code>islands.created</code>.
+     */
+    public IslandsRecord setCreated(Long value) {
+        set(8, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>islands.created</code>.
+     */
+    public Long getCreated() {
+        return (Long) get(8);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -161,7 +176,7 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
     /**
      * Create a detached, initialised IslandsRecord
      */
-    public IslandsRecord(Integer id, String uuid, Integer level, Integer gems, Integer runes, Integer defencecount, Long lastRaided, String lastRaider) {
+    public IslandsRecord(Integer id, String uuid, Integer level, Integer gems, Integer runes, Integer defencecount, Long lastRaided, String lastRaider, Long created) {
         super(Islands.ISLANDS);
 
         setId(id);
@@ -172,6 +187,7 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
         setDefencecount(defencecount);
         setLastRaided(lastRaided);
         setLastRaider(lastRaider);
+        setCreated(created);
         resetChangedOnNotNull();
     }
 
@@ -190,6 +206,7 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
             setDefencecount(value.getDefencecount());
             setLastRaided(value.getLastRaided());
             setLastRaider(value.getLastRaider());
+            setCreated(value.getCreated());
             resetChangedOnNotNull();
         }
     }

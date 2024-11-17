@@ -45,8 +45,8 @@ public class PlayerIslandsDatabaseManager {
     public CompletableFuture<Void> createIsland(Player player, PlayerIsland island) {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(ISLANDS)
-                    .columns(ISLANDS.ID, ISLANDS.UUID, ISLANDS.LEVEL, ISLANDS.GEMS, ISLANDS.RUNES, ISLANDS.DEFENCECOUNT, ISLANDS.LAST_RAIDED, ISLANDS.LAST_RAIDER)
-                    .values(island.getId(), player.getUniqueId().toString(), 0, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_PLAYER_IMMUNITY.getInt(), "N/A")
+                    .columns(ISLANDS.ID, ISLANDS.UUID, ISLANDS.LEVEL, ISLANDS.GEMS, ISLANDS.RUNES, ISLANDS.DEFENCECOUNT, ISLANDS.LAST_RAIDED, ISLANDS.LAST_RAIDER, ISLANDS.CREATED)
+                    .values(island.getId(), player.getUniqueId().toString(), 0, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_PLAYER_IMMUNITY.getInt(), "N/A", System.currentTimeMillis())
                     .execute();
         });
     }

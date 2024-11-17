@@ -3,6 +3,7 @@ package net.skullian.skyfactions.database;
 import com.google.common.net.HostAndPort;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.Getter;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.impl.*;
@@ -31,17 +32,17 @@ public class DatabaseManager {
     private transient HikariDataSource dataSource;
     public boolean closed;
 
-    public CurrencyDatabaseManager currencyManager;
-    public DefencesDatabaseManager defencesManager;
-    public NotificationDatabaseManager notificationManager;
-    public PlayerIslandsDatabaseManager playerIslandManager;
-    public PlayerDatabaseManager playerManager;
+    @Getter private CurrencyDatabaseManager currencyManager;
+    @Getter private DefencesDatabaseManager defencesManager;
+    @Getter private NotificationDatabaseManager notificationManager;
+    @Getter private PlayerIslandsDatabaseManager playerIslandManager;
+    @Getter private PlayerDatabaseManager playerManager;
 
-    public FactionAuditLogDatabaseManager factionAuditLogManager;
-    public FactionInvitesDatabaseManager factionInvitesManager;
-    public FactionIslandDatabaseManager factionIslandManager;
-    public FactionsDatabaseManager factionsManager;
-    public FactionElectionManager electionManager;
+    @Getter private FactionAuditLogDatabaseManager factionAuditLogManager;
+    @Getter private FactionInvitesDatabaseManager factionInvitesManager;
+    @Getter private FactionIslandDatabaseManager factionIslandManager;
+    @Getter private FactionsDatabaseManager factionsManager;
+    @Getter private FactionElectionManager electionManager;
 
     public void initialise(String type) throws SQLException {
         createDataSource(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data/data.sqlite3"), type);
@@ -63,10 +64,8 @@ public class DatabaseManager {
             @NotNull File file, @NotNull String type) {
 
         Configuration configuration = new DefaultConfiguration().set(new DefaultExecuteListenerProvider(new DatabaseExecutionListener()));
-
         System.setProperty("org.jooq.no-tips", "true");
         System.setProperty("org.jooq.no-logo", "true");
-
 
         if (type.equals("sqlite")) {
 

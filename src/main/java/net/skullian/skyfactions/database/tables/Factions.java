@@ -79,6 +79,11 @@ public class Factions extends TableImpl<FactionsRecord> {
      */
     public final TableField<FactionsRecord, String> LOCALE = createField(DSL.name("locale"), SQLDataType.CLOB.nullable(false), this, "");
 
+    /**
+     * The column <code>factions.last_renamed</code>.
+     */
+    public final TableField<FactionsRecord, Long> LAST_RENAMED = createField(DSL.name("last_renamed"), SQLDataType.BIGINT.nullable(false), this, "");
+
     private Factions(Name alias, Table<FactionsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

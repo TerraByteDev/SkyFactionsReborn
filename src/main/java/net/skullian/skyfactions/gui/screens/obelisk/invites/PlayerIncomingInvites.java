@@ -37,7 +37,7 @@ public class PlayerIncomingInvites extends PaginatedScreen {
     }
 
     public static void promptPlayer(Player player) {
-        SkyFactionsReborn.databaseManager.factionInvitesManager.getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((inviteData, ex) -> {
+        SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((inviteData, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your invites", "SQL_INVITE_GET", ex);
                 return;

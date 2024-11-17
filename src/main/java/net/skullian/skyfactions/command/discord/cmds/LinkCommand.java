@@ -24,17 +24,17 @@ public class LinkCommand extends CommandTemplate {
             if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true))
                 return true;
 
-            SkyFactionsReborn.databaseManager.playerManager.getDiscordID(player).whenComplete((id, ex) -> {
+            SkyFactionsReborn.getDatabaseManager().getPlayerManager().getDiscordID(player).whenComplete((id, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "link your Discord", "SQL_GET_DISCORD", ex);
                     return;
                 }
 
                 if (id == null) {
-                    String generatedCode = SkyFactionsReborn.discordHandler.createLinkCode(player);
+                    String generatedCode = SkyFactionsReborn.getDiscordHandler().createLinkCode(player);
                     Messages.DISCORD_LINK_PROMPT.send(player, PlayerHandler.getLocale(player.getUniqueId()), "code", generatedCode);
                 } else {
-                    User retrivedUser = SkyFactionsReborn.discordHandler.JDA.getUserById(id);
+                    User retrivedUser = SkyFactionsReborn.getDiscordHandler().JDA.getUserById(id);
                     Messages.DISCORD_ALREADY_LINKED.send(player, PlayerHandler.getLocale(player.getUniqueId()), "discord_name", retrivedUser.getName());
                 }
             });

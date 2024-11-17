@@ -51,7 +51,7 @@ public class FactionAPI {
             if (world == null) return;
             Location center = island.getCenter(world);
 
-            SkyFactionsReborn.worldBorderApi.setWorldBorder(player, (island.getSize() * 2), new WorldBorder.BorderPos(center.getX(), center.getZ()));
+            SkyFactionsReborn.getWorldBorderApi().setWorldBorder(player, (island.getSize() * 2), new WorldBorder.BorderPos(center.getX(), center.getZ()));
         });
     }
 
@@ -78,7 +78,7 @@ public class FactionAPI {
      * @param name   Name of the faction.
      */
     public static void createFaction(Player player, String name) {
-        SkyFactionsReborn.databaseManager.factionsManager.registerFaction(player, name).whenComplete((ignored, ex) -> {
+        SkyFactionsReborn.getDatabaseManager().getFactionsManager().registerFaction(player, name).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "create a new Faction", "SQL_FACTION_CREATE", ex);
                 // todo disband faction?
@@ -114,8 +114,8 @@ public class FactionAPI {
 
             CompletableFuture.allOf(
                     RegionAPI.cutRegion(region),
-                    SkyFactionsReborn.databaseManager.factionsManager.removeFaction(faction.getName()),
-                    SkyFactionsReborn.databaseManager.defencesManager.removeAllDefences(faction.getName(), true)
+                    SkyFactionsReborn.getDatabaseManager().getFactionsManager().removeFaction(faction.getName()),
+                    SkyFactionsReborn.getDatabaseManager().getDefencesManager().removeAllDefences(faction.getName(), true)
             ).whenComplete((ignored, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "disband your faction", "SQL_FACTION_DISBAND", ex);
@@ -158,7 +158,7 @@ public class FactionAPI {
      */
     public static CompletableFuture<Boolean> isInFaction(Player player) {
         if (factionCache.containsKey(player.getUniqueId())) return CompletableFuture.completedFuture(true);
-        return SkyFactionsReborn.databaseManager.factionsManager.isInFaction(player);
+        return SkyFactionsReborn.getDatabaseManager().getFactionsManager().isInFaction(player);
     }
 
     /**
@@ -172,7 +172,7 @@ public class FactionAPI {
             return CompletableFuture.completedFuture(getCachedFaction(playerUUID));
 
 
-        return SkyFactionsReborn.databaseManager.factionsManager.getFaction(playerUUID).whenComplete((faction, ex) -> {
+        return SkyFactionsReborn.getDatabaseManager().getFactionsManager().getFaction(playerUUID).whenComplete((faction, ex) -> {
             if (ex != null) ex.printStackTrace();
             if (faction == null) return;
 
@@ -190,7 +190,7 @@ public class FactionAPI {
     public static CompletableFuture<Faction> getFaction(String name) {
         if (factionNameCache.containsKey(name)) return CompletableFuture.completedFuture(getCachedFaction(name));
 
-        return SkyFactionsReborn.databaseManager.factionsManager.getFaction(name).whenComplete((faction, ex) -> {
+        return SkyFactionsReborn.getDatabaseManager().getFactionsManager().getFaction(name).whenComplete((faction, ex) -> {
             if (ex != null) ex.printStackTrace();
             if (faction == null) return;
 
@@ -284,13 +284,13 @@ public class FactionAPI {
     }
 
     private static void createIsland(Player player, String faction_name) {
-        FactionIsland island = new FactionIsland(SkyFactionsReborn.databaseManager.factionIslandManager.cachedFactionIslandID, System.currentTimeMillis() + Settings.RAIDING_FACTION_IMMUNITY.getInt());
-        SkyFactionsReborn.databaseManager.factionIslandManager.cachedFactionIslandID++;
+        FactionIsland island = new FactionIsland(SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().cachedFactionIslandID, System.currentTimeMillis() + Settings.RAIDING_FACTION_IMMUNITY.getInt());
+        SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().cachedFactionIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
         createRegion(player, island, world, faction_name);
 
-        CompletableFuture.allOf(SkyFactionsReborn.databaseManager.factionIslandManager.createFactionIsland(faction_name, island), RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction")).whenComplete((unused, ex) -> {
+        CompletableFuture.allOf(SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().createFactionIsland(faction_name, island), RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction")).whenComplete((unused, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -330,7 +330,7 @@ public class FactionAPI {
     }
 
     public static void onFactionLoad(Faction faction, Player player) {
-        SkyFactionsReborn.npcManager.spawnNPC(faction, faction.getIsland());
+        SkyFactionsReborn.getNpcManager().spawnNPC(faction, faction.getIsland());
         modifyDefenceOperation(DefenceOperation.ENABLE, player);
     }
 

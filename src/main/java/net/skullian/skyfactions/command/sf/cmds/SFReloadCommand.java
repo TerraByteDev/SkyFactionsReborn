@@ -42,7 +42,7 @@ public class SFReloadCommand extends CommandTemplate {
         SLogger.warn("[{}] is reloading SkyFactionsReborn.", sender.getName());
         Messages.RELOADING.send(sender, locale);
 
-        SkyFactionsReborn.configHandler.reloadFiles();
+        SkyFactionsReborn.getConfigHandler().reloadFiles();
 
         Messages.RELOADED.send(sender, locale);
         SLogger.warn("SkyFactionsReborn reloaded.");

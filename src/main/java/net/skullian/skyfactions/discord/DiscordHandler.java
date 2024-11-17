@@ -95,7 +95,7 @@ public class DiscordHandler {
     }
 
     public void pingRaid(Player attacker, Player victim) {
-        SkyFactionsReborn.databaseManager.playerManager.getDiscordID(victim).thenAccept(id -> {
+        SkyFactionsReborn.getDatabaseManager().getPlayerManager().getDiscordID(victim).thenAccept(id -> {
             if (id != null && !id.equals("none")) {
                 EmbedBuilder embedBuilder = new EmbedBuilder()
                         .setDescription(Messages.DISCORD_RAID_MESSAGE.getString(victim.locale().getLanguage()).replace("attacker", attacker.getName()))

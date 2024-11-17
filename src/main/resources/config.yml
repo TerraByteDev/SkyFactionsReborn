@@ -87,6 +87,13 @@ Sounds:
 # General island config.
 Island:
 
+  # Cooldown for island deletion (in milliseconds).
+  # We don't put players on cooldown WHEN they delete, because then players have to wait to make a new island.
+  # By putting a cooldown on deletion (upon creating an island), players have an actual island to play on for whatever reason, rather
+  # than being stuck in the actual lobby. Fun right?
+  # This also prevents players from spamming and causing lag.
+  DELETION_COOLDOWN: 7200000 # 2 Hours
+
   # Name of the WORLD where faction islands will be located.
   FACTION_WORLD_NAME: "faction_islands"
   # Name of the WORLD where player islands will be located.
@@ -249,6 +256,14 @@ Raiding:
 Factions:
   # All configurations related to creation factions.
   FACTION_CREATION:
+
+    # Cooldown for faction creation (in milliseconds).
+    # We don't put players on cooldown WHEN they delete, because then players have to wait to make a new island.
+    # By putting a cooldown on deletion (upon creating an island), players have an actual island to play on for whatever reason, rather
+    # than being stuck in the actual lobby. Fun right?
+    # This also prevents players from spamming and causing lag.
+    CREATION_COOLDOWN: 10800000 # 3 Hours
+
     # Cost of creating a faction in player runes.
     # Set this to 0 if you wish it to be free.
     CREATION_COST: 100
@@ -268,6 +283,20 @@ Factions:
     # The plugin will automatically run through all of these strings and check that the faction name does not contain any of these.
     # Can be regex patterns or just strings.
     BLACKLISTED_NAMES: [ cunt, retard, motherfucker, motherfuck, anus, anal, cock, dick, whore, suck, twat, shit, faggot, bitch, "butt|ass(?:hole)?", "^fag$", "nigg(?:a|er)", "tit(?:s|z|ies)?", "boob(?:s|z|ies)?" ]
+
+  # Configuration for faction renaming.
+  # The control measures (min/max name length, blacklisted keywords, allow symbols/numbers/non-english) in the FACTION_CREATION section (above)
+  # will apply here, so don't worry!
+  RENAME:
+    # Allow renaming outright. This will mean players cannot even access /faction rename.
+    ALLOW_RENAMING: true
+
+    # Cost in runes to rename the faction.
+    # Set this to 0 for it to be free.
+    RENAME_COST: 200
+
+    # Time (in milliseconds) between being able to rename your faction.
+    COOLDOWN: 86400000 # 7 Days
 
   # Configure who can do certain actions.
   # Possible Ranks: "owner", "admin", "moderator", "fighter", "member"

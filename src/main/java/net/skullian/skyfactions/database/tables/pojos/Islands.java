@@ -23,6 +23,7 @@ public class Islands implements Serializable {
     private final Integer defencecount;
     private final Long lastRaided;
     private final String lastRaider;
+    private final Long created;
 
     public Islands(Islands value) {
         this.id = value.id;
@@ -33,6 +34,7 @@ public class Islands implements Serializable {
         this.defencecount = value.defencecount;
         this.lastRaided = value.lastRaided;
         this.lastRaider = value.lastRaider;
+        this.created = value.created;
     }
 
     public Islands(
@@ -43,7 +45,8 @@ public class Islands implements Serializable {
         Integer runes,
         Integer defencecount,
         Long lastRaided,
-        String lastRaider
+        String lastRaider,
+        Long created
     ) {
         this.id = id;
         this.uuid = uuid;
@@ -53,6 +56,7 @@ public class Islands implements Serializable {
         this.defencecount = defencecount;
         this.lastRaided = lastRaided;
         this.lastRaider = lastRaider;
+        this.created = created;
     }
 
     /**
@@ -109,6 +113,13 @@ public class Islands implements Serializable {
      */
     public String getLastRaider() {
         return this.lastRaider;
+    }
+
+    /**
+     * Getter for <code>islands.created</code>.
+     */
+    public Long getCreated() {
+        return this.created;
     }
 
     @Override
@@ -168,6 +179,12 @@ public class Islands implements Serializable {
         }
         else if (!this.lastRaider.equals(other.lastRaider))
             return false;
+        if (this.created == null) {
+            if (other.created != null)
+                return false;
+        }
+        else if (!this.created.equals(other.created))
+            return false;
         return true;
     }
 
@@ -183,6 +200,7 @@ public class Islands implements Serializable {
         result = prime * result + ((this.defencecount == null) ? 0 : this.defencecount.hashCode());
         result = prime * result + ((this.lastRaided == null) ? 0 : this.lastRaided.hashCode());
         result = prime * result + ((this.lastRaider == null) ? 0 : this.lastRaider.hashCode());
+        result = prime * result + ((this.created == null) ? 0 : this.created.hashCode());
         return result;
     }
 
@@ -198,6 +216,7 @@ public class Islands implements Serializable {
         sb.append(", ").append(defencecount);
         sb.append(", ").append(lastRaided);
         sb.append(", ").append(lastRaider);
+        sb.append(", ").append(created);
 
         sb.append(")");
         return sb.toString();

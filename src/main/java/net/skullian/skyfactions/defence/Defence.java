@@ -63,9 +63,9 @@ public abstract class Defence {
             block.setType(Material.AIR);
 
             if (data.isIS_FACTION()) {
-                SkyFactionsReborn.cacheService.removeDefence(FactionAPI.factionNameCache.get(data.getUUIDFactionName()), getDefenceLocation());
+                SkyFactionsReborn.getCacheService().removeDefence(FactionAPI.factionNameCache.get(data.getUUIDFactionName()), getDefenceLocation());
             } else {
-                SkyFactionsReborn.cacheService.removeDefence(UUID.fromString(data.getUUIDFactionName()), getDefenceLocation());
+                SkyFactionsReborn.getCacheService().removeDefence(UUID.fromString(data.getUUIDFactionName()), getDefenceLocation());
             }
         });
     }

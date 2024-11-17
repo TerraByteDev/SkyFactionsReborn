@@ -38,8 +38,8 @@ public class FactionsDatabaseManager {
     public CompletableFuture<Void> registerFaction(Player factionOwner, String factionName) {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(FACTIONS)
-                    .columns(FACTIONS.NAME, FACTIONS.MOTD, FACTIONS.LEVEL, FACTIONS.LAST_RAID, FACTIONS.LOCALE)
-                    .values(factionName, "<red>None", 1, (long) 0, PlayerHandler.getLocale(factionOwner.getUniqueId()))
+                    .columns(FACTIONS.NAME, FACTIONS.MOTD, FACTIONS.LEVEL, FACTIONS.LAST_RAID, FACTIONS.LOCALE, FACTIONS.LAST_RENAMED)
+                    .values(factionName, "<red>None", 1, (long) 0, PlayerHandler.getLocale(factionOwner.getUniqueId()), System.currentTimeMillis())
                     .execute();
 
             ctx.insertInto(FACTIONMEMBERS)
@@ -57,7 +57,7 @@ public class FactionsDatabaseManager {
 
             return result != null ?
                     new Faction(
-                            SkyFactionsReborn.databaseManager.factionIslandManager.getFactionIsland(factionName).join(),
+                            SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().getFactionIsland(factionName).join(),
                             result.getName(),
                             result.getLastRaid(),
                             result.getLevel(),
@@ -67,11 +67,12 @@ public class FactionsDatabaseManager {
                             getFactionMembersByRank(factionName, RankType.ADMIN).join(),
                             getFactionMembersByRank(factionName, RankType.MEMBER).join(),
                             getFactionMOTD(factionName).join(),
-                            SkyFactionsReborn.databaseManager.currencyManager.getRunes(factionName).join(),
-                            SkyFactionsReborn.databaseManager.currencyManager.getGems(factionName).join(),
+                            SkyFactionsReborn.getDatabaseManager().getCurrencyManager().getRunes(factionName).join(),
+                            SkyFactionsReborn.getDatabaseManager().getCurrencyManager().getGems(factionName).join(),
                             result.getLocale(),
-                            SkyFactionsReborn.databaseManager.electionManager.isElectionRunning(factionName).join(),
-                            getBannedPlayers(factionName).join()
+                            SkyFactionsReborn.getDatabaseManager().getElectionManager().isElectionRunning(factionName).join(),
+                            getBannedPlayers(factionName).join(),
+                            result.getLastRenamed()
                     ) : null;
         });
     }

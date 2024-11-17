@@ -70,7 +70,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     return;
                 }
 
-                SkyFactionsReborn.databaseManager.factionInvitesManager.hasJoinRequest(player.getUniqueId()).whenComplete((hasJoinRequest, exc) -> {
+                SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().hasJoinRequest(player.getUniqueId()).whenComplete((hasJoinRequest, exc) -> {
                     if (exc != null) {
                         ErrorUtil.handleError(player, "check if you have a join request", "SQL_JOIN_REQUEST_GET", exc);
                         return;

@@ -61,7 +61,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (clickType.isRightClick()) {
             player.closeInventory();
-            SkyFactionsReborn.databaseManager.notificationManager.removeNotification(player, DATA).whenComplete((ignored, ex) -> {
+            SkyFactionsReborn.getDatabaseManager().getNotificationManager().removeNotification(player, DATA).whenComplete((ignored, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "remove a notification", "SQL_NOTIFICATION_REMOVE", ex);
                     return;

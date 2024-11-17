@@ -22,7 +22,7 @@ public class UnlinkCommand extends CommandTemplate {
         if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord"), true))
             return true;
 
-        SkyFactionsReborn.databaseManager.playerManager.getDiscordID(player).whenComplete((id, ex) -> {
+        SkyFactionsReborn.getDatabaseManager().getPlayerManager().getDiscordID(player).whenComplete((id, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "unlink your Discord", "SQL_DISCORD_UNLINK", ex);
                 return;

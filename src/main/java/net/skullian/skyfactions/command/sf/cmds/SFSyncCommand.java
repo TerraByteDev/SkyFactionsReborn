@@ -41,7 +41,7 @@ public class SFSyncCommand extends CommandTemplate {
 
         SLogger.warn("[{}] is forcing a database sync.", sender.getName());
 
-        SkyFactionsReborn.cacheService.cacheOnce().whenComplete((ignored, ex) -> {
+        SkyFactionsReborn.getCacheService().cacheOnce().whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(sender, "force a database sync", "SQL_CACHE_FAILURE", ex);
                 return;

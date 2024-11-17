@@ -50,7 +50,7 @@ public class NotificationAPI {
      * @param replacements Replacements for the notification title / desc.
      */
     public static CompletableFuture<Void> createNotification(UUID playerUUID, NotificationType type, Object... replacements) {
-        return SkyFactionsReborn.databaseManager.notificationManager.createNotification(playerUUID, type.name(), Arrays.toString(replacements));
+        return SkyFactionsReborn.getDatabaseManager().getNotificationManager().createNotification(playerUUID, type.name(), Arrays.toString(replacements));
     }
 
     /**
@@ -60,6 +60,6 @@ public class NotificationAPI {
      * @return {@link List<NotificationData>}
      */
     public static CompletableFuture<List<NotificationData>> getNotifications(OfflinePlayer player) {
-        return SkyFactionsReborn.databaseManager.notificationManager.getNotifications(player);
+        return SkyFactionsReborn.getDatabaseManager().getNotificationManager().getNotifications(player);
     }
 }

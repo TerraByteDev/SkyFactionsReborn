@@ -93,6 +93,21 @@ public class FactionsRecord extends UpdatableRecordImpl<FactionsRecord> {
         return (String) get(4);
     }
 
+    /**
+     * Setter for <code>factions.last_renamed</code>.
+     */
+    public FactionsRecord setLastRenamed(Long value) {
+        set(5, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>factions.last_renamed</code>.
+     */
+    public Long getLastRenamed() {
+        return (Long) get(5);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -116,7 +131,7 @@ public class FactionsRecord extends UpdatableRecordImpl<FactionsRecord> {
     /**
      * Create a detached, initialised FactionsRecord
      */
-    public FactionsRecord(String name, String motd, Integer level, Long lastRaid, String locale) {
+    public FactionsRecord(String name, String motd, Integer level, Long lastRaid, String locale, Long lastRenamed) {
         super(Factions.FACTIONS);
 
         setName(name);
@@ -124,6 +139,7 @@ public class FactionsRecord extends UpdatableRecordImpl<FactionsRecord> {
         setLevel(level);
         setLastRaid(lastRaid);
         setLocale(locale);
+        setLastRenamed(lastRenamed);
         resetChangedOnNotNull();
     }
 
@@ -139,6 +155,7 @@ public class FactionsRecord extends UpdatableRecordImpl<FactionsRecord> {
             setLevel(value.getLevel());
             setLastRaid(value.getLastRaid());
             setLocale(value.getLocale());
+            setLastRenamed(value.getLastRenamed());
             resetChangedOnNotNull();
         }
     }

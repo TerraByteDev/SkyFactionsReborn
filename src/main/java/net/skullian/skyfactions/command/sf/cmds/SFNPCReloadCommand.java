@@ -43,7 +43,7 @@ public class SFNPCReloadCommand extends CommandTemplate {
         SLogger.warn("[{}] is reloading SkyFactions NPCs.", sender.getName());
         Messages.NPC_RELOADING.send(sender, locale);
 
-        SkyFactionsReborn.npcManager.updateNPCs(false).whenComplete((affected, exc) -> {
+        SkyFactionsReborn.getNpcManager().updateNPCs(false).whenComplete((affected, exc) -> {
             if (exc != null) {
                 ErrorUtil.handleError(sender, "update NPCs", "NPC_RELOAD_EXCEPTION", exc);
                 return;

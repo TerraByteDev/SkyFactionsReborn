@@ -3,6 +3,7 @@ package net.skullian.skyfactions;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.jeff_media.customblockdata.CustomBlockData;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
+import lombok.Getter;
 import me.tofaa.entitylib.APIConfig;
 import me.tofaa.entitylib.EntityLib;
 import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;
@@ -11,7 +12,6 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import net.skullian.skyfactions.api.WorldBorderAPI;
 import net.skullian.skyfactions.command.discord.DiscordCommandHandler;
 import net.skullian.skyfactions.command.faction.FactionCommandHandler;
 import net.skullian.skyfactions.command.gems.GemsCommandHandler;
@@ -54,13 +54,13 @@ import java.util.concurrent.TimeUnit;
 
 public final class SkyFactionsReborn extends JavaPlugin {
 
-    public static ConfigFileHandler configHandler;
-    public static DatabaseManager databaseManager;
-    public static DiscordHandler discordHandler;
-    public static BorderAPI worldBorderApi;
-    public static CacheService cacheService;
-    public static BrokenBlockService blockService = new BrokenBlockService();
-    public static NPCManager npcManager;
+    @Getter private static ConfigFileHandler configHandler;
+    @Getter private static DatabaseManager databaseManager;
+    @Getter private static DiscordHandler discordHandler;
+    @Getter private static BorderAPI worldBorderApi;
+    @Getter private static CacheService cacheService;
+    @Getter private static final BrokenBlockService blockService = new BrokenBlockService();
+    @Getter private static NPCManager npcManager;
 
     private void print() {
         ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
@@ -73,6 +73,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
         LOGGER.info(Component.text("│    ___] | \\_   |   |    |  | |___  |  | |__| | \\| ___]     │").style(style));
         LOGGER.info(Component.text("│                                                            │").style(style));
         LOGGER.info(Component.text("╰────────────────────────────────────────────────────────────╯").style(style));
+
     }
 
     @Override

@@ -32,7 +32,7 @@ public class GemsAPI {
     public static int getGems(UUID playerUUID) {
         if (!playerGems.containsKey(playerUUID)) cachePlayer(playerUUID);
 
-        if (SkyFactionsReborn.cacheService.playersToCache.containsKey(playerUUID)) return (playerGems.get(playerUUID) + SkyFactionsReborn.cacheService.playersToCache.get(playerUUID).getGems());
+        if (SkyFactionsReborn.getCacheService().playersToCache.containsKey(playerUUID)) return (playerGems.get(playerUUID) + SkyFactionsReborn.getCacheService().playersToCache.get(playerUUID).getGems());
             else return playerGems.get(playerUUID);
     }
 
@@ -45,7 +45,7 @@ public class GemsAPI {
     public static void addGems(UUID playerUUID, int addition) {
         if (!playerGems.containsKey(playerUUID)) cachePlayer(playerUUID);
 
-        SkyFactionsReborn.cacheService.addGems(playerUUID, addition);
+        SkyFactionsReborn.getCacheService().addGems(playerUUID, addition);
     }
 
     /**
@@ -57,11 +57,11 @@ public class GemsAPI {
     public static void subtractGems(UUID playerUUID, int subtraction) {
         if (!playerGems.containsKey(playerUUID)) cachePlayer(playerUUID);
 
-        SkyFactionsReborn.cacheService.subtractGems(playerUUID, subtraction);
+        SkyFactionsReborn.getCacheService().subtractGems(playerUUID, subtraction);
     }
 
     public static void cachePlayer(UUID playerUUID) {
-        SkyFactionsReborn.databaseManager.currencyManager.getGems(playerUUID).whenComplete((gems, ex) -> {
+        SkyFactionsReborn.getDatabaseManager().getCurrencyManager().getGems(playerUUID).whenComplete((gems, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;

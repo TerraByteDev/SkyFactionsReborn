@@ -98,7 +98,7 @@ public class IslandVisitCommand extends CommandTemplate {
             if ((RaidAPI.currentRaids.containsValue(player.getUniqueId()) || RaidAPI.processingRaid.containsValue(player.getUniqueId())) || (RaidAPI.currentRaids.containsValue(target.getUniqueId()) || RaidAPI.processingRaid.containsValue(target.getUniqueId()))) {
                 Messages.VISIT_IN_RAID.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             } else {
-                SkyFactionsReborn.databaseManager.playerIslandManager.isPlayerTrusted(player.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
+                SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().isPlayerTrusted(player.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
                     if (throwable != null) {
                         ErrorUtil.handleError(player, "check if your are trusted", "SQL_TRUST_GET", throwable);
                         return;

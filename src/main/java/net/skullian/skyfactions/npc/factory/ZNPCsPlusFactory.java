@@ -82,7 +82,7 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
 
     @EventHandler
     public void onInteract(NpcInteractEvent event) {
-        SkyFactionsReborn.npcManager.onClick(new SkyZNPCs(event.getEntry(), false), event.getPlayer());
+        SkyFactionsReborn.getNpcManager().onClick(new SkyZNPCs(event.getEntry(), false), event.getPlayer());
     }
 
     @AllArgsConstructor

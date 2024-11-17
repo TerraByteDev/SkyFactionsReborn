@@ -89,6 +89,11 @@ public class Islands extends TableImpl<IslandsRecord> {
      */
     public final TableField<IslandsRecord, String> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.CLOB.nullable(false), this, "");
 
+    /**
+     * The column <code>islands.created</code>.
+     */
+    public final TableField<IslandsRecord, Long> CREATED = createField(DSL.name("created"), SQLDataType.BIGINT.nullable(false), this, "");
+
     private Islands(Name alias, Table<IslandsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

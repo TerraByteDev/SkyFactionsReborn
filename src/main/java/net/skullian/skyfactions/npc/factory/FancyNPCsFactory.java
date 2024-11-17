@@ -55,7 +55,7 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
 
     @EventHandler
     public void onInteract(NpcInteractEvent event) {
-        SkyFactionsReborn.npcManager.onClick(new SkyFancyNPC(event.getNpc(), false), event.getPlayer());
+        SkyFactionsReborn.getNpcManager().onClick(new SkyFancyNPC(event.getNpc(), false), event.getPlayer());
     }
     
     @AllArgsConstructor
