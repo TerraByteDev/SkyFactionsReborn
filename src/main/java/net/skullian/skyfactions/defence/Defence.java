@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Display;
@@ -63,9 +64,10 @@ public abstract class Defence {
             block.setType(Material.AIR);
 
             if (data.isIS_FACTION()) {
-                SkyFactionsReborn.getCacheService().removeDefence(FactionAPI.factionNameCache.get(data.getUUIDFactionName()), getDefenceLocation());
+                Faction faction = FactionAPI.factionNameCache.get(data.getUUIDFactionName());
+                SkyFactionsReborn.getCacheService().getEntry(faction).removeDefence(getDefenceLocation());
             } else {
-                SkyFactionsReborn.getCacheService().removeDefence(UUID.fromString(data.getUUIDFactionName()), getDefenceLocation());
+                SkyFactionsReborn.getCacheService().getEntry(UUID.fromString(data.getUUIDFactionName())).removeDefence(getDefenceLocation());
             }
         });
     }

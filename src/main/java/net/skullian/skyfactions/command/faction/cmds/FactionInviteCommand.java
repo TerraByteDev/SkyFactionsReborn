@@ -95,7 +95,14 @@ public class FactionInviteCommand extends CommandTemplate {
                         }
                     }
 
-                    faction.createInvite(target, player);
+                    InviteData newInvite = new InviteData(
+                            target,
+                            player,
+                            faction.getName(),
+                            "outgoing",
+                            System.currentTimeMillis()
+                    );
+                    faction.createInvite(newInvite);
                     Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, locale, "player_name", target.getName());
                 });
             }

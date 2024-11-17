@@ -3,6 +3,7 @@ package net.skullian.skyfactions.gui.items.obelisk.invites;
 import java.util.List;
 
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.faction.AuditLogType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -51,7 +52,7 @@ public class OutgoingInvitePaginationItem extends SkyItem {
                     ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                     return;
                 }
-                faction.revokeInvite(DATA, player);
+                faction.revokeInvite(DATA, AuditLogType.INVITE_REVOKE, "player", player.getName(), "invited", DATA.getPlayer().getName());
                 Messages.FACTION_INVITE_REVOKE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player_name", DATA.getPlayer().getName());
             });
         }

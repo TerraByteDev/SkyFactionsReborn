@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.gui.items.obelisk.invites;
 
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.faction.AuditLogType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -38,7 +39,7 @@ public class FactionJoinRequestAcceptItem extends SkyItem {
                 return;
             }
 
-            faction.acceptJoinRequest(DATA, player);
+            faction.revokeInvite(DATA, AuditLogType.JOIN_REQUEST_ACCEPT, "player_name", DATA.getPlayer().getName(), "member", player.getName());
             JoinRequestsUI.promptPlayer(player);
 
             Messages.FACTION_JOIN_REQUEST_ACCEPT_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player_name", DATA.getPlayer().getName());

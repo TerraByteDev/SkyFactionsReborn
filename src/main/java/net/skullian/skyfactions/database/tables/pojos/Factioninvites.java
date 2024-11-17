@@ -19,7 +19,6 @@ public class Factioninvites implements Serializable {
     private final String uuid;
     private final String inviter;
     private final String type;
-    private final Boolean accepted;
     private final Long timestamp;
 
     public Factioninvites(Factioninvites value) {
@@ -27,7 +26,6 @@ public class Factioninvites implements Serializable {
         this.uuid = value.uuid;
         this.inviter = value.inviter;
         this.type = value.type;
-        this.accepted = value.accepted;
         this.timestamp = value.timestamp;
     }
 
@@ -36,14 +34,12 @@ public class Factioninvites implements Serializable {
         String uuid,
         String inviter,
         String type,
-        Boolean accepted,
         Long timestamp
     ) {
         this.factionname = factionname;
         this.uuid = uuid;
         this.inviter = inviter;
         this.type = type;
-        this.accepted = accepted;
         this.timestamp = timestamp;
     }
 
@@ -73,13 +69,6 @@ public class Factioninvites implements Serializable {
      */
     public String getType() {
         return this.type;
-    }
-
-    /**
-     * Getter for <code>factionInvites.accepted</code>.
-     */
-    public Boolean getAccepted() {
-        return this.accepted;
     }
 
     /**
@@ -122,12 +111,6 @@ public class Factioninvites implements Serializable {
         }
         else if (!this.type.equals(other.type))
             return false;
-        if (this.accepted == null) {
-            if (other.accepted != null)
-                return false;
-        }
-        else if (!this.accepted.equals(other.accepted))
-            return false;
         if (this.timestamp == null) {
             if (other.timestamp != null)
                 return false;
@@ -145,7 +128,6 @@ public class Factioninvites implements Serializable {
         result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
         result = prime * result + ((this.inviter == null) ? 0 : this.inviter.hashCode());
         result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
-        result = prime * result + ((this.accepted == null) ? 0 : this.accepted.hashCode());
         result = prime * result + ((this.timestamp == null) ? 0 : this.timestamp.hashCode());
         return result;
     }
@@ -158,7 +140,6 @@ public class Factioninvites implements Serializable {
         sb.append(", ").append(uuid);
         sb.append(", ").append(inviter);
         sb.append(", ").append(type);
-        sb.append(", ").append(accepted);
         sb.append(", ").append(timestamp);
 
         sb.append(")");

@@ -68,11 +68,6 @@ public class Factioninvites extends TableImpl<FactioninvitesRecord> {
     public final TableField<FactioninvitesRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>factionInvites.accepted</code>.
-     */
-    public final TableField<FactioninvitesRecord, Boolean> ACCEPTED = createField(DSL.name("accepted"), SQLDataType.BOOLEAN.nullable(false), this, "");
-
-    /**
      * The column <code>factionInvites.timestamp</code>.
      */
     public final TableField<FactioninvitesRecord, Long> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.BIGINT.nullable(false), this, "");

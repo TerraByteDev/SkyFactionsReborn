@@ -1,6 +1,9 @@
 package net.skullian.skyfactions.gui.items.obelisk.invites;
 
+import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.faction.AuditLogType;
+import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -29,14 +32,21 @@ public class FactionPlayerJoinRequestRevoke extends SkyItem {
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         event.getInventory().close();
 
-        SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().revokeInvite(player.getUniqueId(), DATA.getFactionName(), "incoming").whenComplete((ignored, ex) -> {
-            if (ex != null) {
-                ErrorUtil.handleError(player, "revoke a Faction join request", "SQL_JOIN_REQUEST_REJECT", ex);
+        FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
+            if (throwable != null) {
+                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                 return;
             }
 
-            Messages.FACTION_JOIN_REQUEST_REVOKE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
-            NotificationAPI.factionInviteStore.replace(DATA.getFactionName(), (NotificationAPI.factionInviteStore.get(DATA.getFactionName()) - 1));
+            faction.revokeInvite(faction.toInviteData(DATA, player), AuditLogType.PLAYER_JOIN_REQUEST_REVOKE, "player_name", player.getName()).whenComplete((ignored, ex) -> {
+                if (ex != null) {
+                    ErrorUtil.handleError(player, "revoke a Faction join request", "SQL_JOIN_REQUEST_REJECT", ex);
+                    return;
+                }
+
+                Messages.FACTION_JOIN_REQUEST_REVOKE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
+                NotificationAPI.factionInviteStore.replace(DATA.getFactionName(), (NotificationAPI.factionInviteStore.get(DATA.getFactionName()) - 1));
+            });
         });
     }
 }

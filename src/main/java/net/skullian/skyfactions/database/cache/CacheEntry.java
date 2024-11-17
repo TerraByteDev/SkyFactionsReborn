@@ -3,6 +3,7 @@ package net.skullian.skyfactions.database.cache;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.faction.RankType;
 import org.bukkit.Location;
 
@@ -26,7 +27,9 @@ public class CacheEntry {
     private final List<OfflinePlayer> membersToAdd = new ArrayList<>(); // Faction Exclusive
     private final List<OfflinePlayer> membersToRemove = new ArrayList<>(); // Faction Exclusive
     private final List<OfflinePlayer> membersToBan = new ArrayList<>(); // Faction Exclusive
-    private final List<OfflinePlayer> membersToUnban = new ArrayList<>();
+    private final List<OfflinePlayer> membersToUnban = new ArrayList<>(); // Faction Exclusive
+    private final List<InviteData> invitesToCreate = new ArrayList<>(); // Faction Exclusive
+    private final List<InviteData> invitesToRemove = new ArrayList<>(); // Faction Exclusive
 
     public void addRunes(int amount) {
         runes += amount;
@@ -82,6 +85,16 @@ public class CacheEntry {
         membersToBan.add(player);
     }
 
+    public void createInvite(InviteData inviteData) {
+        invitesToRemove.remove(inviteData);
+        invitesToCreate.add(inviteData);
+    }
+
+    public void removeInvite(InviteData inviteData) {
+        invitesToCreate.remove(inviteData);
+        invitesToRemove.add(inviteData);
+    }
+
     /**
      *
      * @param toCache - UUID of player to cache (only used when the entry is for a player)
@@ -123,6 +136,12 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.getDatabaseManager().getFactionsManager().unbanMembers(membersToUnban, factionName).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to unban players from faction " + factionName, ex);
+                    }),
+                    SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().createFactionInvites(invitesToCreate).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to create invites for faction " + factionName, ex);
+                    }),
+                    SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().removeInvites(invitesToRemove).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to remove invites for faction " + factionName, ex);
                     })
             );
         } else {

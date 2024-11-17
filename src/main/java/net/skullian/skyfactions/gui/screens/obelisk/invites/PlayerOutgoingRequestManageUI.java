@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.screens.obelisk.invites;
 
 import lombok.Builder;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;

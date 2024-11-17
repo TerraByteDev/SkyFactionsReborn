@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import lombok.Getter;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.faction.RankType;
@@ -22,8 +23,8 @@ import net.skullian.skyfactions.util.SLogger;
 
 public class CacheService {
 
-    public final Map<UUID, CacheEntry> playersToCache = new HashMap<>();
-    public final Map<String, CacheEntry> factionsToCache = new HashMap<>();
+    @Getter private final Map<UUID, CacheEntry> playersToCache = new HashMap<>();
+    @Getter private final Map<String, CacheEntry> factionsToCache = new HashMap<>();
 
     private BukkitTask task;
 
@@ -77,102 +78,11 @@ public class CacheService {
         return cacheOnce().orTimeout(60, TimeUnit.SECONDS);
     }
 
-    public void addRunes(UUID playerUUID, int runes) {
-        CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
-        entry.addRunes(runes);
+    public CacheEntry getEntry(UUID playerUUID) {
+        return playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
     }
 
-    public void addRunes(Faction faction, int runes) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.addRunes(runes);
-    }
-
-    public void subtractRunes(UUID playerUUID, int runes) {
-        CacheEntry entry = playersToCache.get(playerUUID);
-        if (entry != null) {
-            entry.removeRunes(runes);
-        }
-    }
-
-    public void subtractRunes(Faction faction, int runes) {
-        CacheEntry entry = factionsToCache.get(faction);
-        if (entry != null) {
-            entry.removeRunes(runes);
-        }
-    }
-
-    public void addGems(UUID playerUUID, int gems) {
-        CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
-        entry.addGems(gems);
-    }
-
-    public void addGems(Faction faction, int gems) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.addGems(gems);
-    }
-
-    public void subtractGems(UUID playerUUID, int gems) {
-        CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
-        entry.removeGems(gems);
-    }
-
-    public void subtractGems(Faction faction, int gems) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.removeGems(gems);
-    }
-
-    public void registerDefence(Faction faction, Location location) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.addDefence(location);
-    }
-
-    public void registerDefence(UUID playerUUID, Location location) {
-        CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
-        entry.addDefence(location);
-    }
-
-    public void removeDefence(Faction faction, Location location) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.removeDefence(location);
-    }
-
-    public void removeDefence(UUID playerUUID, Location location) {
-        CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
-        entry.removeDefence(location);
-    }
-
-    public void updateLocale(UUID playerUUID, String locale) {
-        CacheEntry entry = playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
-        entry.setLocale(locale);
-    }
-
-    public void updateLocale(Faction faction, String locale) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.setLocale(locale);
-    }
-
-    public void updatePlayerRank(Faction faction, UUID playerUUID, RankType newRank) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.setNewRank(playerUUID, newRank);
-    }
-
-    public void addFactionMember(Faction faction, OfflinePlayer player) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.addMember(player);
-    }
-
-    public void removeFactionMember(Faction faction, OfflinePlayer player) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.removeMember(player);
-    }
-
-    public void banFactionMember(Faction faction, OfflinePlayer player) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.banMember(player);
-    }
-
-    public void unbanFactionMember(Faction faction, OfflinePlayer player) {
-        CacheEntry entry = factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
-        entry.unbanMember(player);
+    public CacheEntry getEntry(Faction faction) {
+        return factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
     }
 }

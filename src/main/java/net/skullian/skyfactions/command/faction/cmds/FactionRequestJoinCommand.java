@@ -7,6 +7,7 @@ import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
@@ -79,7 +80,15 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     if (hasJoinRequest) {
                         Messages.JOIN_REQUEST_ALREADY_EXISTS.send(player, locale);
                     } else {
-                        faction.createJoinRequest(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((ignored, exc2) -> {
+                        InviteData joinRequest = new InviteData(
+                                player,
+                                null,
+                                faction.getName(),
+                                "incoming",
+                                System.currentTimeMillis()
+                        );
+
+                        faction.createJoinRequest(joinRequest).whenComplete((ignored, exc2) -> {
                             if (exc2 != null) {
                                 ErrorUtil.handleError(player, "create a join request", "SQL_JOIN_REQUEST_GET", exc2);
                                 return;

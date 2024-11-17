@@ -47,10 +47,7 @@ public class PlayerIncomingInviteAccept extends SkyItem {
                     return;
                 }
 
-                CompletableFuture.allOf(
-                        SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().revokeInvite(player.getUniqueId(), DATA.getFactionName(), "outgoing"),
-                        faction.createAuditLog(player.getUniqueId(), AuditLogType.INVITE_ACCEPT, "player_name", player.getName())
-                ).whenComplete((ignored, exce) -> {
+                faction.revokeInvite(DATA, AuditLogType.INVITE_ACCEPT, "player_name", player.getName()).whenComplete((ignored, exce) -> {
                     if (exce != null) {
                         ErrorUtil.handleError(player, "accept an invite", "SQL_INVITE_ACEPT", exce);
                         return;

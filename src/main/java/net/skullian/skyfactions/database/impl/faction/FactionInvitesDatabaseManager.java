@@ -6,6 +6,7 @@ import net.skullian.skyfactions.faction.JoinRequestData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 
@@ -26,12 +27,16 @@ public class FactionInvitesDatabaseManager {
 
     // ------------------ INVITES  ------------------ //
 
-    public CompletableFuture<Void> createFactionInvite(UUID invitedPlayerUUID, String factionName, String type, Player inviter) {
+    public CompletableFuture<Void> createFactionInvites(List<InviteData> invites) {
         return CompletableFuture.runAsync(() -> {
-            ctx.insertInto(FACTIONINVITES)
-                    .columns(FACTIONINVITES.FACTIONNAME, FACTIONINVITES.UUID, FACTIONINVITES.INVITER, FACTIONINVITES.TYPE, FACTIONINVITES.ACCEPTED, FACTIONINVITES.TIMESTAMP)
-                    .values(factionName, invitedPlayerUUID.toString(), (inviter != null ? inviter.getUniqueId().toString() : ""), type, false, System.currentTimeMillis())
-                    .execute();
+            ctx.transaction((Configuration trx) -> {
+                for (InviteData invite : invites) {
+                    trx.dsl().insertInto(FACTIONINVITES)
+                            .columns(FACTIONINVITES.FACTIONNAME, FACTIONINVITES.UUID, FACTIONINVITES.INVITER, FACTIONINVITES.TYPE, FACTIONINVITES.TIMESTAMP)
+                            .values(invite.getFactionName(), invite.getPlayer().getUniqueId().toString(), (invite.getInviter() != null ? invite.getInviter().getUniqueId().toString() : ""), invite.getType(), invite.getTimestamp())
+                            .execute();
+                }
+            });
         });
     }
 
@@ -41,13 +46,8 @@ public class FactionInvitesDatabaseManager {
                     .where(FACTIONINVITES.UUID.eq(player.getUniqueId().toString()), FACTIONINVITES.TYPE.eq("incoming"))
                     .fetchOne();
 
-            return result != null ? new JoinRequestData(result.getFactionname(), result.getAccepted(), result.getTimestamp()) : null;
+            return result != null ? new JoinRequestData(result.getFactionname(), true, result.getTimestamp()) : null;
         });
-    }
-
-    public CompletableFuture<Boolean> joinRequestExists(String factionName, Player player) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTIONINVITES, FACTIONINVITES.FACTIONNAME.eq(factionName),
-                FACTIONINVITES.UUID.eq(player.getUniqueId().toString()), FACTIONINVITES.TYPE.eq("incoming")));
     }
 
     public CompletableFuture<List<InviteData>> getInvitesOfType(String factionName, String type) {
@@ -94,25 +94,20 @@ public class FactionInvitesDatabaseManager {
         });
     }
 
-    public CompletableFuture<Void> acceptJoinRequest(UUID playerUUID, String factionName) {
+    public CompletableFuture<Void> removeInvites(List<InviteData> invites) {
         return CompletableFuture.runAsync(() -> {
-            ctx.update(FACTIONINVITES)
-                    .set(FACTIONINVITES.ACCEPTED, true)
-                    .where(FACTIONINVITES.FACTIONNAME.eq(factionName), FACTIONINVITES.UUID.eq(playerUUID.toString()), FACTIONINVITES.TYPE.eq("incoming"))
-                    .execute();
+            ctx.transaction((Configuration trx) -> {
+                for (InviteData invite : invites) {
+                    trx.dsl().deleteFrom(FACTIONINVITES)
+                            .where(FACTIONINVITES.FACTIONNAME.eq(invite.getFactionName()), FACTIONINVITES.UUID.eq(invite.getPlayer().getUniqueId().toString()), FACTIONINVITES.TYPE.eq(invite.getType()))
+                            .execute();
+                }
+            });
         });
     }
 
     public CompletableFuture<Boolean> hasJoinRequest(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTIONINVITES, FACTIONINVITES.UUID.eq(playerUUID.toString()), FACTIONINVITES.TYPE.eq("incoming")));
-    }
-
-    public CompletableFuture<Void> revokeInvite(UUID playerUUID, String factionName, String type) {
-        return CompletableFuture.runAsync(() -> {
-            ctx.deleteFrom(FACTIONINVITES)
-                    .where(FACTIONINVITES.FACTIONNAME.eq(factionName), FACTIONINVITES.UUID.eq(playerUUID.toString()), FACTIONINVITES.TYPE.eq(type))
-                    .execute();
-        });
     }
 
 }
