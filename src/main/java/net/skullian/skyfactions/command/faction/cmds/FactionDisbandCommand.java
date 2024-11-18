@@ -52,13 +52,11 @@ public class FactionDisbandCommand extends CommandTemplate {
 
             if (confirm == null) {
                 Messages.FACTION_DISBAND_COMMAND_CONFIRM.send(player, locale);
-                FactionAPI.awaitingDeletion.add(faction);
-            } else if (confirm != null && confirm.equalsIgnoreCase("confirm")) {
+                FactionAPI.awaitingDeletion.add(faction.getName());
+            } else if (confirm.equalsIgnoreCase("confirm")) {
 
-                if (FactionAPI.awaitingDeletion.contains(faction)) {
-
+                if (FactionAPI.awaitingDeletion.contains(faction.getName())) {
                     Messages.FACTION_DISBAND_DELETION_PROCESSING.send(player, locale);
-
                 } else {
                     Messages.FACTION_DISBAND_COMMAND_BLOCK.send(player, locale);
                 }

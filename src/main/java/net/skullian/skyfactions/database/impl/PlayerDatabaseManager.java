@@ -24,8 +24,8 @@ public class PlayerDatabaseManager {
     public CompletableFuture<Void> registerPlayer(Player player) {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(PLAYERDATA)
-                    .columns(PLAYERDATA.UUID, PLAYERDATA.FACTION, PLAYERDATA.DISCORD_ID, PLAYERDATA.LAST_RAID, PLAYERDATA.LOCALE)
-                    .values(player.getUniqueId().toString(), "none", "none", (long) 0, PlayerHandler.getLocale(player.getUniqueId()))
+                    .columns(PLAYERDATA.UUID, PLAYERDATA.DISCORD_ID, PLAYERDATA.LAST_RAID, PLAYERDATA.LOCALE)
+                    .values(player.getUniqueId().toString(), "none", (long) 0, PlayerHandler.getLocale(player.getUniqueId()))
                     .execute();
         });
     }

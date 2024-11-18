@@ -4,6 +4,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandHandler;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.faction.cmds.*;
+import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.util.CooldownManager;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.annotations.AnnotationParser;
@@ -64,6 +65,7 @@ public class FactionCommandHandler implements CommandHandler {
         register(new FactionRequestJoinCommand(), parser);
         register(new FactionTeleportCommand(), parser);
         register(new FactionDisbandCommand(), parser);
+        if (Settings.FACTION_RENAME_ENABLED.getBoolean()) register(new FactionRenameCommand(), parser);
     }
 
     @Override

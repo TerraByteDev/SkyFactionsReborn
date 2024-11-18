@@ -21,12 +21,14 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import static net.skullian.skyfactions.database.tables.Defencelocations.DEFENCELOCATIONS;
 import static net.skullian.skyfactions.database.tables.Factionbans.FACTIONBANS;
 import static net.skullian.skyfactions.database.tables.Factioninvites.FACTIONINVITES;
 import static net.skullian.skyfactions.database.tables.Factionislands.FACTIONISLANDS;
 import static net.skullian.skyfactions.database.tables.Factionmembers.FACTIONMEMBERS;
 import static net.skullian.skyfactions.database.tables.Factions.FACTIONS;
 import static net.skullian.skyfactions.database.tables.Auditlogs.AUDITLOGS;
+import static net.skullian.skyfactions.database.tables.Factionelections.FACTIONELECTIONS;
 
 public class FactionsDatabaseManager {
 
@@ -100,12 +102,49 @@ public class FactionsDatabaseManager {
         });
     }
 
-    public CompletableFuture<Void> updateFactionName(String factionName, String newName) {
+    public CompletableFuture<Void> updateFactionName(String oldName, String newName) {
         return CompletableFuture.runAsync(() -> {
-            ctx.update(FACTIONS)
-                    .set(FACTIONS.NAME, newName)
-                    .where(FACTIONS.NAME.eq(factionName))
-                    .execute();
+            ctx.transaction((Configuration trx) -> {
+                trx.dsl().update(FACTIONS)
+                        .set(FACTIONS.NAME, newName)
+                        .where(FACTIONS.NAME.eq(oldName))
+                        .execute();
+
+                trx.dsl().update(FACTIONBANS)
+                        .set(FACTIONBANS.FACTIONNAME, newName)
+                        .where(FACTIONBANS.FACTIONNAME.eq(oldName))
+                        .execute();
+
+                trx.dsl().update(FACTIONMEMBERS)
+                        .set(FACTIONMEMBERS.FACTIONNAME, newName)
+                        .where(FACTIONMEMBERS.FACTIONNAME.eq(oldName))
+                        .execute();
+
+                trx.dsl().update(AUDITLOGS)
+                        .set(AUDITLOGS.FACTIONNAME, newName)
+                        .where(AUDITLOGS.FACTIONNAME.eq(oldName))
+                        .execute();
+
+                trx.dsl().update(DEFENCELOCATIONS)
+                        .set(DEFENCELOCATIONS.FACTIONNAME, newName)
+                        .where(DEFENCELOCATIONS.FACTIONNAME.eq(oldName))
+                        .execute();
+
+                trx.dsl().update(FACTIONINVITES)
+                        .set(FACTIONINVITES.FACTIONNAME, newName)
+                        .where(FACTIONINVITES.FACTIONNAME.eq(oldName))
+                        .execute();
+
+                trx.dsl().update(FACTIONISLANDS)
+                        .set(FACTIONISLANDS.FACTIONNAME, newName)
+                        .where(FACTIONISLANDS.FACTIONNAME.eq(oldName))
+                        .execute();
+
+                trx.dsl().update(FACTIONELECTIONS)
+                        .set(FACTIONELECTIONS.FACTIONNAME, newName)
+                        .where(FACTIONELECTIONS.FACTIONNAME.eq(oldName))
+                        .execute();
+            });
         });
     }
 
@@ -285,4 +324,5 @@ public class FactionsDatabaseManager {
     public CompletableFuture<Boolean> isPlayerBanned(OfflinePlayer player, String factionName) {
         return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTIONBANS, FACTIONBANS.FACTIONNAME.eq(factionName), FACTIONBANS.UUID.eq(player.getUniqueId().toString())));
     }
+
 }

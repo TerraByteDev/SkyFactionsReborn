@@ -1,0 +1,1 @@
+ALTER TABLE playerData DROP COLUMN faction;

@@ -4,8 +4,8 @@
 package net.skullian.skyfactions.database;
 
 
-import net.skullian.skyfactions.database.tables.ElectionVotes;
-import net.skullian.skyfactions.database.tables.FactionElections;
+import net.skullian.skyfactions.database.tables.Electionvotes;
+import net.skullian.skyfactions.database.tables.Factionelections;
 import net.skullian.skyfactions.database.tables.Factionislands;
 import net.skullian.skyfactions.database.tables.Factionmembers;
 import net.skullian.skyfactions.database.tables.Factions;
@@ -13,8 +13,8 @@ import net.skullian.skyfactions.database.tables.FlywaySchemaHistory;
 import net.skullian.skyfactions.database.tables.Islands;
 import net.skullian.skyfactions.database.tables.Playerdata;
 import net.skullian.skyfactions.database.tables.Trustedplayers;
-import net.skullian.skyfactions.database.tables.records.ElectionVotesRecord;
-import net.skullian.skyfactions.database.tables.records.FactionElectionsRecord;
+import net.skullian.skyfactions.database.tables.records.ElectionvotesRecord;
+import net.skullian.skyfactions.database.tables.records.FactionelectionsRecord;
 import net.skullian.skyfactions.database.tables.records.FactionislandsRecord;
 import net.skullian.skyfactions.database.tables.records.FactionmembersRecord;
 import net.skullian.skyfactions.database.tables.records.FactionsRecord;
@@ -41,8 +41,9 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<ElectionVotesRecord> ELECTION_VOTES__PK_ELECTION_VOTES = Internal.createUniqueKey(ElectionVotes.ELECTION_VOTES, DSL.name("pk_election_votes"), new TableField[] { ElectionVotes.ELECTION_VOTES.ELECTION }, true);
-    public static final UniqueKey<FactionElectionsRecord> FACTION_ELECTIONS__PK_FACTION_ELECTIONS = Internal.createUniqueKey(FactionElections.FACTION_ELECTIONS, DSL.name("pk_faction_elections"), new TableField[] { FactionElections.FACTION_ELECTIONS.ID }, true);
+    public static final UniqueKey<ElectionvotesRecord> ELECTIONVOTES__PK_ELECTIONVOTES = Internal.createUniqueKey(Electionvotes.ELECTIONVOTES, DSL.name("pk_electionVotes"), new TableField[] { Electionvotes.ELECTIONVOTES.ELECTION }, true);
+    public static final UniqueKey<FactionelectionsRecord> FACTIONELECTIONS__PK_FACTIONELECTIONS = Internal.createUniqueKey(Factionelections.FACTIONELECTIONS, DSL.name("pk_factionElections"), new TableField[] { Factionelections.FACTIONELECTIONS.ID }, true);
+    public static final UniqueKey<FactionelectionsRecord> FACTIONELECTIONS__UK_FACTIONELECTIONS_1_128141898 = Internal.createUniqueKey(Factionelections.FACTIONELECTIONS, DSL.name("uk_factionElections_1_128141898"), new TableField[] { Factionelections.FACTIONELECTIONS.FACTIONNAME }, true);
     public static final UniqueKey<FactionislandsRecord> FACTIONISLANDS__PK_FACTIONISLANDS = Internal.createUniqueKey(Factionislands.FACTIONISLANDS, DSL.name("pk_factionIslands"), new TableField[] { Factionislands.FACTIONISLANDS.ID }, true);
     public static final UniqueKey<FactionmembersRecord> FACTIONMEMBERS__PK_FACTIONMEMBERS = Internal.createUniqueKey(Factionmembers.FACTIONMEMBERS, DSL.name("pk_factionMembers"), new TableField[] { Factionmembers.FACTIONMEMBERS.UUID }, true);
     public static final UniqueKey<FactionsRecord> FACTIONS__PK_FACTIONS = Internal.createUniqueKey(Factions.FACTIONS, DSL.name("pk_factions"), new TableField[] { Factions.FACTIONS.NAME }, true);
@@ -55,6 +56,5 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<ElectionVotesRecord, FactionElectionsRecord> ELECTION_VOTES__FK_ELECTION_VOTES_PK_FACTION_ELECTIONS = Internal.createForeignKey(ElectionVotes.ELECTION_VOTES, DSL.name("fk_election_votes_pk_faction_elections"), new TableField[] { ElectionVotes.ELECTION_VOTES.ELECTION }, Keys.FACTION_ELECTIONS__PK_FACTION_ELECTIONS, new TableField[] { FactionElections.FACTION_ELECTIONS.ID }, true);
-    public static final ForeignKey<FactionElectionsRecord, FactionsRecord> FACTION_ELECTIONS__FK_FACTION_ELECTIONS_PK_FACTIONS = Internal.createForeignKey(FactionElections.FACTION_ELECTIONS, DSL.name("fk_faction_elections_pk_factions"), new TableField[] { FactionElections.FACTION_ELECTIONS.FACTION_NAME }, Keys.FACTIONS__PK_FACTIONS, new TableField[] { Factions.FACTIONS.NAME }, true);
+    public static final ForeignKey<ElectionvotesRecord, FactionelectionsRecord> ELECTIONVOTES__FK_ELECTIONVOTES_PK_FACTIONELECTIONS = Internal.createForeignKey(Electionvotes.ELECTIONVOTES, DSL.name("fk_electionVotes_pk_factionElections"), new TableField[] { Electionvotes.ELECTIONVOTES.ELECTION }, Keys.FACTIONELECTIONS__PK_FACTIONELECTIONS, new TableField[] { Factionelections.FACTIONELECTIONS.ID }, true);
 }

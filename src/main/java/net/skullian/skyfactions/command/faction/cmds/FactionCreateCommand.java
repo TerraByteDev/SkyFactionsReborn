@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.RunesAPI;
@@ -10,12 +9,10 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 

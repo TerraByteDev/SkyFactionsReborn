@@ -44,7 +44,7 @@ public class FactionAPI {
     public static Map<UUID, String> factionCache = new HashMap<>();
     public static Map<String, Faction> factionNameCache = new HashMap<>();
 
-    public static HashSet<Faction> awaitingDeletion = new HashSet<>();
+    public static HashSet<String> awaitingDeletion = new HashSet<>();
 
     public static void handleFactionWorldBorder(Player player, FactionIsland island) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
@@ -275,7 +275,7 @@ public class FactionAPI {
         RegionManager regionManager = container.get(BukkitAdapter.adapt(world));
         BlockVector3 min = BlockVector3.at(corner1.getBlockX(), -64, corner1.getBlockZ());
         BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 320, corner2.getBlockZ());
-        ProtectedRegion region = new ProtectedCuboidRegion(faction_name, min, max);
+        ProtectedRegion region = new ProtectedCuboidRegion("SFR_FACTION_" + faction_name, min, max);
 
         DefaultDomain owners = region.getOwners();
         owners.addPlayer(player.getUniqueId());
@@ -338,7 +338,7 @@ public class FactionAPI {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
-            } else if (operation == DefenceOperation.DISABLE && !RegionAPI.isLocationInRegion(player.getLocation(), faction.getName())) return;
+            } else if (operation == DefenceOperation.DISABLE && !RegionAPI.isLocationInRegion(player.getLocation(), "SFR_FACTION_" + faction.getName())) return;
 
             List<Defence> defences = DefencePlacementHandler.loadedFactionDefences.get(faction.getName());
             if (defences != null && !defences.isEmpty()) {
@@ -351,6 +351,15 @@ public class FactionAPI {
                 }
             }
         });
+    }
+
+    public static void onFactionRename(String oldName, String newName) {
+        if (awaitingDeletion.contains(oldName)) {
+            awaitingDeletion.remove(oldName);
+            awaitingDeletion.add(newName);
+        }
+
+        factionCache.replaceAll((uuid, name) -> name.equals(oldName) ? newName : name);
     }
 
     public enum DefenceOperation {

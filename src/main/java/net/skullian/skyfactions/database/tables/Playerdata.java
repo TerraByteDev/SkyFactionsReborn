@@ -55,11 +55,6 @@ public class Playerdata extends TableImpl<PlayerdataRecord> {
     public final TableField<PlayerdataRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
-     * The column <code>playerData.faction</code>.
-     */
-    public final TableField<PlayerdataRecord, String> FACTION = createField(DSL.name("faction"), SQLDataType.CLOB.nullable(false), this, "");
-
-    /**
      * The column <code>playerData.discord_id</code>.
      */
     public final TableField<PlayerdataRecord, String> DISCORD_ID = createField(DSL.name("discord_id"), SQLDataType.CLOB.nullable(false), this, "");

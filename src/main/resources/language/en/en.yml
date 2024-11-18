@@ -13,8 +13,8 @@ CONFIG_VERSION: 1
 # Coloring follows https://docs.terrabytedev.com/skyfactions/installation/setup/messages#text-colours-rgb
 
 Messages:
-  # Used in the /sf language tabcomplete to allow players to choose available
-  # languages other than auto detected. Avoid changing this.
+  # Used in the /sf language tab complete to allow players to choose available
+  # languages other than auto-detected. Avoid changing this.
   LANGUAGE_NAME: "English"
   
   SERVER_NAME: '<gray>[<reset><gradient:#0083FF:#00FFC7><bold>SkyFactions</gradient><reset><gray>]' # Name of your server
@@ -353,6 +353,21 @@ Messages:
         - "<yellow>Knights: <green><fighters><reset>"
         - "<yellow>Subjects: <green><members><reset>"
         - "<gold><bold>------------- <red><bold><faction_name> <gold><bold>-------------<reset>"
+
+    FACTION_RENAME:
+      # Sent when a faction owner attempts to rename their faction when they are still on cooldown (configured in config.yml).
+      # Placeholders: <cooldown> - Cooldown left.
+      RENAME_ON_COOLDOWN: "<server_name><red><bold> Hey!<reset><gray> You are on cooldown for <red><cooldown>"
+
+      # The only reason why there are individual no permission messages for most functions is so that you can customise them further
+      # than just having a generic "You do not have permissions for this action!" message. Given, this makes it more of a pain IF
+      # you want all the permission messages to be the same.
+      # Anyway, this is sent when a faction member tries to rename the faction when they do not have permission (they must be owner!)
+      RENAME_NO_PERMISSIONS: "<server_name><red><bold> Hey!<reset><gray> You do not have permissions to rename the faction!"
+
+      # Sent when the faction does not have enough runes to rename the faction - Cost configurable in config.yml.
+      # Placeholders: <rename_cost> - Cost of renaming the faction (in runes).
+      RENAME_INSUFFICIENT_FUNDS: "<server_name><red><bold> Hey!<reset><gray> You do not have enough runes to rename the faction! You need <red><bold><rename_cost> Runes."
 
     CHANGE_MOTD:
       # Sent while the server is processing the MOTD change.

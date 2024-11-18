@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.database;
 
 
-import net.skullian.skyfactions.database.tables.FactionElections;
+import net.skullian.skyfactions.database.tables.Factionelections;
 import net.skullian.skyfactions.database.tables.FlywaySchemaHistory;
 
 import org.jooq.Index;
@@ -23,6 +23,6 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
-    public static final Index FACTION_ELECTIONS_FACTION_NAME_INDEX = Internal.createIndex(DSL.name("faction_elections_faction_name_index"), FactionElections.FACTION_ELECTIONS, new OrderField[] { FactionElections.FACTION_ELECTIONS.FACTION_NAME }, false);
+    public static final Index FACTIONELECTIONSFACTIONNAMEINDEX = Internal.createIndex(DSL.name("factionElectionsFactionNameIndex"), Factionelections.FACTIONELECTIONS, new OrderField[] { Factionelections.FACTIONELECTIONS.FACTIONNAME }, false);
     public static final Index FLYWAY_SCHEMA_HISTORY_S_IDX = Internal.createIndex(DSL.name("flyway_schema_history_s_idx"), FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, new OrderField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.SUCCESS }, false);
 }

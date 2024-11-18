@@ -30,7 +30,7 @@ public class CacheEntry {
     @Setter private IslandModificationAction islandModificationAction; // Player & Faction
 
     private final List<NotificationData> notificationsToAdd = new ArrayList<>(); // Player Exclusive
-    private final List<NotificationData> notificationsToRemove = new ArrayList<>();
+    private final List<NotificationData> notificationsToRemove = new ArrayList<>(); // Player Exclusive
 
     private final Map<UUID, RankType> newRanks = new HashMap<>(); // Faction Exclusive
     private final List<OfflinePlayer> membersToAdd = new ArrayList<>(); // Faction Exclusive

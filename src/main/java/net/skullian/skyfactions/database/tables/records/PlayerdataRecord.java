@@ -34,25 +34,10 @@ public class PlayerdataRecord extends UpdatableRecordImpl<PlayerdataRecord> {
     }
 
     /**
-     * Setter for <code>playerData.faction</code>.
-     */
-    public PlayerdataRecord setFaction(String value) {
-        set(1, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>playerData.faction</code>.
-     */
-    public String getFaction() {
-        return (String) get(1);
-    }
-
-    /**
      * Setter for <code>playerData.discord_id</code>.
      */
     public PlayerdataRecord setDiscordId(String value) {
-        set(2, value);
+        set(1, value);
         return this;
     }
 
@@ -60,14 +45,14 @@ public class PlayerdataRecord extends UpdatableRecordImpl<PlayerdataRecord> {
      * Getter for <code>playerData.discord_id</code>.
      */
     public String getDiscordId() {
-        return (String) get(2);
+        return (String) get(1);
     }
 
     /**
      * Setter for <code>playerData.last_raid</code>.
      */
     public PlayerdataRecord setLastRaid(Long value) {
-        set(3, value);
+        set(2, value);
         return this;
     }
 
@@ -75,14 +60,14 @@ public class PlayerdataRecord extends UpdatableRecordImpl<PlayerdataRecord> {
      * Getter for <code>playerData.last_raid</code>.
      */
     public Long getLastRaid() {
-        return (Long) get(3);
+        return (Long) get(2);
     }
 
     /**
      * Setter for <code>playerData.locale</code>.
      */
     public PlayerdataRecord setLocale(String value) {
-        set(4, value);
+        set(3, value);
         return this;
     }
 
@@ -90,7 +75,7 @@ public class PlayerdataRecord extends UpdatableRecordImpl<PlayerdataRecord> {
      * Getter for <code>playerData.locale</code>.
      */
     public String getLocale() {
-        return (String) get(4);
+        return (String) get(3);
     }
 
     // -------------------------------------------------------------------------
@@ -116,11 +101,10 @@ public class PlayerdataRecord extends UpdatableRecordImpl<PlayerdataRecord> {
     /**
      * Create a detached, initialised PlayerdataRecord
      */
-    public PlayerdataRecord(String uuid, String faction, String discordId, Long lastRaid, String locale) {
+    public PlayerdataRecord(String uuid, String discordId, Long lastRaid, String locale) {
         super(Playerdata.PLAYERDATA);
 
         setUuid(uuid);
-        setFaction(faction);
         setDiscordId(discordId);
         setLastRaid(lastRaid);
         setLocale(locale);
@@ -135,7 +119,6 @@ public class PlayerdataRecord extends UpdatableRecordImpl<PlayerdataRecord> {
 
         if (value != null) {
             setUuid(value.getUuid());
-            setFaction(value.getFaction());
             setDiscordId(value.getDiscordId());
             setLastRaid(value.getLastRaid());
             setLocale(value.getLocale());

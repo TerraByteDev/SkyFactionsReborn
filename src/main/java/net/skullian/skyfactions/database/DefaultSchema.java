@@ -9,9 +9,9 @@ import java.util.List;
 
 import net.skullian.skyfactions.database.tables.Auditlogs;
 import net.skullian.skyfactions.database.tables.Defencelocations;
-import net.skullian.skyfactions.database.tables.ElectionVotes;
-import net.skullian.skyfactions.database.tables.FactionElections;
+import net.skullian.skyfactions.database.tables.Electionvotes;
 import net.skullian.skyfactions.database.tables.Factionbans;
+import net.skullian.skyfactions.database.tables.Factionelections;
 import net.skullian.skyfactions.database.tables.Factioninvites;
 import net.skullian.skyfactions.database.tables.Factionislands;
 import net.skullian.skyfactions.database.tables.Factionmembers;
@@ -51,19 +51,19 @@ public class DefaultSchema extends SchemaImpl {
     public final Defencelocations DEFENCELOCATIONS = Defencelocations.DEFENCELOCATIONS;
 
     /**
-     * The table <code>election_votes</code>.
+     * The table <code>electionVotes</code>.
      */
-    public final ElectionVotes ELECTION_VOTES = ElectionVotes.ELECTION_VOTES;
-
-    /**
-     * The table <code>faction_elections</code>.
-     */
-    public final FactionElections FACTION_ELECTIONS = FactionElections.FACTION_ELECTIONS;
+    public final Electionvotes ELECTIONVOTES = Electionvotes.ELECTIONVOTES;
 
     /**
      * The table <code>factionBans</code>.
      */
     public final Factionbans FACTIONBANS = Factionbans.FACTIONBANS;
+
+    /**
+     * The table <code>factionElections</code>.
+     */
+    public final Factionelections FACTIONELECTIONS = Factionelections.FACTIONELECTIONS;
 
     /**
      * The table <code>factionInvites</code>.
@@ -128,9 +128,9 @@ public class DefaultSchema extends SchemaImpl {
         return Arrays.asList(
             Auditlogs.AUDITLOGS,
             Defencelocations.DEFENCELOCATIONS,
-            ElectionVotes.ELECTION_VOTES,
-            FactionElections.FACTION_ELECTIONS,
+            Electionvotes.ELECTIONVOTES,
             Factionbans.FACTIONBANS,
+            Factionelections.FACTIONELECTIONS,
             Factioninvites.FACTIONINVITES,
             Factionislands.FACTIONISLANDS,
             Factionmembers.FACTIONMEMBERS,

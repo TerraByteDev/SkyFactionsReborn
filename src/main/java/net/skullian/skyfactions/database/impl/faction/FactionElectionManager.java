@@ -1,11 +1,11 @@
 package net.skullian.skyfactions.database.impl.faction;
 
-import net.skullian.skyfactions.database.tables.records.FactionElectionsRecord;
+import net.skullian.skyfactions.database.tables.records.FactionelectionsRecord;
 import org.jooq.DSLContext;
 
 import java.util.concurrent.CompletableFuture;
 
-import static net.skullian.skyfactions.database.tables.FactionElections.FACTION_ELECTIONS;
+import static net.skullian.skyfactions.database.tables.Factionelections.FACTIONELECTIONS;
 
 public class FactionElectionManager {
     private final DSLContext ctx;
@@ -17,8 +17,8 @@ public class FactionElectionManager {
 
     public CompletableFuture<Boolean> isElectionRunning(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
-            FactionElectionsRecord election = ctx.selectFrom(FACTION_ELECTIONS)
-                    .where(FACTION_ELECTIONS.FACTION_NAME.eq(factionName))
+            FactionelectionsRecord election = ctx.selectFrom(FACTIONELECTIONS)
+                    .where(FACTIONELECTIONS.FACTIONNAME.eq(factionName))
                     .fetchOne();
             return election != null;
         });

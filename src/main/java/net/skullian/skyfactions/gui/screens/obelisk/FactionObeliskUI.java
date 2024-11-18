@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.gui.screens.obelisk;
 
 import lombok.Builder;
+import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.GUIEnums;
@@ -16,6 +17,7 @@ import net.skullian.skyfactions.gui.items.obelisk.election.ObeliskFactionElectio
 import net.skullian.skyfactions.gui.screens.Screen;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.invui.item.Item;
 
@@ -43,6 +45,7 @@ public class FactionObeliskUI extends Screen {
             }
 
             try {
+                player.setMetadata("inFactionRelatedUI", new FixedMetadataValue(SkyFactionsReborn.getInstance(), true));
                 FactionObeliskUI.builder().player(player).faction(faction).build().show();
             } catch (Exception e) {
                 e.printStackTrace();

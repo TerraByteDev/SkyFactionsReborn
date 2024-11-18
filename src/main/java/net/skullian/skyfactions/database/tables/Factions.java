@@ -8,18 +8,13 @@ import java.util.Collection;
 
 import net.skullian.skyfactions.database.DefaultSchema;
 import net.skullian.skyfactions.database.Keys;
-import net.skullian.skyfactions.database.tables.FactionElections.FactionElectionsPath;
 import net.skullian.skyfactions.database.tables.records.FactionsRecord;
 
 import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
-import org.jooq.InverseForeignKey;
 import org.jooq.Name;
-import org.jooq.Path;
 import org.jooq.PlainSQL;
 import org.jooq.QueryPart;
-import org.jooq.Record;
 import org.jooq.SQL;
 import org.jooq.Schema;
 import org.jooq.Select;
@@ -113,39 +108,6 @@ public class Factions extends TableImpl<FactionsRecord> {
         this(DSL.name("factions"), null);
     }
 
-    public <O extends Record> Factions(Table<O> path, ForeignKey<O, FactionsRecord> childPath, InverseForeignKey<O, FactionsRecord> parentPath) {
-        super(path, childPath, parentPath, FACTIONS);
-    }
-
-    /**
-     * A subtype implementing {@link Path} for simplified path-based joins.
-     */
-    public static class FactionsPath extends Factions implements Path<FactionsRecord> {
-
-        private static final long serialVersionUID = 1L;
-        public <O extends Record> FactionsPath(Table<O> path, ForeignKey<O, FactionsRecord> childPath, InverseForeignKey<O, FactionsRecord> parentPath) {
-            super(path, childPath, parentPath);
-        }
-        private FactionsPath(Name alias, Table<FactionsRecord> aliased) {
-            super(alias, aliased);
-        }
-
-        @Override
-        public FactionsPath as(String alias) {
-            return new FactionsPath(DSL.name(alias), this);
-        }
-
-        @Override
-        public FactionsPath as(Name alias) {
-            return new FactionsPath(alias, this);
-        }
-
-        @Override
-        public FactionsPath as(Table<?> alias) {
-            return new FactionsPath(alias.getQualifiedName(), this);
-        }
-    }
-
     @Override
     public Schema getSchema() {
         return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
@@ -154,19 +116,6 @@ public class Factions extends TableImpl<FactionsRecord> {
     @Override
     public UniqueKey<FactionsRecord> getPrimaryKey() {
         return Keys.FACTIONS__PK_FACTIONS;
-    }
-
-    private transient FactionElectionsPath _factionElections;
-
-    /**
-     * Get the implicit to-many join path to the <code>faction_elections</code>
-     * table
-     */
-    public FactionElectionsPath factionElections() {
-        if (_factionElections == null)
-            _factionElections = new FactionElectionsPath(this, null, Keys.FACTION_ELECTIONS__FK_FACTION_ELECTIONS_PK_FACTIONS.getInverseKey());
-
-        return _factionElections;
     }
 
     @Override

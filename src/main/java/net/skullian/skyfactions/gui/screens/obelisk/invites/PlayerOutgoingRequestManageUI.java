@@ -18,6 +18,7 @@ import net.skullian.skyfactions.gui.items.obelisk.invites.InvitePromptItem;
 import net.skullian.skyfactions.gui.screens.Screen;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.item.Item;
@@ -36,6 +37,7 @@ public class PlayerOutgoingRequestManageUI extends Screen {
     public static void promptPlayer(Player player, JoinRequestData joinRequest) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             try {
+                player.setMetadata("inFactionRelatedUI", new FixedMetadataValue(SkyFactionsReborn.getInstance(), true));
                 PlayerOutgoingRequestManageUI.builder().player(player).joinRequest(joinRequest).build().show();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();

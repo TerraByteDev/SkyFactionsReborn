@@ -14,8 +14,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -158,6 +160,13 @@ public class PlayerHandler implements Listener {
                 Messages.NETHER_PORTALS_BLOCKED.send(event.getPlayer(), event.getPlayer().locale().getLanguage());
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        if (event.getPlayer().hasMetadata("inFactionRelatedUI")) {
+            event.getPlayer().removeMetadata("inFactionRelatedUI", SkyFactionsReborn.getInstance());
         }
     }
 }

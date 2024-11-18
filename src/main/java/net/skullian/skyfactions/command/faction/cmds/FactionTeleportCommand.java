@@ -49,7 +49,7 @@ public class FactionTeleportCommand extends CommandTemplate {
             } else if (faction == null) {
                 Messages.NOT_IN_FACTION.send(player, locale);
                 return;
-            } else if (RegionAPI.isLocationInRegion(player.getLocation(), faction.getName())) {
+            } else if (RegionAPI.isLocationInRegion(player.getLocation(), "SFR_FACTION_" + faction.getName())) {
                 Messages.ALREADY_ON_ISLAND.send(player, locale);
                 return;
             }

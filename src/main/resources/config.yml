@@ -287,7 +287,7 @@ Factions:
   # Configuration for faction renaming.
   # The control measures (min/max name length, blacklisted keywords, allow symbols/numbers/non-english) in the FACTION_CREATION section (above)
   # will apply here, so don't worry!
-  RENAME:
+  FACTION_RENAMING:
     # Allow renaming outright. This will mean players cannot even access /faction rename.
     ALLOW_RENAMING: true
 
@@ -301,7 +301,7 @@ Factions:
   # Configure who can do certain actions.
   # Possible Ranks: "owner", "admin", "moderator", "fighter", "member"
   # Some permission configs are in the defences.yml configuration.
-  RANKS:
+  FACTION_RANKS:
 
     # Who can ban other members?
     BAN: ["owner", "admin"]

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.config.types.Messages;
@@ -17,6 +18,7 @@ import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,9 +68,15 @@ public class Faction {
      *
      * @param newName New name of the faction.
      **/
-    public CompletableFuture<Void> updateName(String newName) {
+    public void updateName(String newName) {
+        FactionAPI.onFactionRename(getName(), newName);
+
+        Bukkit.getOnlinePlayers().stream()
+                .filter(player -> player.isOnline() && player.getPlayer().hasMetadata("inFactionRelatedUI"))
+                .forEach(player -> player.getPlayer().closeInventory(InventoryCloseEvent.Reason.PLUGIN));
+
         name = newName;
-        return SkyFactionsReborn.getDatabaseManager().getFactionsManager().updateFactionName(newName, name);
+        SkyFactionsReborn.getDatabaseManager().getFactionsManager().updateFactionName(getName(), newName);
     }
 
     /**

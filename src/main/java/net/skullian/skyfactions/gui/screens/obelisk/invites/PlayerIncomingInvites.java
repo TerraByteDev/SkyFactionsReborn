@@ -18,6 +18,7 @@ import net.skullian.skyfactions.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.item.Item;
@@ -44,6 +45,7 @@ public class PlayerIncomingInvites extends PaginatedScreen {
             }
 
             try {
+                player.setMetadata("inFactionRelatedUI", new FixedMetadataValue(SkyFactionsReborn.getInstance(), true));
                 PlayerIncomingInvites.builder().player(player).inviteData(inviteData).build().show();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
