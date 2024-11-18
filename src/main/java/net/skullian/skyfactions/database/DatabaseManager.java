@@ -202,9 +202,9 @@ public class DatabaseManager {
                 .columns(Notifications.NOTIFICATIONS.fields())
                 .execute();
 
-        ctx.createTableIfNotExists(FactionElections.FACTION_ELECTIONS)
-                .columns(FactionElections.FACTION_ELECTIONS.fields())
-                .primaryKey(FactionElections.FACTION_ELECTIONS.ID)
+        ctx.createTableIfNotExists(Factionelections.FACTIONELECTIONS)
+                .columns(Factionelections.FACTIONELECTIONS.fields())
+                .primaryKey(Factionelections.FACTIONELECTIONS.ID)
                 .execute();
     }
 

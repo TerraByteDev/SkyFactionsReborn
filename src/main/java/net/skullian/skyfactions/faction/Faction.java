@@ -75,7 +75,7 @@ public class Faction {
                 .filter(player -> player.isOnline() && player.getPlayer().hasMetadata("inFactionRelatedUI"))
                 .forEach(player -> player.getPlayer().closeInventory(InventoryCloseEvent.Reason.PLUGIN));
 
-        name = newName;
+        this.name = newName;
         SkyFactionsReborn.getDatabaseManager().getFactionsManager().updateFactionName(getName(), newName);
     }
 

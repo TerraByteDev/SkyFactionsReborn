@@ -53,7 +53,7 @@ public class FactionRenameCommand extends CommandTemplate {
 
             if (faction.getLastRenamed() + Settings.FACTION_RENAME_COOLDOWN.getLong() > System.currentTimeMillis()) {
                 long cooldownDuration = Settings.FACTION_RENAME_COOLDOWN.getLong() - (System.currentTimeMillis() - faction.getLastRenamed());
-                Messages.FACTION_RENAME_ON_COOLDOWN.send(player, locale, "cooldown", DurationFormatUtils.formatDuration(cooldownDuration, "HH'h 'mm'm 'ss's'"););
+                Messages.FACTION_RENAME_ON_COOLDOWN.send(player, locale, "cooldown", DurationFormatUtils.formatDuration(cooldownDuration, "HH'h 'mm'm 'ss's'"));
             } else if (!faction.getOwner().getUniqueId().equals(player.getUniqueId())) { // todo make more customisable/b
                 Messages.FACTION_RENAME_NO_PERMISSIONS.send(player, locale);
             } else {
