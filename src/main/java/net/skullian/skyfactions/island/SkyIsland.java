@@ -1,58 +1,51 @@
 package net.skullian.skyfactions.island;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.skullian.skyfactions.config.types.Settings;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Getter
-public class FactionIsland {
+public abstract class SkyIsland {
 
     private int id;
-    private long last_raided;
-
-    public FactionIsland(int id, long last_raided) {
-        this.id = id;
-        this.last_raided = last_raided;
-    }
+    private int regionSize;
+    private int regionPadding;
+    private List<Integer> gridOrigin;
 
     public Location getCenter(World world) {
-        List<Integer> origin = Settings.GEN_FACTION_GRID_ORIGIN.getIntegerList();
-        if (id == 1) return new org.bukkit.Location(world, origin.get(0), origin.get(1), origin.get(2));
+        if (id == 1) return new Location(world, gridOrigin.get(0), gridOrigin.get(1), gridOrigin.get(2));
 
         int pos = id - 1;
         int radius = (int) (Math.floor((Math.sqrt(pos) - 1) / 2) + 1);
         int diameter = radius * 2;
         int perimeter = diameter * 4;
 
-        int lastCompletePosition = (perimeter * (radius - 1)) / 2;
+        int lastComplete = (perimeter * (radius - 1)) / 2;
+        int currentIndex = (pos - lastComplete) % perimeter;
 
-        int currentIndexInPerimeter = (pos - lastCompletePosition) % perimeter;
-
-        org.bukkit.Location location;
-
-        switch (currentIndexInPerimeter / diameter) {
+        Location location;
+        switch (currentIndex / diameter) {
             case 0:
-                location = new org.bukkit.Location(world, (currentIndexInPerimeter - radius), 0, -radius);
+                location = new Location(world, (currentIndex - radius), gridOrigin.get(1), -radius);
                 break;
             case 1:
-                location = new org.bukkit.Location(world, radius, 0, (currentIndexInPerimeter % diameter) - radius);
+                location = new Location(world, radius, gridOrigin.get(1), (currentIndex % perimeter) - radius);
                 break;
             case 2:
-                location = new org.bukkit.Location(world, radius - (currentIndexInPerimeter % diameter), 0, radius);
+                location = new Location(world, radius - (currentIndex % perimeter), gridOrigin.get(1), radius);
                 break;
             case 3:
-                location = new org.bukkit.Location(world, -radius, 0, radius - (currentIndexInPerimeter % diameter));
+                location = new Location(world, -radius, gridOrigin.get(1), radius - (currentIndex % perimeter));
                 break;
             default:
                 throw new IllegalStateException("Could not find island location with ID: " + id);
         }
 
-        org.bukkit.Location newLocation = location.multiply((Settings.GEN_FACTION_REGION_SIZE.getInt() + Settings.GEN_FACTION_REGION_PADDING.getInt()));
-
-        return newLocation;
+        return location.multiply((regionSize + regionPadding));
     }
 
     public Location getPosition1(World world) {
@@ -83,7 +76,5 @@ public class FactionIsland {
         return center;
     }
 
-    public int getSize() {
-        return Settings.GEN_FACTION_REGION_SIZE.getInt();
-    }
+    public int getSize() { return regionSize; }
 }

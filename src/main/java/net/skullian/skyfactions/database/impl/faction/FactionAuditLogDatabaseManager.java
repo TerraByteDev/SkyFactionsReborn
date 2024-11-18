@@ -26,6 +26,7 @@ public class FactionAuditLogDatabaseManager {
 
     public CompletableFuture<Void> createAuditLogs(List<AuditLogData> auditLogs) {
         return CompletableFuture.runAsync(() -> {
+            if (auditLogs.isEmpty()) return;
             ctx.transaction((Configuration trx) -> {
                 for (AuditLogData auditLog : auditLogs) {
                     trx.dsl().insertInto(AUDITLOGS)

@@ -38,7 +38,7 @@ public class RaidAPI {
     public static Map<UUID, UUID> currentRaids = new HashMap<>();
 
     public static CompletableFuture<String> getCooldownDuration(Player player) {
-        long cooldownDurationInMilliseconds = Settings.RAIDING_COOLDOWN.getInt();
+        long cooldownDurationInMilliseconds = Settings.RAIDING_COOLDOWN.getLong();
         return SkyFactionsReborn.getDatabaseManager().getPlayerManager().getLastRaid(player).thenApply((lastTime) -> {
             long currentTime = System.currentTimeMillis();
 

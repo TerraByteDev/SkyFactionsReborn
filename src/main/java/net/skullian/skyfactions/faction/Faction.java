@@ -11,7 +11,7 @@ import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.struct.AuditLogData;
 import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.event.PlayerHandler;
-import net.skullian.skyfactions.island.FactionIsland;
+import net.skullian.skyfactions.island.impl.FactionIsland;
 import net.skullian.skyfactions.notification.NotificationType;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
@@ -201,7 +201,7 @@ public class Faction {
     }
 
     public void updateLocale(String newLocale) {
-        SkyFactionsReborn.getCacheService().getEntry(this).setLocale(newLocale);
+        SkyFactionsReborn.getCacheService().getEntry(this).setNewLocale(newLocale);
     }
 
     /**

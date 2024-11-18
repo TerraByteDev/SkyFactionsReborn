@@ -23,7 +23,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.island.PlayerIsland;
+import net.skullian.skyfactions.island.impl.PlayerIsland;
 import net.skullian.skyfactions.util.FileUtil;
 import net.skullian.skyfactions.util.SLogger;
 import net.skullian.skyfactions.util.worldborder.WorldBorder;

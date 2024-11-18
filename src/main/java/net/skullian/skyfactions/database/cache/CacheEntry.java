@@ -6,6 +6,8 @@ import java.util.concurrent.CompletableFuture;
 import net.skullian.skyfactions.database.struct.AuditLogData;
 import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.faction.RankType;
+import net.skullian.skyfactions.island.IslandModificationAction;
+import net.skullian.skyfactions.island.impl.FactionIsland;
 import org.bukkit.Location;
 
 import lombok.Getter;
@@ -22,7 +24,8 @@ public class CacheEntry {
     private int gems = 0; // Player & Faction
     private final List<Location> defencesToRegister = new ArrayList<>(); // Player * Faction
     private final List<Location> defencesToRemove = new ArrayList<>(); // Player & Faction
-    private String newLocale; // Player & Faction
+    @Setter private String newLocale; // Player & Faction
+    @Setter private IslandModificationAction islandModificationAction; // Player & Faction
 
     private final Map<UUID, RankType> newRanks = new HashMap<>(); // Faction Exclusive
     private final List<OfflinePlayer> membersToAdd = new ArrayList<>(); // Faction Exclusive
@@ -57,10 +60,6 @@ public class CacheEntry {
     public void removeDefence(Location location) {
         defencesToRegister.remove(location);
         defencesToRemove.add(location);
-    }
-
-    public void setLocale(String locale) {
-        newLocale = locale;
     }
 
     public void setNewRank(UUID playerUUID, RankType rankType) {
@@ -151,15 +150,18 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.getDatabaseManager().getFactionAuditLogManager().createAuditLogs(auditLogsToAdd).exceptionally((ex -> {
                         throw new RuntimeException("Failed to create audit logs for faction " + factionName, ex);
-                    }))
+                    })),
+                    SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().createFactionIsland(factionName, islandModificationAction).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to create island for faction " + factionName, ex);
+                    })
             );
         } else {
-            UUID uuid = UUID.fromString(toCache);
+            UUID uuid = UUID.fromString(Objects.requireNonNull(toCache));
             return CompletableFuture.allOf(
-                    SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyGems(uuid.toString(), gems, false).exceptionally((ex) -> {
+                    SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyGems(uuid, gems, false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set gems of player " + uuid, ex);
                     }),
-                    SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyRunes(uuid.toString(), runes, false).exceptionally((ex) -> {
+                    SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyRunes(uuid, runes, false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set runes of player " + uuid, ex);
                     }),
                     SkyFactionsReborn.getDatabaseManager().getDefencesManager().registerDefenceLocations(defencesToRegister, uuid.toString(), false).exceptionally((ex) -> {
@@ -170,6 +172,9 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.getDatabaseManager().getPlayerManager().setPlayerLocale(uuid, newLocale).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to update defendes for player " + uuid, ex);
+                    }),
+                    SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().createIsland(uuid, islandModificationAction).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to create island for player " + uuid, ex);
                     })
             );
         }

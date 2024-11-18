@@ -1,10 +1,15 @@
 package net.skullian.skyfactions.database.impl.faction;
 
+import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.tables.records.FactionislandsRecord;
-import net.skullian.skyfactions.island.FactionIsland;
+import net.skullian.skyfactions.island.IslandModificationAction;
+import net.skullian.skyfactions.island.SkyIsland;
+import net.skullian.skyfactions.island.impl.FactionIsland;
+import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static net.skullian.skyfactions.database.tables.Factionislands.FACTIONISLANDS;
@@ -31,11 +36,12 @@ public class FactionIslandDatabaseManager {
         });
     }
 
-    public CompletableFuture<Void> createFactionIsland(String factionName, FactionIsland island) {
+    public CompletableFuture<Void> createFactionIsland(String factionName, IslandModificationAction action) {
         return CompletableFuture.runAsync(() -> {
+            if (action == null) return;
             ctx.insertInto(FACTIONISLANDS)
                     .columns(FACTIONISLANDS.ID, FACTIONISLANDS.FACTIONNAME, FACTIONISLANDS.RUNES, FACTIONISLANDS.DEFENCECOUNT, FACTIONISLANDS.GEMS, FACTIONISLANDS.LAST_RAIDED, FACTIONISLANDS.LAST_RAIDER)
-                    .values(island.getId(), factionName, 0, 0, 0, island.getLast_raided(), "N/A")
+                    .values(action.getId(), factionName, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_FACTION_IMMUNITY.getLong(), "N/A")
                     .execute();
         });
     }
@@ -46,7 +52,7 @@ public class FactionIslandDatabaseManager {
                     .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
                     .fetchOne();
 
-            return result != null ? new FactionIsland(result.getId(), result.getLastRaided()) : null;
+            return result != null ? new FactionIsland(result.getId()) : null;
         });
     }
 

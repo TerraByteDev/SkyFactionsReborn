@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import net.skullian.skyfactions.database.cache.CacheEntry;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.island.IslandModificationAction;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -21,7 +23,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
-import net.skullian.skyfactions.island.PlayerIsland;
+import net.skullian.skyfactions.island.impl.PlayerIsland;
 import net.skullian.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.PlayerUtil;
@@ -62,10 +64,12 @@ public class IslandAPI {
         Messages.ISLAND_CREATING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
         RegionAPI.createRegion(player, island.getPosition1(world), island.getPosition2(world), world, player.getUniqueId().toString());
 
-        CompletableFuture.allOf(
-                SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().createIsland(player, island),
-                RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player")
-        ).whenComplete((ignored, ex) -> {
+        CacheEntry entry = SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId());
+        IslandModificationAction action = IslandModificationAction.CREATE;
+        action.setId(island.getId());
+        entry.setIslandModificationAction(action);
+
+        RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
                 removePlayerIsland(player);

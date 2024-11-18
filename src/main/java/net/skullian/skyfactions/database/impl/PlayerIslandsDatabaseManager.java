@@ -4,7 +4,9 @@ import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.struct.IslandRaidData;
 import net.skullian.skyfactions.database.tables.records.IslandsRecord;
 import net.skullian.skyfactions.database.tables.records.TrustedplayersRecord;
-import net.skullian.skyfactions.island.PlayerIsland;
+import net.skullian.skyfactions.island.IslandModificationAction;
+import net.skullian.skyfactions.island.SkyIsland;
+import net.skullian.skyfactions.island.impl.PlayerIsland;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -42,16 +44,17 @@ public class PlayerIslandsDatabaseManager {
         });
     }
 
-    public CompletableFuture<Void> createIsland(Player player, PlayerIsland island) {
+    public CompletableFuture<Void> createIsland(UUID playerUUID, IslandModificationAction action) {
         return CompletableFuture.runAsync(() -> {
+            if (action == null) return;
             ctx.insertInto(ISLANDS)
                     .columns(ISLANDS.ID, ISLANDS.UUID, ISLANDS.LEVEL, ISLANDS.GEMS, ISLANDS.RUNES, ISLANDS.DEFENCECOUNT, ISLANDS.LAST_RAIDED, ISLANDS.LAST_RAIDER, ISLANDS.CREATED)
-                    .values(island.getId(), player.getUniqueId().toString(), 0, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_PLAYER_IMMUNITY.getInt(), "N/A", System.currentTimeMillis())
+                    .values(action.getId(), playerUUID.toString(), 0, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_PLAYER_IMMUNITY.getLong(), "N/A", System.currentTimeMillis())
                     .execute();
         });
     }
 
-    public CompletableFuture<UUID> getOwnerOfIsland(PlayerIsland island) {
+    public CompletableFuture<UUID> getOwnerOfIsland(SkyIsland island) {
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.UUID)
                 .from(ISLANDS)
                 .where(ISLANDS.ID.eq(island.getId()))
@@ -79,14 +82,14 @@ public class PlayerIslandsDatabaseManager {
         });
     }
 
-    public CompletableFuture<Integer> getIslandLevel(PlayerIsland island) {
+    public CompletableFuture<Integer> getIslandLevel(SkyIsland island) {
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.LEVEL)
                 .from(ISLANDS)
                 .where(ISLANDS.ID.eq(island.getId()))
                 .fetchOneInto(Integer.class));
     }
 
-    public CompletableFuture<Void> setIslandCooldown(PlayerIsland island, long time) {
+    public CompletableFuture<Void> setIslandCooldown(SkyIsland island, long time) {
         return CompletableFuture.runAsync(() -> {
             ctx.update(ISLANDS)
                     .set(ISLANDS.LAST_RAIDED, time)
@@ -107,7 +110,7 @@ public class PlayerIslandsDatabaseManager {
     public CompletableFuture<List<IslandRaidData>> getRaidableIslands(Player player) {
         return CompletableFuture.supplyAsync(() -> {
             Result<IslandsRecord> results = ctx.selectFrom(ISLANDS)
-                    .where(ISLANDS.LAST_RAIDED.lessOrEqual((System.currentTimeMillis() - Settings.RAIDED_COOLDOWN.getInt())))
+                    .where(ISLANDS.LAST_RAIDED.lessOrEqual((System.currentTimeMillis() - Settings.RAIDED_COOLDOWN.getLong())))
                     .fetch();
 
             List<IslandRaidData> islands = new ArrayList<>();

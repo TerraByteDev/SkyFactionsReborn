@@ -127,6 +127,10 @@ public enum Settings {
         return config.getInt(this.path);
     }
 
+    public long getLong() {
+        return config.getLong(this.path);
+    }
+
     public boolean getBoolean() {
         return config.getBoolean(this.path);
     }

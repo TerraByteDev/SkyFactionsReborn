@@ -15,13 +15,14 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.database.tables.Notifications;
+import net.skullian.skyfactions.database.cache.CacheEntry;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.event.PlayerHandler;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.Faction;
-import net.skullian.skyfactions.island.FactionIsland;
+import net.skullian.skyfactions.island.IslandModificationAction;
+import net.skullian.skyfactions.island.impl.FactionIsland;
 import net.skullian.skyfactions.notification.NotificationType;
 import net.skullian.skyfactions.obelisk.ObeliskHandler;
 import net.skullian.skyfactions.util.ErrorUtil;
@@ -284,27 +285,25 @@ public class FactionAPI {
     }
 
     private static void createIsland(Player player, String faction_name) {
-        FactionIsland island = new FactionIsland(SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().cachedFactionIslandID, System.currentTimeMillis() + Settings.RAIDING_FACTION_IMMUNITY.getInt());
+        FactionIsland island = new FactionIsland(SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().cachedFactionIslandID);
         SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().cachedFactionIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
         createRegion(player, island, world, faction_name);
 
-        CompletableFuture.allOf(SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().createFactionIsland(faction_name, island), RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction")).whenComplete((unused, ex) -> {
-            if (ex != null) {
-                ex.printStackTrace();
-                return;
-            }
+        CacheEntry entry = SkyFactionsReborn.getCacheService().getEntry(faction_name);
+        IslandModificationAction action = IslandModificationAction.CREATE;
+        action.setId(island.getId());
+        entry.setIslandModificationAction(action);
 
-            ObeliskHandler.spawnFactionObelisk(faction_name, island);
+        ObeliskHandler.spawnFactionObelisk(faction_name, island);
 
-            handleFactionWorldBorder(player, island);
-            IslandAPI.modifyDefenceOperation(DefenceOperation.DISABLE, player.getUniqueId());
-            RegionAPI.teleportPlayerToLocation(player, island.getCenter(world));
+        handleFactionWorldBorder(player, island);
+        IslandAPI.modifyDefenceOperation(DefenceOperation.DISABLE, player.getUniqueId());
+        RegionAPI.teleportPlayerToLocation(player, island.getCenter(world));
 
-            SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
-            Messages.FACTION_CREATION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-        });
+        SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
+        Messages.FACTION_CREATION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
     }
 
     /**

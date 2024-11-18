@@ -29,6 +29,7 @@ public class FactionInvitesDatabaseManager {
 
     public CompletableFuture<Void> createFactionInvites(List<InviteData> invites) {
         return CompletableFuture.runAsync(() -> {
+            if (invites.isEmpty()) return;
             ctx.transaction((Configuration trx) -> {
                 for (InviteData invite : invites) {
                     trx.dsl().insertInto(FACTIONINVITES)

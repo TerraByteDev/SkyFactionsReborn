@@ -82,6 +82,10 @@ public class CacheService {
         return playersToCache.computeIfAbsent(playerUUID, k -> new CacheEntry());
     }
 
+    public CacheEntry getEntry(String factionName) {
+        return factionsToCache.computeIfAbsent(factionName, k -> new CacheEntry());
+    }
+
     public CacheEntry getEntry(Faction faction) {
         return factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
     }

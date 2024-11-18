@@ -11,7 +11,7 @@ import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
-import net.skullian.skyfactions.island.PlayerIsland;
+import net.skullian.skyfactions.island.impl.PlayerIsland;
 
 public class ObeliskHeadItem extends AsyncSkyItem {
 
