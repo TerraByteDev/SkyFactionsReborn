@@ -419,12 +419,12 @@ public class Faction {
      * @param data  Data of the invite [{@link InviteData}]
      * @param actor Player who rejected the invite [{@link Player}]
      */
-    public CompletableFuture<Void> rejectJoinRequest(InviteData data, Player actor) {
+    public void rejectJoinRequest(InviteData data, Player actor) {
         invites.remove(data);
         SkyFactionsReborn.getCacheService().getEntry(this).removeInvite(data);
-        createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "faction_player", actor.getName(), "player", data.getPlayer().getName());
 
-        return NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "player_name", actor.getName(), "faction_name", name);
+        createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "faction_player", actor.getName(), "player", data.getPlayer().getName());
+        NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "player_name", actor.getName(), "faction_name", name);
     }
 
     public InviteData toInviteData(JoinRequestData data, OfflinePlayer player) {

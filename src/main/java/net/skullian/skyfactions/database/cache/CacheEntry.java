@@ -3,11 +3,13 @@ package net.skullian.skyfactions.database.cache;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.database.struct.AuditLogData;
 import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.faction.RankType;
 import net.skullian.skyfactions.island.IslandModificationAction;
 import net.skullian.skyfactions.island.impl.FactionIsland;
+import net.skullian.skyfactions.notification.NotificationData;
 import org.bukkit.Location;
 
 import lombok.Getter;
@@ -26,6 +28,9 @@ public class CacheEntry {
     private final List<Location> defencesToRemove = new ArrayList<>(); // Player & Faction
     @Setter private String newLocale; // Player & Faction
     @Setter private IslandModificationAction islandModificationAction; // Player & Faction
+
+    private final List<NotificationData> notificationsToAdd = new ArrayList<>(); // Player Exclusive
+    private final List<NotificationData> notificationsToRemove = new ArrayList<>();
 
     private final Map<UUID, RankType> newRanks = new HashMap<>(); // Faction Exclusive
     private final List<OfflinePlayer> membersToAdd = new ArrayList<>(); // Faction Exclusive
@@ -98,6 +103,18 @@ public class CacheEntry {
 
     public void addAuditLog(AuditLogData auditLog) {
         auditLogsToAdd.add(auditLog);
+    }
+
+    public void addNotification(NotificationData notification) {
+        notificationsToRemove.remove(notification);
+        notificationsToAdd.add(notification);
+    }
+
+    public void removeNotification(NotificationData notification) {
+        NotificationAPI.removeNotification(notification.getUuid(), notification);
+
+        notificationsToAdd.remove(notification);
+        notificationsToRemove.add(notification);
     }
 
     /**
@@ -175,6 +192,12 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().createIsland(uuid, islandModificationAction).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to create island for player " + uuid, ex);
+                    }),
+                    SkyFactionsReborn.getDatabaseManager().getNotificationManager().createNotifications(notificationsToAdd).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to create notifications for player " + uuid, ex);
+                    }),
+                    SkyFactionsReborn.getDatabaseManager().getNotificationManager().removeNotifications(notificationsToRemove).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to remove notifications for player " + uuid, ex);
                     })
             );
         }

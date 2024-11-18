@@ -9,23 +9,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+
 public class NotificationTask {
 
     public static BukkitRunnable initialise(Player player, boolean isInFaction) {
         return new BukkitRunnable() {
             @Override
             public void run() {
-                NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((data, ex) -> {
-                    if (ex != null) {
-                        SLogger.fatal("Failed to fetch notifications of player {} - {}", player.getName(), ex.getMessage());
-                        ex.printStackTrace();
-                        return;
-                    }
-
-                    if (!data.isEmpty()) {
-                        Messages.UNREAD_NOTIFICATIONS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "count", data.size());
-                    }
-                });
+                List<NotificationData> notifications = NotificationAPI.getNotifications(player);
+                if (!notifications.isEmpty()) {
+                    Messages.UNREAD_NOTIFICATIONS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "count", notifications.size());
+                }
 
                 if (isInFaction) {
                     FactionAPI.getFaction(player.getUniqueId()).thenAccept((faction) -> {

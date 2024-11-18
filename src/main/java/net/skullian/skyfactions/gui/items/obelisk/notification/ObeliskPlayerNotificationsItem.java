@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.obelisk.notification;
 
 import java.util.List;
 
+import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -15,7 +16,7 @@ import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
 import net.skullian.skyfactions.gui.screens.obelisk.PlayerObeliskNotificationUI;
 import net.skullian.skyfactions.notification.NotificationData;
 
-public class ObeliskPlayerNotificationsItem extends AsyncSkyItem {
+public class ObeliskPlayerNotificationsItem extends SkyItem {
 
     public ObeliskPlayerNotificationsItem(ItemData data, ItemStack stack, Player player) {
         super(data, stack, player, null);
@@ -23,7 +24,7 @@ public class ObeliskPlayerNotificationsItem extends AsyncSkyItem {
 
     @Override
     public Object[] replacements() {
-        List<NotificationData> notifications = NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(getPLAYER().getUniqueId())).join();
+        List<NotificationData> notifications = NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(getPLAYER().getUniqueId()));
 
         return List.of(
             "notification_count", notifications.size()

@@ -11,6 +11,7 @@ import net.skullian.skyfactions.notification.NotificationType;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -20,21 +21,31 @@ public class NotificationAPI {
     public static Map<String, Integer> factionInviteStore = new HashMap<>();
     public static Map<UUID, BukkitTask> tasks = new HashMap<>();
 
+    public static Map<UUID, List<NotificationData>> notifications = new HashMap<>();
+
     public static void createCycle(Player player) {
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
             }
-            if (faction != null && !factionInviteStore.containsKey(faction.getName())) {
-                DefencePlacementHandler.addPlacedDefences(faction.getName());
 
-                List<InviteData> requests = faction.getJoinRequests();
-                factionInviteStore.put(faction.getName(), requests.size());
+            SkyFactionsReborn.getDatabaseManager().getNotificationManager().getNotifications(player).whenComplete((fetchedNotifs, throwable) -> {
+                if (throwable != null) {
+                    throwable.printStackTrace();
+                    return;
+                } else notifications.put(player.getUniqueId(), fetchedNotifs);
 
-                BukkitTask task = NotificationTask.initialise(player, true).runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), 0L, (Settings.NOTIFICATIONS_INTERVAL.getInt() * 20L));
-                tasks.put(player.getUniqueId(), task);
-            }
+                if (faction != null && !factionInviteStore.containsKey(faction.getName())) {
+                    DefencePlacementHandler.addPlacedDefences(faction.getName());
+
+                    List<InviteData> requests = faction.getJoinRequests();
+                    factionInviteStore.put(faction.getName(), requests.size());
+
+                    BukkitTask task = NotificationTask.initialise(player, true).runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), 0L, (Settings.NOTIFICATIONS_INTERVAL.getInt() * 20L));
+                    tasks.put(player.getUniqueId(), task);
+                }
+            });
         });
     }
 
@@ -45,8 +56,24 @@ public class NotificationAPI {
      * @param type         Type of notification [{@link net.skullian.skyfactions.faction.AuditLogType}]
      * @param replacements Replacements for the notification title / desc.
      */
-    public static CompletableFuture<Void> createNotification(UUID playerUUID, NotificationType type, Object... replacements) {
-        return SkyFactionsReborn.getDatabaseManager().getNotificationManager().createNotification(playerUUID, type.name(), Arrays.toString(replacements));
+    public static void createNotification(UUID playerUUID, NotificationType type, Object... replacements) {
+        NotificationData data = new NotificationData(
+                playerUUID,
+                type.name(),
+                replacements,
+                System.currentTimeMillis()
+        );
+
+        addNotification(playerUUID, data);
+        SkyFactionsReborn.getCacheService().getEntry(playerUUID).addNotification(data);
+    }
+
+    public static void addNotification(UUID playerUUID, NotificationData notification) {
+        if (notifications.containsKey(playerUUID)) notifications.get(playerUUID).add(notification);
+    }
+
+    public static void removeNotification(UUID playerUUID, NotificationData notification) {
+        if (notifications.containsKey(playerUUID)) notifications.get(playerUUID).remove(notification);
     }
 
     /**
@@ -55,7 +82,8 @@ public class NotificationAPI {
      * @param player Player who the notifications should be fetched from [{@link Player}]
      * @return {@link List<NotificationData>}
      */
-    public static CompletableFuture<List<NotificationData>> getNotifications(OfflinePlayer player) {
-        return SkyFactionsReborn.getDatabaseManager().getNotificationManager().getNotifications(player);
+    @Nullable
+    public static List<NotificationData> getNotifications(OfflinePlayer player) {
+        return notifications.get(player);
     }
 }

@@ -37,19 +37,13 @@ public class PlayerObeliskNotificationUI extends PaginatedScreen {
     }
 
     public static void promptPlayer(Player player) {
-        NotificationAPI.getNotifications(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((notifications, ex) -> {
-            if (ex != null) {
-                ErrorUtil.handleError(player, "open the notifications GUI", "SQL_NOTIFICATION_GET", ex);
-                return;
-            }
-
-            try {
-                PlayerObeliskNotificationUI.builder().player(player).notifications(notifications).build().show();
-            } catch (IllegalArgumentException error) {
-                error.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the notifications GUI", "debug", "GUI_LOAD_EXCEPTION");
-            }
-        });
+        List<NotificationData> notifications = NotificationAPI.getNotifications(player);
+        try {
+            PlayerObeliskNotificationUI.builder().player(player).notifications(notifications).build().show();
+        } catch (IllegalArgumentException error) {
+            error.printStackTrace();
+            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the notifications GUI", "debug", "GUI_LOAD_EXCEPTION");
+        }
     }
 
     @Nullable
