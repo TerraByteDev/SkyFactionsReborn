@@ -29,7 +29,8 @@ import java.util.concurrent.TimeUnit;
 public class DatabaseManager {
 
     private transient DSLContext ctx;
-    private transient HikariDataSource dataSource;
+    @Getter private transient HikariDataSource dataSource;
+    @Getter private transient SQLDialect dialect;
     public boolean closed;
 
     @Getter private CurrencyDatabaseManager currencyManager;

@@ -139,6 +139,8 @@ dependencies {
     compileOnly("io.th0rgal:oraxen:${oraxen}")
     compileOnly("com.github.LoneDev6:API-ItemsAdder:${itemsadder}")
     compileOnly("org.jooq:jooq:${jooq_codegen_version}")
+    compileOnly("org.flywaydb:flyway-core:${flyway_core}")
+
     jooqCodegen("org.xerial:sqlite-jdbc:${sqlite_jdbc}")
     paperweight.paperDevBundle("${minecraft_version}-R0.1-SNAPSHOT")
 }
@@ -220,7 +222,7 @@ tasks.named('jooqCodegen').configure {
     dependsOn tasks.named('flywayMigrate')
             inputs.files(fileTree('src/main/resources/db/migration'))
             .withPropertyName('migrations')
-            .withPathSensitivity(PathSensitivity.RELATIVE)
+                    .withPathSensitivity(PathSensitivity.RELATIVE)
 }
 
 tasks.withType(JavaCompile).configureEach {
