@@ -185,7 +185,7 @@ flyway {
     url = 'jdbc:sqlite:file:./assets/data.sqlite3'
     user = 'sa'
     password = ''
-    locations = ["classpath:db/migration"]
+    locations = ["classpath:net/skullian/skyfactions/database/migrations"]
 }
 
 jooq {
@@ -220,11 +220,12 @@ jooq {
 }
 
 tasks.named('flywayMigrate').configure {
+    System.setProperty("net.skullian.codegen", "true");
+
     dependsOn tasks.named('classes')
 }
 
 tasks.named('jooqCodegen').configure {
-    System.setProperty("net.skullian.codegen", "true");
 
     dependsOn tasks.named('flywayMigrate')
 

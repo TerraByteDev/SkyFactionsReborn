@@ -1,6 +1,6 @@
-package db.migration;
+package net.skullian.skyfactions.database.migrations;
 
-import net.skullian.skyfactions.database.DatabaseManager;
+import net.skullian.skyfactions.util.MigrationUtility;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
 import org.jooq.DSLContext;
@@ -11,7 +11,7 @@ public class V1__Init extends BaseJavaMigration {
 
     @Override
     public void migrate(Context context) throws Exception {
-        DSLContext ctx = DatabaseManager.getCtx(context);
+        DSLContext ctx = MigrationUtility.getCtx(context);
 
         ctx.createTableIfNotExists("islands")
                 .column("id", INTEGER)
@@ -101,7 +101,7 @@ public class V1__Init extends BaseJavaMigration {
         ctx.createTableIfNotExists("notifications")
                 .column("uuid", VARCHAR)
                 .column("type", VARCHAR)
-                .column("description", VARCHAR)
+                .column("replacements", VARCHAR)
                 .column("timestamp", BIGINT)
                 .execute();
     }

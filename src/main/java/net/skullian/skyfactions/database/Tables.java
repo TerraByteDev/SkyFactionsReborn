@@ -4,7 +4,20 @@
 package net.skullian.skyfactions.database;
 
 
+import net.skullian.skyfactions.database.tables.AuditLogs;
+import net.skullian.skyfactions.database.tables.DefenceLocations;
+import net.skullian.skyfactions.database.tables.ElectionVotes;
+import net.skullian.skyfactions.database.tables.FactionBans;
+import net.skullian.skyfactions.database.tables.FactionElections;
+import net.skullian.skyfactions.database.tables.FactionInvites;
+import net.skullian.skyfactions.database.tables.FactionIslands;
+import net.skullian.skyfactions.database.tables.FactionMembers;
+import net.skullian.skyfactions.database.tables.Factions;
 import net.skullian.skyfactions.database.tables.FlywaySchemaHistory;
+import net.skullian.skyfactions.database.tables.Islands;
+import net.skullian.skyfactions.database.tables.Notifications;
+import net.skullian.skyfactions.database.tables.PlayerData;
+import net.skullian.skyfactions.database.tables.TrustedPlayers;
 
 
 /**
@@ -14,7 +27,72 @@ import net.skullian.skyfactions.database.tables.FlywaySchemaHistory;
 public class Tables {
 
     /**
+     * The table <code>audit_logs</code>.
+     */
+    public static final AuditLogs AUDIT_LOGS = AuditLogs.AUDIT_LOGS;
+
+    /**
+     * The table <code>defence_locations</code>.
+     */
+    public static final DefenceLocations DEFENCE_LOCATIONS = DefenceLocations.DEFENCE_LOCATIONS;
+
+    /**
+     * The table <code>election_votes</code>.
+     */
+    public static final ElectionVotes ELECTION_VOTES = ElectionVotes.ELECTION_VOTES;
+
+    /**
+     * The table <code>faction_bans</code>.
+     */
+    public static final FactionBans FACTION_BANS = FactionBans.FACTION_BANS;
+
+    /**
+     * The table <code>faction_elections</code>.
+     */
+    public static final FactionElections FACTION_ELECTIONS = FactionElections.FACTION_ELECTIONS;
+
+    /**
+     * The table <code>faction_invites</code>.
+     */
+    public static final FactionInvites FACTION_INVITES = FactionInvites.FACTION_INVITES;
+
+    /**
+     * The table <code>faction_islands</code>.
+     */
+    public static final FactionIslands FACTION_ISLANDS = FactionIslands.FACTION_ISLANDS;
+
+    /**
+     * The table <code>faction_members</code>.
+     */
+    public static final FactionMembers FACTION_MEMBERS = FactionMembers.FACTION_MEMBERS;
+
+    /**
+     * The table <code>factions</code>.
+     */
+    public static final Factions FACTIONS = Factions.FACTIONS;
+
+    /**
      * The table <code>flyway_schema_history</code>.
      */
     public static final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
+
+    /**
+     * The table <code>islands</code>.
+     */
+    public static final Islands ISLANDS = Islands.ISLANDS;
+
+    /**
+     * The table <code>notifications</code>.
+     */
+    public static final Notifications NOTIFICATIONS = Notifications.NOTIFICATIONS;
+
+    /**
+     * The table <code>player_data</code>.
+     */
+    public static final PlayerData PLAYER_DATA = PlayerData.PLAYER_DATA;
+
+    /**
+     * The table <code>trusted_players</code>.
+     */
+    public static final TrustedPlayers TRUSTED_PLAYERS = TrustedPlayers.TRUSTED_PLAYERS;
 }

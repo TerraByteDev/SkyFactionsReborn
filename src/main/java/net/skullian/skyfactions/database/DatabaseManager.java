@@ -11,7 +11,9 @@ import net.skullian.skyfactions.database.impl.faction.*;
 import net.skullian.skyfactions.database.tables.*;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
+import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.migration.Context;
+import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
@@ -148,75 +150,27 @@ public class DatabaseManager {
     }
 
     private void setupTables() {
-        SLogger.info("Creating SQL Tables.");
+        SLogger.info("Beginning database migrations.");
 
-        ctx.createTableIfNotExists(Islands.ISLANDS)
-                .columns(Islands.ISLANDS.fields())
-                .primaryKey(Islands.ISLANDS.ID)
-                .execute();
+        Flyway flyway = Flyway.configure()
+                .dataSource(this.dataSource)
+                .locations("classpath:net/skullian/skyfactions/database/migrations")
+                .load();
+        MigrateResult result = flyway.migrate();
 
-        ctx.createTableIfNotExists(Playerdata.PLAYERDATA)
-                .columns(Playerdata.PLAYERDATA.fields())
-                .primaryKey(Playerdata.PLAYERDATA.UUID)
-                .execute();
-
-        ctx.createTableIfNotExists(Factionislands.FACTIONISLANDS)
-                .columns(Factionislands.FACTIONISLANDS.fields())
-                .primaryKey(Factionislands.FACTIONISLANDS.ID)
-                .execute();
-
-        ctx.createTableIfNotExists(Factions.FACTIONS)
-                .columns(Factions.FACTIONS.fields())
-                .primaryKey(Factions.FACTIONS.NAME)
-                .execute();
-
-        ctx.createTableIfNotExists(Factionmembers.FACTIONMEMBERS)
-                .columns(Factionmembers.FACTIONMEMBERS.fields())
-                .primaryKey(Factionmembers.FACTIONMEMBERS.UUID)
-                .execute();
-
-        ctx.createTableIfNotExists(Trustedplayers.TRUSTEDPLAYERS)
-                .columns(Trustedplayers.TRUSTEDPLAYERS.fields())
-                .primaryKey(Trustedplayers.TRUSTEDPLAYERS.ISLAND_ID)
-                .execute();
-
-        // no primary key as there can be multiple instances
-        ctx.createTableIfNotExists(Defencelocations.DEFENCELOCATIONS)
-                .columns(Defencelocations.DEFENCELOCATIONS.fields())
-                .execute();
-
-        // no primary key for same reason as above
-        ctx.createTableIfNotExists(Auditlogs.AUDITLOGS)
-                .columns(Auditlogs.AUDITLOGS.fields())
-                .execute();
-
-        // no primary, same reason
-        ctx.createTableIfNotExists(Factionbans.FACTIONBANS)
-                .columns(Factionbans.FACTIONBANS.fields())
-                .execute();
-
-        // guess what? no primary, same reason
-        ctx.createTableIfNotExists(Factioninvites.FACTIONINVITES)
-                .columns(Factioninvites.FACTIONINVITES.fields())
-                .execute();
-
-        // aaand same as before!
-        ctx.createTableIfNotExists(Notifications.NOTIFICATIONS)
-                .columns(Notifications.NOTIFICATIONS.fields())
-                .execute();
-
-        ctx.createTableIfNotExists(Factionelections.FACTIONELECTIONS)
-                .columns(Factionelections.FACTIONELECTIONS.fields())
-                .primaryKey(Factionelections.FACTIONELECTIONS.ID)
-                .execute();
+        if (result.success) {
+            SLogger.info("Database migrations complete: ({} Migrations completed in {}ms)", result.getSuccessfulMigrations(), result.getTotalMigrationTime());
+        } else {
+            handleError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed."));
+            SLogger.fatal("SkyFactions will now disable.");
+            Bukkit.getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
+        }
     }
 
-    public static DSLContext getCtx(Context context) {
-        boolean isCodegen = (System.getProperty("net.skullian.codegen").equals("true"));
+    public static DSLContext getCtx() {
         Configuration configuration = new DefaultConfiguration()
-                .set(isCodegen ? SQLDialect.SQLITE : SkyFactionsReborn.getDatabaseManager().getDialect());
-        if (isCodegen) configuration.set(SkyFactionsReborn.getDatabaseManager().getDataSource());
-        else configuration.set(context.getConnection());
+                .set(SkyFactionsReborn.getDatabaseManager().getDialect())
+                .set(SkyFactionsReborn.getDatabaseManager().getDataSource());
 
         return DSL.using(configuration);
     }
@@ -228,7 +182,7 @@ public class DatabaseManager {
 
     // ------------------ MISC ------------------ //
 
-    public static void handleError(SQLException error) {
+    public static void handleError(Exception error) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
             SLogger.fatal("There was an error while performing database actions:");

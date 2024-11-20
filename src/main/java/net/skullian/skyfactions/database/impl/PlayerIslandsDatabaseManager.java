@@ -3,7 +3,7 @@ package net.skullian.skyfactions.database.impl;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.struct.IslandRaidData;
 import net.skullian.skyfactions.database.tables.records.IslandsRecord;
-import net.skullian.skyfactions.database.tables.records.TrustedplayersRecord;
+import net.skullian.skyfactions.database.tables.records.TrustedPlayersRecord;
 import net.skullian.skyfactions.island.IslandModificationAction;
 import net.skullian.skyfactions.island.SkyIsland;
 import net.skullian.skyfactions.island.impl.PlayerIsland;
@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static net.skullian.skyfactions.database.tables.Islands.ISLANDS;
-import static net.skullian.skyfactions.database.tables.Trustedplayers.TRUSTEDPLAYERS;
+import static net.skullian.skyfactions.database.tables.TrustedPlayers.TRUSTED_PLAYERS;
 
 public class PlayerIslandsDatabaseManager {
 
@@ -129,13 +129,13 @@ public class PlayerIslandsDatabaseManager {
     // ------------------ TRUSTING ------------------ //
 
     public CompletableFuture<Boolean> isPlayerTrusted(UUID playerUUID, int id) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(TRUSTEDPLAYERS, TRUSTEDPLAYERS.UUID.eq(playerUUID.toString()), TRUSTEDPLAYERS.ISLAND_ID.eq(id)));
+        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(TRUSTED_PLAYERS, TRUSTED_PLAYERS.UUID.eq(playerUUID.toString()), TRUSTED_PLAYERS.ISLAND_ID.eq(id)));
     }
 
     public CompletableFuture<Void> trustPlayer(UUID playerUUID, int islandID) {
         return CompletableFuture.runAsync(() -> {
-            ctx.insertInto(TRUSTEDPLAYERS)
-                    .columns(TRUSTEDPLAYERS.ISLAND_ID, TRUSTEDPLAYERS.UUID)
+            ctx.insertInto(TRUSTED_PLAYERS)
+                    .columns(TRUSTED_PLAYERS.ISLAND_ID, TRUSTED_PLAYERS.UUID)
                     .values(islandID, playerUUID.toString())
                     .execute();
         });
@@ -143,29 +143,29 @@ public class PlayerIslandsDatabaseManager {
 
     public CompletableFuture<Void> removePlayerTrust(UUID playerUUID, int islandID) {
         return CompletableFuture.runAsync(() -> {
-            ctx.deleteFrom(TRUSTEDPLAYERS)
-                    .where(TRUSTEDPLAYERS.ISLAND_ID.eq(islandID), TRUSTEDPLAYERS.UUID.eq(playerUUID.toString()))
+            ctx.deleteFrom(TRUSTED_PLAYERS)
+                    .where(TRUSTED_PLAYERS.ISLAND_ID.eq(islandID), TRUSTED_PLAYERS.UUID.eq(playerUUID.toString()))
                     .execute();
         });
     }
 
     public CompletableFuture<Void> removeAllTrustedPlayers(int islandID) {
         return CompletableFuture.runAsync(() -> {
-            ctx.deleteFrom(TRUSTEDPLAYERS)
-                    .where(TRUSTEDPLAYERS.ISLAND_ID.eq(islandID))
+            ctx.deleteFrom(TRUSTED_PLAYERS)
+                    .where(TRUSTED_PLAYERS.ISLAND_ID.eq(islandID))
                     .execute();
         });
     }
 
     public CompletableFuture<List<OfflinePlayer>> getTrustedPlayers(int islandID) {
         return CompletableFuture.supplyAsync(() -> {
-            Result<TrustedplayersRecord> results = ctx.selectFrom(TRUSTEDPLAYERS)
-                    .where(TRUSTEDPLAYERS.ISLAND_ID.eq(islandID))
+            Result<TrustedPlayersRecord> results = ctx.selectFrom(TRUSTED_PLAYERS)
+                    .where(TRUSTED_PLAYERS.ISLAND_ID.eq(islandID))
                     .fetch();
 
             List<OfflinePlayer> players = new ArrayList<>();
-            for (TrustedplayersRecord data : results) {
-                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(data.get(TRUSTEDPLAYERS.UUID)));
+            for (TrustedPlayersRecord data : results) {
+                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(data.get(TRUSTED_PLAYERS.UUID)));
 
                 if (player.hasPlayedBefore()) {
                     players.add(player);

@@ -1,11 +1,9 @@
 package net.skullian.skyfactions.database.impl.faction;
 
 import net.skullian.skyfactions.database.struct.InviteData;
-import net.skullian.skyfactions.database.tables.records.FactioninvitesRecord;
-import net.skullian.skyfactions.faction.JoinRequestData;
+import net.skullian.skyfactions.database.tables.records.FactionInvitesRecord;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;
@@ -15,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import static net.skullian.skyfactions.database.tables.Factioninvites.FACTIONINVITES;
+import static net.skullian.skyfactions.database.tables.FactionInvites.FACTION_INVITES;
 
 public class FactionInvitesDatabaseManager {
 
@@ -32,8 +30,8 @@ public class FactionInvitesDatabaseManager {
             if (invites.isEmpty()) return;
             ctx.transaction((Configuration trx) -> {
                 for (InviteData invite : invites) {
-                    trx.dsl().insertInto(FACTIONINVITES)
-                            .columns(FACTIONINVITES.FACTIONNAME, FACTIONINVITES.UUID, FACTIONINVITES.INVITER, FACTIONINVITES.TYPE, FACTIONINVITES.TIMESTAMP)
+                    trx.dsl().insertInto(FACTION_INVITES)
+                            .columns(FACTION_INVITES.FACTIONNAME, FACTION_INVITES.UUID, FACTION_INVITES.INVITER, FACTION_INVITES.TYPE, FACTION_INVITES.TIMESTAMP)
                             .values(invite.getFactionName(), invite.getPlayer().getUniqueId().toString(), (invite.getInviter() != null ? invite.getInviter().getUniqueId().toString() : ""), invite.getType(), invite.getTimestamp())
                             .execute();
                 }
@@ -43,13 +41,13 @@ public class FactionInvitesDatabaseManager {
 
     public CompletableFuture<List<InviteData>> getAllInvites(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
-            Result<FactioninvitesRecord> results = ctx.selectFrom(FACTIONINVITES)
-                    .where(FACTIONINVITES.FACTIONNAME.eq(factionName))
-                    .orderBy(FACTIONINVITES.TIMESTAMP.desc())
+            Result<FactionInvitesRecord> results = ctx.selectFrom(FACTION_INVITES)
+                    .where(FACTION_INVITES.FACTIONNAME.eq(factionName))
+                    .orderBy(FACTION_INVITES.TIMESTAMP.desc())
                     .fetch();
 
             List<InviteData> data = new ArrayList<>();
-            for (FactioninvitesRecord record : results) {
+            for (FactionInvitesRecord record : results) {
                 data.add(new InviteData(
                         Bukkit.getOfflinePlayer(UUID.fromString(record.getUuid())),
                         Bukkit.getOfflinePlayer(UUID.fromString(record.getInviter())),
@@ -65,13 +63,13 @@ public class FactionInvitesDatabaseManager {
 
     public CompletableFuture<List<InviteData>> getInvitesOfPlayer(OfflinePlayer player) {
         return CompletableFuture.supplyAsync(() -> {
-            Result<FactioninvitesRecord> results = ctx.selectFrom(FACTIONINVITES)
-                    .where(FACTIONINVITES.UUID.eq(player.getUniqueId().toString()), FACTIONINVITES.TYPE.eq("outgoing"))
-                    .orderBy(FACTIONINVITES.TIMESTAMP.desc())
+            Result<FactionInvitesRecord> results = ctx.selectFrom(FACTION_INVITES)
+                    .where(FACTION_INVITES.UUID.eq(player.getUniqueId().toString()), FACTION_INVITES.TYPE.eq("outgoing"))
+                    .orderBy(FACTION_INVITES.TIMESTAMP.desc())
                     .fetch();
 
             List<InviteData> data = new ArrayList<>();
-            for (FactioninvitesRecord record : results) {
+            for (FactionInvitesRecord record : results) {
                 data.add(new InviteData(
                         Bukkit.getOfflinePlayer(UUID.fromString(record.getUuid())),
                         Bukkit.getOfflinePlayer(UUID.fromString(record.getInviter())),
@@ -89,8 +87,8 @@ public class FactionInvitesDatabaseManager {
         return CompletableFuture.runAsync(() -> {
             ctx.transaction((Configuration trx) -> {
                 for (InviteData invite : invites) {
-                    trx.dsl().deleteFrom(FACTIONINVITES)
-                            .where(FACTIONINVITES.FACTIONNAME.eq(invite.getFactionName()), FACTIONINVITES.UUID.eq(invite.getPlayer().getUniqueId().toString()), FACTIONINVITES.TYPE.eq(invite.getType()))
+                    trx.dsl().deleteFrom(FACTION_INVITES)
+                            .where(FACTION_INVITES.FACTIONNAME.eq(invite.getFactionName()), FACTION_INVITES.UUID.eq(invite.getPlayer().getUniqueId().toString()), FACTION_INVITES.TYPE.eq(invite.getType()))
                             .execute();
                 }
             });

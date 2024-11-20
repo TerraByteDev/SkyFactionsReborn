@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.database.impl.faction;
 
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.database.tables.records.FactionislandsRecord;
+import net.skullian.skyfactions.database.tables.records.FactionIslandsRecord;
 import net.skullian.skyfactions.island.IslandModificationAction;
 import net.skullian.skyfactions.island.SkyIsland;
 import net.skullian.skyfactions.island.impl.FactionIsland;
@@ -12,7 +12,7 @@ import org.jooq.impl.DSL;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import static net.skullian.skyfactions.database.tables.Factionislands.FACTIONISLANDS;
+import static net.skullian.skyfactions.database.tables.FactionIslands.FACTION_ISLANDS;
 
 public class FactionIslandDatabaseManager {
 
@@ -27,8 +27,8 @@ public class FactionIslandDatabaseManager {
 
     public CompletableFuture<Void> setFactionIslandCachedNextID() {
         return CompletableFuture.runAsync(() -> {
-            Integer result = ctx.select(DSL.max(FACTIONISLANDS.ID))
-                    .from(FACTIONISLANDS)
+            Integer result = ctx.select(DSL.max(FACTION_ISLANDS.ID))
+                    .from(FACTION_ISLANDS)
                     .fetchOneInto(Integer.class);
 
             if (result == null) this.cachedFactionIslandID = 1;
@@ -39,8 +39,8 @@ public class FactionIslandDatabaseManager {
     public CompletableFuture<Void> createFactionIsland(String factionName, IslandModificationAction action) {
         return CompletableFuture.runAsync(() -> {
             if (action == null) return;
-            ctx.insertInto(FACTIONISLANDS)
-                    .columns(FACTIONISLANDS.ID, FACTIONISLANDS.FACTIONNAME, FACTIONISLANDS.RUNES, FACTIONISLANDS.DEFENCECOUNT, FACTIONISLANDS.GEMS, FACTIONISLANDS.LAST_RAIDED, FACTIONISLANDS.LAST_RAIDER)
+            ctx.insertInto(FACTION_ISLANDS)
+                    .columns(FACTION_ISLANDS.ID, FACTION_ISLANDS.FACTIONNAME, FACTION_ISLANDS.RUNES, FACTION_ISLANDS.DEFENCECOUNT, FACTION_ISLANDS.GEMS, FACTION_ISLANDS.LAST_RAIDED, FACTION_ISLANDS.LAST_RAIDER)
                     .values(action.getId(), factionName, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_FACTION_IMMUNITY.getLong(), "N/A")
                     .execute();
         });
@@ -48,8 +48,8 @@ public class FactionIslandDatabaseManager {
 
     public CompletableFuture<FactionIsland> getFactionIsland(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
-            FactionislandsRecord result = ctx.selectFrom(FACTIONISLANDS)
-                    .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
+            FactionIslandsRecord result = ctx.selectFrom(FACTION_ISLANDS)
+                    .where(FACTION_ISLANDS.FACTIONNAME.eq(factionName))
                     .fetchOne();
 
             return result != null ? new FactionIsland(result.getId()) : null;

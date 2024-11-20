@@ -1,4 +1,4 @@
-package db.migration;
+package net.skullian.skyfactions.database.migrations;
 
 import net.skullian.skyfactions.database.DatabaseManager;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
