@@ -185,6 +185,7 @@ flyway {
     url = 'jdbc:sqlite:file:./assets/data.sqlite3'
     user = 'sa'
     password = ''
+    locations = ["classpath:db/migration"]
 }
 
 jooq {
