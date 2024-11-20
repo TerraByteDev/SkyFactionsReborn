@@ -1,1 +1,0 @@
-ALTER TABLE factionInvites DROP COLUMN accepted;

@@ -11,6 +11,7 @@ import net.skullian.skyfactions.database.impl.faction.*;
 import net.skullian.skyfactions.database.tables.*;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
+import org.flywaydb.core.api.migration.Context;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
@@ -67,6 +68,7 @@ public class DatabaseManager {
         Configuration configuration = new DefaultConfiguration().set(new DefaultExecuteListenerProvider(new DatabaseExecutionListener()));
         System.setProperty("org.jooq.no-tips", "true");
         System.setProperty("org.jooq.no-logo", "true");
+        System.setProperty("net.skullian.codegen", "false");
 
         if (type.equals("sqlite")) {
 
@@ -207,6 +209,16 @@ public class DatabaseManager {
                 .columns(Factionelections.FACTIONELECTIONS.fields())
                 .primaryKey(Factionelections.FACTIONELECTIONS.ID)
                 .execute();
+    }
+
+    public static DSLContext getCtx(Context context) {
+        boolean isCodegen = (System.getProperty("net.skullian.codegen").equals("true"));
+        Configuration configuration = new DefaultConfiguration()
+                .set(isCodegen ? SQLDialect.SQLITE : SkyFactionsReborn.getDatabaseManager().getDialect());
+        if (isCodegen) configuration.set(SkyFactionsReborn.getDatabaseManager().getDataSource());
+        else configuration.set(context.getConnection());
+
+        return DSL.using(configuration);
     }
 
     public void closeConnection() {

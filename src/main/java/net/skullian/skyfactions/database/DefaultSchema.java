@@ -7,20 +7,7 @@ package net.skullian.skyfactions.database;
 import java.util.Arrays;
 import java.util.List;
 
-import net.skullian.skyfactions.database.tables.Auditlogs;
-import net.skullian.skyfactions.database.tables.Defencelocations;
-import net.skullian.skyfactions.database.tables.Electionvotes;
-import net.skullian.skyfactions.database.tables.Factionbans;
-import net.skullian.skyfactions.database.tables.Factionelections;
-import net.skullian.skyfactions.database.tables.Factioninvites;
-import net.skullian.skyfactions.database.tables.Factionislands;
-import net.skullian.skyfactions.database.tables.Factionmembers;
-import net.skullian.skyfactions.database.tables.Factions;
 import net.skullian.skyfactions.database.tables.FlywaySchemaHistory;
-import net.skullian.skyfactions.database.tables.Islands;
-import net.skullian.skyfactions.database.tables.Notifications;
-import net.skullian.skyfactions.database.tables.Playerdata;
-import net.skullian.skyfactions.database.tables.Trustedplayers;
 
 import org.jooq.Catalog;
 import org.jooq.Table;
@@ -41,74 +28,9 @@ public class DefaultSchema extends SchemaImpl {
     public static final DefaultSchema DEFAULT_SCHEMA = new DefaultSchema();
 
     /**
-     * The table <code>auditLogs</code>.
-     */
-    public final Auditlogs AUDITLOGS = Auditlogs.AUDITLOGS;
-
-    /**
-     * The table <code>defenceLocations</code>.
-     */
-    public final Defencelocations DEFENCELOCATIONS = Defencelocations.DEFENCELOCATIONS;
-
-    /**
-     * The table <code>electionVotes</code>.
-     */
-    public final Electionvotes ELECTIONVOTES = Electionvotes.ELECTIONVOTES;
-
-    /**
-     * The table <code>factionBans</code>.
-     */
-    public final Factionbans FACTIONBANS = Factionbans.FACTIONBANS;
-
-    /**
-     * The table <code>factionElections</code>.
-     */
-    public final Factionelections FACTIONELECTIONS = Factionelections.FACTIONELECTIONS;
-
-    /**
-     * The table <code>factionInvites</code>.
-     */
-    public final Factioninvites FACTIONINVITES = Factioninvites.FACTIONINVITES;
-
-    /**
-     * The table <code>factionIslands</code>.
-     */
-    public final Factionislands FACTIONISLANDS = Factionislands.FACTIONISLANDS;
-
-    /**
-     * The table <code>factionMembers</code>.
-     */
-    public final Factionmembers FACTIONMEMBERS = Factionmembers.FACTIONMEMBERS;
-
-    /**
-     * The table <code>factions</code>.
-     */
-    public final Factions FACTIONS = Factions.FACTIONS;
-
-    /**
      * The table <code>flyway_schema_history</code>.
      */
     public final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
-
-    /**
-     * The table <code>islands</code>.
-     */
-    public final Islands ISLANDS = Islands.ISLANDS;
-
-    /**
-     * The table <code>notifications</code>.
-     */
-    public final Notifications NOTIFICATIONS = Notifications.NOTIFICATIONS;
-
-    /**
-     * The table <code>playerData</code>.
-     */
-    public final Playerdata PLAYERDATA = Playerdata.PLAYERDATA;
-
-    /**
-     * The table <code>trustedPlayers</code>.
-     */
-    public final Trustedplayers TRUSTEDPLAYERS = Trustedplayers.TRUSTEDPLAYERS;
 
     /**
      * No further instances allowed
@@ -126,20 +48,7 @@ public class DefaultSchema extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
-            Auditlogs.AUDITLOGS,
-            Defencelocations.DEFENCELOCATIONS,
-            Electionvotes.ELECTIONVOTES,
-            Factionbans.FACTIONBANS,
-            Factionelections.FACTIONELECTIONS,
-            Factioninvites.FACTIONINVITES,
-            Factionislands.FACTIONISLANDS,
-            Factionmembers.FACTIONMEMBERS,
-            Factions.FACTIONS,
-            FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
-            Islands.ISLANDS,
-            Notifications.NOTIFICATIONS,
-            Playerdata.PLAYERDATA,
-            Trustedplayers.TRUSTEDPLAYERS
+            FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY
         );
     }
 }

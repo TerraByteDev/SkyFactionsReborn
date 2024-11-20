@@ -1,3 +1,0 @@
-ALTER TABLE factions ADD COLUMN last_renamed INT8 NOT NULL;
-
-ALTER TABLE islands ADD COLUMN created INT8 NOT NULL;

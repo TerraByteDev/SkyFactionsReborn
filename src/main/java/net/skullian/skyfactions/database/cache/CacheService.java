@@ -9,10 +9,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.faction.RankType;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitTask;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
@@ -25,6 +22,7 @@ public class CacheService {
 
     @Getter private final Map<UUID, CacheEntry> playersToCache = new HashMap<>();
     @Getter private final Map<String, CacheEntry> factionsToCache = new HashMap<>();
+    private final Map<String, String> toRename = new HashMap<>();
 
     private BukkitTask task;
 
@@ -64,7 +62,16 @@ public class CacheService {
     }
 
     public void enable() {
-        this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), this::cacheOnce, Settings.CACHE_SAVE_INTERVAL.getInt() * 20L, Settings.CACHE_SAVE_INTERVAL.getInt() * 20L);
+        this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), () -> cacheOnce().thenRun(this::onCacheComplete), Settings.CACHE_SAVE_INTERVAL.getInt() * 20L, Settings.CACHE_SAVE_INTERVAL.getInt() * 20L);
+    }
+
+    private void onCacheComplete() {
+        for (Map.Entry<String, String> rename : toRename.entrySet()) {
+            CacheEntry entry = factionsToCache.remove(rename.getKey());
+            factionsToCache.put(rename.getValue(), entry);
+
+            toRename.remove(rename.getKey());
+        }
     }
 
     public CompletableFuture<Void> disable() {
@@ -86,5 +93,9 @@ public class CacheService {
 
     public CacheEntry getEntry(Faction faction) {
         return factionsToCache.computeIfAbsent(faction.getName(), k -> new CacheEntry());
+    }
+
+    public void onFactionRename(String oldName, String newName) {
+        toRename.put(oldName, newName);
     }
 }
