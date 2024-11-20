@@ -311,7 +311,7 @@ public enum Messages {
             SLogger.fatal("Plugin will now disable.");
             SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
             exception.printStackTrace();
-            Bukkit.getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
+            SkyFactionsReborn.getInstance().disable();
         }
         
     }

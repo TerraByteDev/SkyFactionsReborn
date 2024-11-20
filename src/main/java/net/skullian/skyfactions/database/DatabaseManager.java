@@ -143,13 +143,15 @@ public class DatabaseManager {
             this.dataSource = dataSource;
             this.ctx = DSL.using(dataSource, SQLDialect.MYSQL);
         } else {
-            throw new IllegalStateException("Unknown database type: " + type);
+            handleError(new IllegalStateException("Unknown database type: " + type));
+            SLogger.fatal("SkyFactions will now disable.");
+            SkyFactionsReborn.getInstance().disable();
         }
 
-        setupTables();
+        setup();
     }
 
-    private void setupTables() {
+    private void setup() {
         SLogger.info("Beginning database migrations.");
 
         Flyway flyway = Flyway.configure()
@@ -161,9 +163,10 @@ public class DatabaseManager {
         if (result.success) {
             SLogger.info("Database migrations complete: ({} Migrations completed in {}ms)", result.getSuccessfulMigrations(), result.getTotalMigrationTime());
         } else {
-            handleError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed."));
+            result.getFailedMigrations().forEach(migration -> SLogger.fatal("Migration failed: {}", migration.description));
+            handleError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed: " + result.getException()));
             SLogger.fatal("SkyFactions will now disable.");
-            Bukkit.getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
+            SkyFactionsReborn.getInstance().disable();
         }
     }
 

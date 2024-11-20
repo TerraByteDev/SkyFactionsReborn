@@ -140,7 +140,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
         RegisteredServiceProvider<BorderAPI> worldBorderApiRegisteredServiceProvider = getServer().getServicesManager().getRegistration(BorderAPI.class);
         if (worldBorderApiRegisteredServiceProvider == null) {
             new RuntimeException("Failed to fetch WorldBorderAPI Service Provider. Is WorldBorderAPI installed?").printStackTrace();
-            getServer().getPluginManager().disablePlugin(this);
+            disable();
             return;
         }
         worldBorderApi = worldBorderApiRegisteredServiceProvider.getProvider();
@@ -192,6 +192,10 @@ public final class SkyFactionsReborn extends JavaPlugin {
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException("Failed to disable Cache Service: " + e.getMessage(), e);
         }
+    }
+
+    public void disable() {
+        getServer().getPluginManager().disablePlugin(this);
     }
 
     private void initialiseDatabaseConnection() {

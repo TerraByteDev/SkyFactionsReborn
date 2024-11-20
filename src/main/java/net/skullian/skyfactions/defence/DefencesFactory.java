@@ -82,7 +82,7 @@ public class DefencesFactory {
         SLogger.fatal("Plugin will now disable.");
         SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
         error.printStackTrace();
-        SkyFactionsReborn.getInstance().getServer().getPluginManager().disablePlugin(SkyFactionsReborn.getInstance());
+        SkyFactionsReborn.getInstance().disable();
     }
     
     public static void register(File directory, String locale) {
