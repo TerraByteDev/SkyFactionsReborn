@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.skullian.skyfactions.api.RegionAPI;
-import net.skullian.skyfactions.database.tables.Defencelocations;
+import net.skullian.skyfactions.database.tables.DefenceLocations;
 import net.skullian.skyfactions.event.PlayerHandler;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -215,7 +215,7 @@ public class DefencePlacementHandler implements Listener {
 
     public static void addPlacedDefences(String factionName) {
         if (loadedFactionDefences.get(factionName) != null) return;
-        SkyFactionsReborn.getDatabaseManager().getDefencesManager().getDefenceLocations(Defencelocations.DEFENCELOCATIONS.FACTIONNAME.eq(factionName), "faction").whenComplete((locations, ex) -> {
+        SkyFactionsReborn.getDatabaseManager().getDefencesManager().getDefenceLocations(DefenceLocations.DEFENCE_LOCATIONS.FACTIONNAME.eq(factionName), "faction").whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -256,7 +256,7 @@ public class DefencePlacementHandler implements Listener {
 
     public static void addPlacedDefences(Player player) {
         if (loadedPlayerDefences.get(player.getUniqueId()) != null) return;
-        SkyFactionsReborn.getDatabaseManager().getDefencesManager().getDefenceLocations(Defencelocations.DEFENCELOCATIONS.UUID.eq(player.getUniqueId().toString()), "player").whenComplete((locations, ex) -> {
+        SkyFactionsReborn.getDatabaseManager().getDefencesManager().getDefenceLocations(DefenceLocations.DEFENCE_LOCATIONS.UUID.eq(player.getUniqueId().toString()), "player").whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;

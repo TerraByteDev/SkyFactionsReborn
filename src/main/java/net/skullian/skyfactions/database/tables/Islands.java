@@ -57,42 +57,42 @@ public class Islands extends TableImpl<IslandsRecord> {
     /**
      * The column <code>islands.uuid</code>.
      */
-    public final TableField<IslandsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<IslandsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>islands.level</code>.
      */
-    public final TableField<IslandsRecord, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<IslandsRecord, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>islands.gems</code>.
      */
-    public final TableField<IslandsRecord, Integer> GEMS = createField(DSL.name("gems"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<IslandsRecord, Integer> GEMS = createField(DSL.name("gems"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>islands.runes</code>.
      */
-    public final TableField<IslandsRecord, Integer> RUNES = createField(DSL.name("runes"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<IslandsRecord, Integer> RUNES = createField(DSL.name("runes"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>islands.defenceCount</code>.
      */
-    public final TableField<IslandsRecord, Integer> DEFENCECOUNT = createField(DSL.name("defenceCount"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<IslandsRecord, Integer> DEFENCECOUNT = createField(DSL.name("defenceCount"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>islands.last_raided</code>.
      */
-    public final TableField<IslandsRecord, Long> LAST_RAIDED = createField(DSL.name("last_raided"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<IslandsRecord, Long> LAST_RAIDED = createField(DSL.name("last_raided"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>islands.last_raider</code>.
      */
-    public final TableField<IslandsRecord, String> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<IslandsRecord, String> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>islands.created</code>.
      */
-    public final TableField<IslandsRecord, Long> CREATED = createField(DSL.name("created"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<IslandsRecord, Long> CREATED = createField(DSL.name("created"), SQLDataType.BIGINT, this, "");
 
     private Islands(Name alias, Table<IslandsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

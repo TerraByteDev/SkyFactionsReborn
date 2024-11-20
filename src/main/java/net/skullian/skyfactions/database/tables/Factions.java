@@ -52,32 +52,32 @@ public class Factions extends TableImpl<FactionsRecord> {
     /**
      * The column <code>factions.name</code>.
      */
-    public final TableField<FactionsRecord, String> NAME = createField(DSL.name("name"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<FactionsRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>factions.motd</code>.
      */
-    public final TableField<FactionsRecord, String> MOTD = createField(DSL.name("motd"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<FactionsRecord, String> MOTD = createField(DSL.name("motd"), SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>factions.level</code>.
      */
-    public final TableField<FactionsRecord, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<FactionsRecord, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER, this, "");
 
     /**
      * The column <code>factions.last_raid</code>.
      */
-    public final TableField<FactionsRecord, Long> LAST_RAID = createField(DSL.name("last_raid"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<FactionsRecord, Long> LAST_RAID = createField(DSL.name("last_raid"), SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>factions.locale</code>.
      */
-    public final TableField<FactionsRecord, String> LOCALE = createField(DSL.name("locale"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<FactionsRecord, String> LOCALE = createField(DSL.name("locale"), SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>factions.last_renamed</code>.
      */
-    public final TableField<FactionsRecord, Long> LAST_RENAMED = createField(DSL.name("last_renamed"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<FactionsRecord, Long> LAST_RENAMED = createField(DSL.name("last_renamed"), SQLDataType.BIGINT, this, "");
 
     private Factions(Name alias, Table<FactionsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

@@ -50,22 +50,22 @@ public class Notifications extends TableImpl<NotificationsRecord> {
     /**
      * The column <code>notifications.uuid</code>.
      */
-    public final TableField<NotificationsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<NotificationsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>notifications.type</code>.
      */
-    public final TableField<NotificationsRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<NotificationsRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>notifications.replacements</code>.
      */
-    public final TableField<NotificationsRecord, String> REPLACEMENTS = createField(DSL.name("replacements"), SQLDataType.CLOB.nullable(false), this, "");
+    public final TableField<NotificationsRecord, String> REPLACEMENTS = createField(DSL.name("replacements"), SQLDataType.VARCHAR, this, "");
 
     /**
      * The column <code>notifications.timestamp</code>.
      */
-    public final TableField<NotificationsRecord, Long> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<NotificationsRecord, Long> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.BIGINT, this, "");
 
     private Notifications(Name alias, Table<NotificationsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

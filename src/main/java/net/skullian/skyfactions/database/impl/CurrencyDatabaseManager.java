@@ -1,13 +1,12 @@
 package net.skullian.skyfactions.database.impl;
 
-import net.skullian.skyfactions.database.tables.records.FactionislandsRecord;
 import org.jooq.DSLContext;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static net.skullian.skyfactions.database.tables.Islands.ISLANDS;
-import static net.skullian.skyfactions.database.tables.Factionislands.FACTIONISLANDS;
+import static net.skullian.skyfactions.database.tables.FactionIslands.FACTION_ISLANDS;
 
 public class CurrencyDatabaseManager {
 
@@ -27,9 +26,9 @@ public class CurrencyDatabaseManager {
     }
 
     public CompletableFuture<Integer> getGems(String factionName) {
-        return CompletableFuture.supplyAsync(() -> ctx.select(FACTIONISLANDS.GEMS)
-                .from(FACTIONISLANDS)
-                .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
+        return CompletableFuture.supplyAsync(() -> ctx.select(FACTION_ISLANDS.GEMS)
+                .from(FACTION_ISLANDS)
+                .where(FACTION_ISLANDS.FACTIONNAME.eq(factionName))
                 .fetchOneInto(Integer.class));
     }
 
@@ -48,9 +47,9 @@ public class CurrencyDatabaseManager {
         return CompletableFuture.runAsync(() -> {
             int current = getGems(factionName).join();
 
-            ctx.update(FACTIONISLANDS)
-                    .set(FACTIONISLANDS.GEMS, (subtract ? current - amount : current + amount))
-                    .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
+            ctx.update(FACTION_ISLANDS)
+                    .set(FACTION_ISLANDS.GEMS, (subtract ? current - amount : current + amount))
+                    .where(FACTION_ISLANDS.FACTIONNAME.eq(factionName))
                     .execute();
         });
     }
@@ -66,9 +65,9 @@ public class CurrencyDatabaseManager {
     }
 
     public CompletableFuture<Integer> getRunes(String factionName) {
-        return CompletableFuture.supplyAsync(() -> ctx.select(FACTIONISLANDS.RUNES)
-                .from(FACTIONISLANDS)
-                .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
+        return CompletableFuture.supplyAsync(() -> ctx.select(FACTION_ISLANDS.RUNES)
+                .from(FACTION_ISLANDS)
+                .where(FACTION_ISLANDS.FACTIONNAME.eq(factionName))
                 .fetchOneInto(Integer.class));
     }
 
@@ -87,9 +86,9 @@ public class CurrencyDatabaseManager {
         return CompletableFuture.runAsync(() -> {
             int current = getRunes(factionName).join();
 
-            ctx.update(FACTIONISLANDS)
-                    .set(FACTIONISLANDS.RUNES, (subtract ? current - amount : current + amount))
-                    .where(FACTIONISLANDS.FACTIONNAME.eq(factionName))
+            ctx.update(FACTION_ISLANDS)
+                    .set(FACTION_ISLANDS.RUNES, (subtract ? current - amount : current + amount))
+                    .where(FACTION_ISLANDS.FACTIONNAME.eq(factionName))
                     .execute();
         });
     }

@@ -4,20 +4,20 @@
 package net.skullian.skyfactions.database;
 
 
-import net.skullian.skyfactions.database.tables.Auditlogs;
-import net.skullian.skyfactions.database.tables.Defencelocations;
-import net.skullian.skyfactions.database.tables.Electionvotes;
-import net.skullian.skyfactions.database.tables.Factionbans;
-import net.skullian.skyfactions.database.tables.Factionelections;
-import net.skullian.skyfactions.database.tables.Factioninvites;
-import net.skullian.skyfactions.database.tables.Factionislands;
-import net.skullian.skyfactions.database.tables.Factionmembers;
+import net.skullian.skyfactions.database.tables.AuditLogs;
+import net.skullian.skyfactions.database.tables.DefenceLocations;
+import net.skullian.skyfactions.database.tables.ElectionVotes;
+import net.skullian.skyfactions.database.tables.FactionBans;
+import net.skullian.skyfactions.database.tables.FactionElections;
+import net.skullian.skyfactions.database.tables.FactionInvites;
+import net.skullian.skyfactions.database.tables.FactionIslands;
+import net.skullian.skyfactions.database.tables.FactionMembers;
 import net.skullian.skyfactions.database.tables.Factions;
 import net.skullian.skyfactions.database.tables.FlywaySchemaHistory;
 import net.skullian.skyfactions.database.tables.Islands;
 import net.skullian.skyfactions.database.tables.Notifications;
-import net.skullian.skyfactions.database.tables.Playerdata;
-import net.skullian.skyfactions.database.tables.Trustedplayers;
+import net.skullian.skyfactions.database.tables.PlayerData;
+import net.skullian.skyfactions.database.tables.TrustedPlayers;
 
 
 /**
@@ -27,44 +27,44 @@ import net.skullian.skyfactions.database.tables.Trustedplayers;
 public class Tables {
 
     /**
-     * The table <code>auditLogs</code>.
+     * The table <code>audit_logs</code>.
      */
-    public static final Auditlogs AUDITLOGS = Auditlogs.AUDITLOGS;
+    public static final AuditLogs AUDIT_LOGS = AuditLogs.AUDIT_LOGS;
 
     /**
-     * The table <code>defenceLocations</code>.
+     * The table <code>defence_locations</code>.
      */
-    public static final Defencelocations DEFENCELOCATIONS = Defencelocations.DEFENCELOCATIONS;
+    public static final DefenceLocations DEFENCE_LOCATIONS = DefenceLocations.DEFENCE_LOCATIONS;
 
     /**
-     * The table <code>electionVotes</code>.
+     * The table <code>election_votes</code>.
      */
-    public static final Electionvotes ELECTIONVOTES = Electionvotes.ELECTIONVOTES;
+    public static final ElectionVotes ELECTION_VOTES = ElectionVotes.ELECTION_VOTES;
 
     /**
-     * The table <code>factionBans</code>.
+     * The table <code>faction_bans</code>.
      */
-    public static final Factionbans FACTIONBANS = Factionbans.FACTIONBANS;
+    public static final FactionBans FACTION_BANS = FactionBans.FACTION_BANS;
 
     /**
-     * The table <code>factionElections</code>.
+     * The table <code>faction_elections</code>.
      */
-    public static final Factionelections FACTIONELECTIONS = Factionelections.FACTIONELECTIONS;
+    public static final FactionElections FACTION_ELECTIONS = FactionElections.FACTION_ELECTIONS;
 
     /**
-     * The table <code>factionInvites</code>.
+     * The table <code>faction_invites</code>.
      */
-    public static final Factioninvites FACTIONINVITES = Factioninvites.FACTIONINVITES;
+    public static final FactionInvites FACTION_INVITES = FactionInvites.FACTION_INVITES;
 
     /**
-     * The table <code>factionIslands</code>.
+     * The table <code>faction_islands</code>.
      */
-    public static final Factionislands FACTIONISLANDS = Factionislands.FACTIONISLANDS;
+    public static final FactionIslands FACTION_ISLANDS = FactionIslands.FACTION_ISLANDS;
 
     /**
-     * The table <code>factionMembers</code>.
+     * The table <code>faction_members</code>.
      */
-    public static final Factionmembers FACTIONMEMBERS = Factionmembers.FACTIONMEMBERS;
+    public static final FactionMembers FACTION_MEMBERS = FactionMembers.FACTION_MEMBERS;
 
     /**
      * The table <code>factions</code>.
@@ -87,12 +87,12 @@ public class Tables {
     public static final Notifications NOTIFICATIONS = Notifications.NOTIFICATIONS;
 
     /**
-     * The table <code>playerData</code>.
+     * The table <code>player_data</code>.
      */
-    public static final Playerdata PLAYERDATA = Playerdata.PLAYERDATA;
+    public static final PlayerData PLAYER_DATA = PlayerData.PLAYER_DATA;
 
     /**
-     * The table <code>trustedPlayers</code>.
+     * The table <code>trusted_players</code>.
      */
-    public static final Trustedplayers TRUSTEDPLAYERS = Trustedplayers.TRUSTEDPLAYERS;
+    public static final TrustedPlayers TRUSTED_PLAYERS = TrustedPlayers.TRUSTED_PLAYERS;
 }

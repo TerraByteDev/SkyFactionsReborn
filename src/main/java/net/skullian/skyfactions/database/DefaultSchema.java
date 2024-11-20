@@ -7,20 +7,20 @@ package net.skullian.skyfactions.database;
 import java.util.Arrays;
 import java.util.List;
 
-import net.skullian.skyfactions.database.tables.Auditlogs;
-import net.skullian.skyfactions.database.tables.Defencelocations;
-import net.skullian.skyfactions.database.tables.Electionvotes;
-import net.skullian.skyfactions.database.tables.Factionbans;
-import net.skullian.skyfactions.database.tables.Factionelections;
-import net.skullian.skyfactions.database.tables.Factioninvites;
-import net.skullian.skyfactions.database.tables.Factionislands;
-import net.skullian.skyfactions.database.tables.Factionmembers;
+import net.skullian.skyfactions.database.tables.AuditLogs;
+import net.skullian.skyfactions.database.tables.DefenceLocations;
+import net.skullian.skyfactions.database.tables.ElectionVotes;
+import net.skullian.skyfactions.database.tables.FactionBans;
+import net.skullian.skyfactions.database.tables.FactionElections;
+import net.skullian.skyfactions.database.tables.FactionInvites;
+import net.skullian.skyfactions.database.tables.FactionIslands;
+import net.skullian.skyfactions.database.tables.FactionMembers;
 import net.skullian.skyfactions.database.tables.Factions;
 import net.skullian.skyfactions.database.tables.FlywaySchemaHistory;
 import net.skullian.skyfactions.database.tables.Islands;
 import net.skullian.skyfactions.database.tables.Notifications;
-import net.skullian.skyfactions.database.tables.Playerdata;
-import net.skullian.skyfactions.database.tables.Trustedplayers;
+import net.skullian.skyfactions.database.tables.PlayerData;
+import net.skullian.skyfactions.database.tables.TrustedPlayers;
 
 import org.jooq.Catalog;
 import org.jooq.Table;
@@ -41,44 +41,44 @@ public class DefaultSchema extends SchemaImpl {
     public static final DefaultSchema DEFAULT_SCHEMA = new DefaultSchema();
 
     /**
-     * The table <code>auditLogs</code>.
+     * The table <code>audit_logs</code>.
      */
-    public final Auditlogs AUDITLOGS = Auditlogs.AUDITLOGS;
+    public final AuditLogs AUDIT_LOGS = AuditLogs.AUDIT_LOGS;
 
     /**
-     * The table <code>defenceLocations</code>.
+     * The table <code>defence_locations</code>.
      */
-    public final Defencelocations DEFENCELOCATIONS = Defencelocations.DEFENCELOCATIONS;
+    public final DefenceLocations DEFENCE_LOCATIONS = DefenceLocations.DEFENCE_LOCATIONS;
 
     /**
-     * The table <code>electionVotes</code>.
+     * The table <code>election_votes</code>.
      */
-    public final Electionvotes ELECTIONVOTES = Electionvotes.ELECTIONVOTES;
+    public final ElectionVotes ELECTION_VOTES = ElectionVotes.ELECTION_VOTES;
 
     /**
-     * The table <code>factionBans</code>.
+     * The table <code>faction_bans</code>.
      */
-    public final Factionbans FACTIONBANS = Factionbans.FACTIONBANS;
+    public final FactionBans FACTION_BANS = FactionBans.FACTION_BANS;
 
     /**
-     * The table <code>factionElections</code>.
+     * The table <code>faction_elections</code>.
      */
-    public final Factionelections FACTIONELECTIONS = Factionelections.FACTIONELECTIONS;
+    public final FactionElections FACTION_ELECTIONS = FactionElections.FACTION_ELECTIONS;
 
     /**
-     * The table <code>factionInvites</code>.
+     * The table <code>faction_invites</code>.
      */
-    public final Factioninvites FACTIONINVITES = Factioninvites.FACTIONINVITES;
+    public final FactionInvites FACTION_INVITES = FactionInvites.FACTION_INVITES;
 
     /**
-     * The table <code>factionIslands</code>.
+     * The table <code>faction_islands</code>.
      */
-    public final Factionislands FACTIONISLANDS = Factionislands.FACTIONISLANDS;
+    public final FactionIslands FACTION_ISLANDS = FactionIslands.FACTION_ISLANDS;
 
     /**
-     * The table <code>factionMembers</code>.
+     * The table <code>faction_members</code>.
      */
-    public final Factionmembers FACTIONMEMBERS = Factionmembers.FACTIONMEMBERS;
+    public final FactionMembers FACTION_MEMBERS = FactionMembers.FACTION_MEMBERS;
 
     /**
      * The table <code>factions</code>.
@@ -101,14 +101,14 @@ public class DefaultSchema extends SchemaImpl {
     public final Notifications NOTIFICATIONS = Notifications.NOTIFICATIONS;
 
     /**
-     * The table <code>playerData</code>.
+     * The table <code>player_data</code>.
      */
-    public final Playerdata PLAYERDATA = Playerdata.PLAYERDATA;
+    public final PlayerData PLAYER_DATA = PlayerData.PLAYER_DATA;
 
     /**
-     * The table <code>trustedPlayers</code>.
+     * The table <code>trusted_players</code>.
      */
-    public final Trustedplayers TRUSTEDPLAYERS = Trustedplayers.TRUSTEDPLAYERS;
+    public final TrustedPlayers TRUSTED_PLAYERS = TrustedPlayers.TRUSTED_PLAYERS;
 
     /**
      * No further instances allowed
@@ -126,20 +126,20 @@ public class DefaultSchema extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
-            Auditlogs.AUDITLOGS,
-            Defencelocations.DEFENCELOCATIONS,
-            Electionvotes.ELECTIONVOTES,
-            Factionbans.FACTIONBANS,
-            Factionelections.FACTIONELECTIONS,
-            Factioninvites.FACTIONINVITES,
-            Factionislands.FACTIONISLANDS,
-            Factionmembers.FACTIONMEMBERS,
+            AuditLogs.AUDIT_LOGS,
+            DefenceLocations.DEFENCE_LOCATIONS,
+            ElectionVotes.ELECTION_VOTES,
+            FactionBans.FACTION_BANS,
+            FactionElections.FACTION_ELECTIONS,
+            FactionInvites.FACTION_INVITES,
+            FactionIslands.FACTION_ISLANDS,
+            FactionMembers.FACTION_MEMBERS,
             Factions.FACTIONS,
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
             Islands.ISLANDS,
             Notifications.NOTIFICATIONS,
-            Playerdata.PLAYERDATA,
-            Trustedplayers.TRUSTEDPLAYERS
+            PlayerData.PLAYER_DATA,
+            TrustedPlayers.TRUSTED_PLAYERS
         );
     }
 }

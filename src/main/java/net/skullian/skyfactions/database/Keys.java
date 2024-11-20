@@ -4,24 +4,24 @@
 package net.skullian.skyfactions.database;
 
 
-import net.skullian.skyfactions.database.tables.Electionvotes;
-import net.skullian.skyfactions.database.tables.Factionelections;
-import net.skullian.skyfactions.database.tables.Factionislands;
-import net.skullian.skyfactions.database.tables.Factionmembers;
+import net.skullian.skyfactions.database.tables.ElectionVotes;
+import net.skullian.skyfactions.database.tables.FactionElections;
+import net.skullian.skyfactions.database.tables.FactionIslands;
+import net.skullian.skyfactions.database.tables.FactionMembers;
 import net.skullian.skyfactions.database.tables.Factions;
 import net.skullian.skyfactions.database.tables.FlywaySchemaHistory;
 import net.skullian.skyfactions.database.tables.Islands;
-import net.skullian.skyfactions.database.tables.Playerdata;
-import net.skullian.skyfactions.database.tables.Trustedplayers;
-import net.skullian.skyfactions.database.tables.records.ElectionvotesRecord;
-import net.skullian.skyfactions.database.tables.records.FactionelectionsRecord;
-import net.skullian.skyfactions.database.tables.records.FactionislandsRecord;
-import net.skullian.skyfactions.database.tables.records.FactionmembersRecord;
+import net.skullian.skyfactions.database.tables.PlayerData;
+import net.skullian.skyfactions.database.tables.TrustedPlayers;
+import net.skullian.skyfactions.database.tables.records.ElectionVotesRecord;
+import net.skullian.skyfactions.database.tables.records.FactionElectionsRecord;
+import net.skullian.skyfactions.database.tables.records.FactionIslandsRecord;
+import net.skullian.skyfactions.database.tables.records.FactionMembersRecord;
 import net.skullian.skyfactions.database.tables.records.FactionsRecord;
 import net.skullian.skyfactions.database.tables.records.FlywaySchemaHistoryRecord;
 import net.skullian.skyfactions.database.tables.records.IslandsRecord;
-import net.skullian.skyfactions.database.tables.records.PlayerdataRecord;
-import net.skullian.skyfactions.database.tables.records.TrustedplayersRecord;
+import net.skullian.skyfactions.database.tables.records.PlayerDataRecord;
+import net.skullian.skyfactions.database.tables.records.TrustedPlayersRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -41,20 +41,19 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<ElectionvotesRecord> ELECTIONVOTES__PK_ELECTIONVOTES = Internal.createUniqueKey(Electionvotes.ELECTIONVOTES, DSL.name("pk_electionVotes"), new TableField[] { Electionvotes.ELECTIONVOTES.ELECTION }, true);
-    public static final UniqueKey<FactionelectionsRecord> FACTIONELECTIONS__PK_FACTIONELECTIONS = Internal.createUniqueKey(Factionelections.FACTIONELECTIONS, DSL.name("pk_factionElections"), new TableField[] { Factionelections.FACTIONELECTIONS.ID }, true);
-    public static final UniqueKey<FactionelectionsRecord> FACTIONELECTIONS__UK_FACTIONELECTIONS_1_128141898 = Internal.createUniqueKey(Factionelections.FACTIONELECTIONS, DSL.name("uk_factionElections_1_128141898"), new TableField[] { Factionelections.FACTIONELECTIONS.FACTIONNAME }, true);
-    public static final UniqueKey<FactionislandsRecord> FACTIONISLANDS__PK_FACTIONISLANDS = Internal.createUniqueKey(Factionislands.FACTIONISLANDS, DSL.name("pk_factionIslands"), new TableField[] { Factionislands.FACTIONISLANDS.ID }, true);
-    public static final UniqueKey<FactionmembersRecord> FACTIONMEMBERS__PK_FACTIONMEMBERS = Internal.createUniqueKey(Factionmembers.FACTIONMEMBERS, DSL.name("pk_factionMembers"), new TableField[] { Factionmembers.FACTIONMEMBERS.UUID }, true);
+    public static final UniqueKey<ElectionVotesRecord> ELECTION_VOTES__PK_ELECTION_VOTES = Internal.createUniqueKey(ElectionVotes.ELECTION_VOTES, DSL.name("pk_election_votes"), new TableField[] { ElectionVotes.ELECTION_VOTES.ELECTION }, true);
+    public static final UniqueKey<FactionElectionsRecord> FACTION_ELECTIONS__PK_FACTION_ELECTIONS = Internal.createUniqueKey(FactionElections.FACTION_ELECTIONS, DSL.name("pk_faction_elections"), new TableField[] { FactionElections.FACTION_ELECTIONS.ID }, true);
+    public static final UniqueKey<FactionIslandsRecord> FACTION_ISLANDS__PK_FACTION_ISLANDS = Internal.createUniqueKey(FactionIslands.FACTION_ISLANDS, DSL.name("pk_faction_islands"), new TableField[] { FactionIslands.FACTION_ISLANDS.ID }, true);
+    public static final UniqueKey<FactionMembersRecord> FACTION_MEMBERS__PK_FACTION_MEMBERS = Internal.createUniqueKey(FactionMembers.FACTION_MEMBERS, DSL.name("pk_faction_members"), new TableField[] { FactionMembers.FACTION_MEMBERS.UUID }, true);
     public static final UniqueKey<FactionsRecord> FACTIONS__PK_FACTIONS = Internal.createUniqueKey(Factions.FACTIONS, DSL.name("pk_factions"), new TableField[] { Factions.FACTIONS.NAME }, true);
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY__PK_FLYWAY_SCHEMA_HISTORY = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("pk_flyway_schema_history"), new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
     public static final UniqueKey<IslandsRecord> ISLANDS__PK_ISLANDS = Internal.createUniqueKey(Islands.ISLANDS, DSL.name("pk_islands"), new TableField[] { Islands.ISLANDS.ID }, true);
-    public static final UniqueKey<PlayerdataRecord> PLAYERDATA__PK_PLAYERDATA = Internal.createUniqueKey(Playerdata.PLAYERDATA, DSL.name("pk_playerData"), new TableField[] { Playerdata.PLAYERDATA.UUID }, true);
-    public static final UniqueKey<TrustedplayersRecord> TRUSTEDPLAYERS__PK_TRUSTEDPLAYERS = Internal.createUniqueKey(Trustedplayers.TRUSTEDPLAYERS, DSL.name("pk_trustedPlayers"), new TableField[] { Trustedplayers.TRUSTEDPLAYERS.ISLAND_ID }, true);
+    public static final UniqueKey<PlayerDataRecord> PLAYER_DATA__PK_PLAYER_DATA = Internal.createUniqueKey(PlayerData.PLAYER_DATA, DSL.name("pk_player_data"), new TableField[] { PlayerData.PLAYER_DATA.UUID }, true);
+    public static final UniqueKey<TrustedPlayersRecord> TRUSTED_PLAYERS__PK_TRUSTED_PLAYERS = Internal.createUniqueKey(TrustedPlayers.TRUSTED_PLAYERS, DSL.name("pk_trusted_players"), new TableField[] { TrustedPlayers.TRUSTED_PLAYERS.ISLAND_ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<ElectionvotesRecord, FactionelectionsRecord> ELECTIONVOTES__FK_ELECTIONVOTES_PK_FACTIONELECTIONS = Internal.createForeignKey(Electionvotes.ELECTIONVOTES, DSL.name("fk_electionVotes_pk_factionElections"), new TableField[] { Electionvotes.ELECTIONVOTES.ELECTION }, Keys.FACTIONELECTIONS__PK_FACTIONELECTIONS, new TableField[] { Factionelections.FACTIONELECTIONS.ID }, true);
+    public static final ForeignKey<ElectionVotesRecord, FactionElectionsRecord> ELECTION_VOTES__FK_ELECTION_VOTES_PK_FACTION_ELECTIONS = Internal.createForeignKey(ElectionVotes.ELECTION_VOTES, DSL.name("fk_election_votes_pk_faction_elections"), new TableField[] { ElectionVotes.ELECTION_VOTES.ELECTION }, Keys.FACTION_ELECTIONS__PK_FACTION_ELECTIONS, new TableField[] { FactionElections.FACTION_ELECTIONS.ID }, true);
 }
