@@ -25,7 +25,7 @@ public class V1__Init extends BaseJavaMigration {
                 .primaryKey("id")
                 .execute();
 
-        ctx.createTableIfNotExists("playerData")
+        ctx.createTableIfNotExists("player_data")
                 .column("uuid", VARCHAR)
                 .column("faction", VARCHAR)
                 .column("discord_id", VARCHAR)
@@ -34,7 +34,7 @@ public class V1__Init extends BaseJavaMigration {
                 .primaryKey("uuid")
                 .execute();
 
-        ctx.createTableIfNotExists("factionIslands")
+        ctx.createTableIfNotExists("faction_islands")
                 .column("id", INTEGER)
                 .column("factionName", VARCHAR)
                 .column("runes", INTEGER)
@@ -54,20 +54,20 @@ public class V1__Init extends BaseJavaMigration {
                 .primaryKey("name")
                 .execute();
 
-        ctx.createTableIfNotExists("factionMembers")
+        ctx.createTableIfNotExists("faction_members")
                 .column("factionName", VARCHAR)
                 .column("uuid", VARCHAR)
                 .column("rank", VARCHAR)
                 .primaryKey("uuid")
                 .execute();
 
-        ctx.createTableIfNotExists("trustedPlayers")
+        ctx.createTableIfNotExists("trusted_players")
                 .column("island_id", INTEGER)
                 .column("uuid", VARCHAR)
                 .primaryKey("island_id")
                 .execute();
 
-        ctx.createTableIfNotExists("defenceLocations")
+        ctx.createTableIfNotExists("defence_locations")
                 .column("uuid", VARCHAR)
                 .column("type", VARCHAR)
                 .column("factionName", VARCHAR)
@@ -76,7 +76,7 @@ public class V1__Init extends BaseJavaMigration {
                 .column("z", INTEGER)
                 .execute();
 
-        ctx.createTableIfNotExists("auditLogs")
+        ctx.createTableIfNotExists("audit_logs")
                 .column("factionName", VARCHAR)
                 .column("type", VARCHAR)
                 .column("uuid", VARCHAR)
@@ -84,12 +84,12 @@ public class V1__Init extends BaseJavaMigration {
                 .column("timestamp", BIGINT)
                 .execute();
 
-        ctx.createTableIfNotExists("factionBans")
+        ctx.createTableIfNotExists("faction_bans")
                 .column("factionName", VARCHAR)
                 .column("uuid", VARCHAR)
                 .execute();
 
-        ctx.createTableIfNotExists("factionInvites")
+        ctx.createTableIfNotExists("faction_invites")
                 .column("factionName", VARCHAR)
                 .column("uuid", VARCHAR)
                 .column("inviter", VARCHAR)

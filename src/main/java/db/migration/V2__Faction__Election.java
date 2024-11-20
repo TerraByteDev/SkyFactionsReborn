@@ -14,7 +14,7 @@ public class V2__Faction__Election extends BaseJavaMigration {
     public void migrate(Context context) throws Exception {
         DSLContext ctx = DatabaseManager.getCtx(context);
 
-        ctx.createTableIfNotExists("factionElections")
+        ctx.createTableIfNotExists("faction_elections")
                 .column("id", INTEGER.identity(true))
                 .column("factionName", VARCHAR)
                 .column("endDate", DATE)
@@ -22,15 +22,15 @@ public class V2__Faction__Election extends BaseJavaMigration {
                 .execute();
 
         ctx.createIndexIfNotExists("factionElectionsFactionNameIndex")
-                .on("factionElections", "factionName")
+                .on("faction_elections", "factionName")
                 .execute();
 
-        ctx.createTableIfNotExists("electionVotes")
+        ctx.createTableIfNotExists("election_votes")
                 .column("election", INTEGER)
                 .column("uuid", CLOB)
                 .column("votedFor", CLOB)
                 .primaryKey("election")
-                .constraint(DSL.foreignKey("election").references("factionElections", "id").onDeleteCascade())
+                .constraint(DSL.foreignKey("election").references("faction_elections", "id").onDeleteCascade())
                 .execute();
     }
 }

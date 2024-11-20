@@ -11,11 +11,11 @@ public class V4__Remove_Redundant_Columns extends BaseJavaMigration {
     public void migrate(Context context) throws Exception {
         DSLContext ctx = DatabaseManager.getCtx(context);
 
-        ctx.alterTableIfExists("factionInvites")
+        ctx.alterTableIfExists("faction_invites")
                 .dropColumn("accepted")
                 .execute();
 
-        ctx.alterTableIfExists("playerData")
+        ctx.alterTableIfExists("player_data")
                 .dropColumn("faction")
                 .execute();
 

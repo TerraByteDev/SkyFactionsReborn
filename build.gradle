@@ -219,6 +219,10 @@ jooq {
     }
 }
 
+tasks.named('flywayMigrate').configure {
+    dependsOn tasks.named('classes')
+}
+
 tasks.named('jooqCodegen').configure {
     System.setProperty("net.skullian.codegen", "true");
 
