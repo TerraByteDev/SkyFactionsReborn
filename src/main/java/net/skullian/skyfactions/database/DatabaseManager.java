@@ -50,18 +50,6 @@ public class DatabaseManager {
 
     public void initialise(String type) throws SQLException {
         createDataSource(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data/data.sqlite3"), type);
-
-        this.currencyManager = new CurrencyDatabaseManager(this.ctx);
-        this.defencesManager = new DefencesDatabaseManager(this.ctx);
-        this.notificationManager = new NotificationDatabaseManager(this.ctx);
-        this.playerIslandManager = new PlayerIslandsDatabaseManager(this.ctx);
-        this.playerManager = new PlayerDatabaseManager(this.ctx);
-
-        this.factionAuditLogManager = new FactionAuditLogDatabaseManager(this.ctx);
-        this.factionInvitesManager = new FactionInvitesDatabaseManager(this.ctx);
-        this.factionIslandManager = new FactionIslandDatabaseManager(this.ctx);
-        this.factionsManager = new FactionsDatabaseManager(this.ctx);
-        this.electionManager = new FactionElectionManager(this.ctx);
     }
 
     private void createDataSource(
@@ -162,6 +150,18 @@ public class DatabaseManager {
 
         if (result.success) {
             SLogger.info("Database migrations complete: ({} Migrations completed in {}ms)", result.getSuccessfulMigrations(), result.getTotalMigrationTime());
+
+            this.currencyManager = new CurrencyDatabaseManager(this.ctx);
+            this.defencesManager = new DefencesDatabaseManager(this.ctx);
+            this.notificationManager = new NotificationDatabaseManager(this.ctx);
+            this.playerIslandManager = new PlayerIslandsDatabaseManager(this.ctx);
+            this.playerManager = new PlayerDatabaseManager(this.ctx);
+
+            this.factionAuditLogManager = new FactionAuditLogDatabaseManager(this.ctx);
+            this.factionInvitesManager = new FactionInvitesDatabaseManager(this.ctx);
+            this.factionIslandManager = new FactionIslandDatabaseManager(this.ctx);
+            this.factionsManager = new FactionsDatabaseManager(this.ctx);
+            this.electionManager = new FactionElectionManager(this.ctx);
         } else {
             result.getFailedMigrations().forEach(migration -> SLogger.fatal("Migration failed: {}", migration.description));
             handleError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed: " + result.getException()));
