@@ -62,7 +62,7 @@ public class NotificationAPI {
         NotificationData data = new NotificationData(
                 playerUUID,
                 type.name(),
-                replacements,
+                replacements != null ? replacements : new Object[0],
                 System.currentTimeMillis()
         );
 

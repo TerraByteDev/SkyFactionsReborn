@@ -20,11 +20,9 @@ public class FactionElectionManager {
     }
 
     public CompletableFuture<Integer> getElectionID(String factionName) {
-        return CompletableFuture.supplyAsync(() -> {
-            return ctx.select(FACTION_ELECTIONS.ID)
-                    .from(FACTION_ELECTIONS)
-                    .where(FACTION_ELECTIONS.FACTIONNAME.eq(factionName))
-                    .fetchOneInto(Integer.class);
-        });
+        return CompletableFuture.supplyAsync(() -> ctx.select(FACTION_ELECTIONS.ID)
+                .from(FACTION_ELECTIONS)
+                .where(FACTION_ELECTIONS.FACTIONNAME.eq(factionName))
+                .fetchOneInto(Integer.class));
     }
 }

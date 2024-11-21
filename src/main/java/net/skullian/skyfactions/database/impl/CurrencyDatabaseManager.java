@@ -19,6 +19,8 @@ public class CurrencyDatabaseManager {
     // ------------------ GEMS  ------------------ //
 
     public CompletableFuture<Integer> getGems(UUID playerUUID) {
+
+
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.GEMS)
                 .from(ISLANDS)
                 .where(ISLANDS.UUID.eq(playerUUID.toString()))
@@ -34,6 +36,7 @@ public class CurrencyDatabaseManager {
 
     public CompletableFuture<Void> modifyGems(UUID playerUUID, int amount, boolean subtract) {
         return CompletableFuture.runAsync(() -> {
+            System.out.println("UUID: " + playerUUID);
             int current = getGems(playerUUID).join();
 
             ctx.update(ISLANDS)

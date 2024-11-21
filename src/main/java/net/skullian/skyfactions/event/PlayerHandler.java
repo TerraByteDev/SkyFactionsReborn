@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.event;
 
+import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
@@ -43,8 +44,8 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (SkyFactionsReborn.getDatabaseManager().closed) {
-            event.getPlayer().kick();
-            throw new RuntimeException("Database is closed! Cannot allow player to join without risking dupes.");
+            event.getPlayer().kick(Component.text("<red>A fatal error occurred. Please contact your server owners to check logs."));
+            throw new RuntimeException("Database is closed! Cannot allow player to join without risking dupes and unexpected functionalities.");
         }
 
         SkyFactionsReborn.getDatabaseManager().getPlayerManager().isPlayerRegistered(event.getPlayer()).whenComplete((isRegistered, ex) -> {

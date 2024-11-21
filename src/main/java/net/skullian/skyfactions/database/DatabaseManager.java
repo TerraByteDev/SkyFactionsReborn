@@ -23,6 +23,7 @@ import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultExecuteListenerProvider;
 import org.sqlite.JDBC;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -61,6 +62,8 @@ public class DatabaseManager {
         System.setProperty("org.jooq.no-logo", "true");
         System.setProperty("net.skullian.codegen", "false");
 
+        int maxPoolSize = Settings.DATABASE_MAX_POOL_SIZE.getInt();
+
         if (type.equals("sqlite")) {
 
             HikariConfig sqliteConfig = new HikariConfig();
@@ -74,7 +77,7 @@ public class DatabaseManager {
             sqliteConfig.addDataSourceProperty("synchronous", "NORMAL");
             sqliteConfig.addDataSourceProperty("journalMode", "WAL");
             sqliteConfig.setPoolName("SQLite");
-            sqliteConfig.setMaximumPoolSize(1);
+            sqliteConfig.setMaximumPoolSize(maxPoolSize);
 
             HikariDataSource dataSource = new HikariDataSource(sqliteConfig);
             SLogger.info("Using SQLite Database.");
@@ -92,7 +95,6 @@ public class DatabaseManager {
             String databaseName = Settings.DATABASE_NAME.getString();
             String username = Settings.DATABASE_USERNAME.getString();
             String password = Settings.DATABASE_PASSWORD.getString();
-
             List<String> missingProperties = new ArrayList<>();
 
             if (rawHost == null || rawHost.isBlank()) {
@@ -127,7 +129,7 @@ public class DatabaseManager {
             mysqlConfig.setMaxLifetime(TimeUnit.MINUTES.toMillis(Settings.DATABASE_MAX_LIFETIME.getInt()));
             mysqlConfig.setUsername(username);
             mysqlConfig.setPassword(password);
-            mysqlConfig.setMaximumPoolSize(2);
+            mysqlConfig.setMaximumPoolSize(maxPoolSize);
 
             SLogger.info("Using MySQL database '{}' on: {}:{}.",
                     databaseName, host.getHost(), host.getPortOrDefault(3306));
@@ -154,9 +156,8 @@ public class DatabaseManager {
 
         Flyway flyway = Flyway.configure(this.getClass().getClassLoader())
                 .locations("classpath:net/skullian/skyfactions/database/migrations").failOnMissingLocations(true).cleanDisabled(true)
-                .dataSource(this.url, "wefuckinghateflyway-fuckyoutony", "")
+                .dataSource(this.dataSource)
                 .load();
-
         MigrateResult result = flyway.migrate();
 
         if (result.success) {
