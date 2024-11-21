@@ -284,7 +284,7 @@ public class FactionAPI {
         regionManager.addRegion(region);
     }
 
-    private static void createIsland(Player player, String faction_name) {
+    private static CompletableFuture<Void> createIsland(Player player, String faction_name) {
         FactionIsland island = new FactionIsland(SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().cachedFactionIslandID);
         SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().cachedFactionIslandID++;
 
@@ -294,7 +294,10 @@ public class FactionAPI {
         IslandModificationAction action = IslandModificationAction.CREATE;
         action.setId(island.getId());
 
-        SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().createFactionIsland(faction_name, action).whenComplete((ignored, ex) -> {
+        return CompletableFuture.allOf(
+                RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction"),
+                SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().createFactionIsland(faction_name, action)
+        ).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
                 return;

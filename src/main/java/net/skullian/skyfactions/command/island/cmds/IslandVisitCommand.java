@@ -77,10 +77,9 @@ public class IslandVisitCommand extends CommandTemplate {
             Messages.UNKNOWN_PLAYER.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
             return;
         } else if (target.getUniqueId().equals(player.getUniqueId())) {
-            CommandTemplate template = this.handler.getSubCommands().get("teleport");
-            Method method = template.getClass().getDeclaredMethod("perform");
-
-            method.invoke(template, player);
+            IslandTeleportCommand template = (IslandTeleportCommand) this.handler.getSubCommands().get("teleport");
+            template.perform(player);
+            return;
         }
 
         IslandAPI.getPlayerIsland(target.getUniqueId()).whenComplete((is, ex) -> {

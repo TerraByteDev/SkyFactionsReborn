@@ -154,7 +154,7 @@ public class DatabaseManager {
 
         Flyway flyway = Flyway.configure(this.getClass().getClassLoader())
                 .locations("classpath:net/skullian/skyfactions/database/migrations").failOnMissingLocations(true).cleanDisabled(true)
-                .dataSource(this.url, "wefuckinghateflyway", "")
+                .dataSource(this.url, "wefuckinghateflyway-fuckyoutony", "")
                 .load();
 
         MigrateResult result = flyway.migrate();
