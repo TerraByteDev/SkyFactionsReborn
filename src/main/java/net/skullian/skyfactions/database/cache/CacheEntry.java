@@ -27,7 +27,6 @@ public class CacheEntry {
     private final List<Location> defencesToRegister = new ArrayList<>(); // Player * Faction
     private final List<Location> defencesToRemove = new ArrayList<>(); // Player & Faction
     @Setter private String newLocale; // Player & Faction
-    @Setter private IslandModificationAction islandModificationAction; // Player & Faction
 
     private final List<NotificationData> notificationsToAdd = new ArrayList<>(); // Player Exclusive
     private final List<NotificationData> notificationsToRemove = new ArrayList<>(); // Player Exclusive
@@ -167,10 +166,7 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.getDatabaseManager().getFactionAuditLogManager().createAuditLogs(auditLogsToAdd).exceptionally((ex -> {
                         throw new RuntimeException("Failed to create audit logs for faction " + factionName, ex);
-                    })),
-                    SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().createFactionIsland(factionName, islandModificationAction).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to create island for faction " + factionName, ex);
-                    })
+                    }))
             );
         } else {
             UUID uuid = UUID.fromString(Objects.requireNonNull(toCache));
@@ -189,9 +185,6 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.getDatabaseManager().getPlayerManager().setPlayerLocale(uuid, newLocale).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to update defendes for player " + uuid, ex);
-                    }),
-                    SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().createIsland(uuid, islandModificationAction).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to create island for player " + uuid, ex);
                     }),
                     SkyFactionsReborn.getDatabaseManager().getNotificationManager().createNotifications(notificationsToAdd).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to create notifications for player " + uuid, ex);

@@ -50,26 +50,28 @@ public class IslandAPI {
         if (!FactionAPI.factionCache.containsKey(player.getUniqueId())) FactionAPI.getFaction(player.getUniqueId());
     }
 
-    public static void createIsland(Player player) {
+    public static CompletableFuture<Void> createIsland(Player player) {
 
         PlayerIsland island = new PlayerIsland(SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().cachedPlayerIslandID);
         SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().cachedPlayerIslandID++;
 
         World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
         if (world == null) {
-            ErrorUtil.handleError(player, "create an island", "WORLD_NOT_EXIST", new IllegalArgumentException("Unknown World: " + Settings.ISLAND_PLAYER_WORLD.getString()));
-            return;
+            IllegalArgumentException gasp = new IllegalArgumentException("Unknown World: " + Settings.ISLAND_PLAYER_WORLD.getString());
+            ErrorUtil.handleError(player, "create an island", "WORLD_NOT_EXIST", gasp);
+            throw new IllegalArgumentException(gasp);
         }
 
         Messages.ISLAND_CREATING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
         RegionAPI.createRegion(player, island.getPosition1(world), island.getPosition2(world), world, player.getUniqueId().toString());
 
-        CacheEntry entry = SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId());
         IslandModificationAction action = IslandModificationAction.CREATE;
         action.setId(island.getId());
-        entry.setIslandModificationAction(action);
 
-        RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player").whenComplete((ignored, ex) -> {
+        return CompletableFuture.allOf(
+                RegionAPI.pasteIslandSchematic(player, island.getCenter(world), world.getName(), "player"),
+                SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().createIsland(player.getUniqueId(), action)
+        ).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
                 removePlayerIsland(player);

@@ -291,19 +291,24 @@ public class FactionAPI {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
         createRegion(player, island, world, faction_name);
 
-        CacheEntry entry = SkyFactionsReborn.getCacheService().getEntry(faction_name);
         IslandModificationAction action = IslandModificationAction.CREATE;
         action.setId(island.getId());
-        entry.setIslandModificationAction(action);
 
-        ObeliskHandler.spawnFactionObelisk(faction_name, island);
+        SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().createFactionIsland(faction_name, action).whenComplete((ignored, ex) -> {
+            if (ex != null) {
+                ErrorUtil.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
+                return;
+            }
 
-        handleFactionWorldBorder(player, island);
-        IslandAPI.modifyDefenceOperation(DefenceOperation.DISABLE, player.getUniqueId());
-        RegionAPI.teleportPlayerToLocation(player, island.getCenter(world));
+            ObeliskHandler.spawnFactionObelisk(faction_name, island);
 
-        SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
-        Messages.FACTION_CREATION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            handleFactionWorldBorder(player, island);
+            IslandAPI.modifyDefenceOperation(DefenceOperation.DISABLE, player.getUniqueId());
+            RegionAPI.teleportPlayerToLocation(player, island.getCenter(world));
+
+            SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
+            Messages.FACTION_CREATION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+        });
     }
 
     /**

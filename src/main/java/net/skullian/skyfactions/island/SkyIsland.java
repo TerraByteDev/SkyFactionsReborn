@@ -30,16 +30,16 @@ public abstract class SkyIsland {
         Location location;
         switch (currentIndex / diameter) {
             case 0:
-                location = new Location(world, (currentIndex - radius), gridOrigin.get(1), -radius);
+                location = new Location(world, (currentIndex - radius), 0, -radius);
                 break;
             case 1:
-                location = new Location(world, radius, gridOrigin.get(1), (currentIndex % perimeter) - radius);
+                location = new Location(world, radius, 0, (currentIndex % diameter) - radius);
                 break;
             case 2:
-                location = new Location(world, radius - (currentIndex % perimeter), gridOrigin.get(1), radius);
+                location = new Location(world, radius - (currentIndex % diameter), 0, radius);
                 break;
             case 3:
-                location = new Location(world, -radius, gridOrigin.get(1), radius - (currentIndex % perimeter));
+                location = new Location(world, -radius, 0, radius - (currentIndex % diameter));
                 break;
             default:
                 throw new IllegalStateException("Could not find island location with ID: " + id);
