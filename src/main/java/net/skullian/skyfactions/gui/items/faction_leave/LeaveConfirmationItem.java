@@ -36,6 +36,8 @@ public class LeaveConfirmationItem extends SkyItem {
         if (faction != null && faction.isOwner(getPLAYER())) {
             builder.addLoreLines(toList(Messages.FACTION_LEAVE_OWNER_CONFIRMATION_LORE.getStringList(PlayerHandler.getLocale(getPLAYER().getUniqueId()))));
         }
+
+        return builder;
     }
 
     @Override
