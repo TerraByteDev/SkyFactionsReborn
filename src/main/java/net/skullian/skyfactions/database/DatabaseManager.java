@@ -80,6 +80,7 @@ public class DatabaseManager {
                     .set(SQLDialect.SQLITE);
 
             this.dataSource = dataSource;
+            this.dialect = SQLDialect.SQLITE;
             this.ctx = DSL.using(configuration);
         } else if (type.equals("sql")) {
 
@@ -129,6 +130,7 @@ public class DatabaseManager {
                     .set(SQLDialect.MYSQL);
 
             this.dataSource = dataSource;
+            this.dialect = SQLDialect.MYSQL;
             this.ctx = DSL.using(dataSource, SQLDialect.MYSQL);
         } else {
             handleError(new IllegalStateException("Unknown database type: " + type));
@@ -144,12 +146,13 @@ public class DatabaseManager {
 
         Flyway flyway = Flyway.configure()
                 .dataSource(this.dataSource)
-                .locations("classpath:net/skullian/skyfactions/database/migrations")
+                .locations("classpath:net/skullian/skyfactions/database/migrations/**").failOnMissingLocations(true).cleanDisabled(true)
                 .load();
+
         MigrateResult result = flyway.migrate();
 
         if (result.success) {
-            SLogger.info("Database migrations complete: ({} Migrations completed in {}ms)", result.getSuccessfulMigrations(), result.getTotalMigrationTime());
+            SLogger.info("Database migrations complete: ({} Migrations completed in {}ms)", result.getSuccessfulMigrations().size(), result.getTotalMigrationTime());
 
             this.currencyManager = new CurrencyDatabaseManager(this.ctx);
             this.defencesManager = new DefencesDatabaseManager(this.ctx);
