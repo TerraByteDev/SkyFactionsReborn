@@ -123,6 +123,7 @@ public class FactionAPI {
                     return;
                 }
 
+
                 Messages.FACTION_DISBAND_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
             });
         }
@@ -130,6 +131,9 @@ public class FactionAPI {
 
     private static void onFactionDisband(Faction faction) {
         for (OfflinePlayer member : faction.getAllMembers()) {
+            factionCache.remove(member.getUniqueId());
+            factionNameCache.remove(faction.getName());
+
             NotificationAPI.createNotification(member.getUniqueId(), NotificationType.FACTION_DISBANDED);
 
             if (member.isOnline() && RegionAPI.isLocationInRegion(member.getPlayer().getLocation(), "SFR_FACTION_" + faction.getName())) {

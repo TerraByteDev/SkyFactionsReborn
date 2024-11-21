@@ -57,14 +57,13 @@ public class FactionDisbandCommand extends CommandTemplate {
 
                 if (FactionAPI.awaitingDeletion.contains(faction.getName())) {
                     Messages.FACTION_DISBAND_DELETION_PROCESSING.send(player, locale);
+                    FactionAPI.disbandFaction(player, faction);
                 } else {
                     Messages.FACTION_DISBAND_COMMAND_BLOCK.send(player, locale);
                 }
-
             } else {
                 Messages.INCORRECT_USAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "usage", getSyntax());
             }
-
 
         });
     }
