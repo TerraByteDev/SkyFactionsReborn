@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.skullian.skyfactions.api.RegionAPI;
 import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -20,11 +21,21 @@ import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.util.ErrorUtil;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 public class LeaveConfirmationItem extends SkyItem {
 
     public LeaveConfirmationItem(ItemData data, ItemStack stack, Player player) {
         super(data, stack, player, null);
+    }
+
+    @Override
+    public ItemBuilder process(ItemBuilder builder) {
+        Faction faction = FactionAPI.getCachedFaction(getPLAYER().getUniqueId());
+
+        if (faction != null && faction.isOwner(getPLAYER())) {
+            builder.addLoreLines(toList(Messages.FACTION_LEAVE_OWNER_CONFIRMATION_LORE.getStringList(PlayerHandler.getLocale(getPLAYER().getUniqueId()))));
+        }
     }
 
     @Override

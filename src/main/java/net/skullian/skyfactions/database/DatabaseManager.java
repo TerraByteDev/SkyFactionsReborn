@@ -34,6 +34,7 @@ public class DatabaseManager {
     private transient DSLContext ctx;
     @Getter private transient HikariDataSource dataSource;
     @Getter private transient SQLDialect dialect;
+    @Getter private transient String url;
     public boolean closed;
 
     @Getter private CurrencyDatabaseManager currencyManager;
@@ -63,6 +64,9 @@ public class DatabaseManager {
         if (type.equals("sqlite")) {
 
             HikariConfig sqliteConfig = new HikariConfig();
+
+            this.url = JDBC.PREFIX + file.getAbsolutePath();
+
             sqliteConfig.setDataSourceClassName("org.sqlite.SQLiteDataSource");
             sqliteConfig.addDataSourceProperty("url", JDBC.PREFIX + file.getAbsolutePath());
             sqliteConfig.addDataSourceProperty("encoding", "UTF-8");
@@ -112,6 +116,10 @@ public class DatabaseManager {
             }
 
             HostAndPort host = HostAndPort.fromHost(rawHost);
+
+            this.url = String.format("jdbc:mysql://%s:%d/%s",
+                    host.getHost(), host.getPortOrDefault(3306), databaseName);
+
             HikariConfig mysqlConfig = new HikariConfig();
             mysqlConfig.setPoolName("SkyFactions");
             mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s",
@@ -144,9 +152,9 @@ public class DatabaseManager {
     private void setup() {
         SLogger.info("Beginning database migrations.");
 
-        Flyway flyway = Flyway.configure()
-                .dataSource(this.dataSource)
-                .locations("classpath:net/skullian/skyfactions/database/migrations/**").failOnMissingLocations(true).cleanDisabled(true)
+        Flyway flyway = Flyway.configure(this.getClass().getClassLoader())
+                .locations("classpath:net/skullian/skyfactions/database/migrations").failOnMissingLocations(true).cleanDisabled(true)
+                .dataSource(this.url, "wefuckinghateflyway", "")
                 .load();
 
         MigrateResult result = flyway.migrate();
@@ -171,14 +179,6 @@ public class DatabaseManager {
             SLogger.fatal("SkyFactions will now disable.");
             SkyFactionsReborn.getInstance().disable();
         }
-    }
-
-    public static DSLContext getCtx() {
-        Configuration configuration = new DefaultConfiguration()
-                .set(SkyFactionsReborn.getDatabaseManager().getDialect())
-                .set(SkyFactionsReborn.getDatabaseManager().getDataSource());
-
-        return DSL.using(configuration);
     }
 
     public void closeConnection() {

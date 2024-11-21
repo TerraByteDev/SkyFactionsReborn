@@ -389,8 +389,12 @@ Messages:
       # Placeholders: <faction_name> - Name of the faction.
       FACTION_LEAVE_SUCCESS: "<server_name> <green>You have successfully left <yellow><faction_name>."
 
-      # Sent when the faction owner tries to leave the faction.
-      FACTION_OWNER_LEAVE_DENY: "<server_name> <red>You cannot leave this faction because you are the owner!"
+      # Appended to the bottom of the leave confirmation gui item lore when the player is the owner.
+      OWNER_CONFIRMATION_LORE:
+        - "<red><bold>WARNING: <italic>You are the owner of"
+        - "<red><italic>this Faction. If you leave, an"
+        - "<red><italic>Election will begin. Rejoining will"
+        - "<red><bold>not <italic>reinstate you as owner."
 
     FACTION_BROADCAST:
 
@@ -543,10 +547,14 @@ Messages:
       FACTION_DISBAND_SUCCESS: "<server_name> <green>Successfully disbanded your Faction."
 
       # Sent when the player tries to run '/faction disband confirm' before running '/faction disband'.
-      FACTION_DISBAND_COMMAND_BLOCK: "<server>name> <red><bold>Hey! <reset><grey>You must run <red>/faction disband <yellow>before doing that."
+      FACTION_DISBAND_COMMAND_BLOCK: "<server_name> <red><bold>Hey! <reset><grey>You must run <red>/faction disband <yellow>before doing that."
 
       # Sent to all online players when the faction is disbanded.
       FACTION_DISBAND_BROADCAST: "<red><bold>The faction has ben disbanded."
+
+    FACTION_ABANDON:
+      # Sent when a non-owner of the Faction attempts to abandon the Faction.
+      ABANDON_PERMISSIONS_DENY: "<server_name> <red><bold>Hey! <reset><grey>You do not have the sufficient permissions to abandon the faction!"
 
   Notifications:
     # Sent when a player has a pending Faction invitation in their Obelisk.
