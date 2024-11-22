@@ -65,7 +65,7 @@ public class PlayerListener implements Listener {
             }
         });
 
-        IslandAPI.cacheData(event.getPlayer());
+        PlayerAPI.cacheData(event.getPlayer());
 
         IslandAPI.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {

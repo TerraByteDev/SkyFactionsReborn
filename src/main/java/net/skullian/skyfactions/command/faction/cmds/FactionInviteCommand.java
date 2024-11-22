@@ -101,7 +101,6 @@ public class FactionInviteCommand extends CommandTemplate {
                     );
                     faction.createInvite(newInvite);
                     Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, locale, "player_name", target.getName());
-
                 }
             });
         });

@@ -2,6 +2,7 @@ package net.skullian.skyfactions.database.impl.faction;
 
 import net.skullian.skyfactions.database.struct.InviteData;
 import net.skullian.skyfactions.database.tables.records.FactionInvitesRecord;
+import net.skullian.skyfactions.faction.JoinRequestData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jooq.Configuration;
@@ -80,6 +81,20 @@ public class FactionInvitesDatabaseManager {
             }
 
             return data;
+        });
+    }
+
+    public CompletableFuture<JoinRequestData> getPlayerJoinRequest(OfflinePlayer player) {
+        return CompletableFuture.supplyAsync(() -> {
+            FactionInvitesRecord result = ctx.selectFrom(FACTION_INVITES)
+                    .where(FACTION_INVITES.UUID.eq(player.getUniqueId().toString()), FACTION_INVITES.TYPE.eq("incoming"))
+                    .fetchOne();
+
+            return result != null ? new JoinRequestData(
+                    result.getFactionname(),
+                    false,
+                    result.getTimestamp()
+            ) : null;
         });
     }
 

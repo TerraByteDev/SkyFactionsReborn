@@ -5,6 +5,7 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.InvitesAPI;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
@@ -350,6 +351,7 @@ public class Faction {
         OfflinePlayer player = data.getPlayer();
         OfflinePlayer inviter = data.getInviter();
 
+        InvitesAPI.onInviteCreate(player.getUniqueId(), data);
         invites.add(data);
         SkyFactionsReborn.getCacheService().getEntry(this).createInvite(data);
         createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "inviter", inviter.getName(), "player_name", player.getName());

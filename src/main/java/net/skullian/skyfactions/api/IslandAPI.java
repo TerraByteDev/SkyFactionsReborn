@@ -42,13 +42,6 @@ public class IslandAPI {
         });
     }
 
-    // for PlaceholderAPI
-    public static void cacheData(Player player) {
-        if (!GemsAPI.playerGems.containsKey(player.getUniqueId())) GemsAPI.cachePlayer(player.getUniqueId());
-        if (!RunesAPI.playerRunes.containsKey(player.getUniqueId())) RunesAPI.cachePlayer(player.getUniqueId());
-        if (!FactionAPI.factionCache.containsKey(player.getUniqueId())) FactionAPI.getFaction(player.getUniqueId());
-    }
-
     public static CompletableFuture<Void> createIsland(Player player) {
 
         PlayerIsland island = new PlayerIsland(SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().cachedPlayerIslandID);

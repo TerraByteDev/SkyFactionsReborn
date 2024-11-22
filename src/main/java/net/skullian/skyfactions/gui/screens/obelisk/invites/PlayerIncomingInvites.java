@@ -3,6 +3,7 @@ package net.skullian.skyfactions.gui.screens.obelisk.invites;
 import lombok.Builder;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
+import net.skullian.skyfactions.api.InvitesAPI;
 import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.database.struct.InviteData;
@@ -38,7 +39,7 @@ public class PlayerIncomingInvites extends PaginatedScreen {
     }
 
     public static void promptPlayer(Player player) {
-        SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().getInvitesOfPlayer(Bukkit.getOfflinePlayer(player.getUniqueId())).whenComplete((inviteData, ex) -> {
+        InvitesAPI.getPlayerIncomingInvites(player.getUniqueId()).whenComplete((inviteData, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your invites", "SQL_INVITE_GET", ex);
                 return;
