@@ -64,7 +64,6 @@ public class V1__Init extends BaseJavaMigration {
         ctx.createTableIfNotExists("trusted_players")
                 .column("island_id", INTEGER)
                 .column("uuid", VARCHAR)
-                .primaryKey("island_id")
                 .execute();
 
         ctx.createTableIfNotExists("defence_locations")
