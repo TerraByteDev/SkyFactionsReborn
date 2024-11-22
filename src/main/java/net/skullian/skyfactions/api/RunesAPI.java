@@ -8,6 +8,8 @@ import java.util.UUID;
 
 import dev.lone.itemsadder.api.CustomStack;
 import io.th0rgal.oraxen.api.OraxenItems;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.DependencyHandler;
 import org.bukkit.Material;
@@ -82,7 +84,12 @@ public class RunesAPI {
     }
 
     public static void handleConversion(List<ItemStack> stacks, Player player, Faction faction) {
-        int total = getDefenceCost(stacks, player);
+        int total;
+
+        DefenceRunesData defenceData = getDefenceCost(stacks, player);
+        stacks = defenceData.getStacks();
+        total = defenceData.getCost();
+
         Map<String, Integer> overrides = RunesConfig.RUNE_OVERRIDES.getMap();
 
         Map<ItemStack, Integer> quantities = new HashMap<>();
@@ -181,7 +188,7 @@ public class RunesAPI {
         });
     }
 
-    private static int getDefenceCost(List<ItemStack> items, Player player) {
+    private static DefenceRunesData getDefenceCost(List<ItemStack> items, Player player) {
         int count = 0;
 
         for (ItemStack item : items) {
@@ -193,11 +200,17 @@ public class RunesAPI {
             if (container.has(defenceKey, PersistentDataType.STRING)) {
                 String identifier = container.get(defenceKey, PersistentDataType.STRING);
                 DefenceStruct struct = DefencesFactory.defences.getOrDefault(PlayerAPI.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(identifier);
-                if (struct != null) count += struct.getSELL_COST();
+                if (struct != null) {
+                    count += struct.getSELL_COST();
+                    items.remove(item);
+                };
             }
         }
 
-        return count;
+        return new DefenceRunesData(
+                count,
+                items
+        );
     }
 
     private static boolean hasEnchants(ItemStack stack) {
@@ -255,5 +268,12 @@ public class RunesAPI {
                 }
             }
         }
+    }
+
+    @AllArgsConstructor
+    @Getter
+    private static class DefenceRunesData {
+        private final int cost;
+        private final List<ItemStack> stacks;
     }
 }
