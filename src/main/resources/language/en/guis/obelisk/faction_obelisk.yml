@@ -114,7 +114,7 @@ ITEMS:
     lore:
       - "<red>Your Faction Lord has abandoned you!"
       - "<yellow>Vote who you think should be the"
-      - "<yellow>new Lord here!
+      - "<yellow>new Lord here!"
 
   BORDER:
     char: "#"
