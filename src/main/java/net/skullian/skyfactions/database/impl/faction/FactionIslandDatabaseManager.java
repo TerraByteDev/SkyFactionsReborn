@@ -9,6 +9,7 @@ import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -54,6 +55,13 @@ public class FactionIslandDatabaseManager {
 
             return result != null ? new FactionIsland(result.getId()) : null;
         });
+    }
+
+    public CompletableFuture<Void> updateFactionLastRaid(String factionName, long newTime) {
+        return CompletableFuture.runAsync(() -> ctx.update(FACTION_ISLANDS)
+                .set(FACTION_ISLANDS.LAST_RAIDED, newTime)
+                .where(FACTION_ISLANDS.FACTIONNAME.eq(factionName))
+                .execute());
     }
 
 

@@ -195,8 +195,10 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.getDatabaseManager().getFactionAuditLogManager().createAuditLogs(auditLogsToAdd).exceptionally((ex -> {
                         throw new RuntimeException("Failed to create audit logs for faction " + factionName, ex);
-                    }))
-                    // todo update faction last raid
+                    })),
+                    SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().updateFactionLastRaid(factionName, newLastRaid).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to update last raid for faction " + factionName, ex);
+                    })
             );
         } else {
             UUID uuid = UUID.fromString(Objects.requireNonNull(toCache));
