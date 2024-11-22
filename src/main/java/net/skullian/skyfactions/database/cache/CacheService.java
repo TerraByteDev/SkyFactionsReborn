@@ -17,6 +17,8 @@ import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.SLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CacheService {
 
@@ -39,6 +41,8 @@ public class CacheService {
 
                 GemsAPI.playerGems.replace(uuid, (Math.max(0, GemsAPI.playerGems.get(uuid) + gemsModification)));
                 RunesAPI.playerRunes.replace(uuid, (Math.max(0, RunesAPI.playerRunes.get(uuid) + runesModification)));
+
+                playersToCache.remove(uuid);
             }
 
             for (Map.Entry<String, CacheEntry> cachedFaction : factionsToCache.entrySet()) {
@@ -55,6 +59,8 @@ public class CacheService {
 
                 if (faction.gems < 0) faction.gems = 0;
                 if (faction.runes < 0) faction.runes = 0;
+
+                factionsToCache.remove(factionName);
             }
 
             SLogger.info("Periodic Save - Done.");
