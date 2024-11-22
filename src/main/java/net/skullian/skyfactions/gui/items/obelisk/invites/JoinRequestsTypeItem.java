@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.gui.items.obelisk.invites;
 
 import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.InvitesAPI;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.JoinRequestData;
@@ -33,14 +34,11 @@ public class JoinRequestsTypeItem extends SkyItem {
         if (TYPE.equals("faction")) {
             JoinRequestsUI.promptPlayer(player);
         } else if (TYPE.equals("player")) {
-            FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+            InvitesAPI.getPlayerJoinRequest(player.getUniqueId()).whenComplete((joinRequest, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "get your outgoing join request", "SQL_JOIN_REQUEST_GET", ex);
                     return;
-                }
-
-                JoinRequestData joinRequest = faction.getPlayerJoinRequest(player);
-                if (joinRequest == null) {
+                } else if (joinRequest == null) {
                     SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
                     Messages.FACTION_JOIN_REQUEST_NOT_EXIST.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 } else {
