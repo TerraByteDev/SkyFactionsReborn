@@ -6,7 +6,7 @@ import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.data.PaginationItemData;
@@ -43,7 +43,7 @@ public class ObeliskDefencePurchaseOverviewUI extends PaginatedScreen {
             ObeliskDefencePurchaseOverviewUI.builder().player(player).obeliskType(obeliskType).faction(faction).build().show();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the defences purchase GUI", "debug", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "open the defences purchase GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 
@@ -76,7 +76,7 @@ public class ObeliskDefencePurchaseOverviewUI extends PaginatedScreen {
     protected List<Item> getModels(Player player, ItemData data) {
         List<Item> items = new ArrayList<>();
 
-        for (Map.Entry<String, DefenceStruct> defence : DefencesFactory.defences.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).entrySet()) {
+        for (Map.Entry<String, DefenceStruct> defence : DefencesFactory.defences.getOrDefault(PlayerAPI.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).entrySet()) {
             DefenceStruct struct = defence.getValue();
             ItemData newData = new ItemData(
                     data.getITEM_ID(),

@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.command;
 
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class CommandsUtility {
         }
 
         if (sendDeny) {
-            Messages.PERMISSION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.PERMISSION_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()));
         }
         return false;
     }

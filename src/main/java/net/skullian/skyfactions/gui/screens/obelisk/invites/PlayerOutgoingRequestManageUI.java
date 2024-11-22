@@ -2,11 +2,10 @@ package net.skullian.skyfactions.gui.screens.obelisk.invites;
 
 import lombok.Builder;
 import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.JoinRequestData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.AirItem;
@@ -41,7 +40,7 @@ public class PlayerOutgoingRequestManageUI extends Screen {
                 PlayerOutgoingRequestManageUI.builder().player(player).joinRequest(joinRequest).build().show();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "manage your outgoing join request", "debug", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "manage your outgoing join request", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }

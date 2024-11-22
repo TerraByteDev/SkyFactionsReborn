@@ -5,9 +5,8 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -40,7 +39,7 @@ public class FactionRenameCommand extends CommandTemplate {
             @Argument(value = "name") String name
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {

@@ -5,7 +5,7 @@ import net.skullian.skyfactions.database.tables.records.FactionBansRecord;
 import net.skullian.skyfactions.database.tables.records.FactionIslandsRecord;
 import net.skullian.skyfactions.database.tables.records.FactionMembersRecord;
 import net.skullian.skyfactions.database.tables.records.FactionsRecord;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.faction.RankType;
 import org.bukkit.Bukkit;
@@ -43,7 +43,7 @@ public class FactionsDatabaseManager {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(FACTIONS)
                     .columns(FACTIONS.NAME, FACTIONS.MOTD, FACTIONS.LEVEL, FACTIONS.LAST_RAID, FACTIONS.LOCALE, FACTIONS.LAST_RENAMED)
-                    .values(factionName, "<red>None", 1, (long) 0, PlayerHandler.getLocale(factionOwner.getUniqueId()), System.currentTimeMillis())
+                    .values(factionName, "<red>None", 1, (long) 0, PlayerAPI.getLocale(factionOwner.getUniqueId()), System.currentTimeMillis())
                     .execute();
 
             ctx.insertInto(FACTION_MEMBERS)
@@ -262,8 +262,7 @@ public class FactionsDatabaseManager {
             List<OfflinePlayer> players = new ArrayList<>();
             for (FactionMembersRecord member : results) {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(member.getUuid()));
-
-                if (player.hasPlayedBefore()) players.add(player);
+                players.add(player);
             }
 
             return players;
@@ -320,7 +319,7 @@ public class FactionsDatabaseManager {
             List<OfflinePlayer> players = new ArrayList<>();
             for (FactionBansRecord bannedPlayer : results) {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(bannedPlayer.getUuid()));
-                if (player.hasPlayedBefore()) players.add(player);
+                players.add(player);
             }
 
             return players;

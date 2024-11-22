@@ -4,7 +4,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import lombok.RequiredArgsConstructor;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.execution.postprocessor.CommandPostprocessingContext;
@@ -41,7 +41,7 @@ public class CooldownManager {
 
         if (cooldownEnd != null && now.isBefore(cooldownEnd)) {
             long secondsLeft = Duration.between(now, cooldownEnd).getSeconds();
-            Messages.COOLDOWN.send(player, PlayerHandler.getLocale(playerId), "cooldown", String.valueOf(secondsLeft));
+            Messages.COOLDOWN.send(player, PlayerAPI.getLocale(playerId), "cooldown", String.valueOf(secondsLeft));
             return true;
         }
 

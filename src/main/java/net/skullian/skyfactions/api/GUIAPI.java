@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -30,7 +30,7 @@ public class GUIAPI {
      * @throws IllegalArgumentException
      */
     public static GUIData getGUIData(String guiName, Player player) throws IllegalArgumentException {
-        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get(guiName);
+        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerAPI.getLocale(player.getUniqueId()), getFallbackLanguage()).get(guiName);
         if (config != null) {
             String guiTitle = config.getString("TITLE").replace("<player_name>", player.getName());
             String openSound = config.getString("OPEN_SOUND");
@@ -57,7 +57,7 @@ public class GUIAPI {
      * @throws IllegalArgumentException
      */
     public static List<ItemData> getItemData(String guiName, OfflinePlayer player) throws IllegalArgumentException {
-        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get(guiName);
+        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerAPI.getLocale(player.getUniqueId()), getFallbackLanguage()).get(guiName);
         if (config != null) {
 
             Section itemsConfig = config.getSection("ITEMS");
@@ -90,7 +90,7 @@ public class GUIAPI {
      * @throws RuntimeException
      */
     public static List<PaginationItemData> getPaginationData(Player player) throws RuntimeException {
-        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), getFallbackLanguage()).get("pagination");
+        YamlDocument config = GUIEnums.configs.getOrDefault(PlayerAPI.getLocale(player.getUniqueId()), getFallbackLanguage()).get("pagination");
         if (config != null) {
 
             Section itemsConfig = config.getSection("ITEMS");

@@ -9,11 +9,10 @@ import org.jetbrains.annotations.NotNull;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.notification.NotificationData;
-import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
@@ -30,7 +29,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
 
     @Override
     public ItemProvider getItemProvider() {
-        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
+        String locale = PlayerAPI.getLocale(getPLAYER().getUniqueId());
 
         String title = NotificationType.valueOf(DATA.getType()).getTitle(locale);
         String description = NotificationType.valueOf(DATA.getType()).getDescription(locale);
@@ -63,7 +62,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
             player.closeInventory();
 
             SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId()).removeNotification(DATA);
-            Messages.NOTIFICATION_DISMISS_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.NOTIFICATION_DISMISS_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
         }
     }
 

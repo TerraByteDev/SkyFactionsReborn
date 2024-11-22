@@ -2,7 +2,7 @@ package net.skullian.skyfactions.gui.items.obelisk.member_manage;
 
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
@@ -28,7 +28,7 @@ public class MemberRankItem extends SkyItem {
         Faction faction = (Faction) getOptionals()[0];
 
         if (!Settings.FACTION_MANAGE_RANK_PERMISSIONS.getList().contains(faction.getRankType(getPLAYER().getUniqueId()).getRankValue())) {
-            builder.addLoreLines(toList(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(PlayerHandler.getLocale(getPLAYER().getUniqueId()))));
+            builder.addLoreLines(toList(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(PlayerAPI.getLocale(getPLAYER().getUniqueId()))));
         }
 
         return builder;

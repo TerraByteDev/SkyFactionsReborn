@@ -6,11 +6,10 @@ import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
@@ -18,7 +17,6 @@ import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,41 +52,45 @@ public class IslandUntrustCommand extends CommandTemplate {
             @Argument(value = "target", suggestions = "onlinePlayers") String playerName
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-
         OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
-        if (!target.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
-            return;
-        }
-
-        IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((is, ex) -> {
-            if (ex != null) {
-                ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
+        PlayerAPI.isPlayerRegistered(target.getUniqueId()).whenComplete((isRegistered, err) -> {
+            if (err != null) {
+                ErrorUtil.handleError(player, "check if that player is registered", "SQL_PLAYER_GET", err);
                 return;
-            } else if (is == null) {
-                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            } else if (!isRegistered) {
+                Messages.UNKNOWN_PLAYER.send(player, PlayerAPI.getLocale(player.getUniqueId()), "player", playerName);
                 return;
             }
 
-            SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().isPlayerTrusted(target.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
-                if (throwable != null) {
-                    ErrorUtil.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", throwable);
+            IslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((is, ex) -> {
+                if (ex != null) {
+                    ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
+                    return;
+                } else if (is == null) {
+                    Messages.NO_ISLAND.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                     return;
                 }
 
-                if (isTrusted) {
-                    SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().removePlayerTrust(target.getUniqueId(), is.getId()).whenComplete((ignored, exc) -> {
-                        if (exc != null) {
-                            ErrorUtil.handleError(player, "untrust a player", "SQL_TRUST_REMOVE", exc);
-                            return;
-                        }
+                SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().isPlayerTrusted(target.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
+                    if (throwable != null) {
+                        ErrorUtil.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", throwable);
+                        return;
+                    }
 
-                        Messages.UNTRUST_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", target.getName());
-                    });
-                } else {
-                    Messages.UNTRUST_FAILURE.send(player, PlayerHandler.getLocale(player.getUniqueId()));
-                }
+                    if (isTrusted) {
+                        SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().removePlayerTrust(target.getUniqueId(), is.getId()).whenComplete((ignored, exc) -> {
+                            if (exc != null) {
+                                ErrorUtil.handleError(player, "untrust a player", "SQL_TRUST_REMOVE", exc);
+                                return;
+                            }
+
+                            Messages.UNTRUST_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "player", target.getName());
+                        });
+                    } else {
+                        Messages.UNTRUST_FAILURE.send(player, PlayerAPI.getLocale(player.getUniqueId()));
+                    }
+                });
             });
         });
     }

@@ -4,6 +4,9 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.database.struct.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -12,11 +15,41 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class PlayerAPI {
 
     // Player Data //
+
+    public static final Map<UUID, PlayerData> playerData = new HashMap<>();
+
+    public static CompletableFuture<Boolean> isPlayerRegistered(UUID uuid) {
+        if (playerData.containsKey(uuid)) return CompletableFuture.completedFuture(true);
+
+        return getPlayerData(uuid).handle((data, ex) -> data != null);
+    }
+
+    public static CompletableFuture<PlayerData> getPlayerData(UUID uuid) {
+        if (playerData.containsKey(uuid)) return CompletableFuture.completedFuture(playerData.get(uuid));
+
+        return SkyFactionsReborn.getDatabaseManager().getPlayerManager().getPlayerData(uuid).handle((data, ex) -> {
+            if (data != null) {
+                playerData.put(uuid, data);
+            }
+            return data;
+        });
+    }
+
+    public static String getLocale(UUID uuid) {
+        return playerData.getOrDefault(uuid, getDefaultPlayerData()).getLOCALE();
+    }
+
+    private static PlayerData getDefaultPlayerData() {
+        return new PlayerData(null, null, 0, Messages.getDefaulLocale());
+    }
 
     // Skulls //
 

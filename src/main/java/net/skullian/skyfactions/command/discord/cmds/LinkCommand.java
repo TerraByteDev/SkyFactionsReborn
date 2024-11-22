@@ -5,12 +5,11 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -32,10 +31,10 @@ public class LinkCommand extends CommandTemplate {
 
                 if (id == null) {
                     String generatedCode = SkyFactionsReborn.getDiscordHandler().createLinkCode(player);
-                    Messages.DISCORD_LINK_PROMPT.send(player, PlayerHandler.getLocale(player.getUniqueId()), "code", generatedCode);
+                    Messages.DISCORD_LINK_PROMPT.send(player, PlayerAPI.getLocale(player.getUniqueId()), "code", generatedCode);
                 } else {
                     User retrivedUser = SkyFactionsReborn.getDiscordHandler().JDA.getUserById(id);
-                    Messages.DISCORD_ALREADY_LINKED.send(player, PlayerHandler.getLocale(player.getUniqueId()), "discord_name", retrivedUser.getName());
+                    Messages.DISCORD_ALREADY_LINKED.send(player, PlayerAPI.getLocale(player.getUniqueId()), "discord_name", retrivedUser.getName());
                 }
             });
 

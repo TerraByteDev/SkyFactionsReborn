@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.gui.items.obelisk.member_manage;
 
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -33,7 +33,7 @@ public class MemberBanItem extends SkyItem {
         Faction faction = (Faction) getOptionals()[0];
 
         if (!Settings.FACTION_BAN_PERMISSIONS.getList().contains(faction.getRankType(getPLAYER().getUniqueId()).getRankValue())) {
-            builder.addLoreLines(toList(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(PlayerHandler.getLocale(getPLAYER().getUniqueId()))));
+            builder.addLoreLines(toList(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(PlayerAPI.getLocale(getPLAYER().getUniqueId()))));
         }
 
         return builder;
@@ -48,9 +48,9 @@ public class MemberBanItem extends SkyItem {
             faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_BAN, "banned", SUBJECT.getName(), "player", player.getName());
             faction.banPlayer(SUBJECT, player);
 
-            Messages.FACTION_MANAGE_BAN_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", SUBJECT.getName());
+            Messages.FACTION_MANAGE_BAN_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "player", SUBJECT.getName());
         } else {
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "ban a player", "debug", "FACTION_MEMBER_UNKNOWN");
+            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "ban a player", "debug", "FACTION_MEMBER_UNKNOWN");
             event.getInventory().close();
         }
     }

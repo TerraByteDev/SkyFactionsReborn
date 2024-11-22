@@ -6,9 +6,8 @@ import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -71,7 +70,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
     @Override
     public ItemBuilder process(ItemBuilder builder) {
         if (getPLAYER().getInventory().firstEmpty() == -1) {
-            builder.addLoreLines(toList(Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(PlayerHandler.getLocale(getPLAYER().getUniqueId()))));
+            builder.addLoreLines(toList(Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(PlayerAPI.getLocale(getPLAYER().getUniqueId()))));
         }
 
         String type = (String) getOptionals()[2];
@@ -92,7 +91,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
             ObeliskPurchaseDefenceUI.promptPlayer(player, TYPE, STRUCT, FACTION);
         } else if (!HAS_PERMISSIONS) {
             SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
-            Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
         }
     }
 }

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import dev.lone.itemsadder.api.CustomStack;
 import io.th0rgal.oraxen.api.OraxenItems;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.DependencyHandler;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -38,13 +38,13 @@ public class RunesAPI {
      */
     public static boolean isStackProhibited(ItemStack stack, Player player) {
         if (!RunesConfig.ALLOW_ENCHANTS.getBoolean() && hasEnchants(stack)) {
-            Messages.RUNE_ENCHANT_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.RUNE_ENCHANT_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             return true;
         } else if (!RunesConfig.ALLOW_LORE.getBoolean() && hasLore(stack)) {
-            Messages.RUNE_GENERAL_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.RUNE_GENERAL_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             return true;
         } else if (!isAllowed(stack)) {
-            Messages.RUNE_GENERAL_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.RUNE_GENERAL_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             return true;
         } else if (DependencyHandler.isEnabled("ItemsAdder") && !RunesConfig.ALLOW_ITEMSADDER_ITEMS.getBoolean() && CustomStack.byItemStack(stack) != null) {
             return true;
@@ -71,7 +71,7 @@ public class RunesAPI {
             if (faction != null) {
                 handleConversion(stacks, player, faction);
             } else {
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "convert to runes", "debug", "SQL_UNKNOWN_FACTION");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "convert to runes", "debug", "SQL_UNKNOWN_FACTION");
                 for (ItemStack stack : stacks) {
                     if (stack != null && !stack.getType().equals(Material.AIR)) {
                         player.getInventory().addItem(stack);
@@ -127,9 +127,9 @@ public class RunesAPI {
                 addRunes(player.getUniqueId(), total);
             }
 
-            Messages.RUNE_CONVERSION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "added", total);
+            Messages.RUNE_CONVERSION_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "added", total);
         } else {
-            Messages.RUNE_INSUFFICIENT_ITEMS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.RUNE_INSUFFICIENT_ITEMS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
         }
     }
 
@@ -192,7 +192,7 @@ public class RunesAPI {
 
             if (container.has(defenceKey, PersistentDataType.STRING)) {
                 String identifier = container.get(defenceKey, PersistentDataType.STRING);
-                DefenceStruct struct = DefencesFactory.defences.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(identifier);
+                DefenceStruct struct = DefencesFactory.defences.getOrDefault(PlayerAPI.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(identifier);
                 if (struct != null) count += struct.getSELL_COST();
             }
         }

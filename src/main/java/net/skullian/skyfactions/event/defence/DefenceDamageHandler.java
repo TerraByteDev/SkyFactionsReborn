@@ -4,7 +4,7 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.defence.struct.DefenceEntityDeathData;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.NamespacedKey;
 import org.bukkit.damage.DamageType;
@@ -50,7 +50,7 @@ public class DefenceDamageHandler implements Listener {
             if (hitEntity.getType().equals(EntityType.PLAYER) && container.has(messageKey, PersistentDataType.STRING)) {
                 String message = container.get(messageKey, PersistentDataType.STRING);
                 Player player = (Player) hitEntity;
-                hitEntity.sendMessage(TextUtility.color(message, PlayerHandler.getLocale(player.getUniqueId()), player));
+                hitEntity.sendMessage(TextUtility.color(message, PlayerAPI.getLocale(player.getUniqueId()), player));
             }
         }
     }
@@ -66,7 +66,7 @@ public class DefenceDamageHandler implements Listener {
             String deathMessage = data.getDEATH_MESSAGE();
             event.deathMessage(TextUtility.color(deathMessage
                     .replaceAll("player_name", player.getName())
-                    .replaceAll("defender", "DEFENDER_NAME"), PlayerHandler.getLocale(player.getUniqueId()), player));
+                    .replaceAll("defender", "DEFENDER_NAME"), PlayerAPI.getLocale(player.getUniqueId()), player));
 
             removeDeadEntity(event.getPlayer(), data);
         }

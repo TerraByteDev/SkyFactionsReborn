@@ -2,7 +2,7 @@ package net.skullian.skyfactions.gui.items.impl;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.util.CooldownManager;
 import net.skullian.skyfactions.util.SoundUtil;
@@ -42,7 +42,7 @@ public abstract class SkyItem implements Item {
 
     @Override
     public ItemProvider getItemProvider() {
-        String locale = PlayerHandler.getLocale(PLAYER.getUniqueId());
+        String locale = PlayerAPI.getLocale(PLAYER.getUniqueId());
 
         Object[] replacements = replacements();
         ItemBuilder builder = new ItemBuilder(STACK)
@@ -80,7 +80,7 @@ public abstract class SkyItem implements Item {
     }
 
     public String[] toList(List<String> strings) {
-        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
+        String locale = PlayerAPI.getLocale(getPLAYER().getUniqueId());
         List<String> formatted = strings.stream()
                 .map(string -> TextUtility.legacyColor(string, locale, getPLAYER()))
                 .collect(Collectors.toList());

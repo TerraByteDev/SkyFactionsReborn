@@ -1,22 +1,19 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.command.faction.FactionCommandHandler;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.util.ErrorUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotation.specifier.Greedy;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -56,7 +53,7 @@ public class FactionBroadcastCommand extends CommandTemplate {
 
             if (faction != null) {
                 if (!Settings.FACTION_CREATE_BROADCAST_PERMISSIONS.getList().contains(faction.getRankType(player.getUniqueId()).getRankValue())) {
-                    Messages.FACTION_ACTION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                    Messages.FACTION_ACTION_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 } else {
                     if (FactionAPI.hasValidName(player, message)) {
                         faction.createAuditLog(player.getUniqueId(), AuditLogType.BROADCAST_CREATE, "player_name", player.getName());

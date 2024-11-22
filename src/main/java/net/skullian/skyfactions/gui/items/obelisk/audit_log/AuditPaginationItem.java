@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.gui.items.obelisk.audit_log;
 
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.AuditLogType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +25,7 @@ public class AuditPaginationItem extends SkyItem {
 
     @Override
     public ItemProvider getItemProvider() {
-        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
+        String locale = PlayerAPI.getLocale(getPLAYER().getUniqueId());
 
         String title = AuditLogType.valueOf(DATA.getType()).getTitle(getPLAYER());
         String description = AuditLogType.valueOf(DATA.getType()).getDescription(getPLAYER());

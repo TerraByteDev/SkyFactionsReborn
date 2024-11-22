@@ -6,7 +6,7 @@ import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.database.struct.InviteData;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.data.PaginationItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
@@ -43,7 +43,7 @@ public class JoinRequestsUI extends PaginatedScreen {
             }
 
             if (faction == null) {
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the faction join requests GUI", "debug", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "open the faction join requests GUI", "debug", "FACTION_NOT_FOUND");
                 return;
             }
 
@@ -52,7 +52,7 @@ public class JoinRequestsUI extends PaginatedScreen {
                 JoinRequestsUI.builder().player(player).inviteData(joinRequests).build().show();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the faction join requests GUI", "debug", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "open the faction join requests GUI", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }

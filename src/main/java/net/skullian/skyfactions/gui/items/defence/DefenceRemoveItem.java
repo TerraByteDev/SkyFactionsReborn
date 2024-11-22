@@ -7,7 +7,7 @@ import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
@@ -61,7 +61,7 @@ public class DefenceRemoveItem extends SkyItem {
             }
 
             DefenceAPI.returnDefence(struct, getPLAYER());
-            Messages.DEFENCE_REMOVE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.DEFENCE_REMOVE_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
 
             if (!(getOptionals()[2] instanceof String)) {
                 Faction faction = (Faction) getOptionals()[2];

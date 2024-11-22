@@ -6,7 +6,7 @@ import java.util.UUID;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.config.types.DefencesConfig;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.event.armor.ArmorEquipEvent;
 import net.skullian.skyfactions.gui.screens.defence.DefenceManageUI;
 import org.bukkit.block.Block;
@@ -68,7 +68,7 @@ public class DefenceInteractionHandler implements Listener {
                     } else if (faction == null) return;
                         else if (!faction.getName().equals(defence.getData().getUUIDFactionName())) return;
                         else if (DefenceAPI.hasPermissions(DefencesConfig.PERMISSION_ACCESS_DEFENCE.getList(), player, faction))
-                            Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                            Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
 
                     DefenceManageUI.promptPlayer(player, defence.getData(), defence.getStruct(), faction);
                 });

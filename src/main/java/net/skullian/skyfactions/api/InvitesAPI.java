@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.api;
 
 import net.skullian.skyfactions.database.struct.InviteData;
+import net.skullian.skyfactions.faction.JoinRequestData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,4 +11,5 @@ import java.util.UUID;
 public class InvitesAPI {
 
     public static final Map<UUID, List<InviteData>> playerIncomingInvites = new HashMap<>();
+    public static final Map<UUID, JoinRequestData> playerJoinRequests = new HashMap<>();
 }

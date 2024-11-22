@@ -6,7 +6,7 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.defence.struct.DefenceData;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
@@ -30,7 +30,7 @@ public class DefenceHostileToggleItem extends SkyItem {
     @Override
     public Object[] replacements() {
         DefenceData data = (DefenceData) getOptionals()[0];
-        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
+        String locale = PlayerAPI.getLocale(getPLAYER().getUniqueId());
 
         return List.of(
                 "operation", data.isTARGET_HOSTILES() ? Messages.DEFENCE_DISABLE_PLACEHOLDER.getString(locale)

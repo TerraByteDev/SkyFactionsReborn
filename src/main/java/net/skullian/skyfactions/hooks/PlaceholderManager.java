@@ -1,12 +1,11 @@
 package net.skullian.skyfactions.hooks;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.RunesAPI;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +43,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
         if (params.equalsIgnoreCase("player_runes")) {
             if (player == null) return "-1";
             if (RunesAPI.playerRunes.containsKey(player.getUniqueId()))
@@ -93,7 +92,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
         } else if (params.equalsIgnoreCase("faction_rank")) {
             if (player == null) return "UNKNOWN PLAYER";
             if (FactionAPI.factionCache.containsKey(player.getUniqueId()))
-                return TextUtility.legacyColor(FactionAPI.getCachedFaction(player.getUniqueId()).getRank(player.getUniqueId()), PlayerHandler.getLocale(player.getUniqueId()), player);
+                return TextUtility.legacyColor(FactionAPI.getCachedFaction(player.getUniqueId()).getRank(player.getUniqueId()), PlayerAPI.getLocale(player.getUniqueId()), player);
             else return TextUtility.legacyColor("&cN/A", locale, player);
         }
         return null;

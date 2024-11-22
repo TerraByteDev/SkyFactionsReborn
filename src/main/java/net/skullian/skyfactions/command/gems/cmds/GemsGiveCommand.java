@@ -4,6 +4,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
@@ -73,9 +74,16 @@ public class GemsGiveCommand extends CommandTemplate {
 
         if (type.equalsIgnoreCase("player")) {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
-            if (!offlinePlayer.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
-            } else {
+
+            PlayerAPI.isPlayerRegistered(offlinePlayer.getUniqueId()).whenComplete((isRegistered, ex) -> {
+                if (ex != null) {
+                    ErrorUtil.handleError(sender, "check if that player is registered", "SQL_PLAYER_GET", ex);
+                    return;
+                } else if (!isRegistered) {
+                    Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
+                    return;
+                }
+
                 IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, throwable) -> {
                     if (throwable != null) {
                         ErrorUtil.handleError(sender, "check if the specified player had an island", "SQL_ISLAND_GET", throwable);
@@ -88,7 +96,7 @@ public class GemsGiveCommand extends CommandTemplate {
                     GemsAPI.addGems(offlinePlayer.getUniqueId(), amount);
                     Messages.GEM_GIVE_SUCCESS.send(sender, locale, "amount", amount, "name", offlinePlayer.getName());
                 });
-            }
+            });
         } else if (type.equalsIgnoreCase("faction")) {
             FactionAPI.getFaction(playerFactionName).whenComplete((faction, throwable) -> {
                 if (throwable != null) {

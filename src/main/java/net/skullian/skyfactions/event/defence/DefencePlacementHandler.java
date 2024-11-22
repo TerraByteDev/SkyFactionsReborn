@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.skullian.skyfactions.api.RegionAPI;
 import net.skullian.skyfactions.database.tables.DefenceLocations;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -53,7 +53,7 @@ public class DefencePlacementHandler implements Listener {
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         ItemStack stack = event.getItemInHand();
         NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
@@ -272,7 +272,7 @@ public class DefencePlacementHandler implements Listener {
                 if (container.has(defenceKey, PersistentDataType.STRING)) {
                     String name = container.get(defenceKey, PersistentDataType.STRING);
                     String data = container.get(dataKey, PersistentDataType.STRING);
-                    DefenceStruct defence = DefencesFactory.defences.getOrDefault(PlayerHandler.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(name);
+                    DefenceStruct defence = DefencesFactory.defences.getOrDefault(PlayerAPI.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(name);
 
                     try {
                         if (defence != null) {

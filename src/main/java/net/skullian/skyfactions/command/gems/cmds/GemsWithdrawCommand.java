@@ -1,21 +1,18 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.Arrays;
 import java.util.List;
@@ -61,15 +58,15 @@ public class GemsWithdrawCommand extends CommandTemplate {
 
                     GemsAPI.subtractGems(player.getUniqueId(), (parsedAmount - remainingItems));
 
-                    Messages.GEMS_WITHDRAW_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "amount", parsedAmount);
+                    Messages.GEMS_WITHDRAW_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "amount", parsedAmount);
                     if (remainingItems > 0) {
-                        Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                        Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                     }
                 } catch (NumberFormatException exception) {
-                    Messages.INCORRECT_USAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "usage", getSyntax());
+                    Messages.INCORRECT_USAGE.send(player, PlayerAPI.getLocale(player.getUniqueId()), "usage", getSyntax());
                 }
             } else {
-                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.NO_ISLAND.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             }
         });
 

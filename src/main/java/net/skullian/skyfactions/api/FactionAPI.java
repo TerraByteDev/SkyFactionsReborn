@@ -15,10 +15,9 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.database.cache.CacheEntry;
 import net.skullian.skyfactions.defence.Defence;
 import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.island.IslandModificationAction;
@@ -68,7 +67,7 @@ public class FactionAPI {
             RegionAPI.teleportPlayerToLocation(player, faction.getIsland().getCenter(world));
             onFactionLoad(faction, player);
         } else {
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "teleport to your faction's island", "debug", "WORLD_NOT_EXIST");
+            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "teleport to your faction's island", "debug", "WORLD_NOT_EXIST");
         }
     }
 
@@ -124,7 +123,7 @@ public class FactionAPI {
                 }
 
 
-                Messages.FACTION_DISBAND_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.FACTION_DISBAND_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             });
         }
     }
@@ -238,13 +237,13 @@ public class FactionAPI {
         int length = name.length();
         if (length >= minimumLength && length <= maximumLength) {
             if (!Settings.FACTION_CREATION_ALLOW_NUMBERS.getBoolean() && TextUtility.containsNumbers(name)) {
-                Messages.FACTION_NO_NUMBERS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.FACTION_NO_NUMBERS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return false;
             } else if (!Settings.FACTION_CREATION_ALLOW_NON_ENGLISH.getBoolean() && !TextUtility.isEnglish(name)) {
-                Messages.FACTION_NON_ENGLISH.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.FACTION_NON_ENGLISH.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return false;
             } else if (!Settings.FACTION_CREATION_ALLOW_SYMBOLS.getBoolean() && TextUtility.hasSymbols(name)) {
-                Messages.FACTION_NO_SYMBOLS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.FACTION_NO_SYMBOLS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return false;
             } else {
                 boolean regexMatch = false;
@@ -258,7 +257,7 @@ public class FactionAPI {
                 }
 
                 if (regexMatch) {
-                    Messages.FACTION_NAME_PROHIBITED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                    Messages.FACTION_NAME_PROHIBITED.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                     return false;
                 } else {
                     return true;
@@ -266,7 +265,7 @@ public class FactionAPI {
             }
 
         } else {
-            Messages.FACTION_NAME_LENGTH_LIMIT.send(player, PlayerHandler.getLocale(player.getUniqueId()), "min", minimumLength, "max", maximumLength);
+            Messages.FACTION_NAME_LENGTH_LIMIT.send(player, PlayerAPI.getLocale(player.getUniqueId()), "min", minimumLength, "max", maximumLength);
             return false;
         }
     }
@@ -314,7 +313,7 @@ public class FactionAPI {
             RegionAPI.teleportPlayerToLocation(player, island.getCenter(world));
 
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
-            Messages.FACTION_CREATION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.FACTION_CREATION_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
         });
     }
 

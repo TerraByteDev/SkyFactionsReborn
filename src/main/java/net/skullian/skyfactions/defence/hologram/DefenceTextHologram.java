@@ -41,7 +41,7 @@ import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceData;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.text.TextUtility;
 
 public class DefenceTextHologram {
@@ -169,7 +169,7 @@ public class DefenceTextHologram {
     }
 
     private Component createText(Player player) {
-        String locale = PlayerHandler.locales.get(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
         DefenceStruct struct = DefencesFactory.defences.getOrDefault(locale, DefencesFactory.defences.get(Messages.getDefaulLocale())).get(defence.getIDENTIFIER());
         Component[] components = new Component[3];
         

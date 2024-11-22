@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.gui.items.obelisk.member_manage;
 
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class MemberKickItem extends SkyItem {
         Faction faction = (Faction) getOptionals()[0];
 
         if (!Settings.FACTION_KICK_PERMISSIONS.getList().contains(faction.getRankType(getPLAYER().getUniqueId()).getRankValue())) {
-            builder.addLoreLines(toList(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(PlayerHandler.getLocale(getPLAYER().getUniqueId()))));
+            builder.addLoreLines(toList(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(PlayerAPI.getLocale(getPLAYER().getUniqueId()))));
         }
 
         return builder;
@@ -56,13 +56,13 @@ public class MemberKickItem extends SkyItem {
                     faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_KICK, "kicked", SUBJECT.getName(), "player", player.getName());
                     faction.kickPlayer(SUBJECT, player);
 
-                    Messages.FACTION_MANAGE_KICK_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", SUBJECT.getName());
+                    Messages.FACTION_MANAGE_KICK_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "player", SUBJECT.getName());
                 } else {
-                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "kick a player", "debug", "FACTION_MEMBER_UNKNOWN");
+                    Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "kick a player", "debug", "FACTION_MEMBER_UNKNOWN");
                     event.getInventory().close();
                 }
             } else {
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "kick a player", "debug", "FACTION_NOT_EXIST");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "kick a player", "debug", "FACTION_NOT_EXIST");
                 event.getInventory().close();
             }
         });

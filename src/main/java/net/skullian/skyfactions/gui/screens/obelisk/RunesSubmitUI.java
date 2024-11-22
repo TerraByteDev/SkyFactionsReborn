@@ -1,12 +1,11 @@
 package net.skullian.skyfactions.gui.screens.obelisk;
 
 import lombok.Builder;
-import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
 import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
@@ -15,7 +14,6 @@ import net.skullian.skyfactions.gui.screens.Screen;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.gui.Gui;
@@ -62,7 +60,7 @@ public class RunesSubmitUI extends Screen {
             RunesSubmitUI.builder().player(player).type(type).build().show();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open your runes submit GUI", "debug", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "open your runes submit GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 

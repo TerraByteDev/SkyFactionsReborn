@@ -4,7 +4,7 @@ import lombok.Builder;
 import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.data.PaginationItemData;
@@ -39,7 +39,7 @@ public class MemberManagementUI extends PaginatedScreen {
             MemberManagementUI.builder().player(player).faction(faction).build().show();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the member management GUI", "debug", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "open the member management GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 

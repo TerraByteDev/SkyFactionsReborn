@@ -3,6 +3,7 @@ package net.skullian.skyfactions.event;
 import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.ObeliskConfig;
 import net.skullian.skyfactions.gui.screens.obelisk.FactionObeliskUI;
@@ -76,7 +77,7 @@ public class ObeliskInteractionListener implements Listener {
             return;
 
         event.setCancelled(true);
-        Messages.OBELISK_DESTROY_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+        Messages.OBELISK_DESTROY_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()));
     }
 
     // Listen for interaction with the Obelisk
@@ -102,7 +103,7 @@ public class ObeliskInteractionListener implements Listener {
 
         hasPermissions(player, type, owner).thenAccept((has) -> {
             if (!has) {
-                Messages.OBELISK_ACCESS_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.OBELISK_ACCESS_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             }
         });
     }

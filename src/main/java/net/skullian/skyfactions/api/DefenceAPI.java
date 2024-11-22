@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.defence.struct.DefenceData;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -43,7 +43,7 @@ public class DefenceAPI {
         NamespacedKey nameKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
 
         ItemMeta meta = stack.getItemMeta();
-        meta.displayName(TextUtility.color(defence.getNAME(), PlayerHandler.getLocale(player.getUniqueId()), player));
+        meta.displayName(TextUtility.color(defence.getNAME(), PlayerAPI.getLocale(player.getUniqueId()), player));
         meta.getPersistentDataContainer().set(nameKey, PersistentDataType.STRING, defence.getIDENTIFIER());
 
         meta.lore(getFormattedLore(defence, defence.getITEM_LORE(), player));
@@ -90,7 +90,7 @@ public class DefenceAPI {
                     .replace("cooldown", cooldown)
                     .replace("healing", healing)
                     .replace("distance", distance)
-                    .replace("cost", String.valueOf(struct.getBUY_COST())), PlayerHandler.getLocale(player.getUniqueId()), player));
+                    .replace("cost", String.valueOf(struct.getBUY_COST())), PlayerAPI.getLocale(player.getUniqueId()), player));
         }
 
         return newLore;
@@ -124,7 +124,7 @@ public class DefenceAPI {
     }
 
     public static ItemBuilder processPermissions(ItemBuilder builder, Player player) {
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         for (String line : Messages.DEFENCE_INSUFFICIENT_PERMISSIONS_LORE.getStringList(locale)) {
             builder.addLoreLines(TextUtility.legacyColor(line, locale, player));

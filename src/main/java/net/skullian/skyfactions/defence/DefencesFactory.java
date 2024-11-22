@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
@@ -24,7 +23,6 @@ import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
-import io.lumine.mythic.bukkit.utils.events.extra.ArmorEquipEvent;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.skullian.skyfactions.SkyFactionsReborn;
@@ -37,7 +35,7 @@ import net.skullian.skyfactions.defence.struct.DefenceAttributeStruct;
 import net.skullian.skyfactions.defence.struct.DefenceEffectStruct;
 import net.skullian.skyfactions.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.AuditLogType;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.SLogger;
@@ -270,14 +268,14 @@ public class DefencesFactory {
 
     public static void addDefence(Player player, DefenceStruct defence, Faction faction) {
         ItemStack stack = DefenceAPI.createDefenceStack(defence, player);
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         if (faction != null) {
             // assume faction type
             faction.subtractRunes(defence.getBUY_COST());
             player.getInventory().addItem(stack);
             SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
-            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "defence_name", TextUtility.color(defence.getNAME(), locale, player));
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "defence_name", TextUtility.color(defence.getNAME(), locale, player));
 
             faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_PURCHASE, "player_name", player.getName(), "defence_name", TextUtility.color(defence.getNAME(), locale, player));
         } else {
@@ -285,7 +283,7 @@ public class DefencesFactory {
             RunesAPI.removeRunes(player.getUniqueId(), defence.getBUY_COST());
             player.getInventory().addItem(stack);
             SoundUtil.playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1);
-            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "defence_name", TextUtility.color(defence.getNAME(), locale, player));
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "defence_name", TextUtility.color(defence.getNAME(), locale, player));
         }
     }
 

@@ -27,6 +27,7 @@ public class CacheEntry {
     private final List<Location> defencesToRegister = new ArrayList<>(); // Player * Faction
     private final List<Location> defencesToRemove = new ArrayList<>(); // Player & Faction
     @Setter private String newLocale; // Player & Faction
+    @Setter private boolean shouldRegister; // Player Exclusive
 
     private final List<NotificationData> notificationsToAdd = new ArrayList<>(); // Player Exclusive
     private final List<NotificationData> notificationsToRemove = new ArrayList<>(); // Player Exclusive
@@ -171,6 +172,9 @@ public class CacheEntry {
         } else {
             UUID uuid = UUID.fromString(Objects.requireNonNull(toCache));
             return CompletableFuture.allOf(
+                    SkyFactionsReborn.getDatabaseManager().getPlayerManager().registerPlayer(uuid).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to register player " + uuid, ex);
+                    }),
                     SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyGems(uuid, gems, false).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to set gems of player " + uuid, ex);
                     }),
@@ -184,7 +188,7 @@ public class CacheEntry {
                         throw new RuntimeException("Failed to remove defences for player " + uuid, ex);
                     }),
                     SkyFactionsReborn.getDatabaseManager().getPlayerManager().setPlayerLocale(uuid, newLocale).exceptionally((ex) -> {
-                        throw new RuntimeException("Failed to update defendes for player " + uuid, ex);
+                        throw new RuntimeException("Failed to update defences for player " + uuid, ex);
                     }),
                     SkyFactionsReborn.getDatabaseManager().getNotificationManager().createNotifications(notificationsToAdd).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to create notifications for player " + uuid, ex);

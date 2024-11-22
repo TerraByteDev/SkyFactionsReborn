@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.gui.items.obelisk;
 
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -32,7 +32,7 @@ public class ObeliskInvitesItem extends SkyItem {
             if (FACTION.isOwner(player) || FACTION.isAdmin(player) || FACTION.isModerator(player)) {
                 FactionInviteTypeSelectionUI.promptPlayer(player);
             } else {
-                Messages.OBELISK_GUI_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()), "rank", Messages.FACTION_MODERATOR_TITLE.get(PlayerHandler.getLocale(player.getUniqueId())));
+                Messages.OBELISK_GUI_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()), "rank", Messages.FACTION_MODERATOR_TITLE.get(PlayerAPI.getLocale(player.getUniqueId())));
             }
         } else if (TYPE.equals("player")) {
             PlayerInviteTypeSelectionUI.promptPlayer(player);

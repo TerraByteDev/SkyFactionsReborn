@@ -13,12 +13,11 @@ import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.AsyncSkyItem;
 import net.skullian.skyfactions.util.SoundUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
@@ -39,7 +38,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
     public ItemBuilder process(ItemBuilder builder) {
         String type = (String) getOptionals()[0];
         DefenceStruct struct = (DefenceStruct) getOptionals()[2];
-        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
+        String locale = PlayerAPI.getLocale(getPLAYER().getUniqueId());
 
         if (type.equals("faction")) {
             Faction faction = (Faction) getOptionals()[1];

@@ -1,15 +1,13 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -36,14 +34,14 @@ public class FactionDisbandCommand extends CommandTemplate {
             Player player,
             @Argument(value = "confirm") @Nullable String confirm
     ) {
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
             } else if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.NOT_IN_FACTION.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return;
             } else if (!faction.getOwner().getUniqueId().equals(player.getUniqueId())) {
                 Messages.FACTION_DISBAND_OWNER_REQUIRED.send(player, locale);
@@ -62,7 +60,7 @@ public class FactionDisbandCommand extends CommandTemplate {
                     Messages.FACTION_DISBAND_COMMAND_BLOCK.send(player, locale);
                 }
             } else {
-                Messages.INCORRECT_USAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "usage", getSyntax());
+                Messages.INCORRECT_USAGE.send(player, PlayerAPI.getLocale(player.getUniqueId()), "usage", getSyntax());
             }
 
         });

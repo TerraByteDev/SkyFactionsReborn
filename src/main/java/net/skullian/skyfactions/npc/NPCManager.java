@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.island.impl.FactionIsland;
 import net.skullian.skyfactions.island.impl.PlayerIsland;
@@ -48,21 +48,21 @@ public class NPCManager {
             if (faction == null) return; // probably only when a non-per-island npc is clicked.
 
             if (!faction.isInFaction(player.getUniqueId())) {
-                Messages.NPC_ACCESS_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.NPC_ACCESS_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return;
             }
 
-            process(Messages.NPC_FACTION_ISLANDS_ACTIONS.getStringList(PlayerHandler.getLocale(player.getUniqueId())), player);
+            process(Messages.NPC_FACTION_ISLANDS_ACTIONS.getStringList(PlayerAPI.getLocale(player.getUniqueId())), player);
         } else {
             UUID owner = playerNPCs.get(npc);
             if (owner == null) return;
 
             if (!owner.equals(player.getUniqueId())) {
-                Messages.NPC_ACCESS_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.NPC_ACCESS_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return;
             }
 
-            process(Messages.NPC_PLAYER_ISLANDS_ACTIONS.getStringList(PlayerHandler.getLocale(player.getUniqueId())), player);
+            process(Messages.NPC_PLAYER_ISLANDS_ACTIONS.getStringList(PlayerAPI.getLocale(player.getUniqueId())), player);
         }
     }
 
@@ -73,7 +73,7 @@ public class NPCManager {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         SkyNPC npc = factory.create(
             "player-" + island.getId(),
-            TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", player.getName()), PlayerHandler.getLocale(playerUUID), player),
+            TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", player.getName()), PlayerAPI.getLocale(playerUUID), player),
             getOffsetLocation(island.getCenter(Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString())), Settings.NPC_PLAYER_ISLANDS_OFFSET.getIntegerList()),
             Settings.NPC_PLAYER_ISLANDS_SKIN.getString().replace("player_name", Bukkit.getOfflinePlayer(playerUUID).getName()),
             EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()),
@@ -110,7 +110,7 @@ public class NPCManager {
     }
 
     private void process(List<String> actions, Player player) {
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
         for (String request : actions) {
             String[] parts = request.split("\\[([^]]+)\\]: (.+)");
             String action = parts[0].trim().toLowerCase();
@@ -210,7 +210,7 @@ public class NPCManager {
                                         return;
                                     }
                                     OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
-                                    npc.updateDisplayName(TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", owner.getName()), PlayerHandler.getLocale(uuid), owner));
+                                    npc.updateDisplayName(TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", owner.getName()), PlayerAPI.getLocale(uuid), owner));
                                     npc.updateEntityType(EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()));
                                     npc.updateSkin(Settings.NPC_PLAYER_ISLANDS_SKIN.toString().replace("player_name", owner.getName()));
                                     affected.incrementAndGet();

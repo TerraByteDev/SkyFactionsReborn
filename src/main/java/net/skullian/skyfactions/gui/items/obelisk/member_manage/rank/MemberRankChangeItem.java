@@ -1,9 +1,8 @@
 package net.skullian.skyfactions.gui.items.obelisk.member_manage.rank;
 
-import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.faction.RankType;
 import net.skullian.skyfactions.gui.data.ItemData;
@@ -57,7 +56,7 @@ public class MemberRankChangeItem extends SkyItem {
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[2];
 
         return List.of(
-                "is_selected", ((TYPE == null && faction.getRankType(subject.getUniqueId()).equals(type)) || (type.equals(TYPE))) ? Messages.FACTION_MANAGE_RANK_SELECTED.getString(PlayerHandler.getLocale(getPLAYER().getUniqueId()))
+                "is_selected", ((TYPE == null && faction.getRankType(subject.getUniqueId()).equals(type)) || (type.equals(TYPE))) ? Messages.FACTION_MANAGE_RANK_SELECTED.getString(PlayerAPI.getLocale(getPLAYER().getUniqueId()))
                         : ""
         ).toArray();
     }

@@ -6,7 +6,7 @@ import net.skullian.skyfactions.api.GUIAPI;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.config.types.GUIEnums;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.data.PaginationItemData;
 import net.skullian.skyfactions.gui.items.EmptyItem;
@@ -16,8 +16,6 @@ import net.skullian.skyfactions.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.gui.items.obelisk.notification.ObeliskNotificationPaginationItem;
 import net.skullian.skyfactions.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.notification.NotificationData;
-import net.skullian.skyfactions.util.ErrorUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +43,7 @@ public class PlayerObeliskNotificationUI extends PaginatedScreen {
             PlayerObeliskNotificationUI.builder().player(player).notifications(notifications).build().show();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "open the notifications GUI", "debug", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "open the notifications GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 

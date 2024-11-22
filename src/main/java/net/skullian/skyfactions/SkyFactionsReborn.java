@@ -26,12 +26,13 @@ import net.skullian.skyfactions.database.DatabaseManager;
 import net.skullian.skyfactions.database.cache.CacheService;
 import net.skullian.skyfactions.defence.block.BrokenBlockService;
 import net.skullian.skyfactions.discord.DiscordHandler;
+import net.skullian.skyfactions.event.PlayerListener;
 import net.skullian.skyfactions.event.armor.ArmorListener;
 import net.skullian.skyfactions.event.defence.DefenceDamageHandler;
 import net.skullian.skyfactions.event.defence.DefenceInteractionHandler;
 import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.event.ObeliskInteractionListener;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.npc.NPCManager;
 import net.skullian.skyfactions.util.DependencyHandler;
 import net.skullian.skyfactions.util.SLogger;
@@ -124,7 +125,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
         SLogger.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new ArmorListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerHandler(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
         getServer().getPluginManager().registerEvents(new DefenceDamageHandler(), this);
         getServer().getPluginManager().registerEvents(new DefencePlacementHandler(), this);

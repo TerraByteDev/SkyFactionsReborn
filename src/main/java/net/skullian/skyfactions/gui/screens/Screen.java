@@ -2,7 +2,7 @@ package net.skullian.skyfactions.gui.screens;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.GUIAPI;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.gui.data.GUIData;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.AirItem;
@@ -36,7 +36,7 @@ public abstract class Screen {
     protected final void initWindow() {
         window = Window.single()
                 .setViewer(player)
-                .setTitle(TextUtility.legacyColor(guiData.getTITLE(), PlayerHandler.getLocale(player.getUniqueId()), player))
+                .setTitle(TextUtility.legacyColor(guiData.getTITLE(), PlayerAPI.getLocale(player.getUniqueId()), player))
                 .setGui(registerItems())
                 .build();
     }

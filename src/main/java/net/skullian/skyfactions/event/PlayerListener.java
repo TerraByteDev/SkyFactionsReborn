@@ -2,20 +2,16 @@ package net.skullian.skyfactions.event;
 
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.api.IslandAPI;
-import net.skullian.skyfactions.api.NotificationAPI;
-import net.skullian.skyfactions.api.RegionAPI;
+import net.skullian.skyfactions.api.*;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
+import net.skullian.skyfactions.database.struct.PlayerData;
 import net.skullian.skyfactions.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.util.CooldownManager;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -30,16 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 
-public class PlayerHandler implements Listener {
-
-    public static final Map<UUID, String> locales = new HashMap<>();
-
-    public static String getLocale(UUID uuid) {
-        return locales.getOrDefault(uuid, Messages.getDefaulLocale());
-    }
+public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -48,7 +37,7 @@ public class PlayerHandler implements Listener {
             throw new RuntimeException("Database is closed! Cannot allow player to join without risking dupes and unexpected functionalities.");
         }
 
-        SkyFactionsReborn.getDatabaseManager().getPlayerManager().isPlayerRegistered(event.getPlayer()).whenComplete((isRegistered, ex) -> {
+        PlayerAPI.isPlayerRegistered(event.getPlayer().getUniqueId()).whenComplete((isRegistered, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -56,8 +45,14 @@ public class PlayerHandler implements Listener {
 
             if (!isRegistered) {
                 SLogger.info("Player [{}] has not joined before. Syncing with database.", event.getPlayer().getName());
-                SkyFactionsReborn.getDatabaseManager().getPlayerManager().registerPlayer(event.getPlayer());
-                locales.put(event.getPlayer().getUniqueId(), event.getPlayer().locale().getLanguage());
+                SkyFactionsReborn.getCacheService().getEntry(event.getPlayer().getUniqueId()).setShouldRegister(true);
+
+                PlayerAPI.playerData.put(event.getPlayer().getUniqueId(), new PlayerData(
+                        event.getPlayer().getUniqueId(),
+                        "none",
+                        0,
+                        event.getPlayer().locale().getLanguage()
+                ));
             } else {
                 SkyFactionsReborn.getDatabaseManager().getPlayerManager().getPlayerLocale(event.getPlayer().getUniqueId()).whenComplete((locale, ex2) -> {
                     if (ex2 != null) {
@@ -65,7 +60,7 @@ public class PlayerHandler implements Listener {
                         return;
                     }
 
-                    locales.put(event.getPlayer().getUniqueId(), locale);
+                    PlayerAPI.getPlayerData(event.getPlayer().getUniqueId());
                 });
             }
         });

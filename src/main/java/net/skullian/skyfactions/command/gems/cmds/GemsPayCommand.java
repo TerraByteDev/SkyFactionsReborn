@@ -1,19 +1,17 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -45,20 +43,25 @@ public class GemsPayCommand extends CommandTemplate {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
-        if (!offlinePlayer.hasPlayedBefore()) {
-            Messages.UNKNOWN_PLAYER.send(player, PlayerHandler.getLocale(player.getUniqueId()), "player", playerName);
-        } else {
+        PlayerAPI.isPlayerRegistered(offlinePlayer.getUniqueId()).whenComplete((isRegistered, ex) -> {
+            if (ex != null) {
+                ErrorUtil.handleError(player, "check if that player is registered", "SQL_PLAYER_GET", ex);
+                return;
+            } else if (!isRegistered) {
+                Messages.UNKNOWN_PLAYER.send(player, PlayerAPI.getLocale(player.getUniqueId()), "player", playerName);
+                return;
+            }
 
             int playerGemCount = GemsAPI.getGems(player.getUniqueId());
             if (playerGemCount >= amount) {
                 GemsAPI.subtractGems(player.getUniqueId(), amount);
                 GemsAPI.addGems(offlinePlayer.getUniqueId(), amount);
 
-                Messages.GEM_ADD_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "amount", amount, "player", offlinePlayer.getName());
+                Messages.GEM_ADD_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "amount", amount, "player", offlinePlayer.getName());
             } else {
-                Messages.INSUFFICIENT_GEMS_COUNT.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.INSUFFICIENT_GEMS_COUNT.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             }
-        }
+        });
     }
 
     public static List<String> permissions = List.of("skyfactions.gems.pay", "skyfactions.gems");

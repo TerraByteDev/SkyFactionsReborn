@@ -1,20 +1,17 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -47,7 +44,7 @@ public class GemsDepositCommand extends CommandTemplate {
                 ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", throwable);
                 return;
             } else if (!hasIsland) {
-                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.NO_ISLAND.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             }
 
             ItemStack currencyItem = GemsAPI.createGemsStack(player);
@@ -60,13 +57,13 @@ public class GemsDepositCommand extends CommandTemplate {
                     int parsedAmount = Integer.parseInt(amount);
                     totalDeposited = depositSpecificAmount(player, currencyItem, parsedAmount);
                 } catch (NumberFormatException exception) {
-                    Messages.INCORRECT_USAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "usage", getSyntax());
+                    Messages.INCORRECT_USAGE.send(player, PlayerAPI.getLocale(player.getUniqueId()), "usage", getSyntax());
                 }
             }
 
             int finalTotalDeposited = totalDeposited;
             GemsAPI.subtractGems(player.getUniqueId(), totalDeposited);
-            Messages.GEMS_DEPOSIT_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "amount", finalTotalDeposited);
+            Messages.GEMS_DEPOSIT_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "amount", finalTotalDeposited);
         });
 
     }

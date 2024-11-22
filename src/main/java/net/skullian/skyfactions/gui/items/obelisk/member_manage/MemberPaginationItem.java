@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.gui.screens.obelisk.member.ManageMemberUI;
@@ -33,7 +33,7 @@ public class MemberPaginationItem extends SkyItem {
     public ItemBuilder process(ItemBuilder builder) {
         Faction faction = (Faction) getOptionals()[2];
 
-        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
+        String locale = PlayerAPI.getLocale(getPLAYER().getUniqueId());
         OfflinePlayer subject = (OfflinePlayer) getOptionals()[1];
 
         if (subject.getUniqueId().equals(getPLAYER().getUniqueId())) {
@@ -58,7 +58,7 @@ public class MemberPaginationItem extends SkyItem {
     @Override
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         Faction faction = (Faction) getOptionals()[2];
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         if (SUBJECT.getUniqueId().equals(player.getUniqueId())) {
             SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND.getInt(), 1);

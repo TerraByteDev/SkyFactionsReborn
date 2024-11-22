@@ -4,12 +4,11 @@ import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -29,9 +28,9 @@ public class UnlinkCommand extends CommandTemplate {
             }
 
             if (id == null) {
-                Messages.DISCORD_NOT_LINKED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.DISCORD_NOT_LINKED.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             } else {
-                Messages.DISCORD_UNLINK_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.DISCORD_UNLINK_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             }
         });
         return true;

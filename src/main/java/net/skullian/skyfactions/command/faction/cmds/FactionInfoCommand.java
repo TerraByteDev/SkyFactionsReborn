@@ -1,21 +1,17 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.ErrorUtil;
-import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -54,7 +50,7 @@ public class FactionInfoCommand extends CommandTemplate {
                 }
 
                 if (!isInFaction) {
-                    Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                    Messages.NOT_IN_FACTION.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 } else {
 
                     FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
@@ -79,7 +75,7 @@ public class FactionInfoCommand extends CommandTemplate {
                 if (faction != null) {
                     sendInfo(player, faction);
                 } else {
-                    Messages.FACTION_NOT_FOUND.send(player, PlayerHandler.getLocale(player.getUniqueId()), "name", name);
+                    Messages.FACTION_NOT_FOUND.send(player, PlayerAPI.getLocale(player.getUniqueId()), "name", name);
                 }
             });
         }
@@ -88,7 +84,7 @@ public class FactionInfoCommand extends CommandTemplate {
     private void sendInfo(Player player, Faction faction) {
 
         Messages.FACTION_INFO_LIST.send(player,
-                PlayerHandler.getLocale(player.getUniqueId()),
+                PlayerAPI.getLocale(player.getUniqueId()),
                 "faction_name", faction.getName(),
                 "motd", faction.getMOTD(),
                 "owner", faction.getOwner().getName(),

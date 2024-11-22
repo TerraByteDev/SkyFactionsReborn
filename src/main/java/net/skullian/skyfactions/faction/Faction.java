@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.SkyFactionsReborn;
-import net.skullian.skyfactions.api.DefenceAPI;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.struct.AuditLogData;
 import net.skullian.skyfactions.database.struct.InviteData;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.island.impl.FactionIsland;
 import net.skullian.skyfactions.notification.NotificationType;
 import net.skullian.skyfactions.util.text.TextUtility;
@@ -21,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -138,7 +136,7 @@ public class Faction {
         List<OfflinePlayer> players = getAllMembers();
         for (OfflinePlayer player : players) {
             if (player.isOnline()) {
-                String locale = PlayerHandler.getLocale(player.getUniqueId());
+                String locale = PlayerAPI.getLocale(player.getUniqueId());
 
                 Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
                         Messages.replace(message.getString(locale), locale, player.getPlayer(), replacements)
@@ -158,7 +156,7 @@ public class Faction {
         List<OfflinePlayer> players = getAllMembers();
         for (OfflinePlayer player : players) {
             if (player.isOnline()) {
-                String locale = PlayerHandler.getLocale(player.getUniqueId());
+                String locale = PlayerAPI.getLocale(player.getUniqueId());
 
                 Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
                         Messages.replace(message, locale, player.getPlayer()));
@@ -357,7 +355,7 @@ public class Faction {
         createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "inviter", inviter.getName(), "player_name", player.getName());
 
         if (player.isOnline()) {
-            Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), PlayerAPI.getLocale(player.getUniqueId()));
         } else {
             NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "player_name", inviter.getName(), "faction_name", name);
         }
@@ -453,7 +451,7 @@ public class Faction {
      */
     public String getRank(UUID playerUUID) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
-        String locale = player.isOnline() ? PlayerHandler.getLocale(player.getUniqueId()) : Messages.getDefaulLocale();
+        String locale = player.isOnline() ? PlayerAPI.getLocale(player.getUniqueId()) : Messages.getDefaulLocale();
 
         if (owner.equals(player)) return Messages.FACTION_OWNER_TITLE.getString(locale);
         if (admins.contains(player)) return Messages.FACTION_ADMIN_TITLE.getString(locale);

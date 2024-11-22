@@ -7,8 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import net.skullian.skyfactions.database.cache.CacheEntry;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.island.IslandModificationAction;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -62,7 +61,7 @@ public class IslandAPI {
             throw new IllegalArgumentException(gasp);
         }
 
-        Messages.ISLAND_CREATING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+        Messages.ISLAND_CREATING.send(player, PlayerAPI.getLocale(player.getUniqueId()));
         RegionAPI.createRegion(player, island.getPosition1(world), island.getPosition2(world), world, player.getUniqueId().toString());
 
         IslandModificationAction action = IslandModificationAction.CREATE;
@@ -87,7 +86,7 @@ public class IslandAPI {
             RegionAPI.teleportPlayerToLocation(player, island.getCenter(world));
 
             ObeliskHandler.spawnPlayerObelisk(player, island);
-            Messages.ISLAND_CREATED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.ISLAND_CREATED.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
         });
     }
@@ -136,10 +135,10 @@ public class IslandAPI {
                     PlayerUtil.clearInventory(player);
                     PlayerUtil.clearEnderChest(player);
 
-                    Messages.ISLAND_DELETION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                    Messages.ISLAND_DELETION_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 });
             } else {
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "delete your island", "debug", "WORLD_NOT_EXIST");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "delete your island", "debug", "WORLD_NOT_EXIST");
             }
         });
     }

@@ -63,22 +63,12 @@ public class RunesResetCommand extends CommandTemplate {
     public void perform(
             CommandSender sender,
             @Argument(value = "type", suggestions = "giveTypeSelection") String type,
-            @Argument(value = "playerFactionName", suggestions = "playerFactionName") String playerFactionName,
+            @Argument(value = "playerFactionName", suggestions = "playerFactionName") String playerFactionName
     ) {
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
-        if (type.equalsIgnoreCase("player")) {
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
-            if (!offlinePlayer.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
-            } else {
 
-                });
-            }
-        } else if (type.equalsIgnoreCase("faction")) {
-
-        }
     }
 
 

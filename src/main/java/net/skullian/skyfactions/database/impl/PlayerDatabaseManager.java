@@ -1,6 +1,8 @@
 package net.skullian.skyfactions.database.impl;
 
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
+import net.skullian.skyfactions.database.struct.PlayerData;
+import net.skullian.skyfactions.database.tables.records.PlayerDataRecord;
 import org.bukkit.entity.Player;
 import org.jooq.DSLContext;
 
@@ -17,16 +19,28 @@ public class PlayerDatabaseManager {
         this.ctx = ctx;
     }
 
-    public CompletableFuture<Boolean> isPlayerRegistered(Player player) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(PLAYER_DATA, PLAYER_DATA.UUID.eq(player.getUniqueId().toString())));
-    }
-
-    public CompletableFuture<Void> registerPlayer(Player player) {
+    public CompletableFuture<Void> registerPlayer(UUID uuid) {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(PLAYER_DATA)
                     .columns(PLAYER_DATA.UUID, PLAYER_DATA.DISCORD_ID, PLAYER_DATA.LAST_RAID, PLAYER_DATA.LOCALE)
-                    .values(player.getUniqueId().toString(), "none", (long) 0, PlayerHandler.getLocale(player.getUniqueId()))
+                    .values(uuid.toString(), "none", (long) 0, PlayerAPI.getLocale(uuid))
                     .execute();
+        });
+    }
+
+    public CompletableFuture<PlayerData> getPlayerData(UUID uuid) {
+        return CompletableFuture.supplyAsync(() -> {
+            PlayerDataRecord result = ctx.selectFrom(PLAYER_DATA)
+                    .where(PLAYER_DATA.UUID.eq(uuid.toString()))
+                    .fetchOne();
+
+            return result != null ?
+                    new PlayerData(
+                            uuid,
+                            result.getDiscordId(),
+                            result.getLastRaid(),
+                            result.getLocale()
+                    ) : null;
         });
     }
 

@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.runes.subcommands;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
@@ -73,9 +74,16 @@ public class RunesGiveCommand extends CommandTemplate {
 
         if (type.equalsIgnoreCase("player")) {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
-            if (!offlinePlayer.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
-            } else {
+
+            PlayerAPI.isPlayerRegistered(offlinePlayer.getUniqueId()).whenComplete((isRegistered, throwable) -> {
+                 if (throwable != null) {
+                     ErrorUtil.handleError(sender, "check if that player is registered", "SQL_PLAYER_GET", throwable);
+                     return;
+                 } else if (!isRegistered) {
+                     Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
+                     return;
+                 }
+
                 IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, ex) -> {
                     if (ex != null) {
                         ErrorUtil.handleError(sender, "check if the player had an island", "SQL_ISLAND_GET", ex);
@@ -88,7 +96,7 @@ public class RunesGiveCommand extends CommandTemplate {
                     RunesAPI.addRunes(offlinePlayer.getUniqueId(), amount);
                     Messages.RUNES_GIVE_SUCCESS.send(sender, locale, "amount", amount, "name", offlinePlayer.getName());
                 });
-            }
+            });
         } else if (type.equalsIgnoreCase("faction")) {
 
             FactionAPI.getFaction(playerFactionName).whenComplete((faction, throwable) -> {

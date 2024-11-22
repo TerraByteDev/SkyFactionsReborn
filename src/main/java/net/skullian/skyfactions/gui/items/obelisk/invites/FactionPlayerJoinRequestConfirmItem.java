@@ -1,8 +1,6 @@
 package net.skullian.skyfactions.gui.items.obelisk.invites;
 
-import java.util.concurrent.CompletableFuture;
-
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -33,7 +31,7 @@ public class FactionPlayerJoinRequestConfirmItem extends SkyItem {
 
         FactionAPI.getFaction(DATA.getFactionName()).whenComplete((faction, ex) -> {
             if (faction == null) {
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "get your Faction", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "get your Faction", "FACTION_NOT_FOUND");
                 return;
             } else if (ex != null) {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
@@ -42,7 +40,7 @@ public class FactionPlayerJoinRequestConfirmItem extends SkyItem {
 
             SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId()).removeInvite(faction.toInviteData(DATA, player));
             faction.addFactionMember(player);
-            Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
+            Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
             NotificationAPI.factionInviteStore.replace(faction.getName(), (NotificationAPI.factionInviteStore.get(faction.getName()) - 1));
         });
     }

@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.gui.items.obelisk;
 
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -26,7 +26,7 @@ public class ObeliskAuditLogItem extends SkyItem {
     public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (faction == null) {
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "get your Faction", "FACTION_NOT_FOUND");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "get your Faction", "FACTION_NOT_FOUND");
                 return;
             } else if (ex != null) {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
@@ -37,7 +37,7 @@ public class ObeliskAuditLogItem extends SkyItem {
             if (faction.getOwner().equals(offlinePlayer) || faction.getAdmins().contains(offlinePlayer)) {
                 FactionAuditLogUI.promptPlayer(player, faction);
             } else {
-                Messages.OBELISK_GUI_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()), "rank", Messages.FACTION_ADMIN_TITLE.get(PlayerHandler.getLocale(player.getUniqueId())));
+                Messages.OBELISK_GUI_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()), "rank", Messages.FACTION_ADMIN_TITLE.get(PlayerAPI.getLocale(player.getUniqueId())));
             }
         });
     }

@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -56,7 +56,7 @@ public class RaidAPI {
         try {
             AtomicBoolean cancel = new AtomicBoolean(false);
 
-            Messages.RAID_PROCESSING.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.RAID_PROCESSING.send(player, PlayerAPI.getLocale(player.getUniqueId()));
 
             /*SkyFactionsReborn.getDatabaseManager().updateLastRaid(player, System.currentTimeMillis()).thenAccept(result -> SkyFactionsReborn.getDatabaseManager().getGems(player).thenAccept(count -> SkyFactionsReborn.getDatabaseManager().subtractGems(player, count, Settings.RAIDING_COST.getInt()))).exceptionally(ex -> {
                 ex.printStackTrace();
@@ -75,12 +75,12 @@ public class RaidAPI {
                 handlePlayers(player, playerUUID);
                 processingRaid.put(player.getUniqueId(), playerUUID);
             } else {
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "ISLAND_RETURNED_NULL");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "ISLAND_RETURNED_NULL");
             }
 
         } catch (Exception error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "MAIN_RAID_START");
+            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "MAIN_RAID_START");
             handleRaidExecutionError(player, false);
         }
     }
@@ -145,19 +145,19 @@ public class RaidAPI {
             AtomicInteger currentGems = new AtomicInteger();
             SkyFactionsReborn.getDatabaseManager().getCurrencyManager().getGems(player.getUniqueId()).thenAccept(currentGems::set).exceptionally(ex -> {
                 ex.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "check your gem count", "debug", "SQL_GEMS_GET");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "check your gem count", "debug", "SQL_GEMS_GET");
                 return null;
             }).get();
 
             if (currentGems.get() < required) {
-                Messages.RAID_INSUFFICIENT_GEMS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "raid_cost", required);
+                Messages.RAID_INSUFFICIENT_GEMS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "raid_cost", required);
                 return false;
             } else {
                 return true;
             }
         } catch (InterruptedException | ExecutionException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_GEMS_GET");
+            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_GEMS_GET");
         }
 
         return false;
@@ -168,19 +168,19 @@ public class RaidAPI {
             AtomicReference<List<IslandRaidData>> data = new AtomicReference<>(new ArrayList<>());
             SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().getRaidableIslands(player).thenAccept(data::set).exceptionally(ex -> {
                 ex.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
                 return null;
             }).get();
 
             if (data.get().isEmpty()) {
-                Messages.RAID_NO_PLAYERS.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.RAID_NO_PLAYERS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             } else {
                 Random random = new Random();
                 return data.get().get(random.nextInt(data.get().size()));
             }
         } catch (InterruptedException | ExecutionException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
+            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
         }
         return null;
     }
@@ -192,11 +192,11 @@ public class RaidAPI {
 
     private static void alertPlayer(Player player, Player attacker) {
         SoundUtil.soundAlarm(player);
-        List<String> alertList = Messages.RAID_IMMINENT_MESSAGE.getStringList(PlayerHandler.getLocale(player.getUniqueId()));
+        List<String> alertList = Messages.RAID_IMMINENT_MESSAGE.getStringList(PlayerAPI.getLocale(player.getUniqueId()));
 
         if (player.isOnline()) {
             for (String msg : alertList) {
-                player.sendMessage(TextUtility.color(msg.replace("player_name", player.getName()).replace("raider", attacker.getName()), PlayerHandler.getLocale(player.getUniqueId()), player));
+                player.sendMessage(TextUtility.color(msg.replace("player_name", player.getName()).replace("raider", attacker.getName()), PlayerAPI.getLocale(player.getUniqueId()), player));
             }
         }
     }
@@ -249,7 +249,7 @@ public class RaidAPI {
 
         SkyFactionsReborn.getDatabaseManager().getPlayerManager().updateLastRaid(player, 0).exceptionally(ex -> {
             ex.printStackTrace();
-            Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "handle raid errors", "debug", "SQL_RAID_UPDATE");
+            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "handle raid errors", "debug", "SQL_RAID_UPDATE");
             return null;
         });
         SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyGems(player.getUniqueId(), Settings.RAIDING_COST.getInt(), false).join();
@@ -257,11 +257,11 @@ public class RaidAPI {
         if (isDefendant) {
             IslandAPI.getPlayerIsland(player.getUniqueId()).thenAccept(island -> SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().setIslandCooldown(island, 0).exceptionally(ex -> {
                 ex.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "handle raid errors", "debug", "SQL_ISLAND_COOLDOWN");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "handle raid errors", "debug", "SQL_ISLAND_COOLDOWN");
                 return null;
             })).exceptionally(ex -> {
                 ex.printStackTrace();
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "handle raid errors", "debug", "SQL_ISLAND_GET");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "handle raid errors", "debug", "SQL_ISLAND_GET");
                 return null;
             });
         }

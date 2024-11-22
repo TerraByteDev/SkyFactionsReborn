@@ -1,23 +1,19 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.database.struct.InviteData;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.JoinRequestData;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -46,7 +42,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
         FactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "check if you were in a Faction", "SQL_FACTION_GET", ex);

@@ -1,19 +1,16 @@
 package net.skullian.skyfactions.command.faction.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -48,18 +45,18 @@ public class FactionDonateCommand extends CommandTemplate {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                 return;
             } else if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.NOT_IN_FACTION.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return;
             }
 
             int gems = GemsAPI.getGems(player.getUniqueId());
             if (gems < amount) {
-                Messages.INSUFFICIENT_GEMS_COUNT.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.INSUFFICIENT_GEMS_COUNT.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return;
             }
             GemsAPI.subtractGems(player.getUniqueId(), amount);
             faction.addGems(amount);
-            Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "amount", amount);
+            Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "amount", amount);
         });
     }
 

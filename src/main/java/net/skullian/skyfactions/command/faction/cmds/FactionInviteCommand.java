@@ -7,11 +7,10 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
 import net.skullian.skyfactions.database.struct.InviteData;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
@@ -19,7 +18,6 @@ import org.incendo.cloud.annotations.Permission;
 import org.incendo.cloud.annotations.suggestion.Suggestions;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,7 +53,7 @@ public class FactionInviteCommand extends CommandTemplate {
             @Argument(value = "target", suggestions = "playerFactionName") String playerName
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         FactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
@@ -75,33 +73,37 @@ public class FactionInviteCommand extends CommandTemplate {
             }
 
             OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
-            if (!target.hasPlayedBefore()) {
-                Messages.UNKNOWN_PLAYER.send(player, locale, "player", playerName);
-            } else if (faction.getAllMembers().contains(target)) {
-                Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, locale);
-            } else if (faction.isPlayerBanned(target)) {
-                Messages.FACTION_INVITE_PLAYER_BANNED.send(player, locale);
-            } else {
+            PlayerAPI.isPlayerRegistered(target.getUniqueId()).whenComplete((isRegistered, ex2) -> {
+                if (ex2 != null) {
+                    ErrorUtil.handleError(player, "check if that player is registered", "SQL_PLAYER_GET", ex2);
+                } else if (!isRegistered) {
+                    Messages.UNKNOWN_PLAYER.send(player, locale, "player", playerName);
+                }else if (faction.getAllMembers().contains(target)) {
+                    Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, locale);
+                } else if (faction.isPlayerBanned(target)) {
+                    Messages.FACTION_INVITE_PLAYER_BANNED.send(player, locale);
+                } else {
 
-                List<InviteData> invites = faction.getOutgoingInvites();
-                for (InviteData invite : invites) {
-                    if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
-                        Messages.FACTION_INVITE_DUPLICATE.send(player, locale);
-                        return;
+                    List<InviteData> invites = faction.getOutgoingInvites();
+                    for (InviteData invite : invites) {
+                        if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
+                            Messages.FACTION_INVITE_DUPLICATE.send(player, locale);
+                            return;
+                        }
                     }
+
+                    InviteData newInvite = new InviteData(
+                            target,
+                            player,
+                            faction.getName(),
+                            "outgoing",
+                            System.currentTimeMillis()
+                    );
+                    faction.createInvite(newInvite);
+                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, locale, "player_name", target.getName());
+
                 }
-
-                InviteData newInvite = new InviteData(
-                        target,
-                        player,
-                        faction.getName(),
-                        "outgoing",
-                        System.currentTimeMillis()
-                );
-                faction.createInvite(newInvite);
-                Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, locale, "player_name", target.getName());
-
-            }
+            });
         });
     }
 

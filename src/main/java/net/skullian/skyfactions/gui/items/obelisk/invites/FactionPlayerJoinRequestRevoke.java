@@ -1,16 +1,14 @@
 package net.skullian.skyfactions.gui.items.obelisk.invites;
 
 import net.skullian.skyfactions.api.FactionAPI;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.AuditLogType;
-import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.api.NotificationAPI;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.faction.JoinRequestData;
@@ -40,7 +38,7 @@ public class FactionPlayerJoinRequestRevoke extends SkyItem {
 
             faction.revokeInvite(faction.toInviteData(DATA, player), AuditLogType.PLAYER_JOIN_REQUEST_REVOKE, "player_name", player.getName());
 
-            Messages.FACTION_JOIN_REQUEST_REVOKE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
+            Messages.FACTION_JOIN_REQUEST_REVOKE_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
             NotificationAPI.factionInviteStore.replace(DATA.getFactionName(), (NotificationAPI.factionInviteStore.get(DATA.getFactionName()) - 1));
         });
     }

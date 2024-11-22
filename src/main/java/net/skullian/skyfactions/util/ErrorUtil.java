@@ -6,15 +6,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
-
-import java.sql.SQLException;
+import net.skullian.skyfactions.api.PlayerAPI;
 
 public class ErrorUtil {
 
     public static void handleError(CommandSender sender, String operation, String debug, Throwable err) {
         err.printStackTrace();
-        Messages.ERROR.send(sender, sender instanceof Player ? PlayerHandler.getLocale(((Player) sender).getUniqueId()) : Messages.getDefaulLocale(), "operation", operation, "debug", debug);
+        Messages.ERROR.send(sender, sender instanceof Player ? PlayerAPI.getLocale(((Player) sender).getUniqueId()) : Messages.getDefaulLocale(), "operation", operation, "debug", debug);
     }
 
     public static void handleError(Exception error) {

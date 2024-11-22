@@ -4,13 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.ObeliskConfig;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.gui.data.ItemData;
 import net.skullian.skyfactions.util.CooldownManager;
 import net.skullian.skyfactions.util.SoundUtil;
 import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.Bukkit;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.item.Item;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.AsyncItem;
 import xyz.xenondevs.invui.window.AbstractWindow;
 import xyz.xenondevs.invui.window.Window;
 
@@ -51,7 +49,7 @@ public abstract class AsyncSkyItem implements Item {
             this.provider = new ItemProvider() {
                 @Override
                 public @NotNull ItemStack get(@Nullable String s) {
-                    String locale = PlayerHandler.getLocale(PLAYER.getUniqueId());
+                    String locale = PlayerAPI.getLocale(PLAYER.getUniqueId());
                     Object[] replacements = replacements();
                     ItemBuilder builder = new ItemBuilder(STACK)
                             .setDisplayName(TextUtility.legacyColor(DATA.getNAME(), locale, PLAYER, replacements));
@@ -93,7 +91,7 @@ public abstract class AsyncSkyItem implements Item {
     }
 
     public String[] toList(List<String> strings) {
-        String locale = PlayerHandler.getLocale(getPLAYER().getUniqueId());
+        String locale = PlayerAPI.getLocale(getPLAYER().getUniqueId());
         List<String> formatted = strings.stream()
                 .map(string -> TextUtility.legacyColor(string, locale, getPLAYER()))
                 .collect(Collectors.toList());

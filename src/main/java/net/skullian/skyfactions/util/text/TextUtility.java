@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -102,7 +102,7 @@ public class TextUtility {
         }
 
         if (regexMatch) {
-            Messages.FACTION_NAME_PROHIBITED.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+            Messages.FACTION_NAME_PROHIBITED.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             return true;
         } else {
             return false;

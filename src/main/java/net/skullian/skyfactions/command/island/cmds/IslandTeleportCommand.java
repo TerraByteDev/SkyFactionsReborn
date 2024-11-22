@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.command.island.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.api.RegionAPI;
@@ -8,15 +7,13 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -49,9 +46,9 @@ public class IslandTeleportCommand extends CommandTemplate {
                 ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
             } else if (island == null) {
-                Messages.NO_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.NO_ISLAND.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             } else if (RegionAPI.isLocationInRegion(player.getLocation(), player.getUniqueId().toString())) {
-                Messages.ALREADY_ON_ISLAND.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.ALREADY_ON_ISLAND.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return;
             }
 
@@ -64,7 +61,7 @@ public class IslandTeleportCommand extends CommandTemplate {
 
                 IslandAPI.onIslandLoad(player.getUniqueId());
             } else {
-                Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "teleport you to your island", "debug", "WORLD_NOT_EXIST");
+                Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "teleport you to your island", "debug", "WORLD_NOT_EXIST");
             }
         });
     }

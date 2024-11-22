@@ -1,18 +1,15 @@
 package net.skullian.skyfactions.command.gems.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.GemsAPI;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -49,7 +46,7 @@ public class GemsBalanceCommand extends CommandTemplate {
 
             if (hasIsland) {
                 int gems = GemsAPI.getGems(player.getUniqueId());
-                Messages.GEMS_COUNT_MESSAGE.send(player, PlayerHandler.getLocale(player.getUniqueId()), "count", gems);
+                Messages.GEMS_COUNT_MESSAGE.send(player, PlayerAPI.getLocale(player.getUniqueId()), "count", gems);
             }
         });
     }

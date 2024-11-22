@@ -1,18 +1,15 @@
 package net.skullian.skyfactions.command.island.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.IslandAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.gui.screens.confirmation.IslandCreationConfirmationUI;
 import net.skullian.skyfactions.util.ErrorUtil;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
-import org.incendo.cloud.paper.util.sender.PlayerSource;
 
 import java.util.List;
 
@@ -47,7 +44,7 @@ public class IslandCreateCommand extends CommandTemplate {
             }
 
             if (hasIsland) {
-                Messages.ISLAND_CREATION_DENY.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.ISLAND_CREATION_DENY.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             } else {
                 IslandCreationConfirmationUI.promptPlayer(player);
             }

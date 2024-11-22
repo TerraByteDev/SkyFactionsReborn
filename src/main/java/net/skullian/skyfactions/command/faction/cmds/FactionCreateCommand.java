@@ -7,7 +7,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.Settings;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
@@ -41,7 +41,7 @@ public class FactionCreateCommand extends CommandTemplate {
             @Argument(value = "name") String name
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        String locale = PlayerHandler.getLocale(player.getUniqueId());
+        String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         Messages.FACTION_CREATION_PROCESSING.send(player, locale);
 

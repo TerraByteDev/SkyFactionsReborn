@@ -166,10 +166,7 @@ public class PlayerIslandsDatabaseManager {
             List<OfflinePlayer> players = new ArrayList<>();
             for (TrustedPlayersRecord data : results) {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(data.get(TRUSTED_PLAYERS.UUID)));
-
-                if (player.hasPlayedBefore()) {
-                    players.add(player);
-                }
+                players.add(player);
             }
 
             return players;

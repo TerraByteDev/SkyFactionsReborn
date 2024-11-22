@@ -2,10 +2,8 @@ package net.skullian.skyfactions.faction;
 
 import org.bukkit.entity.Player;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.skullian.skyfactions.config.types.Messages;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 
 public enum AuditLogType {
 
@@ -37,11 +35,11 @@ public enum AuditLogType {
     }
 
     public String getTitle(Player player) {
-        return title.getString(PlayerHandler.getLocale(player.getUniqueId()));
+        return title.getString(PlayerAPI.getLocale(player.getUniqueId()));
     }
 
     public String getDescription(Player player) {
-        return description.getString(PlayerHandler.getLocale(player.getUniqueId()));
+        return description.getString(PlayerAPI.getLocale(player.getUniqueId()));
     }
 
 

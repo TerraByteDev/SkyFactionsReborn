@@ -3,7 +3,7 @@ package net.skullian.skyfactions.gui.items.faction_leave;
 import java.util.List;
 
 import net.skullian.skyfactions.api.RegionAPI;
-import net.skullian.skyfactions.event.PlayerHandler;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.faction.Faction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -34,7 +34,7 @@ public class LeaveConfirmationItem extends SkyItem {
         Faction faction = FactionAPI.getCachedFaction(getPLAYER().getUniqueId());
 
         if (faction != null && faction.isOwner(getPLAYER())) {
-            builder.addLoreLines(toList(Messages.FACTION_LEAVE_OWNER_CONFIRMATION_LORE.getStringList(PlayerHandler.getLocale(getPLAYER().getUniqueId()))));
+            builder.addLoreLines(toList(Messages.FACTION_LEAVE_OWNER_CONFIRMATION_LORE.getStringList(PlayerAPI.getLocale(getPLAYER().getUniqueId()))));
         }
 
         return builder;
@@ -71,7 +71,7 @@ public class LeaveConfirmationItem extends SkyItem {
                                     Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
                                     RegionAPI.teleportPlayerToLocation(player, location);
                                 } else {
-                                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "leave the faction", "debug", "WORLD_NOT_EXIST");
+                                    Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "leave the faction", "debug", "WORLD_NOT_EXIST");
                                 }
                             }
                         });
@@ -79,13 +79,13 @@ public class LeaveConfirmationItem extends SkyItem {
                     }
 
                     faction.leaveFaction(Bukkit.getOfflinePlayer(player.getUniqueId()));
-                    Messages.FACTION_LEAVE_SUCCESS.send(player, PlayerHandler.getLocale(player.getUniqueId()), "faction_name", faction.getName());
+                    Messages.FACTION_LEAVE_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "faction_name", faction.getName());
                 } else {
-                    Messages.ERROR.send(player, PlayerHandler.getLocale(player.getUniqueId()), "operation", "leave the faction", "debug", "WORLD_NOT_EXIST");
+                    Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "leave the faction", "debug", "WORLD_NOT_EXIST");
 
                 }
             } else {
-                Messages.NOT_IN_FACTION.send(player, PlayerHandler.getLocale(player.getUniqueId()));
+                Messages.NOT_IN_FACTION.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             }
         });
 
