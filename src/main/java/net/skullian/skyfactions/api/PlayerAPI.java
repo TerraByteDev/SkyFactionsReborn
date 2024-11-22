@@ -14,7 +14,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-public class SkullAPI {
+public class PlayerAPI {
+
+    // Player Data //
+
+    // Skulls //
 
     private static Method metaSetProfileMethod;
     private static Field metaProfileField;

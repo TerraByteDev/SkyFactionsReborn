@@ -24,50 +24,47 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Command("runes")
-public class RunesGiveCommand extends CommandTemplate {
+public class RunesResetCommand extends CommandTemplate {
     @Override
     public String getName() {
-        return "give";
+        return "reset";
     }
 
     @Override
     public String getDescription() {
-        return "Gives other players runes (ADMIN COMMAND)";
+        return "Reset a player's or Faction's runes.";
     }
 
     @Override
     public String getSyntax() {
-        return "/runes give <type> <player/faction> <amount>";
+        return "/runes reset <type> <player/faction>";
     }
 
-    @Suggestions("giveTypeSelection")
+    @Suggestions("resetTypeSelection")
     public List<String> selectionSuggestion(CommandContext<CommandSourceStack> context, CommandInput input) {
         return List.of("player", "faction");
     }
 
     @Suggestions("playerFactionName")
     public List<String> suggestPlayerOrFaction(CommandContext<CommandSourceStack> context, CommandInput input) {
-        if (input.input().startsWith("runes give player")) {
+        if (input.input().startsWith("runes reset player")) {
             return Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
                     .collect(Collectors.toList());
-        } else if (input.input().startsWith("runes give faction")) {
+        } else if (input.input().startsWith("runes reset faction")) {
             return new ArrayList<>(FactionAPI.factionNameCache.keySet());
         }
 
         return List.of();
     }
 
-    @Command("give <type> <playerFactionName> <amount> ")
-    @Permission(value = {"skyfactions.runes.give"}, mode = Permission.Mode.ANY_OF)
+    @Command("reset <type> <playerFactionName>")
+    @Permission(value = {"skyfactions.runes.reset"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSender sender,
             @Argument(value = "type", suggestions = "giveTypeSelection") String type,
             @Argument(value = "playerFactionName", suggestions = "playerFactionName") String playerFactionName,
-            @Argument(value = "amount") int amount
-
     ) {
-        
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
@@ -76,40 +73,18 @@ public class RunesGiveCommand extends CommandTemplate {
             if (!offlinePlayer.hasPlayedBefore()) {
                 Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
             } else {
-                IslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, ex) -> {
-                    if (ex != null) {
-                        ErrorUtil.handleError(sender, "check if the player had an island", "SQL_ISLAND_GET", ex);
-                        return;
-                    } else if (!hasIsland) {
-                        Messages.PLAYER_HAS_NO_ISLAND.send(sender, locale);
-                        return;
-                    }
 
-                    RunesAPI.addRunes(offlinePlayer.getUniqueId(), amount);
-                    Messages.RUNES_GIVE_SUCCESS.send(sender, locale, "amount", amount, "name", offlinePlayer.getName());
                 });
             }
         } else if (type.equalsIgnoreCase("faction")) {
 
-            FactionAPI.getFaction(playerFactionName).whenComplete((faction, throwable) -> {
-                if (throwable != null) {
-                    ErrorUtil.handleError(sender, "get the specified Faction", "SQL_FACTION_GET", throwable);
-                    return;
-                } else if (faction == null) {
-                    Messages.FACTION_NOT_FOUND.send(sender, locale, "name", playerFactionName);
-                    return;
-                }
-
-                faction.addRunes(amount);
-                Messages.RUNES_GIVE_SUCCESS.send(sender, locale, "amount", amount, "name", faction.getName());
-            });
         }
     }
 
-    public static List<String> permissions = List.of("skyfactions.runes.give");
+
 
     @Override
     public List<String> permission() {
-        return permissions;
+        return List.of("skyfactions.runes.reset");
     }
 }

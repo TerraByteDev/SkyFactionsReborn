@@ -128,9 +128,9 @@ public class GUIAPI {
         ItemStack stack;
         if (material.equalsIgnoreCase("PLAYER_HEAD")) {
             if (texture.equalsIgnoreCase("<player_skull>")) {
-                stack = SkullAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), playerUUID);
+                stack = PlayerAPI.getPlayerSkull(new ItemStack(Material.PLAYER_HEAD), playerUUID);
             } else {
-                stack = SkullAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), texture);
+                stack = PlayerAPI.convertToSkull(new ItemStack(Material.PLAYER_HEAD), texture);
             }
         } else {
             stack = new ItemStack(Material.getMaterial(material));

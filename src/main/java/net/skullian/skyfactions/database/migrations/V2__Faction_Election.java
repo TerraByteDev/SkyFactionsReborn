@@ -8,7 +8,7 @@ import org.jooq.impl.DSL;
 
 import static org.jooq.impl.SQLDataType.*;
 
-public class V2__Faction__Election extends BaseJavaMigration {
+public class V2__Faction_Election extends BaseJavaMigration {
 
     @Override
     public void migrate(Context context) throws Exception {

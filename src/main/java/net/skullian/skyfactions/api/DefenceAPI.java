@@ -39,7 +39,7 @@ public class DefenceAPI {
      * @return
      */
     public static ItemStack createDefenceStack(DefenceStruct defence, Player player) {
-        ItemStack stack = SkullAPI.convertToSkull(new ItemStack(Material.getMaterial(defence.getITEM_MATERIAL())), defence.getITEM_SKULL());
+        ItemStack stack = PlayerAPI.convertToSkull(new ItemStack(Material.getMaterial(defence.getITEM_MATERIAL())), defence.getITEM_SKULL());
         NamespacedKey nameKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
 
         ItemMeta meta = stack.getItemMeta();
