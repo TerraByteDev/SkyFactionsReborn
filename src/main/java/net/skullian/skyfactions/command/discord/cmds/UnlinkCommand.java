@@ -15,25 +15,25 @@ import java.util.List;
 public class UnlinkCommand extends CommandTemplate {
     @Command("unlink")
     @Permission(value = {"skyfactions.command.unlink"}, mode = Permission.Mode.ANY_OF)
-    public boolean handleUnlink(
+    public void handleUnlink(
             Player player
     ) {
-        if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord"), true))
-            return true;
+        if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.unlink", "skyfactions.discord"), true)) return;
 
-        SkyFactionsReborn.getDatabaseManager().getPlayerManager().getDiscordID(player).whenComplete((id, ex) -> {
+        PlayerAPI.getPlayerData(player.getUniqueId()).whenComplete((data, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "unlink your Discord", "SQL_DISCORD_UNLINK", ex);
                 return;
             }
 
-            if (id == null) {
+            if (data.getDISCORD_ID() == null) {
                 Messages.DISCORD_NOT_LINKED.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             } else {
+                SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId()).setNewDiscordID(player.getUniqueId(), "none");
                 Messages.DISCORD_UNLINK_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()));
             }
         });
-        return true;
+
     }
 
     @Override

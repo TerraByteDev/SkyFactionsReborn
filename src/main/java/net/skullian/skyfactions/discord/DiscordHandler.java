@@ -11,8 +11,10 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.skullian.skyfactions.SkyFactionsReborn;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.config.types.DiscordConfig;
 import net.skullian.skyfactions.config.types.Messages;
+import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SLogger;
 import org.bukkit.entity.Player;
 
@@ -95,17 +97,19 @@ public class DiscordHandler {
     }
 
     public void pingRaid(Player attacker, Player victim) {
-        SkyFactionsReborn.getDatabaseManager().getPlayerManager().getDiscordID(victim).thenAccept(id -> {
-            if (id != null && !id.equals("none")) {
+        PlayerAPI.getPlayerData(victim.getUniqueId()).whenComplete((data, ex) -> {
+            if (ex != null) {
+                ErrorUtil.handleError(victim, "start your raid", "SQL_GET_DISCORD", ex);
+                return;
+            }
+
+            if (!data.getDISCORD_ID().equals("none")) {
                 EmbedBuilder embedBuilder = new EmbedBuilder()
                         .setDescription(Messages.DISCORD_RAID_MESSAGE.getString(victim.locale().getLanguage()).replace("attacker", attacker.getName()))
                         .setThumbnail(DiscordConfig.AVATAR_API.getString().replace("player", attacker.getUniqueId().toString()));
 
-                RAID_NOTIFICATION_CHANNEL.sendMessage("<@" + id + ">").setEmbeds(embedBuilder.build()).queue();
+                RAID_NOTIFICATION_CHANNEL.sendMessage("<@" + data.getDISCORD_ID() + ">").setEmbeds(embedBuilder.build()).queue();
             }
-        }).exceptionally(ex -> {
-            ex.printStackTrace();
-            return null;
         });
     }
 }

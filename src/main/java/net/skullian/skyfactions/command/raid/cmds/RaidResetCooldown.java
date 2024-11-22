@@ -36,14 +36,8 @@ public class RaidResetCooldown extends CommandTemplate {
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
-        SkyFactionsReborn.getDatabaseManager().getPlayerManager().updateLastRaid(player, 0).whenComplete((ignored, throwable) -> {
-            if (throwable != null) {
-                ErrorUtil.handleError(player, "reset your raid cooldown", "SQL_RAID_UPDATE", throwable);
-                return;
-            }
-
-            player.sendMessage(TextUtility.color("&aSuccessfully reset your raid cooldown.", PlayerAPI.getLocale(player.getUniqueId()), player));
-        });
+        SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId()).setNewLastRaid(player.getUniqueId(), 0);
+        player.sendMessage(TextUtility.color("<green>Successfully reset your raid cooldown.", PlayerAPI.getLocale(player.getUniqueId()), player));
     }
 
     public static List<String> permissions = List.of("skyfactions.raid.resetcooldown");

@@ -39,13 +39,18 @@ public class RaidAPI {
 
     public static CompletableFuture<String> getCooldownDuration(Player player) {
         long cooldownDurationInMilliseconds = Settings.RAIDING_COOLDOWN.getLong();
-        return SkyFactionsReborn.getDatabaseManager().getPlayerManager().getLastRaid(player).thenApply((lastTime) -> {
+        return PlayerAPI.getPlayerData(player.getUniqueId()).handle((data, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return null;
+            }
+
             long currentTime = System.currentTimeMillis();
 
-            if (currentTime - lastTime >= cooldownDurationInMilliseconds) {
+            if (currentTime - data.getLAST_RAID() >= cooldownDurationInMilliseconds) {
                 return null;
             } else {
-                long cooldownDuration = cooldownDurationInMilliseconds - (currentTime - lastTime);
+                long cooldownDuration = cooldownDurationInMilliseconds - (currentTime - data.getLAST_RAID());
                 return DurationFormatUtils.formatDuration(cooldownDuration, "HH'h 'mm'm 'ss's'");
             }
         });
@@ -247,12 +252,8 @@ public class RaidAPI {
             }
         }
 
-        SkyFactionsReborn.getDatabaseManager().getPlayerManager().updateLastRaid(player, 0).exceptionally(ex -> {
-            ex.printStackTrace();
-            Messages.ERROR.send(player, PlayerAPI.getLocale(player.getUniqueId()), "operation", "handle raid errors", "debug", "SQL_RAID_UPDATE");
-            return null;
-        });
-        SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyGems(player.getUniqueId(), Settings.RAIDING_COST.getInt(), false).join();
+        SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId()).setNewLastRaid(player.getUniqueId(), 0);
+        SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId()).addGems(Settings.RAIDING_COST.getInt());
 
         if (isDefendant) {
             IslandAPI.getPlayerIsland(player.getUniqueId()).thenAccept(island -> SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().setIslandCooldown(island, 0).exceptionally(ex -> {

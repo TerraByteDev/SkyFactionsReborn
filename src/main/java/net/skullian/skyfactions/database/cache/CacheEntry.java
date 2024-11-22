@@ -4,8 +4,10 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import net.skullian.skyfactions.api.NotificationAPI;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.database.struct.AuditLogData;
 import net.skullian.skyfactions.database.struct.InviteData;
+import net.skullian.skyfactions.database.struct.PlayerData;
 import net.skullian.skyfactions.faction.RankType;
 import net.skullian.skyfactions.island.IslandModificationAction;
 import net.skullian.skyfactions.island.impl.FactionIsland;
@@ -28,6 +30,8 @@ public class CacheEntry {
     private final List<Location> defencesToRemove = new ArrayList<>(); // Player & Faction
     @Setter private String newLocale; // Player & Faction
     @Setter private boolean shouldRegister; // Player Exclusive
+    @Getter private String newDiscordID; // Player Exclusive
+    @Getter private long newLastRaid = -1; // Player & Faction
 
     private final List<NotificationData> notificationsToAdd = new ArrayList<>(); // Player Exclusive
     private final List<NotificationData> notificationsToRemove = new ArrayList<>(); // Player Exclusive
@@ -117,6 +121,30 @@ public class CacheEntry {
         notificationsToRemove.add(notification);
     }
 
+    public void setNewDiscordID(UUID playerUUID, String id) {
+        this.newDiscordID = id;
+
+        if (PlayerAPI.playerData.containsKey(playerUUID)) {
+            PlayerAPI.playerData.get(playerUUID).setDISCORD_ID(id);
+        }
+    }
+
+    public void setNewLocale(UUID playerUUID, String locale) {
+        this.newLocale = locale;
+
+        if (PlayerAPI.playerData.containsKey(playerUUID)) {
+            PlayerAPI.playerData.get(playerUUID).setLOCALE(locale);
+        }
+    }
+
+    public void setNewLastRaid(UUID playerUUID, long time) {
+        this.newLastRaid = time;
+
+        if (PlayerAPI.playerData.containsKey(playerUUID)) {
+            PlayerAPI.playerData.get(playerUUID).setLAST_RAID(time);
+        }
+    }
+
     /**
      *
      * @param toCache - UUID of player to cache (only used when the entry is for a player)
@@ -168,6 +196,7 @@ public class CacheEntry {
                     SkyFactionsReborn.getDatabaseManager().getFactionAuditLogManager().createAuditLogs(auditLogsToAdd).exceptionally((ex -> {
                         throw new RuntimeException("Failed to create audit logs for faction " + factionName, ex);
                     }))
+                    // todo update faction last raid
             );
         } else {
             UUID uuid = UUID.fromString(Objects.requireNonNull(toCache));
@@ -195,6 +224,12 @@ public class CacheEntry {
                     }),
                     SkyFactionsReborn.getDatabaseManager().getNotificationManager().removeNotifications(notificationsToRemove).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to remove notifications for player " + uuid, ex);
+                    }),
+                    SkyFactionsReborn.getDatabaseManager().getPlayerManager().registerDiscordLink(uuid, newDiscordID).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to update discord link for player " + uuid, ex);
+                    }),
+                    SkyFactionsReborn.getDatabaseManager().getPlayerManager().updateLastRaid(uuid, newLastRaid).exceptionally((ex) -> {
+                        throw new RuntimeException("Failed to update last raid for player " + uuid, ex);
                     })
             );
         }

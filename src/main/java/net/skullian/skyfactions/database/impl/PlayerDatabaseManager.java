@@ -46,6 +46,8 @@ public class PlayerDatabaseManager {
 
     public CompletableFuture<Void> registerDiscordLink(UUID playerUUID, String discordID) {
         return CompletableFuture.runAsync(() -> {
+            if (discordID == null) return;
+
             ctx.update(PLAYER_DATA)
                     .set(PLAYER_DATA.DISCORD_ID, discordID)
                     .where(PLAYER_DATA.UUID.eq(playerUUID.toString()))
@@ -53,25 +55,12 @@ public class PlayerDatabaseManager {
         });
     }
 
-    public CompletableFuture<String> getDiscordID(Player player) {
-        return CompletableFuture.supplyAsync(() -> ctx.select(PLAYER_DATA.DISCORD_ID)
-                .from(PLAYER_DATA)
-                .where(PLAYER_DATA.UUID.eq(player.getUniqueId().toString()))
-                .fetchOneInto(String.class));
-    }
-
-    public CompletableFuture<Long> getLastRaid(Player player) {
-        return CompletableFuture.supplyAsync(() -> ctx.select(PLAYER_DATA.LAST_RAID)
-                .from(PLAYER_DATA)
-                .where(PLAYER_DATA.UUID.eq(player.getUniqueId().toString()))
-                .fetchOneInto(Long.class));
-    }
-
-    public CompletableFuture<Void> updateLastRaid(Player player, long time) {
+    public CompletableFuture<Void> updateLastRaid(UUID playerUUID, long time) {
         return CompletableFuture.runAsync(() -> {
+            if (time == -1) return;
              ctx.update(PLAYER_DATA)
                      .set(PLAYER_DATA.LAST_RAID, time)
-                     .where(PLAYER_DATA.UUID.eq(player.getUniqueId().toString()))
+                     .where(PLAYER_DATA.UUID.eq(playerUUID.toString()))
                      .execute();
         });
     }

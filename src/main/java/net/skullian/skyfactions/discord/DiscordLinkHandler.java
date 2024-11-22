@@ -24,15 +24,13 @@ public class DiscordLinkHandler extends ListenerAdapter {
 
                 OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
 
+                SkyFactionsReborn.getCacheService().getEntry(playerUUID).setNewDiscordID(playerUUID, event.getUser().getId());
+                if (player.isOnline()) {
+                    Messages.DISCORD_LINK_SUCCESS.send(player.getPlayer(), PlayerAPI.getLocale(player.getUniqueId()), "discord_name", event.getUser().getName());
+                }
 
-                SkyFactionsReborn.getDatabaseManager().getPlayerManager().registerDiscordLink(playerUUID, event.getUser().getId()).thenAccept(result -> {
-                    if (player.isOnline()) {
-                        Messages.DISCORD_LINK_SUCCESS.send(player.getPlayer(), PlayerAPI.getLocale(player.getUniqueId()), "discord_name", event.getUser().getName());
-                    }
-
-                    event.reply("").setEmbeds(buildEmbed(Color.GREEN, Messages.DISCORD_APP_LINK_SUCCESS.getString(Messages.getDefaulLocale()).replace("player_name", player.getName())).build()).queue();
-                    SkyFactionsReborn.getDiscordHandler().codes.remove(code);
-                });
+                event.reply("").setEmbeds(buildEmbed(Color.GREEN, Messages.DISCORD_APP_LINK_SUCCESS.getString(Messages.getDefaulLocale()).replace("player_name", player.getName())).build()).queue();
+                SkyFactionsReborn.getDiscordHandler().codes.remove(code);
             } else {
                 event.reply("").setEmbeds(buildEmbed(Color.RED, Messages.DISCORD_APP_LINK_FAILED.getString(Messages.getDefaulLocale())).build()).queue();
             }

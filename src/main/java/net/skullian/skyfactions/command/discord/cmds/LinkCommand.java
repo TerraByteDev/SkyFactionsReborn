@@ -16,29 +16,24 @@ import java.util.List;
 public class LinkCommand extends CommandTemplate {
     @Command("link")
     @Permission(value = {"skyfactions.command.link"}, mode = Permission.Mode.ANY_OF)
-    public boolean handleLink(
+    public void perform(
             Player player
     ) {
 
-            if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true))
-                return true;
+        if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true)) return;
 
-            SkyFactionsReborn.getDatabaseManager().getPlayerManager().getDiscordID(player).whenComplete((id, ex) -> {
-                if (ex != null) {
-                    ErrorUtil.handleError(player, "link your Discord", "SQL_GET_DISCORD", ex);
-                    return;
-                }
-
-                if (id == null) {
-                    String generatedCode = SkyFactionsReborn.getDiscordHandler().createLinkCode(player);
-                    Messages.DISCORD_LINK_PROMPT.send(player, PlayerAPI.getLocale(player.getUniqueId()), "code", generatedCode);
-                } else {
-                    User retrivedUser = SkyFactionsReborn.getDiscordHandler().JDA.getUserById(id);
-                    Messages.DISCORD_ALREADY_LINKED.send(player, PlayerAPI.getLocale(player.getUniqueId()), "discord_name", retrivedUser.getName());
-                }
-            });
-
-        return true;
+        PlayerAPI.getPlayerData(player.getUniqueId()).whenComplete((data, ex) -> {
+            if (ex != null) {
+                ErrorUtil.handleError(player, "link your Discord", "SQL_GET_DISCORD", ex);
+                return;
+            } else if (data.getDISCORD_ID() == null) {
+                String generatedCode = SkyFactionsReborn.getDiscordHandler().createLinkCode(player);
+                Messages.DISCORD_LINK_PROMPT.send(player, PlayerAPI.getLocale(player.getUniqueId()), "code", generatedCode);
+            } else {
+                User retrivedUser = SkyFactionsReborn.getDiscordHandler().JDA.getUserById(data.getDISCORD_ID());
+                Messages.DISCORD_ALREADY_LINKED.send(player, PlayerAPI.getLocale(player.getUniqueId()), "discord_name", retrivedUser.getName());
+            }
+        });
     }
 
     @Override
