@@ -90,7 +90,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
 
             int runes = RunesAPI.getRunes(player.getUniqueId());
             if (runes < STRUCT.getBUY_COST()) {
-                SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND.getInt(), 1);
+                SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
                 return;
             }
 

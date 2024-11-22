@@ -61,10 +61,10 @@ public class MemberPaginationItem extends SkyItem {
         String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         if (SUBJECT.getUniqueId().equals(player.getUniqueId())) {
-            SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND.getInt(), 1);
+            SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
             Messages.FACTION_MANAGE_SELF_DENY.send(player, locale);
         } else if (faction.getRankType(SUBJECT.getUniqueId()).getOrder() <= faction.getRankType(player.getUniqueId()).getOrder()) {
-            SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND.getInt(), 1);
+            SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
             Messages.FACTION_MANAGE_HIGHER_RANKS_DENY.send(player, locale);
         } else {
             ManageMemberUI.promptPlayer(player, SUBJECT, faction);
