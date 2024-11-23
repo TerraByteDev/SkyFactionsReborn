@@ -22,8 +22,6 @@ public class NMSProvider {
     private static final String NMS_CLASSPATH = "net.skullian.skyfactions.nms.%s.NMSHandlerImpl";
     @Getter private static final NMSHandler NMS_HANDLER;
 
-    @Getter private static AWorldBorder border;
-
     static {
         NMSHandler nmsHandler;
 
@@ -36,9 +34,6 @@ public class NMSProvider {
             MethodType methodType = MethodType.methodType(Void.TYPE);
             final MethodHandle handle = handleLookup.findConstructor(nmsClass, methodType);
             nmsHandler = (NMSHandler) handle.invoke();
-
-            Class<?> clazz = Class.forName("net.skullian.skyfactions.nms." + NMS_VERSION + ".WorldBorder");
-            border = (AWorldBorder) clazz.getDeclaredConstructor().newInstance();
         } catch (Throwable error) {
             error.printStackTrace();
             nmsHandler = null;

@@ -5,6 +5,6 @@ import net.skullian.skyfactions.util.nms.NMSProvider;
 
 public class Border extends WorldBorderAPI {
     public Border() {
-        super(player -> NMSProvider.getBorder(), world -> NMSProvider.getBorder()); // Adjust constructor as needed
+        super(NMSProvider::getBorder, NMSProvider::getBorder); // Adjust constructor as needed
     }
 }
