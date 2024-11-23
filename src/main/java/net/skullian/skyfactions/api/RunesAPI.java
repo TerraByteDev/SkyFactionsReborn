@@ -193,8 +193,9 @@ public class RunesAPI {
 
     private static DefenceRunesData getDefenceCost(List<ItemStack> items, Player player) {
         int count = 0;
+        List<ItemStack> mutableItems = new ArrayList<>(items);
 
-        for (ItemStack item : items) {
+        for (ItemStack item : mutableItems) {
             if (item == null || item.getType().equals(Material.AIR)) continue;
 
             NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
@@ -205,14 +206,14 @@ public class RunesAPI {
                 DefenceStruct struct = DefencesFactory.defences.getOrDefault(PlayerAPI.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(identifier);
                 if (struct != null) {
                     count += struct.getSELL_COST();
-                    items.remove(item);
+                    mutableItems.remove(item);
                 };
             }
         }
 
         return new DefenceRunesData(
                 count,
-                items
+                mutableItems
         );
     }
 
