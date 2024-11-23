@@ -43,6 +43,7 @@ public class SFSyncCommand extends CommandTemplate {
 
         SLogger.warn("[{}] is forcing a database sync.", sender.getName());
 
+        Messages.SYNC_RUNNING.send(sender, locale);
         SkyFactionsReborn.getCacheService().cacheOnce().whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(sender, "force a database sync", "SQL_CACHE_FAILURE", ex);

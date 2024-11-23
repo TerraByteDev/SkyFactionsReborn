@@ -26,7 +26,9 @@ Messages:
   INCORRECT_USAGE: '<server_name><reset><gray> Incorrect usage of command. Usage: <red><bold><usage>' # Sent when the player uses a command with improper syntax.
   UNKNOWN_PLAYER: "<server_name><reset><gray> Unknown player: <red><bold><player>" # Sent when a command is ran on an unknown player (when applicable).
   PLEASE_WAIT: "<server_name><reset><gray> <operation>, please wait..." # Sent when the plugin is processing a request. Everything is fully async so responses aren't guaranteed to be immediate.
-  SYNC_SUCCESS: "<server_name><reset><green> Successfully synced cached data with the database!" # Sent when /sf sync is ran.
+
+  SYNC_RUNNING: "<server_name><reset><yellow> Syncing cached data with the database. <gray>This may take a while!" # Sent when /sf sync is ran.
+  SYNC_SUCCESS: "<server_name><reset><green> Successfully synced cached data with the database!" # Sent when /sf sync is ran and completes.
 
   # Sent when an error occurs when trying to execute a command or task.
   # Placeholders: <operation> - what was happening / <debug> - Debug code to be used in accordance to https://docs.terrabytedev.com/skyfactions/errors-and-debugging.

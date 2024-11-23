@@ -355,11 +355,10 @@ public class Faction {
         invites.add(data);
         SkyFactionsReborn.getCacheService().getEntry(this).createInvite(data);
         createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "inviter", inviter.getName(), "player_name", player.getName());
+        NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "player_name", inviter.getName(), "faction_name", name);
 
         if (player.isOnline()) {
             Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), PlayerAPI.getLocale(player.getUniqueId()));
-        } else {
-            NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "player_name", inviter.getName(), "faction_name", name);
         }
     }
 
