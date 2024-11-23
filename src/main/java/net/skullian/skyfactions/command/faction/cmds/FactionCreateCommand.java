@@ -84,7 +84,7 @@ public class FactionCreateCommand extends CommandTemplate {
                                             RunesAPI.removeRunes(player.getUniqueId(), cost);
                                             FactionAPI.createFaction(player, name);
                                         }
-                                    })
+                                    });
                                 }
                             }
                         }
