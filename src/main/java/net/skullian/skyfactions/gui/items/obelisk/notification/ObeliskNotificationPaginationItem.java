@@ -17,25 +17,28 @@ import net.skullian.skyfactions.util.text.TextUtility;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
+import java.util.List;
+
 public class ObeliskNotificationPaginationItem extends SkyItem {
 
     private NotificationData DATA;
 
     public ObeliskNotificationPaginationItem(ItemData data, ItemStack stack, NotificationData inviteData, Player player) {
-        super(data, stack, player, null);
+        super(data, stack, player, List.of(inviteData).toArray());
 
         this.DATA = inviteData;
     }
 
     @Override
     public ItemProvider getItemProvider() {
+        NotificationData data = (NotificationData) getOptionals()[0];
         String locale = PlayerAPI.getLocale(getPLAYER().getUniqueId());
 
-        String title = NotificationType.valueOf(DATA.getType()).getTitle(locale);
-        String description = NotificationType.valueOf(DATA.getType()).getDescription(locale);
+        String title = NotificationType.valueOf(data.getType()).getTitle(locale);
+        String description = NotificationType.valueOf(data.getType()).getDescription(locale);
 
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("notification_title", title), locale, getPLAYER(), DATA.getReplacements()));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("notification_title", title), locale, getPLAYER(), data.getReplacements()));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("notification_description")) {
@@ -47,7 +50,7 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
             }
 
             builder.addLoreLines(TextUtility.legacyColor(loreLine
-                    .replace("timestamp", Messages.replace(Messages.NOTIFICATION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "time", TextUtility.formatExtendedElapsedTime(DATA.getTimestamp()))),
+                    .replace("timestamp", Messages.replace(Messages.NOTIFICATION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "time", TextUtility.formatExtendedElapsedTime(data.getTimestamp()))),
                     locale,
                     getPLAYER()
             ));
