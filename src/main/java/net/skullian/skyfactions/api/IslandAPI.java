@@ -55,7 +55,7 @@ public class IslandAPI {
         }
 
         Messages.ISLAND_CREATING.send(player, PlayerAPI.getLocale(player.getUniqueId()));
-        RegionAPI.createRegion(player, island.getPosition1(world), island.getPosition2(world), world, player.getUniqueId().toString());
+        RegionAPI.createRegion(player, island.getPosition1(world), island.getPosition2(world), world, "SFR_PLAYER_" + player.getUniqueId().toString());
 
         IslandModificationAction action = IslandModificationAction.CREATE;
         action.setId(island.getId());

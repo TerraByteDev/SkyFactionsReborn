@@ -93,9 +93,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "purchase your defence", "SQL_RUNES_GET", ex);
                     return;
-                }
-
-                if (runes < STRUCT.getBUY_COST()) {
+                } else if (runes < STRUCT.getBUY_COST()) {
                     SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
                     return;
                 }

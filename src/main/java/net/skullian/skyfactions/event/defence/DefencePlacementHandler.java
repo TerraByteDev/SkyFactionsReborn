@@ -52,20 +52,16 @@ public class DefencePlacementHandler implements Listener {
 
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {
-        System.out.println("PLACE");
         Player player = event.getPlayer();
         String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         ItemStack stack = event.getItemInHand();
         NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
-        System.out.println("MKAY");
 
         PersistentDataContainer container = stack.getItemMeta().getPersistentDataContainer();
         if (container.has(defenceKey, PersistentDataType.STRING)) {
-            System.out.println("woohoo");
             Block placed = event.getBlockPlaced();
             returnOwnerDependingOnLocation(placed.getLocation(), player).whenComplete((owner, ex) -> {
-                System.out.println("fetched");
                 boolean isFaction = DefenceAPI.isFaction(owner);
                 System.out.println(isFaction);
                 if (ex != null) {
