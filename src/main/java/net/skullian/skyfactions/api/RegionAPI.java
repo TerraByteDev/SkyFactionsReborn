@@ -144,4 +144,11 @@ public class RegionAPI {
             }
         });
     }
+
+    public static CompletableFuture<Void> removeRegion(String regionName, World world) {
+        return CompletableFuture.runAsync(() -> {
+            RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+            container.get(BukkitAdapter.adapt(world)).removeRegion(regionName);
+        });
+    }
 }

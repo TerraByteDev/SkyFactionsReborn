@@ -47,7 +47,7 @@ public class IslandTeleportCommand extends CommandTemplate {
                 return;
             } else if (island == null) {
                 Messages.NO_ISLAND.send(player, PlayerAPI.getLocale(player.getUniqueId()));
-            } else if (RegionAPI.isLocationInRegion(player.getLocation(), "SFR_ISLAND_" + player.getUniqueId().toString())) {
+            } else if (RegionAPI.isLocationInRegion(player.getLocation(), "sfr_player_" + player.getUniqueId().toString())) {
                 Messages.ALREADY_ON_ISLAND.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return;
             }

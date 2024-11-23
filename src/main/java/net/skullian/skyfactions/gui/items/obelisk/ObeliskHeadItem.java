@@ -27,7 +27,7 @@ public class ObeliskHeadItem extends AsyncSkyItem {
         return List.of(
             "player_name", getPLAYER().getName(),
             "level", island == null ? "N/A" : SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().getIslandLevel(island).join(),
-            "rune_count", RunesAPI.getRunes(getPLAYER().getUniqueId()),
+            "rune_count", RunesAPI.getRunes(getPLAYER().getUniqueId()).join(),
             "gem_count", GemsAPI.getGems(getPLAYER().getUniqueId())
         ).toArray();
     }

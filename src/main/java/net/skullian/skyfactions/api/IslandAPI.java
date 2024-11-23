@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.island.IslandModificationAction;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -55,7 +54,7 @@ public class IslandAPI {
         }
 
         Messages.ISLAND_CREATING.send(player, PlayerAPI.getLocale(player.getUniqueId()));
-        RegionAPI.createRegion(player, island.getPosition1(world), island.getPosition2(world), world, "SFR_PLAYER_" + player.getUniqueId().toString());
+        RegionAPI.createRegion(player, island.getPosition1(world), island.getPosition2(world), world, "sfr_player_" + player.getUniqueId());
 
         IslandModificationAction action = IslandModificationAction.CREATE;
         action.setId(island.getId());
@@ -118,6 +117,7 @@ public class IslandAPI {
 
                 CompletableFuture.allOf(
                         RegionAPI.cutRegion(region),
+                        RegionAPI.removeRegion("sfr_player_" + player.getUniqueId(), world),
                         SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().removeIsland(player),
                         SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().removeAllTrustedPlayers(island.getId()),
                         SkyFactionsReborn.getDatabaseManager().getDefencesManager().removeAllDefences(player.getUniqueId().toString(), false)
@@ -152,7 +152,7 @@ public class IslandAPI {
     }
 
     public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID) {
-        if (operation == FactionAPI.DefenceOperation.DISABLE && !RegionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), "SFR_ISLAND_" + playerUUID.toString())) return;
+        if (operation == FactionAPI.DefenceOperation.DISABLE && !RegionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), "sfr_player_" + playerUUID.toString())) return;
 
         List<Defence> defences = DefencePlacementHandler.loadedPlayerDefences.get(playerUUID);
         if (defences == null || defences.isEmpty()) return;

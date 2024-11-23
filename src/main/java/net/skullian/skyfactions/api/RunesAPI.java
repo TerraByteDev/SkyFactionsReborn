@@ -175,7 +175,7 @@ public class RunesAPI {
         return CompletableFuture.supplyAsync(() -> {
             if (!playerRunes.containsKey(playerUUID)) return cachePlayer(playerUUID).join();
 
-            if (SkyFactionsReborn.getCacheService().getPlayersToCache().containsKey(playerUUID)) return (playerRunes.get(playerUUID) + SkyFactionsReborn.getCacheService().getPlayersToCache().get(playerUUID).getRunes());
+            if (SkyFactionsReborn.getCacheService().getPlayersToCache().containsKey(playerUUID) && playerRunes.containsKey(playerUUID)) return (playerRunes.get(playerUUID) + SkyFactionsReborn.getCacheService().getPlayersToCache().get(playerUUID).getRunes());
             else return playerRunes.get(playerUUID);
         });
     }

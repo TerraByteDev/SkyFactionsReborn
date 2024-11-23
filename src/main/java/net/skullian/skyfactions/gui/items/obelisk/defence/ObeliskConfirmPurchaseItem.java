@@ -98,6 +98,8 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
                     return;
                 }
 
+                System.out.println("CLOSE INV");
+                System.out.println("THREAD: " + Thread.currentThread().getName());
                 player.closeInventory();
                 Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "operation", "Purchasing your defence");
                 DefencesFactory.addDefence(player, STRUCT, FACTION);

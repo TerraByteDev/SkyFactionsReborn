@@ -32,7 +32,7 @@ public class GemsAPI {
     public static int getGems(UUID playerUUID) {
         if (!playerGems.containsKey(playerUUID)) cachePlayer(playerUUID);
 
-        if (SkyFactionsReborn.getCacheService().getPlayersToCache().containsKey(playerUUID)) return (playerGems.get(playerUUID) + SkyFactionsReborn.getCacheService().getPlayersToCache().get(playerUUID).getGems());
+        if (SkyFactionsReborn.getCacheService().getPlayersToCache().containsKey(playerUUID) && playerGems.containsKey(playerUUID)) return (playerGems.get(playerUUID) + SkyFactionsReborn.getCacheService().getPlayersToCache().get(playerUUID).getGems());
             else return playerGems.get(playerUUID);
     }
 

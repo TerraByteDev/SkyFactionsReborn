@@ -19,8 +19,9 @@ public class PlayerDatabaseManager {
         this.ctx = ctx;
     }
 
-    public CompletableFuture<Void> registerPlayer(UUID uuid) {
+    public CompletableFuture<Void> registerPlayer(UUID uuid, boolean shouldRegister) {
         return CompletableFuture.runAsync(() -> {
+            if (!shouldRegister) return;
             ctx.insertInto(PLAYER_DATA)
                     .columns(PLAYER_DATA.UUID, PLAYER_DATA.DISCORD_ID, PLAYER_DATA.LAST_RAID, PLAYER_DATA.LOCALE)
                     .values(uuid.toString(), "none", (long) 0, PlayerAPI.getLocale(uuid))

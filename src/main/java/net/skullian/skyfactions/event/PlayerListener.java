@@ -131,7 +131,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void playerRespawn(PlayerRespawnEvent event) {
         if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
-            if (RegionAPI.isLocationInRegion(event.getPlayer().getLocation(), "SFR_ISLAND_" + event.getPlayer().getUniqueId().toString()))
+            if (RegionAPI.isLocationInRegion(event.getPlayer().getLocation(), "sfr_player_" + event.getPlayer().getUniqueId().toString()))
                 IslandAPI.modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
             IslandAPI.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
                 if (ex != null) {

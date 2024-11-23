@@ -212,7 +212,7 @@ public class CacheEntry {
         } else {
             UUID uuid = UUID.fromString(Objects.requireNonNull(toCache));
             return CompletableFuture.allOf(
-                    SkyFactionsReborn.getDatabaseManager().getPlayerManager().registerPlayer(uuid).exceptionally((ex) -> {
+                    SkyFactionsReborn.getDatabaseManager().getPlayerManager().registerPlayer(uuid, shouldRegister).exceptionally((ex) -> {
                         throw new RuntimeException("Failed to register player " + uuid, ex);
                     }),
                     SkyFactionsReborn.getDatabaseManager().getCurrencyManager().modifyGems(uuid, gems, false).exceptionally((ex) -> {

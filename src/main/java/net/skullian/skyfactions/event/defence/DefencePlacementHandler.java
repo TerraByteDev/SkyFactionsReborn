@@ -120,7 +120,7 @@ public class DefencePlacementHandler implements Listener {
                     Block belowBlock = placed.getWorld().getBlockAt(belowLoc);
                     if (!isAllowedBlock(belowBlock, defence)) {
                         event.setCancelled(true);
-                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE().replace("server_name", Messages.SERVER_NAME.getString(locale)), locale, player));
+                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE(), locale, player, "server_name", Messages.SERVER_NAME.getString(locale)));
                         return;
                     }
 
@@ -195,11 +195,11 @@ public class DefencePlacementHandler implements Listener {
     }
 
     private CompletableFuture<String> returnOwnerDependingOnLocation(Location location, Player player) {
-        if (location.getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString()) && RegionAPI.isLocationInRegion(location, "SFR_ISLAND_" + player.getUniqueId())) {
+        if (location.getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString()) && RegionAPI.isLocationInRegion(location, "sfr_player_" + player.getUniqueId())) {
             return CompletableFuture.completedFuture(player.getUniqueId().toString());
         } else if (location.getWorld().getName().equals(Settings.ISLAND_FACTION_WORLD.getString())) {
             return FactionAPI.getFaction(player.getUniqueId()).thenApply((faction) -> {
-                if (faction != null && RegionAPI.isLocationInRegion(location, "SFR_FACTION_" + faction.getName())) {
+                if (faction != null && RegionAPI.isLocationInRegion(location, "sfr_faction_" + faction.getName())) {
                     return faction.getName();
                 } else return null;
             });

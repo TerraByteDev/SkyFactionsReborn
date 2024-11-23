@@ -72,14 +72,16 @@ public abstract class AsyncSkyItem implements Item {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        event.setCancelled(true);
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+            event.setCancelled(true);
 
-        if (CooldownManager.ITEMS.manage(player)) return;
+            if (CooldownManager.ITEMS.manage(player)) return;
 
-        if (!DATA.getSOUND().equalsIgnoreCase("none")) {
-            SoundUtil.playSound(player, DATA.getSOUND(), DATA.getPITCH(), 1f);
-        }
-        onClick(clickType, player, event);
+            if (!DATA.getSOUND().equalsIgnoreCase("none")) {
+                SoundUtil.playSound(player, DATA.getSOUND(), DATA.getPITCH(), 1f);
+            }
+            onClick(clickType, player, event);
+        });
     }
 
     public ItemBuilder process(ItemBuilder builder) {

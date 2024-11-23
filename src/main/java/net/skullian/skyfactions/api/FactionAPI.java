@@ -104,7 +104,6 @@ public class FactionAPI {
     }
 
     public static void disbandFaction(Player player, Faction faction) {
-        FactionIsland island = faction.getIsland();
         Region region = getFactionRegion(faction);
 
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
@@ -114,6 +113,7 @@ public class FactionAPI {
 
             CompletableFuture.allOf(
                     RegionAPI.cutRegion(region),
+                    RegionAPI.removeRegion("sfr_faction_" + faction.getName(), world),
                     SkyFactionsReborn.getDatabaseManager().getFactionsManager().removeFaction(faction.getName()),
                     SkyFactionsReborn.getDatabaseManager().getDefencesManager().removeAllDefences(faction.getName(), true)
             ).whenComplete((ignored, ex) -> {
@@ -135,7 +135,7 @@ public class FactionAPI {
 
             NotificationAPI.createNotification(member.getUniqueId(), NotificationType.FACTION_DISBANDED);
 
-            if (member.isOnline() && RegionAPI.isLocationInRegion(member.getPlayer().getLocation(), "SFR_FACTION_" + faction.getName())) {
+            if (member.isOnline() && RegionAPI.isLocationInRegion(member.getPlayer().getLocation(), "sfr_faction_" + faction.getName())) {
                 RegionAPI.teleportPlayerToLocation(member.getPlayer(), RegionAPI.getHubLocation());
             }
         }
@@ -278,7 +278,7 @@ public class FactionAPI {
         RegionManager regionManager = container.get(BukkitAdapter.adapt(world));
         BlockVector3 min = BlockVector3.at(corner1.getBlockX(), -64, corner1.getBlockZ());
         BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 320, corner2.getBlockZ());
-        ProtectedRegion region = new ProtectedCuboidRegion("SFR_FACTION_" + faction_name, min, max);
+        ProtectedRegion region = new ProtectedCuboidRegion("sfr_faction_" + faction_name, min, max);
 
         DefaultDomain owners = region.getOwners();
         owners.addPlayer(player.getUniqueId());
@@ -349,7 +349,7 @@ public class FactionAPI {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
-            } else if (operation == DefenceOperation.DISABLE && !RegionAPI.isLocationInRegion(player.getLocation(), "SFR_FACTION_" + faction.getName())) return;
+            } else if (operation == DefenceOperation.DISABLE && !RegionAPI.isLocationInRegion(player.getLocation(), "sfr_faction_" + faction.getName())) return;
 
             List<Defence> defences = DefencePlacementHandler.loadedFactionDefences.get(faction.getName());
             if (defences != null && !defences.isEmpty()) {
