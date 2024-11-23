@@ -2,7 +2,7 @@ package net.skullian.skyfactions.util;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.hooks.ItemJoinHook;
-import net.skullian.skyfactions.hooks.PlaceholderManager;
+import net.skullian.skyfactions.hooks.PlaceholderAPIHook;
 import net.skullian.skyfactions.hooks.VaultAPIHook;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class DependencyHandler {
     public static void init() {
         if (isPluginEnabled("PlaceholderAPI")) {
             SLogger.info("Found {} installed on the server - Registering expansion.", "\u001B[33mPlaceholderAPI\u001B[34m");
-            new PlaceholderManager(SkyFactionsReborn.getInstance()).register();
+            new PlaceholderAPIHook(SkyFactionsReborn.getInstance()).register();
             enabledDeps.add("PlaceholderAPI");
         } else alert("PlaceholderAPI");
 

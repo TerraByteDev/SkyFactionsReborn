@@ -10,11 +10,11 @@ import net.skullian.skyfactions.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
-public class PlaceholderManager extends PlaceholderExpansion {
+public class PlaceholderAPIHook extends PlaceholderExpansion {
 
     private final SkyFactionsReborn plugin;
 
-    public PlaceholderManager(SkyFactionsReborn plugin) {
+    public PlaceholderAPIHook(SkyFactionsReborn plugin) {
         this.plugin = plugin;
     }
 
@@ -47,14 +47,14 @@ public class PlaceholderManager extends PlaceholderExpansion {
         if (params.equalsIgnoreCase("player_runes")) {
             if (player == null) return "-1";
             if (RunesAPI.playerRunes.containsKey(player.getUniqueId()))
-                return String.valueOf(RunesAPI.getRunes(player.getUniqueId()));
+                return String.valueOf(RunesAPI.getRunesIfCached(player.getUniqueId()));
             else RunesAPI.cachePlayer(player.getUniqueId());
 
             return "-1";
         } else if (params.equalsIgnoreCase("player_gems")) {
             if (player == null) return "-1";
             if (GemsAPI.playerGems.containsKey(player.getUniqueId()))
-                return String.valueOf(GemsAPI.getGems(player.getUniqueId()));
+                return String.valueOf(GemsAPI.getGemsIfCached(player.getUniqueId()));
             else GemsAPI.cachePlayer(player.getUniqueId());
 
             return "-1";
@@ -81,6 +81,7 @@ public class PlaceholderManager extends PlaceholderExpansion {
             if (player == null) return "UNKNOWN PLAYER";
             if (FactionAPI.factionCache.containsKey(player.getUniqueId()))
                 return String.valueOf(FactionAPI.getCachedFaction(player.getUniqueId()).getGems());
+            
             else return TextUtility.legacyColor("&cN/A", locale, player);
         } else if (params.toLowerCase().startsWith("faction_gems_")) {
             String factionName = params.toLowerCase().replace("faction_gems_", "");

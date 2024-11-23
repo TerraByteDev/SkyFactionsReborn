@@ -294,7 +294,9 @@ public class Faction {
      * @param replacements Values to replace.
      */
     public void createAuditLog(UUID playerUUID, AuditLogType type, Object... replacements) {
-        SkyFactionsReborn.getCacheService().getEntry(this).addAuditLog(createData(playerUUID, type, replacements));
+        AuditLogData auditLogData = createData(playerUUID, type, replacements);
+        auditLogs.add(auditLogData);
+        SkyFactionsReborn.getCacheService().getEntry(this).addAuditLog(auditLogData);
     }
 
     private AuditLogData createData(UUID playerUUID, AuditLogType type, Object... replacements) {

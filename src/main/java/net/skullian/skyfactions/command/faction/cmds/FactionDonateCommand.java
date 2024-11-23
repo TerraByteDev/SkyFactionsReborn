@@ -49,14 +49,19 @@ public class FactionDonateCommand extends CommandTemplate {
                 return;
             }
 
-            int gems = GemsAPI.getGems(player.getUniqueId());
-            if (gems < amount) {
-                Messages.INSUFFICIENT_GEMS_COUNT.send(player, PlayerAPI.getLocale(player.getUniqueId()));
-                return;
-            }
-            GemsAPI.subtractGems(player.getUniqueId(), amount);
-            faction.addGems(amount);
-            Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "amount", amount);
+            GemsAPI.getGems(player.getUniqueId()).whenComplete((gems, err) -> {
+                if (err != null) {
+                    ErrorUtil.handleError(player, "get your gems", "SQL_GEMS_GET", err);
+                    return;
+                } else if (gems < amount) {
+                    Messages.INSUFFICIENT_GEMS_COUNT.send(player, PlayerAPI.getLocale(player.getUniqueId()));
+                    return;
+                }
+
+                GemsAPI.subtractGems(player.getUniqueId(), amount);
+                faction.addGems(amount);
+                Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "amount", amount);
+            });
         });
     }
 

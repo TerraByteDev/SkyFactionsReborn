@@ -169,8 +169,15 @@ public class RunesAPI {
             if (!playerRunes.containsKey(playerUUID)) return cachePlayer(playerUUID).join();
 
             if (SkyFactionsReborn.getCacheService().getPlayersToCache().containsKey(playerUUID) && playerRunes.containsKey(playerUUID)) return (playerRunes.get(playerUUID) + SkyFactionsReborn.getCacheService().getPlayersToCache().get(playerUUID).getRunes());
-            else return playerRunes.get(playerUUID);
+                else return playerRunes.get(playerUUID);
         });
+    }
+
+    public static int getRunesIfCached(UUID playerUUID) {
+        if (!playerRunes.containsKey(playerUUID)) cachePlayer(playerUUID);
+
+        if (SkyFactionsReborn.getCacheService().getPlayersToCache().containsKey(playerUUID) && playerRunes.containsKey(playerUUID)) return (playerRunes.get(playerUUID) + SkyFactionsReborn.getCacheService().getPlayersToCache().get(playerUUID).getRunes());
+            else return playerRunes.get(playerUUID);
     }
 
     public static CompletableFuture<Integer> cachePlayer(UUID playerUUID) {

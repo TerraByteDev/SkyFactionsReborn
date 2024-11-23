@@ -3,6 +3,7 @@ package net.skullian.skyfactions.api;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import net.skullian.skyfactions.api.PlayerAPI;
@@ -29,7 +30,16 @@ public class GemsAPI {
      * @param playerUUID UUID of the player you want to get gem count from.
      * @return {@link Integer}
      */
-    public static int getGems(UUID playerUUID) {
+    public static CompletableFuture<Integer> getGems(UUID playerUUID) {
+        return CompletableFuture.supplyAsync(() -> {
+             if (!playerGems.containsKey(playerUUID)) return cachePlayer(playerUUID).join();
+
+             if (SkyFactionsReborn.getCacheService().getPlayersToCache().containsKey(playerUUID) && playerGems.containsKey(playerUUID)) return (playerGems.get(playerUUID) + SkyFactionsReborn.getCacheService().getPlayersToCache().get(playerUUID).getGems());
+                else return playerGems.get(playerUUID);
+        });
+    }
+
+    public static int getGemsIfCached(UUID playerUUID) {
         if (!playerGems.containsKey(playerUUID)) cachePlayer(playerUUID);
 
         if (SkyFactionsReborn.getCacheService().getPlayersToCache().containsKey(playerUUID) && playerGems.containsKey(playerUUID)) return (playerGems.get(playerUUID) + SkyFactionsReborn.getCacheService().getPlayersToCache().get(playerUUID).getGems());
@@ -60,8 +70,8 @@ public class GemsAPI {
         SkyFactionsReborn.getCacheService().getEntry(playerUUID).removeGems(subtraction);
     }
 
-    public static void cachePlayer(UUID playerUUID) {
-        SkyFactionsReborn.getDatabaseManager().getCurrencyManager().getGems(playerUUID).whenComplete((gems, ex) -> {
+    public static CompletableFuture<Integer> cachePlayer(UUID playerUUID) {
+        return SkyFactionsReborn.getDatabaseManager().getCurrencyManager().getGems(playerUUID).whenComplete((gems, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
             } else playerGems.put(playerUUID, gems);
