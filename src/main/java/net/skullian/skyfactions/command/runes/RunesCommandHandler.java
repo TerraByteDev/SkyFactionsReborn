@@ -7,6 +7,7 @@ import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.runes.subcommands.RunesBalanceCommand;
 import net.skullian.skyfactions.command.runes.subcommands.RunesGiveCommand;
 import net.skullian.skyfactions.command.runes.subcommands.RunesHelpCommand;
+import net.skullian.skyfactions.command.runes.subcommands.RunesResetCommand;
 import net.skullian.skyfactions.util.CooldownManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -61,6 +62,7 @@ public class RunesCommandHandler implements CommandHandler {
         register(new RunesGiveCommand(), parser);
         register(new RunesHelpCommand(this), parser);
         register(new RunesBalanceCommand(), parser);
+        register(new RunesResetCommand(), parser);
     }
 
     @Override
