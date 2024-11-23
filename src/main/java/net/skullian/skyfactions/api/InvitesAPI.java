@@ -43,10 +43,29 @@ public class InvitesAPI {
 
     public static void onInviteCreate(UUID playerUUID, InviteData data) {
         getPlayerIncomingInvites(playerUUID).whenComplete((ignored, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return;
+            }
+
             List<InviteData> invites = playerIncomingInvites.get(playerUUID);
             if (invites == null) return; // sanity
 
             invites.add(data);
+        });
+    }
+
+    public static void onInviteRemove(UUID playerUUID, InviteData data) {
+        getPlayerIncomingInvites(playerUUID).whenComplete((ignored, ex) -> {
+            if (ex != null) {
+                ex.printStackTrace();
+                return;
+            }
+
+            List<InviteData> invites = playerIncomingInvites.get(playerUUID);
+            if (invites == null) return; // sanity
+
+            invites.remove(data);
         });
     }
 

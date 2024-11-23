@@ -409,6 +409,7 @@ public class Faction {
 
         invites.remove(data);
         SkyFactionsReborn.getCacheService().getEntry(this).removeInvite(data);
+        InvitesAPI.onInviteRemove(player.getUniqueId(), data);
         createAuditLog(player.getUniqueId(), type, replacements);
     }
 
