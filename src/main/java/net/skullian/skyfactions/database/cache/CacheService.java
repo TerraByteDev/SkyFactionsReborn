@@ -39,10 +39,10 @@ public class CacheService {
                 int gemsModification = cachedPlayer.getValue().getGems();
                 int runesModification = cachedPlayer.getValue().getRunes();
 
+                playersToCache.remove(uuid);
+
                 GemsAPI.playerGems.replace(uuid, (Math.max(0, GemsAPI.playerGems.get(uuid) + gemsModification)));
                 RunesAPI.playerRunes.replace(uuid, (Math.max(0, RunesAPI.playerRunes.get(uuid) + runesModification)));
-
-                playersToCache.remove(uuid);
             }
 
             for (Map.Entry<String, CacheEntry> cachedFaction : factionsToCache.entrySet()) {
@@ -53,14 +53,13 @@ public class CacheService {
 
                 int gemsModification = cachedFaction.getValue().getGems();
                 int runesModification = cachedFaction.getValue().getRunes();
+                factionsToCache.remove(factionName);
 
                 faction.gems += gemsModification;
                 faction.runes += runesModification;
 
                 if (faction.gems < 0) faction.gems = 0;
                 if (faction.runes < 0) faction.runes = 0;
-
-                factionsToCache.remove(factionName);
             }
 
             SLogger.info("Periodic Save - Done.");

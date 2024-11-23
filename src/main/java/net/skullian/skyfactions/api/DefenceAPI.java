@@ -82,15 +82,15 @@ public class DefenceAPI {
 
         for (String str : lore) {
             newLore.add(TextUtility.color(str
-                    .replace("max_level", maxLevel)
-                    .replace("range", range)
-                    .replace("ammo", ammo)
-                    .replace("target_max", targetMax)
-                    .replace("damage", damage)
-                    .replace("cooldown", cooldown)
-                    .replace("healing", healing)
-                    .replace("distance", distance)
-                    .replace("cost", String.valueOf(struct.getBUY_COST())), PlayerAPI.getLocale(player.getUniqueId()), player));
+                    .replace("<max_level>", maxLevel)
+                    .replace("<range>", range)
+                    .replace("<ammo>", ammo)
+                    .replace("<target_max>", targetMax)
+                    .replace("<damage>", damage)
+                    .replace("<cooldown>", cooldown)
+                    .replace("<healing>", healing)
+                    .replace("<distance>", distance)
+                    .replace("<cost>", String.valueOf(struct.getBUY_COST())), PlayerAPI.getLocale(player.getUniqueId()), player));
         }
 
         return newLore;
@@ -137,6 +137,20 @@ public class DefenceAPI {
         return DefencesFactory.defences.values().stream()
                 .flatMap(inner -> inner.values().stream())
                 .anyMatch(struct -> struct.getBLOCK_MATERIAL().equals(block.getType().name()));
+    }
+
+    public static DefenceStruct getDefenceFromItem(ItemStack itemStack, Player player) {
+        NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
+        PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
+
+        if (container.has(defenceKey, PersistentDataType.STRING)) {
+            String identifier = container.get(defenceKey, PersistentDataType.STRING);
+            DefenceStruct struct = DefencesFactory.defences.getOrDefault(PlayerAPI.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(identifier);
+
+            return struct;
+        }
+
+        return null;
     }
 
     public static boolean isFaction(String uuid) {

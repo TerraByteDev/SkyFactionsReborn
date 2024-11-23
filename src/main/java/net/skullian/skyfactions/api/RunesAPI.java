@@ -9,21 +9,14 @@ import java.util.concurrent.CompletableFuture;
 
 import dev.lone.itemsadder.api.CustomStack;
 import io.th0rgal.oraxen.api.OraxenItems;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.util.DependencyHandler;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.config.types.RunesConfig;
-import net.skullian.skyfactions.defence.DefencesFactory;
 import net.skullian.skyfactions.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.faction.Faction;
 import net.skullian.skyfactions.util.ErrorUtil;
@@ -85,12 +78,7 @@ public class RunesAPI {
     }
 
     public static void handleConversion(List<ItemStack> stacks, Player player, Faction faction) {
-        int total;
-
-        DefenceRunesData defenceData = getDefenceCost(stacks, player);
-        stacks = defenceData.getStacks();
-        total = defenceData.getCost();
-
+        int total = 0;
         Map<String, Integer> overrides = RunesConfig.RUNE_OVERRIDES.getMap();
 
         Map<ItemStack, Integer> quantities = new HashMap<>();
@@ -103,6 +91,11 @@ public class RunesAPI {
 
         for (Map.Entry<ItemStack, Integer> entry : quantities.entrySet()) {
             ItemStack stack = entry.getKey();
+            DefenceStruct struct = DefenceAPI.getDefenceFromItem(stack, player);
+            if (struct != null) {
+                total += struct.getSELL_COST();
+            }
+
             int quantity = entry.getValue();
 
             int tempForEach = RunesConfig.BASE_FOR_EACH.getInt();
@@ -189,32 +182,7 @@ public class RunesAPI {
 
             playerRunes.put(playerUUID, runes);
         });
-    }
 
-    private static DefenceRunesData getDefenceCost(List<ItemStack> items, Player player) {
-        int count = 0;
-        List<ItemStack> mutableItems = new ArrayList<>(items);
-
-        for (ItemStack item : mutableItems) {
-            if (item == null || item.getType().equals(Material.AIR)) continue;
-
-            NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
-            PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
-
-            if (container.has(defenceKey, PersistentDataType.STRING)) {
-                String identifier = container.get(defenceKey, PersistentDataType.STRING);
-                DefenceStruct struct = DefencesFactory.defences.getOrDefault(PlayerAPI.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(identifier);
-                if (struct != null) {
-                    count += struct.getSELL_COST();
-                    mutableItems.remove(item);
-                };
-            }
-        }
-
-        return new DefenceRunesData(
-                count,
-                mutableItems
-        );
     }
 
     private static boolean hasEnchants(ItemStack stack) {
@@ -272,12 +240,5 @@ public class RunesAPI {
                 }
             }
         }
-    }
-
-    @AllArgsConstructor
-    @Getter
-    private static class DefenceRunesData {
-        private final int cost;
-        private final List<ItemStack> stacks;
     }
 }
