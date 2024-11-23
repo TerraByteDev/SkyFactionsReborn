@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.database.impl;
 
+import net.skullian.skyfactions.SkyFactionsReborn;
 import org.jooq.DSLContext;
 
 import java.util.UUID;
@@ -36,7 +37,7 @@ public class CurrencyDatabaseManager {
 
     public CompletableFuture<Void> modifyGems(UUID playerUUID, int amount, boolean subtract) {
         return CompletableFuture.runAsync(() -> {
-            System.out.println("UUID: " + playerUUID);
+            if (amount == 0 || !SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().hasIsland(playerUUID).join()) return;
             int current = getGems(playerUUID).join();
 
             ctx.update(ISLANDS)
@@ -48,6 +49,7 @@ public class CurrencyDatabaseManager {
 
     public CompletableFuture<Void> modifyGems(String factionName, int amount, boolean subtract) {
         return CompletableFuture.runAsync(() -> {
+            if (amount == 0) return;
             int current = getGems(factionName).join();
 
             ctx.update(FACTION_ISLANDS)
@@ -76,6 +78,7 @@ public class CurrencyDatabaseManager {
 
     public CompletableFuture<Void> modifyRunes(UUID playerUUID, int amount, boolean subtract) {
         return CompletableFuture.runAsync(() -> {
+            if (amount == 0 || !SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().hasIsland(playerUUID).join()) return;
             int current = getRunes(playerUUID).join();
 
             ctx.update(ISLANDS)
@@ -87,6 +90,7 @@ public class CurrencyDatabaseManager {
 
     public CompletableFuture<Void> modifyRunes(String factionName, int amount, boolean subtract) {
         return CompletableFuture.runAsync(() -> {
+            if (amount == 0) return;
             int current = getRunes(factionName).join();
 
             ctx.update(FACTION_ISLANDS)

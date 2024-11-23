@@ -30,7 +30,7 @@ public class ObeliskRuneItem extends AsyncSkyItem {
 
         int runes = 0;
         if (type.equals("player")) {
-            runes = RunesAPI.getRunes(getPLAYER().getUniqueId());
+            runes = RunesAPI.getRunes(getPLAYER().getUniqueId()).join();
         } else if (type.equals("faction")) {
             Faction faction = FactionAPI.getFaction(getPLAYER().getUniqueId()).join();
             if (faction != null) {

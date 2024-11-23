@@ -90,7 +90,7 @@ public class IslandVisitCommand extends CommandTemplate {
                 } else if (is == null) {
                     Messages.VISIT_NO_ISLAND.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                     return;
-                } else if (RegionAPI.isLocationInRegion(player.getLocation(), target.getUniqueId().toString())) {
+                } else if (RegionAPI.isLocationInRegion(player.getLocation(), "SFR_ISLAND_" + target.getUniqueId().toString())) {
                     Messages.VISIT_ALREADY_ON_ISLAND.send(player, PlayerAPI.getLocale(player.getUniqueId()), "player", target.getName());
                     return;
                 }

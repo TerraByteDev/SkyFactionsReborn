@@ -52,22 +52,28 @@ public class DefencePlacementHandler implements Listener {
 
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {
+        System.out.println("PLACE");
         Player player = event.getPlayer();
         String locale = PlayerAPI.getLocale(player.getUniqueId());
 
         ItemStack stack = event.getItemInHand();
         NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
+        System.out.println("MKAY");
 
         PersistentDataContainer container = stack.getItemMeta().getPersistentDataContainer();
         if (container.has(defenceKey, PersistentDataType.STRING)) {
+            System.out.println("woohoo");
             Block placed = event.getBlockPlaced();
             returnOwnerDependingOnLocation(placed.getLocation(), player).whenComplete((owner, ex) -> {
+                System.out.println("fetched");
                 boolean isFaction = DefenceAPI.isFaction(owner);
+                System.out.println(isFaction);
                 if (ex != null) {
                     ErrorUtil.handleError(player, "place your defence", "SQL_FACTION_GET", ex);
                     event.setCancelled(true);
                     return;
                 } else if (owner == null) {
+                    System.out.println("what! owner is null?");
                     event.setCancelled(true);
                     return;
                 }
@@ -193,11 +199,11 @@ public class DefencePlacementHandler implements Listener {
     }
 
     private CompletableFuture<String> returnOwnerDependingOnLocation(Location location, Player player) {
-        if (location.getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString()) && RegionAPI.isLocationInRegion(location, player.getUniqueId().toString())) {
+        if (location.getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString()) && RegionAPI.isLocationInRegion(location, "SFR_ISLAND_" + player.getUniqueId())) {
             return CompletableFuture.completedFuture(player.getUniqueId().toString());
         } else if (location.getWorld().getName().equals(Settings.ISLAND_FACTION_WORLD.getString())) {
             return FactionAPI.getFaction(player.getUniqueId()).thenApply((faction) -> {
-                if (faction != null && RegionAPI.isLocationInRegion(location, faction.getName())) {
+                if (faction != null && RegionAPI.isLocationInRegion(location, "SFR_FACTION_" + faction.getName())) {
                     return faction.getName();
                 } else return null;
             });

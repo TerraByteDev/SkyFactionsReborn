@@ -667,6 +667,10 @@ Messages:
     # Placeholders: <amount> - Amount of additional runes given / <name> - Player / Faction affected.
     RUNES_GIVE_SUCCESS: "<server_name><reset><green> Successfully paid<reset><yellow> <amount><reset><green> Runes to <reset><yellow><name>."
 
+    # Sent when an admin runes /runes reset <type> <player / faction> (Admin Command!)
+    # Placeholders: <name> - Player / Faction affected.
+    RUNES_RESET_SUCCESS: "<server_name><reset><green> Successfully reset<reset><yellow> <name>'s<reset><green> Runes."
+
     # Sent when they successfully convert their items to runes.
     CONVERSION_SUCCESS: "<server_name><green><bold> Success!<reset><gray> You have gained <green><bold><added><reset><gray> runes!"
 

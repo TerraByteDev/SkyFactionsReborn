@@ -13,6 +13,7 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SLogger;
+import org.incendo.cloud.annotations.Permission;
 
 @Command("sf")
 public class SFNPCDisableCommand extends CommandTemplate {
@@ -33,6 +34,7 @@ public class SFNPCDisableCommand extends CommandTemplate {
     }
 
     @Command("disablenpcs")
+    @Permission(value = {"skyfactions.sf.disablenpcs"}, mode = Permission.Mode.ANY_OF)
     public void perform(
         CommandSender sender
     ) {

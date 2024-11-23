@@ -45,8 +45,13 @@ public class RunesBalanceCommand extends CommandTemplate {
                 Messages.NO_ISLAND.send(player, PlayerAPI.getLocale(player.getUniqueId()));
                 return;
             }
-            int runes = RunesAPI.getRunes(player.getUniqueId());
-            Messages.RUNES_BALANCE_MESSAGE.send(player, PlayerAPI.getLocale(player.getUniqueId()), "count", runes);
+            RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, throwable) -> {
+                if (throwable != null) {
+                    ErrorUtil.handleError(player, "get your runes balance", "SQL_RUNES_GET", throwable);
+                    return;
+                }
+                Messages.RUNES_BALANCE_MESSAGE.send(player, PlayerAPI.getLocale(player.getUniqueId()), "count", runes);
+            });
         });
     }
 

@@ -3,6 +3,7 @@ package net.skullian.skyfactions.command.runes.subcommands;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.skullian.skyfactions.api.FactionAPI;
 import net.skullian.skyfactions.api.IslandAPI;
+import net.skullian.skyfactions.api.PlayerAPI;
 import net.skullian.skyfactions.api.RunesAPI;
 import net.skullian.skyfactions.command.CommandTemplate;
 import net.skullian.skyfactions.command.CommandsUtility;
@@ -68,7 +69,40 @@ public class RunesResetCommand extends CommandTemplate {
         if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
         String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
 
+        if (type.equalsIgnoreCase("player")) {
+            OfflinePlayer player = Bukkit.getOfflinePlayer(playerFactionName);
 
+            PlayerAPI.isPlayerRegistered(player.getUniqueId()).whenComplete((isRegistered, throwable) -> {
+                if (throwable != null) {
+                    ErrorUtil.handleError(sender, "check if that player is registered", "SQL_PLAYER_GET", throwable);
+                    return;
+                } else if (!isRegistered) {
+                    Messages.UNKNOWN_PLAYER.send(sender, locale, "player", playerFactionName);
+                    return;
+                }
+
+                IslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
+                    if (ex != null) {
+                        ErrorUtil.handleError(sender, "check if the player had an island", "SQL_ISLAND_GET", ex);
+                        return;
+                    } else if (!hasIsland) {
+                        Messages.PLAYER_HAS_NO_ISLAND.send(sender, locale);
+                        return;
+                    }
+
+                    RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, ex2) -> {
+                        if (ex2 != null) {
+                            ErrorUtil.handleError(sender, "get the player's runes", "SQL_RUNES_GET", ex2);
+                            return;
+                        }
+
+                        RunesAPI.removeRunes(player.getUniqueId(), runes);
+                    });
+
+                    Messages.RUNES_RESET_SUCCESS.send(sender, locale, "name", player.getName());
+                });
+            });
+        }
     }
 
 

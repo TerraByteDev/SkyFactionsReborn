@@ -145,6 +145,15 @@ public class CacheEntry {
         }
     }
 
+    public void onIslandRemove() {
+        this.runes = 0;
+        this.gems = 0;
+        this.defencesToRegister.clear();
+        this.defencesToRemove.clear();
+        this.notificationsToAdd.clear();
+        this.notificationsToRemove.clear();
+    }
+
     /**
      *
      * @param toCache - UUID of player to cache (only used when the entry is for a player)

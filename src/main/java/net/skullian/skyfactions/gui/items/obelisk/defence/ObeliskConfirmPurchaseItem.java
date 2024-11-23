@@ -2,6 +2,7 @@ package net.skullian.skyfactions.gui.items.obelisk.defence;
 
 import java.util.List;
 
+import net.skullian.skyfactions.util.ErrorUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -46,7 +47,7 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
                 builder.addLoreLines(toList(Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList(locale)));
             }
         } else if (type.equals("player")) {
-            int runes = RunesAPI.getRunes(getPLAYER().getUniqueId());
+            int runes = RunesAPI.getRunes(getPLAYER().getUniqueId()).join();
             if (runes < struct.getBUY_COST()) {
                 builder.addLoreLines(toList(Messages.DEFENCE_INSUFFICIENT_RUNES_LORE.getStringList(locale)));
             }
@@ -88,15 +89,21 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
             DefencesFactory.addDefence(player, STRUCT, FACTION);;
         } else if (TYPE.equals("player")) {
 
-            int runes = RunesAPI.getRunes(player.getUniqueId());
-            if (runes < STRUCT.getBUY_COST()) {
-                SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
-                return;
-            }
+            RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, ex) -> {
+                if (ex != null) {
+                    ErrorUtil.handleError(player, "purchase your defence", "SQL_RUNES_GET", ex);
+                    return;
+                }
 
-            player.closeInventory();
-            Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "operation", "Purchasing your defence");
-            DefencesFactory.addDefence(player, STRUCT, FACTION);
+                if (runes < STRUCT.getBUY_COST()) {
+                    SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
+                    return;
+                }
+
+                player.closeInventory();
+                Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "operation", "Purchasing your defence");
+                DefencesFactory.addDefence(player, STRUCT, FACTION);
+            });
         }
 
 

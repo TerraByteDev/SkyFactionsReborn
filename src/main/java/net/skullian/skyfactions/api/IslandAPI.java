@@ -93,6 +93,8 @@ public class IslandAPI {
         SkyFactionsReborn.getWorldBorderApi().resetBorder(player);
 
         // reset runes and gems.
+
+        SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId()).onIslandRemove();
         RunesAPI.playerRunes.remove(player.getUniqueId());
         GemsAPI.playerGems.remove(player.getUniqueId());
 
@@ -150,7 +152,7 @@ public class IslandAPI {
     }
 
     public static void modifyDefenceOperation(FactionAPI.DefenceOperation operation, UUID playerUUID) {
-        if (operation == FactionAPI.DefenceOperation.DISABLE && !RegionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), playerUUID.toString())) return;
+        if (operation == FactionAPI.DefenceOperation.DISABLE && !RegionAPI.isLocationInRegion(Bukkit.getPlayer(playerUUID).getLocation(), "SFR_ISLAND_" + playerUUID.toString())) return;
 
         List<Defence> defences = DefencePlacementHandler.loadedPlayerDefences.get(playerUUID);
         if (defences == null || defences.isEmpty()) return;

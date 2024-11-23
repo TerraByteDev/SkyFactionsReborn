@@ -13,6 +13,7 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SLogger;
+import org.incendo.cloud.annotations.Permission;
 
 @Command("sf")
 public class SFSyncCommand extends CommandTemplate {
@@ -32,6 +33,7 @@ public class SFSyncCommand extends CommandTemplate {
     }
 
     @Command("sync")
+    @Permission(value = {"skyfactions.sf.sync"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSender sender
     ) {
@@ -53,6 +55,6 @@ public class SFSyncCommand extends CommandTemplate {
 
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.sync");
+        return List.of("skyfactions.sf.sync");
     }
 }

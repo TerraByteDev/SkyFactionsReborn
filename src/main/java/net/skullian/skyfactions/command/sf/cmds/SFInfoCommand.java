@@ -32,7 +32,7 @@ public class SFInfoCommand extends CommandTemplate {
     }
 
     @Command("info")
-    @Permission(value = { "skyfactions.command.info" }, mode = Permission.Mode.ANY_OF)
+    @Permission(value = { "skyfactions.sf.info" }, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSender sender
     ) {
@@ -42,17 +42,17 @@ public class SFInfoCommand extends CommandTemplate {
 
         Messages.COMMAND_HEAD.send(sender, locale);
         sender.sendMessage(TextUtility.color(
-                "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getVersion() + "</gradient><reset>\n" +
-                        "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "") + "</gradient><reset>\n" +
-                        "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getWebsite() + "</gradient><reset>\n" +
-                        "<dark_aqua>Version: <reset><gradient:#15FB08:#00B0CA>" + SkyFactionsReborn.getInstance().getDescription().getContributors().toString().replace("[", "").replace("]", "") + "</gradient><reset>",
+                "<dark_aqua>Version: <reset><gray>" + SkyFactionsReborn.getInstance().getDescription().getVersion() + "</gradient><reset>\n" +
+                        "<dark_aqua>Authors: <reset><gray>" + SkyFactionsReborn.getInstance().getDescription().getAuthors().toString().replace("[", "").replace("]", "") + "</gradient><reset>\n" +
+                        "<dark_aqua>Website: <reset><gray>" + SkyFactionsReborn.getInstance().getDescription().getWebsite() + "</gradient><reset>\n" +
+                        "<dark_aqua>Contributors: <reset><gray>" + SkyFactionsReborn.getInstance().getDescription().getContributors().toString().replace("[", "").replace("]", "") + "</gradient><reset>",
                         locale,
                         sender instanceof Player ? ((Player) sender) : null
         ));
         Messages.COMMAND_HEAD.send(sender, locale);
     }
 
-    public static List<String> permissions = List.of("skyfactions.command.info");
+    public static List<String> permissions = List.of("skyfactions.sf.info");
 
     @Override
     public List<String> permission() {

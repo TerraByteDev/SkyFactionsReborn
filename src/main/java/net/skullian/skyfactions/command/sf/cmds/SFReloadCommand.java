@@ -31,7 +31,7 @@ public class SFReloadCommand extends CommandTemplate {
     }
 
     @Command("reload")
-    @Permission(value = {"skyfactions.reload"}, mode = Permission.Mode.ANY_OF)
+    @Permission(value = {"skyfactions.sf.reload"}, mode = Permission.Mode.ANY_OF)
     public void perform(
             CommandSender sender
     ) {
@@ -48,7 +48,7 @@ public class SFReloadCommand extends CommandTemplate {
         SLogger.warn("SkyFactionsReborn reloaded.");
     }
 
-    public static List<String> permissions = List.of("skyfactions.reload");
+    public static List<String> permissions = List.of("skyfactions.sf.reload");
 
     @Override
     public List<String> permission() {

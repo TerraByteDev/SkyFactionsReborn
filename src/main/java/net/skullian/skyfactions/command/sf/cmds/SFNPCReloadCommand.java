@@ -13,6 +13,7 @@ import net.skullian.skyfactions.command.CommandsUtility;
 import net.skullian.skyfactions.config.types.Messages;
 import net.skullian.skyfactions.util.ErrorUtil;
 import net.skullian.skyfactions.util.SLogger;
+import org.incendo.cloud.annotations.Permission;
 
 @Command("sf")
 public class SFNPCReloadCommand extends CommandTemplate {
@@ -33,6 +34,7 @@ public class SFNPCReloadCommand extends CommandTemplate {
     }
 
     @Command("updatenpcs")
+    @Permission(value = {"skyfactions.sf.updatenpcs"}, mode = Permission.Mode.ANY_OF)
     public void perform(
         CommandSender sender
     ) {

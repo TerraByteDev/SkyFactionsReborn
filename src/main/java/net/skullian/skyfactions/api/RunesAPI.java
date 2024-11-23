@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import dev.lone.itemsadder.api.CustomStack;
 import io.th0rgal.oraxen.api.OraxenItems;
@@ -170,15 +171,17 @@ public class RunesAPI {
      * @param playerUUID UUID of the Player {@link UUID}
      * @return {@link Integer}
      */
-    public static int getRunes(UUID playerUUID) {
-        if (!playerRunes.containsKey(playerUUID)) cachePlayer(playerUUID);
+    public static CompletableFuture<Integer> getRunes(UUID playerUUID) {
+        return CompletableFuture.supplyAsync(() -> {
+            if (!playerRunes.containsKey(playerUUID)) return cachePlayer(playerUUID).join();
 
-        if (SkyFactionsReborn.getCacheService().getPlayersToCache().containsKey(playerUUID)) return (playerRunes.get(playerUUID) + SkyFactionsReborn.getCacheService().getPlayersToCache().get(playerUUID).getRunes());
+            if (SkyFactionsReborn.getCacheService().getPlayersToCache().containsKey(playerUUID)) return (playerRunes.get(playerUUID) + SkyFactionsReborn.getCacheService().getPlayersToCache().get(playerUUID).getRunes());
             else return playerRunes.get(playerUUID);
+        });
     }
 
-    public static void cachePlayer(UUID playerUUID) {
-        SkyFactionsReborn.getDatabaseManager().getCurrencyManager().getRunes(playerUUID).whenComplete((runes, ex) -> {
+    public static CompletableFuture<Integer> cachePlayer(UUID playerUUID) {
+        return SkyFactionsReborn.getDatabaseManager().getCurrencyManager().getRunes(playerUUID).whenComplete((runes, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
