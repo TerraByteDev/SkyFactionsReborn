@@ -38,13 +38,11 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
         String description = NotificationType.valueOf(data.getType()).getDescription(locale);
 
         ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("notification_title", title), locale, getPLAYER(), data.getReplacements()));
+                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("<notification_title>", title), locale, getPLAYER(), data.getReplacements()));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("notification_description")) {
-                for (String part : TextUtility.toParts(description)) {
-                    builder.addLoreLines(part);
-                }
+                builder.addLoreLines(toList(TextUtility.toParts(description)));
 
                 continue;
             }
