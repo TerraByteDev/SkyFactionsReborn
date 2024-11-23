@@ -50,13 +50,13 @@ public abstract class SkyIsland {
 
     public Location getPosition1(World world) {
         if (world == null) {
-            double size = getSize() / 2.00;
+            double size = getSize();
             Location center = getCenter(null).subtract(new Location(null, size, 0, size));
             center.setY(-64);
             return center;
         }
 
-        double size = getSize() / 2.00;
+        double size = getSize();
         Location center = getCenter(world).subtract(new Location(world, size, 0, size));
         center.setY(-64);
         return center;
@@ -64,13 +64,13 @@ public abstract class SkyIsland {
 
     public Location getPosition2(World world) {
         if (world == null) {
-            double size = getSize() / 2.00;
+            double size = getSize();
             Location center = getCenter(null).add(new Location(null, size, 0, size));
             center.setY(219);
             return center;
         }
 
-        double size = getSize() / 2.00;
+        double size = getSize();
         Location center = getCenter(world).add(new Location(world, size, 0, size));
         center.setY(219);
         return center;

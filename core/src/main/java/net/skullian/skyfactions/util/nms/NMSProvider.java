@@ -45,7 +45,7 @@ public class NMSProvider {
     public static AWorldBorder getBorder(Player player) {
         try {
             Class<?> clazz = Class.forName("net.skullian.skyfactions.nms." + NMS_VERSION + ".WorldBorder");
-            return (AWorldBorder) clazz.getDeclaredConstructor().newInstance(player);
+            return (AWorldBorder) clazz.getDeclaredConstructor(Player.class).newInstance(player);
         } catch (Throwable error) {
             error.printStackTrace();
         }
@@ -56,7 +56,7 @@ public class NMSProvider {
     public static AWorldBorder getBorder(World world) {
         try {
             Class<?> clazz = Class.forName("net.skullian.skyfactions.nms." + NMS_VERSION + ".WorldBorder");
-            return (AWorldBorder) clazz.getDeclaredConstructor().newInstance(world);
+            return (AWorldBorder) clazz.getDeclaredConstructor(World.class).newInstance(world);
         } catch (Throwable error) {
             error.printStackTrace();
         }

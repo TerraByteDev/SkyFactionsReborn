@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.nms.v1_21_R1;
 
-
 import net.skullian.skyfactions.util.nms.NMSProvider;
 import net.skullian.skyfactions.util.worldborder.AWorldBorder;
 import net.skullian.skyfactions.util.worldborder.BorderPos;
@@ -13,6 +12,10 @@ import org.bukkit.entity.Player;
 public class WorldBorder extends AWorldBorder {
 
     private final net.minecraft.world.level.border.WorldBorder border;
+
+    public WorldBorder() {
+        this(new net.minecraft.world.level.border.WorldBorder());
+    }
 
     public WorldBorder(Player player) {
         this(new net.minecraft.world.level.border.WorldBorder());

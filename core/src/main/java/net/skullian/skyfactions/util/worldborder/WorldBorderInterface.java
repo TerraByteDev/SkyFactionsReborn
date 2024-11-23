@@ -3,6 +3,7 @@ package net.skullian.skyfactions.util.worldborder;
 import org.bukkit.entity.Player;
 
 public interface WorldBorderInterface {
+
     default BorderPos getCentre() {
         return centre();
     }

@@ -1,11 +1,4 @@
 plugins {
     id 'java'
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-
+    id 'com.gradleup.shadow' version "${shadow_version}"
 }

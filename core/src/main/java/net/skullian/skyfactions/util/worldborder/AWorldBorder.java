@@ -1,12 +1,15 @@
 package net.skullian.skyfactions.util.worldborder;
 
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
 import java.util.function.Supplier;
 
 public abstract class AWorldBorder implements WorldBorderInterface {
-    private final ConsumerSupplier<BorderPos> center;
-    private final Supplier<BorderPos> minimum;
-    private final Supplier<BorderPos> maximum;
-    private final ConsumerSupplier<Double> size;
+    private ConsumerSupplier<BorderPos> center;
+    private Supplier<BorderPos> minimum;
+    private Supplier<BorderPos> maximum;
+    private ConsumerSupplier<Double> size;
 
     public AWorldBorder(ConsumerSupplier<BorderPos> center, Supplier<BorderPos> minimum, Supplier<BorderPos> maximum, ConsumerSupplier<Double> size) {
         this.center = center;
@@ -14,6 +17,10 @@ public abstract class AWorldBorder implements WorldBorderInterface {
         this.maximum = maximum;
         this.size = size;
     }
+
+    public AWorldBorder(Player player) {}
+
+    public AWorldBorder(World world) {}
 
     @Override
     public void centre(BorderPos location) {
