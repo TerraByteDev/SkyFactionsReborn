@@ -1,0 +1,15 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'io.papermc.paperweight.userdev' version "${paperweight_version}"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    paperweight.paperDevBundle("${minecraft_version}-R0.1-SNAPSHOT")
+    compileOnly(project(":core"))
+}
