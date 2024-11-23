@@ -37,11 +37,7 @@ public class MemberRankChangeItem extends SkyItem {
         Faction faction = (Faction) getOptionals()[1];
         RankType thisType = (RankType) getOptionals()[0];
 
-        System.out.println("SELECTED TYPE: " + TYPE);
-        System.out.println("THIS TYPE: " + thisType);
-
         if ((TYPE == null && faction.getRankType(subject.getUniqueId()).equals(thisType) || (thisType.equals(TYPE)))) {
-            System.out.println("YAHHHH! " + thisType);
             builder.addEnchantment(Enchantment.LURE, 1, false);
             builder.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }

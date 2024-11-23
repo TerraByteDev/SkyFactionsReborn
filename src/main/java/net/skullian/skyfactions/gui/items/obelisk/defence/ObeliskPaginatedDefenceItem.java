@@ -63,7 +63,8 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
             "healing", healing,
             "distance", distance,
             "repair_cost", repairCost,
-            "cost", String.valueOf(struct.getBUY_COST())
+            "cost", String.valueOf(struct.getBUY_COST()),
+            "defence_name", struct.getNAME()
         ).toArray();
     }
 

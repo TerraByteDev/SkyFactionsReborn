@@ -30,9 +30,7 @@ public class NotificationAPI {
                 return;
             }
 
-            System.out.println("fetching notifs");
             SkyFactionsReborn.getDatabaseManager().getNotificationManager().getNotifications(player).whenComplete((fetchedNotifs, throwable) -> {
-                System.out.println("fetched notifications");
                 if (throwable != null) {
                     throwable.printStackTrace();
                     return;

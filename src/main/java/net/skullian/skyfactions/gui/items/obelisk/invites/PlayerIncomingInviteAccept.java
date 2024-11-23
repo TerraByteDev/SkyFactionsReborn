@@ -47,7 +47,7 @@ public class PlayerIncomingInviteAccept extends SkyItem {
                 faction.revokeInvite(DATA, AuditLogType.INVITE_ACCEPT, "player_name", player.getName());
                 faction.addFactionMember(player);
 
-                Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "faction_name", player.getName());
+                Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, PlayerAPI.getLocale(player.getUniqueId()), "faction_name", faction.getName());
             });
         });
     }

@@ -2,7 +2,9 @@ package net.skullian.skyfactions.gui.items.obelisk.defence;
 
 import java.util.List;
 
+import net.skullian.skyfactions.SkyFactionsReborn;
 import net.skullian.skyfactions.util.ErrorUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -90,19 +92,19 @@ public class ObeliskConfirmPurchaseItem extends AsyncSkyItem {
         } else if (TYPE.equals("player")) {
 
             RunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, ex) -> {
-                if (ex != null) {
-                    ErrorUtil.handleError(player, "purchase your defence", "SQL_RUNES_GET", ex);
-                    return;
-                } else if (runes < STRUCT.getBUY_COST()) {
-                    SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
-                    return;
-                }
+                Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+                    if (ex != null) {
+                        ErrorUtil.handleError(player, "purchase your defence", "SQL_RUNES_GET", ex);
+                        return;
+                    } else if (runes < STRUCT.getBUY_COST()) {
+                        SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
+                        return;
+                    }
 
-                System.out.println("CLOSE INV");
-                System.out.println("THREAD: " + Thread.currentThread().getName());
-                player.closeInventory();
-                Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "operation", "Purchasing your defence");
-                DefencesFactory.addDefence(player, STRUCT, FACTION);
+                    player.closeInventory();
+                    Messages.PLEASE_WAIT.send(player, getPLAYER().locale().getLanguage(), "operation", "Purchasing your defence");
+                    DefencesFactory.addDefence(player, STRUCT, FACTION);
+                });
             });
         }
 

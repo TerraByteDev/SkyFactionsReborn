@@ -79,10 +79,10 @@ public abstract class SkyItem implements Item {
     public void onClick(ClickType clickType, Player player, InventoryClickEvent event) {
     }
 
-    public String[] toList(List<String> strings) {
+    public String[] toList(List<String> strings, Object... replacements) {
         String locale = PlayerAPI.getLocale(getPLAYER().getUniqueId());
         List<String> formatted = strings.stream()
-                .map(string -> TextUtility.legacyColor(string, locale, getPLAYER()))
+                .map(string -> TextUtility.legacyColor(string, locale, getPLAYER(), replacements))
                 .collect(Collectors.toList());
 
         return formatted.toArray(new String[formatted.size()]);

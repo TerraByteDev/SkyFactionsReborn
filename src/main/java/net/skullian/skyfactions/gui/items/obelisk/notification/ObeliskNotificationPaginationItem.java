@@ -42,13 +42,13 @@ public class ObeliskNotificationPaginationItem extends SkyItem {
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("notification_description")) {
-                builder.addLoreLines(toList(TextUtility.toParts(description)));
+                builder.addLoreLines(toList(TextUtility.toParts(description), data.getReplacements()));
 
                 continue;
             }
 
             builder.addLoreLines(TextUtility.legacyColor(loreLine
-                    .replace("timestamp", Messages.replace(Messages.NOTIFICATION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "time", TextUtility.formatExtendedElapsedTime(data.getTimestamp()))),
+                    .replace("<timestamp>", Messages.replace(Messages.NOTIFICATION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "<time>", TextUtility.formatExtendedElapsedTime(data.getTimestamp()))),
                     locale,
                     getPLAYER()
             ));

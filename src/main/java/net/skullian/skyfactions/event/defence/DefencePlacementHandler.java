@@ -63,13 +63,11 @@ public class DefencePlacementHandler implements Listener {
             Block placed = event.getBlockPlaced();
             returnOwnerDependingOnLocation(placed.getLocation(), player).whenComplete((owner, ex) -> {
                 boolean isFaction = DefenceAPI.isFaction(owner);
-                System.out.println(isFaction);
                 if (ex != null) {
                     ErrorUtil.handleError(player, "place your defence", "SQL_FACTION_GET", ex);
                     event.setCancelled(true);
                     return;
                 } else if (owner == null) {
-                    System.out.println("what! owner is null?");
                     event.setCancelled(true);
                     return;
                 }
