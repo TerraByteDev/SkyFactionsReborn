@@ -81,7 +81,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
             if (player == null) return "UNKNOWN PLAYER";
             if (FactionAPI.factionCache.containsKey(player.getUniqueId()))
                 return String.valueOf(FactionAPI.getCachedFaction(player.getUniqueId()).getGems());
-            
+
             else return TextUtility.legacyColor("&cN/A", locale, player);
         } else if (params.toLowerCase().startsWith("faction_gems_")) {
             String factionName = params.toLowerCase().replace("faction_gems_", "");

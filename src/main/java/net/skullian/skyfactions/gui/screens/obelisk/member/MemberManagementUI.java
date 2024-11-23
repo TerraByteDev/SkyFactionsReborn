@@ -73,9 +73,15 @@ public class MemberManagementUI extends PaginatedScreen {
         List<Item> items = new ArrayList<>();
 
         for (OfflinePlayer member : faction.getAllMembers()) {
+            System.out.println("MEMBER NAME: " + member.getName());
+            System.out.println("DATA NAME: " + data.getNAME());
+
             // Skullians: please god, let this be the last ever fucking hack in this plugin
             data.setNAME(data.getNAME().replace(player.getName(), member.getName())); // guiapi will auto place the gui viewer's name, so we just replace it here hehe
             items.add(new MemberPaginationItem(data, GUIAPI.createItem(data, member.getUniqueId()), faction.getRank(member.getUniqueId()), member, player, faction));
+
+            // never fucking mind. slay!!!
+            data.setNAME(data.getNAME().replace(member.getName(), player.getName()));
         }
 
         return items;
