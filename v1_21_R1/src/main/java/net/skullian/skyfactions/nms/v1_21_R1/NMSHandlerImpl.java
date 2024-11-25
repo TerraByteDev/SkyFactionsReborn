@@ -5,9 +5,9 @@ import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
 import net.minecraft.network.protocol.game.ClientboundSetBorderCenterPacket;
 import net.minecraft.network.protocol.game.ClientboundSetBorderSizePacket;
 import net.minecraft.world.level.border.WorldBorder;
-import net.skullian.skyfactions.util.nms.NMSHandler;
-import net.skullian.skyfactions.util.SLogger;
-import net.skullian.skyfactions.util.worldborder.BorderUpdateAction;
+import net.skullian.skyfactions.common.util.worldborder.BorderUpdateAction;
+import net.skullian.skyfactions.core.util.nms.NMSHandler;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 

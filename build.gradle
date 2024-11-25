@@ -128,7 +128,6 @@ allprojects {
         compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:${fawe}")
         compileOnly("com.sk89q.worldguard:worldguard-bukkit:${worldguard}")
         compileOnly("org.xerial:sqlite-jdbc:${sqlite_jdbc}")
-        compileOnly("net.dv8tion:JDA:${jda}")
         compileOnly("fr.skytasul:jukebox:${jukebox}")
         compileOnly("com.github.koca2000:NoteBlockAPI:${noteblockapi}")
         compileOnly("com.fasterxml.jackson.core:jackson-databind:${jackson}")
@@ -138,7 +137,6 @@ allprojects {
         compileOnly("net.objecthunter:exp4j:${exp4j}")
         compileOnly("com.github.retrooper:packetevents-spigot:${packetevents}")
         implementation("me.tofaa.entitylib:spigot:${entitylib}")
-        //implementation("me.tofaa.entitylib:spigot:${entitylib}")
         compileOnly("dev.dejvokep:boosted-yaml:${boostedyaml}")
         compileOnly("org.incendo:cloud-paper:${cloud}-SNAPSHOT")
         compileOnly("org.incendo:cloud-core:${cloud}")
@@ -152,11 +150,16 @@ allprojects {
         compileOnly("com.github.LoneDev6:API-ItemsAdder:${itemsadder}")
         compileOnly("org.jooq:jooq:${jooq_codegen_version}")
         compileOnly("org.flywaydb:flyway-core:${flyway_core}")
+        compileOnly("org.jetbrains:annotations:${jetbrains_annotations}")
     }
 }
 
 dependencies {
+    implementation(project(":common"))
     implementation(project(":core"))
+
+    implementation(project(":modules"))
+
     implementation(project(":v1_21_R1"))
 
     jooqCodegen("org.xerial:sqlite-jdbc:${sqlite_jdbc}")
@@ -243,7 +246,7 @@ jooq {
                 fluentSetters = true
             }
             target {
-                packageName = 'net.skullian.skyfactions.database'
+                packageName = 'net.skullian.skyfactions.core.database'
                 directory = 'core/src/main/java/'
                 clean = false
             }

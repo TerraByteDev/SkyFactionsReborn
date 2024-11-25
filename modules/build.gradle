@@ -1,0 +1,8 @@
+plugins {
+    id 'java'
+    id 'com.gradleup.shadow' version "${shadow_version}"
+}
+
+dependencies {
+    compileOnly(project(":common"))
+}

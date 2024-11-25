@@ -10,8 +10,13 @@
 # DO NOT CHANGE THIS!!!!
 CONFIG_VERSION: 1
 
-# ALL OF THESE COMMANDS REQUIRE A SERVER RESTART! DISCORD MESSAGES ARE LOCATED IN THE MESSAGE CONFIG!
+# All of these settings require a restart apart from:
+# - Raid Channel
+# - Avatar API
+# - Activity & Status config
 
+# The Discord feature allows you to send raid notifications to a Discord channel.
+# Players can link their Discord account to their Minecraft account to receive notifications.
 Discord:
   # Whether the discord feature is enabled.
   ENABLED: false
@@ -23,3 +28,31 @@ Discord:
 
   # API URL for getting the attacker's head.
   AVATAR_API: "https://mc-heads.net/avatar/%player%.png/500"
+
+  # This allows you to customise the link command on the Discord.
+  COMMANDS:
+    # Name and description of the application command itself.
+    COMMAND_NAME: "link-mc"
+    COMMAND_DESCRIPTION: "Links your discord account to your minecraft account for SkyFactions."
+
+    # The application command has a single String input option for the code provided ingame.
+    # You can customise the name and description of this input here.
+    CODE_OPTION_NAME: "code"
+    CODE_OPTION_DESCRIPTION: "Code that you were given on the SkyFactions server when running /link."
+
+  # How often the presence should be changed. In seconds - Do not see this too low!
+  PRESENCE_INTERVAL: 300 # 5 Minutes
+
+  # Configure the bot status & activity.
+  # Available activity types: PLAYING, COMPETING, LISTENING, STREAMING, WATCHING
+  # Available status types: IDLE, ONLINE, DO_NOT_DISTURB, OFFLINE, INVISIBLE
+  PRESENCE:
+    1:
+      STATUS: "ONLINE"
+      TYPE: "PLAYING"
+      DESCRIPTION: "SkyFactions"
+
+    2:
+      STATUS: "ONLINE" # Status
+      TYPE: "WATCHING" # Type
+      DESCRIPTION: "over the server" # e.g. "Watching... over the server" - Assuming the TYPE is WATCHING

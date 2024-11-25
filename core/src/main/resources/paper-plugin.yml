@@ -1,6 +1,6 @@
 name: SkyFactionsReborn
 version: '@version@'
-main: net.skullian.skyfactions.SkyFactionsReborn
+main: net.skullian.skyfactions.core.SkyFactionsReborn
 description: An advanced plugin core merging Skyblock and Factions together.
 api-version: '1.21'
 loader: net.skullian.skyfactions.SkyLoader
