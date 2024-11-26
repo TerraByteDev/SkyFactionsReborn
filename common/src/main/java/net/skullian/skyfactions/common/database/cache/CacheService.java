@@ -3,20 +3,13 @@ package net.skullian.skyfactions.common.database.cache;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import lombok.Getter;
-import net.skullian.skyfactions.core.api.FactionAPI;
-import net.skullian.skyfactions.core.config.types.Settings;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitTask;
-
-import net.skullian.skyfactions.core.SkyFactionsReborn;
-import net.skullian.skyfactions.core.api.GemsAPI;
-import net.skullian.skyfactions.core.api.RunesAPI;
-import net.skullian.skyfactions.core.faction.Faction;
-import net.skullian.skyfactions.core.util.SLogger;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.faction.Faction;
+import net.skullian.skyfactions.common.util.SLogger;
 
 public class CacheService {
 
@@ -24,7 +17,8 @@ public class CacheService {
     @Getter private final Map<String, CacheEntry> factionsToCache = new HashMap<>();
     private final Map<String, String> toRename = new HashMap<>();
 
-    private BukkitTask task;
+    private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    private ScheduledFuture<?> task;
 
     public CompletableFuture<Void> cacheOnce() {
         return CompletableFuture.runAsync(() -> {
@@ -39,15 +33,14 @@ public class CacheService {
 
                 playersToCache.remove(uuid);
 
-                GemsAPI.playerGems.replace(uuid, (Math.max(0, GemsAPI.playerGems.get(uuid) + gemsModification)));
-                RunesAPI.playerRunes.replace(uuid, (Math.max(0, RunesAPI.playerRunes.get(uuid) + runesModification)));
+                SkyApi.getInstance().getUserManager().getUser(uuid).onCacheComplete(gemsModification, runesModification);
             }
 
             for (Map.Entry<String, CacheEntry> cachedFaction : factionsToCache.entrySet()) {
                 cachedFaction.getValue().cache(null, cachedFaction.getKey()).join();
 
                 String factionName = cachedFaction.getKey();
-                Faction faction = FactionAPI.getCachedFaction(factionName);
+                Faction faction = SkyApi.getInstance().getFactionAPI().getCachedFaction(factionName);
 
                 int gemsModification = cachedFaction.getValue().getGems();
                 int runesModification = cachedFaction.getValue().getRunes();
@@ -65,7 +58,7 @@ public class CacheService {
     }
 
     public void enable() {
-        this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(SkyFactionsReborn.getInstance(), () -> cacheOnce().thenRun(this::onCacheComplete), Settings.CACHE_SAVE_INTERVAL.getInt() * 20L, Settings.CACHE_SAVE_INTERVAL.getInt() * 20L);
+        this.task = executorService.scheduleAtFixedRate(() -> cacheOnce().thenRun(this::onCacheComplete), 0, Settings.CACHE_SAVE_INTERVAL.getInt(), TimeUnit.SECONDS);
     }
 
     private void onCacheComplete() {
@@ -79,8 +72,8 @@ public class CacheService {
 
     public CompletableFuture<Void> disable() {
         SLogger.info("Disabling Cache Service...");
-        if (task != null) {
-            task.cancel();
+        if (task != null && !task.isCancelled()) {
+            task.cancel(false);
         }
 
         return cacheOnce().orTimeout(60, TimeUnit.SECONDS);

@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.skullian.skyfactions.common.config.ConfigFileHandler;
 import net.skullian.skyfactions.common.database.DatabaseManager;
 import net.skullian.skyfactions.common.database.cache.CacheService;
+import net.skullian.skyfactions.common.user.UserManager;
 import net.skullian.skyfactions.common.util.worldborder.BorderAPI;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,6 +83,21 @@ public abstract class SkyApi {
      * @return {@link NotificationAPI}
      */
    @NotNull public abstract NotificationAPI getNotificationAPI();
+
+    /**
+     * Get the User Manager. This allows you to fetch / store data concerning users such as their balance, island, etc.
+     *
+     * @return {@link UserManager}
+     */
+   @NotNull public abstract UserManager getUserManager();
+
+    /**
+     * Get the Gems API. This allows you to control the gems system for players..
+     * Kind of self-explanatory.
+     *
+     * @return {@link GemsAPI}
+     */
+   @NotNull public abstract GemsAPI getGemsAPI();
 
     /**
      * Set the API Instance. Can depend on the platform (obviously a WIP)

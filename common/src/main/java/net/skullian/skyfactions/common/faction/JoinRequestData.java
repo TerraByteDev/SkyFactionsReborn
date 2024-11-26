@@ -10,4 +10,5 @@ public class JoinRequestData {
     private String factionName;
     private boolean accepted;
     private long timestamp;
+
 }

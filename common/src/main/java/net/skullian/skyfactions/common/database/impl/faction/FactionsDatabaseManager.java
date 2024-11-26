@@ -1,13 +1,13 @@
 package net.skullian.skyfactions.common.database.impl.faction;
 
-import net.skullian.skyfactions.core.SkyFactionsReborn;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.database.tables.records.FactionBansRecord;
 import net.skullian.skyfactions.common.database.tables.records.FactionIslandsRecord;
 import net.skullian.skyfactions.common.database.tables.records.FactionMembersRecord;
 import net.skullian.skyfactions.common.database.tables.records.FactionsRecord;
 import net.skullian.skyfactions.common.api.PlayerAPI;
-import net.skullian.skyfactions.core.faction.Faction;
-import net.skullian.skyfactions.core.faction.RankType;
+import net.skullian.skyfactions.common.faction.Faction;
+import net.skullian.skyfactions.common.faction.RankType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -43,7 +43,7 @@ public class FactionsDatabaseManager {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(FACTIONS)
                     .columns(FACTIONS.NAME, FACTIONS.MOTD, FACTIONS.LEVEL, FACTIONS.LAST_RAID, FACTIONS.LOCALE, FACTIONS.LAST_RENAMED)
-                    .values(factionName, "<red>None", 1, (long) 0, PlayerAPI.getLocale(factionOwner.getUniqueId()), System.currentTimeMillis())
+                    .values(factionName, "<red>None", 1, (long) 0, SkyApi.getInstance().getPlayerAPI().getLocale(factionOwner.getUniqueId()), System.currentTimeMillis())
                     .execute();
 
             ctx.insertInto(FACTION_MEMBERS)
@@ -61,7 +61,7 @@ public class FactionsDatabaseManager {
 
             return result != null ?
                     new Faction(
-                            SkyFactionsReborn.getDatabaseManager().getFactionIslandManager().getFactionIsland(factionName).join(),
+                            SkyApi.getInstance().getDatabaseManager().getFactionIslandManager().getFactionIsland(factionName).join(),
                             result.getName(),
                             result.getLastRaid(),
                             result.getLevel(),
@@ -71,14 +71,14 @@ public class FactionsDatabaseManager {
                             getFactionMembersByRank(factionName, RankType.ADMIN).join(),
                             getFactionMembersByRank(factionName, RankType.MEMBER).join(),
                             getFactionMOTD(factionName).join(),
-                            SkyFactionsReborn.getDatabaseManager().getCurrencyManager().getRunes(factionName).join(),
-                            SkyFactionsReborn.getDatabaseManager().getCurrencyManager().getGems(factionName).join(),
+                            SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getRunes(factionName).join(),
+                            SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getGems(factionName).join(),
                             result.getLocale(),
-                            SkyFactionsReborn.getDatabaseManager().getElectionManager().isElectionRunning(factionName).join(),
+                            SkyApi.getInstance().getDatabaseManager().getElectionManager().isElectionRunning(factionName).join(),
                             getBannedPlayers(factionName).join(),
                             result.getLastRenamed(),
-                            SkyFactionsReborn.getDatabaseManager().getFactionInvitesManager().getAllInvites(factionName).join(),
-                            SkyFactionsReborn.getDatabaseManager().getFactionAuditLogManager().getAuditLogs(factionName).join()
+                            SkyApi.getInstance().getDatabaseManager().getFactionInvitesManager().getAllInvites(factionName).join(),
+                            SkyApi.getInstance().getDatabaseManager().getFactionAuditLogManager().getAuditLogs(factionName).join()
                     ) : null;
         });
     }
@@ -198,7 +198,7 @@ public class FactionsDatabaseManager {
                         .where(AUDIT_LOGS.FACTIONNAME.eq(factionName))
                         .execute();
 
-                int id = SkyFactionsReborn.getDatabaseManager().getElectionManager().getElectionID(factionName).join();
+                int id = SkyApi.getInstance().getDatabaseManager().getElectionManager().getElectionID(factionName).join();
                 trx.dsl().deleteFrom(FACTION_ELECTIONS)
                         .where(FACTION_ELECTIONS.FACTIONNAME.eq(factionName))
                         .execute();
@@ -239,8 +239,8 @@ public class FactionsDatabaseManager {
         });
     }
 
-    public CompletableFuture<Boolean> isInFaction(Player player) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_MEMBERS, FACTION_MEMBERS.UUID.eq(player.getUniqueId().toString())));
+    public CompletableFuture<Boolean> isInFaction(UUID playerUUID) {
+        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_MEMBERS, FACTION_MEMBERS.UUID.eq(playerUUID.toString())));
     }
 
     public CompletableFuture<OfflinePlayer> getFactionOwner(String factionName) {

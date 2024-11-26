@@ -1,35 +1,42 @@
 package net.skullian.skyfactions.common.user;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.faction.JoinRequestData;
-import net.skullian.skyfactions.common.island.SkyIsland;
+import net.skullian.skyfactions.common.island.impl.PlayerIsland;
 import net.skullian.skyfactions.common.notification.NotificationData;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Getter
 public abstract class SkyUser {
 
+    public abstract UUID getUniqueId();
+
+    public abstract void teleport(Object location);
+
     public abstract PlayerData getPlayerData();
 
-    public abstract Object getPlayerInstance();
+    public abstract CompletableFuture<Integer> getGems();
 
-    public abstract int getGems();
+    public abstract CompletableFuture<Integer> getRunes();
 
-    public abstract int getRunes();
+    @Nullable public abstract CompletableFuture<PlayerIsland> getIsland();
 
-    public abstract SkyIsland getIsland();
-
-    public abstract String getBelongingFaction();
+    public abstract CompletableFuture<String> getBelongingFaction();
 
     public abstract List<NotificationData> getNotifications();
 
-    public abstract List<InviteData> getIncomingInvites();
+    public abstract CompletableFuture<List<InviteData>> getIncomingInvites();
 
-    public abstract JoinRequestData getActiveJoinRequest();
+    public abstract List<InviteData> getCachedInvites();
+
+    public abstract void onCacheComplete(int runesAddition, int gemsAddition);
+
+    @Nullable public abstract CompletableFuture<JoinRequestData> getActiveJoinRequest();
 
 }

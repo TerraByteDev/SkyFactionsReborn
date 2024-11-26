@@ -4,8 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.database.struct.AuditLogData;
+import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.island.impl.FactionIsland;
+import net.skullian.skyfactions.common.notification.NotificationType;
+import net.skullian.skyfactions.common.util.text.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -42,15 +47,14 @@ public class Faction {
     public List<AuditLogData> auditLogs;
 
     public int getRunes() {
-        if (SkyApi.getInstance().getCacheService())
-        if (SkyFactionsReborn.getCacheService().getFactionsToCache().containsKey(getName()))
-            return (runes += SkyFactionsReborn.getCacheService().getFactionsToCache().get(getName()).getRunes());
+        if (SkyApi.getInstance().getCacheService().getFactionsToCache().containsKey(getName()))
+            return (runes += SkyApi.getInstance().getCacheService().getFactionsToCache().get(getName()).getRunes());
         else return runes;
     }
 
     public int getGems() {
-        if (SkyFactionsReborn.getCacheService().getFactionsToCache().containsKey(getName()))
-            return (gems += SkyFactionsReborn.getCacheService().getFactionsToCache().get(getName()).getGems());
+        if (SkyApi.getInstance().getCacheService().getFactionsToCache().containsKey(getName()))
+            return (gems += SkyApi.getInstance().getCacheService().getFactionsToCache().get(getName()).getGems());
         else return gems;
     }
 
@@ -60,14 +64,14 @@ public class Faction {
      * @param newName New name of the faction.
      **/
     public void updateName(String newName) {
-        FactionAPI.onFactionRename(getName(), newName);
+        SkyApi.getInstance().getFactionAPI().onFactionRename(getName(), newName);
 
         Bukkit.getOnlinePlayers().stream()
                 .filter(player -> player.isOnline() && player.getPlayer().hasMetadata("inFactionRelatedUI"))
                 .forEach(player -> player.getPlayer().closeInventory(InventoryCloseEvent.Reason.PLUGIN));
 
         this.name = newName;
-        SkyFactionsReborn.getDatabaseManager().getFactionsManager().updateFactionName(getName(), newName);
+        SkyApi.getInstance().getDatabaseManager().getFactionsManager().updateFactionName(getName(), newName);
     }
 
     /**
@@ -78,9 +82,9 @@ public class Faction {
      */
     public void modifyPlayerRank(OfflinePlayer player, RankType newRank, Player actor) {
         RankType oldRank = getRankType(player.getUniqueId());
-        SkyFactionsReborn.getCacheService().getEntry(this).setNewRank(player.getUniqueId(), newRank);
+        SkyApi.getInstance().getCacheService().getEntry(this).setNewRank(player.getUniqueId(), newRank);
         cache(player, oldRank.getRankValue(), newRank);
-        NotificationAPI.createNotification(player.getUniqueId(), NotificationType.RANK_UPDATED, "new_rank", getRank(player.getUniqueId()), "player_name", actor.getName());
+        SkyApi.getInstance().getNotificationAPI().createNotification(player.getUniqueId(), NotificationType.RANK_UPDATED, "new_rank", getRank(player.getUniqueId()), "player_name", actor.getName());
     }
 
     /**
@@ -117,7 +121,7 @@ public class Faction {
     public CompletableFuture<Void> updateMOTD(String MOTD, Player actor) {
         this.motd = MOTD;
         createAuditLog(actor.getUniqueId(), AuditLogType.MOTD_UPDATE, "player_name", actor.getName(), "new_motd", MOTD);
-        return SkyFactionsReborn.getDatabaseManager().getFactionsManager().updateFactionMOTD(name, MOTD);
+        return SkyApi.getInstance().getDatabaseManager().getFactionsManager().updateFactionMOTD(name, MOTD);
     }
 
     /**
@@ -129,7 +133,7 @@ public class Faction {
         List<OfflinePlayer> players = getAllMembers();
         for (OfflinePlayer player : players) {
             if (player.isOnline()) {
-                String locale = PlayerAPI.getLocale(player.getUniqueId());
+                String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
                 Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
                         Messages.replace(message.getString(locale), locale, player.getPlayer(), replacements)
@@ -149,7 +153,7 @@ public class Faction {
         List<OfflinePlayer> players = getAllMembers();
         for (OfflinePlayer player : players) {
             if (player.isOnline()) {
-                String locale = PlayerAPI.getLocale(player.getUniqueId());
+                String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
                 Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
                         Messages.replace(message, locale, player.getPlayer()));
@@ -166,7 +170,7 @@ public class Faction {
      */
     public void addRunes(int addition) {
         runes += addition;
-        SkyFactionsReborn.getCacheService().getEntry(this).addRunes(addition);
+        SkyApi.getInstance().getCacheService().getEntry(this).addRunes(addition);
     }
 
     /**
@@ -176,7 +180,7 @@ public class Faction {
      */
     public void subtractRunes(int subtraction) {
         runes -= subtraction;
-        SkyFactionsReborn.getCacheService().getEntry(this).removeRunes(subtraction);
+        SkyApi.getInstance().getCacheService().getEntry(this).removeRunes(subtraction);
     }
 
     /**
@@ -186,7 +190,7 @@ public class Faction {
      */
     public void addGems(int addition) {
         gems += addition;
-        SkyFactionsReborn.getCacheService().getEntry(this).addGems(addition);
+        SkyApi.getInstance().getCacheService().getEntry(this).addGems(addition);
     }
 
     /**
@@ -196,11 +200,11 @@ public class Faction {
      */
     public void subtractGems(int subtraction) {
         gems -= subtraction;
-        SkyFactionsReborn.getCacheService().getEntry(this).removeGems(subtraction);
+        SkyApi.getInstance().getCacheService().getEntry(this).removeGems(subtraction);
     }
 
     public void updateLocale(String newLocale) {
-        SkyFactionsReborn.getCacheService().getEntry(this).setNewLocale(newLocale);
+        SkyApi.getInstance().getCacheService().getEntry(this).setNewLocale(newLocale);
     }
 
     /**
@@ -209,7 +213,7 @@ public class Faction {
      * @param player Player to kick [{@link Player}]
      */
     public void kickPlayer(OfflinePlayer player, Player actor) {
-        SkyFactionsReborn.getCacheService().getEntry(this).removeMember(player);
+        SkyApi.getInstance().getCacheService().getEntry(this).removeMember(player);
         if (Settings.FACTION_MANAGE_BROADCAST_KICKS.getBoolean()) {
             createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST, "<kicked>", player.getName());
         }
@@ -221,7 +225,7 @@ public class Faction {
      * @param player Player to ban [{@link Player}]
      */
     public void banPlayer(OfflinePlayer player, Player actor) {
-        SkyFactionsReborn.getCacheService().getEntry(this).banMember(player);
+        SkyApi.getInstance().getCacheService().getEntry(this).banMember(player);
         bannedPlayers.add(player);
         createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_BAN, "banned", player.getName(), "player", actor.getName());
         if (Settings.FACTION_MANAGE_BROADCAST_BANS.getBoolean()) {
@@ -236,7 +240,7 @@ public class Faction {
      */
     public void unbanPlayer(OfflinePlayer player) {
         bannedPlayers.remove(player);
-        SkyFactionsReborn.getCacheService().getEntry(this).unbanMember(player); // todo audit log & ban viewing
+        SkyApi.getInstance().getCacheService().getEntry(this).unbanMember(player); // todo audit log & ban viewing
     }
 
     /**
@@ -253,7 +257,7 @@ public class Faction {
      * @return {@link List<OfflinePlayer>}
      */
     public CompletableFuture<List<OfflinePlayer>> getBannedPlayers() {
-        return SkyFactionsReborn.getDatabaseManager().getFactionsManager().getBannedPlayers(name);
+        return SkyApi.getInstance().getDatabaseManager().getFactionsManager().getBannedPlayers(name);
     }
 
     /**
@@ -263,7 +267,7 @@ public class Faction {
      */
     public void leaveFaction(OfflinePlayer player) {
         removeFromFaction(player);
-        SkyFactionsReborn.getCacheService().getEntry(this).removeMember(player);
+        SkyApi.getInstance().getCacheService().getEntry(this).removeMember(player);
     }
 
     /**
@@ -272,7 +276,7 @@ public class Faction {
      * @param player UUID of the player to add [{@link OfflinePlayer}]
      */
     public void addFactionMember(OfflinePlayer player) {
-        SkyFactionsReborn.getCacheService().getEntry(this).addMember(player);
+        SkyApi.getInstance().getCacheService().getEntry(this).addMember(player);
         members.add(player);
         createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_JOIN, "player_name", player.getName());
         createBroadcast(player, Messages.FACTION_JOIN_BROADCAST, "<player_name>", player.getName());
@@ -288,7 +292,7 @@ public class Faction {
     public void createAuditLog(UUID playerUUID, AuditLogType type, Object... replacements) {
         AuditLogData auditLogData = createData(playerUUID, type, replacements);
         auditLogs.add(auditLogData);
-        SkyFactionsReborn.getCacheService().getEntry(this).addAuditLog(auditLogData);
+        SkyApi.getInstance().getCacheService().getEntry(this).addAuditLog(auditLogData);
     }
 
     private AuditLogData createData(UUID playerUUID, AuditLogType type, Object... replacements) {
@@ -345,14 +349,14 @@ public class Faction {
         OfflinePlayer player = data.getPlayer();
         OfflinePlayer inviter = data.getInviter();
 
-        InvitesAPI.onInviteCreate(player.getUniqueId(), data);
+        SkyApi.getInstance().getInvitesAPI().onInviteCreate(player.getUniqueId(), data);
         invites.add(data);
-        SkyFactionsReborn.getCacheService().getEntry(this).createInvite(data);
+        SkyApi.getInstance().getCacheService().getEntry(this).createInvite(data);
         createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "inviter", inviter.getName(), "player_name", player.getName());
-        NotificationAPI.createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "player_name", inviter.getName(), "faction_name", name);
+        SkyApi.getInstance().getNotificationAPI().createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "player_name", inviter.getName(), "faction_name", name);
 
         if (player.isOnline()) {
-            Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), PlayerAPI.getLocale(player.getUniqueId()));
+            Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
         }
     }
 
@@ -365,7 +369,7 @@ public class Faction {
         OfflinePlayer player = data.getPlayer();
 
         invites.add(data);
-        SkyFactionsReborn.getCacheService().getEntry(this).createInvite(data);
+        SkyApi.getInstance().getCacheService().getEntry(this).createInvite(data);
         createAuditLog(player.getUniqueId(), AuditLogType.JOIN_REQUEST_CREATE, "player_name", player.getName());
 
         List<OfflinePlayer> users = Stream.concat(getModerators().stream(), getAdmins().stream()).collect(Collectors.toList());
@@ -401,8 +405,8 @@ public class Faction {
         OfflinePlayer player = data.getPlayer();
 
         invites.remove(data);
-        SkyFactionsReborn.getCacheService().getEntry(this).removeInvite(data);
-        InvitesAPI.onInviteRemove(player.getUniqueId(), data);
+        SkyApi.getInstance().getCacheService().getEntry(this).removeInvite(data);
+        SkyApi.getInstance().getInvitesAPI().onInviteRemove(player.getUniqueId(), data);
         createAuditLog(player.getUniqueId(), type, replacements);
     }
 
@@ -423,10 +427,10 @@ public class Faction {
      */
     public void rejectJoinRequest(InviteData data, Player actor) {
         invites.remove(data);
-        SkyFactionsReborn.getCacheService().getEntry(this).removeInvite(data);
+        SkyApi.getInstance().getCacheService().getEntry(this).removeInvite(data);
 
         createAuditLog(data.getPlayer().getUniqueId(), AuditLogType.JOIN_REQUEST_REJECT, "faction_player", actor.getName(), "player", data.getPlayer().getName());
-        NotificationAPI.createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "player_name", actor.getName(), "faction_name", name);
+        SkyApi.getInstance().getNotificationAPI().createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "player_name", actor.getName(), "faction_name", name);
     }
 
     public InviteData toInviteData(JoinRequestData data, OfflinePlayer player) {
@@ -447,7 +451,7 @@ public class Faction {
      */
     public String getRank(UUID playerUUID) {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
-        String locale = player.isOnline() ? PlayerAPI.getLocale(player.getUniqueId()) : Messages.getDefaulLocale();
+        String locale = player.isOnline() ? SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()) : Messages.getDefaulLocale();
 
         if (owner.equals(player)) return Messages.FACTION_OWNER_TITLE.getString(locale);
         if (admins.contains(player)) return Messages.FACTION_ADMIN_TITLE.getString(locale);
@@ -508,7 +512,7 @@ public class Faction {
     }
 
     private void removeFromFaction(OfflinePlayer player) {
-        FactionAPI.factionCache.remove(player.getUniqueId());
+        SkyApi.getInstance().getFactionAPI().factionCache.remove(player.getUniqueId());
         if (owner.equals(player)) {
             owner = null;
         } else {

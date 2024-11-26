@@ -1,8 +1,9 @@
 package net.skullian.skyfactions.common.database.impl.faction;
 
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.database.tables.records.FactionInvitesRecord;
-import net.skullian.skyfactions.core.faction.JoinRequestData;
+import net.skullian.skyfactions.common.faction.JoinRequestData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jooq.Configuration;
@@ -50,8 +51,8 @@ public class FactionInvitesDatabaseManager {
             List<InviteData> data = new ArrayList<>();
             for (FactionInvitesRecord record : results) {
                 data.add(new InviteData(
-                        Bukkit.getOfflinePlayer(UUID.fromString(record.getUuid())),
-                        Bukkit.getOfflinePlayer(UUID.fromString(record.getInviter())),
+                        SkyApi.getInstance().getUserManager().getUser(UUID.fromString(record.getUuid())),
+                        SkyApi.getInstance().getUserManager().getUser(UUID.fromString(record.getInviter())),
                         record.getFactionname(),
                         record.getType(),
                         record.getTimestamp()
@@ -62,18 +63,18 @@ public class FactionInvitesDatabaseManager {
         });
     }
 
-    public CompletableFuture<List<InviteData>> getInvitesOfPlayer(OfflinePlayer player) {
+    public CompletableFuture<List<InviteData>> getInvitesOfPlayer(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
             Result<FactionInvitesRecord> results = ctx.selectFrom(FACTION_INVITES)
-                    .where(FACTION_INVITES.UUID.eq(player.getUniqueId().toString()), FACTION_INVITES.TYPE.eq("outgoing"))
+                    .where(FACTION_INVITES.UUID.eq(playerUUID.toString()), FACTION_INVITES.TYPE.eq("outgoing"))
                     .orderBy(FACTION_INVITES.TIMESTAMP.desc())
                     .fetch();
 
             List<InviteData> data = new ArrayList<>();
             for (FactionInvitesRecord record : results) {
                 data.add(new InviteData(
-                        Bukkit.getOfflinePlayer(UUID.fromString(record.getUuid())),
-                        Bukkit.getOfflinePlayer(UUID.fromString(record.getInviter())),
+                        SkyApi.getInstance().getUserManager().getUser(UUID.fromString(record.getUuid())),
+                        SkyApi.getInstance().getUserManager().getUser(UUID.fromString(record.getInviter())),
                         record.getFactionname(),
                         record.getType(),
                         record.getTimestamp()
@@ -84,10 +85,10 @@ public class FactionInvitesDatabaseManager {
         });
     }
 
-    public CompletableFuture<JoinRequestData> getPlayerJoinRequest(OfflinePlayer player) {
+    public CompletableFuture<JoinRequestData> getPlayerJoinRequest(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
             FactionInvitesRecord result = ctx.selectFrom(FACTION_INVITES)
-                    .where(FACTION_INVITES.UUID.eq(player.getUniqueId().toString()), FACTION_INVITES.TYPE.eq("incoming"))
+                    .where(FACTION_INVITES.UUID.eq(playerUUID.toString()), FACTION_INVITES.TYPE.eq("incoming"))
                     .fetchOne();
 
             return result != null ? new JoinRequestData(

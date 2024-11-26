@@ -13,7 +13,6 @@ import org.bukkit.Location;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.skullian.skyfactions.core.SkyFactionsReborn;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
 

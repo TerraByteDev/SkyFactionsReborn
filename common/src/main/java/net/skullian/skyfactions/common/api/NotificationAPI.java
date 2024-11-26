@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.common.api;
 
+import lombok.Getter;
 import net.skullian.skyfactions.common.notification.NotificationData;
 import net.skullian.skyfactions.common.notification.NotificationType;
 import net.skullian.skyfactions.common.faction.AuditLogType;
@@ -7,9 +8,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 public abstract class NotificationAPI {
+
+    private Map<String, Integer> factionInviteStore = new ConcurrentHashMap<>();
 
     /**
      * Initialise the notification cycle for a Player on join.

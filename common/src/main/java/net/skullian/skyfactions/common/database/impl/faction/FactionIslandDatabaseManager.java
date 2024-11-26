@@ -1,9 +1,9 @@
 package net.skullian.skyfactions.common.database.impl.faction;
 
-import net.skullian.skyfactions.core.config.types.Settings;
+import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.database.tables.records.FactionIslandsRecord;
-import net.skullian.skyfactions.core.island.IslandModificationAction;
-import net.skullian.skyfactions.core.island.impl.FactionIsland;
+import net.skullian.skyfactions.common.island.IslandModificationAction;
+import net.skullian.skyfactions.common.island.impl.FactionIsland;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 

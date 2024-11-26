@@ -1,5 +1,5 @@
 rootProject.name = 'SkyFactionsReborn'
-include 'core'
+include 'spigot'
 include 'v1_21_R1'
 include 'modules'
 include 'modules:discord'

@@ -60,43 +60,6 @@ public abstract class RunesAPI {
     public abstract void addRunes(UUID playerUUID, int amount);
 
     /**
-     * Get a player's rune count.
-     *
-     * @param playerUUID UUID of the Player {@link UUID}
-     *
-     * @return {@link CompletableFuture<Integer>} - This will be immediately completed if the player is cached, which should always be the case unless this is PAPI, or a module.
-     */
-    public abstract CompletableFuture<Integer> getRunes(UUID playerUUID);
-
-    /**
-     * Immediately skip fetching from the database if uncached and return the cached value.
-     *
-     * @param playerUUID
-     *
-     * @return The amount of runes the player has. Can return 0 if the player is not cached.
-     */
-    public abstract int getRunesIfCached(UUID playerUUID);
-
-    /**
-     * Check if a player is cached. Pretty much only used in the cacheData method in PlayerAPI but use it to your heart's content.
-     *
-     * @param playerUUID UUID of the player to check.
-     *
-     * @return true if the player is cached.
-     */
-    public abstract boolean isPlayerCached(UUID playerUUID);
-
-    /**
-     * Typically used internally to cache a player's runes for the future.
-     * Will automatically return a completed future if the player is already cached.
-     *
-     * @param playerUUID UUID of the player to fetch from the database.
-     *
-     * @return {@link CompletableFuture<Integer>} - Returns an integer of the player's runes along with auto-caching it.
-     */
-    public abstract CompletableFuture<Integer> cachePlayer(UUID playerUUID);
-
-    /**
      * This is a very simple method to check if an ItemStack has any enchantments.
      * Used within the runes conversion UI.
      *
