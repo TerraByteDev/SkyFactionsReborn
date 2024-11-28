@@ -8,7 +8,7 @@ import net.skullian.skyfactions.core.config.types.DefencesConfig;
 import net.skullian.skyfactions.core.config.types.Messages;
 import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
 import net.skullian.skyfactions.core.event.armor.ArmorEquipEvent;
-import net.skullian.skyfactions.core.gui.screens.defence.DefenceManageUI;
+import net.skullian.skyfactions.common.gui.screens.defence.DefenceManageUI;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -108,9 +108,9 @@ public abstract class DefenceAPI {
      * @param builder Builder of the item.
      * @param player Player in question.
      *
-     * @return {@link SkyItemStack} - The modified ItemBuilder with the insufficient permissions lore added.
+     * @return {@link SkyItemStack.SkyItemStackBuilder} - The modified ItemBuilder with the insufficient permissions lore added.
      */
-    @NotNull public abstract SkyItemStack processPermissions(SkyItemStack builder, SkyUser player);
+    @NotNull public abstract SkyItemStack.SkyItemStackBuilder processPermissions(SkyItemStack.SkyItemStackBuilder builder, SkyUser player);
 
     /**
      * Check if a block is a defence material. Useful for quick efficient checking rather than immediately checking the block's PDC.

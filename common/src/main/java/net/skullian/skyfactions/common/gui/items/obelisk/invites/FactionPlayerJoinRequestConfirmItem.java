@@ -1,0 +1,47 @@
+package net.skullian.skyfactions.common.gui.items.obelisk.invites;
+
+import net.skullian.skyfactions.common.faction.JoinRequestData;
+import net.skullian.skyfactions.core.SkyFactionsReborn;
+import net.skullian.skyfactions.core.api.SpigotFactionAPI;
+import net.skullian.skyfactions.core.api.SpigotNotificationAPI;
+import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.core.config.types.Messages;
+import net.skullian.skyfactions.core.gui.data.ItemData;
+import net.skullian.skyfactions.core.gui.items.impl.old.SkyItem;
+import net.skullian.skyfactions.core.util.ErrorUtil;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+public class FactionPlayerJoinRequestConfirmItem extends SkyItem {
+    private JoinRequestData DATA;
+
+    public FactionPlayerJoinRequestConfirmItem(ItemData data, ItemStack stack, JoinRequestData joinRequestData, Player player) {
+        super(data, stack, player, null);
+        
+        this.DATA = joinRequestData;
+    }
+
+    @Override
+    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+        event.getInventory().close();
+
+        SpigotFactionAPI.getFaction(DATA.getFactionName()).whenComplete((faction, ex) -> {
+            if (faction == null) {
+                Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "get your Faction", "FACTION_NOT_FOUND");
+                return;
+            } else if (ex != null) {
+                ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
+                return;
+            }
+
+            SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId()).removeInvite(faction.toInviteData(DATA, player));
+            faction.addFactionMember(player);
+            Messages.PLAYER_FACTION_JOIN_SUCCESS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "faction_name", DATA.getFactionName());
+            SpigotNotificationAPI.factionInviteStore.replace(faction.getName(), (SpigotNotificationAPI.factionInviteStore.get(faction.getName()) - 1));
+        });
+    }
+
+}

@@ -31,5 +31,5 @@ public abstract class BaseSkyItem {
 
     public void onClick(SkyClickType clickType, SkyUser user) {}
 
-    public abstract void update();
+    public void update() {}
 }

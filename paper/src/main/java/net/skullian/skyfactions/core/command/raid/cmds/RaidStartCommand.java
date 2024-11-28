@@ -5,7 +5,7 @@ import net.skullian.skyfactions.core.command.CommandTemplate;
 import net.skullian.skyfactions.core.command.CommandsUtility;
 import net.skullian.skyfactions.core.config.types.Messages;
 import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.core.gui.screens.confirmation.PlayerRaidConfirmationUI;
+import net.skullian.skyfactions.common.gui.screens.confirmation.PlayerRaidConfirmationUI;
 import net.skullian.skyfactions.core.util.ErrorUtil;
 import net.skullian.skyfactions.core.util.SoundUtil;
 import org.bukkit.entity.Player;

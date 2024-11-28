@@ -203,7 +203,7 @@ public abstract class FactionAPI {
             ObeliskHandler.spawnFactionObelisk(factionName, island);
 
             handleFactionWorldBorder(player, island);
-            SkyApi.getInstance().getIslandAPI().modifyDefenceOperation(DefenceOperation.DISABLE, player;
+            SkyApi.getInstance().getIslandAPI().modifyDefenceOperation(DefenceOperation.DISABLE, player);
             player.teleport(island.getCenter(worldName));
 
             SkyApi.getInstance().getSoundAPI().playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
