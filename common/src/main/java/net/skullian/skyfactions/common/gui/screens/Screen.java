@@ -2,6 +2,7 @@ package net.skullian.skyfactions.common.gui.screens;
 
 import net.skullian.skyfactions.common.api.GUIAPI;
 import net.skullian.skyfactions.common.gui.data.GUIData;
+import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.common.user.SkyUser;
 import org.jetbrains.annotations.Nullable;
@@ -24,5 +25,5 @@ public abstract class Screen {
 
     public abstract void show();
 
-    public abstract @Nullable SkyItem
+    public abstract @Nullable BaseSkyItem handleItem(SkyItem item);
 }
