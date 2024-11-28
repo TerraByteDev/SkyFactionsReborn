@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.common.api;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 import java.util.UUID;
 
@@ -11,8 +11,8 @@ public abstract class GemsAPI {
 
     public abstract void subtractGems(UUID playerUUID, int subtraction);
 
-    public abstract ItemStack createGemsStack(Player player);
+    public abstract SkyItemStack createGemsStack(SkyUser player);
 
-    public abstract boolean isGemsStack(ItemStack stack);
+    public abstract boolean isGemsStack(SkyItemStack stack);
 
 }

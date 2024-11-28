@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.common.util.worldborder;
 
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
 
 public interface WorldBorderInterface {
 
@@ -34,5 +34,5 @@ public interface WorldBorderInterface {
     BorderPos maximumPos();
     double worldBorderSize();
     void worldBorderSize(double radius);
-    void update(BorderUpdateAction action, Player player);
+    void update(BorderUpdateAction action, SkyUser player);
 }

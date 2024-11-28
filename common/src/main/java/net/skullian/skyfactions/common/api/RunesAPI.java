@@ -1,13 +1,12 @@
 package net.skullian.skyfactions.common.api;
 
 import net.skullian.skyfactions.common.faction.Faction;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public abstract class RunesAPI {
 
@@ -18,14 +17,14 @@ public abstract class RunesAPI {
      * @param player Player related to the ItemStack.
      * @return {@link Boolean}
      */
-    public abstract boolean isStackProhibited(ItemStack stack, Player player);
+    public abstract boolean isStackProhibited(SkyItemStack stack, SkyUser player);
 
     /**
      * Used in the runes conversion UI. This is used through Player obelisks.
      * @param stacks List of ItemStacks from the VirtualInventory to submit.
      * @param player PLayer who is converting the items -> runes.
      */
-    public abstract void handlePlayerRuneConversion(List<ItemStack> stacks, Player player);
+    public abstract void handlePlayerRuneConversion(List<SkyItemStack> stacks, SkyUser player);
 
     /**
      * Used in the runes conversion UI. This is used through Faction obelisks.
@@ -33,15 +32,15 @@ public abstract class RunesAPI {
      * @param stacks List of ItemStacks from the VirtualInventory to submit.
      * @param player Member of the Faction who is converting the items -> runes.
      */
-    public abstract void handleFactionRuneConversion(List<ItemStack> stacks, Player player);
+    public abstract void handleFactionRuneConversion(List<SkyItemStack> stacks, SkyUser player);
 
     /**
-     * Internally referenced by {@link #handlePlayerRuneConversion(List, Player)} and {@link #handleFactionRuneConversion(List, Player)}.
+     * Internally referenced by {@link #handlePlayerRuneConversion(List, SkyUser)} and {@link #handleFactionRuneConversion(List, SkyUser)}.
      *
      * @param stacks List of ItemStacks from the VirtualInventory to submit.
      * @param player PLayer who is converting the items -> runes.
      */
-    public abstract void handleRuneConversion(List<ItemStack> stacks, Player player, Faction faction);
+    public abstract void handleRuneConversion(List<SkyItemStack> stacks, SkyUser player, Faction faction);
 
     /**
      * Remove runes from a player.
@@ -67,7 +66,7 @@ public abstract class RunesAPI {
      *
      * @return true if the ItemStack has enchantments.
      */
-    public abstract boolean hasEnchants(ItemStack stack);
+    public abstract boolean hasEnchants(SkyItemStack stack);
 
     /**
      * Checks for any lore present in the ItemStack.
@@ -77,7 +76,7 @@ public abstract class RunesAPI {
      *
      * @return true if the ItemStack has lore present.
      */
-    public abstract boolean hasLore(ItemStack stack);
+    public abstract boolean hasLore(SkyItemStack stack);
 
     /**
      * Checks with the runes conversion configuration whether the ItemStack is allowed, primary to check it against the blacklist config.
@@ -85,7 +84,7 @@ public abstract class RunesAPI {
      *
      * @return true if the ItemStack is allowed to be converted.
      */
-    public abstract boolean isAllowed(ItemStack stack);
+    public abstract boolean isAllowed(SkyItemStack stack);
 
     /**
      * Used to get the item ID of an ItemStack in content plugins such as Oraxen and ItemsAdder.
@@ -94,7 +93,7 @@ public abstract class RunesAPI {
      *
      * @return {@link String} of the corresponding custom item from the content plugin. Will just return the name of the material if it's not a custom item.
      */
-    @NotNull public abstract String getItemID(ItemStack stack);
+    @NotNull public abstract String getItemID(SkyItemStack stack);
 
     /**
      * Used after items have been converted into runes. ItemStacks that did not meet the requirements for conversion (e.g. too little amounts of said ItemStack) will be sent here.
@@ -102,5 +101,5 @@ public abstract class RunesAPI {
      * @param stacks Stacks to return to the player.
      * @param player Player to return the items to.
      */
-    public abstract void returnItems(List<ItemStack> stacks, Player player);
+    public abstract void returnItems(List<SkyItemStack> stacks, SkyUser player);
 }

@@ -1,6 +1,8 @@
 package net.skullian.skyfactions.common.api;
 
+import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.common.island.impl.PlayerIsland;
+import net.skullian.skyfactions.common.user.SkyUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,18 @@ public abstract class IslandAPI {
 
             return island;
         });
+    }
+
+    public void modifyDefenceOperation(FactionAPI.DefenceOperation operation, SkyUser user) {
+        if (operation == FactionAPI.DefenceOperation.DISABLE && !SkyApi.getInstance().getRegionAPI().isLocationInRegion(user, "sfr_player_" + user.getUniqueId())) return;
+
+        List<Defence> defences = SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().get(user.getUniqueId());
+        if (defences != null && !defences.isEmpty()) {
+            for (Defence defence : defences) {
+                if (operation == FactionAPI.DefenceOperation.ENABLE) defence.onLoad(user.getUniqueId().toString());
+                    else defence.disable();
+            }
+        }
     }
 
 

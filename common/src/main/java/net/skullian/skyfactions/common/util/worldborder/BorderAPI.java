@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.common.util.worldborder;
 
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.worldborder.persistence.WBData;
-import org.bukkit.entity.Player;
 
 public interface BorderAPI {
 
@@ -10,7 +10,7 @@ public interface BorderAPI {
      *
      * @param player Player in question.
      */
-    void resetBorder(Player player);
+    void resetBorder(SkyUser player);
 
     /**
      * Modify a player's individual world border.
@@ -19,10 +19,10 @@ public interface BorderAPI {
      * @param radius New radius of the world border.
      * @param location New central location of the world border.
      */
-    void setWorldBorder(Player player, double radius, BorderPos location);
+    void setWorldBorder(SkyUser player, double radius, BorderPos location);
 
     interface PersistentBorderAPI extends BorderAPI {
-        WBData getWBData(Player player);
+        WBData getWBData(SkyUser player);
     }
 
 }

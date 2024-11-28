@@ -4,14 +4,12 @@ import com.google.common.net.HostAndPort;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.database.impl.*;
 import net.skullian.skyfactions.common.database.impl.faction.*;
-import net.skullian.skyfactions.core.SkyFactionsReborn;
-import net.skullian.skyfactions.core.config.types.Settings;
-import net.skullian.skyfactions.core.database.impl.*;
-import net.skullian.skyfactions.core.database.impl.faction.*;
-import net.skullian.skyfactions.core.util.SLogger;
-import org.bukkit.Bukkit;
+import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +22,6 @@ import org.jooq.impl.DefaultExecuteListenerProvider;
 import org.sqlite.JDBC;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -49,8 +46,8 @@ public class DatabaseManager {
     @Getter private FactionsDatabaseManager factionsManager;
     @Getter private FactionElectionManager electionManager;
 
-    public void initialise(String type) throws SQLException {
-        createDataSource(new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data/data.sqlite3"), type);
+    public void initialise(String type) {
+        createDataSource(SkyApi.getInstance().getFileAPI().getDatabasePath(), type);
     }
 
     private void createDataSource(
@@ -142,9 +139,9 @@ public class DatabaseManager {
             this.dialect = SQLDialect.MYSQL;
             this.ctx = DSL.using(dataSource, SQLDialect.MYSQL);
         } else {
-            handleError(new IllegalStateException("Unknown database type: " + type));
+            ErrorUtil.handleDatabaseError(new IllegalStateException("Unknown database type: " + type));
             SLogger.fatal("SkyFactions will now disable.");
-            SkyFactionsReborn.getInstance().disable();
+            SkyApi.disablePlugin();
         }
 
         setup();
@@ -175,27 +172,14 @@ public class DatabaseManager {
             this.electionManager = new FactionElectionManager(this.ctx);
         } else {
             result.getFailedMigrations().forEach(migration -> SLogger.fatal("Migration failed: {}", migration.description));
-            handleError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed: " + result.getException()));
+            ErrorUtil.handleDatabaseError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed: " + result.getException()));
             SLogger.fatal("SkyFactions will now disable.");
-            SkyFactionsReborn.getInstance().disable();
+            SkyApi.disablePlugin();
         }
     }
 
     public void closeConnection() {
         this.dataSource.close();
         ctx = null;
-    }
-
-    // ------------------ MISC ------------------ //
-
-    public static void handleError(Exception error) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-            SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
-            SLogger.fatal("There was an error while performing database actions:");
-            SLogger.fatal(error.getMessage());
-            SLogger.fatal("Please see https://docs.terrabytedev.com/skyfactions/errors-and-debugging for more information.");
-            SLogger.fatal("Please contact the devs.");
-            SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
-        });
     }
 }

@@ -1,10 +1,8 @@
 package net.skullian.skyfactions.common.obelisk;
 
 import lombok.Getter;
-import net.skullian.skyfactions.core.config.types.ObeliskConfig;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import net.skullian.skyfactions.common.config.types.ObeliskConfig;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 import java.util.List;
 
@@ -15,29 +13,24 @@ public class ObeliskItem {
     private List<String> lore;
     private int customModelData;
 
-    public ObeliskItem(ItemStack itemStack) {
-        this.displayName = itemStack.getItemMeta().getDisplayName();
-        this.lore = itemStack.getItemMeta().getLore();
-        if (itemStack.getItemMeta().hasCustomModelData()) {
-            this.customModelData = itemStack.getItemMeta().getCustomModelData();
+    public ObeliskItem(SkyItemStack itemStack) {
+        this.displayName = itemStack.getDisplayName();
+        this.lore = itemStack.getLore();
+        if (itemStack.getCustomModelData() != -1) {
+            this.customModelData = itemStack.getCustomModelData();
         } else {
             this.customModelData = ObeliskConfig.OBELISK_CUSTOM_MODEL_DATA.getInt();
         }
     }
 
-    public ItemStack getItem(int amount) {
-        ItemStack item = new ItemStack(Material.BARRIER, amount);
-        ItemMeta itemMeta = item.getItemMeta();
-
-        itemMeta.setDisplayName(this.displayName);
-        itemMeta.setLore(this.lore);
-        if (this.customModelData != -1) {
-            itemMeta.setCustomModelData(this.customModelData);
-        }
-
-        item.setItemMeta(itemMeta);
-
-        return item;
+    public SkyItemStack getItem(int amount) {
+        return SkyItemStack.builder()
+                .material("BARRIER")
+                .amount(amount)
+                .displayName(this.displayName)
+                .lore(this.lore)
+                .customModelData(this.customModelData)
+                .build();
     }
 
 

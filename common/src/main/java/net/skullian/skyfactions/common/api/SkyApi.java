@@ -4,13 +4,17 @@ import lombok.Getter;
 import net.skullian.skyfactions.common.config.ConfigFileHandler;
 import net.skullian.skyfactions.common.database.DatabaseManager;
 import net.skullian.skyfactions.common.database.cache.CacheService;
+import net.skullian.skyfactions.common.npc.NPCManager;
 import net.skullian.skyfactions.common.user.UserManager;
 import net.skullian.skyfactions.common.util.worldborder.BorderAPI;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Method;
+
 public abstract class SkyApi {
 
     @Getter private static SkyApi instance = null;
+    private static Object pluginInstance = null;
 
     /**
      * Get the configuration handler. Not much need for this usually.
@@ -100,6 +104,49 @@ public abstract class SkyApi {
    @NotNull public abstract GemsAPI getGemsAPI();
 
     /**
+     * Get the Island API. This is typically used for only player-island related operations.
+     * Can vary ^^
+     *
+     * @return {@link IslandAPI}
+     */
+   @NotNull public abstract IslandAPI getIslandAPI();
+
+    /**
+     * Get the Faction API. This is typically used for only faction-related operations.
+     *
+     * @return {@link FactionAPI}
+     */
+   @NotNull public abstract FactionAPI getFactionAPI();
+
+    /**
+     * Get the Sound API. This is for playing sounds to players.
+     *
+     * @return {@link SoundAPI}
+     */
+   @NotNull public abstract SoundAPI getSoundAPI();
+
+    /**
+     * Get the File API. This is for file-related operations such as config paths, etc.
+     * @return {@link FileAPI}
+     */
+   @NotNull public abstract FileAPI getFileAPI();
+
+    /**
+     * Get the NPC Manager.
+     * Self explanatory.
+     *
+     * @return {@link NPCManager}
+     */
+   @NotNull public abstract NPCManager getNPCManager();
+
+    /**
+     * API For the Obelisk. Used for spawning obelisk blocks on island creation.
+     *
+     * @return {@link ObeliskAPI}
+     */
+   @NotNull public abstract ObeliskAPI getObeliskAPI();
+
+    /**
      * Set the API Instance. Can depend on the platform (obviously a WIP)
      *
      * @param newInstance The new class that extends the SkyAPI class.
@@ -107,6 +154,30 @@ public abstract class SkyApi {
     public static void setInstance(SkyApi newInstance) {
         if (instance != null) throw new IllegalStateException("SkyAPI Instance has already been set!");
         instance = newInstance;
+    }
+
+    public static void setPluginInstance(Object newInstance) {
+        if (pluginInstance != null) throw new IllegalStateException("Plugin instance has already been set!");
+        pluginInstance = newInstance;
+    }
+
+    public static void disablePlugin() {
+        try {
+            if (pluginInstance == null) return;
+            Class<?> actualClass = pluginInstance.getClass();
+
+            Method method;
+            try {
+                method = actualClass.getMethod("disable");
+            } catch (NoSuchMethodError exception) {
+                method = actualClass.getDeclaredMethod("disable");
+            }
+
+            method.setAccessible(true);
+            method.invoke(instance);
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
     }
 
 }

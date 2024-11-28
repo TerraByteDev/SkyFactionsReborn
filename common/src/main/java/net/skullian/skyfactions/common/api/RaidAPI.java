@@ -1,31 +1,31 @@
 package net.skullian.skyfactions.common.api;
 
 import net.skullian.skyfactions.common.database.struct.IslandRaidData;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class RaidAPI {
 
-    public abstract CompletableFuture<String> getCooldownDuration(Player player);
+    public abstract CompletableFuture<String> getCooldownDuration(SkyUser player);
 
-    public abstract void startRaid(Player player);
+    public abstract void startRaid(SkyUser player);
 
-    public abstract void handlePlayers(Player attacker, UUID uuid);
+    public abstract void handlePlayers(SkyUser attacker, UUID uuid);
 
-    public abstract boolean hasEnoughGems(Player player);
+    public abstract boolean hasEnoughGems(SkyUser player);
 
-    public abstract IslandRaidData getRandomRaidable(Player player);
+    public abstract IslandRaidData getRandomRaidable(SkyUser player);
 
     public abstract boolean isPlayerOnline(UUID uuid);
 
-    public abstract void alertPlayer(Player player, Player attacker);
+    public abstract void alertPlayer(SkyUser player, SkyUser attacker);
 
-    public abstract void teleportToPreparationArea(Player player);
+    public abstract void teleportToPreparationArea(SkyUser player);
 
-    public abstract CompletableFuture<Void> showCountdown(UUID def, Player att);
+    public abstract CompletableFuture<Void> showCountdown(UUID def, SkyUser att);
 
-    public abstract void handleRaidExecutionError(Player player, boolean isDefendant);
+    public abstract void handleRaidExecutionError(SkyUser player, boolean isDefendant);
 
 }

@@ -5,12 +5,9 @@ import net.skullian.skyfactions.common.database.tables.records.FactionBansRecord
 import net.skullian.skyfactions.common.database.tables.records.FactionIslandsRecord;
 import net.skullian.skyfactions.common.database.tables.records.FactionMembersRecord;
 import net.skullian.skyfactions.common.database.tables.records.FactionsRecord;
-import net.skullian.skyfactions.common.api.PlayerAPI;
 import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.faction.RankType;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;
@@ -39,7 +36,7 @@ public class FactionsDatabaseManager {
         this.ctx = ctx;
     }
 
-    public CompletableFuture<Void> registerFaction(Player factionOwner, String factionName) {
+    public CompletableFuture<Void> registerFaction(SkyUser factionOwner, String factionName) {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(FACTIONS)
                     .columns(FACTIONS.NAME, FACTIONS.MOTD, FACTIONS.LEVEL, FACTIONS.LAST_RAID, FACTIONS.LOCALE, FACTIONS.LAST_RENAMED)
@@ -213,10 +210,10 @@ public class FactionsDatabaseManager {
 
     // ------------------ MEMBERS  ------------------ //
 
-    public CompletableFuture<Void> addFactionMembers(List<OfflinePlayer> players, String factionName) {
+    public CompletableFuture<Void> addFactionMembers(List<SkyUser> players, String factionName) {
         return CompletableFuture.runAsync(() -> {
             ctx.transaction((Configuration trx) -> {
-                for (OfflinePlayer player : players) {
+                for (SkyUser player : players) {
                     trx.dsl().insertInto(FACTION_MEMBERS)
                             .columns(FACTION_MEMBERS.FACTIONNAME, FACTION_MEMBERS.UUID, FACTION_MEMBERS.RANK)
                             .values(factionName, player.getUniqueId().toString(), "member")
@@ -243,25 +240,25 @@ public class FactionsDatabaseManager {
         return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_MEMBERS, FACTION_MEMBERS.UUID.eq(playerUUID.toString())));
     }
 
-    public CompletableFuture<OfflinePlayer> getFactionOwner(String factionName) {
+    public CompletableFuture<SkyUser> getFactionOwner(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
             FactionMembersRecord result = ctx.selectFrom(FACTION_MEMBERS)
                     .where(FACTION_MEMBERS.FACTIONNAME.eq(factionName), FACTION_MEMBERS.RANK.eq("owner"))
                     .fetchOne();
 
-            return result != null ? Bukkit.getOfflinePlayer(UUID.fromString(result.getUuid())) : null;
+            return result != null ? SkyApi.getInstance().getUserManager().getUser(UUID.fromString(result.getUuid())) : null;
         });
     }
 
-    public CompletableFuture<List<OfflinePlayer>> getFactionMembersByRank(String factionName, RankType rank) {
+    public CompletableFuture<List<SkyUser>> getFactionMembersByRank(String factionName, RankType rank) {
         return CompletableFuture.supplyAsync(() -> {
             Result<FactionMembersRecord> results = ctx.selectFrom(FACTION_MEMBERS)
                     .where(FACTION_MEMBERS.FACTIONNAME.eq(factionName), FACTION_MEMBERS.RANK.eq(rank.getRankValue()))
                     .fetch();
 
-            List<OfflinePlayer> players = new ArrayList<>();
+            List<SkyUser> players = new ArrayList<>();
             for (FactionMembersRecord member : results) {
-                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(member.getUuid()));
+                SkyUser player = SkyApi.getInstance().getUserManager().getUser(UUID.fromString(member.getUuid()));
                 players.add(player);
             }
 
@@ -271,10 +268,10 @@ public class FactionsDatabaseManager {
 
     // ------------------ ADMINISTRATION  ------------------ //
 
-    public CompletableFuture<Void> removeMembers(List<OfflinePlayer> players, String factionName) {
+    public CompletableFuture<Void> removeMembers(List<SkyUser> players, String factionName) {
         return CompletableFuture.runAsync(() -> {
             ctx.transaction((Configuration trx) -> {
-                for (OfflinePlayer player : players) {
+                for (SkyUser player : players) {
                     trx.dsl().deleteFrom(FACTION_MEMBERS)
                             .where(FACTION_MEMBERS.UUID.eq(player.getUniqueId().toString()), FACTION_MEMBERS.FACTIONNAME.eq(factionName))
                             .execute();
@@ -283,12 +280,12 @@ public class FactionsDatabaseManager {
         });
     }
 
-    public CompletableFuture<Void> banMembers(List<OfflinePlayer> players, String factionName) {
+    public CompletableFuture<Void> banMembers(List<SkyUser> players, String factionName) {
         return CompletableFuture.runAsync(() -> {
             ctx.transaction((Configuration trx) -> {
                 removeMembers(players, factionName).join();
 
-                for (OfflinePlayer player : players) {
+                for (SkyUser player : players) {
                     trx.dsl().insertInto(FACTION_BANS)
                             .columns(FACTION_BANS.FACTIONNAME, FACTION_BANS.UUID)
                             .values(factionName, player.getUniqueId().toString())
@@ -298,10 +295,10 @@ public class FactionsDatabaseManager {
         });
     }
 
-    public CompletableFuture<Void> unbanMembers(List<OfflinePlayer> players, String factionName) {
+    public CompletableFuture<Void> unbanMembers(List<SkyUser> players, String factionName) {
         return CompletableFuture.runAsync(() -> {
             ctx.transaction((Configuration trx) -> {
-                for (OfflinePlayer player : players) {
+                for (SkyUser player : players) {
                     trx.dsl().deleteFrom(FACTION_BANS)
                             .where(FACTION_BANS.UUID.eq(player.getUniqueId().toString()), FACTION_BANS.FACTIONNAME.eq(factionName))
                             .execute();
@@ -310,15 +307,15 @@ public class FactionsDatabaseManager {
         });
     }
 
-    public CompletableFuture<List<OfflinePlayer>> getBannedPlayers(String factionName) {
+    public CompletableFuture<List<SkyUser>> getBannedPlayers(String factionName) {
         return CompletableFuture.supplyAsync(() -> {
             Result<FactionBansRecord> results = ctx.selectFrom(FACTION_BANS)
                     .where(FACTION_BANS.FACTIONNAME.eq(factionName))
                     .fetch();
 
-            List<OfflinePlayer> players = new ArrayList<>();
+            List<SkyUser> players = new ArrayList<>();
             for (FactionBansRecord bannedPlayer : results) {
-                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(bannedPlayer.getUuid()));
+                SkyUser player = SkyApi.getInstance().getUserManager().getUser(UUID.fromString(bannedPlayer.getUuid()));
                 players.add(player);
             }
 
@@ -326,7 +323,7 @@ public class FactionsDatabaseManager {
         });
     }
 
-    public CompletableFuture<Boolean> isPlayerBanned(OfflinePlayer player, String factionName) {
+    public CompletableFuture<Boolean> isPlayerBanned(SkyUser player, String factionName) {
         return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_BANS, FACTION_BANS.FACTIONNAME.eq(factionName), FACTION_BANS.UUID.eq(player.getUniqueId().toString())));
     }
 

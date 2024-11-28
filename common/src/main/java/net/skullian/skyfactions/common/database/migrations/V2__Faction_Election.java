@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.common.database.migrations;
 
-import net.skullian.skyfactions.core.util.MigrationUtil;
+import net.skullian.skyfactions.common.util.MigrationUtil;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
 import org.jooq.DSLContext;

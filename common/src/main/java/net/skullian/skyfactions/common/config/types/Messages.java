@@ -10,11 +10,11 @@ import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.DependencyHandler;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.text.TextUtility;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -358,7 +358,7 @@ public enum Messages {
         return val;
     }
 
-    public void send(CommandSender receiver, String locale, Object... replacements) {
+    public void send(Object receiver, String locale, Object... replacements) {
         if (receiver == null) return;
         YamlDocument config = configs.getOrDefault(locale, getFallbackDocument());
 
@@ -366,9 +366,9 @@ public enum Messages {
 
         Component message;
         if (value == null) {
-            message = TextUtility.color(SERVER_NAME.get(locale) + "&r&7 Message not found: " + this.path, locale, receiver instanceof Player ? (Player) receiver : null , replacements);
+            message = TextUtility.color(SERVER_NAME.get(locale) + "&r&7 Message not found: " + this.path, locale, receiver instanceof SkyUser ? (SkyUser) receiver : null , replacements);
         } else {
-            message = value instanceof List ? TextUtility.fromList((List<?>) value, locale, receiver instanceof Player ? (Player) receiver : null, replacements) : TextUtility.color(String.valueOf(value), locale, receiver instanceof Player ? (Player) receiver : null, replacements);
+            message = value instanceof List ? TextUtility.fromList((List<?>) value, locale, receiver instanceof SkyUser ? (SkyUser) receiver : null, replacements) : TextUtility.color(String.valueOf(value), locale, receiver instanceof SkyUser ? (SkyUser) receiver : null, replacements);
         }
 
         receiver.sendMessage(message);

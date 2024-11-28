@@ -1,9 +1,9 @@
 package net.skullian.skyfactions.common.database.impl.faction;
 
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.database.struct.AuditLogData;
 import net.skullian.skyfactions.common.database.tables.records.AuditLogsRecord;
 import net.skullian.skyfactions.common.util.text.TextUtility;
-import org.bukkit.Bukkit;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;
@@ -48,7 +48,7 @@ public class FactionAuditLogDatabaseManager {
             List<AuditLogData> data = new ArrayList<>();
             for (AuditLogsRecord log : results) {
                 data.add(new AuditLogData(
-                        Bukkit.getOfflinePlayer(UUID.fromString(log.getUuid())),
+                        SkyApi.getInstance().getUserManager().getUser(UUID.fromString(log.getUuid())),
                         log.getFactionname(),
                         log.getType(),
                         TextUtility.convertFromString(log.getReplacements()),

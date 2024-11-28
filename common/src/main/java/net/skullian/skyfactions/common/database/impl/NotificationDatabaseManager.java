@@ -2,8 +2,8 @@ package net.skullian.skyfactions.common.database.impl;
 
 import net.skullian.skyfactions.common.database.tables.records.NotificationsRecord;
 import net.skullian.skyfactions.common.notification.NotificationData;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.text.TextUtility;
-import org.bukkit.OfflinePlayer;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;
@@ -50,7 +50,7 @@ public class NotificationDatabaseManager {
         });
     }
 
-    public CompletableFuture<List<NotificationData>> getNotifications(OfflinePlayer player) {
+    public CompletableFuture<List<NotificationData>> getNotifications(SkyUser player) {
         return CompletableFuture.supplyAsync(() -> {
             Result<NotificationsRecord> results = ctx.selectFrom(NOTIFICATIONS)
                     .where(NOTIFICATIONS.UUID.eq(player.getUniqueId().toString()))

@@ -6,6 +6,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.defence.struct.DefenceData;
+import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
+import net.skullian.skyfactions.common.faction.Faction;
+import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.core.api.FactionAPI;
 import net.skullian.skyfactions.core.faction.Faction;
 import org.bukkit.*;
@@ -25,16 +30,6 @@ import com.jeff_media.customblockdata.CustomBlockData;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
 import lombok.Setter;
-import net.skullian.skyfactions.core.SkyFactionsReborn;
-import net.skullian.skyfactions.core.config.types.Messages;
-import net.skullian.skyfactions.common.defence.struct.DefenceData;
-import net.skullian.skyfactions.common.defence.struct.DefenceEntityStruct;
-import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.core.event.defence.DefencePlacementHandler;
-import net.skullian.skyfactions.common.util.DependencyHandler;
-import net.skullian.skyfactions.core.util.SLogger;
-import net.skullian.skyfactions.core.defence.hologram.DefenceTextHologram;
-import net.skullian.skyfactions.common.util.text.TextUtility;
 
 @Getter
 @Setter
@@ -64,10 +59,10 @@ public abstract class Defence {
             block.setType(Material.AIR);
 
             if (data.isIS_FACTION()) {
-                Faction faction = FactionAPI.factionNameCache.get(data.getUUIDFactionName());
-                SkyFactionsReborn.getCacheService().getEntry(faction).removeDefence(getDefenceLocation());
+                Faction faction = SkyApi.getInstance().getFactionAPI().getCachedFaction(data.getUUIDFactionName());
+                SkyApi.getInstance().getCacheService().getEntry(faction).removeDefence(getDefenceLocation());
             } else {
-                SkyFactionsReborn.getCacheService().getEntry(UUID.fromString(data.getUUIDFactionName())).removeDefence(getDefenceLocation());
+                SkyApi.getInstance().getCacheService().getEntry(UUID.fromString(data.getUUIDFactionName())).removeDefence(getDefenceLocation());
             }
         });
     }
@@ -90,7 +85,7 @@ public abstract class Defence {
             ObjectMapper mapper = new ObjectMapper();
             container.set(dataKey, PersistentDataType.STRING, mapper.writeValueAsString(data));
 
-            DefencePlacementHandler.hologramsMap.get(getHologramID(data.getUUIDFactionName())).setData(data);
+            SkyApi.getInstance().getDefenceAPI().getHologramsMap().get(getHologramID(data.getUUIDFactionName())).setData(data);
         } catch (JsonProcessingException exception) {
             SLogger.fatal("Error when trying to update PDC Defence Data for Defence [{}].", getHologramID(data.getUUIDFactionName()), exception);
         }

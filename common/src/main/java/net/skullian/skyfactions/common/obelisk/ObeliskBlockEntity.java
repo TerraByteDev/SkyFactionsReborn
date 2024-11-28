@@ -1,51 +1,24 @@
 package net.skullian.skyfactions.common.obelisk;
 
 import lombok.Getter;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.ItemDisplay;
-import org.bukkit.inventory.ItemStack;
+import lombok.Setter;
+import net.skullian.skyfactions.common.util.SkyLocation;
 
 @Getter
-public class ObeliskBlockEntity {
-    private Material BROKEN_MATERIAL = Material.AIR;
-    private Material HITBOX_MATERIAL = Material.BARRIER;
+@Setter
+public abstract class ObeliskBlockEntity {
+    private final String BROKEN_MATERIAL = "AIR";
+    private final String HITBOX_MATERIAL = "BARRIER";
 
-    private Location location;
-    private ItemDisplay entity;
+    private SkyLocation location;
     private ObeliskItem blockItem;
 
-    public ObeliskBlockEntity(Location location, ObeliskItem blockItem) {
-        this.placeBlock(location, blockItem);
-    }
+    public abstract void placeBlock(SkyLocation location, ObeliskItem blockItem);
 
-    private void placeBlock(Location location, ObeliskItem blockItem) {
-        World world = location.getWorld();
+    public abstract void breakBlock();
 
-        world.setBlockData(location, HITBOX_MATERIAL.createBlockData());
-        Location entityLocation = getLocationFromBlock(location);
-
-        world.spawn(entityLocation, ItemDisplay.class, entity -> {
-            ItemStack item = blockItem.getItem(1);
-            entity.setItemStack(item);
-            entity.setPersistent(true);
-            entity.setInvisible(true);
-
-            this.entity = entity;
-            this.location = location;
-            this.blockItem = blockItem;
-        });
-    }
-
-    public void breakBlock() {
-        this.entity.remove();
-        World world = this.location.getWorld();
-        world.setBlockData(this.location, BROKEN_MATERIAL.createBlockData());
-    }
-
-    private Location getLocationFromBlock(Location location) {
-        Location entityLocation = location.clone();
+    public SkyLocation getLocationFromBlock(SkyLocation location) {
+        SkyLocation entityLocation = location.clone();
         entityLocation.setX(location.getX() + 0.5);
         entityLocation.setY(location.getY() + 0.5);
         entityLocation.setZ(location.getZ() + 0.5);

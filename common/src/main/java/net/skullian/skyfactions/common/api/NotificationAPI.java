@@ -4,7 +4,7 @@ import lombok.Getter;
 import net.skullian.skyfactions.common.notification.NotificationData;
 import net.skullian.skyfactions.common.notification.NotificationType;
 import net.skullian.skyfactions.common.faction.AuditLogType;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -21,9 +21,9 @@ public abstract class NotificationAPI {
      * Initialise the notification cycle for a Player on join.
      * This will periodically check for unread notifications and send the player a message.
      *
-     * @param player Playerc who the notification cycle should be created for [{@link Player}]
+     * @param player Playerc who the notification cycle should be created for [{@link SkyUser}]
      */
-    public abstract void createCycle(Player player);
+    public abstract void createCycle(SkyUser player);
 
     /**
      * Create a notification for a Player.

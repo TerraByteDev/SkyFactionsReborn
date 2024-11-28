@@ -3,17 +3,16 @@ package net.skullian.skyfactions.common.database.cache;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import net.skullian.skyfactions.common.api.PlayerAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.database.struct.AuditLogData;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.faction.RankType;
 import net.skullian.skyfactions.common.notification.NotificationData;
-import org.bukkit.Location;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.OfflinePlayer;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyLocation;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
@@ -21,8 +20,8 @@ public class CacheEntry {
 
     private int runes = 0; // Player & Faction
     private int gems = 0; // Player & Faction
-    private final List<Location> defencesToRegister = new ArrayList<>(); // Player * Faction
-    private final List<Location> defencesToRemove = new ArrayList<>(); // Player & Faction
+    private final List<SkyLocation> defencesToRegister = new ArrayList<>(); // Player * Faction
+    private final List<SkyLocation> defencesToRemove = new ArrayList<>(); // Player & Faction
     @Setter private String newLocale; // Player & Faction
     @Setter private boolean shouldRegister; // Player Exclusive
     @Getter private String newDiscordID; // Player Exclusive
@@ -32,10 +31,10 @@ public class CacheEntry {
     private final List<NotificationData> notificationsToRemove = new ArrayList<>(); // Player Exclusive
 
     private final Map<UUID, RankType> newRanks = new HashMap<>(); // Faction Exclusive
-    private final List<OfflinePlayer> membersToAdd = new ArrayList<>(); // Faction Exclusive
-    private final List<OfflinePlayer> membersToRemove = new ArrayList<>(); // Faction Exclusive
-    private final List<OfflinePlayer> membersToBan = new ArrayList<>(); // Faction Exclusive
-    private final List<OfflinePlayer> membersToUnban = new ArrayList<>(); // Faction Exclusive
+    private final List<SkyUser> membersToAdd = new ArrayList<>(); // Faction Exclusive
+    private final List<SkyUser> membersToRemove = new ArrayList<>(); // Faction Exclusive
+    private final List<SkyUser> membersToBan = new ArrayList<>(); // Faction Exclusive
+    private final List<SkyUser> membersToUnban = new ArrayList<>(); // Faction Exclusive
     private final List<InviteData> invitesToCreate = new ArrayList<>(); // Faction Exclusive
     private final List<InviteData> invitesToRemove = new ArrayList<>(); // Faction Exclusive
     private final List<AuditLogData> auditLogsToAdd = new ArrayList<>(); // Faction Exclusive
@@ -56,12 +55,12 @@ public class CacheEntry {
         gems -= amount;
     }
 
-    public void addDefence(Location location) {
+    public void addDefence(SkyLocation location) {
         defencesToRemove.remove(location);
         defencesToRegister.add(location);
     }
 
-    public void removeDefence(Location location) {
+    public void removeDefence(SkyLocation location) {
         defencesToRegister.remove(location);
         defencesToRemove.add(location);
     }
@@ -70,22 +69,22 @@ public class CacheEntry {
         newRanks.put(playerUUID, rankType);
     }
 
-    public void addMember(OfflinePlayer player) {
+    public void addMember(SkyUser player) {
         membersToRemove.remove(player);
         membersToAdd.add(player);
     }
 
-    public void removeMember(OfflinePlayer player) {
+    public void removeMember(SkyUser player) {
         membersToAdd.remove(player);
         membersToRemove.add(player);
     }
 
-    public void banMember(OfflinePlayer player) {
+    public void banMember(SkyUser player) {
         membersToUnban.remove(player);
         membersToBan.add(player);
     }
 
-    public void unbanMember(OfflinePlayer player) {
+    public void unbanMember(SkyUser player) {
         membersToBan.remove(player);
         membersToBan.add(player);
     }

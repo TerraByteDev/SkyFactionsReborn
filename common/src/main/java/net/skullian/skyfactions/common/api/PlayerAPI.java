@@ -1,15 +1,12 @@
 package net.skullian.skyfactions.common.api;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.database.struct.PlayerData;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -82,10 +79,10 @@ public abstract class PlayerAPI {
      * This method is used to get the default player data object, e.g. if you attempt to use {@link #getLocale(UUID)} while the player is uncached, and will
      * default to the configured default locale.
      *
-     * @return {@link PlayerData} default player data object. UUID: null / DISCORD_ID: null / LAST_RAID: 0 / LOCALE: default configured locale.
+     * @return {@link PlayerData} default player data object. UUID: null / DISCORD_ID: none / LAST_RAID: 0 / LOCALE: default configured locale.
      */
     public PlayerData getDefaultPlayerData() {
-        return new PlayerData(null, null, 0, Messages.getDefaulLocale());
+        return new PlayerData("none", 0, Messages.getDefaulLocale());
     }
 
     /**
@@ -94,38 +91,52 @@ public abstract class PlayerAPI {
      * @param item Item to convert.
      * @param skullValue Skull texture value.
      *
-     * @return {@link ItemStack} converted item.
+     * @return {@link SkyItemStack} converted item.
      */
-    public static ItemStack convertToSkull(ItemStack item, String skullValue) {
-        if (item.getType() == Material.PLAYER_HEAD) {
-            item.editMeta(SkullMeta.class, skullMeta -> {
-                final UUID uuid = UUID.randomUUID();
-                final PlayerProfile playerProfile = Bukkit.createProfile(uuid, uuid.toString().substring(0, 16));
-                playerProfile.setProperty(new ProfileProperty("textures", skullValue));
+    public static SkyItemStack.SkyItemStackBuilder convertToSkull(SkyItemStack.SkyItemStackBuilder item, String skullValue) {
+        item.textures(skullValue);
+        /*item.editMeta(SkullMeta.class, skullMeta -> {
+            final UUID uuid = UUID.randomUUID();
+            final PlayerProfile playerProfile = Bukkit.createProfile(uuid, uuid.toString().substring(0, 16));
+            playerProfile.setProperty(new ProfileProperty("textures", skullValue));
 
-                skullMeta.setPlayerProfile(playerProfile);
-            });
-        }
+            skullMeta.setPlayerProfile(playerProfile);
+        });*/
 
         return item;
     }
 
     /**
-     * Used for the universal player_skull placeholder in GUIs.
-     * Fetches the player's skull and sets it to the item.
+     * Used primarily in the paper implementation.
+     * Use with PlaceholderAPI.
      *
-     * @param item ItemStack to modify.
-     * @param playerUUID Player UUID to fetch the skull of.
+     * @param user SkyUser object.
+     * @param text Text to process.
      *
-     * @return {@link ItemStack} - Adapted ItemStack.
+     * @return The processes text String.
      */
-    public static ItemStack getPlayerSkull(ItemStack item, UUID playerUUID) {
-        if (item.getType() == Material.PLAYER_HEAD) {
-            SkullMeta meta = (SkullMeta) item.getItemMeta();
-            meta.setOwningPlayer(Bukkit.getOfflinePlayer(playerUUID));
-            item.setItemMeta(meta);
-        }
+    public abstract String processText(SkyUser user, String text);
 
-        return item;
-    }
+    /**
+     * Clear a user's inventory.
+     * Used on island delete.
+     *
+     * @param user SkyUser whose inventory should be wiped.
+     */
+    public abstract void clearInventory(SkyUser user);
+
+    /**
+     * Clear a user's ender chest contents.
+     * Used on island delete.
+     *
+     * @param user SkyUser whose inventory should be wiped.
+     */
+    public abstract void clearEnderChest(SkyUser user);
+
+    /**
+     * Get all online players on the server.
+     *
+     * @return {@link List<SkyUser>} of all online players.
+     */
+    public abstract List<SkyUser> getOnlinePlayers();
 }

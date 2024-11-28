@@ -1,21 +1,18 @@
 package net.skullian.skyfactions.common.api;
 
-import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import lombok.Getter;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.common.faction.AuditLogType;
 import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.island.IslandModificationAction;
 import net.skullian.skyfactions.common.island.impl.FactionIsland;
 import net.skullian.skyfactions.common.obelisk.ObeliskHandler;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
-import net.skullian.skyfactions.common.util.SoundUtil;
 import net.skullian.skyfactions.common.util.text.TextUtility;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -29,10 +26,12 @@ import java.util.regex.Pattern;
 @Getter
 public abstract class FactionAPI {
 
+    private Map<UUID, String> factionUserCache = new ConcurrentHashMap<>();
     private Map<String, Faction> factionCache = new ConcurrentHashMap<>();
+
     private HashSet<String> awaitingDeletion = new HashSet<>();
 
-    public void createFaction(Player player, String name) {
+    public void createFaction(SkyUser player, String name) {
         SkyApi.getInstance().getDatabaseManager().getFactionsManager().registerFaction(player, name).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "create a new Faction", "SQL_FACTION_CREATE", ex);
@@ -57,19 +56,24 @@ public abstract class FactionAPI {
         });
     }
 
-    public abstract void handleFactionWorldBorder(Player player, FactionIsland island);
+    public abstract void handleFactionWorldBorder(SkyUser player, FactionIsland island);
 
-    public abstract void teleportToFactionIsland(Player player, Faction faction);
+    /**
+     * Teleport the player to their faction's island.
+     *
+     * @param player Player to teleport.
+     */
+    public abstract void teleportToFactionIsland(SkyUser player, Faction faction);
 
-    public abstract void disbandFaction(Player player, Faction faction);
+    public abstract void disbandFaction(SkyUser player, Faction faction);
 
     public abstract void onFactionDisband(Faction faction);
 
-    public abstract Region getFactionRegion(Faction faction);
+    public abstract ProtectedRegion getFactionRegion(Faction faction);
 
     public CompletableFuture<Boolean> isInFaction(UUID user) {
         return CompletableFuture.supplyAsync(() -> {
-            if (SkyApi.getInstance().getUserManager().isCached(user)) return SkyApi.getInstance().getUserManager().getUser(user).getBelongingFaction().join() != "none";
+            if (factionUserCache.containsKey(user)) return true;
 
             return SkyApi.getInstance().getDatabaseManager().getFactionsManager().isInFaction(user).join();
         });
@@ -88,10 +92,30 @@ public abstract class FactionAPI {
             if (ex != null || faction == null) return;
 
             factionCache.put(faction.getName(), faction);
+            for (SkyUser player : faction.getAllMembers()) {
+
+            }
             for (OfflinePlayer player : faction.getAllMembers()) {
                 if (!player.isOnline()) return;
                 factionCache.put(faction.getName(), faction);
             }
+        });
+    }
+
+    /**
+     * Get the faction from a player's UUID.
+     *
+     * @param playerUUID UUID of the player.
+     * @return {@link Faction}
+     */
+    public CompletableFuture<Faction> getFaction(UUID playerUUID) {
+        if (factionUserCache.containsKey(playerUUID)) return CompletableFuture.completedFuture(getCachedFaction(factionUserCache.get(playerUUID)));
+
+        return SkyApi.getInstance().getDatabaseManager().getFactionsManager().getFaction(playerUUID).whenComplete((faction, ex) -> {
+            if (ex != null || faction == null) return;
+
+            factionCache.put(faction.getName(), faction);
+            factionUserCache.put(playerUUID, faction.getName());
         });
     }
 
@@ -155,20 +179,20 @@ public abstract class FactionAPI {
         }
     }
 
-    public abstract void createRegion(Player player, FactionIsland island, String worldName, String factionName);
+    public abstract void createRegion(SkyUser player, FactionIsland island, String worldName, String factionName);
 
-    public CompletableFuture<Void> createIsland(Player player, String factionName) {
+    public CompletableFuture<Void> createIsland(SkyUser player, String factionName) {
         FactionIsland island = new FactionIsland(SkyApi.getInstance().getDatabaseManager().getFactionIslandManager().cachedFactionIslandID);
         SkyApi.getInstance().getDatabaseManager().getFactionIslandManager().cachedFactionIslandID++;
 
-        World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
-        createRegion(player, island, world.getName(), factionName);
+        String worldName = Settings.ISLAND_FACTION_WORLD.getString();
+        createRegion(player, island, worldName, factionName);
 
         IslandModificationAction action = IslandModificationAction.CREATE;
         action.setId(island.getId());
 
         return CompletableFuture.allOf(
-                SkyApi.getInstance().getRegionAPI().pasteIslandSchematic(player, island.getCenter(world), world.getName(), "faction"),
+                SkyApi.getInstance().getRegionAPI().pasteIslandSchematic(player, island.getCenter(worldName), worldName, "faction"),
                 SkyApi.getInstance().getDatabaseManager().getFactionIslandManager().createFactionIsland(factionName, action)
         ).whenComplete((ignored, ex) -> {
             if (ex != null) {
@@ -179,23 +203,33 @@ public abstract class FactionAPI {
             ObeliskHandler.spawnFactionObelisk(factionName, island);
 
             handleFactionWorldBorder(player, island);
-            SkyApi.getInstance().getIslandAPI().modifyDefenceOperation(DefenceOperation.DISABLE, player.getUniqueId());
-            SkyApi.getInstance().getRegionAPI().teleportPlayerToLocation(player.getUniqueId(), island.getCenter(world));
+            SkyApi.getInstance().getIslandAPI().modifyDefenceOperation(DefenceOperation.DISABLE, player;
+            player.teleport(island.getCenter(worldName));
 
-            SoundUtil.playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
+            SkyApi.getInstance().getSoundAPI().playSound(player, Settings.SOUNDS_ISLAND_CREATE_SUCCESS.getString(), Settings.SOUNDS_ISLAND_CREATE_SUCCESS_PITCH.getInt(), 1f);
             Messages.FACTION_CREATION_SUCCESS.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
         });
     }
 
-    public abstract boolean isInRegion(Player player, String regionName);
+    public abstract boolean isInRegion(SkyUser player, String regionName);
 
-    public void onFactionLoad(Faction faction, Player player) {
+    public void onFactionLoad(Faction faction, SkyUser player) {
         SkyApi.getInstance().getNPCManager().spawnNPC(faction, faction.getIsland());
         modifyDefenceOperation(DefenceOperation.ENABLE, player);
     }
 
-    public void modifyDefenceOperation(DefenceOperation operation, Player player) {
-        
+    public void modifyDefenceOperation(DefenceOperation operation, SkyUser player) {
+        getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+            if (ex != null) return;
+            if (operation == DefenceOperation.DISABLE && !SkyApi.getInstance().getRegionAPI().isLocationInRegion(player.getLocation(), "sfr_faction_" + faction.getName())) return;
+
+            List<Defence> defences = SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences().get(faction.getName());
+            if (defences != null && !defences.isEmpty()) {
+                for (Defence defence : defences)
+                    if (operation == DefenceOperation.ENABLE) defence.onLoad(faction.getName());
+                        else defence.disable();
+            }
+        });
     }
 
     public enum DefenceOperation {

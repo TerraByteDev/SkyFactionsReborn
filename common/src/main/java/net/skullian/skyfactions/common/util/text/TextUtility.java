@@ -8,16 +8,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import net.skullian.skyfactions.common.api.PlayerAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
-import net.skullian.skyfactions.common.util.DependencyHandler;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
 import org.jetbrains.annotations.NotNull;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -27,7 +24,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class TextUtility {
 
-    public static Component color(String string, String locale, OfflinePlayer player, Object... replacements) {
+    public static Component color(String string, String locale, SkyUser user, Object... replacements) {
         YamlDocument config = Messages.configs.getOrDefault(locale, Messages.getFallbackDocument());
 
         TagResolver[] resolvers = new TagResolver[(replacements.length != 0 ? (replacements.length / 2) + 1 : 1)];
@@ -41,44 +38,52 @@ public class TextUtility {
         String prefix = config.getString("Messages." + Messages.SERVER_NAME.getPath());
         resolvers[replacements.length != 0 ? (replacements.length / 2) : 0] = Placeholder.parsed("server_name", prefix != null && !prefix.isEmpty() ? prefix : "");
 
-        if (DependencyHandler.isEnabled("PlaceholderAPI")) string = PlaceholderAPI.setPlaceholders(player, string);
+        string = SkyApi.getInstance().getPlayerAPI().processText(user, string);
 
         return MiniMessage.miniMessage().deserialize(string, resolvers);
     }
 
-    public static String legacyColor(String string, String locale, OfflinePlayer player, Object... replacements) {
-        return LegacyComponentSerializer.legacySection().serialize(color(string, locale, player, replacements));
+    public static String legacyColor(String string, String locale, SkyUser user, Object... replacements) {
+        return LegacyComponentSerializer.legacySection().serialize(color(string, locale, user, replacements));
     }
 
-    public static Component fromList(List<?> list, String locale, OfflinePlayer player, Object... replacements) {
+    public static Component fromList(List<?> list, String locale, SkyUser user, Object... replacements) {
         if (list == null || list.isEmpty()) return null;
 
         List<Component> components = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            components.add(color(list.get(i).toString(), locale, player, replacements));
+            components.add(color(list.get(i).toString(), locale, user, replacements));
         }
 
         return Component.join(JoinConfiguration.newlines(), components);
     }
 
+    public static List<Component> color(List<String> strings, String locale, SkyUser user, Object... replacements) {
+        return strings.stream()
+                .map(text -> TextUtility.color(text, locale, user, replacements))
+                .toList();
+    }
+
+    public static List<String> legacyColor(List<String> strings, String locale, SkyUser user, Object... replacements) {
+        return strings.stream()
+                .map(text -> TextUtility.legacyColor(text, locale, user, replacements))
+                .toList();
+    }
+
     public static boolean isEnglish(@NotNull CharSequence seq) {
-        if (seq == null) {
+        int length = seq.length();
+        if (length == 0) {
             return false;
         } else {
-            int length = seq.length();
-            if (length == 0) {
-                return false;
-            } else {
-                for (int i = 0; i < length; i++) {
-                    char character = seq.charAt(i);
+            for (int i = 0; i < length; i++) {
+                char character = seq.charAt(i);
 
-                    if (character != ' ' && character != '_' && !isEnglishDigitOrLetter(character)) {
-                        return false;
-                    }
+                if (character != ' ' && character != '_' && !isEnglishDigitOrLetter(character)) {
+                    return false;
                 }
-
-                return true;
             }
+
+            return true;
         }
     }
 
@@ -86,11 +91,11 @@ public class TextUtility {
      * Check if a string contains blacklisted words.
      * Blacklisted words (regex) are configured in config.yml.
      *
-     * @param player Player to check
+     * @param user Player to check
      * @param name   String to check.
      * @return {@link Boolean}
      */
-    public static boolean hasBlacklistedWords(Player player, String name) {
+    public static boolean hasBlacklistedWords(SkyUser user, String name) {
         boolean regexMatch = false;
         List<String> blacklistedNames = Settings.FACTION_CREATION_BLACKLISTED_NAMES.getList();
 
@@ -102,7 +107,7 @@ public class TextUtility {
         }
 
         if (regexMatch) {
-            Messages.FACTION_NAME_PROHIBITED.send(player, PlayerAPI.getLocale(player.getUniqueId()));
+            Messages.FACTION_NAME_PROHIBITED.send(user, SkyApi.getInstance().getPlayerAPI().getLocale(user.getUniqueId()));
             return true;
         } else {
             return false;

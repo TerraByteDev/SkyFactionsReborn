@@ -2,6 +2,7 @@ package net.skullian.skyfactions.common.island;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.skullian.skyfactions.common.util.SkyLocation;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -16,8 +17,8 @@ public abstract class SkyIsland {
     private int regionPadding;
     private List<Integer> gridOrigin;
 
-    public Location getCenter(World world) {
-        if (id == 1) return new Location(world, gridOrigin.get(0), gridOrigin.get(1), gridOrigin.get(2));
+    public SkyLocation getCenter(String worldName) {
+        if (id == 1) return new SkyLocation(worldName, gridOrigin.get(0), gridOrigin.get(1), gridOrigin.get(2));
 
         int pos = id - 1;
         int radius = (int) (Math.floor((Math.sqrt(pos) - 1) / 2) + 1);
@@ -27,19 +28,19 @@ public abstract class SkyIsland {
         int lastComplete = (perimeter * (radius - 1)) / 2;
         int currentIndex = (pos - lastComplete) % perimeter;
 
-        Location location;
+        SkyLocation location;
         switch (currentIndex / diameter) {
             case 0:
-                location = new Location(world, (currentIndex - radius), 0, -radius);
+                location = new SkyLocation(worldName, (currentIndex - radius), gridOrigin.get(1), -radius);
                 break;
             case 1:
-                location = new Location(world, radius, 0, (currentIndex % diameter) - radius);
+                location = new SkyLocation(worldName, radius, gridOrigin.get(1), (currentIndex % diameter) - radius);
                 break;
             case 2:
-                location = new Location(world, radius - (currentIndex % diameter), 0, radius);
+                location = new SkyLocation(worldName, radius - (currentIndex % diameter), gridOrigin.get(1), radius);
                 break;
             case 3:
-                location = new Location(world, -radius, 0, radius - (currentIndex % diameter));
+                location = new SkyLocation(worldName, -radius, gridOrigin.get(1), radius - (currentIndex % diameter));
                 break;
             default:
                 throw new IllegalStateException("Could not find island location with ID: " + id);
@@ -48,30 +49,30 @@ public abstract class SkyIsland {
         return location.multiply((regionSize + regionPadding));
     }
 
-    public Location getPosition1(World world) {
-        if (world == null) {
+    public SkyLocation getPosition1(String worldName) {
+        if (worldName == null) {
             double size = getSize();
-            Location center = getCenter(null).subtract(new Location(null, size, 0, size));
+            SkyLocation center = getCenter(null).subtract(new SkyLocation(null, size, gridOrigin.get(1), size));
             center.setY(-64);
             return center;
         }
 
         double size = getSize();
-        Location center = getCenter(world).subtract(new Location(world, size, 0, size));
+        SkyLocation center = getCenter(worldName).subtract(new SkyLocation(worldName, size, gridOrigin.get(1), size));
         center.setY(-64);
         return center;
     }
 
-    public Location getPosition2(World world) {
-        if (world == null) {
+    public SkyLocation getPosition2(String worldName) {
+        if (worldName == null) {
             double size = getSize();
-            Location center = getCenter(null).add(new Location(null, size, 0, size));
+            SkyLocation center = getCenter(null).add(new SkyLocation(null, size, gridOrigin.get(1), size));
             center.setY(219);
             return center;
         }
 
         double size = getSize();
-        Location center = getCenter(world).add(new Location(world, size, 0, size));
+        SkyLocation center = getCenter(worldName).add(new SkyLocation(worldName, size, gridOrigin.get(1), size));
         center.setY(219);
         return center;
     }

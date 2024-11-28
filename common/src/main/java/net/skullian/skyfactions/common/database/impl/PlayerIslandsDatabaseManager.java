@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.common.database.impl;
 
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.database.struct.IslandRaidData;
 import net.skullian.skyfactions.common.database.tables.records.IslandsRecord;
@@ -7,10 +8,8 @@ import net.skullian.skyfactions.common.database.tables.records.TrustedPlayersRec
 import net.skullian.skyfactions.common.island.IslandModificationAction;
 import net.skullian.skyfactions.common.island.SkyIsland;
 import net.skullian.skyfactions.common.island.impl.PlayerIsland;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SLogger;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.impl.DSL;
@@ -98,7 +97,7 @@ public class PlayerIslandsDatabaseManager {
         });
     }
 
-    public CompletableFuture<Void> removeIsland(Player player) {
+    public CompletableFuture<Void> removeIsland(SkyUser player) {
         SLogger.info("Removing island [{}] from Database.", player.getUniqueId().toString());
         return CompletableFuture.runAsync(() -> {
             ctx.deleteFrom(ISLANDS)
@@ -107,7 +106,7 @@ public class PlayerIslandsDatabaseManager {
         });
     }
 
-    public CompletableFuture<List<IslandRaidData>> getRaidableIslands(Player player) {
+    public CompletableFuture<List<IslandRaidData>> getRaidableIslands(SkyUser player) {
         return CompletableFuture.supplyAsync(() -> {
             Result<IslandsRecord> results = ctx.selectFrom(ISLANDS)
                     .where(ISLANDS.LAST_RAIDED.lessOrEqual((System.currentTimeMillis() - Settings.RAIDED_COOLDOWN.getLong())))
@@ -157,15 +156,15 @@ public class PlayerIslandsDatabaseManager {
         });
     }
 
-    public CompletableFuture<List<OfflinePlayer>> getTrustedPlayers(int islandID) {
+    public CompletableFuture<List<SkyUser>> getTrustedPlayers(int islandID) {
         return CompletableFuture.supplyAsync(() -> {
             Result<TrustedPlayersRecord> results = ctx.selectFrom(TRUSTED_PLAYERS)
                     .where(TRUSTED_PLAYERS.ISLAND_ID.eq(islandID))
                     .fetch();
 
-            List<OfflinePlayer> players = new ArrayList<>();
+            List<SkyUser> players = new ArrayList<>();
             for (TrustedPlayersRecord data : results) {
-                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(data.get(TRUSTED_PLAYERS.UUID)));
+                SkyUser player = SkyApi.getInstance().getUserManager().getUser(UUID.fromString(data.get(TRUSTED_PLAYERS.UUID)));
                 players.add(player);
             }
 

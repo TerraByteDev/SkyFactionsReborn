@@ -4,8 +4,6 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.database.tables.records.FactionInvitesRecord;
 import net.skullian.skyfactions.common.faction.JoinRequestData;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;

@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.common.database.impl;
 
-import net.skullian.skyfactions.core.SkyFactionsReborn;
+import net.skullian.skyfactions.common.api.SkyApi;
 import org.jooq.DSLContext;
 
 import java.util.UUID;
@@ -37,7 +37,7 @@ public class CurrencyDatabaseManager {
 
     public CompletableFuture<Void> modifyGems(UUID playerUUID, int amount, boolean subtract) {
         return CompletableFuture.runAsync(() -> {
-            if (amount == 0 || !SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().hasIsland(playerUUID).join()) return;
+            if (amount == 0 || !SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().hasIsland(playerUUID).join()) return;
             int current = getGems(playerUUID).join();
 
             ctx.update(ISLANDS)
@@ -78,7 +78,7 @@ public class CurrencyDatabaseManager {
 
     public CompletableFuture<Void> modifyRunes(UUID playerUUID, int amount, boolean subtract) {
         return CompletableFuture.runAsync(() -> {
-            if (amount == 0 || !SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().hasIsland(playerUUID).join()) return;
+            if (amount == 0 || !SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().hasIsland(playerUUID).join()) return;
             int current = getRunes(playerUUID).join();
 
             ctx.update(ISLANDS)

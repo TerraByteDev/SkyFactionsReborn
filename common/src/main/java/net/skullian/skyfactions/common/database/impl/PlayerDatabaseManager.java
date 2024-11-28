@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.common.database.impl;
 
-import net.skullian.skyfactions.common.api.PlayerAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.database.tables.records.PlayerDataRecord;
 import org.jooq.DSLContext;
@@ -23,7 +23,7 @@ public class PlayerDatabaseManager {
             if (!shouldRegister) return;
             ctx.insertInto(PLAYER_DATA)
                     .columns(PLAYER_DATA.UUID, PLAYER_DATA.DISCORD_ID, PLAYER_DATA.LAST_RAID, PLAYER_DATA.LOCALE)
-                    .values(uuid.toString(), "none", (long) 0, PlayerAPI.getLocale(uuid))
+                    .values(uuid.toString(), "none", (long) 0, SkyApi.getInstance().getPlayerAPI().getLocale(uuid))
                     .execute();
         });
     }
@@ -36,7 +36,6 @@ public class PlayerDatabaseManager {
 
             return result != null ?
                     new PlayerData(
-                            uuid,
                             result.getDiscordId(),
                             result.getLastRaid(),
                             result.getLocale()
@@ -58,10 +57,10 @@ public class PlayerDatabaseManager {
     public CompletableFuture<Void> updateLastRaid(UUID playerUUID, long time) {
         return CompletableFuture.runAsync(() -> {
             if (time == -1) return;
-             ctx.update(PLAYER_DATA)
-                     .set(PLAYER_DATA.LAST_RAID, time)
-                     .where(PLAYER_DATA.UUID.eq(playerUUID.toString()))
-                     .execute();
+            ctx.update(PLAYER_DATA)
+                    .set(PLAYER_DATA.LAST_RAID, time)
+                    .where(PLAYER_DATA.UUID.eq(playerUUID.toString()))
+                    .execute();
         });
     }
 

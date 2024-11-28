@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.common.island.impl;
 
-import net.skullian.skyfactions.core.config.types.Settings;
-import net.skullian.skyfactions.core.island.SkyIsland;
+import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.island.SkyIsland;
 
 public class PlayerIsland extends SkyIsland {
 

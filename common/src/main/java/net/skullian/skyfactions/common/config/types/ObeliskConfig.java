@@ -3,11 +3,9 @@ package net.skullian.skyfactions.common.config.types;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import lombok.Getter;
 import lombok.Setter;
-import net.skullian.skyfactions.common.api.PlayerAPI;
-import net.skullian.skyfactions.common.util.text.TextUtility;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 import java.util.List;
 
@@ -42,13 +40,14 @@ public enum ObeliskConfig {
         return config.getInt(this.path);
     }
 
-    public static ItemBuilder getLoadingItem(Player player) {
-        ItemBuilder builder = new ItemBuilder(Material.getMaterial(Messages.LOADING_ITEM_MATERIAL.getString(PlayerAPI.getLocale(player.getUniqueId())))).setDisplayName(TextUtility.legacyColor(Messages.LOADING_ITEM_TEXT.getString(PlayerAPI.getLocale(player.getUniqueId())), PlayerAPI.getLocale(player.getUniqueId()), player));
-        for (String str : Messages.LOADING_ITEM_LORE.getStringList(PlayerAPI.getLocale(player.getUniqueId()))) {
-            builder.addLoreLines(TextUtility.legacyColor(str, PlayerAPI.getLocale(player.getUniqueId()), player));
-        }
+    public static SkyItemStack getLoadingItem(SkyUser player) {
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
-        return builder;
+        return SkyItemStack.builder()
+                .material(Messages.LOADING_ITEM_MATERIAL.getString(locale))
+                .lore(Messages.LOADING_ITEM_LORE.getStringList(locale))
+                .displayName(Messages.LOADING_ITEM_TEXT.getString(locale))
+                .build();
     }
 
     public boolean getBoolean() {

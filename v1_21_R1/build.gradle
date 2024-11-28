@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     compileOnly(project(":common"))
-    compileOnly(project(":spigot"))
+    compileOnly(project(":paper"))
 
     paperweight.paperDevBundle("${minecraft_version}-R0.1-SNAPSHOT")
 }

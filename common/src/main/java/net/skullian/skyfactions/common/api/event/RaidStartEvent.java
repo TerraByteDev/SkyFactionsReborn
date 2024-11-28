@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.common.api.event;
 
 import lombok.Getter;
-import net.skullian.skyfactions.core.island.SkyIsland;
+import net.skullian.skyfactions.common.island.SkyIsland;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

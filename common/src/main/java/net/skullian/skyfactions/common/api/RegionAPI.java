@@ -1,24 +1,13 @@
 package net.skullian.skyfactions.common.api;
 
 import com.sk89q.worldedit.regions.Region;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyLocation;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class RegionAPI {
-
-    /**
-     * Teleport a player to a location.
-     * Just makes everything a lot cleaner plus ensures it is on the main thread as, obviously, spigot / paper doesn't like async teleporting.
-     *
-     * @param playerUUID UUID of player to teleport.
-     * @param location Location to teleport the player to.
-     */
-    public abstract void teleportPlayerToLocation(UUID playerUUID, Location location);
 
     /**
      * Cut a region. Used in island deletion.
@@ -33,12 +22,12 @@ public abstract class RegionAPI {
      * Check if a location is within a WE/WG Region.
      * Typically used to check if a player tries to teleport to their island while they are already in it.
      *
-     * @param bukkitLoc Location to check.
+     * @param loc Location to check.
      * @param regionName Region to check if the location is in.
      *
      * @return true if the location is in the specified WE/WG Region.
      */
-    public abstract boolean isLocationInRegion(Location bukkitLoc, String regionName);
+    public abstract boolean isLocationInRegion(SkyLocation loc, String regionName);
 
     /**
      * Create a new region. Typically used for island creation.
@@ -50,14 +39,14 @@ public abstract class RegionAPI {
      * @param regionName Name of the region.
      *
      */
-    public abstract void createRegion(Player player, Location corner1, Location corner2, World world, String regionName);
+    public abstract void createRegion(SkyUser player, SkyLocation corner1, SkyLocation corner2, String world, String regionName);
 
     /**
      * Get the location of the hub (configured in config.yml).
      *
-     * @return {@link Location} location of the Hub.
+     * @return {@link SkyLocation} location of the Hub.
      */
-    @NotNull public abstract Location getHubLocation();
+    @NotNull public abstract SkyLocation getHubLocation();
 
     /**
      * Modify a player's world border.
@@ -66,7 +55,7 @@ public abstract class RegionAPI {
      * @param center New center of the worldborder.
      * @param size New size of the worldborder.
      */
-    public abstract void modifyWorldBorder(Player player, Location center, int size);
+    public abstract void modifyWorldBorder(SkyUser player, SkyLocation center, int size);
 
     /**
      * Paste an island schematic.
@@ -79,7 +68,7 @@ public abstract class RegionAPI {
      *
      * @return {@link CompletableFuture<Boolean>} - true if the schematic was pasted successfully.
      */
-    public abstract CompletableFuture<Boolean> pasteIslandSchematic(Player player, Location location, String worldName, String type);
+    public abstract CompletableFuture<Boolean> pasteIslandSchematic(SkyUser player, SkyLocation location, String worldName, String type);
 
     /**
      * Remove a region.
@@ -89,6 +78,6 @@ public abstract class RegionAPI {
      *
      * @return {@link CompletableFuture<Void>}
      */
-    public abstract CompletableFuture<Void> removeRegion(String regionName, World world);
+    public abstract CompletableFuture<Void> removeRegion(String regionName, String world);
 
 }

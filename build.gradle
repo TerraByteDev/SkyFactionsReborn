@@ -156,7 +156,7 @@ allprojects {
 
 dependencies {
     implementation(project(":common"))
-    implementation(project(":spigot"))
+    implementation(project(":paper"))
 
     implementation(project(":modules"))
 

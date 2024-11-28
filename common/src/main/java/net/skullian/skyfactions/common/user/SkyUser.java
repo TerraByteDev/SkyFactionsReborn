@@ -1,11 +1,14 @@
 package net.skullian.skyfactions.common.user;
 
 import lombok.Getter;
+import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.faction.JoinRequestData;
 import net.skullian.skyfactions.common.island.impl.PlayerIsland;
 import net.skullian.skyfactions.common.notification.NotificationData;
+import net.skullian.skyfactions.common.util.SkyLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -17,7 +20,11 @@ public abstract class SkyUser {
 
     public abstract UUID getUniqueId();
 
-    public abstract void teleport(Object location);
+    public abstract String getName();
+
+    public abstract void playSound(Sound sound, float pitch, float volume);
+
+    public abstract void teleport(SkyLocation location);
 
     public abstract PlayerData getPlayerData();
 
@@ -26,8 +33,6 @@ public abstract class SkyUser {
     public abstract CompletableFuture<Integer> getRunes();
 
     @Nullable public abstract CompletableFuture<PlayerIsland> getIsland();
-
-    public abstract CompletableFuture<String> getBelongingFaction();
 
     public abstract List<NotificationData> getNotifications();
 
@@ -38,5 +43,21 @@ public abstract class SkyUser {
     public abstract void onCacheComplete(int runesAddition, int gemsAddition);
 
     @Nullable public abstract CompletableFuture<JoinRequestData> getActiveJoinRequest();
+
+    public abstract void sendMessage(Component message);
+
+    public abstract void performCommand(String command);
+
+    public abstract SkyLocation getLocation();
+
+    public abstract void closeInventory();
+
+    public abstract boolean hasMetadata(String key);
+
+    public abstract boolean isOnline();
+
+    public String getWorld() {
+        return getLocation().getWorldName();
+    }
 
 }

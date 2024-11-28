@@ -1,8 +1,10 @@
 package net.skullian.skyfactions.common.faction;
 
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.skullian.skyfactions.common.api.InvitesAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
@@ -10,11 +12,8 @@ import net.skullian.skyfactions.common.database.struct.AuditLogData;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.island.impl.FactionIsland;
 import net.skullian.skyfactions.common.notification.NotificationType;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.text.TextUtility;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +30,17 @@ public class Faction {
     private String name;
     private long lastRaid;
     private int level;
-    private OfflinePlayer owner;
-    private List<OfflinePlayer> admins;
-    private List<OfflinePlayer> moderators;
-    private List<OfflinePlayer> fighters;
-    private List<OfflinePlayer> members;
+    private SkyUser owner;
+    private List<SkyUser> admins;
+    private List<SkyUser> moderators;
+    private List<SkyUser> fighters;
+    private List<SkyUser> members;
     private String motd;
     public int runes;
     public int gems;
     public String locale;
     private boolean electionRunning;
-    public List<OfflinePlayer> bannedPlayers;
+    public List<SkyUser> bannedPlayers;
     public long lastRenamed;
     public List<InviteData> invites;
     public List<AuditLogData> auditLogs;
@@ -66,9 +65,9 @@ public class Faction {
     public void updateName(String newName) {
         SkyApi.getInstance().getFactionAPI().onFactionRename(getName(), newName);
 
-        Bukkit.getOnlinePlayers().stream()
-                .filter(player -> player.isOnline() && player.getPlayer().hasMetadata("inFactionRelatedUI"))
-                .forEach(player -> player.getPlayer().closeInventory(InventoryCloseEvent.Reason.PLUGIN));
+        SkyApi.getInstance().getPlayerAPI().getOnlinePlayers().stream()
+                        .filter(player -> player.isOnline() && player.hasMetadata("inFacRelatedUI"))
+                        .forEach(SkyUser::closeInventory);
 
         this.name = newName;
         SkyApi.getInstance().getDatabaseManager().getFactionsManager().updateFactionName(getName(), newName);
@@ -80,7 +79,7 @@ public class Faction {
      * @param player  Player in question.
      * @param newRank {@link RankType} New Rank of the player.
      */
-    public void modifyPlayerRank(OfflinePlayer player, RankType newRank, Player actor) {
+    public void modifyPlayerRank(SkyUser player, RankType newRank, SkyUser actor) {
         RankType oldRank = getRankType(player.getUniqueId());
         SkyApi.getInstance().getCacheService().getEntry(this).setNewRank(player.getUniqueId(), newRank);
         cache(player, oldRank.getRankValue(), newRank);
@@ -92,8 +91,8 @@ public class Faction {
      *
      * @return {@link Integer}
      */
-    public List<OfflinePlayer> getAllMembers() {
-        List<OfflinePlayer> allMembers = new ArrayList<>();
+    public List<SkyUser> getAllMembers() {
+        List<SkyUser> allMembers = new ArrayList<>();
         allMembers.addAll(getMembers());
         allMembers.addAll(getFighters());
         allMembers.addAll(getModerators());
@@ -118,7 +117,7 @@ public class Faction {
      * @param MOTD New MOTD.
      * @return {@link String}
      */
-    public CompletableFuture<Void> updateMOTD(String MOTD, Player actor) {
+    public CompletableFuture<Void> updateMOTD(String MOTD, SkyUser actor) {
         this.motd = MOTD;
         createAuditLog(actor.getUniqueId(), AuditLogType.MOTD_UPDATE, "player_name", actor.getName(), "new_motd", MOTD);
         return SkyApi.getInstance().getDatabaseManager().getFactionsManager().updateFactionMOTD(name, MOTD);
@@ -129,17 +128,17 @@ public class Faction {
      *
      * @param message Message to broadcast [{@link Messages}]
      */
-    public void createBroadcast(OfflinePlayer broadcaster, Messages message, Object... replacements) {
-        List<OfflinePlayer> players = getAllMembers();
-        for (OfflinePlayer player : players) {
+    public void createBroadcast(SkyUser broadcaster, Messages message, Object... replacements) {
+        List<SkyUser> players = getAllMembers();
+        for (SkyUser player : players) {
             if (player.isOnline()) {
                 String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
                 Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
-                        Messages.replace(message.getString(locale), locale, player.getPlayer(), replacements)
+                        Messages.replace(message.getString(locale), locale, player, replacements)
                 );
 
-                player.getPlayer().sendMessage(model);
+                player.sendMessage(model);
             }
         }
     }
@@ -149,16 +148,16 @@ public class Faction {
      *
      * @param message Message to broadcast [{@link String}]
      */
-    public void createBroadcast(OfflinePlayer broadcaster, String message) {
-        List<OfflinePlayer> players = getAllMembers();
-        for (OfflinePlayer player : players) {
+    public void createBroadcast(SkyUser broadcaster, String message) {
+        List<SkyUser> players = getAllMembers();
+        for (SkyUser player : players) {
             if (player.isOnline()) {
                 String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
                 Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
-                        Messages.replace(message, locale, player.getPlayer()));
+                        Messages.replace(message, locale, player));
 
-                player.getPlayer().sendMessage(model);
+                player.sendMessage(model);
             }
         }
     }
@@ -210,9 +209,9 @@ public class Faction {
     /**
      * Kick a player from the Faction for a specific reason.
      *
-     * @param player Player to kick [{@link Player}]
+     * @param player Player to kick [{@link SkyUser}]
      */
-    public void kickPlayer(OfflinePlayer player, Player actor) {
+    public void kickPlayer(SkyUser player, SkyUser actor) {
         SkyApi.getInstance().getCacheService().getEntry(this).removeMember(player);
         if (Settings.FACTION_MANAGE_BROADCAST_KICKS.getBoolean()) {
             createBroadcast(actor, Messages.FACTION_MANAGE_KICK_BROADCAST, "<kicked>", player.getName());
@@ -222,9 +221,9 @@ public class Faction {
     /**
      * Ban a player from the faction.
      *
-     * @param player Player to ban [{@link Player}]
+     * @param player Player to ban [{@link SkyUser}]
      */
-    public void banPlayer(OfflinePlayer player, Player actor) {
+    public void banPlayer(SkyUser player, SkyUser actor) {
         SkyApi.getInstance().getCacheService().getEntry(this).banMember(player);
         bannedPlayers.add(player);
         createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_BAN, "banned", player.getName(), "player", actor.getName());
@@ -236,36 +235,36 @@ public class Faction {
     /**
      * Remove a ban from a player.
      *
-     * @param player {@link OfflinePlayer}
+     * @param player {@link SkyUser}
      */
-    public void unbanPlayer(OfflinePlayer player) {
+    public void unbanPlayer(SkyUser player) {
         bannedPlayers.remove(player);
         SkyApi.getInstance().getCacheService().getEntry(this).unbanMember(player); // todo audit log & ban viewing
     }
 
     /**
-     * @param player Player to check ban status of [{@link Player}]
+     * @param player Player to check ban status of [{@link SkyUser}]
      * @return {@link Boolean}
      */
-    public boolean isPlayerBanned(OfflinePlayer player) {
+    public boolean isPlayerBanned(SkyUser player) {
         return bannedPlayers.contains(player);
     }
 
     /**
      * Get a list of all the banned players.
      *
-     * @return {@link List<OfflinePlayer>}
+     * @return {@link List<SkyUser>}
      */
-    public CompletableFuture<List<OfflinePlayer>> getBannedPlayers() {
+    public CompletableFuture<List<SkyUser>> getBannedPlayers() {
         return SkyApi.getInstance().getDatabaseManager().getFactionsManager().getBannedPlayers(name);
     }
 
     /**
      * Remove a player from the faction (willingly).
      *
-     * @param player Player who is leaving [{@link Player}]
+     * @param player Player who is leaving [{@link SkyUser}]
      */
-    public void leaveFaction(OfflinePlayer player) {
+    public void leaveFaction(SkyUser player) {
         removeFromFaction(player);
         SkyApi.getInstance().getCacheService().getEntry(this).removeMember(player);
     }
@@ -273,13 +272,15 @@ public class Faction {
     /**
      * Add a new member to the Faction.
      *
-     * @param player UUID of the player to add [{@link OfflinePlayer}]
+     * @param player UUID of the player to add [{@link SkyUser}]
      */
-    public void addFactionMember(OfflinePlayer player) {
+    public void addFactionMember(SkyUser player) {
         SkyApi.getInstance().getCacheService().getEntry(this).addMember(player);
         members.add(player);
         createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_JOIN, "player_name", player.getName());
         createBroadcast(player, Messages.FACTION_JOIN_BROADCAST, "<player_name>", player.getName());
+
+        SkyApi.getInstance().getFactionAPI().getFactionRegion(this).getMembers().addPlayer(player.getUniqueId());
     }
 
     /**
@@ -297,7 +298,7 @@ public class Faction {
 
     private AuditLogData createData(UUID playerUUID, AuditLogType type, Object... replacements) {
         return new AuditLogData(
-                Bukkit.getOfflinePlayer(playerUUID),
+                SkyApi.getInstance().getUserManager().getUser(playerUUID),
                 getName(),
                 type.name(),
                 replacements,
@@ -327,7 +328,7 @@ public class Faction {
                 .collect(Collectors.toList());
     }
 
-    public JoinRequestData getPlayerJoinRequest(Player player) {
+    public JoinRequestData getPlayerJoinRequest(SkyUser player) {
         InviteData data = invites.stream()
                 .filter(invite -> invite.getPlayer().getUniqueId().equals(player.getUniqueId()))
                 .findFirst()
@@ -346,17 +347,17 @@ public class Faction {
      * @param data Data of the invite [{@link InviteData}]
      */
     public void createInvite(InviteData data) {
-        OfflinePlayer player = data.getPlayer();
-        OfflinePlayer inviter = data.getInviter();
+        SkyUser player = data.getPlayer();
+        SkyUser inviter = data.getInviter();
 
-        SkyApi.getInstance().getInvitesAPI().onInviteCreate(player.getUniqueId(), data);
+        InvitesAPI.onInviteCreate(player.getUniqueId(), data);
         invites.add(data);
         SkyApi.getInstance().getCacheService().getEntry(this).createInvite(data);
         createAuditLog(player.getUniqueId(), AuditLogType.INVITE_CREATE, "inviter", inviter.getName(), "player_name", player.getName());
         SkyApi.getInstance().getNotificationAPI().createNotification(player.getUniqueId(), NotificationType.INVITE_CREATE, "player_name", inviter.getName(), "faction_name", name);
 
         if (player.isOnline()) {
-            Messages.FACTION_INVITE_NOTIFICATION.send(player.getPlayer(), SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
+            Messages.FACTION_INVITE_NOTIFICATION.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
         }
     }
 
@@ -366,32 +367,32 @@ public class Faction {
      * @param data Data of the join request [{@link InviteData}]
      */
     public void createJoinRequest(InviteData data) {
-        OfflinePlayer player = data.getPlayer();
+        SkyUser player = data.getPlayer();
 
         invites.add(data);
         SkyApi.getInstance().getCacheService().getEntry(this).createInvite(data);
         createAuditLog(player.getUniqueId(), AuditLogType.JOIN_REQUEST_CREATE, "player_name", player.getName());
 
-        List<OfflinePlayer> users = Stream.concat(getModerators().stream(), getAdmins().stream()).collect(Collectors.toList());
+        List<SkyUser> users = Stream.concat(getModerators().stream(), getAdmins().stream()).collect(Collectors.toList());
         users.add(getOwner());
 
-        for (OfflinePlayer user : users) {
+        for (SkyUser user : users) {
             if (user.isOnline()) {
-                Messages.JOIN_REQUEST_NOTIFICATION.send(user.getPlayer(), user.getPlayer().locale().getLanguage());
+                Messages.JOIN_REQUEST_NOTIFICATION.send(user, SkyApi.getInstance().getPlayerAPI().getLocale(user.getUniqueId()));
             }
         }
     }
 
-    public boolean isOwner(Player player) {
-        return getOwner().equals(Bukkit.getOfflinePlayer(player.getUniqueId()));
+    public boolean isOwner(SkyUser player) {
+        return getOwner().equals(player);
     }
 
-    public boolean isModerator(Player player) {
-        return getModerators().contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
+    public boolean isModerator(SkyUser player) {
+        return getModerators().contains(player);
     }
 
-    public boolean isAdmin(Player player) {
-        return getAdmins().contains(Bukkit.getOfflinePlayer(player.getUniqueId()));
+    public boolean isAdmin(SkyUser player) {
+        return getAdmins().contains(player);
     }
 
     /**
@@ -402,11 +403,11 @@ public class Faction {
      * @param replacements Values to replace in the audit log.
      */
     public void revokeInvite(InviteData data, AuditLogType type, Object... replacements) {
-        OfflinePlayer player = data.getPlayer();
+        SkyUser player = data.getPlayer();
 
         invites.remove(data);
         SkyApi.getInstance().getCacheService().getEntry(this).removeInvite(data);
-        SkyApi.getInstance().getInvitesAPI().onInviteRemove(player.getUniqueId(), data);
+        InvitesAPI.onInviteRemove(player.getUniqueId(), data);
         createAuditLog(player.getUniqueId(), type, replacements);
     }
 
@@ -423,9 +424,9 @@ public class Faction {
      * Reject a Player's join request to your Faction.
      *
      * @param data  Data of the invite [{@link InviteData}]
-     * @param actor Player who rejected the invite [{@link Player}]
+     * @param actor Player who rejected the invite [{@link SkyUser}]
      */
-    public void rejectJoinRequest(InviteData data, Player actor) {
+    public void rejectJoinRequest(InviteData data, SkyUser actor) {
         invites.remove(data);
         SkyApi.getInstance().getCacheService().getEntry(this).removeInvite(data);
 
@@ -433,7 +434,7 @@ public class Faction {
         SkyApi.getInstance().getNotificationAPI().createNotification(data.getPlayer().getUniqueId(), NotificationType.JOIN_REQUEST_ACCEPT, "player_name", actor.getName(), "faction_name", name);
     }
 
-    public InviteData toInviteData(JoinRequestData data, OfflinePlayer player) {
+    public InviteData toInviteData(JoinRequestData data, SkyUser player) {
         return new InviteData(
                 player,
                 null,
@@ -450,7 +451,7 @@ public class Faction {
      * @return The rank of the player. {@link String}
      */
     public String getRank(UUID playerUUID) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
+        SkyUser player = SkyApi.getInstance().getUserManager().getUser(playerUUID);
         String locale = player.isOnline() ? SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()) : Messages.getDefaulLocale();
 
         if (owner.equals(player)) return Messages.FACTION_OWNER_TITLE.getString(locale);
@@ -463,7 +464,7 @@ public class Faction {
     }
 
     public RankType getRankType(UUID playerUUID) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
+        SkyUser player = SkyApi.getInstance().getUserManager().getUser(playerUUID);
 
         if (owner.equals(player)) return RankType.OWNER;
         if (admins.contains(player)) return RankType.ADMIN;
@@ -479,7 +480,7 @@ public class Faction {
                 .anyMatch(player -> player.getUniqueId().equals(playerUUID));
     }
 
-    private void cache(OfflinePlayer player, String oldRank, RankType newType) {
+    private void cache(SkyUser player, String oldRank, RankType newType) {
         switch (oldRank) {
             case "admin":
                 admins.remove(player);
@@ -511,8 +512,10 @@ public class Faction {
         }
     }
 
-    private void removeFromFaction(OfflinePlayer player) {
-        SkyApi.getInstance().getFactionAPI().factionCache.remove(player.getUniqueId());
+    private void removeFromFaction(SkyUser player) {
+        ProtectedRegion region = SkyApi.getInstance().getFactionAPI().getFactionRegion(this);
+
+        SkyApi.getInstance().getFactionAPI().getFactionUserCache().remove(player.getUniqueId());
         if (owner.equals(player)) {
             owner = null;
         } else {
@@ -521,5 +524,7 @@ public class Faction {
             fighters.remove(player);
             members.remove(player);
         }
+
+        region.getMembers().removePlayer(player.getUniqueId());
     }
 }
