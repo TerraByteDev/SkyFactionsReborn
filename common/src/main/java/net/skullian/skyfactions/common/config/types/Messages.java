@@ -10,6 +10,7 @@ import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.DependencyHandler;
 import net.skullian.skyfactions.common.util.SLogger;
@@ -20,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -374,14 +376,30 @@ public enum Messages {
         receiver.sendMessage(message);
     }
 
-    public static String replace(String value, String locale, Player player, Object... replacements) {
-        if (DependencyHandler.isEnabled("PlaceholderAPI")) value = PlaceholderAPI.setPlaceholders(player, value);
+    public static String replace(String value, SkyUser player, Object... replacements) {
+        value = SkyApi.getInstance().getPlayerAPI().processText(player, value);
         for (int i = 0; i < replacements.length; i += 2) {
             if (i + 1 >= replacements.length) break;
             value = value.replace(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
         }
 
         return value;
+    }
+
+    public static List<String> replace(List<String> values, SkyUser player, Object... replacements) {
+        List<String> formatted = new ArrayList<>();
+
+        for (String val : valuse) {
+            val = SkyApi.getInstance().getPlayerAPI().processText(player, val);
+            for (int i = 0; i < replacements.length; i += 2) {
+                if (i + 1 >= replacements.length) break;
+                val = val.replace(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
+            }
+
+            formatted.add(val);
+        }
+
+        return formatted;
     }
 
     public static YamlDocument getFallbackDocument() {
