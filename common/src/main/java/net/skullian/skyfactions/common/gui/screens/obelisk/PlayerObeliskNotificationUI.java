@@ -1,26 +1,23 @@
 package net.skullian.skyfactions.common.gui.screens.obelisk;
 
 import lombok.Builder;
-import net.skullian.skyfactions.core.SkyFactionsReborn;
-import net.skullian.skyfactions.core.api.SpigotGUIAPI;
-import net.skullian.skyfactions.core.api.SpigotNotificationAPI;
-import net.skullian.skyfactions.core.config.types.GUIEnums;
-import net.skullian.skyfactions.core.config.types.Messages;
-import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.data.PaginationItemData;
-import net.skullian.skyfactions.core.gui.items.EmptyItem;
-import net.skullian.skyfactions.core.gui.items.PaginationBackItem;
-import net.skullian.skyfactions.core.gui.items.PaginationForwardItem;
-import net.skullian.skyfactions.core.gui.items.obelisk.ObeliskBackItem;
-import net.skullian.skyfactions.core.gui.items.obelisk.notification.ObeliskNotificationPaginationItem;
-import net.skullian.skyfactions.core.gui.screens.confirmation.PaginatedScreen;
-import net.skullian.skyfactions.core.notification.NotificationData;
-import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
+import net.skullian.skyfactions.common.api.GUIAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.GUIEnums;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.PaginationItemData;
+import net.skullian.skyfactions.common.gui.items.EmptyItem;
+import net.skullian.skyfactions.common.gui.items.PaginationBackItem;
+import net.skullian.skyfactions.common.gui.items.PaginationForwardItem;
+import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
+import net.skullian.skyfactions.common.gui.items.obelisk.ObeliskBackItem;
+import net.skullian.skyfactions.common.gui.items.obelisk.notification.ObeliskNotificationPaginationItem;
+import net.skullian.skyfactions.common.gui.screens.PaginatedScreen;
+import net.skullian.skyfactions.common.notification.NotificationData;
+import net.skullian.skyfactions.common.user.SkyUser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xyz.xenondevs.invui.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,54 +26,54 @@ public class PlayerObeliskNotificationUI extends PaginatedScreen {
     private final List<NotificationData> notifications;
 
     @Builder
-    public PlayerObeliskNotificationUI(Player player, List<NotificationData> notifications) {
-        super(player, GUIEnums.OBELISK_PLAYER_NOTIFICATIONS_GUI.getPath());
+    public PlayerObeliskNotificationUI(SkyUser player, List<NotificationData> notifications) {
+        super(GUIEnums.OBELISK_PLAYER_NOTIFICATIONS_GUI.getPath(), player);
         this.notifications = notifications;
 
-        initWindow();
+        init();
     }
 
-    public static void promptPlayer(Player player) {
-        List<NotificationData> notifications = SpigotNotificationAPI.getNotifications(player);
+    public static void promptPlayer(SkyUser player) {
+        List<NotificationData> notifications = SkyApi.getInstance().getNotificationAPI().getNotifications(player.getUniqueId());
         try {
-            player.setMetadata("inFactionRelatedUI", new FixedMetadataValue(SkyFactionsReborn.getInstance(), true));
+            player.addMetadata("inFactionRelatedUI");
             PlayerObeliskNotificationUI.builder().player(player).notifications(notifications).build().show();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "open the notifications GUI", "debug", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open the notifications GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 
     @Nullable
     @Override
-    protected Item handleItem(@NotNull ItemData itemData) {
+    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "PROMPT", "BORDER" ->
-                    new EmptyItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), player);
+                    new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             case "BACK" ->
-                    new ObeliskBackItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), "player", player);
+                    new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", player);
             default -> null;
         };
     }
 
     @Nullable
     @Override
-    protected Item handlePaginationItem(@NotNull PaginationItemData paginationItem) {
+    protected BaseSkyItem handlePaginationItem(@NotNull PaginationItemData paginationItem) {
         return switch (paginationItem.getITEM_ID()) {
             case "FORWARD_BUTTON" ->
-                    new PaginationForwardItem(paginationItem, SpigotGUIAPI.createItem(paginationItem, player.getUniqueId()));
+                    new PaginationForwardItem(paginationItem, player);
             case "BACK_BUTTON" ->
-                    new PaginationBackItem(paginationItem, SpigotGUIAPI.createItem(paginationItem, player.getUniqueId()));
+                    new PaginationBackItem(paginationItem, player);
             default -> null;
         };
     }
 
     @NotNull
     @Override
-    protected List<Item> getModels(Player player, ItemData data) {
-        List<Item> items = new ArrayList<>();
+    protected List<BaseSkyItem> getModels(SkyUser player, ItemData data) {
+        List<BaseSkyItem> items = new ArrayList<>();
         for (NotificationData notification : notifications) {
-            items.add(new ObeliskNotificationPaginationItem(data, SpigotGUIAPI.createItem(data, player.getUniqueId()), notification, player));
+            items.add(new ObeliskNotificationPaginationItem(data, GUIAPI.createItem(data, player.getUniqueId()), notification, player));
         }
 
         return items;

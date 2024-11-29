@@ -1,16 +1,14 @@
 package net.skullian.skyfactions.common.gui.items;
 
-import net.skullian.skyfactions.common.gui.data.ItemData;
 import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.gui.items.impl.SkyPageItem;
 import net.skullian.skyfactions.common.user.SkyUser;
-import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class PaginationBackItem extends SkyPageItem {
 
 
-    public PaginationBackItem(ItemData data, SkyItemStack stack, SkyUser player, Object[] optionals, PaginationItemData paginationItemData) {
-        super(data, stack, player, optionals, paginationItemData, false);
+    public PaginationBackItem(PaginationItemData paginationItemData, SkyUser player) {
+        super(null, null, player, null, paginationItemData, false);
     }
 
     @Override

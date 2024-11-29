@@ -1,56 +1,56 @@
 package net.skullian.skyfactions.common.gui.screens.obelisk.invites;
 
 import lombok.Builder;
-import net.skullian.skyfactions.core.api.SpigotGUIAPI;
-import net.skullian.skyfactions.core.config.types.GUIEnums;
-import net.skullian.skyfactions.core.config.types.Messages;
+import net.skullian.skyfactions.common.api.GUIAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.GUIEnums;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.items.EmptyItem;
+import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
+import net.skullian.skyfactions.common.gui.items.obelisk.ObeliskBackItem;
+import net.skullian.skyfactions.common.gui.items.obelisk.invites.InvitePromptItem;
+import net.skullian.skyfactions.common.gui.items.obelisk.invites.PlayerIncomingInviteAccept;
+import net.skullian.skyfactions.common.gui.items.obelisk.invites.PlayerIncomingInviteDeny;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.database.struct.InviteData;
-import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.EmptyItem;
-import net.skullian.skyfactions.core.gui.items.obelisk.ObeliskBackItem;
-import net.skullian.skyfactions.core.gui.items.obelisk.invites.InvitePromptItem;
-import net.skullian.skyfactions.core.gui.items.obelisk.invites.PlayerIncomingInviteAccept;
-import net.skullian.skyfactions.core.gui.items.obelisk.invites.PlayerIncomingInviteDeny;
 import net.skullian.skyfactions.common.gui.screens.Screen;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xyz.xenondevs.invui.item.Item;
 
 public class PlayerManageIncomingInviteUI extends Screen {
     private final InviteData inviteData;
 
     @Builder
-    public PlayerManageIncomingInviteUI(Player player, InviteData inviteData) {
-        super(player, GUIEnums.OBELISK_PLAYER_INVITE_MANAGE_GUI.getPath());
+    public PlayerManageIncomingInviteUI(SkyUser player, InviteData inviteData) {
+        super(GUIEnums.OBELISK_PLAYER_INVITE_MANAGE_GUI.getPath(), player);
         this.inviteData = inviteData;
 
-        initWindow();
+        init();
     }
 
-    public static void promptPlayer(Player player, InviteData inviteData) {
+    public static void promptPlayer(SkyUser player, InviteData inviteData) {
         try {
             PlayerManageIncomingInviteUI.builder().player(player).inviteData(inviteData).build().show();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "manage an incoming Faction invite", "debug", "GUI_LOAD_EXCEPTION");
+            Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "manage an incoming Faction invite", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
 
     @Nullable
     @Override
-    protected Item handleItem(@NotNull ItemData itemData) {
+    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "PROMPT" ->
-                    new InvitePromptItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), inviteData.getFactionName(), player);
+                    new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData.getFactionName(), player);
             case "ACCEPT" ->
-                    new PlayerIncomingInviteAccept(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player);
+                    new PlayerIncomingInviteAccept(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player);
             case "DENY" ->
-                    new PlayerIncomingInviteDeny(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player);
+                    new PlayerIncomingInviteDeny(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player);
             case "BACK" ->
-                    new ObeliskBackItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), "player", player);
-            case "BORDER" -> new EmptyItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), player);
+                    new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", player);
+            case "BORDER" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };
     }

@@ -132,7 +132,7 @@ public abstract class DefenceAPI {
      *
      * @return true if the block is a defence material.
      */
-    public abstract boolean isDefenceMaterial(Block block);
+    public abstract boolean isDefenceMaterial(SkyLocation block);
 
     /**
      * Get the defence struct from an item.

@@ -1,8 +1,5 @@
 package net.skullian.skyfactions.common.gui.data;
 
-/**
- * What the client did to trigger this action (not the result).
- */
 public enum SkyClickType {
 
     LEFT,

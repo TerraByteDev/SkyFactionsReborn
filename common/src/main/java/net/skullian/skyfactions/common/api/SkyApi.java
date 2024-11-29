@@ -4,6 +4,8 @@ import lombok.Getter;
 import net.skullian.skyfactions.common.config.ConfigFileHandler;
 import net.skullian.skyfactions.common.database.DatabaseManager;
 import net.skullian.skyfactions.common.database.cache.CacheService;
+import net.skullian.skyfactions.common.defence.DefenceFactory;
+import net.skullian.skyfactions.common.gui.UIShower;
 import net.skullian.skyfactions.common.npc.NPCManager;
 import net.skullian.skyfactions.common.user.UserManager;
 import net.skullian.skyfactions.common.util.worldborder.BorderAPI;
@@ -145,6 +147,20 @@ public abstract class SkyApi {
      * @return {@link ObeliskAPI}
      */
    @NotNull public abstract ObeliskAPI getObeliskAPI();
+
+    /**
+     * Get the UIShower. This is used for showing GUIs to players for platforms.
+     *
+     * @return {@link UIShower}
+     */
+   @NotNull public abstract UIShower getUIShower();
+
+    /**
+     * Get the Defence Factory. This is used for creating defences.
+     *
+     * @return {@link DefenceFactory}
+     */
+   @NotNull public abstract DefenceFactory getDefenceFactory();
 
     /**
      * Set the API Instance. Can depend on the platform (obviously a WIP)

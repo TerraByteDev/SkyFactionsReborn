@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.common.gui.screens;
 
 import net.skullian.skyfactions.common.api.GUIAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.gui.data.GUIData;
 import net.skullian.skyfactions.common.gui.data.ItemData;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
@@ -11,20 +12,24 @@ import org.jetbrains.annotations.Nullable;
 public abstract class Screen {
     protected final String guiPath;
     protected final GUIData guiData;
+    protected final SkyUser player;
 
     public Screen(String guiPath, SkyUser player) {
         this.guiPath = guiPath;
-        // GUIAPI should be platform independent (remove player)
+
         this.guiData = GUIAPI.getGUIData(guiPath, player);
+        this.player = player;
     }
 
     // init window in here
-    protected abstract void init();
+    protected void init() {}
 
-    public abstract void show();
+    public void show() {
+        SkyApi.getInstance().getUIShower().show(player, this);
+    }
 
     protected abstract @Nullable BaseSkyItem handleItem(@NotNull ItemData itemData);
 
-    protected abstract void registerItems();
+    protected void registerItems() {}
 }
 

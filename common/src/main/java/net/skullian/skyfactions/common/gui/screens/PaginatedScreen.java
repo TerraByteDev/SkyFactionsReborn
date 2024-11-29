@@ -2,6 +2,7 @@ package net.skullian.skyfactions.common.gui.screens;
 
 import lombok.Getter;
 import net.skullian.skyfactions.common.api.GUIAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.gui.data.GUIData;
 import net.skullian.skyfactions.common.gui.data.ItemData;
 import net.skullian.skyfactions.common.gui.data.PaginationItemData;
@@ -16,19 +17,23 @@ import java.util.List;
 public abstract class PaginatedScreen {
     protected final String guiPath;
     protected final GUIData guIData;
+    protected final SkyUser player;
 
     public PaginatedScreen(String guiPath, SkyUser player) {
         this.guiPath = guiPath;
         this.guIData = GUIAPI.getGUIData(guiPath, player);
+        this.player = player;
     }
 
-    protected abstract void init();
+    protected void init() {}
 
-    public abstract void show();
+    public void show() {
+        SkyApi.getInstance().getUIShower().show(player, this);
+    }
 
     protected abstract @Nullable BaseSkyItem handleItem(@NotNull ItemData itemData);
 
-    protected abstract void registerItems();
+    protected void registerItems() {};
 
     protected abstract @Nullable BaseSkyItem handlePaginationItem(@NotNull PaginationItemData paginationItem);
 

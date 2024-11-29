@@ -2,84 +2,79 @@ package net.skullian.skyfactions.common.gui.screens.obelisk;
 
 import lombok.Builder;
 import net.skullian.skyfactions.common.api.GUIAPI;
-import net.skullian.skyfactions.core.SkyFactionsReborn;
-import net.skullian.skyfactions.core.api.SpigotFactionAPI;
-import net.skullian.skyfactions.core.api.SpigotGUIAPI;
-import net.skullian.skyfactions.core.config.types.GUIEnums;
-import net.skullian.skyfactions.core.config.types.Messages;
-import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.GUIEnums;
+import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.faction.Faction;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.AirItem;
-import net.skullian.skyfactions.core.gui.items.EmptyItem;
-import net.skullian.skyfactions.core.gui.items.obelisk.*;
-import net.skullian.skyfactions.core.gui.items.obelisk.defence.ObeliskDefencePurchaseItem;
-import net.skullian.skyfactions.core.gui.items.obelisk.election.ObeliskFactionElectionMenuItem;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.items.AirItem;
+import net.skullian.skyfactions.common.gui.items.EmptyItem;
+import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
+import net.skullian.skyfactions.common.gui.items.obelisk.*;
+import net.skullian.skyfactions.common.gui.items.obelisk.defence.ObeliskDefencePurchaseItem;
+import net.skullian.skyfactions.common.gui.items.obelisk.election.ObeliskFactionElectionMenuItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
-import net.skullian.skyfactions.core.util.ErrorUtil;
-import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.Item;
 
 public class FactionObeliskUI extends Screen {
     private final Faction faction;
 
     @Builder
-    public FactionObeliskUI(Player player, Faction faction) {
-        super(player, GUIEnums.OBELISK_FACTION_GUI.getPath());
+    public FactionObeliskUI(SkyUser player, Faction faction) {
+        super(GUIEnums.OBELISK_FACTION_GUI.getPath(), player);
         this.faction = faction;
 
-        initWindow();
+        init();
     }
 
-    public static void promptPlayer(Player player) {
-        SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
+    public static void promptPlayer(SkyUser player) {
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
+        SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
             if (exc != null) {
                 ErrorUtil.handleError(player, "open faction obelisk", "GUI_LOAD_EXCEPTION", exc);
                 return;
-            }
-
-            if (faction == null) {
-                Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "open faction obelisk", "debug", "FACTION_NOT_FOUND");
+            } else if (faction == null) {
+                Messages.ERROR.send(player, locale, "operation", "open faction obelisk", "debug", "FACTION_NOT_FOUND");
                 return;
             }
 
             try {
-                player.setMetadata("inFactionRelatedUI", new FixedMetadataValue(SkyFactionsReborn.getInstance(), true));
+                player.addMetadata("inFactionRelatedUI");
                 FactionObeliskUI.builder().player(player).faction(faction).build().show();
             } catch (Exception e) {
                 e.printStackTrace();
-                Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "open faction obelisk", "debug", "GUI_LOAD_EXCEPTION");
+                Messages.ERROR.send(player, locale, "operation", "open faction obelisk", "debug", "GUI_LOAD_EXCEPTION");
             }
         });
     }
 
     @Override
-    protected Item handleItem(@NotNull ItemData itemData) {
+    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "FACTION" ->
                     new ObeliskFactionOverviewItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             case "DEFENCES" ->
-                    new ObeliskDefencePurchaseItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction, player);
+                    new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction, player);
 
             case "RUNES_CONVERSION" ->
-                    new ObeliskRuneItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), "faction", player);
+                    new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player);
 
             case "MEMBER_MANAGEMENT" ->
-                    new ObeliskMemberManagementItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), faction, player);
+                    new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), faction, player);
 
             case "AUDIT_LOGS" ->
-                    new ObeliskAuditLogItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), player);
+                    new ObeliskAuditLogItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
 
             case "INVITES" ->
-                    new ObeliskInvitesItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction, player);
+                    new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction, player);
 
             case "ELECTION" -> faction.isElectionRunning() ?
-                    new ObeliskFactionElectionMenuItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), faction, player) :
+                    new ObeliskFactionElectionMenuItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), faction, player) :
                     new AirItem(player);
 
-            case "BORDER" -> new EmptyItem(itemData, SpigotGUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "BORDER" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };
     }
