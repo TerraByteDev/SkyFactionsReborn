@@ -1,51 +1,48 @@
 package net.skullian.skyfactions.common.gui.items.obelisk.member_manage;
 
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.faction.AuditLogType;
 import net.skullian.skyfactions.common.faction.Faction;
-import net.skullian.skyfactions.core.api.SpigotFactionAPI;
-import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.core.config.types.Messages;
-import net.skullian.skyfactions.core.config.types.Settings;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.SkyItem;
-import net.skullian.skyfactions.core.util.ErrorUtil;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.SkyClickType;
+import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 import java.util.List;
 
 public class MemberKickItem extends SkyItem {
 
-    private OfflinePlayer SUBJECT;
+    private SkyUser SUBJECT;
 
-    public MemberKickItem(ItemData data, ItemStack stack, OfflinePlayer player, Player viewer, Faction faction) {
+    public MemberKickItem(ItemData data, SkyItemStack stack, SkyUser player, SkyUser viewer, Faction faction) {
         super(data, stack, viewer, List.of(faction).toArray());
         
         this.SUBJECT = player;
     }
 
     @Override
-    public ItemBuilder process(ItemBuilder builder) {
-        Faction faction = (Faction) getOptionals()[0];
+    public SkyItemStack.SkyItemStackBuilder process(SkyItemStack.SkyItemStackBuilder builder) {
+        Faction faction = (Faction) getOPTIONALS()[0];
 
         if (!Settings.FACTION_KICK_PERMISSIONS.getList().contains(faction.getRankType(getPLAYER().getUniqueId()).getRankValue())) {
-            builder.addLoreLines(toList(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(SpigotPlayerAPI.getLocale(getPLAYER().getUniqueId()))));
+            builder.lore(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(SkyApi.getInstance().getPlayerAPI().getLocale(getPLAYER().getUniqueId())));
         }
 
         return builder;
     }
 
     @Override
-    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, exc) -> {
-            event.getInventory().close();
-            if (exc != null) {
-                ErrorUtil.handleError(player, "kick a player", "SQL_FACTION_GET", exc);
+    public void onClick(SkyClickType clickType, SkyUser player) {
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
+
+        SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+            player.closeInventory();
+            if (ex != null) {
+                ErrorUtil.handleError(player, "kick a player", "SQL_FACTION_GET", ex);
                 return;
             }
 
@@ -55,17 +52,13 @@ public class MemberKickItem extends SkyItem {
                     faction.createAuditLog(SUBJECT.getUniqueId(), AuditLogType.PLAYER_KICK, "kicked", SUBJECT.getName(), "player", player.getName());
                     faction.kickPlayer(SUBJECT, player);
 
-                    Messages.FACTION_MANAGE_KICK_SUCCESS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "player", SUBJECT.getName());
+                    Messages.FACTION_MANAGE_KICK_SUCCESS.send(player, locale, "player", SUBJECT.getName());
                 } else {
-                    Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "kick a player", "debug", "FACTION_MEMBER_UNKNOWN");
-                    event.getInventory().close();
+                    Messages.ERROR.send(player, locale, "operation", "kick a player", "debug", "FACTION_MEMBER_UNKNOWN");
                 }
             } else {
-                Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "kick a player", "debug", "FACTION_NOT_EXIST");
-                event.getInventory().close();
+                Messages.ERROR.send(player, locale, "operation", "kick a player", "debug", "FACTION_NOT_EXIST");
             }
         });
-
-
     }
 }

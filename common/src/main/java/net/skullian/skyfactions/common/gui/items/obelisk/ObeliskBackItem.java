@@ -1,30 +1,27 @@
 package net.skullian.skyfactions.common.gui.items.obelisk;
 
-import net.skullian.skyfactions.core.SkyFactionsReborn;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.SkyItem;
-import net.skullian.skyfactions.core.gui.screens.obelisk.FactionObeliskUI;
-import net.skullian.skyfactions.core.gui.screens.obelisk.PlayerObeliskUI;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.SkyClickType;
+import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.common.gui.screens.obelisk.FactionObeliskUI;
+import net.skullian.skyfactions.common.gui.screens.obelisk.PlayerObeliskUI;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class ObeliskBackItem extends SkyItem {
 
     private String TYPE;
 
-    public ObeliskBackItem(ItemData data, ItemStack stack, String type, Player player) {
+    public ObeliskBackItem(ItemData data, SkyItemStack stack, String type, SkyUser player) {
         super(data, stack, player, null);
         
         this.TYPE = type;
     }
 
     @Override
-    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+    public void onClick(SkyClickType clickType, SkyUser player) {
         if (player.hasMetadata("rune_ui")) {
-            player.removeMetadata("rune_ui", SkyFactionsReborn.getInstance());
+            player.removeMetadata("rune_ui");
         }
 
         if (TYPE.equals("player")) {

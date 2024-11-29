@@ -1,23 +1,18 @@
 package net.skullian.skyfactions.common.gui.items.obelisk.defence;
 
+import net.skullian.skyfactions.common.api.DefenceAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.DefencesConfig;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.common.faction.Faction;
-import net.skullian.skyfactions.core.api.SpigotDefenceAPI;
-import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.core.config.types.DefencesConfig;
-import net.skullian.skyfactions.core.config.types.Messages;
-import net.skullian.skyfactions.core.config.types.Settings;
-import net.skullian.skyfactions.core.defence.DefencesFactory;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.AsyncSkyItem;
-import net.skullian.skyfactions.core.gui.screens.obelisk.defence.ObeliskPurchaseDefenceUI;
-import net.skullian.skyfactions.core.util.SoundUtil;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.SkyClickType;
+import net.skullian.skyfactions.common.gui.items.impl.AsyncSkyItem;
+import net.skullian.skyfactions.common.gui.screens.obelisk.defence.ObeliskPurchaseDefenceUI;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 import java.util.List;
 
@@ -29,7 +24,7 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
     private Faction FACTION;
     private boolean HAS_PERMISSIONS = false;
 
-    public ObeliskPaginatedDefenceItem(ItemData data, ItemStack stack, DefenceStruct struct, boolean shouldRedirect, String type, Faction faction, Player player) {
+    public ObeliskPaginatedDefenceItem(ItemData data, SkyItemStack stack, DefenceStruct struct, boolean shouldRedirect, String type, Faction faction, SkyUser player) {
         super(data, stack, player, List.of(struct, faction != null ? faction : "", type).toArray());
 
         this.STRUCT = struct;
@@ -40,17 +35,17 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
 
     @Override
     public Object[] replacements() {
-        DefenceStruct struct = (DefenceStruct) getOptionals()[0];
+        DefenceStruct struct = (DefenceStruct) getOPTIONALS()[0];
 
         String maxLevel = String.valueOf(struct.getMAX_LEVEL());
-        String range = DefencesFactory.solveFormula(struct.getATTRIBUTES().getRANGE(), 1);
-        String ammo = DefencesFactory.solveFormula(struct.getATTRIBUTES().getMAX_AMMO(), 1);
-        String targetMax = DefencesFactory.solveFormula(struct.getATTRIBUTES().getMAX_TARGETS(), 1);
-        String damage = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDAMAGE(), 1);
-        String cooldown = DefencesFactory.solveFormula(struct.getATTRIBUTES().getCOOLDOWN(), 1);
-        String healing = DefencesFactory.solveFormula(struct.getATTRIBUTES().getHEALING(), 1);
-        String distance = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDISTANCE(), 1);
-        String repairCost = DefencesFactory.solveFormula(struct.getREPAIR_COST(), 1);   
+        String range = DefenceAPI.solveFormula(struct.getATTRIBUTES().getRANGE(), 1);
+        String ammo = DefenceAPI.solveFormula(struct.getATTRIBUTES().getMAX_AMMO(), 1);
+        String targetMax = DefenceAPI.solveFormula(struct.getATTRIBUTES().getMAX_TARGETS(), 1);
+        String damage = DefenceAPI.solveFormula(struct.getATTRIBUTES().getDAMAGE(), 1);
+        String cooldown = DefenceAPI.solveFormula(struct.getATTRIBUTES().getCOOLDOWN(), 1);
+        String healing = DefenceAPI.solveFormula(struct.getATTRIBUTES().getHEALING(), 1);
+        String distance = DefenceAPI.solveFormula(struct.getATTRIBUTES().getDISTANCE(), 1);
+        String repairCost = DefenceAPI.solveFormula(struct.getREPAIR_COST(), 1);
         
         return List.of(
             "max_level", maxLevel,
@@ -68,17 +63,17 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
     }
 
     @Override
-    public ItemBuilder process(ItemBuilder builder) {
-        if (getPLAYER().getInventory().firstEmpty() == -1) {
-            builder.addLoreLines(toList(Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(SpigotPlayerAPI.getLocale(getPLAYER().getUniqueId()))));
+    public SkyItemStack.SkyItemStackBuilder process(SkyItemStack.SkyItemStackBuilder builder) {
+        if (!SkyApi.getInstance().getPlayerAPI().hasInventorySpace(getPLAYER())) {
+            Messages.DEFENCE_INSUFFICIENT_INVENTORY_LORE.getStringList(SkyApi.getInstance().getPlayerAPI().getLocale(getPLAYER().getUniqueId()));
         }
 
-        String type = (String) getOptionals()[2];
+        String type = (String) getOPTIONALS()[2];
         if (type.equalsIgnoreCase("faction")) {
-            Faction faction  = (Faction) getOptionals()[1];
+            Faction faction  = (Faction) getOPTIONALS()[1];
 
-            if (SpigotDefenceAPI.hasPermissions(DefencesConfig.PERMISSION_PURCHASE_DEFENCE.getList(), getPLAYER(), faction)) this.HAS_PERMISSIONS = true;
-                else return SpigotDefenceAPI.processPermissions(builder, getPLAYER());
+            if (SkyApi.getInstance().getDefenceAPI().hasPermissions(DefencesConfig.PERMISSION_PURCHASE_DEFENCE.getList(), getPLAYER(), faction)) this.HAS_PERMISSIONS = true;
+                else return SkyApi.getInstance().getDefenceAPI().processPermissions(builder, getPLAYER());
         } else HAS_PERMISSIONS = true;
 
 
@@ -86,12 +81,12 @@ public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
     }
 
     @Override
-    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+    public void onClick(SkyClickType clickType, SkyUser player) {
         if (SHOULD_REDIRECT && HAS_PERMISSIONS) {
             ObeliskPurchaseDefenceUI.promptPlayer(player, TYPE, STRUCT, FACTION);
         } else if (!HAS_PERMISSIONS) {
-            SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
-            Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+            SkyApi.getInstance().getSoundAPI().playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
+            Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
         }
     }
 }

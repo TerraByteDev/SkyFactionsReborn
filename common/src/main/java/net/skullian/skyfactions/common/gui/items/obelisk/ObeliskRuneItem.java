@@ -1,16 +1,13 @@
 package net.skullian.skyfactions.common.gui.items.obelisk;
 
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.faction.Faction;
-import net.skullian.skyfactions.core.api.SpigotFactionAPI;
-import net.skullian.skyfactions.core.api.SpigotRunesAPI;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.AsyncSkyItem;
-import net.skullian.skyfactions.core.gui.screens.obelisk.RunesSubmitUI;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.SkyClickType;
+import net.skullian.skyfactions.common.gui.items.impl.AsyncSkyItem;
+import net.skullian.skyfactions.common.gui.screens.obelisk.RunesSubmitUI;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 import java.util.List;
 
@@ -18,7 +15,7 @@ public class ObeliskRuneItem extends AsyncSkyItem {
 
     private String TYPE;
 
-    public ObeliskRuneItem(ItemData data, ItemStack stack, String type, Player player) {
+    public ObeliskRuneItem(ItemData data, SkyItemStack stack, String type, SkyUser player) {
         super(data, stack, player, List.of(type).toArray());
 
         this.TYPE = type;
@@ -26,13 +23,13 @@ public class ObeliskRuneItem extends AsyncSkyItem {
 
     @Override
     public Object[] replacements() {
-        String type = (String) getOptionals()[0];
+        String type = (String) getOPTIONALS()[0];
 
         int runes = 0;
         if (type.equals("player")) {
-            runes = SpigotRunesAPI.getRunes(getPLAYER().getUniqueId()).join();
+            runes = getPLAYER().getRunes().join();
         } else if (type.equals("faction")) {
-            Faction faction = SpigotFactionAPI.getFaction(getPLAYER().getUniqueId()).join();
+            Faction faction = SkyApi.getInstance().getFactionAPI().getFaction(getPLAYER().getUniqueId()).join();
             if (faction != null) {
                 runes = faction.getRunes();
             }
@@ -42,7 +39,7 @@ public class ObeliskRuneItem extends AsyncSkyItem {
     }
 
     @Override
-    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+    public void onClick(SkyClickType clickType, SkyUser player) {
         RunesSubmitUI.promptPlayer(player, TYPE);
     }
 

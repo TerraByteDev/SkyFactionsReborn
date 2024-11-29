@@ -13,8 +13,8 @@ public class GeneralCancelItem extends SkyItem {
     }
 
     @Override
-    public void onClick(SkyClickType clickType, SkyUser user) {
-        user.closeInventory();
+    public void onClick(SkyClickType clickType, SkyUser player) {
+        player.closeInventory();
     }
 
 

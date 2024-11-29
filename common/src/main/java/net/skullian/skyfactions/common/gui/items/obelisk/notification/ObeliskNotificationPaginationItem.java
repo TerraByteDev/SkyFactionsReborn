@@ -1,68 +1,63 @@
 package net.skullian.skyfactions.common.gui.items.obelisk.notification;
 
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.SkyClickType;
+import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.common.notification.NotificationData;
+import net.skullian.skyfactions.common.notification.NotificationType;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.text.TextUtility;
-import net.skullian.skyfactions.core.SkyFactionsReborn;
-import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.core.config.types.Messages;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.SkyItem;
-import net.skullian.skyfactions.core.notification.NotificationData;
-import net.skullian.skyfactions.core.notification.NotificationType;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.ItemProvider;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ObeliskNotificationPaginationItem extends SkyItem {
 
     private NotificationData DATA;
 
-    public ObeliskNotificationPaginationItem(ItemData data, ItemStack stack, NotificationData inviteData, Player player) {
+    public ObeliskNotificationPaginationItem(ItemData data, SkyItemStack stack, NotificationData inviteData, SkyUser player) {
         super(data, stack, player, List.of(inviteData).toArray());
 
         this.DATA = inviteData;
     }
 
     @Override
-    public ItemProvider getItemProvider() {
-        NotificationData data = (NotificationData) getOptionals()[0];
-        String locale = SpigotPlayerAPI.getLocale(getPLAYER().getUniqueId());
+    public SkyItemStack getItemStack() {
+        NotificationData data = (NotificationData) getOPTIONALS()[0];
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(getPLAYER().getUniqueId());
 
         String title = NotificationType.valueOf(data.getType()).getTitle(locale);
         String description = NotificationType.valueOf(data.getType()).getDescription(locale);
 
-        ItemBuilder builder = new ItemBuilder(getSTACK())
-                .setDisplayName(TextUtility.legacyColor(getDATA().getNAME().replace("<notification_title>", title), locale, getPLAYER(), data.getReplacements()));
+        SkyItemStack.SkyItemStackBuilder builder = SkyItemStack.builder()
+                .displayName(getDATA().getNAME().replace("<notification_title>", title));
 
         for (String loreLine : getDATA().getLORE()) {
             if (loreLine.contains("notification_description")) {
-                builder.addLoreLines(toList(TextUtility.toParts(description), data.getReplacements()));
+                builder.lore(Messages.replace(TextUtility.toParts(description), getPLAYER(), data.getReplacements()));
 
                 continue;
             }
 
-            builder.addLoreLines(TextUtility.legacyColor(loreLine
-                    .replace("<timestamp>", Messages.replace(Messages.NOTIFICATION_TIMESTAMP_FORMAT.getString(locale), locale, getPLAYER(), "<time>", TextUtility.formatExtendedElapsedTime(data.getTimestamp()))),
-                    locale,
-                    getPLAYER()
-            ));
+            builder.lore(new ArrayList<>(Collections.singleton(loreLine
+                            .replace("<timestamp>", Messages.replace(Messages.NOTIFICATION_TIMESTAMP_FORMAT.getString(locale), getPLAYER(), "<time>", TextUtility.formatExtendedElapsedTime(data.getTimestamp())))
+            )));
         }
 
-        return builder;
+        return builder.build();
     }
 
     @Override
-    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+    public void onClick(SkyClickType clickType, SkyUser player) {
         if (clickType.isRightClick()) {
             player.closeInventory();
 
-            SkyFactionsReborn.getCacheService().getEntry(player.getUniqueId()).removeNotification(DATA);
-            Messages.NOTIFICATION_DISMISS_SUCCESS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+            SkyApi.getInstance().getCacheService().getEntry(player.getUniqueId()).removeNotification(DATA);
+            Messages.NOTIFICATION_DISMISS_SUCCESS.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
         }
     }
 

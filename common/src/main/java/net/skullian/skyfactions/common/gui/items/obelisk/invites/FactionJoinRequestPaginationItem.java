@@ -1,15 +1,13 @@
 package net.skullian.skyfactions.common.gui.items.obelisk.invites;
 
 import net.skullian.skyfactions.common.database.struct.InviteData;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.SkyClickType;
+import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.common.gui.screens.obelisk.invites.JoinRequestManageUI;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.text.TextUtility;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.SkyItem;
-import net.skullian.skyfactions.core.gui.screens.obelisk.invites.JoinRequestManageUI;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class FactionJoinRequestPaginationItem extends SkyItem {
 
     private InviteData DATA;
 
-    public FactionJoinRequestPaginationItem(ItemData data, ItemStack stack, Player player, InviteData inviteData) {
+    public FactionJoinRequestPaginationItem(ItemData data, SkyItemStack stack, SkyUser player, InviteData inviteData) {
         super(data, stack, player, List.of(inviteData).toArray());
 
         this.DATA = inviteData;
@@ -25,7 +23,7 @@ public class FactionJoinRequestPaginationItem extends SkyItem {
 
     @Override
     public Object[] replacements() {
-        InviteData data = (InviteData) getOptionals()[1];
+        InviteData data = (InviteData) getOPTIONALS()[1];
 
         return List.of(
             "player_name", data.getPlayer().getName(),
@@ -34,7 +32,7 @@ public class FactionJoinRequestPaginationItem extends SkyItem {
     }
 
     @Override
-    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+    public void onClick(SkyClickType clickType, SkyUser player) {
         JoinRequestManageUI.promptPlayer(player, DATA);
     }
 

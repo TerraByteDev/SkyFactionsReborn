@@ -2,12 +2,15 @@ package net.skullian.skyfactions.common.api;
 
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import org.bukkit.block.Block;
@@ -37,6 +40,16 @@ public abstract class DefenceAPI {
      * @return {@link SkyItemStack} of the defence.
      */
     @NotNull public abstract SkyItemStack createDefenceStack(DefenceStruct defence, SkyUser player);
+
+    /**
+     * Add a defence to the player's inventory.
+     *
+     * @param player  Player to give the item to.
+     * @param defence DefenceStruct of the defence.
+     * @param faction Faction the player belongs to (if applicable, handled internally).
+     *
+     */
+    public abstract void addDefence(SkyUser player, DefenceStruct defence, Faction faction);
 
     /**
      * Check whether an item is a defence item.
@@ -142,4 +155,23 @@ public abstract class DefenceAPI {
      * @return {@link Boolean} - true if the owner is a faction.
      */
     public abstract boolean isFaction(String owner);
+
+    public static String solveFormula(String formula, int level) {
+        if (formula == null) return "N/A";
+        try {
+            Expression expression = new ExpressionBuilder(formula)
+                    .variable("level")
+                    .build()
+                    .setVariable("level", level);
+
+            if (!expression.validate().isValid()) return "N/A";
+
+            return String.valueOf(Math.round(expression.evaluate()));
+        } catch (Exception e) {
+            SLogger.fatal("Encountered an error when trying to evaluate defence formulas: {}", e.getMessage());
+            e.printStackTrace();
+        }
+
+        return "N/A";
+    }
 }

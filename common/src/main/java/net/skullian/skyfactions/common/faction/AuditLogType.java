@@ -1,9 +1,8 @@
 package net.skullian.skyfactions.common.faction;
 
-import org.bukkit.entity.Player;
-
-import net.skullian.skyfactions.core.config.types.Messages;
-import net.skullian.skyfactions.core.api.PlayerAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
 
 public enum AuditLogType {
 
@@ -34,12 +33,12 @@ public enum AuditLogType {
         this.description = description;
     }
 
-    public String getTitle(Player player) {
-        return title.getString(PlayerAPI.getLocale(player.getUniqueId()));
+    public String getTitle(SkyUser player) {
+        return title.getString(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
     }
 
-    public String getDescription(Player player) {
-        return description.getString(PlayerAPI.getLocale(player.getUniqueId()));
+    public String getDescription(SkyUser player) {
+        return description.getString(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
     }
 
 

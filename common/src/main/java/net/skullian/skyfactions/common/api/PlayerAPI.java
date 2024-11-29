@@ -139,4 +139,13 @@ public abstract class PlayerAPI {
      * @return {@link List<SkyUser>} of all online players.
      */
     public abstract List<SkyUser> getOnlinePlayers();
+
+    /**
+     * Check if a user has inventory space.
+     *
+     * @param user SkyUser to check.
+     *
+     * @return true if they have space.
+     */
+    public abstract boolean hasInventorySpace(SkyUser user);
 }

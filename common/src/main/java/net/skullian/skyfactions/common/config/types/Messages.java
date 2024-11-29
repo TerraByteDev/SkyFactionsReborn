@@ -389,7 +389,7 @@ public enum Messages {
     public static List<String> replace(List<String> values, SkyUser player, Object... replacements) {
         List<String> formatted = new ArrayList<>();
 
-        for (String val : valuse) {
+        for (String val : values) {
             val = SkyApi.getInstance().getPlayerAPI().processText(player, val);
             for (int i = 0; i < replacements.length; i += 2) {
                 if (i + 1 >= replacements.length) break;

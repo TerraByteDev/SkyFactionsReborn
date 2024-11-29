@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.common.api;
 
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import lombok.Getter;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
@@ -9,7 +8,6 @@ import net.skullian.skyfactions.common.faction.AuditLogType;
 import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.island.IslandModificationAction;
 import net.skullian.skyfactions.common.island.impl.FactionIsland;
-import net.skullian.skyfactions.common.obelisk.ObeliskHandler;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.text.TextUtility;
@@ -69,8 +67,6 @@ public abstract class FactionAPI {
 
     public abstract void onFactionDisband(Faction faction);
 
-    public abstract ProtectedRegion getFactionRegion(Faction faction);
-
     public CompletableFuture<Boolean> isInFaction(UUID user) {
         return CompletableFuture.supplyAsync(() -> {
             if (factionUserCache.containsKey(user)) return true;
@@ -95,7 +91,7 @@ public abstract class FactionAPI {
             for (SkyUser player : faction.getAllMembers()) {
 
             }
-            for (OfflinePlayer player : faction.getAllMembers()) {
+            for (SkyUser player : faction.getAllMembers()) {
                 if (!player.isOnline()) return;
                 factionCache.put(faction.getName(), faction);
             }
@@ -130,12 +126,17 @@ public abstract class FactionAPI {
         return factionCache.get(name);
     }
 
+    @Nullable
+    public Faction getCachedFaction(UUID playerUUID) {
+        return factionCache.get(factionUserCache.get(playerUUID));
+    }
+
     /**
      * @param player Player corresponded to string. Set to null if not needed.
      * @param name   String to check.
      * @return {@link Boolean}
      */
-    public boolean hasValidName(Player player, String name) {
+    public boolean hasValidName(SkyUser player, String name) {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
         
         int minimumLength = Settings.FACTION_CREATION_MIN_LENGTH.getInt();
@@ -200,7 +201,7 @@ public abstract class FactionAPI {
                 return;
             }
 
-            ObeliskHandler.spawnFactionObelisk(factionName, island);
+            SkyApi.getInstance().getObeliskAPI().spawnFactionObelisk(factionName, island);
 
             handleFactionWorldBorder(player, island);
             SkyApi.getInstance().getIslandAPI().modifyDefenceOperation(DefenceOperation.DISABLE, player);

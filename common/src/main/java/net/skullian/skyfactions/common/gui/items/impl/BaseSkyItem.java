@@ -23,13 +23,15 @@ public abstract class BaseSkyItem {
         this.PLAYER = player;
     }
 
+    public abstract SkyItemStack getItemStack();
+
     public SkyItemStack.SkyItemStackBuilder process(SkyItemStack.SkyItemStackBuilder builder) { return builder; }
 
     public Object[] replacements() {
         return new Object[0];
     }
 
-    public void onClick(SkyClickType clickType, SkyUser user) {}
+    public void onClick(SkyClickType clickType, SkyUser player) {}
 
     public void update() {}
 }

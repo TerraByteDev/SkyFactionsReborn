@@ -4,7 +4,6 @@ import net.skullian.skyfactions.common.api.GUIAPI;
 import net.skullian.skyfactions.common.gui.data.ItemData;
 import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.common.user.SkyUser;
-import org.bukkit.Material;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class AirItem extends SkyItem {
             "air",
             '\0',
             "",
-            Material.AIR.name(),
+            "AIR",
             "",
             "NONE",
             0,

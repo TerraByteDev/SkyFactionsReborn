@@ -1,21 +1,21 @@
 package net.skullian.skyfactions.common.gui.items.obelisk.invites;
 
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.SkyItem;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 import java.util.List;
 
 public class InvitePromptItem extends SkyItem {
 
-    public InvitePromptItem(ItemData data, ItemStack stack, String name, Player player) {
+    public InvitePromptItem(ItemData data, SkyItemStack stack, String name, SkyUser player) {
         super(data, stack, player, List.of(name).toArray());
     }
 
     @Override
     public Object[] replacements() {
-        String data = (String) getOptionals()[0];
+        String data = (String) getOPTIONALS()[0];
 
         return List.of(
             "faction_name", data

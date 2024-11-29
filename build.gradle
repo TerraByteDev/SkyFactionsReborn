@@ -116,38 +116,24 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
-
         compileOnly("org.projectlombok:lombok:${lombok}")
         annotationProcessor("org.projectlombok:lombok:${lombok}")
-        compileOnly("me.clip:placeholderapi:${placeholder_api}")
+
         compileOnly("com.zaxxer:HikariCP:${hikaricp}")
-        compileOnly("xyz.xenondevs.invui:invui:${invui}")
-        implementation(platform("com.intellectualsites.bom:bom-newest:${fawe_bom}"))
-        compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:${fawe}")
-        compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:${fawe}")
-        compileOnly("com.sk89q.worldguard:worldguard-bukkit:${worldguard}")
         compileOnly("org.xerial:sqlite-jdbc:${sqlite_jdbc}")
-        compileOnly("fr.skytasul:jukebox:${jukebox}")
-        compileOnly("com.github.koca2000:NoteBlockAPI:${noteblockapi}")
+
         compileOnly("com.fasterxml.jackson.core:jackson-databind:${jackson}")
         compileOnly("com.mojang:authlib:${authlib}")
         compileOnly("com.jeff-media:custom-block-data:${customblockdata}")
-        compileOnly("io.lumine:Mythic-Dist:${mythicmobs}")
         compileOnly("net.objecthunter:exp4j:${exp4j}")
-        compileOnly("com.github.retrooper:packetevents-spigot:${packetevents}")
-        implementation("me.tofaa.entitylib:spigot:${entitylib}")
+
         compileOnly("dev.dejvokep:boosted-yaml:${boostedyaml}")
-        compileOnly("org.incendo:cloud-paper:${cloud}-SNAPSHOT")
+
         compileOnly("org.incendo:cloud-core:${cloud}")
         compileOnly("org.incendo:cloud-annotations:${cloud}")
-        compileOnly("lol.pyr:znpcsplus-api:${znpcsplus}")
+
         compileOnly("net.kyori:adventure-text-minimessage:${minimessage}")
-        compileOnly("de.oliver:FancyNpcs:${fancynpcs}")
-        compileOnly("com.github.MilkBowl:VaultAPI:${vaultapi}")
-        compileOnly("me.RockinChaos.itemjoin:ItemJoin:${itemjoin}")
-        compileOnly("io.th0rgal:oraxen:${oraxen}")
-        compileOnly("com.github.LoneDev6:API-ItemsAdder:${itemsadder}")
+
         compileOnly("org.jooq:jooq:${jooq_codegen_version}")
         compileOnly("org.flywaydb:flyway-core:${flyway_core}")
         compileOnly("org.jetbrains:annotations:${jetbrains_annotations}")

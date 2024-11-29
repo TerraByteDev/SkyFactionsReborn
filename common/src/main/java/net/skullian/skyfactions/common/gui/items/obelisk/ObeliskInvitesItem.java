@@ -1,24 +1,22 @@
 package net.skullian.skyfactions.common.gui.items.obelisk;
 
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.faction.Faction;
-import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.core.config.types.Messages;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.SkyItem;
-import net.skullian.skyfactions.core.gui.screens.obelisk.invites.FactionInviteTypeSelectionUI;
-import net.skullian.skyfactions.core.gui.screens.obelisk.invites.PlayerInviteTypeSelectionUI;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.SkyClickType;
+import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.common.gui.screens.obelisk.invites.FactionInviteTypeSelectionUI;
+import net.skullian.skyfactions.common.gui.screens.obelisk.invites.PlayerInviteTypeSelectionUI;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class ObeliskInvitesItem extends SkyItem {
 
     private String TYPE;
     private Faction FACTION;
 
-    public ObeliskInvitesItem(ItemData data, ItemStack stack, String type, Faction faction, Player player) {
+    public ObeliskInvitesItem(ItemData data, SkyItemStack stack, String type, Faction faction, SkyUser player) {
         super(data, stack, player, null);
         
         this.TYPE = type;
@@ -26,12 +24,14 @@ public class ObeliskInvitesItem extends SkyItem {
     }
 
     @Override
-    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+    public void onClick(SkyClickType clickType, SkyUser player) {
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
+
         if (TYPE.equals("faction")) {
             if (FACTION.isOwner(player) || FACTION.isAdmin(player) || FACTION.isModerator(player)) {
                 FactionInviteTypeSelectionUI.promptPlayer(player);
             } else {
-                Messages.OBELISK_GUI_DENY.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "rank", Messages.FACTION_MODERATOR_TITLE.get(SpigotPlayerAPI.getLocale(player.getUniqueId())));
+                Messages.OBELISK_GUI_DENY.send(player, locale, "rank", Messages.FACTION_MODERATOR_TITLE.get(locale));
             }
         } else if (TYPE.equals("player")) {
             PlayerInviteTypeSelectionUI.promptPlayer(player);

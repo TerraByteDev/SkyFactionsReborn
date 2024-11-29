@@ -34,6 +34,7 @@ import net.skullian.skyfactions.core.util.DependencyHandler;
 import net.skullian.skyfactions.common.util.nms.NMSProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.xenondevs.invui.InvUI;
+import xyz.xenondevs.invui.item.impl.controlitem.PageItem;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -56,6 +57,8 @@ public final class SkyFactionsReborn extends JavaPlugin {
         LOGGER.info(Component.text("│    ___] | \\_   |   |    |  | |___  |  | |__| | \\| ___]     │").style(style));
         LOGGER.info(Component.text("│                                                            │").style(style));
         LOGGER.info(Component.text("╰────────────────────────────────────────────────────────────╯").style(style));
+
+
 
     }
 

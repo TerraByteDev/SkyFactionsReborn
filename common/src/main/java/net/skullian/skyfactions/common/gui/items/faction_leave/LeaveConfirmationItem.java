@@ -1,93 +1,58 @@
 package net.skullian.skyfactions.common.gui.items.faction_leave;
 
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.faction.Faction;
-import net.skullian.skyfactions.core.api.SpigotFactionAPI;
-import net.skullian.skyfactions.core.api.SpigotIslandAPI;
-import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.core.api.SpigotRegionAPI;
-import net.skullian.skyfactions.core.config.types.Messages;
-import net.skullian.skyfactions.core.config.types.Settings;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.SkyItem;
-import net.skullian.skyfactions.core.util.ErrorUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
-
-import java.util.List;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.SkyClickType;
+import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class LeaveConfirmationItem extends SkyItem {
 
-    public LeaveConfirmationItem(ItemData data, ItemStack stack, Player player) {
+    public LeaveConfirmationItem(ItemData data, SkyItemStack stack, SkyUser player) {
         super(data, stack, player, null);
     }
 
     @Override
-    public ItemBuilder process(ItemBuilder builder) {
-        Faction faction = SpigotFactionAPI.getCachedFaction(getPLAYER().getUniqueId());
+    public SkyItemStack.SkyItemStackBuilder process(SkyItemStack.SkyItemStackBuilder builder) {
+        Faction faction = SkyApi.getInstance().getFactionAPI().getCachedFaction(getPLAYER().getUniqueId());
 
         if (faction != null && faction.isOwner(getPLAYER())) {
-            builder.addLoreLines(toList(Messages.FACTION_LEAVE_OWNER_CONFIRMATION_LORE.getStringList(SpigotPlayerAPI.getLocale(getPLAYER().getUniqueId()))));
+            builder.lore(Messages.FACTION_LEAVE_OWNER_CONFIRMATION_LORE.getStringList(SkyApi.getInstance().getPlayerAPI().getLocale(getPLAYER().getUniqueId())));
         }
 
         return builder;
     }
 
     @Override
-    public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        event.getInventory().close();
-        // We do this again in case they get kicked before the confirmation.
-        SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+    public void onClick(SkyClickType clickType, SkyUser player) {
+        player.closeInventory();
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
+
+        SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
+            } else if (faction == null) {
+                Messages.NOT_IN_FACTION.send(player, locale);
+                return;
             }
 
-            if (faction != null) {
-                World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
-                if (world != null) {
-                    if (SpigotFactionAPI.isInRegion(player, faction.getName())) {
+            if (SkyApi.getInstance().getRegionAPI().isLocationInRegion(player.getLocation(), "sfr_faction_" + faction.getName())) {
+                SkyApi.getInstance().getIslandAPI().getPlayerIsland(player.getUniqueId()).whenComplete((island, throwable) -> {
+                    if (throwable != null) {
+                        ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", throwable);
+                        return;
+                    } else if (island != null) SkyApi.getInstance().getIslandAPI().teleportPlayerToIsland(player, island);
+                        else player.teleport(SkyApi.getInstance().getRegionAPI().getHubLocation());
 
-                        SpigotIslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((island, exc) -> {
-                            if (exc != null) {
-                                ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", exc);
-                                return;
-                            }
-
-                            World islandWorld = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-                            if (island != null && islandWorld != null) {
-                                SpigotRegionAPI.teleportPlayerToLocation(player, island.getCenter(islandWorld));
-                            } else {
-                                World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
-                                if (hubWorld != null) {
-                                    List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
-                                    Location location = new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
-                                    SpigotRegionAPI.teleportPlayerToLocation(player, location);
-                                } else {
-                                    Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "leave the faction", "debug", "WORLD_NOT_EXIST");
-                                }
-                            }
-                        });
-
-                    }
-
-                    faction.leaveFaction(Bukkit.getOfflinePlayer(player.getUniqueId()));
-                    Messages.FACTION_LEAVE_SUCCESS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "faction_name", faction.getName());
-                } else {
-                    Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "leave the faction", "debug", "WORLD_NOT_EXIST");
-
-                }
-            } else {
-                Messages.NOT_IN_FACTION.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                    faction.leaveFaction(player);
+                    Messages.FACTION_LEAVE_SUCCESS.send(player, locale, "faction_name", faction.getName());
+                });
             }
         });
-
     }
-
 }

@@ -29,4 +29,15 @@ public abstract class AsyncSkyItem extends BaseSkyItem {
             update();
         });
     }
+
+    @Override
+    public SkyItemStack getItemStack() {
+        Object[] replacements = replacements();
+
+        SkyItemStack.SkyItemStackBuilder builder = SkyItemStack.builder()
+                .displayName(Messages.replace(getDATA().getNAME(), getPLAYER(), replacements))
+                .lore(Messages.replace(getDATA().getLORE(),getPLAYER(), replacements));
+
+        return process(builder).build();
+    }
 }

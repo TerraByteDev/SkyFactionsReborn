@@ -54,6 +54,10 @@ public abstract class SkyUser {
 
     public abstract boolean hasMetadata(String key);
 
+    public abstract void addMetadata(String key);
+
+    public abstract void removeMetadata(String key);
+
     public abstract boolean isOnline();
 
     public String getWorld() {

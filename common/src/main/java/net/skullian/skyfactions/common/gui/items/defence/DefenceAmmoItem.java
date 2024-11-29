@@ -10,9 +10,6 @@ import net.skullian.skyfactions.common.gui.data.SkyClickType;
 import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
 
@@ -46,9 +43,9 @@ public class DefenceAmmoItem extends SkyItem {
     }
 
     @Override
-    public void onClick(SkyClickType clickType, SkyUser user) {
+    public void onClick(SkyClickType clickType, SkyUser player) {
         if (!this.HAS_PERMISSIONS) {
-            SkyApi.getInstance().getSoundAPI().playSound(user, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
+            SkyApi.getInstance().getSoundAPI().playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
             return;
         }
         // todo

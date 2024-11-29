@@ -1,26 +1,25 @@
 package net.skullian.skyfactions.common.gui.items.obelisk.election;
 
+import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.common.faction.Faction;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.AsyncSkyItem;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.SkyClickType;
+import net.skullian.skyfactions.common.gui.items.impl.AsyncSkyItem;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class ObeliskFactionElectionMenuItem extends AsyncSkyItem {
     private Faction FACTION;
 
-    public ObeliskFactionElectionMenuItem(ItemData data, ItemStack stack, Faction faction, Player player) {
+    public ObeliskFactionElectionMenuItem(ItemData data, SkyItemStack stack, Faction faction, SkyUser player) {
         super(data, stack, player, null);
         this.FACTION = faction;
     }
 
     @Override
-    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        if (FACTION.isElectionRunning()) {
-            player.sendMessage("There's no running elections right now");
+    public void onClick(SkyClickType clickType, SkyUser player) {
+        if (!FACTION.isElectionRunning()) {
+            player.sendMessage(Component.text("There's no running elections right now"));
             return;
         }
     }

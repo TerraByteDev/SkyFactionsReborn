@@ -1,56 +1,25 @@
 package net.skullian.skyfactions.common.gui.items;
 
-import net.skullian.skyfactions.common.util.text.TextUtility;
-import net.skullian.skyfactions.core.gui.data.PaginationItemData;
-import net.skullian.skyfactions.core.util.SoundUtil;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.gui.PagedGui;
-import xyz.xenondevs.invui.item.ItemProvider;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.controlitem.PageItem;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.PaginationItemData;
+import net.skullian.skyfactions.common.gui.items.impl.SkyPageItem;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
-public class PaginationForwardItem extends PageItem {
+public class PaginationForwardItem extends SkyPageItem {
 
-    private String NAME;
-    private String SOUND;
-    private int PITCH;
-    private String MORE_PAGES_LORE;
-    private String NO_PAGES_LORE;
-    private ItemStack STACK;
 
-    public PaginationForwardItem(PaginationItemData data, ItemStack stack) {
-        super(true);
-        this.NAME = data.getNAME();
-        this.SOUND = data.getSOUND();
-        this.PITCH = data.getPITCH();
-        this.MORE_PAGES_LORE = data.getMORE_PAGES_LORE();
-        this.NO_PAGES_LORE = data.getNO_PAGES_LORE();
-        this.STACK = stack;
+    public PaginationForwardItem(ItemData data, SkyItemStack stack, SkyUser player, Object[] optionals, PaginationItemData paginationItemData) {
+        super(data, stack, player, optionals, paginationItemData, true);
     }
 
     @Override
-    public ItemProvider getItemProvider(PagedGui<?> gui) {
-        ItemBuilder builder = new ItemBuilder(STACK)
-                .setDisplayName(TextUtility.legacyColor(NAME, null, null))
-                .addLoreLines(gui.hasNextPage()
-                ? TextUtility.legacyColor(MORE_PAGES_LORE.replace("next_page", String.valueOf(gui.getCurrentPage() + 2)).replace("total_pages", String.valueOf(gui.getPageAmount())), null, null)
-                        : TextUtility.legacyColor(NO_PAGES_LORE, null, null));
-
-        return builder;
+    public int getCurrentPage() {
+        return 0;
     }
 
     @Override
-    public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        if (clickType == ClickType.LEFT) {
-            getGui().goForward();
-        }
-
-        if (!SOUND.equalsIgnoreCase("none")) {
-            SoundUtil.playSound(player, SOUND, PITCH, 1);
-        }
+    public int getPageAmount() {
+        return 0;
     }
 }

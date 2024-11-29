@@ -51,11 +51,6 @@ import java.util.regex.Pattern;
 
 public class SpigotFactionAPI extends FactionAPI {
 
-    public static Map<UUID, String> factionCache = new ConcurrentHashMap<>();
-    public static Map<String, Faction> factionNameCache = new ConcurrentHashMap<>();
-
-    public static HashSet<String> awaitingDeletion = new HashSet<>();
-
     @Override
     public void handleFactionWorldBorder(Player player, FactionIsland island) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
@@ -233,6 +228,7 @@ public class SpigotFactionAPI extends FactionAPI {
      * @param playerUUID UUID of a faction member
      * @return {@link Faction}
      */
+    @Override
     public static Faction getCachedFaction(UUID playerUUID) {
         return factionNameCache.get(factionCache.get(playerUUID));
     }

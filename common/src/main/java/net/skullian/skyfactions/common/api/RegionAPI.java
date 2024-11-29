@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.common.api;
 
-import com.sk89q.worldedit.regions.Region;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import org.jetbrains.annotations.NotNull;
@@ -12,11 +11,12 @@ public abstract class RegionAPI {
     /**
      * Cut a region. Used in island deletion.
      *
-     * @param region WorldEdit (WorldGuard) region to delete.
+     * @param corner1 Bottom corner of the region.
+     * @param corner2 Opposite top corner of the region.
      *
      * @return {@link CompletableFuture<Void>}
      */
-    public abstract CompletableFuture<Void> cutRegion(Region region);
+    public abstract CompletableFuture<Void> cutRegion(SkyLocation corner1, SkyLocation corner2);
 
     /**
      * Check if a location is within a WE/WG Region.
@@ -79,5 +79,14 @@ public abstract class RegionAPI {
      * @return {@link CompletableFuture<Void>}
      */
     public abstract CompletableFuture<Void> removeRegion(String regionName, String world);
+
+    /**
+     * Check if a world exists.
+     *
+     * @param worldName Name of the world to check.
+     *
+     * @return true if the world exists.
+     */
+    public abstract boolean worldExists(String worldName);
 
 }

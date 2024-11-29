@@ -1,43 +1,39 @@
 package net.skullian.skyfactions.common.gui.items.obelisk.member_manage;
 
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.faction.Faction;
-import net.skullian.skyfactions.core.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.core.config.types.Messages;
-import net.skullian.skyfactions.core.config.types.Settings;
-import net.skullian.skyfactions.core.gui.data.ItemData;
-import net.skullian.skyfactions.core.gui.items.impl.old.SkyItem;
-import net.skullian.skyfactions.core.gui.screens.obelisk.member.MemberManageRankUI;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import net.skullian.skyfactions.common.gui.data.ItemData;
+import net.skullian.skyfactions.common.gui.data.SkyClickType;
+import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
+import net.skullian.skyfactions.common.gui.screens.obelisk.member.MemberManageRankUI;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 
 import java.util.List;
 
 public class MemberRankItem extends SkyItem {
 
-    public MemberRankItem(ItemData data, ItemStack stack, OfflinePlayer player, Player actor, Faction faction) {
+    public MemberRankItem(ItemData data, SkyItemStack stack, SkyUser player, SkyUser actor, Faction faction) {
         super(data, stack, actor, List.of(faction, player).toArray());
     }
 
     @Override
-    public ItemBuilder process(ItemBuilder builder) {
-        Faction faction = (Faction) getOptionals()[0];
+    public SkyItemStack.SkyItemStackBuilder process(SkyItemStack.SkyItemStackBuilder builder) {
+        Faction faction = (Faction) getOPTIONALS()[0];
 
         if (!Settings.FACTION_MANAGE_RANK_PERMISSIONS.getList().contains(faction.getRankType(getPLAYER().getUniqueId()).getRankValue())) {
-            builder.addLoreLines(toList(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(SpigotPlayerAPI.getLocale(getPLAYER().getUniqueId()))));
+            builder.lore(Messages.FACTION_MANAGE_NO_PERMISSIONS_LORE.getStringList(SkyApi.getInstance().getPlayerAPI().getLocale(getPLAYER().getUniqueId())));
         }
 
         return builder;
     }
 
     @Override
-    public void onClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        Faction faction = (Faction) getOptionals()[0];
-        OfflinePlayer subject = (OfflinePlayer) getOptionals()[1];
+    public void onClick(SkyClickType clickType, SkyUser player) {
+        Faction faction = (Faction) getOPTIONALS()[0];
+        SkyUser subject = (SkyUser) getOPTIONALS()[1];
         MemberManageRankUI.promptPlayer(player, faction, subject);
     }
 }

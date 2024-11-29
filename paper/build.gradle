@@ -3,8 +3,117 @@ plugins {
     id 'com.gradleup.shadow' version "${shadow_version}"
 }
 
+repositories {
+    mavenCentral()
+
+    maven {
+        name = "papermc-repo"
+        url = "https://repo.papermc.io/repository/maven-public/"
+    }
+
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
+    }
+
+    maven {
+        name = "EngineHub"
+        url = "https://maven.enginehub.org/repo/"
+    }
+
+    maven {
+        name = "PlaceholderAPI"
+        url = "https://repo.extendedclip.com/content/repositories/placeholderapi/"
+    }
+
+    maven {
+        name = "XenonDevs Releases"
+        url = "https://repo.xenondevs.xyz/releases"
+    }
+
+    maven {
+        name = "CodeMC Public"
+        url = "https://repo.codemc.org/repository/maven-public/"
+    }
+
+    maven {
+        name = "EssentialsX Releases"
+        url = "https://repo.essentialsx.net/releases/"
+    }
+
+    maven {
+        name = "eldonexus"
+        url = uri("https://eldonexus.de/repository/maven-releases/")
+    }
+
+    maven {
+        name = "Lumine Public"
+        url = "https://mvn.lumine.io/repository/maven-public/"
+    }
+
+    maven {
+        name = "Pyr's Snapshots"
+        url = "https://repo.pyr.lol/snapshots"
+    }
+
+    maven {
+        name = "JitPack"
+        url "https://jitpack.io"
+    }
+
+    maven {
+        name = "EvokeGames Snapshots"
+        url = "https://maven.evokegames.gg/snapshots"
+    }
+
+    maven {
+        name = "SpigotMC Snapshots"
+        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+
+    maven {
+        name = "FancyNPCs Repository"
+        url = "https://repo.fancyplugins.de/releases"
+    }
+
+    maven {
+        name = "CraftationGaming Chaos"
+        url = "https://repo.craftationgaming.com/chaos"
+    }
+
+    maven {
+        name = "Oraxen Repository"
+        url = "https://repo.oraxen.com/releases"
+    }
+}
+
 dependencies {
     compileOnly(project(":common"))
     compileOnly(project(":modules"))
     compileOnly(project(":modules:discord"))
+
+    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("org.incendo:cloud-paper:${cloud}-SNAPSHOT")
+    compileOnly("xyz.xenondevs.invui:invui:${invui}")
+
+    implementation(platform("com.intellectualsites.bom:bom-newest:${fawe_bom}"))
+    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:${fawe}")
+    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:${fawe}")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:${worldguard}")
+
+    compileOnly("fr.skytasul:jukebox:${jukebox}")
+    compileOnly("com.github.koca2000:NoteBlockAPI:${noteblockapi}")
+    compileOnly("me.clip:placeholderapi:${placeholder_api}")
+    compileOnly("io.lumine:Mythic-Dist:${mythicmobs}")
+    compileOnly("lol.pyr:znpcsplus-api:${znpcsplus}")
+    compileOnly("de.oliver:FancyNpcs:${fancynpcs}")
+    compileOnly("com.github.MilkBowl:VaultAPI:${vaultapi}")
+    compileOnly("me.RockinChaos.itemjoin:ItemJoin:${itemjoin}")
+    compileOnly("io.th0rgal:oraxen:${oraxen}")
+    compileOnly("com.github.LoneDev6:API-ItemsAdder:${itemsadder}")
+
+    compileOnly("com.github.retrooper:packetevents-spigot:${packetevents}")
+    implementation("me.tofaa.entitylib:spigot:${entitylib}")
+
+    compileOnly("com.jeff-media:custom-block-data:${customblockdata}")
 }
