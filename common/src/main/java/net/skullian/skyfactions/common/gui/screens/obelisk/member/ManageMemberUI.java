@@ -27,8 +27,6 @@ public class ManageMemberUI extends Screen {
         super(GUIEnums.OBELISK_MANAGE_MEMBER_GUI.getPath(), player);
         this.subject = subject;
         this.faction = faction;
-
-        init();
     }
 
     public static void promptPlayer(SkyUser player, SkyUser subject, Faction faction) {
@@ -42,7 +40,7 @@ public class ManageMemberUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "BORDER", "PLAYER_HEAD" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, subject.getUniqueId()), player);

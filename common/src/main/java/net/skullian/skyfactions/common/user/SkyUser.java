@@ -64,4 +64,6 @@ public abstract class SkyUser {
         return getLocation().getWorldName();
     }
 
+    public abstract boolean hasPermission(String permission);
+
 }

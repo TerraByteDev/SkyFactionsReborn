@@ -33,7 +33,7 @@ public class PlayerRaidConfirmationUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "CANCEL" -> new RaidCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             case "CONFIRM" ->

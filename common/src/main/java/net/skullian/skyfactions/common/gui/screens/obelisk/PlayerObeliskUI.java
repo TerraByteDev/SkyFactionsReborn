@@ -24,7 +24,7 @@ public class PlayerObeliskUI extends Screen {
     public PlayerObeliskUI(SkyUser player) {
         super(GUIEnums.OBELISK_PLAYER_GUI.getPath(), player);
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player) {
@@ -38,7 +38,7 @@ public class PlayerObeliskUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "HEAD" -> new ObeliskHeadItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
 

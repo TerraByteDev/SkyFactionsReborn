@@ -22,7 +22,7 @@ public class PlayerInviteTypeSelectionUI extends Screen {
     public PlayerInviteTypeSelectionUI(SkyUser player) {
         super(GUIEnums.OBELISK_PLAYER_INVITE_TYPE_SELECTION_GUI.getPath(), player);
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player) {
@@ -36,7 +36,7 @@ public class PlayerInviteTypeSelectionUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "PROMPT", "BORDER" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);

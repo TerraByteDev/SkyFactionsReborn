@@ -10,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class Screen {
-    protected final String guiPath;
-    protected final GUIData guiData;
-    protected final SkyUser player;
+    public final String guiPath;
+    public final GUIData guiData;
+    public final SkyUser player;
 
     public Screen(String guiPath, SkyUser player) {
         this.guiPath = guiPath;
@@ -21,15 +21,10 @@ public abstract class Screen {
         this.player = player;
     }
 
-    // init window in here
-    protected void init() {}
-
     public void show() {
         SkyApi.getInstance().getUIShower().show(player, this);
     }
 
-    protected abstract @Nullable BaseSkyItem handleItem(@NotNull ItemData itemData);
-
-    protected void registerItems() {}
+    public abstract @Nullable BaseSkyItem handleItem(@NotNull ItemData itemData);
 }
 

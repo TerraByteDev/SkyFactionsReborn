@@ -15,27 +15,23 @@ import java.util.List;
 
 @Getter
 public abstract class PaginatedScreen {
-    protected final String guiPath;
-    protected final GUIData guIData;
-    protected final SkyUser player;
+    public final String guiPath;
+    public final GUIData guiData;
+    public final SkyUser player;
 
     public PaginatedScreen(String guiPath, SkyUser player) {
         this.guiPath = guiPath;
-        this.guIData = GUIAPI.getGUIData(guiPath, player);
+        this.guiData = GUIAPI.getGUIData(guiPath, player);
         this.player = player;
     }
-
-    protected void init() {}
 
     public void show() {
         SkyApi.getInstance().getUIShower().show(player, this);
     }
 
-    protected abstract @Nullable BaseSkyItem handleItem(@NotNull ItemData itemData);
+    public abstract @Nullable BaseSkyItem handleItem(@NotNull ItemData itemData);
 
-    protected void registerItems() {};
+    public void registerItems() {};
 
-    protected abstract @Nullable BaseSkyItem handlePaginationItem(@NotNull PaginationItemData paginationItem);
-
-    protected abstract @NotNull List<BaseSkyItem> getModels(SkyUser player, ItemData data);
+    public abstract @NotNull List<BaseSkyItem> getModels(SkyUser player, ItemData data);
 }

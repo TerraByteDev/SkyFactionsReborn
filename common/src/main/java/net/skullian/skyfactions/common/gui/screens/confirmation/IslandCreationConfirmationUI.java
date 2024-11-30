@@ -20,7 +20,7 @@ public class IslandCreationConfirmationUI extends Screen {
     public IslandCreationConfirmationUI(SkyUser player) {
         super(GUIEnums.CREATE_ISLAND_GUI.getPath(), player);
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player) {
@@ -34,7 +34,7 @@ public class IslandCreationConfirmationUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "CANCEL" -> new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             case "CONFIRM" ->

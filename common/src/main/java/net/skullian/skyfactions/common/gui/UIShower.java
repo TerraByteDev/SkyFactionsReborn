@@ -6,7 +6,7 @@ import net.skullian.skyfactions.common.user.SkyUser;
 
 public abstract class UIShower {
 
-    public abstract void show(SkyUser player, Screen screen);
+    public abstract void show(Screen screen);
 
-    public abstract void show(SkyUser player, PaginatedScreen screen);
+    public abstract void show(PaginatedScreen screen);
 }

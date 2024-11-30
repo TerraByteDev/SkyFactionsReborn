@@ -20,7 +20,7 @@ public class FactionLeaveConfirmationUI extends Screen {
     public FactionLeaveConfirmationUI(SkyUser player) {
         super(GUIEnums.FACTION_LEAVE_GUI.getPath(), player);
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player) {
@@ -34,7 +34,7 @@ public class FactionLeaveConfirmationUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "PROMPT", "BORDER" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);

@@ -15,12 +15,14 @@ public abstract class BaseSkyItem {
     private SkyItemStack STACK;
     private SkyUser PLAYER;
     private Object[] OPTIONALS;
+    private boolean ASYNC;
 
-    public BaseSkyItem(ItemData data, SkyItemStack stack, SkyUser player, Object[] optionals) {
+    public BaseSkyItem(ItemData data, SkyItemStack stack, SkyUser player, Object[] optionals, boolean async) {
         this.OPTIONALS = optionals;
         this.DATA = data;
         this.STACK = stack;
         this.PLAYER = player;
+        this.ASYNC = async;
     }
 
     public abstract SkyItemStack getItemStack();

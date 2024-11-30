@@ -29,7 +29,7 @@ public class DefenceManageUI extends Screen {
         this.struct = struct;
         this.faction = faction;
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player, DefenceData defenceData, DefenceStruct struct, Faction faction) {
@@ -43,7 +43,7 @@ public class DefenceManageUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "DEFENCE" ->
                     new DefenceDisplayItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, struct, defenceData);

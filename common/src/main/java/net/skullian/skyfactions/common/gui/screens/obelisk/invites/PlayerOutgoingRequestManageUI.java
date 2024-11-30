@@ -27,7 +27,7 @@ public class PlayerOutgoingRequestManageUI extends Screen {
         super(GUIEnums.OBELISK_INVITE_OUTGOING_GUI.getPath(), player);
         this.joinRequest = joinRequest;
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player, JoinRequestData joinRequest) {
@@ -42,7 +42,7 @@ public class PlayerOutgoingRequestManageUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "PROMPT" ->
                     new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest.getFactionName(), player);

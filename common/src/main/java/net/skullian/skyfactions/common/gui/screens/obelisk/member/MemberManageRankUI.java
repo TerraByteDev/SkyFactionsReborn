@@ -34,7 +34,7 @@ public class MemberManageRankUI extends Screen {
         this.faction = faction;
         this.subject = subject;
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player, Faction faction, SkyUser subject) {
@@ -56,7 +56,7 @@ public class MemberManageRankUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         if (itemData.getITEM_ID().equals("CONFIRM")) {
             MemberRankChangeConfirmationItem confirmationItem = new MemberRankChangeConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, faction, subject, faction.getRankType(player.getUniqueId()));
 

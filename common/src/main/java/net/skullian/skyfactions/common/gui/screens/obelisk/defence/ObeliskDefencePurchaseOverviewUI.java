@@ -34,7 +34,7 @@ public class ObeliskDefencePurchaseOverviewUI extends PaginatedScreen {
         this.obeliskType = obeliskType;
         this.faction = faction;
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player, String obeliskType, Faction faction) {
@@ -48,7 +48,7 @@ public class ObeliskDefencePurchaseOverviewUI extends PaginatedScreen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "PROMPT", "BORDER" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);

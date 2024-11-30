@@ -106,6 +106,8 @@ public abstract class PlayerAPI {
         return item;
     }
 
+    public abstract SkyItemStack.SkyItemStackBuilder getPlayerSkull(SkyItemStack.SkyItemStackBuilder builder, UUID playerUUID);
+
     /**
      * Used primarily in the paper implementation.
      * Use with PlaceholderAPI.

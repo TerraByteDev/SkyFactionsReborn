@@ -37,7 +37,7 @@ public class RunesSubmitUI extends Screen {
                     .count();
         }
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player, String type) {
@@ -51,7 +51,7 @@ public class RunesSubmitUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "PROMPT", "BORDER" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);

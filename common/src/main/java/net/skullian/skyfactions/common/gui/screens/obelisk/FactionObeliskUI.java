@@ -26,7 +26,7 @@ public class FactionObeliskUI extends Screen {
         super(GUIEnums.OBELISK_FACTION_GUI.getPath(), player);
         this.faction = faction;
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player) {
@@ -51,7 +51,7 @@ public class FactionObeliskUI extends Screen {
     }
 
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "FACTION" ->
                     new ObeliskFactionOverviewItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);

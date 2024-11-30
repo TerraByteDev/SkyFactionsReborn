@@ -30,7 +30,7 @@ public class MemberManagementUI extends PaginatedScreen {
         super(GUIEnums.OBELISK_MEMBER_MANAGEMENT_GUI.getPath(), player);
         this.faction = faction;
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player, Faction faction) {
@@ -44,7 +44,7 @@ public class MemberManagementUI extends PaginatedScreen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "PROMPT", "BORDER" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);

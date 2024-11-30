@@ -32,7 +32,7 @@ public class PlayerIncomingInvites extends PaginatedScreen {
         super(GUIEnums.OBELISK_PLAYER_INCOMING_INVITES_GUI.getPath(), player);
         this.inviteData = inviteData;
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player) {
@@ -54,7 +54,7 @@ public class PlayerIncomingInvites extends PaginatedScreen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "PROMPT", "BORDER" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);

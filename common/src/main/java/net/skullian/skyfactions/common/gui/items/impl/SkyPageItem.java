@@ -1,5 +1,7 @@
 package net.skullian.skyfactions.common.gui.items.impl;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.gui.data.ItemData;
 import net.skullian.skyfactions.common.gui.data.PaginationItemData;
@@ -11,10 +13,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+@Getter
+@Setter
 public abstract class SkyPageItem extends BaseSkyItem {
 
+    private int currentPage;
+    private int pageAmount;
+
     public SkyPageItem(ItemData data, SkyItemStack stack, SkyUser player, Object[] optionals, PaginationItemData paginationItemData, boolean forward) {
-        super(data, stack, player, Arrays.asList(optionals, paginationItemData, forward).toArray());
+        super(data, stack, player, Arrays.asList(optionals, paginationItemData, forward).toArray(), false);
     }
 
     @Override
@@ -29,10 +36,6 @@ public abstract class SkyPageItem extends BaseSkyItem {
                         : TextUtility.legacyColor(paginationItemData.getNO_PAGES_LORE(), locale, getPLAYER()))))
                 .build();
     }
-
-    public abstract int getCurrentPage();
-
-    public abstract int getPageAmount();
 
     public boolean hasNextPage() {
         return getCurrentPage() < getPageAmount() - 1;

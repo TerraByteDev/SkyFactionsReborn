@@ -19,7 +19,7 @@ public class FactionElectionUI extends PaginatedScreen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return null;
     }
 

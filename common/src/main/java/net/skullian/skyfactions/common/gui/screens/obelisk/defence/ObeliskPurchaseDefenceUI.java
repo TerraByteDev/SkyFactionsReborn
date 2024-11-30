@@ -31,7 +31,7 @@ public class ObeliskPurchaseDefenceUI extends Screen {
         this.struct = struct;
         this.faction = faction;
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player, String obeliskType, DefenceStruct struct, Faction faction) {
@@ -45,7 +45,7 @@ public class ObeliskPurchaseDefenceUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         if (itemData.getITEM_ID().equals("DEFENCE")) {
             itemData.setBASE64_TEXTURE(struct.getITEM_SKULL());
             itemData.setMATERIAL(struct.getITEM_MATERIAL());

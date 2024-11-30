@@ -25,7 +25,7 @@ public class JoinRequestManageUI extends Screen {
         super(GUIEnums.OBELISK_JOIN_REQUEST_MANAGE_GUI.getPath(), player);
         this.inviteData = inviteData;
 
-        init();
+        ;
     }
 
     public static void promptPlayer(SkyUser player, InviteData inviteData) {
@@ -39,7 +39,7 @@ public class JoinRequestManageUI extends Screen {
 
     @Nullable
     @Override
-    protected BaseSkyItem handleItem(@NotNull ItemData itemData) {
+    public BaseSkyItem handleItem(@NotNull ItemData itemData) {
         return switch (itemData.getITEM_ID()) {
             case "PROMPT", "BORDER" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
