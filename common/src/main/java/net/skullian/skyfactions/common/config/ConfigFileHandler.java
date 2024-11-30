@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.common.config;
 
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.*;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.HashMap;
@@ -11,18 +11,19 @@ public class ConfigFileHandler {
 
     private Map<ConfigTypes, ConfigHandler> configs = new HashMap<>();
 
-    public void loadFiles(JavaPlugin plugin) {
-        new File(plugin.getDataFolder(), "/schematics").mkdirs();
-        new File(plugin.getDataFolder(), "/songs").mkdirs();
+    public void loadFiles() {
+        String configPath = SkyApi.getInstance().getFileAPI().getConfigFolderPath();
+        new File(configPath, "/schematics").mkdirs();
+        new File(configPath, "/songs").mkdirs();
 
-        registerFile(ConfigTypes.SETTINGS, new ConfigHandler("config", plugin));
-        registerFile(ConfigTypes.OBELISK, new ConfigHandler("obelisk", plugin));
-        registerFile(ConfigTypes.RUNES, new ConfigHandler("runes", plugin));
-        registerFile(ConfigTypes.DEFENCES, new ConfigHandler("defences", plugin));
+        registerFile(ConfigTypes.SETTINGS, new ConfigHandler("config"));
+        registerFile(ConfigTypes.OBELISK, new ConfigHandler("obelisk"));
+        registerFile(ConfigTypes.RUNES, new ConfigHandler("runes"));
+        registerFile(ConfigTypes.DEFENCES, new ConfigHandler("defences"));
 
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
-        Messages.load(plugin);
+        Messages.load();
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         RunesConfig.setConfig(getFile(ConfigTypes.RUNES).getConfig());
     }
@@ -31,11 +32,11 @@ public class ConfigFileHandler {
         return configs.get(type);
     }
 
-    public void reloadFiles(JavaPlugin plugin) {
+    public void reloadFiles() {
         configs.values().forEach(ConfigHandler::reload);
 
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
-        Messages.load(plugin);
+        Messages.load();
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         RunesConfig.setConfig(getFile(ConfigTypes.RUNES).getConfig());
         DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());

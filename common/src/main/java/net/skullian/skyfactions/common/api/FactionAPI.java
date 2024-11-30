@@ -24,10 +24,10 @@ import java.util.regex.Pattern;
 @Getter
 public abstract class FactionAPI {
 
-    private Map<UUID, String> factionUserCache = new ConcurrentHashMap<>();
-    private Map<String, Faction> factionCache = new ConcurrentHashMap<>();
+    private final Map<UUID, String> factionUserCache = new ConcurrentHashMap<>();
+    private final Map<String, Faction> factionCache = new ConcurrentHashMap<>();
 
-    private HashSet<String> awaitingDeletion = new HashSet<>();
+    private final HashSet<String> awaitingDeletion = new HashSet<>();
 
     public void createFaction(SkyUser player, String name) {
         SkyApi.getInstance().getDatabaseManager().getFactionsManager().registerFaction(player, name).whenComplete((ignored, ex) -> {

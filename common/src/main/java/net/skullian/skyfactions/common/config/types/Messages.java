@@ -7,17 +7,12 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import lombok.Getter;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.user.SkyUser;
-import net.skullian.skyfactions.common.util.DependencyHandler;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.text.TextUtility;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -279,17 +274,17 @@ public enum Messages {
         this.path = path;
     }
 
-    public static void load(JavaPlugin plugin) {
+    public static void load() {
         try {
-            new File(plugin.getDataFolder(), "/language").mkdirs();
+            new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath(), "/language").mkdirs();
             SLogger.info("Saving default language [English].");
-            YamlDocument doc = YamlDocument.create(new File(plugin.getDataFolder() + "/language/en/en.yml"), plugin.getResource("language/en/en.yml"),
+            YamlDocument doc = YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/en.yml"), Messages.class.getClassLoader().getResourceAsStream("language/en/en.yml"),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
             configs.put("en", doc);
 
 
-            File folder = new File(plugin.getDataFolder(), "/language");
+            File folder = new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath(), "/language");
             if (!folder.exists() || !folder.isDirectory()) throw new Exception("Could not find the language folder. Please report this error ASAP.");
 
             for (File dir : folder.listFiles()) {
@@ -303,7 +298,7 @@ public enum Messages {
                                 DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build())
                     );
 
-                    registerGUIs(dir, dir.getName(), plugin);
+                    registerGUIs(dir, dir.getName());
                 }
             }
         } catch (Exception exception) {
@@ -313,15 +308,15 @@ public enum Messages {
             SLogger.fatal("Plugin will now disable.");
             SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
             exception.printStackTrace();
-            Bukkit.getServer().getPluginManager().disablePlugin(plugin);
+            SkyApi.disablePlugin();
         }
         
     }
 
-    private static void registerGUIs(File dir, String locale, JavaPlugin plugin) throws IOException {
+    private static void registerGUIs(File dir, String locale) throws IOException {
         Map<String, YamlDocument> docs = new HashMap<>();
         for (GUIEnums enumEntry : GUIEnums.values()) {
-            YamlDocument doc = YamlDocument.create(new File(dir,  "guis/" + enumEntry.getPath() + ".yml"), plugin.getResource(String.format("language/%s/%s.yml", locale, "guis/" + enumEntry.getPath())),
+            YamlDocument doc = YamlDocument.create(new File(dir,  "guis/" + enumEntry.getPath() + ".yml"), Messages.class.getClassLoader().getResourceAsStream(String.format("language/%s/%s.yml", locale, "guis/" + enumEntry.getPath())),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
             docs.put(enumEntry.getPath(), doc);
@@ -373,7 +368,7 @@ public enum Messages {
             message = value instanceof List ? TextUtility.fromList((List<?>) value, locale, receiver instanceof SkyUser ? (SkyUser) receiver : null, replacements) : TextUtility.color(String.valueOf(value), locale, receiver instanceof SkyUser ? (SkyUser) receiver : null, replacements);
         }
 
-        receiver.sendMessage(message);
+        SkyApi.getInstance().getUserManager().sendMessage(receiver, message);
     }
 
     public static String replace(String value, SkyUser player, Object... replacements) {
