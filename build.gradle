@@ -232,8 +232,8 @@ jooq {
                 fluentSetters = true
             }
             target {
-                packageName = 'net.skullian.skyfactions.core.database'
-                directory = 'core/src/main/java/'
+                packageName = 'net.skullian.skyfactions.common.database'
+                directory = 'common/src/main/java/'
                 clean = false
             }
         }

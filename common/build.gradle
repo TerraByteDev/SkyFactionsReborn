@@ -2,3 +2,7 @@ plugins {
     id 'java'
     id 'com.gradleup.shadow' version "${shadow_version}"
 }
+
+dependencies {
+    compileOnly("com.google.guava:guava:${guava}")
+}
