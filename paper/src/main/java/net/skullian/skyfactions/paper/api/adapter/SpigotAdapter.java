@@ -30,6 +30,10 @@ public class SpigotAdapter {
         );
     }
 
+    public static SkyLocation adapt(Location location) {
+        return new SkyLocation(location.getWorld().getName(), location.getX(), location.getY(), location.getZ());
+    }
+
     public static OfflinePlayer adapt(SkyUser user) {
         return Bukkit.getOfflinePlayer(user.getUniqueId());
     }

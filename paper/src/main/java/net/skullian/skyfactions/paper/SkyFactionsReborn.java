@@ -22,6 +22,7 @@ import net.skullian.skyfactions.paper.command.raid.RaidCommandHandler;
 import net.skullian.skyfactions.paper.command.runes.RunesCommandHandler;
 import net.skullian.skyfactions.paper.command.sf.SFCommandHandler;
 import net.skullian.skyfactions.paper.module.SkyModuleManager;
+import net.skullian.skyfactions.paper.npc.SpigotNPCManager;
 import net.skullian.skyfactions.paper.defence.block.BrokenBlockService;
 import net.skullian.skyfactions.paper.event.PlayerListener;
 import net.skullian.skyfactions.paper.event.armor.ArmorListener;
@@ -82,7 +83,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
         SkyApi.setPluginInstance(this);
 
         SLogger.info("Initialising NPC Manager.");
-        npcManager = new NPCManager();
+        npcManager = new SpigotNPCManager();
 
         SLogger.info("Initialising Module Manager.");
         moduleManager = new SkyModuleManager();

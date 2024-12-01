@@ -22,8 +22,6 @@ public abstract class SkyUser {
 
     public abstract String getName();
 
-    public abstract void playSound(Sound sound, float pitch, float volume);
-
     public abstract void teleport(SkyLocation location);
 
     public abstract PlayerData getPlayerData();
@@ -54,7 +52,7 @@ public abstract class SkyUser {
 
     public abstract boolean hasMetadata(String key);
 
-    public abstract void addMetadata(String key);
+    public abstract void addMetadata(String key, Object value);
 
     public abstract void removeMetadata(String key);
 
