@@ -15,6 +15,8 @@ import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -43,12 +45,7 @@ public class SpigotSkyUser extends SkyUser {
     @Override
     public String getName() {
         return SpigotAdapter.adapt(this).getName();
-    }
 
-    @Override
-    public void playSound(Sound sound, float pitch, float volume) {
-        OfflinePlayer player = SpigotAdapter.adapt(this);
-        if (player.isOnline()) player.getPlayer().playSound(player.getPlayer().getLocation(), sound, Sound.Source.MASTER, volume, pitch);
     }
 
     @Override
@@ -138,5 +135,52 @@ public class SpigotSkyUser extends SkyUser {
     public void sendMessage(Component message) {
         OfflinePlayer player = SpigotAdapter.adapt(this);
         if (player.isOnline()) player.getPlayer().sendMessage(message);
+    }
+
+    @Override
+    public void performCommand(String command) {
+        OfflinePlayer player = SpigotAdapter.adapt(this);
+        if (player.isOnline()) player.getPlayer().performCommand(command);
+    }
+
+    @Override
+    public SkyLocation getLocation() {
+        OfflinePlayer player = SpigotAdapter.adapt(this);
+        return player.isOnline() ? SpigotAdapter.adapt(player.getPlayer().getLocation()) : null;
+    }
+
+    @Override
+    public void closeInventory() {
+        OfflinePlayer player = SpigotAdapter.adapt(this);
+        if (player.isOnline()) player.getPlayer().closeInventory(Reason.PLUGIN);
+    }
+
+    @Override
+    public boolean hasMetadata(String key) {
+        OfflinePlayer player = SpigotAdapter.adapt(this);
+        return player.isOnline() ? player.getPlayer().hasMetadata(key) : false;
+    }
+
+    @Override
+    public void addMetadata(String key, Object value) {
+        OfflinePlayer player = SpigotAdapter.adapt(this);
+        if (player.isOnline()) player.getPlayer().setMetadata(key, new FixedMetadataValue(SkyFactionsReborn.getInstance(), value));
+    }
+
+    @Override
+    public void removeMetadata(String key) {
+        OfflinePlayer player = SpigotAdapter.adapt(this);
+        if (player.isOnline()) player.getPlayer().removeMetadata(key, SkyFactionsReborn.getInstance());
+    }
+
+    @Override
+    public boolean isOnline() {
+        return SpigotAdapter.adapt(this).isOnline();
+    }
+
+    @Override
+    public boolean hasPermission(String permission) {
+        OfflinePlayer player = SpigotAdapter.adapt(this);
+        return player.isOnline() ? player.getPlayer().hasPermission(permission) : false;
     }
 }
