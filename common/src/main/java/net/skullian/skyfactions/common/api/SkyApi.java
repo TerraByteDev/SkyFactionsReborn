@@ -15,7 +15,8 @@ import java.lang.reflect.Method;
 
 public abstract class SkyApi {
 
-    @Getter private static SkyApi instance = null;
+    @Getter
+    private static SkyApi instance = null;
     private static Object pluginInstance = null;
 
     /**

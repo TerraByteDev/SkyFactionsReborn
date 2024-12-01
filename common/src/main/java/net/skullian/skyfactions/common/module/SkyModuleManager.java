@@ -1,20 +1,24 @@
-package net.skullian.skyfactions.paper.module;
+package net.skullian.skyfactions.common.module;
 
+import lombok.Getter;
 import net.skullian.skyfactions.common.util.SLogger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SkyModuleManager {
 
-    private final List<String> modules = new ArrayList<>();
-    private final List<SkyModule> enabledModules = new ArrayList<>();
+    private static final List<String> modules = new ArrayList<>();
+    @Getter
+    private static final Map<String, SkyModule> enabledModules = new HashMap<>();
 
-    public void registerModule(Class<?> module) {
+    public static void registerModule(Class<?> module) {
         modules.add(module.getClass().getName());
     }
 
-    public void onEnable() {
+    public static void onEnable() {
         for (String module : modules) {
             try {
                 Class<?> clazz = Class.forName(module);
@@ -23,7 +27,7 @@ public class SkyModuleManager {
                     skyModule.onEnable();
                 }
 
-                enabledModules.add(skyModule);
+                enabledModules.put(skyModule.getClass().getName(), skyModule);
             } catch (Exception e) {
                 SLogger.fatal("----------------------- MODULES EXCEPTION -----------------------");
                 SLogger.fatal("There was an error initialising module {}:", module);
@@ -35,15 +39,15 @@ public class SkyModuleManager {
         }
     }
 
-    public void onReload() {
-        for (SkyModule module : enabledModules) {
-            module.onReload();
+    public static void onReload() {
+        for (Map.Entry<String, SkyModule> module : enabledModules.entrySet()) {
+            module.getValue().onReload();
         }
     }
 
-    public void onDisable() {
-        for (SkyModule module : enabledModules) {
-            module.onDisable();
+    public static void onDisable() {
+        for (Map.Entry<String, SkyModule> module : enabledModules.entrySet()) {
+            module.getValue().onDisable();
         }
     }
 }

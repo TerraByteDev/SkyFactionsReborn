@@ -1,27 +1,15 @@
 package net.skullian.skyfactions.paper.discord;
-
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.utils.ChunkingFilter;
-import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.module.modules.discord.DiscordConfig;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import net.skullian.skyfactions.paper.util.SLogger;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SLogger;
+import net.skullian.skyfactions.paper.module.impl.discord.DiscordConfig;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 
 public class DiscordHandler {
 
@@ -95,7 +83,7 @@ public class DiscordHandler {
     }
 
     public void pingRaid(Player attacker, Player victim) {
-        SpigotPlayerAPI.getPlayerData(victim.getUniqueId()).whenComplete((data, ex) -> {
+        SkyApi.getInstance().getPlayerAPI().getPlayerData(victim.getUniqueId()).whenComplete((data, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(victim, "start your raid", "SQL_GET_DISCORD", ex);
                 return;

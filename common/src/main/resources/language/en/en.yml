@@ -101,6 +101,8 @@ Messages:
     # Placeholders: <player> - Name of the player they tried to visit.
     VISIT_ALREADY_ON_ISLAND: "<server_name><red><bold> Hey!<reset><gray> You are already on <player>'s island!"
 
+  # Used in the discord module.
+  # We only keep the message configuration for modules in here because it keeps all the locale-based configurations in one place.
   Discord:
     # Sent to the player when they request to link (runs /link).
     # Placeholders: <code> - Code to run in the discord.

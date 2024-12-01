@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public abstract class NotificationAPI {
 
-    private Map<String, Integer> factionInviteStore = new ConcurrentHashMap<>();
+    private final Map<String, Integer> factionInviteStore = new ConcurrentHashMap<>();
 
     /**
      * Initialise the notification cycle for a Player on join.

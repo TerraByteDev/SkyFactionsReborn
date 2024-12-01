@@ -64,4 +64,5 @@ public abstract class SkyUser {
 
     public abstract boolean hasPermission(String permission);
 
+    public abstract void playSound(Sound sound, float volume, float pitch);
 }

@@ -19,6 +19,7 @@ plugins {
     id "xyz.jpenilla.run-paper" version "${run_paper_version}"
     id 'org.flywaydb.flyway' version "${flyway_version}"
     id "org.jooq.jooq-codegen-gradle" version "${jooq_codegen_version}"
+    id("org.jetbrains.intellij.platform") version "${intellij_version}"
 }
 
 group = 'net.skullian.skyfactions'
@@ -30,6 +31,7 @@ java {
 
 allprojects {
     apply plugin: 'java'
+    apply plugin: 'org.jetbrains.intellij.platform'
 
     repositories {
         mavenCentral()

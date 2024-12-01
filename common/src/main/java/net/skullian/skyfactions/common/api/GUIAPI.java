@@ -58,7 +58,7 @@ public class GUIAPI {
                 boolean isModel = name.equalsIgnoreCase("MODEL");
                 Section itemData = itemsConfig.getSection(name);
 
-                char charValue = !isModel ? itemData.getString("char").charAt(0) : "x".charAt(0);
+                char charValue = !isModel ? itemData.getString("char").charAt(0) : 'x';
                 String material = itemData.getString("material");
                 String text = itemData.getString("text").replace("<player_name>", user.getName());
                 String sound = itemData.getString("sound");

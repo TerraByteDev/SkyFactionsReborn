@@ -40,6 +40,11 @@ Discord:
     CODE_OPTION_NAME: "code"
     CODE_OPTION_DESCRIPTION: "Code that you were given on the SkyFactions server when running /link."
 
+  # Color when successfully linking a Discord account.
+  SUCCESS_COLOR: "GREEN"
+  # Color when something fails.
+  ERROR_COLOR: "RED"
+
   # How often the presence should be changed. In seconds - Do not see this too low!
   PRESENCE_INTERVAL: 300 # 5 Minutes
 

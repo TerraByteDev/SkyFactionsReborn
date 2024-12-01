@@ -21,7 +21,7 @@ import net.skullian.skyfactions.paper.command.island.IslandCommandHandler;
 import net.skullian.skyfactions.paper.command.raid.RaidCommandHandler;
 import net.skullian.skyfactions.paper.command.runes.RunesCommandHandler;
 import net.skullian.skyfactions.paper.command.sf.SFCommandHandler;
-import net.skullian.skyfactions.paper.module.SkyModuleManager;
+import net.skullian.skyfactions.common.module.SkyModuleManager;
 import net.skullian.skyfactions.paper.npc.SpigotNPCManager;
 import net.skullian.skyfactions.paper.defence.block.BrokenBlockService;
 import net.skullian.skyfactions.paper.event.PlayerListener;
@@ -45,7 +45,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
     @Getter private static final BrokenBlockService blockService = new BrokenBlockService();
     @Getter private static NPCManager npcManager;
-    @Getter private static SkyModuleManager moduleManager;
 
     private void print() {
         ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
@@ -57,9 +56,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
         LOGGER.info(Component.text("│    ___] | \\_   |   |    |  | |___  |  | |__| | \\| ___]     │").style(style));
         LOGGER.info(Component.text("│                                                            │").style(style));
         LOGGER.info(Component.text("╰────────────────────────────────────────────────────────────╯").style(style));
-
-
-
     }
 
     @Override
@@ -86,8 +82,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
         npcManager = new SpigotNPCManager();
 
         SLogger.info("Initialising Module Manager.");
-        moduleManager = new SkyModuleManager();
-        moduleManager.onEnable();
+        SkyModuleManager.onEnable();
 
         SLogger.info("Loading InvLib Instance.");
         InvUI.getInstance().setPlugin(this);
@@ -131,16 +126,15 @@ public final class SkyFactionsReborn extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
-            if (SkyApi.getInstance().getCacheService() != null) {
-                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-                scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
-                SkyApi.getInstance().getCacheService().disable().get();
+            SkyApi.getInstance().getCacheService();
+            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
+            SkyApi.getInstance().getCacheService().disable().get();
 
-                scheduler.shutdownNow();
-            }
+            scheduler.shutdownNow();
 
             SLogger.info("Disabling Module Manager.");
-            moduleManager.onDisable();
+            SkyModuleManager.onDisable();
 
             SLogger.info("Closing Database connection.");
             closeDatabase();

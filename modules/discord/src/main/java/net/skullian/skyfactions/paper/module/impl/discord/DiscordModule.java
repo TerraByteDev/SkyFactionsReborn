@@ -11,16 +11,21 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.ConfigHandler;
+import net.skullian.skyfactions.common.config.types.ConfigTypes;
+import net.skullian.skyfactions.common.module.SkyModuleManager;
+import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.paper.module.SkyModule;
-import org.bukkit.event.Listener;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class DiscordModule implements Listener, SkyModule {
+public class DiscordModule implements SkyModule {
 
     public DiscordModule() {}
 
@@ -60,6 +65,18 @@ public class DiscordModule implements Listener, SkyModule {
     @Override
     public void onDisable() {
         if (scheduler != null && !scheduler.isShutdown()) this.scheduler.shutdown();
+        try {
+            JDA.shutdown();
+            if (!JDA.awaitShutdown(Duration.ofSeconds(10))) {
+                JDA.shutdownNow();
+            }
+        } catch (InterruptedException error) {
+            SLogger.fatal("----------------------- DISCORD EXCEPTION -----------------------");
+            SLogger.fatal("There was an error while stopping the bot.");
+            SLogger.fatal("Please contact the devs.");
+            SLogger.fatal("----------------------- DISCORD EXCEPTION -----------------------");
+            error.printStackTrace();
+        }
     }
 
     @Override
@@ -113,7 +130,20 @@ public class DiscordModule implements Listener, SkyModule {
     }
 
     public void loadConfig() {
-        SkyFactionsReborn.getConfigHandler().registerFile(ConfigTypes.DISCORD, new ConfigHandler("discord"));
-        DiscordConfig.setConfig(SkyFactionsReborn.getConfigHandler().getFile(ConfigTypes.DISCORD).getConfig());
+
+        SkyApi.getInstance().getConfigHandler().registerFile(ConfigTypes.DISCORD, new ConfigHandler("discord"));
+        DiscordConfig.setConfig(SkyApi.getInstance().getConfigHandler().getFile(ConfigTypes.DISCORD).getConfig());
+    }
+
+    public UUID getUUIDFromCode(String code) {
+        return this.codes.get(code);
+    }
+
+    public void onSuccessfulLink(String code) {
+        this.codes.remove(code);
+    }
+
+    public static DiscordModule getInstance() {
+        return (DiscordModule) SkyModuleManager.getEnabledModules().get(DiscordModule.class.getName());
     }
 }
