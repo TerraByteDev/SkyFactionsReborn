@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DefencesFactory extends DefenceFactory {
+public class SpigotDefencesFactory extends DefenceFactory {
 
     @Override
     public List<String> getPlacementBlocks(YamlDocument config) {

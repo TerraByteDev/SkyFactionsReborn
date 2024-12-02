@@ -1,31 +1,31 @@
 package net.skullian.skyfactions.paper.api;
 
 import com.jeff_media.customblockdata.CustomBlockData;
-import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.common.api.DefenceAPI;
+import net.skullian.skyfactions.common.api.PlayerAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.faction.AuditLogType;
 import net.skullian.skyfactions.common.user.SkyUser;
-import net.skullian.skyfactions.common.util.text.TextUtility;
+import net.skullian.skyfactions.common.util.SkyItemStack;
+import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.common.defence.Defence;
-import net.skullian.skyfactions.paper.defence.DefencesFactory;
+import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
+import net.skullian.skyfactions.paper.defence.SpigotDefencesFactory;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.paper.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.common.faction.Faction;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,29 +34,46 @@ import java.util.UUID;
 public class SpigotDefenceAPI extends DefenceAPI {
 
     @Override
-    public @NotNull ItemStack createDefenceStack(DefenceStruct defence, SkyUser player) {
-        ItemStack stack = SpigotPlayerAPI.convertToSkull(new ItemStack(Material.getMaterial(defence.getITEM_MATERIAL())), defence.getITEM_SKULL());
-        NamespacedKey nameKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
+    public @NotNull SkyItemStack createDefenceStack(DefenceStruct defence, SkyUser player) {
+        SkyItemStack.SkyItemStackBuilder stack = PlayerAPI.convertToSkull(SkyItemStack.builder().material(defence.getITEM_MATERIAL()), defence.getITEM_SKULL());
+        stack.displayName(defence.getNAME());
+        stack.lore(getFormattedLore(defence, defence.getITEM_LORE(), player));
+        stack.persistentData(new SkyItemStack.PersistentData("defence-identifier", "STRING", defence.getIDENTIFIER()));
 
-        ItemMeta meta = stack.getItemMeta();
-        meta.displayName(TextUtility.color(defence.getNAME(), SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), player));
-        meta.getPersistentDataContainer().set(nameKey, PersistentDataType.STRING, defence.getIDENTIFIER());
-
-        meta.lore(getFormattedLore(defence, defence.getITEM_LORE(), player));
-        stack.setItemMeta(meta);
-
-        return stack;
+        return stack.build();
     }
 
     @Override
-    public boolean isDefence(ItemStack item) {
-        NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
-        return item.getItemMeta().getPersistentDataContainer().has(defenceKey, PersistentDataType.STRING);
+    public void addDefence(SkyUser player, DefenceStruct defence, Faction faction) {
+        SkyItemStack stack = createDefenceStack(defence, player);
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
+
+        if (faction != null) {
+            // assumes the type is faction
+            faction.subtractRunes(defence.getBUY_COST());
+            player.addItem(stack);
+
+            SkyApi.getInstance().getSoundAPI().playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1f);
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, locale, "defence_name", defence.getNAME());
+
+            faction.createAuditLog(player.getUniqueId(), AuditLogType.DEFENCE_PURCHASE, "player_name", player.getName(), "defence_name", defence.getNAME());
+        } else {
+            SkyApi.getInstance().getRunesAPI().removeRunes(player.getUniqueId(), defence.getBUY_COST());
+            player.addItem(stack);
+
+            SkyApi.getInstance().getSoundAPI().playSound(player, Settings.DEFENCE_PURCHASE_SUCCESS_SOUND.getString(), Settings.DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH.getInt(), 1f);
+            Messages.DEFENCE_PURCHASE_SUCCESS.send(player, locale, "defence_name", defence.getNAME());
+        }
     }
 
     @Override
-    public boolean isDefence(Location location) {
-        Block block = location.getBlock();
+    public boolean isDefence(SkyItemStack item) {
+        return item.hasPersistentData("defence-identifier");
+    }
+
+    @Override
+    public boolean isDefence(SkyLocation location) {
+        Block block = SpigotAdapter.adapt(location).getBlock();
         NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
 
         PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
@@ -68,19 +85,19 @@ public class SpigotDefenceAPI extends DefenceAPI {
     }
 
     @Override
-    public @NotNull List<Component> getFormattedLore(DefenceStruct struct, List<String> lore, Player player) {
+    public @NotNull List<String> getFormattedLore(DefenceStruct struct, List<String> lore, SkyUser player) {
         String maxLevel = String.valueOf(struct.getMAX_LEVEL());
-        String range = DefencesFactory.solveFormula(struct.getATTRIBUTES().getRANGE(), 1);
-        String ammo = DefencesFactory.solveFormula(struct.getATTRIBUTES().getMAX_AMMO(), 1);
-        String targetMax = DefencesFactory.solveFormula(struct.getATTRIBUTES().getMAX_TARGETS(), 1);
-        String damage = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDAMAGE(), 1);
-        String cooldown = DefencesFactory.solveFormula(struct.getATTRIBUTES().getCOOLDOWN(), 1);
-        String healing = DefencesFactory.solveFormula(struct.getATTRIBUTES().getHEALING(), 1);
-        String distance = DefencesFactory.solveFormula(struct.getATTRIBUTES().getDISTANCE(), 1);
-        List<Component> newLore = new ArrayList<>();
+        String range = DefenceAPI.solveFormula(struct.getATTRIBUTES().getRANGE(), 1);
+        String ammo = DefenceAPI.solveFormula(struct.getATTRIBUTES().getMAX_AMMO(), 1);
+        String targetMax = DefenceAPI.solveFormula(struct.getATTRIBUTES().getMAX_TARGETS(), 1);
+        String damage = DefenceAPI.solveFormula(struct.getATTRIBUTES().getDAMAGE(), 1);
+        String cooldown = DefenceAPI.solveFormula(struct.getATTRIBUTES().getCOOLDOWN(), 1);
+        String healing = DefenceAPI.solveFormula(struct.getATTRIBUTES().getHEALING(), 1);
+        String distance = DefenceAPI.solveFormula(struct.getATTRIBUTES().getDISTANCE(), 1);
+        List<String> newLore = new ArrayList<>();
 
         for (String str : lore) {
-            newLore.add(TextUtility.color(str
+            newLore.add(str
                     .replace("<max_level>", maxLevel)
                     .replace("<range>", range)
                     .replace("<ammo>", ammo)
@@ -89,7 +106,7 @@ public class SpigotDefenceAPI extends DefenceAPI {
                     .replace("<cooldown>", cooldown)
                     .replace("<healing>", healing)
                     .replace("<distance>", distance)
-                    .replace("<cost>", String.valueOf(struct.getBUY_COST())), SpigotPlayerAPI.getLocale(player.getUniqueId()), player));
+                    .replace("<cost>", String.valueOf(struct.getBUY_COST())));
         }
 
         return newLore;
@@ -98,60 +115,58 @@ public class SpigotDefenceAPI extends DefenceAPI {
     @Override
     public Defence getDefenceFromData(DefenceData data) {
         return getLoadedDefence(
-                new Location(Bukkit.getWorld(data.getWORLD_LOC()), data.getX(), data.getY(), data.getZ())
+                new SkyLocation(data.getWORLD_LOC(), data.getX(), data.getY(), data.getZ())
         );
     }
 
     @Override
-    public Defence getLoadedDefence(Location location) {
+    public Defence getLoadedDefence(SkyLocation location) {
+        Location bukkitLocation = SpigotAdapter.adapt(location);
         return DefencePlacementHandler.loadedFactionDefences.values().stream()
                 .flatMap(List::stream)
-                .filter(d -> d.getDefenceLocation().equals(location))
+                .filter(d -> d.getDefenceLocation().equals(bukkitLocation))
                 .findFirst()
                 .orElseGet(() -> DefencePlacementHandler.loadedPlayerDefences.values().stream()
                         .flatMap(List::stream)
-                        .filter(d -> d.getDefenceLocation().equals(location))
+                        .filter(d -> d.getDefenceLocation().equals(bukkitLocation))
                         .findFirst()
                         .orElse(null));
     }
 
     @Override
-    public void returnDefence(DefenceStruct struct, Player player) {
-        ItemStack stack = createDefenceStack(struct, player);
-        player.getInventory().addItem(stack);
+    public void returnDefence(DefenceStruct struct, SkyUser player) {
+        player.addItem(createDefenceStack(struct, player));
     }
 
     @Override
-    public boolean hasPermissions(List<String> permissions, Player player, Faction faction) {
+    public boolean hasPermissions(List<String> permissions, SkyUser player, Faction faction) {
         return permissions.contains(faction.getRankType(player.getUniqueId()).getRankValue());
     }
 
     @Override
-    public @NotNull ItemBuilder processPermissions(ItemBuilder builder, Player player) {
-        String locale = SpigotPlayerAPI.getLocale(player.getUniqueId());
+    public @NotNull SkyItemStack.SkyItemStackBuilder processPermissions(SkyItemStack.SkyItemStackBuilder builder, SkyUser player) {
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
         for (String line : Messages.DEFENCE_INSUFFICIENT_PERMISSIONS_LORE.getStringList(locale)) {
-            builder.addLoreLines(TextUtility.legacyColor(line, locale, player));
+            builder.loreLine(line);
         }
 
         return builder;
     }
 
     @Override
-    public boolean isDefenceMaterial(Block block) {
-        return DefencesFactory.defences.values().stream()
+    public boolean isDefenceMaterial(SkyLocation location) {
+        Block bukkitBlock = SpigotAdapter.adapt(location).getBlock();
+        return SkyApi.getInstance().getDefenceFactory().getDefences().values().stream()
                 .flatMap(inner -> inner.values().stream())
-                .anyMatch(struct -> struct.getBLOCK_MATERIAL().equals(block.getType().name()));
+                .anyMatch(struct -> struct.getBLOCK_MATERIAL().equals(bukkitBlock.getType().name()));
     }
 
     @Override
-    public DefenceStruct getDefenceFromItem(ItemStack itemStack, Player player) {
-        NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
-        PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
-
-        if (container.has(defenceKey, PersistentDataType.STRING)) {
-            String identifier = container.get(defenceKey, PersistentDataType.STRING);
-            DefenceStruct struct = DefencesFactory.defences.getOrDefault(SpigotPlayerAPI.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(identifier);
+    public DefenceStruct getDefenceFromItem(SkyItemStack itemStack, SkyUser player) {
+        if (itemStack.hasPersistentData("defence-identifier")) {
+            String identifier = itemStack.getPersistentData("defence-identifier").getData().toString();
+            DefenceStruct struct = SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), SpigotDefencesFactory.getDefaultStruct()).get(identifier);
 
             return struct;
         }

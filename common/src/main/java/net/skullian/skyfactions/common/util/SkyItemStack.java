@@ -24,14 +24,18 @@ public class SkyItemStack implements Cloneable {
     @Setter private String textures;
 
     @Builder
-    private SkyItemStack(String displayName, String material, int amount, int customModelData, List<PersistentData> persistentData, List<EnchantData> enchants, List<String> itemFlags, List<String> lore, String textures) {
+    private SkyItemStack(String displayName, String material, int amount, int customModelData, List<PersistentData> persistentDatas, PersistentData persistentData, List<EnchantData> enchants, EnchantData enchant, List<String> itemFlags, String itemFlag, List<String> lore, String loreLine, String textures) {
         this.material = material;
         this.displayName = displayName;
         this.amount = amount;
         this.customModelData = customModelData;
-        this.persistentData.addAll(persistentData);
+        this.persistentData.add(persistentData);
+        this.persistentData.addAll(persistentDatas);
+        this.enchants.add(enchant);
         this.enchants.addAll(enchants);
+        this.itemFlags.add(itemFlag);
         this.itemFlags.addAll(itemFlags);
+        this.lore.add(loreLine);
         this.lore.addAll(lore);
         this.textures = textures;
     }
@@ -70,6 +74,14 @@ public class SkyItemStack implements Cloneable {
 
     public void addItemFlag(String flag) {
         itemFlags.add(flag);
+    }
+
+    public boolean hasPersistentData(String key) {
+        return persistentData.stream().anyMatch(persistentData -> persistentData.getKey().equals(key));
+    }
+
+    public PersistentData getPersistentData(String key) {
+        return persistentData.stream().filter(persistentData -> persistentData.getKey().equals(key)).findFirst().orElse(null);
     }
 
     @AllArgsConstructor

@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.common.util.worldborder;
 
+import net.skullian.skyfactions.common.user.SkyUser;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -18,9 +19,9 @@ public abstract class AWorldBorder implements WorldBorderInterface {
         this.size = size;
     }
 
-    public AWorldBorder(Player player) {}
+    public AWorldBorder(SkyUser player) {}
 
-    public AWorldBorder(World world) {}
+    public AWorldBorder(String world) {}
 
     @Override
     public void centre(BorderPos location) {

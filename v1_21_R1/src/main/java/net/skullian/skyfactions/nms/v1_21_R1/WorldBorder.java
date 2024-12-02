@@ -1,9 +1,13 @@
 package net.skullian.skyfactions.nms.v1_21_R1;
 
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.nms.NMSProvider;
 import net.skullian.skyfactions.common.util.worldborder.AWorldBorder;
 import net.skullian.skyfactions.common.util.worldborder.BorderPos;
 import net.skullian.skyfactions.common.util.worldborder.BorderUpdateAction;
 import net.skullian.skyfactions.common.util.worldborder.ConsumerSupplier;
+import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Player;
@@ -16,13 +20,13 @@ public class WorldBorder extends AWorldBorder {
         this(new net.minecraft.world.level.border.WorldBorder());
     }
 
-    public WorldBorder(Player player) {
+    public WorldBorder(SkyUser player) {
         this(new net.minecraft.world.level.border.WorldBorder());
-        this.border.world = ((CraftWorld) player.getWorld()).getHandle();
+        this.border.world = ((CraftWorld) SpigotAdapter.adapt(player).getPlayer().getWorld()).getHandle();
     }
 
-    public WorldBorder(World world) {
-        this(((CraftWorld) world).getHandle().getWorldBorder());
+    public WorldBorder(String world) {
+        this(((CraftWorld) Bukkit.getWorld(world)).getHandle().getWorldBorder());
     }
 
     public WorldBorder(net.minecraft.world.level.border.WorldBorder worldBorder) {
@@ -39,7 +43,7 @@ public class WorldBorder extends AWorldBorder {
     }
 
     @Override
-    public void update(BorderUpdateAction action, Player player) {
+    public void update(BorderUpdateAction action, SkyUser player) {
         NMSProvider.getInstance().updateWorldBorder(action, player, border);
     }
 }

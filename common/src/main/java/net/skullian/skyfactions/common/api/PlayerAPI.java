@@ -95,13 +95,6 @@ public abstract class PlayerAPI {
      */
     public static SkyItemStack.SkyItemStackBuilder convertToSkull(SkyItemStack.SkyItemStackBuilder item, String skullValue) {
         item.textures(skullValue);
-        /*item.editMeta(SkullMeta.class, skullMeta -> {
-            final UUID uuid = UUID.randomUUID();
-            final PlayerProfile playerProfile = Bukkit.createProfile(uuid, uuid.toString().substring(0, 16));
-            playerProfile.setProperty(new ProfileProperty("textures", skullValue));
-
-            skullMeta.setPlayerProfile(playerProfile);
-        });*/
 
         return item;
     }

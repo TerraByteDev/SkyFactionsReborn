@@ -36,7 +36,7 @@ import net.skullian.skyfactions.paper.config.types.DefencesConfig;
 import net.skullian.skyfactions.paper.config.types.Messages;
 import net.skullian.skyfactions.paper.config.types.Settings;
 import net.skullian.skyfactions.common.defence.Defence;
-import net.skullian.skyfactions.paper.defence.DefencesFactory;
+import net.skullian.skyfactions.paper.defence.SpigotDefencesFactory;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.paper.util.ErrorUtil;
@@ -111,7 +111,7 @@ public class DefencePlacementHandler implements Listener {
                 if (!shouldContinue.get()) return;
                 String defenceIdentifier = container.get(defenceKey, PersistentDataType.STRING);
 
-                DefenceStruct defence = DefencesFactory.defences.getOrDefault(locale, DefencesFactory.getDefaultStruct()).get(defenceIdentifier);
+                DefenceStruct defence = SpigotDefencesFactory.defences.getOrDefault(locale, SpigotDefencesFactory.getDefaultStruct()).get(defenceIdentifier);
                 if (defence != null) {
                     Location belowLoc = placed.getLocation().clone();
                     belowLoc.setY(belowLoc.getY() - 1);
@@ -149,7 +149,7 @@ public class DefencePlacementHandler implements Listener {
     private static Defence createDefence(DefenceData data, DefenceStruct defenceStruct, String owner, boolean isFaction, Optional<Player> player, Optional<BlockPlaceEvent> event, boolean isPlace, boolean shouldLoad) {
         Defence instance = null;
         try {
-            Class<?> clazz = Class.forName(DefencesFactory.defenceTypes.get(defenceStruct.getTYPE()));
+            Class<?> clazz = Class.forName(SpigotDefencesFactory.defenceTypes.get(defenceStruct.getTYPE()));
             Constructor<?> constr = clazz.getConstructor(DefenceData.class, DefenceStruct.class);
 
             instance = (Defence) constr.newInstance(data, defenceStruct);
@@ -237,7 +237,7 @@ public class DefencePlacementHandler implements Listener {
                     ObjectMapper mapper = new ObjectMapper();
                     DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                    DefenceStruct defence = DefencesFactory.defences.getOrDefault(defenceData.getLOCALE(), DefencesFactory.getDefaultStruct()).get(name);
+                    DefenceStruct defence = SpigotDefencesFactory.defences.getOrDefault(defenceData.getLOCALE(), SpigotDefencesFactory.getDefaultStruct()).get(name);
                         if (defence != null) {
 
                             Defence instance = createDefence(defenceData, defence, factionName, true, Optional.empty(), Optional.empty(), false, false);
@@ -273,7 +273,7 @@ public class DefencePlacementHandler implements Listener {
                 if (container.has(defenceKey, PersistentDataType.STRING)) {
                     String name = container.get(defenceKey, PersistentDataType.STRING);
                     String data = container.get(dataKey, PersistentDataType.STRING);
-                    DefenceStruct defence = DefencesFactory.defences.getOrDefault(SpigotPlayerAPI.getLocale(player.getUniqueId()), DefencesFactory.getDefaultStruct()).get(name);
+                    DefenceStruct defence = SpigotDefencesFactory.defences.getOrDefault(SpigotPlayerAPI.getLocale(player.getUniqueId()), SpigotDefencesFactory.getDefaultStruct()).get(name);
 
                     try {
                         if (defence != null) {

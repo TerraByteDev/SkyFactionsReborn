@@ -33,6 +33,8 @@ import net.skullian.skyfactions.paper.event.ObeliskInteractionListener;
 import net.skullian.skyfactions.common.npc.NPCManager;
 import net.skullian.skyfactions.paper.util.DependencyHandler;
 import net.skullian.skyfactions.common.util.nms.NMSProvider;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.xenondevs.invui.InvUI;
 

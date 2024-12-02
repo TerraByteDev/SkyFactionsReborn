@@ -75,7 +75,7 @@ public abstract class DefenceAPI {
      *
      * @return {@link List<Component>} list of formatted components.
      */
-    @NotNull public abstract List<Component> getFormattedLore(DefenceStruct struct, List<String> lore, SkyUser player);
+    @NotNull public abstract List<String> getFormattedLore(DefenceStruct struct, List<String> lore, SkyUser player);
 
     /**
      * Get a loaded defence instance from its data.

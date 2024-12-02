@@ -8,6 +8,7 @@ import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.faction.JoinRequestData;
 import net.skullian.skyfactions.common.island.impl.PlayerIsland;
 import net.skullian.skyfactions.common.notification.NotificationData;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,4 +66,6 @@ public abstract class SkyUser {
     public abstract boolean hasPermission(String permission);
 
     public abstract void playSound(Sound sound, float volume, float pitch);
+
+    public abstract void addItem(SkyItemStack stack);
 }

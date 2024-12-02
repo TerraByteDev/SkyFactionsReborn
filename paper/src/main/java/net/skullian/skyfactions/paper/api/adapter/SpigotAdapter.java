@@ -1,5 +1,7 @@
 package net.skullian.skyfactions.paper.api.adapter;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import io.th0rgal.oraxen.items.ItemBuilder;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
@@ -12,10 +14,13 @@ import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.item.ItemProvider;
+
+import java.util.UUID;
 
 public class SpigotAdapter {
 
@@ -43,6 +48,16 @@ public class SpigotAdapter {
         
         ItemStack stack = new ItemStack(Material.valueOf(skyStack.getMaterial()));
         stack.setAmount(skyStack.getAmount());
+
+        if (!skyStack.getTextures().isEmpty() || !skyStack.getTextures().equalsIgnoreCase("none")) {
+            stack.editMeta(SkullMeta.class, skullMeta -> {
+                UUID uuid = UUID.randomUUID();
+                PlayerProfile playerProfile = Bukkit.createProfile(uuid, uuid.toString().substring(0, 16));
+                playerProfile.setProperty(new ProfileProperty("textures", skyStack.getTextures()));
+
+                skullMeta.setPlayerProfile(playerProfile);
+            });
+        }
 
         ItemMeta meta = stack.getItemMeta();
         if (!legacy) meta.lore(TextUtility.color(skyStack.getLore(), locale, user));

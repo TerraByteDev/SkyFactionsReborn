@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.paper.user;
 
-import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.common.api.InvitesAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
