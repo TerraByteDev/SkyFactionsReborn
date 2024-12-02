@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.common.api;
 
 import lombok.Getter;
+import net.kyori.adventure.audience.Audience;
 import net.skullian.skyfactions.common.config.ConfigFileHandler;
 import net.skullian.skyfactions.common.database.DatabaseManager;
 import net.skullian.skyfactions.common.database.cache.CacheService;
@@ -8,6 +9,7 @@ import net.skullian.skyfactions.common.defence.DefenceFactory;
 import net.skullian.skyfactions.common.gui.UIShower;
 import net.skullian.skyfactions.common.npc.NPCManager;
 import net.skullian.skyfactions.common.user.UserManager;
+import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.worldborder.BorderAPI;
 import org.jetbrains.annotations.NotNull;
 
@@ -162,6 +164,13 @@ public abstract class SkyApi {
      * @return {@link DefenceFactory}
      */
    @NotNull public abstract DefenceFactory getDefenceFactory();
+
+    /**
+     * Get the Audience. This is used for sending messages to console.
+     *
+     * @return {@link Audience}
+     */
+   @NotNull public abstract Audience getConsoleAudience();
 
     /**
      * Set the API Instance. Can depend on the platform (obviously a WIP)

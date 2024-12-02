@@ -134,7 +134,8 @@ allprojects {
         compileOnly("org.incendo:cloud-core:${cloud}")
         compileOnly("org.incendo:cloud-annotations:${cloud}")
 
-        compileOnly("net.kyori:adventure-text-minimessage:${minimessage}")
+        compileOnly("net.kyori:adventure-text-logger-slf4j:${adventure}")
+        compileOnly("net.kyori:adventure-text-minimessage:${adventure}")
 
         compileOnly("org.jooq:jooq:${jooq_codegen_version}")
         compileOnly("org.flywaydb:flyway-core:${flyway_core}")
