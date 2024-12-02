@@ -6,9 +6,13 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class RunesAPI {
+
+    public final Map<UUID, Integer> playerRunes = new ConcurrentHashMap<>();
 
     /**
      * See whether an item is allowed for rune conversion.
@@ -48,7 +52,11 @@ public abstract class RunesAPI {
      * @param playerUUID UUID of the Player {@link UUID}
      * @param amount     Amount of runes to remove {@link Integer}
      */
-    public abstract void removeRunes(UUID playerUUID, int amount);
+    public void removeRunes(UUID playerUUID, int amount) {
+        if (!SkyApi.getInstance().getUserManager().isCached(playerUUID)) SkyApi.getInstance().getUserManager().getUser(playerUUID);
+
+        SkyApi.getInstance().getCacheService().getEntry(playerUUID).removeRunes(amount);
+    }
 
     /**
      * Add runes to a player's rune balance.
@@ -56,7 +64,11 @@ public abstract class RunesAPI {
      * @param playerUUID UUID of the Player {@link UUID}
      * @param amount     Amount of runes to add {@link Integer}
      */
-    public abstract void addRunes(UUID playerUUID, int amount);
+    public void addRunes(UUID playerUUID, int amount) {
+        if (!SkyApi.getInstance().getUserManager().isCached(playerUUID)) SkyApi.getInstance().getUserManager().getUser(playerUUID);
+
+        SkyApi.getInstance().getCacheService().getEntry(playerUUID).addRunes(amount);
+    }
 
     /**
      * This is a very simple method to check if an ItemStack has any enchantments.
