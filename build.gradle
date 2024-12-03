@@ -171,7 +171,6 @@ tasks {
         downloadPlugins {
             modrinth("FastAsyncWorldEdit", "2.12.0")
             modrinth("ViaVersion", "5.1.1")
-            modrinth("PacketEvents", "2.6.0")
             modrinth("pworlds", "2.0.12")
 
             hangar("PlaceholderAPI", "2.11.6")

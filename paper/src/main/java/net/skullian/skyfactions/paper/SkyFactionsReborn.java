@@ -1,12 +1,7 @@
 package net.skullian.skyfactions.paper;
 
-import com.github.retrooper.packetevents.PacketEvents;
 import com.jeff_media.customblockdata.CustomBlockData;
-import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import lombok.Getter;
-import me.tofaa.entitylib.APIConfig;
-import me.tofaa.entitylib.EntityLib;
-import me.tofaa.entitylib.spigot.SpigotEntityLibPlatform;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
@@ -33,8 +28,6 @@ import net.skullian.skyfactions.paper.event.ObeliskInteractionListener;
 import net.skullian.skyfactions.common.npc.NPCManager;
 import net.skullian.skyfactions.paper.util.DependencyHandler;
 import net.skullian.skyfactions.common.util.nms.NMSProvider;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.xenondevs.invui.InvUI;
 
@@ -58,14 +51,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
         LOGGER.info(Component.text("│    ___] | \\_   |   |    |  | |___  |  | |__| | \\| ___]     │").style(style));
         LOGGER.info(Component.text("│                                                            │").style(style));
         LOGGER.info(Component.text("╰────────────────────────────────────────────────────────────╯").style(style));
-    }
-
-    @Override
-    public void onLoad() {
-        SLogger.info("Initialising PacketEvents.");
-
-        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
-        PacketEvents.getAPI().load();
     }
 
     @Override
@@ -104,16 +89,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DefencePlacementHandler(), this);
         getServer().getPluginManager().registerEvents(new DefenceInteractionHandler(), this);
 
-        SLogger.info("Creating PacketEvents Instance.");
-        PacketEvents.getAPI().init();
-
-        SLogger.info("Initialising EntityLib.");
-        SpigotEntityLibPlatform platform = new SpigotEntityLibPlatform(this);
-        APIConfig settings = new APIConfig(PacketEvents.getAPI())
-                .usePlatformLogger();
-
-        EntityLib.init(platform, settings);
-
         // This is kind of pointless.
         // Just a class for handling dependencies and optional dependencies.
         // Majorly incomplete.
@@ -140,9 +115,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
             SLogger.info("Closing Database connection.");
             closeDatabase();
-
-            SLogger.info("Terminating PacketEvents.");
-            PacketEvents.getAPI().terminate();
 
             print();
             SLogger.info("SkyFactions has been disabled.");

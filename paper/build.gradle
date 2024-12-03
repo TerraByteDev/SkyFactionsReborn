@@ -113,8 +113,5 @@ dependencies {
     compileOnly("io.th0rgal:oraxen:${oraxen}")
     compileOnly("com.github.LoneDev6:API-ItemsAdder:${itemsadder}")
 
-    compileOnly("com.github.retrooper:packetevents-spigot:${packetevents}")
-    implementation("me.tofaa.entitylib:spigot:${entitylib}")
-
     compileOnly("com.jeff-media:custom-block-data:${customblockdata}")
 }
