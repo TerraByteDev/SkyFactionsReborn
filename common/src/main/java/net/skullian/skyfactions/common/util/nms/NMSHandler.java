@@ -9,7 +9,7 @@ public interface NMSHandler {
 
     void spawnHologram(DefenceTextHologram hologram);
 
-    void updateHologram(DefenceTextHologram hologram, SkyUser user);
+    void updateHologram(DefenceTextHologram hologram);
 
     void removeHologram(DefenceTextHologram hologram);
 

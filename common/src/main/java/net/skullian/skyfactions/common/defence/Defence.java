@@ -141,7 +141,7 @@ public abstract class Defence {
     }
 
     public void removeDeadEntity(int entityID) {
-        targetedEntities.remove(entity);
+        targetedEntities.remove(entityID);
     }
 
     public void onLoad(String playerUUIDorFactionName) {

@@ -13,16 +13,12 @@ import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
-import net.skullian.skyfactions.paper.defence.SpigotDefencesFactory;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.paper.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.common.faction.Faction;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -77,11 +73,7 @@ public class SpigotDefenceAPI extends DefenceAPI {
         NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
 
         PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
-        if (container.has(defenceKey, PersistentDataType.STRING)) {
-            return true;
-        }
-
-        return false;
+        return container.has(defenceKey, PersistentDataType.STRING);
     }
 
     @Override
@@ -121,14 +113,13 @@ public class SpigotDefenceAPI extends DefenceAPI {
 
     @Override
     public Defence getLoadedDefence(SkyLocation location) {
-        Location bukkitLocation = SpigotAdapter.adapt(location);
         return DefencePlacementHandler.loadedFactionDefences.values().stream()
                 .flatMap(List::stream)
-                .filter(d -> d.getDefenceLocation().equals(bukkitLocation))
+                .filter(d -> d.getDefenceLocation().equals(location))
                 .findFirst()
                 .orElseGet(() -> DefencePlacementHandler.loadedPlayerDefences.values().stream()
                         .flatMap(List::stream)
-                        .filter(d -> d.getDefenceLocation().equals(bukkitLocation))
+                        .filter(d -> d.getDefenceLocation().equals(location))
                         .findFirst()
                         .orElse(null));
     }
@@ -166,9 +157,8 @@ public class SpigotDefenceAPI extends DefenceAPI {
     public DefenceStruct getDefenceFromItem(SkyItemStack itemStack, SkyUser player) {
         if (itemStack.hasPersistentData("defence-identifier")) {
             String identifier = itemStack.getPersistentData("defence-identifier").getData().toString();
-            DefenceStruct struct = SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), SpigotDefencesFactory.getDefaultStruct()).get(identifier);
 
-            return struct;
+            return SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), SkyApi.getInstance().getDefenceFactory().getDefaultStruct()).get(identifier);
         }
 
         return null;

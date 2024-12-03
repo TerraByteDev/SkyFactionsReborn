@@ -1,13 +1,13 @@
 package net.skullian.skyfactions.nms.v1_21_R1;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.border.WorldBorder;
 import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.common.user.SkyUser;
@@ -44,25 +44,33 @@ public class NMSHandlerImpl implements NMSHandler {
                 EntityType.TEXT_DISPLAY,
                 ((CraftWorld) Bukkit.getWorld(hologram.getLocation().getWorldName())).getHandle()
         );
-        textDisplay.setText(Component.literal(LegacyComponentSerializer.legacySection().serialize(hologram.getTextAsComponent())));
         textDisplay.setPos(hologram.getLocation().getX(), hologram.getLocation().getY(), hologram.getLocation().getZ());
         textDisplay.setNoGravity(true);
         textDisplay.setTextOpacity(hologram.getTextOpacity());
 
         hologram.setEntity(textDisplay);
-
         hologram.getViewers().stream()
                 .forEach((user) -> {
                     Player player = SpigotAdapter.adapt(user).getPlayer();
+                    textDisplay.setText(Component.literal(LegacyComponentSerializer.legacySection().serialize(hologram.createText(user))));
 
                     ServerGamePacketListenerImpl connection = ((CraftPlayer) player).getHandle().connection;
-                    connection.send(new ClientboundAddEntityPacket(textDisplay));
+                    connection.send(new ClientboundAddEntityPacket(textDisplay, 0, new BlockPos(hologram.getLocation().getBlockX(), hologram.getLocation().getBlockY(), hologram.getLocation().getBlockZ())));
+                    connection.send(new ClientboundSetEntityDataPacket(textDisplay.getId(), textDisplay.getEntityData().packAll()));
                 });
     }
 
     @Override
-    public void updateHologram(DefenceTextHologram hologram, SkyUser user) {
+    public void updateHologram(DefenceTextHologram hologram) {
+        hologram.getViewers().stream()
+                .forEach((user) -> {
+                    Player player = SpigotAdapter.adapt(user).getPlayer();
+                    textDisplay.setText(Component.literal(LegacyComponentSerializer.legacySection().serialize(hologram.createText(user))));
 
+                    ServerGamePacketListenerImpl connection = ((CraftPlayer) player).getHandle().connection;
+                    connection.send(new ClientboundAddEntityPacket(textDisplay, 0, new BlockPos(hologram.getLocation().getBlockX(), hologram.getLocation().getBlockY(), hologram.getLocation().getBlockZ())));
+                    connection.send(new ClientboundSetEntityDataPacket(textDisplay.getId(), textDisplay.getEntityData().packAll()));
+                });
     }
 
     @Override

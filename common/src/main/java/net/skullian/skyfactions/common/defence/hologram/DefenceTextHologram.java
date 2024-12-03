@@ -117,8 +117,7 @@ public abstract class DefenceTextHologram {
         this.task = executorService.scheduleAtFixedRate(this::updateAffectedPlayers, 1, updateTaskPeriod, TimeUnit.SECONDS);
     }
 
-
-    private Component createText(SkyUser player) {
+    public Component createText(SkyUser player) {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
         DefenceStruct struct = SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(locale, SkyApi.getInstance().getDefenceFactory().getDefences().get(Messages.getDefaulLocale())).get(defence.getIDENTIFIER());
         Component[] components = new Component[3];
