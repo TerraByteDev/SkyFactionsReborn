@@ -30,7 +30,7 @@ public class SpigotPlayerAPI extends PlayerAPI {
         if (builder.getMaterial().equals("PLAYER_HEAD")) {
             builder.setOwningPlayerUUID(playerUUID.toString());
         }
-        
+
         return builder;
     }
 

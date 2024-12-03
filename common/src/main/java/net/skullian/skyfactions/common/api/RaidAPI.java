@@ -18,8 +18,6 @@ public abstract class RaidAPI {
 
     public abstract IslandRaidData getRandomRaidable(SkyUser player);
 
-    public abstract boolean isPlayerOnline(UUID uuid);
-
     public abstract void alertPlayer(SkyUser player, SkyUser attacker);
 
     public abstract void teleportToPreparationArea(SkyUser player);

@@ -1,28 +1,21 @@
 package net.skullian.skyfactions.paper.api;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.title.Title;
 import net.skullian.skyfactions.common.api.RaidAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.database.struct.IslandRaidData;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.common.util.text.TextUtility;
-import net.skullian.skyfactions.paper.SkyFactionsReborn;
-import net.skullian.skyfactions.paper.util.SoundUtil;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -33,9 +26,9 @@ public class SpigotRaidAPI extends RaidAPI {
     public Map<UUID, UUID> currentRaids = new HashMap<>();
 
     @Override
-    public CompletableFuture<String> getCooldownDuration(Player player) {
+    public CompletableFuture<String> getCooldownDuration(SkyUser player) {
         long cooldownDurationInMilliseconds = Settings.RAIDING_COOLDOWN.getLong();
-        return SpigotPlayerAPI.getPlayerData(player.getUniqueId()).handle((data, ex) -> {
+        return SkyApi.getInstance().getPlayerAPI().getPlayerData(player.getUniqueId()).handle((data, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return null;
@@ -53,12 +46,12 @@ public class SpigotRaidAPI extends RaidAPI {
     }
 
     @Override
-    public void startRaid(Player player) {
+    public void startRaid(SkyUser player) {
         // TODO REFACTOR ALL OF THIS
         try {
             AtomicBoolean cancel = new AtomicBoolean(false);
 
-            Messages.RAID_PROCESSING.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+            Messages.RAID_PROCESSING.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
 
             /*SkyFactionsReborn.getDatabaseManager().updateLastRaid(player, System.currentTimeMillis()).thenAccept(result -> SkyFactionsReborn.getDatabaseManager().getGems(player).thenAccept(count -> SkyFactionsReborn.getDatabaseManager().subtractGems(player, count, Settings.RAIDING_COST.getInt()))).exceptionally(ex -> {
                 ex.printStackTrace();
@@ -77,22 +70,22 @@ public class SpigotRaidAPI extends RaidAPI {
                 handlePlayers(player, playerUUID);
                 processingRaid.put(player.getUniqueId(), playerUUID);
             } else {
-                Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "ISLAND_RETURNED_NULL");
+                Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "ISLAND_RETURNED_NULL");
             }
 
         } catch (Exception error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "MAIN_RAID_START");
+            Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "MAIN_RAID_START");
             handleRaidExecutionError(player, false);
         }
     }
 
     @Override
-    public void handlePlayers(Player attacker, UUID uuid) {
-        AtomicBoolean cancel = new AtomicBoolean(false);
+    public void handlePlayers(SkyUser attacker, UUID uuid) {
+        /*AtomicBoolean cancel = new AtomicBoolean(false);
 
         if (!isPlayerOnline(uuid)) {
-            SkyFactionsReborn.getDiscordHandler().pingRaid(attacker, Bukkit.getOfflinePlayer(uuid).getPlayer());
+            SkyApi.getInstance().getDiscordHandler().pingRaid(attacker, Bukkit.getOfflinePlayer(uuid).getPlayer());
         } else {
             Player def = Bukkit.getPlayer(uuid);
             if (def == null) return;
@@ -139,12 +132,12 @@ public class SpigotRaidAPI extends RaidAPI {
                 });
 
             }, (Settings.RAIDING_PREPARATION_TIME.getInt() * 20L));
-        }
+        }*/
     }
 
     @Override
-    public boolean hasEnoughGems(Player player) {
-        try {
+    public boolean hasEnoughGems(SkyUser player) {
+        /*try {
             int required = Settings.RAIDING_COST.getInt();
             AtomicInteger currentGems = new AtomicInteger();
             SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getGems(player.getUniqueId()).thenAccept(currentGems::set).exceptionally(ex -> {
@@ -162,68 +155,62 @@ public class SpigotRaidAPI extends RaidAPI {
         } catch (InterruptedException | ExecutionException error) {
             error.printStackTrace();
             Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_GEMS_GET");
-        }
+        }*/
 
         return false;
     }
 
     @Override
-    public IslandRaidData getRandomRaidable(Player player) {
+    public IslandRaidData getRandomRaidable(SkyUser player) {
         try {
             AtomicReference<List<IslandRaidData>> data = new AtomicReference<>(new ArrayList<>());
             SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().getRaidableIslands(player).thenAccept(data::set).exceptionally(ex -> {
                 ex.printStackTrace();
-                Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
+                Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
                 return null;
             }).get();
 
             if (data.get().isEmpty()) {
-                Messages.RAID_NO_PLAYERS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                Messages.RAID_NO_PLAYERS.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
             } else {
                 Random random = new Random();
                 return data.get().get(random.nextInt(data.get().size()));
             }
         } catch (InterruptedException | ExecutionException error) {
             error.printStackTrace();
-            Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
+            Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
         }
         return null;
     }
 
     @Override
-    public boolean isPlayerOnline(UUID uuid) {
-        OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-        return player.isOnline();
-    }
-
-    @Override
-    public void alertPlayer(Player player, Player attacker) {
-        SoundUtil.soundAlarm(player);
-        List<String> alertList = Messages.RAID_IMMINENT_MESSAGE.getStringList(SpigotPlayerAPI.getLocale(player.getUniqueId()));
+    public void alertPlayer(SkyUser player, SkyUser attacker) {
+        SkyApi.getInstance().getSoundAPI().soundAlarm(player);
+        List<String> alertList = Messages.RAID_IMMINENT_MESSAGE.getStringList(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
 
         if (player.isOnline()) {
             for (String msg : alertList) {
-                player.sendMessage(TextUtility.color(msg.replace("player_name", player.getName()).replace("raider", attacker.getName()), SpigotPlayerAPI.getLocale(player.getUniqueId()), player));
+                player.sendMessage(TextUtility.color(msg.replace("player_name", player.getName()).replace("raider", attacker.getName()), SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), player));
             }
         }
     }
 
     @Override
-    public void teleportToPreparationArea(Player player) {
+    public void teleportToPreparationArea(SkyUser player) {
         if (player.isOnline()) {
             List<Integer> loc = Settings.RAIDING_PREPARATION_POS.getIntegerList();
             World world = Bukkit.getWorld(Settings.RAIDING_PREPARATION_WORLD.getString());
             if (world != null) {
-                Location location = new Location(world, loc.get(0), loc.get(1), loc.get(2));
+                SkyLocation location = new SkyLocation(world.getName(), loc.get(0), loc.get(1), loc.get(2));
                 player.teleport(location);
             }
         }
     }
 
     @Override
-    public CompletableFuture<Void> showCountdown(UUID def, Player att) {
+    public CompletableFuture<Void> showCountdown(UUID def, SkyUser att) {
         return CompletableFuture.runAsync(() -> {
-            try {
+            /*try {
                 Player defp = Bukkit.getPlayer(def);
                 int length = Settings.RAIDING_COUNTDOWN_DURATION.getInt();
                 String countdown_sound = Settings.COUNTDOWN_SOUND.getString();
@@ -237,21 +224,21 @@ public class SpigotRaidAPI extends RaidAPI {
                     final Title attackerTitle = Title.title(mainTitle, attackerSubtitle);
                     if (defp != null) att.showTitle(attackerTitle);
 
-                    SoundUtil.playSound(defp, countdown_sound, countdown_pitch, 1f);
+                    SkyApi.getInstance().getSoundAPI().playSound(defp, countdown_sound, countdown_pitch, 1f);
                     SoundUtil.playSound(att, countdown_sound, countdown_pitch, 1f);
 
                     Thread.sleep(1000);
                 }
             } catch (InterruptedException error) {
                 throw new RuntimeException(error);
-            }
+            }*/
         });
 
     }
 
     @Override
-    public void handleRaidExecutionError(Player player, boolean isDefendant) {
-        if (player != null) {
+    public void handleRaidExecutionError(SkyUser player, boolean isDefendant) {
+        /*if (player != null) {
             if (processingRaid.containsKey(player.getUniqueId()) || processingRaid.containsValue(player.getUniqueId())) {
                 processingRaid.remove(player.getUniqueId());
             }
@@ -270,6 +257,6 @@ public class SpigotRaidAPI extends RaidAPI {
                 Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "handle raid errors", "debug", "SQL_ISLAND_GET");
                 return null;
             });
-        }
+        }*/
     }
 }
