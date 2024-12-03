@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.common.api;
 
+import lombok.Getter;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.defence.Defence;
@@ -16,6 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 public abstract class IslandAPI {
 
     private final Map<UUID, PlayerIsland> islands;
@@ -90,6 +92,15 @@ public abstract class IslandAPI {
         });
     }
 
+    public void onIslandRemove(SkyUser user) {
+        user.teleport(SkyApi.getInstance().getRegionAPI().getHubLocation());
+        SkyApi.getInstance().getWorldBorderAPI().resetBorder(user);
+
+        SkyApi.getInstance().getCacheService().getEntry(user.getUniqueId()).onIslandRemove();
+
+        removePlayerIsland(user);
+    }
+
     public void modifyDefenceOperation(FactionAPI.DefenceOperation operation, SkyUser user) {
         if (operation == FactionAPI.DefenceOperation.DISABLE && !SkyApi.getInstance().getRegionAPI().isLocationInRegion(user.getLocation(), "sfr_player_" + user.getUniqueId())) return;
 
@@ -102,7 +113,9 @@ public abstract class IslandAPI {
         }
     }
 
-    public abstract void teleportPlayerToIsland(SkyUser user, SkyIsland island);
+    public void teleportPlayerToIsland(SkyUser user, SkyIsland island) {
+        user.teleport(island.getCenter(Settings.ISLAND_PLAYER_WORLD.getString()));
+    }
 
 
 }
