@@ -2,6 +2,7 @@ package net.skullian.skyfactions.paper.api.adapter;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import com.sk89q.worldedit.math.BlockVector3;
 import io.th0rgal.oraxen.items.ItemBuilder;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
@@ -80,6 +81,15 @@ public class SpigotAdapter {
         stack.setItemMeta(meta);
 
         return stack;
+    }
+
+    public static SkyLocation adapt(BlockVector3 vector3, String world) {
+        return new SkyLocation(
+                world,
+                vector3.x(),
+                vector3.y(),
+                vector3.z()
+        )
     }
 
     public static ItemProvider adapt(SkyItemStack skyStack, SkyUser user) {

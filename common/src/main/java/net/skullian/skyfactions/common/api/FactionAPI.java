@@ -29,6 +29,12 @@ public abstract class FactionAPI {
 
     private final HashSet<String> awaitingDeletion = new HashSet<>();
 
+    /**
+     * Create a new faction.
+     *
+     * @param player Owner of the faction.
+     * @param name   Name of the faction.
+     */
     public void createFaction(SkyUser player, String name) {
         SkyApi.getInstance().getDatabaseManager().getFactionsManager().registerFaction(player, name).whenComplete((ignored, ex) -> {
             if (ex != null) {
@@ -67,6 +73,13 @@ public abstract class FactionAPI {
 
     public abstract void onFactionDisband(Faction faction);
 
+    /**
+     * Check if a player is in a faction.
+     * You can alternatively use {@link #getFaction(String)} and check if the return value is null.
+     *
+     * @param user Player to check.
+     * @return {@link Boolean}
+     */
     public CompletableFuture<Boolean> isInFaction(UUID user) {
         return CompletableFuture.supplyAsync(() -> {
             if (factionUserCache.containsKey(user)) return true;
@@ -212,6 +225,13 @@ public abstract class FactionAPI {
         });
     }
 
+    /**
+     * Check if a player is in a certain region.
+     *
+     * @param player     Player to check.
+     * @param regionName Name of region.
+     * @return {@link Boolean}
+     */
     public abstract boolean isInRegion(SkyUser player, String regionName);
 
     public void onFactionLoad(Faction faction, SkyUser player) {
@@ -231,6 +251,15 @@ public abstract class FactionAPI {
                         else defence.disable();
             }
         });
+    }
+
+    public void onFactionRename(String oldName, String newName) {
+        if (awaitingDeletion.contains(oldName)) {
+            awaitingDeletion.remove(oldName);
+            awaitingDeletion.add(newName);
+        }
+
+        factionUserCache.replaceAll((uuid, name) -> name.equals(oldName) ? newName : name);
     }
 
     public enum DefenceOperation {
