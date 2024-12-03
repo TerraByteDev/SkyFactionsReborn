@@ -46,6 +46,7 @@ public class NMSHandlerImpl implements NMSHandler {
         );
         textDisplay.setPos(hologram.getLocation().getX(), hologram.getLocation().getY(), hologram.getLocation().getZ());
         textDisplay.setNoGravity(true);
+        textDisplay.setBillboardConstraints(Display.BillboardConstraints.CENTER);
         textDisplay.setTextOpacity(hologram.getTextOpacity());
 
         hologram.setEntity(textDisplay);
@@ -62,6 +63,12 @@ public class NMSHandlerImpl implements NMSHandler {
 
     @Override
     public void updateHologram(DefenceTextHologram hologram) {
+        Display.TextDisplay textDisplay = (Display.TextDisplay) hologram.getEntity();
+        textDisplay.setPos(hologram.getLocation().getX(), hologram.getLocation().getY(), hologram.getLocation().getZ());
+        textDisplay.setNoGravity(true);
+        textDisplay.setBillboardConstraints(Display.BillboardConstraints.CENTER);
+        textDisplay.setTextOpacity(hologram.getTextOpacity());
+
         hologram.getViewers().stream()
                 .forEach((user) -> {
                     Player player = SpigotAdapter.adapt(user).getPlayer();

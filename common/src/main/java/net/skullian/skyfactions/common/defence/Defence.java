@@ -1,9 +1,7 @@
 package net.skullian.skyfactions.common.defence;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -24,8 +22,9 @@ public abstract class Defence {
     private DefenceData data;
     private DefenceStruct struct;
     private ScheduledFuture<?> task;
-    private List<Integer> targetedEntities = new ArrayList<>();
+    private List<UUID> targetedEntities = new ArrayList<>();
     private boolean noAmmoNotified;
+    private ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
 
     public Defence(DefenceData defenceData, DefenceStruct defenceStruct) {
         this.data = defenceData;
@@ -120,7 +119,7 @@ public abstract class Defence {
 
     public abstract List<Object> getRandomEntity(String defenceWorld);
 
-    private boolean isMaxEntitiesReached() {
+    public boolean isMaxEntitiesReached() {
         return targetedEntities.size() == getMaxSimEntities();
     }
 
