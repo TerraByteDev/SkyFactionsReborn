@@ -33,8 +33,6 @@ public abstract class SkyUser {
 
     @Nullable public abstract CompletableFuture<PlayerIsland> getIsland();
 
-    public abstract List<NotificationData> getNotifications();
-
     public abstract CompletableFuture<List<InviteData>> getIncomingInvites();
 
     public abstract List<InviteData> getCachedInvites();

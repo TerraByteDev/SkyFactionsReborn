@@ -16,6 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class NotificationAPI {
 
     private final Map<String, Integer> factionInviteStore = new ConcurrentHashMap<>();
+    public static Map<UUID, List<NotificationData>> notifications = new ConcurrentHashMap<>();
+
 
     /**
      * Initialise the notification cycle for a Player on join.
@@ -44,15 +46,16 @@ public abstract class NotificationAPI {
         SkyApi.getInstance().getCacheService().getEntry(playerUUID).addNotification(data);
     }
 
-    public abstract void addNotification(UUID playerUUID, NotificationData notification);
+    public void addNotification(UUID playerUUID, NotificationData notification) {
+        if (notifications.containsKey(playerUUID)) notifications.get(playerUUID).add(notification);
+    }
 
-    public abstract void removeNotification(UUID playerUUID, NotificationData notification);
+    public void removeNotification(UUID playerUUID, NotificationData notification) {
+        if (notifications.containsKey(playerUUID)) notifications.get(playerUUID).remove(notification);
+    }
 
-    /**
-     * Get all notifications (unread) of a Player.
-     *
-     * @param playerUUID UUID of the player who the notifications should be fetched from [{@link UUID}]
-     * @return {@link List<NotificationData>}
-     */
-    @Nullable public abstract List<NotificationData> getNotifications(UUID playerUUID);
+    @Nullable
+    public List<NotificationData> getNotifications(UUID playerUUID) {
+        return notifications.get(playerUUID);
+    }
 }

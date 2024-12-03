@@ -28,7 +28,6 @@ public class SpigotSkyUser extends SkyUser {
     private Optional<Integer> gems = Optional.empty();
     private Optional<Integer> runes = Optional.empty();
     private Optional<PlayerIsland> island = Optional.empty();
-    private Optional<List<NotificationData>> notifications = Optional.empty();
     private Optional<List<InviteData>> incomingInvites = Optional.empty();
     private Optional<JoinRequestData> activeJoinRequest = Optional.empty();
 
@@ -44,7 +43,6 @@ public class SpigotSkyUser extends SkyUser {
     @Override
     public String getName() {
         return SpigotAdapter.adapt(this).getName();
-
     }
 
     @Override
@@ -92,12 +90,6 @@ public class SpigotSkyUser extends SkyUser {
 
             this.island = Optional.of(island);
         }));
-
-    }
-
-    @Override
-    public List<NotificationData> getNotifications() {
-        return this.notifications.orElseGet(() -> SkyApi.getInstance().getNotificationAPI().getNotifications(uuid));
     }
 
     @Override

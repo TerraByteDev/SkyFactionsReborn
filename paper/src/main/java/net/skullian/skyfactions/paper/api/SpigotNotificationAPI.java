@@ -5,6 +5,7 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.notification.NotificationData;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.paper.notification.NotificationTask;
@@ -25,8 +26,8 @@ public class SpigotNotificationAPI extends NotificationAPI {
     public static Map<UUID, List<NotificationData>> notifications = new ConcurrentHashMap<>();
 
     @Override
-    public void createCycle(Player player) {
-        SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+    public void createCycle(SkyUser player) {
+        SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -49,21 +50,5 @@ public class SpigotNotificationAPI extends NotificationAPI {
                 }
             });
         });
-    }
-
-    @Override
-    public void addNotification(UUID playerUUID, NotificationData notification) {
-        if (notifications.containsKey(playerUUID)) notifications.get(playerUUID).add(notification);
-    }
-
-    @Override
-    public void removeNotification(UUID playerUUID, NotificationData notification) {
-        if (notifications.containsKey(playerUUID)) notifications.get(playerUUID).remove(notification);
-    }
-
-    @Nullable
-    @Override
-    public List<NotificationData> getNotifications(UUID playerUUID) {
-        return notifications.get(playerUUID);
     }
 }
