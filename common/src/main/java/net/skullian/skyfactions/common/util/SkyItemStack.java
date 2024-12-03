@@ -9,6 +9,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 public class SkyItemStack implements Cloneable {
@@ -22,9 +23,10 @@ public class SkyItemStack implements Cloneable {
     private List<String> itemFlags = new ArrayList<>();
     private List<String> lore = new ArrayList<>();
     @Setter private String textures;
+    @Setter private String owningPlayerUUID = "none";
 
     @Builder
-    private SkyItemStack(String displayName, String material, int amount, int customModelData, List<PersistentData> persistentDatas, PersistentData persistentData, List<EnchantData> enchants, EnchantData enchant, List<String> itemFlags, String itemFlag, List<String> lore, String loreLine, String textures) {
+    private SkyItemStack(String displayName, String material, int amount, int customModelData, List<PersistentData> persistentDatas, PersistentData persistentData, List<EnchantData> enchants, EnchantData enchant, List<String> itemFlags, String itemFlag, List<String> lore, String loreLine, String textures, UUID owningPlayerUUID) {
         this.material = material;
         this.displayName = displayName;
         this.amount = amount;
@@ -38,6 +40,7 @@ public class SkyItemStack implements Cloneable {
         this.lore.add(loreLine);
         this.lore.addAll(lore);
         this.textures = textures;
+        this.owningPlayerUUID = owningPlayerUUID.toString();
     }
 
     public void lore(List<String> lore) {

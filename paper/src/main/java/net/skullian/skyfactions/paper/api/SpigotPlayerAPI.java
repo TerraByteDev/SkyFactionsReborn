@@ -5,14 +5,19 @@ import net.skullian.skyfactions.common.api.PlayerAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.paper.util.DependencyHandler;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.hooks.ItemJoinHook;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -20,52 +25,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SpigotPlayerAPI extends PlayerAPI {
 
-    // Player Data //
-
-    public static final Map<UUID, PlayerData> playerData = new ConcurrentHashMap<>();
-
     @Override
-    public CompletableFuture<Boolean> isPlayerRegistered(UUID uuid) {
-        if (playerData.containsKey(uuid)) return CompletableFuture.completedFuture(true);
-
-        return getPlayerData(uuid).handle((data, ex) -> data != null);
-    }
-
-    @Override
-    public void cacheData(UUID playerUUID) {
-        SkyUser user = SkyApi.getInstance().getUserManager().getUser(playerUUID);
-        user.getGems();
-        user.getRunes();
-        user.getIncomingInvites();
-        user.getActiveJoinRequest();
-    }
-
-    @Override
-    public boolean isPlayerCached(UUID uuid) {
-        return playerData.containsKey(uuid);
-    }
-
-    @Override
-    public CompletableFuture<PlayerData> getPlayerData(UUID uuid) {
-        if (playerData.containsKey(uuid)) return CompletableFuture.completedFuture(playerData.get(uuid));
-
-        return SkyApi.getInstance().getDatabaseManager().getPlayerManager().getPlayerData(uuid).handle((data, ex) -> {
-            if (data != null) {
-                playerData.put(uuid, data);
-            }
-            return data;
-        });
-    }
-
-    @NotNull
-    @Override
-    public PlayerData getCachedPlayerData(UUID uuid) {
-        return playerData.get(uuid);
-    }
-
-    @Override
-    public String getLocale(UUID uuid) {
-        return playerData.getOrDefault(uuid, getDefaultPlayerData()).getLOCALE();
+    public SkyItemStack getPlayerSkull(SkyItemStack builder, UUID playerUUID) {
+        if (builder.getMaterial().equals("PLAYER_HEAD")) {
+            builder.setOwningPlayerUUID(playerUUID.toString());
+        }
+        
+        return builder;
     }
 
     @Override
@@ -104,5 +70,15 @@ public class SpigotPlayerAPI extends PlayerAPI {
 
         Player player = offlinePlayer.getPlayer();
         player.getEnderChest().clear();
+    }
+
+    @Override
+    public List<SkyUser> getOnlinePlayers() {
+        return Bukkit.getOnlinePlayers().stream().map(player -> SkyApi.getInstance().getUserManager().getUser(player.getUniqueId())).toList();
+    }
+
+    @Override
+    public boolean hasInventorySpace(SkyUser user) {
+        return SpigotAdapter.adapt(user).getPlayer().getInventory().firstEmpty() != -1;
     }
 }

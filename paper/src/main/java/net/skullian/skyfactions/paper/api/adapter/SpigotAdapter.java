@@ -50,7 +50,12 @@ public class SpigotAdapter {
         ItemStack stack = new ItemStack(Material.valueOf(skyStack.getMaterial()));
         stack.setAmount(skyStack.getAmount());
 
-        if (!skyStack.getTextures().isEmpty() || !skyStack.getTextures().equalsIgnoreCase("none")) {
+        if (!skyStack.getOwningPlayerUUID().equals("none")) {
+            SkullMeta skullMeta = (SkullMeta) stack.getItemMeta();
+            skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString(skyStack.getOwningPlayerUUID())));
+
+            stack.setItemMeta(skullMeta);
+        } else if (!skyStack.getTextures().isEmpty() || !skyStack.getTextures().equalsIgnoreCase("none")) {
             stack.editMeta(SkullMeta.class, skullMeta -> {
                 UUID uuid = UUID.randomUUID();
                 PlayerProfile playerProfile = Bukkit.createProfile(uuid, uuid.toString().substring(0, 16));
@@ -89,7 +94,7 @@ public class SpigotAdapter {
                 vector3.x(),
                 vector3.y(),
                 vector3.z()
-        )
+        );
     }
 
     public static ItemProvider adapt(SkyItemStack skyStack, SkyUser user) {

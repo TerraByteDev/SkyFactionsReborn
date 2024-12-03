@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.common.api;
 
+import lombok.Getter;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.user.SkyUser;
@@ -7,10 +8,15 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 public abstract class PlayerAPI {
+
+    private final Map<UUID, PlayerData> playerData = new ConcurrentHashMap<>();
 
     /**
      * Check if a player is registered.
@@ -21,7 +27,11 @@ public abstract class PlayerAPI {
      *
      * @return {@link CompletableFuture<Boolean>} true if the player is registered.
      */
-    public abstract CompletableFuture<Boolean> isPlayerRegistered(UUID uuid);
+    public CompletableFuture<Boolean> isPlayerRegistered(UUID uuid) {
+        if (playerData.containsKey(uuid)) return CompletableFuture.completedFuture(true);
+
+        return getPlayerData(uuid).handle((data, ex) -> data != null);
+    }
 
     /**
      * Cache player data.
@@ -30,7 +40,13 @@ public abstract class PlayerAPI {
      *
      * @param uuid UUID of the player to cache.
      */
-    public abstract void cacheData(UUID uuid);
+    public void cacheData(UUID uuid) {
+        SkyUser user = SkyApi.getInstance().getUserManager().getUser(uuid);
+        user.getGems();
+        user.getRunes();
+        user.getIncomingInvites();
+        user.getActiveJoinRequest();
+    }
 
     /**
      * Check if a player is cached already locally.
@@ -39,7 +55,7 @@ public abstract class PlayerAPI {
      *
      * @return true if the player is already cached.
      */
-    public abstract boolean isPlayerCached(UUID uuid);
+    public boolean isPlayerCached(UUID uuid) { return playerData.containsKey(uuid); }
 
     /**
      * Get the player data.
@@ -50,7 +66,16 @@ public abstract class PlayerAPI {
      *
      * @return {@link CompletableFuture<PlayerData>}
      */
-    public abstract CompletableFuture<PlayerData> getPlayerData(UUID uuid);
+    public CompletableFuture<PlayerData> getPlayerData(UUID uuid) {
+        if (playerData.containsKey(uuid)) return CompletableFuture.completedFuture(playerData.get(uuid));
+
+        return SkyApi.getInstance().getDatabaseManager().getPlayerManager().getPlayerData(uuid).handle((data, ex) -> {
+            if (data != null) {
+                playerData.put(uuid, data);
+            }
+            return data;
+        });
+    }
 
     /**
      * Get the player data if cached.
@@ -60,7 +85,7 @@ public abstract class PlayerAPI {
      *
      * @return {@link PlayerData} - Cached playerdata object.
      */
-    @NotNull public abstract PlayerData getCachedPlayerData(UUID uuid);
+    @NotNull public PlayerData getCachedPlayerData(UUID uuid) { return playerData.get(uuid); }
 
     /**
      * Get the locale of a player.
@@ -72,7 +97,7 @@ public abstract class PlayerAPI {
      *
      * @return The locale of the player.
      */
-    public abstract String getLocale(UUID uuid);
+    public String getLocale(UUID uuid) { return playerData.getOrDefault(uuid, getDefaultPlayerData()).getLOCALE(); }
 
     /**
      * Typically used internally.
@@ -99,7 +124,7 @@ public abstract class PlayerAPI {
         return item;
     }
 
-    public abstract SkyItemStack.SkyItemStackBuilder getPlayerSkull(SkyItemStack.SkyItemStackBuilder builder, UUID playerUUID);
+    public abstract SkyItemStack getPlayerSkull(SkyItemStack builder, UUID playerUUID);
 
     /**
      * Used primarily in the paper implementation.
