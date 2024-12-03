@@ -10,11 +10,11 @@ import java.util.concurrent.CompletableFuture;
 public class InvitesAPI {
 
     public static CompletableFuture<List<InviteData>> getPlayerIncomingInvites(UUID playerUUID) {
-        return SkyApi.getInstance().getDatabaseManager().getFactionInvitesManager().getInvitesOfPlayer(playerUUID);
+        return SkyApi.getInstance().getUserManager().getUser(playerUUID).getIncomingInvites();
     }
 
     public static CompletableFuture<JoinRequestData> getPlayerJoinRequest(UUID playerUUID) {
-        return SkyApi.getInstance().getDatabaseManager().getFactionInvitesManager().getPlayerJoinRequest(playerUUID);
+        return SkyApi.getInstance().getUserManager().getUser(playerUUID).getActiveJoinRequest();
     }
 
     public static void onInviteCreate(UUID playerUUID, InviteData data) {
