@@ -10,6 +10,7 @@ import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.block.BlockType;
@@ -25,12 +26,11 @@ import net.skullian.skyfactions.common.api.RegionAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.user.SkyUser;
-import net.skullian.skyfactions.common.util.FileUtil;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.common.util.worldborder.BorderPos;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
-import net.skullian.skyfactions.paper.util.FileUtil;
+import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -46,13 +46,13 @@ import java.util.concurrent.CompletableFuture;
 public class SpigotRegionAPI extends RegionAPI {
 
     @Override
-    public void teleportPlayerToLocation(SkyUser player, SkyLocation location) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> player.teleport(location));
-    }
-
-    @Override
-    public CompletableFuture<Void> cutRegion(Region region) {
+    public CompletableFuture<Void> cutRegion(SkyLocation corner1, SkyLocation corner2) {
         return CompletableFuture.runAsync(() -> {
+            BlockVector3 min = BlockVector3.at(corner1.getX(), corner1.getY(), corner1.getZ());
+            BlockVector3 max = BlockVector3.at(corner2.getX(), corner2.getY(), corner2.getZ());
+
+            Region region = new CuboidRegion(BukkitAdapter.adapt(Bukkit.getWorld(corner1.getWorldName())), min, max);
+
             try (EditSession editSession = WorldEdit.getInstance().newEditSession(region.getWorld())) {
                 editSession.setBlocks(region, BlockType.REGISTRY.get("air"));
             }
@@ -60,10 +60,10 @@ public class SpigotRegionAPI extends RegionAPI {
     }
 
     @Override
-    public boolean isLocationInRegion(Location bukkitLoc, String regionName) {
+    public boolean isLocationInRegion(SkyLocation skyLoc, String regionName) {
 
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        com.sk89q.worldedit.util.Location location = BukkitAdapter.adapt(bukkitLoc);
+        com.sk89q.worldedit.util.Location location = BukkitAdapter.adapt(SpigotAdapter.adapt(skyLoc));
         RegionQuery query = container.createQuery();
         ApplicableRegionSet set = query.getApplicableRegions(location);
 
@@ -77,9 +77,9 @@ public class SpigotRegionAPI extends RegionAPI {
     }
 
     @Override
-    public void createRegion(Player player, Location corner1, Location corner2, World world, String regionName) {
+    public void createRegion(SkyUser player, SkyLocation corner1, SkyLocation corner2, String world, String regionName) {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regionManager = container.get(BukkitAdapter.adapt(world));
+        RegionManager regionManager = container.get(BukkitAdapter.adapt(Bukkit.getWorld(world)));
         BlockVector3 min = BlockVector3.at(corner1.getBlockX(), -64, corner1.getBlockZ());
         BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 320, corner2.getBlockZ());
         ProtectedRegion region = new ProtectedCuboidRegion(regionName, min, max);
@@ -93,22 +93,20 @@ public class SpigotRegionAPI extends RegionAPI {
 
     @NotNull
     @Override
-    public Location getHubLocation() {
-        World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
-
+    public SkyLocation getHubLocation() {
         List<Integer> hubLocArray = Settings.HUB_LOCATION.getIntegerList();
-        return new Location(hubWorld, hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
+        return new SkyLocation(Settings.HUB_WORLD_NAME.getString(), hubLocArray.get(0), hubLocArray.get(1), hubLocArray.get(2));
     }
 
     @Override
-    public void modifyWorldBorder(Player player, Location center, int size) {
+    public void modifyWorldBorder(SkyUser player, SkyLocation center, int size) {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             SkyApi.getInstance().getWorldBorderAPI().setWorldBorder(player, (size * 2), new BorderPos(center.getX(), center.getZ()));
         });
     }
 
     @Override
-    public CompletableFuture<Boolean> pasteIslandSchematic(Player player, Location location, String worldName, String type) {
+    public CompletableFuture<Boolean> pasteIslandSchematic(SkyUser player, SkyLocation location, String worldName, String type) {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 World world = Bukkit.getWorld(worldName);
@@ -118,9 +116,9 @@ public class SpigotRegionAPI extends RegionAPI {
                 } else {
                     File schemFile = null;
                     if (type.equals("player")) {
-                        schemFile = FileUtil.getSchematicFile(Settings.ISLAND_PLAYER_SCHEMATIC.getString());
+                        schemFile = SkyApi.getInstance().getFileAPI().getSchematicFile(Settings.ISLAND_PLAYER_SCHEMATIC.getString());
                     } else if (type.equals("faction")) {
-                        schemFile = FileUtil.getSchematicFile(Settings.ISLAND_FACTION_SCHEMATIC.getString());
+                        schemFile = SkyApi.getInstance().getFileAPI().getSchematicFile(Settings.ISLAND_FACTION_SCHEMATIC.getString());
                     }
                     if (schemFile == null)
                         throw new RuntimeException("Could not find schematic file when attempting to paste island schematic!");
@@ -135,7 +133,7 @@ public class SpigotRegionAPI extends RegionAPI {
                     try (EditSession editSession = WorldEdit.getInstance().newEditSession(weWorld)) {
                         Operation operation = new ClipboardHolder(clipboard)
                                 .createPaste(editSession)
-                                .to(BukkitAdapter.adapt(location).toBlockPoint())
+                                .to(BukkitAdapter.adapt(SpigotAdapter.adapt(location)).toBlockPoint())
                                 .build();
                         SLogger.warn("Pasting schematic [{}] in world [{}] for player [{}].", schemFile.getName(), world.getName(), player.getName());
 
@@ -152,10 +150,15 @@ public class SpigotRegionAPI extends RegionAPI {
     }
 
     @Override
-    public CompletableFuture<Void> removeRegion(String regionName, World world) {
+    public CompletableFuture<Void> removeRegion(String regionName, String world) {
         return CompletableFuture.runAsync(() -> {
             RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-            container.get(BukkitAdapter.adapt(world)).removeRegion(regionName);
+            container.get(BukkitAdapter.adapt(Bukkit.getWorld(world))).removeRegion(regionName);
         });
+    }
+
+    @Override
+    public boolean worldExists(String worldName) {
+        return Bukkit.getWorld(worldName) != null;
     }
 }
