@@ -12,8 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class RunesAPI {
 
-    public final Map<UUID, Integer> playerRunes = new ConcurrentHashMap<>();
-
     /**
      * See whether an item is allowed for rune conversion.
      *

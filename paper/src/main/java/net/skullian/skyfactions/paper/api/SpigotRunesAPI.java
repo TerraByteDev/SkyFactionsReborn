@@ -23,8 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SpigotRunesAPI extends RunesAPI {
 
-    public final Map<UUID, Integer> playerRunes = new ConcurrentHashMap<>();
-    
     @Override
     public boolean isStackProhibited(SkyItemStack stack, SkyUser player) {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
