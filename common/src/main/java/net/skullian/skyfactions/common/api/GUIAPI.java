@@ -121,17 +121,17 @@ public class GUIAPI {
     }
 
     private static SkyItemStack create(String material, String texture, UUID playerUUID) {
-        SkyItemStack.SkyItemStackBuilder stack = SkyItemStack.builder();
+        SkyItemStack stack;
         if (material.equalsIgnoreCase("PLAYER_HEAD")) {
             if (texture.equalsIgnoreCase("<player_skull>")) {
-                stack = SkyApi.getInstance().getPlayerAPI().getPlayerSkull(stack.material("PLAYER_HEAD"), playerUUID);
+                stack = SkyApi.getInstance().getPlayerAPI().getPlayerSkull(SkyItemStack.builder().material("PLAYER_HEAD").build(), playerUUID);
             } else {
-                stack = SkyApi.getInstance().getPlayerAPI().convertToSkull(stack.material("PLAYER_HEAD"), texture);
+                stack = PlayerAPI.convertToSkull(SkyItemStack.builder().material("PLAYER_HEAD"), texture).build();
             }
         } else {
-            stack = stack.material(material);
+            stack = SkyItemStack.builder().material(material).build();
         }
 
-        return stack.build();
+        return stack;
     }
 }
