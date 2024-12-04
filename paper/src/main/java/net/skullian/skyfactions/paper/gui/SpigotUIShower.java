@@ -5,6 +5,7 @@ import net.skullian.skyfactions.common.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.gui.screens.obelisk.RunesSubmitUI;
 import net.skullian.skyfactions.paper.gui.screens.SpigotPaginatedScreen;
+import net.skullian.skyfactions.paper.gui.screens.SpigotRunesSubmitScreen;
 import net.skullian.skyfactions.paper.gui.screens.SpigotScreen;
 
 public class SpigotUIShower extends UIShower {
@@ -21,7 +22,7 @@ public class SpigotUIShower extends UIShower {
 
     @Override
     public void show(RunesSubmitUI screen) {
-
+        new SpigotRunesSubmitScreen(screen);
     }
 
 }
