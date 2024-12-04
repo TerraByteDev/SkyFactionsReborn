@@ -8,6 +8,7 @@ import net.skullian.skyfactions.paper.util.DependencyHandler;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 
 import java.util.List;
@@ -16,8 +17,10 @@ public class SpigotSoundAPI extends SoundAPI {
     @Override
     public void playSound(SkyLocation location, String identifier, float pitch, float volume) {
         Sound sound = Sound.valueOf(identifier);
+        Location bukkitLocation = SpigotAdapter.adapt(location);
+
         if (sound == null) SLogger.warn("Attempted to play a sound of {} when it returned null!", identifier);
-        else SpigotAdapter.adapt(location).playSound(location, sound, volume, pitch);
+        else bukkitLocation.getWorld().playSound(bukkitLocation, sound, volume, pitch);
     }
 
     @Override
