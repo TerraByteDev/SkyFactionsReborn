@@ -26,7 +26,7 @@ public class SkyItemStack implements Cloneable {
     @Setter private String owningPlayerUUID = "none";
 
     @Builder
-    private SkyItemStack(String displayName, String material, int amount, int customModelData, List<PersistentData> persistentDatas, PersistentData persistentData, List<EnchantData> enchants, EnchantData enchant, List<String> itemFlags, String itemFlag, List<String> lore, String loreLine, String textures, UUID owningPlayerUUID) {
+    private SkyItemStack(String displayName, String material, int amount, int customModelData, List<PersistentData> persistentDatas, PersistentData persistentData, List<EnchantData> enchants, EnchantData enchant, List<String> itemFlags, String itemFlag, List<String> lore, String loreLine, String textures, String owningPlayerUUID) {
         this.material = material;
         this.displayName = displayName;
         this.amount = amount;
@@ -40,7 +40,7 @@ public class SkyItemStack implements Cloneable {
         this.lore.add(loreLine);
         this.lore.addAll(lore);
         this.textures = textures;
-        this.owningPlayerUUID = owningPlayerUUID.toString();
+        this.owningPlayerUUID = owningPlayerUUID;
     }
 
     public void lore(List<String> lore) {

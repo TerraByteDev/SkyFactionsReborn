@@ -72,7 +72,7 @@ public class ObeliskDefencePurchaseOverviewUI extends PaginatedScreen {
 
     @NotNull
     @Override
-    protected List<BaseSkyItem> getModels(SkyUser player, ItemData data) {
+    public List<BaseSkyItem> getModels(SkyUser player, ItemData data) {
         List<BaseSkyItem> items = new ArrayList<>();
 
         for (Map.Entry<String, DefenceStruct> defence : SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), SkyApi.getInstance().getDefenceFactory().getDefaultStruct()).entrySet()) {

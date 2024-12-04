@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.paper.command;
+package net.skullian.skyfactions.common.command;
 
 import java.util.List;
 

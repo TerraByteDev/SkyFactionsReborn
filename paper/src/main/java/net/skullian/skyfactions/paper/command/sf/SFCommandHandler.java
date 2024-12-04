@@ -12,7 +12,7 @@ import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.command.CommandHandler;
-import net.skullian.skyfactions.paper.command.CommandTemplate;
+import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.paper.command.sf.cmds.SFHelpCommand;
 import net.skullian.skyfactions.paper.command.sf.cmds.SFInfoCommand;
 import net.skullian.skyfactions.paper.command.sf.cmds.SFNPCDisableCommand;

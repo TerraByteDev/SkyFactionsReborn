@@ -10,6 +10,6 @@ public abstract class UserManager {
 
     public abstract boolean isCached(UUID uuid);
 
-    public abstract void sendMessage(Object object, Component component);
+    public abstract SkyUser fromConsole();
 
 }

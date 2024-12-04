@@ -2,7 +2,7 @@ package net.skullian.skyfactions.paper.command.gems;
 
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.command.CommandHandler;
-import net.skullian.skyfactions.paper.command.CommandTemplate;
+import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.paper.command.gems.cmds.*;
 import net.skullian.skyfactions.paper.config.types.Settings;
 import net.skullian.skyfactions.paper.util.CooldownManager;

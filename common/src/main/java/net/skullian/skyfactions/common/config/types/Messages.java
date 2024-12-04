@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Getter
 public enum Messages {
 
     LANGUAGE_NAME("LANGUAGE_NAME"),
@@ -267,7 +268,6 @@ public enum Messages {
     NOTIFICATION_FACTION_RANK_UPDATED_DESCRIPTION("Notifications.FACTION_RANK_UPDATED_DESCRIPTION");
 
     public static Map<String, YamlDocument> configs = new HashMap<>();
-    @Getter
     private final String path;
 
     Messages(String path) {
@@ -368,7 +368,8 @@ public enum Messages {
             message = value instanceof List ? TextUtility.fromList((List<?>) value, locale, receiver instanceof SkyUser ? (SkyUser) receiver : null, replacements) : TextUtility.color(String.valueOf(value), locale, receiver instanceof SkyUser ? (SkyUser) receiver : null, replacements);
         }
 
-        SkyApi.getInstance().getUserManager().sendMessage(receiver, message);
+        assert receiver instanceof SkyUser;
+        ((SkyUser) receiver).sendMessage(message);
     }
 
     public static String replace(String value, SkyUser player, Object... replacements) {

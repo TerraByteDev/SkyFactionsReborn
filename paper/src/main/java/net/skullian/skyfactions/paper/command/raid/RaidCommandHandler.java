@@ -2,7 +2,7 @@ package net.skullian.skyfactions.paper.command.raid;
 
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.command.CommandHandler;
-import net.skullian.skyfactions.paper.command.CommandTemplate;
+import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.paper.command.raid.cmds.RaidHelpCommand;
 import net.skullian.skyfactions.paper.command.raid.cmds.RaidResetCooldown;
 import net.skullian.skyfactions.paper.command.raid.cmds.RaidStartCommand;

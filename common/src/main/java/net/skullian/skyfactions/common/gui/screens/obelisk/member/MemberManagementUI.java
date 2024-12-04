@@ -68,7 +68,7 @@ public class MemberManagementUI extends PaginatedScreen {
 
     @NotNull
     @Override
-    protected List<BaseSkyItem> getModels(SkyUser player, ItemData data) {
+    public List<BaseSkyItem> getModels(SkyUser player, ItemData data) {
         List<BaseSkyItem> items = new ArrayList<>();
 
         String oldTitle = data.getNAME();

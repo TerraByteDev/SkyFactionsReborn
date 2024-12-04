@@ -20,24 +20,22 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public class RunesSubmitUI extends Screen {
-    @Getter
     private final Map<Integer, SkyItemStack> inventory = new HashMap<>();
     private final String type;
+    private int invSize;
 
     @Builder
     public RunesSubmitUI(SkyUser player, String type) {
         super(GUIEnums.RUNES_SUBMIT_GUI.getPath(), player);
         this.type = type;
 
-        int invSize = 0;
         for (String row : guiData.getLAYOUT()) {
-            invSize += (int) row.chars()
+            this.invSize += (int) row.chars()
                     .filter(ch -> ch == '.')
                     .count();
         }
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player, String type) {

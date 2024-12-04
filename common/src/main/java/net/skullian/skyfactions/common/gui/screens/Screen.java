@@ -22,7 +22,7 @@ public abstract class Screen {
     }
 
     public void show() {
-        SkyApi.getInstance().getUIShower().show(player, this);
+        SkyApi.getInstance().getUIShower().show(this);
     }
 
     public abstract @Nullable BaseSkyItem handleItem(@NotNull ItemData itemData);

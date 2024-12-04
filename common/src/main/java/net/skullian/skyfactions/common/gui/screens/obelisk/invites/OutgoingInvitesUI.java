@@ -81,7 +81,7 @@ public class OutgoingInvitesUI extends PaginatedScreen {
 
     @NotNull
     @Override
-    protected List<BaseSkyItem> getModels(SkyUser player, ItemData itemData) {
+    public List<BaseSkyItem> getModels(SkyUser player, ItemData itemData) {
         List<BaseSkyItem> items = new ArrayList<>();
         for (InviteData data : inviteData) {
             itemData.setNAME(itemData.getNAME().replace("player_name", data.getPlayer().getName()));

@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.command;
 
+import net.skullian.skyfactions.common.command.CommandTemplate;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;

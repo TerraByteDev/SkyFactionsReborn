@@ -2,7 +2,7 @@ package net.skullian.skyfactions.paper.command.runes;
 
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.command.CommandHandler;
-import net.skullian.skyfactions.paper.command.CommandTemplate;
+import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.paper.command.runes.subcommands.RunesBalanceCommand;
 import net.skullian.skyfactions.paper.command.runes.subcommands.RunesGiveCommand;
 import net.skullian.skyfactions.paper.command.runes.subcommands.RunesHelpCommand;

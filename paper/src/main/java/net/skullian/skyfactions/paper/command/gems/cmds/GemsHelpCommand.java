@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.paper.command.gems.cmds;
 
-import net.skullian.skyfactions.paper.command.CommandTemplate;
-import net.skullian.skyfactions.paper.command.CommandsUtility;
+import net.skullian.skyfactions.common.command.CommandTemplate;
+import net.skullian.skyfactions.common.command.CommandsUtility;
 import net.skullian.skyfactions.paper.command.gems.GemsCommandHandler;
 import net.skullian.skyfactions.paper.config.types.Messages;
 import org.bukkit.command.CommandSender;

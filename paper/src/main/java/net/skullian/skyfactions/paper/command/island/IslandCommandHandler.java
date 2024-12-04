@@ -2,7 +2,7 @@ package net.skullian.skyfactions.paper.command.island;
 
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.command.CommandHandler;
-import net.skullian.skyfactions.paper.command.CommandTemplate;
+import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.paper.command.island.cmds.*;
 import net.skullian.skyfactions.paper.util.CooldownManager;
 import org.bukkit.command.CommandSender;

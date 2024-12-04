@@ -19,6 +19,8 @@ import java.util.concurrent.CompletableFuture;
 @Getter
 public abstract class SkyUser {
 
+    public abstract boolean isConsole();
+
     public abstract UUID getUniqueId();
 
     public abstract String getName();

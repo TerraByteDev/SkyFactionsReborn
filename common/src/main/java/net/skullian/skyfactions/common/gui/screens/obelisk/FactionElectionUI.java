@@ -31,7 +31,7 @@ public class FactionElectionUI extends PaginatedScreen {
 
     @NotNull
     @Override
-    protected List<BaseSkyItem> getModels(SkyUser player, ItemData data) {
+    public List<BaseSkyItem> getModels(SkyUser player, ItemData data) {
         return List.of();
     }
 }

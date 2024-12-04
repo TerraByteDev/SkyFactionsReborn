@@ -15,9 +15,14 @@ public class SpigotUserManager extends UserManager {
     public SkyUser getUser(UUID uuid) {
         if (skyUsers.containsKey(uuid)) return skyUsers.get(uuid);
 
-        SkyUser skyUser = new SpigotSkyUser(uuid);
+        SkyUser skyUser = new SpigotSkyUser(uuid, false);
         skyUsers.put(uuid, skyUser);
         return skyUser;
+    }
+
+    @Override
+    public SkyUser fromConsole() {
+        return new SpigotSkyUser(UUID.randomUUID(), true);
     }
 
     @Override

@@ -1,16 +1,19 @@
 package net.skullian.skyfactions.paper.command.discord;
 
+import net.skullian.skyfactions.common.gui.CooldownManager;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.command.CommandHandler;
-import net.skullian.skyfactions.paper.command.CommandTemplate;
+import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.paper.command.discord.cmds.LinkCommand;
 import net.skullian.skyfactions.paper.command.discord.cmds.UnlinkCommand;
-import net.skullian.skyfactions.paper.util.CooldownManager;
 import org.bukkit.command.CommandSender;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.annotations.AnnotationParser;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
+import org.incendo.cloud.paper.PaperCommandManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +25,8 @@ public class DiscordCommandHandler implements CommandHandler {
     Map<String, CommandTemplate> subcommands = new HashMap<>();
 
     public DiscordCommandHandler() {
+
+
         this.manager = LegacyPaperCommandManager.createNative(
                 SkyFactionsReborn.getInstance(),
                 ExecutionCoordinator.simpleCoordinator()
@@ -36,6 +41,7 @@ public class DiscordCommandHandler implements CommandHandler {
 
         registerSubCommands(this.parser);
     }
+
 
     @Override
     public CommandHandler getHandler() {

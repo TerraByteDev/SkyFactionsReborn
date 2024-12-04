@@ -2,8 +2,8 @@ package net.skullian.skyfactions.paper.command.faction.cmds;
 
 import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
 import net.skullian.skyfactions.paper.api.SpigotNotificationAPI;
-import net.skullian.skyfactions.paper.command.CommandTemplate;
-import net.skullian.skyfactions.paper.command.CommandsUtility;
+import net.skullian.skyfactions.common.command.CommandTemplate;
+import net.skullian.skyfactions.common.command.CommandsUtility;
 import net.skullian.skyfactions.paper.config.types.Messages;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;

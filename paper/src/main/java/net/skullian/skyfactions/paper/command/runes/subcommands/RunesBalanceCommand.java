@@ -2,8 +2,8 @@ package net.skullian.skyfactions.paper.command.runes.subcommands;
 
 import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
 import net.skullian.skyfactions.paper.api.SpigotRunesAPI;
-import net.skullian.skyfactions.paper.command.CommandTemplate;
-import net.skullian.skyfactions.paper.command.CommandsUtility;
+import net.skullian.skyfactions.common.command.CommandTemplate;
+import net.skullian.skyfactions.common.command.CommandsUtility;
 import net.skullian.skyfactions.paper.config.types.Messages;
 import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
 import net.skullian.skyfactions.paper.util.ErrorUtil;

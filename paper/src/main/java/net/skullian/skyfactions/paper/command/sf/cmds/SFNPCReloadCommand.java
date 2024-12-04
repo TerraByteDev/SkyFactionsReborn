@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Command;
 
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
-import net.skullian.skyfactions.paper.command.CommandTemplate;
-import net.skullian.skyfactions.paper.command.CommandsUtility;
+import net.skullian.skyfactions.common.command.CommandTemplate;
+import net.skullian.skyfactions.common.command.CommandsUtility;
 import net.skullian.skyfactions.paper.config.types.Messages;
 import net.skullian.skyfactions.paper.util.ErrorUtil;
 import net.skullian.skyfactions.paper.util.SLogger;

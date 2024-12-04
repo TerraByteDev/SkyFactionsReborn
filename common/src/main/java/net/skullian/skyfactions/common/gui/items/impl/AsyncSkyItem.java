@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public abstract class AsyncSkyItem extends BaseSkyItem {
 
     public AsyncSkyItem(ItemData data, SkyItemStack stack, SkyUser player, Object[] optionals) {
-        super(data, stack, player, optionals);
+        super(data, stack, player, optionals, true);
 
         setSTACK(ObeliskConfig.getLoadingItem(player));
         CompletableFuture.runAsync(() -> {

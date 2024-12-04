@@ -1,10 +1,14 @@
 package net.skullian.skyfactions.common.gui;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.user.SkyUser;
+import org.incendo.cloud.execution.postprocessor.CommandPostprocessingContext;
+import org.incendo.cloud.execution.postprocessor.CommandPostprocessor;
+import org.incendo.cloud.services.type.ConsumerService;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -52,5 +56,16 @@ public class CooldownManager {
      */
     public void remove(@NotNull SkyUser player) {
         cooldowns.remove(player.getUniqueId());
+    }
+
+    public static final class CooldownPostprocessor<C> implements CommandPostprocessor<C> {
+        @Override
+        public void accept(final @NonNull CommandPostprocessingContext<C> context) {
+            if (context instanceof SkyUser player) {
+                if (CooldownManager.COMMANDS.manage(player)) {
+                    ConsumerService.interrupt();
+                }
+            }
+        }
     }
 }

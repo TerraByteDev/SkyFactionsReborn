@@ -12,7 +12,7 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 public abstract class SkyItem extends BaseSkyItem {
 
     public SkyItem(ItemData data, SkyItemStack stack, SkyUser player, Object[] optionals) {
-        super(data, stack, player, optionals);
+        super(data, stack, player, optionals, false);
 
         setSTACK(getItemStack());
     }

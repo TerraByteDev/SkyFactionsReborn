@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.user;
 
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.common.api.InvitesAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
@@ -9,6 +10,7 @@ import net.skullian.skyfactions.common.faction.JoinRequestData;
 import net.skullian.skyfactions.common.island.impl.PlayerIsland;
 import net.skullian.skyfactions.common.notification.NotificationData;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
@@ -23,16 +25,23 @@ import java.util.concurrent.CompletableFuture;
 
 public class SpigotSkyUser extends SkyUser {
 
-    private UUID uuid;
-    private Optional<PlayerData> data = Optional.empty();
+    private final UUID uuid;
+    private final Optional<PlayerData> data = Optional.empty();
     private Optional<Integer> gems = Optional.empty();
     private Optional<Integer> runes = Optional.empty();
     private Optional<PlayerIsland> island = Optional.empty();
     private Optional<List<InviteData>> incomingInvites = Optional.empty();
     private Optional<JoinRequestData> activeJoinRequest = Optional.empty();
+    private final boolean console;
 
-    public SpigotSkyUser(UUID uuid) {
+    public SpigotSkyUser(UUID uuid, boolean console) {
         this.uuid = uuid;
+        this.console = console;
+    }
+
+    @Override
+    public boolean isConsole() {
+        return console;
     }
 
     @Override
@@ -149,7 +158,7 @@ public class SpigotSkyUser extends SkyUser {
     @Override
     public boolean hasMetadata(String key) {
         OfflinePlayer player = SpigotAdapter.adapt(this);
-        return player.isOnline() ? player.getPlayer().hasMetadata(key) : false;
+        return player.isOnline() && player.getPlayer().hasMetadata(key);
     }
 
     @Override
@@ -172,6 +181,18 @@ public class SpigotSkyUser extends SkyUser {
     @Override
     public boolean hasPermission(String permission) {
         OfflinePlayer player = SpigotAdapter.adapt(this);
-        return player.isOnline() ? player.getPlayer().hasPermission(permission) : false;
+        return player.isOnline() && player.getPlayer().hasPermission(permission);
+    }
+
+    @Override
+    public void playSound(Sound sound, float volume, float pitch) {
+        OfflinePlayer player = SpigotAdapter.adapt(this);
+        if (player.isOnline()) player.getPlayer().playSound(sound, Sound.Emitter.self());
+    }
+
+    @Override
+    public void addItem(SkyItemStack stack) {
+        OfflinePlayer player = SpigotAdapter.adapt(this);
+        if (player.isOnline()) player.getPlayer().getInventory().addItem(SpigotAdapter.adapt(stack, this, false));
     }
 }

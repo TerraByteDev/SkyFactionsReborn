@@ -57,21 +57,9 @@ public class FactionAuditLogUI extends PaginatedScreen {
         };
     }
 
-    @Nullable
-    @Override
-    protected BaseSkyItem handlePaginationItem(@NotNull PaginationItemData paginationItem) {
-        return switch (paginationItem.getITEM_ID()) {
-            case "FORWARD_BUTTON" ->
-                    new PaginationForwardItem(paginationItem, player);
-            case "BACK_BUTTON" ->
-                    new PaginationBackItem(paginationItem, player);
-            default -> null;
-        };
-    }
-
     @NotNull
     @Override
-    protected List<BaseSkyItem> getModels(SkyUser player, ItemData data) {
+    public List<BaseSkyItem> getModels(SkyUser player, ItemData data) {
         List<BaseSkyItem> items = new ArrayList<>();
         for (AuditLogData auditLog : auditLogData) {
             items.add(new AuditPaginationItem(data, GUIAPI.createItem(data, auditLog.getPlayer().getUniqueId()), auditLog, player));
