@@ -1,5 +1,6 @@
-package net.skullian.skyfactions.common.util.worldborder.persistence;
+package net.skullian.skyfactions.paper.util.worldborder;
 
+import net.skullian.skyfactions.common.util.worldborder.persistence.WBData;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -39,9 +40,9 @@ public class BorderDataTags implements PersistentDataType<PersistentDataContaine
     public PersistentDataContainer toPrimitive(@NotNull WBData complex, @NotNull PersistentDataAdapterContext context) {
         PersistentDataContainer container = context.newPersistentDataContainer();
 
-        container.set(sizeKey, PersistentDataType.DOUBLE, complex.getSize());
-        container.set(xKey, PersistentDataType.DOUBLE, complex.getX());
-        container.set(zKey, PersistentDataType.DOUBLE, complex.getZ());
+        container.set(sizeKey, DOUBLE, complex.getSize());
+        container.set(xKey, DOUBLE, complex.getX());
+        container.set(zKey, DOUBLE, complex.getZ());
 
         return container;
     }
@@ -51,9 +52,9 @@ public class BorderDataTags implements PersistentDataType<PersistentDataContaine
     public WBData fromPrimitive(@NotNull PersistentDataContainer primitive, @NotNull PersistentDataAdapterContext context) {
         WBData data = new WBData();
 
-        fetch(primitive, sizeKey, PersistentDataType.DOUBLE).ifPresent(data::setSize);
-        fetch(primitive, xKey, PersistentDataType.DOUBLE).ifPresent(data::setX);
-        fetch(primitive, zKey, PersistentDataType.DOUBLE).ifPresent(data::setZ);
+        fetch(primitive, sizeKey, DOUBLE).ifPresent(data::setSize);
+        fetch(primitive, xKey, DOUBLE).ifPresent(data::setX);
+        fetch(primitive, zKey, DOUBLE).ifPresent(data::setZ);
 
         return data;
     }

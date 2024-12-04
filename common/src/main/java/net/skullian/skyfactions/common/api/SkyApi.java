@@ -9,6 +9,7 @@ import net.skullian.skyfactions.common.defence.DefenceFactory;
 import net.skullian.skyfactions.common.gui.UIShower;
 import net.skullian.skyfactions.common.npc.NPCManager;
 import net.skullian.skyfactions.common.user.UserManager;
+import net.skullian.skyfactions.common.util.nms.NMSProvider;
 import net.skullian.skyfactions.common.util.worldborder.BorderAPI;
 import org.jetbrains.annotations.NotNull;
 
@@ -170,6 +171,13 @@ public abstract class SkyApi {
      * @return {@link Audience}
      */
    @NotNull public abstract Audience getConsoleAudience();
+
+    /**
+     * Get the NMS Provider. This is used for NMS operations.
+     *
+     * @return {@link NMSProvider}
+     */
+   @NotNull public abstract NMSProvider getNMSProvider();
 
     /**
      * Set the API Instance. Can depend on the platform (obviously a WIP)

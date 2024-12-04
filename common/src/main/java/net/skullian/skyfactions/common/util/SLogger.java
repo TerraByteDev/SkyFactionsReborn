@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.common.util;
 
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
@@ -9,9 +8,7 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.skullian.skyfactions.common.api.SkyApi;
 
-import java.text.MessageFormat;
-
-public abstract class SLogger {
+public class SLogger {
 
     private static final ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
     private static final Style infoStyle = Style.style(TextColor.color(25, 100, 230), TextDecoration.BOLD);
