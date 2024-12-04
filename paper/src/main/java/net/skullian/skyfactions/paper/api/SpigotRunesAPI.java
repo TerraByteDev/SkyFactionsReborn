@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class SpigotRunesAPI extends RunesAPI {
 
@@ -54,7 +53,7 @@ public class SpigotRunesAPI extends RunesAPI {
 
     @Override
     public void handleFactionRuneConversion(List<SkyItemStack> stacks, SkyUser player) {
-        SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+        SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "convert your items to runes", "SQL_FACTION_GET", ex);
                 return;
