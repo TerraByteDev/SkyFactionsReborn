@@ -12,10 +12,6 @@ public abstract class FileAPI {
         return new File(getConfigFolderPath(), "/data/data.sqlite3");
     }
 
-    public File getSongsPath() {
-        return new File(getConfigFolderPath(), "/songs/");
-    }
-
     public File getSchematicFile(String name) {
         File retrievedSchematic = new File(getConfigFolderPath() + "/schematics", name);
         if (retrievedSchematic.exists() && !retrievedSchematic.isDirectory()) {
