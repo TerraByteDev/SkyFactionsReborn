@@ -5,4 +5,3 @@ include 'modules'
 include 'modules:discord'
 findProject(':modules:discord')?.name = 'discord'
 include 'common'
-

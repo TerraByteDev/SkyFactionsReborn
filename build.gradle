@@ -14,12 +14,12 @@ buildscript {
 }
 
 plugins {
-    id 'com.gradleup.shadow' version "${shadow_version}"
-    id 'java'
+    id "com.gradleup.shadow" version "${shadow_version}"
+    id "java"
     id "xyz.jpenilla.run-paper" version "${run_paper_version}"
-    id 'org.flywaydb.flyway' version "${flyway_version}"
+    id "org.flywaydb.flyway" version "${flyway_version}"
     id "org.jooq.jooq-codegen-gradle" version "${jooq_codegen_version}"
-    id("org.jetbrains.intellij.platform") version "${intellij_version}"
+    id "idea"
 }
 
 group = 'net.skullian.skyfactions'
@@ -31,7 +31,7 @@ java {
 
 allprojects {
     apply plugin: 'java'
-    apply plugin: 'org.jetbrains.intellij.platform'
+    apply plugin: 'idea'
 
     repositories {
         mavenCentral()
@@ -115,6 +115,7 @@ allprojects {
             name = "Oraxen Repository"
             url = "https://repo.oraxen.com/releases"
         }
+
     }
 
     dependencies {

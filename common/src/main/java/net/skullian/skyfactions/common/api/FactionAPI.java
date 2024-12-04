@@ -262,6 +262,10 @@ public abstract class FactionAPI {
         factionUserCache.replaceAll((uuid, name) -> name.equals(oldName) ? newName : name);
     }
 
+    public abstract void removeMemberFromRegion(SkyUser user, Faction faction);
+
+    public abstract void addMemberToRegion(SkyUser user, Faction faction);
+
     public enum DefenceOperation {
         ENABLE,
         DISABLE

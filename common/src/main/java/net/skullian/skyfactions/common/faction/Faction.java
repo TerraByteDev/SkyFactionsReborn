@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.common.faction;
 
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -135,7 +134,7 @@ public class Faction {
                 String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
                 Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
-                        Messages.replace(message.getString(locale), locale, player, replacements)
+                        Messages.replace(message.getString(locale), player, replacements)
                 );
 
                 player.sendMessage(model);
@@ -155,7 +154,7 @@ public class Faction {
                 String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
                 Component model = TextUtility.fromList(Messages.FACTION_BROADCAST_MODEL.getStringList(locale), locale, player, "broadcaster", broadcaster.getName(), "broadcast",
-                        Messages.replace(message, locale, player));
+                        Messages.replace(message, player));
 
                 player.sendMessage(model);
             }
@@ -280,7 +279,7 @@ public class Faction {
         createAuditLog(player.getUniqueId(), AuditLogType.PLAYER_JOIN, "player_name", player.getName());
         createBroadcast(player, Messages.FACTION_JOIN_BROADCAST, "<player_name>", player.getName());
 
-        SkyApi.getInstance().getFactionAPI().getFactionRegion(this).getMembers().addPlayer(player.getUniqueId());
+        SkyApi.getInstance().getFactionAPI().addMemberToRegion(player, this);
     }
 
     /**
@@ -513,7 +512,7 @@ public class Faction {
     }
 
     private void removeFromFaction(SkyUser player) {
-        ProtectedRegion region = SkyApi.getInstance().getFactionAPI().getFactionRegion(this);
+        SkyApi.getInstance().getFactionAPI().removeMemberFromRegion(player, this);
 
         SkyApi.getInstance().getFactionAPI().getFactionUserCache().remove(player.getUniqueId());
         if (owner.equals(player)) {
@@ -524,7 +523,5 @@ public class Faction {
             fighters.remove(player);
             members.remove(player);
         }
-
-        region.getMembers().removePlayer(player.getUniqueId());
     }
 }

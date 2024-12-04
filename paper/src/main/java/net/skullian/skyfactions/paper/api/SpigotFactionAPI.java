@@ -2,8 +2,6 @@ package net.skullian.skyfactions.paper.api;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -59,15 +57,14 @@ public class SpigotFactionAPI extends FactionAPI {
 
     @Override
     public void disbandFaction(SkyUser player, Faction faction) {
-        Region region = getFactionRegion(faction);
 
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
-        if (world != null && region != null) {
+        if (world != null && faction.getIsland() != null) {
             faction.createBroadcast(player, Messages.FACTION_DISBAND_BROADCAST);
             onFactionDisband(faction);
 
             CompletableFuture.allOf(
-                    SkyApi.getInstance().getRegionAPI().cutRegion(SpigotAdapter.adapt(region.getMinimumPoint(), world.getName()), SpigotAdapter.adapt(region.getMaximumPoint(), world.getName())),
+                    SkyApi.getInstance().getRegionAPI().cutRegion(faction.getIsland().getPosition1(world.getName()), faction.getIsland().getPosition2(world.getName())),
                     SkyApi.getInstance().getRegionAPI().removeRegion("sfr_faction_" + faction.getName(), world.getName()),
                     SkyApi.getInstance().getDatabaseManager().getFactionsManager().removeFaction(faction.getName()),
                     SkyApi.getInstance().getDatabaseManager().getDefencesManager().removeAllDefences(faction.getName(), true)
@@ -97,13 +94,13 @@ public class SpigotFactionAPI extends FactionAPI {
         }
     }
 
-    public static Region getFactionRegion(Faction faction) {
+    public static ProtectedRegion getFactionRegion(Faction faction) {
         World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
-        if (world != null) {
-            BlockVector3 bottom = BukkitAdapter.asBlockVector(SpigotAdapter.adapt(faction.getIsland().getPosition1(null)));
-            BlockVector3 top = BukkitAdapter.asBlockVector(SpigotAdapter.adapt(faction.getIsland().getPosition2(null)));
+        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        RegionManager regions = container.get(BukkitAdapter.adapt(world));
 
-            return new CuboidRegion(BukkitAdapter.adapt(world), bottom, top);
+        if (world != null && regions != null) {
+           return regions.getRegion("sfr_faction_" + faction.getName());
         }
 
         return null;
@@ -139,6 +136,16 @@ public class SpigotFactionAPI extends FactionAPI {
         }
 
         return false;
+    }
+
+    @Override
+    public void removeMemberFromRegion(SkyUser user, Faction faction) {
+        getFactionRegion(faction).getMembers().removePlayer(user.getUniqueId());
+    }
+
+    @Override
+    public void addMemberToRegion(SkyUser user, Faction faction) {
+        getFactionRegion(faction).getMembers().addPlayer(user.getUniqueId());
     }
 
 }
