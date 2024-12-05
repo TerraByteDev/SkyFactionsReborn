@@ -1,16 +1,9 @@
 package net.skullian.skyfactions.paper.user;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.common.api.InvitesAPI;
-import net.skullian.skyfactions.common.api.SkyApi;
-import net.skullian.skyfactions.common.database.struct.InviteData;
-import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.faction.JoinRequestData;
-import net.skullian.skyfactions.common.island.impl.PlayerIsland;
-import net.skullian.skyfactions.common.notification.NotificationData;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.SkyLocation;
@@ -27,30 +20,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class SpigotSkyUser extends SkyUser {
 
-    private final UUID uuid;
-    private final Optional<PlayerData> data = Optional.empty();
-    private Optional<Integer> gems = Optional.empty();
-    private Optional<Integer> runes = Optional.empty();
-    private Optional<PlayerIsland> island = Optional.empty();
-    private Optional<List<InviteData>> incomingInvites = Optional.empty();
-    private Optional<JoinRequestData> activeJoinRequest = Optional.empty();
-    private final boolean console;
-    private Object commandSender;
-
     public SpigotSkyUser(UUID uuid, boolean console, Object commandSender) {
-        this.uuid = uuid;
-        this.console = console;
-        this.commandSender = commandSender;
-    }
-
-    @Override
-    public boolean isConsole() {
-        return console;
-    }
-
-    @Override
-    public UUID getUniqueId() {
-        return this.uuid;
+        super(uuid, console, commandSender);
     }
 
     @Override
@@ -66,57 +37,6 @@ public class SpigotSkyUser extends SkyUser {
         Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
             player.getPlayer().teleport(SpigotAdapter.adapt(location));
         });
-    }
-
-    @Override
-    public PlayerData getPlayerData() {
-        return this.data.get();
-    }
-
-    @Override
-    public CompletableFuture<Integer> getGems() {
-        if (this.gems.isEmpty()) return SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getGems(this.uuid).whenComplete((gems, ex) -> {
-            if (ex != null) return;
-            this.gems = Optional.of(this.gems.get() + gems);
-        });
-
-        if (SkyApi.getInstance().getCacheService().getPlayersToCache().containsKey(this.uuid) && this.gems.isPresent()) return CompletableFuture.completedFuture((this.gems.get() + SkyApi.getInstance().getCacheService().getEntry(this.uuid).getGems()));
-            else return CompletableFuture.completedFuture(this.gems.get());
-    }
-
-    @Override
-    public CompletableFuture<Integer> getRunes() {
-        if (this.runes.isEmpty()) return SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getRunes(this.uuid).whenComplete((runes, ex) -> {
-            if (ex != null) return;
-            this.runes = Optional.of(this.runes.get() + runes);
-        });
-
-        if (SkyApi.getInstance().getCacheService().getPlayersToCache().containsKey(this.uuid) && this.runes.isPresent()) return CompletableFuture.completedFuture((this.runes.get() + SkyApi.getInstance().getCacheService().getEntry(this.uuid).getRunes()));
-            else return CompletableFuture.completedFuture(this.runes.get());
-    }
-
-    @Nullable
-    @Override
-    public CompletableFuture<PlayerIsland> getIsland() {
-        return this.island.map(CompletableFuture::completedFuture).orElseGet(() -> SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().getPlayerIsland(this.uuid).whenComplete((island, ex) -> {
-            if (ex != null) return;
-
-            this.island = Optional.of(island);
-        }));
-    }
-
-    @Override
-    public CompletableFuture<List<InviteData>> getIncomingInvites() {
-        return InvitesAPI.getPlayerIncomingInvites(this.uuid).whenComplete((invites, ex) -> {
-            if (ex != null) return;
-
-            this.incomingInvites = Optional.of(invites);
-        });
-    }
-
-    @Override
-    public List<InviteData> getCachedInvites() {
-        return this.incomingInvites.get();
     }
 
     @Override
@@ -198,16 +118,5 @@ public class SpigotSkyUser extends SkyUser {
     public void addItem(SkyItemStack stack) {
         OfflinePlayer player = SpigotAdapter.adapt(this);
         if (player.isOnline()) player.getPlayer().getInventory().addItem(SpigotAdapter.adapt(stack, this, false));
-    }
-
-    @Override
-    public Object getCommandSender() {
-        return this.commandSender;
-    }
-
-    @Override
-    public SkyUser setCommandSender(Object commandSender) {
-        this.commandSender = commandSender;
-        return this;
     }
 }

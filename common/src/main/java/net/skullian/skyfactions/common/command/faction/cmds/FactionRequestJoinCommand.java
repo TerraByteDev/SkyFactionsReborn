@@ -1,16 +1,13 @@
 package net.skullian.skyfactions.common.command.faction.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.paper.api.SpigotNotificationAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.database.struct.InviteData;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
 import net.skullian.skyfactions.common.faction.JoinRequestData;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -19,6 +16,11 @@ import java.util.List;
 
 @Command("faction")
 public class FactionRequestJoinCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "faction";
+    }
+
     @Override
     public String getName() {
         return "requestjoin";
@@ -37,13 +39,13 @@ public class FactionRequestJoinCommand extends CommandTemplate {
     @Command("requestjoin <factionName>")
     @Permission(value = {"skyfactions.faction.requestjoin", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player,
+            SkyUser player,
             @Argument(value = "factionName") String factionName
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
-        String locale = SpigotPlayerAPI.getLocale(player.getUniqueId());
-        SpigotFactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
+        SkyApi.getInstance().getFactionAPI().isInFaction(player.getUniqueId()).whenComplete((isInFaction, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "check if you were in a Faction", "SQL_FACTION_GET", ex);
                 return;
@@ -52,15 +54,14 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                 return;
             }
 
-
-            SpigotFactionAPI.getFaction(factionName).whenComplete((faction, throwable) -> {
+            SkyApi.getInstance().getFactionAPI().getFaction(factionName).whenComplete((faction, throwable) -> {
                 if (throwable != null) {
                     ErrorUtil.handleError(player, "check the Faction", "SQL_FACTION_GET", throwable);
                     return;
                 } else if (faction == null) {
                     Messages.FACTION_NOT_FOUND.send(player, locale, "name", factionName);
                     return;
-                } else if (faction.getAllMembers().contains(Bukkit.getOfflinePlayer(player.getUniqueId()))) {
+                } else if (faction.getAllMembers().contains(player)) {
                     Messages.JOIN_REQUEST_SAME_FACTION.send(player, locale);
                     return;
                 } else if (faction.isPlayerBanned(player)) {
@@ -83,7 +84,7 @@ public class FactionRequestJoinCommand extends CommandTemplate {
                     faction.createJoinRequest(joinRequest);
 
                     Messages.JOIN_REQUEST_CREATE_SUCCESS.send(player, locale, "faction_name", factionName);
-                    SpigotNotificationAPI.factionInviteStore.replace(factionName, (SpigotNotificationAPI.factionInviteStore.get(factionName) + 1));
+                    SkyApi.getInstance().getNotificationAPI().getFactionInviteStore().replace(factionName, (SkyApi.getInstance().getNotificationAPI().getFactionInviteStore().get(factionName) + 1));
                 }
             });
         });

@@ -2,8 +2,8 @@ package net.skullian.skyfactions.paper.user;
 
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.user.UserManager;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 import java.util.Map;
 import java.util.UUID;
@@ -20,6 +20,14 @@ public class SpigotUserManager extends UserManager {
         SkyUser skyUser = new SpigotSkyUser(uuid, false, null);
         skyUsers.put(uuid, skyUser);
         return skyUser;
+    }
+
+    @Override
+    public SkyUser getUser(String name) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(name);
+        if (!player.hasPlayedBefore()) return null;
+
+        return getUser(player.getName());
     }
 
     @Override

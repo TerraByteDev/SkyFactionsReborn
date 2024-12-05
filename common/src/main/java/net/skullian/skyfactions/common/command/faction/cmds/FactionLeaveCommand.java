@@ -1,13 +1,12 @@
 package net.skullian.skyfactions.common.command.faction.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.gui.screens.confirmation.FactionLeaveConfirmationUI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
@@ -15,6 +14,11 @@ import java.util.List;
 
 @Command("faction")
 public class FactionLeaveCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "faction";
+    }
+
     @Override
     public String getName() {
         return "leave";
@@ -33,18 +37,16 @@ public class FactionLeaveCommand extends CommandTemplate {
     @Command("leave")
     @Permission(value = {"skyfactions.faction.leave", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player
+            SkyUser player
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
-        SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+        SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
-            }
-
-            if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+            } else if (faction == null) {
+                Messages.NOT_IN_FACTION.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
                 return;
             }
 

@@ -1,13 +1,11 @@
 package net.skullian.skyfactions.common.command.faction.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.paper.api.SpigotGemsAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -16,6 +14,11 @@ import java.util.List;
 
 @Command("faction")
 public class FactionDonateCommand extends CommandTemplate {
+
+    @Override
+    public String getParent() {
+        return "";
+    }
 
     @Override
     public String getName() {
@@ -35,32 +38,33 @@ public class FactionDonateCommand extends CommandTemplate {
     @Command("donate <amount>")
     @Permission(value = {"skyfactions.faction.donate", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player,
+            SkyUser player,
             @Argument("amount") int amount
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
-        SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
+        SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
             if (throwable != null) {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                 return;
             } else if (faction == null) {
-                Messages.NOT_IN_FACTION.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                Messages.NOT_IN_FACTION.send(player, locale);
                 return;
             }
 
-            SpigotGemsAPI.getGems(player.getUniqueId()).whenComplete((gems, err) -> {
+            player.getGems().whenComplete((gems, err) -> {
                 if (err != null) {
                     ErrorUtil.handleError(player, "get your gems", "SQL_GEMS_GET", err);
                     return;
                 } else if (gems < amount) {
-                    Messages.INSUFFICIENT_GEMS_COUNT.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                    Messages.INSUFFICIENT_GEMS_COUNT.send(player, locale);
                     return;
                 }
 
-                SpigotGemsAPI.subtractGems(player.getUniqueId(), amount);
+                player.removeGems(amount);
                 faction.addGems(amount);
-                Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "amount", amount);
+                Messages.FACTION_GEMS_DONATION_SUCCESS.send(player, locale, "amount", amount);
             });
         });
     }

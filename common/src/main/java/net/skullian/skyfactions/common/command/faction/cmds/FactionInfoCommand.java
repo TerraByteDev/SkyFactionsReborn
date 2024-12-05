@@ -1,14 +1,12 @@
 package net.skullian.skyfactions.common.command.faction.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.faction.Faction;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -19,6 +17,11 @@ import java.util.stream.Collectors;
 
 @Command("faction")
 public class FactionInfoCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "faction";
+    }
+
     @Override
     public String getName() {
         return "info";
@@ -37,54 +40,53 @@ public class FactionInfoCommand extends CommandTemplate {
     @Command("info [name]")
     @Permission(value = {"skyfactions.faction.info", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player,
+            SkyUser player,
             @Argument(value = "name") @Nullable String name
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
         if (name == null) {
-            SpigotFactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
+            SkyApi.getInstance().getFactionAPI().isInFaction(player.getUniqueId()).whenComplete((isInFaction, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
-                    return;
-                }
-
-                if (!isInFaction) {
-                    Messages.NOT_IN_FACTION.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                } else if (!isInFaction) {
+                    Messages.NOT_IN_FACTION.send(player, locale);
                 } else {
 
-                    SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
+                    SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, throwable) -> {
                         if (throwable != null) {
                             ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", throwable);
                             return;
                         }
 
                         if (faction != null) {
-                            sendInfo(player, faction);
+                            sendInfo(player, faction, locale);
                         }
                     });
                 }
+
             });
         } else {
-            SpigotFactionAPI.getFaction(name).whenComplete((faction, ex) -> {
+            SkyApi.getInstance().getFactionAPI().getFaction(name).whenComplete((faction, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "get the Faction", "SQL_FACTION_GET", ex);
                     return;
                 }
 
                 if (faction != null) {
-                    sendInfo(player, faction);
+                    sendInfo(player, faction, locale);
                 } else {
-                    Messages.FACTION_NOT_FOUND.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "name", name);
+                    Messages.FACTION_NOT_FOUND.send(player, locale, "name", name);
                 }
             });
         }
     }
 
-    private void sendInfo(Player player, Faction faction) {
+    private void sendInfo(SkyUser player, Faction faction, String locale) {
 
         Messages.FACTION_INFO_LIST.send(player,
-                SpigotPlayerAPI.getLocale(player.getUniqueId()),
+                locale,
                 "faction_name", faction.getName(),
                 "motd", faction.getMOTD(),
                 "owner", faction.getOwner().getName(),
@@ -95,11 +97,9 @@ public class FactionInfoCommand extends CommandTemplate {
         );
     }
 
-    private String buildString(List<OfflinePlayer> list) {
-        if (list.size() <= 0) {
-            return "<red>None";
-        } else if (list.size() > 0) {
-            return String.join(", ", list.stream().map(OfflinePlayer::getName).collect(Collectors.toList()));
+    private String buildString(List<SkyUser> list) {
+        if (list.size() > 0) {
+            return String.join(", ", list.stream().map(SkyUser::getName).collect(Collectors.toList()));
         }
 
         return "<red>None";

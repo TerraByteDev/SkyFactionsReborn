@@ -1,14 +1,13 @@
 package net.skullian.skyfactions.common.command.faction.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.config.types.Settings;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.bukkit.entity.Player;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -17,6 +16,11 @@ import java.util.List;
 
 @Command("faction")
 public class FactionRenameCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "faction";
+    }
+
     @Override
     public String getName() {
         return "rename";
@@ -35,13 +39,13 @@ public class FactionRenameCommand extends CommandTemplate {
     @Command("rename <name>")
     @Permission(value = {"skyfactions.faction.rename", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player,
+            SkyUser player,
             @Argument(value = "name") String name
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        String locale = SpigotPlayerAPI.getLocale(player.getUniqueId());
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
-        SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+        SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
@@ -56,7 +60,7 @@ public class FactionRenameCommand extends CommandTemplate {
             } else if (!faction.getOwner().getUniqueId().equals(player.getUniqueId())) { // todo make more customisable/b
                 Messages.FACTION_RENAME_NO_PERMISSIONS.send(player, locale);
             } else {
-                SpigotFactionAPI.getFaction(name).whenComplete((fetchedFaction, ex2) -> {
+                SkyApi.getInstance().getFactionAPI().getFaction(name).whenComplete((fetchedFaction, ex2) -> {
                     if (ex2 != null) {
                         ErrorUtil.handleError(player, "check if a Faction already exists with that name", "SQL_FACTION_GET", ex2);
                         return;
@@ -64,7 +68,7 @@ public class FactionRenameCommand extends CommandTemplate {
 
                     if (fetchedFaction != null) {
                         Messages.FACTION_CREATION_NAME_DUPLICATE.send(player, locale); // lazy
-                    } else if (SpigotFactionAPI.hasValidName(player, name)) {
+                    } else if (SkyApi.getInstance().getFactionAPI().hasValidName(player, name)) {
                         int cost = Settings.FACTION_RENAME_COST.getInt();
                         if (cost > 0 && (faction.getRunes() < cost)) {
                             Messages.FACTION_RENAME_INSUFFICIENT_FUNDS.send(player, locale, "rename_cost", cost);

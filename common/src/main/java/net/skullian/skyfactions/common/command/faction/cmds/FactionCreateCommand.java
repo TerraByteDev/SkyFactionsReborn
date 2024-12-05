@@ -1,15 +1,12 @@
 package net.skullian.skyfactions.common.command.faction.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
-import net.skullian.skyfactions.paper.api.SpigotRunesAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.config.types.Settings;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -18,6 +15,11 @@ import java.util.List;
 
 @Command("faction")
 public class FactionCreateCommand extends CommandTemplate {
+
+    @Override
+    public String getParent() {
+        return "faction";
+    }
 
     @Override
     public String getName() {
@@ -37,24 +39,24 @@ public class FactionCreateCommand extends CommandTemplate {
     @Command("create <name>")
     @Permission(value = {"skyfactions.faction.create", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player,
+            SkyUser player,
             @Argument(value = "name") String name
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        String locale = SpigotPlayerAPI.getLocale(player.getUniqueId());
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
         Messages.FACTION_CREATION_PROCESSING.send(player, locale);
 
-        SpigotIslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {
+        SkyApi.getInstance().getIslandAPI().getPlayerIsland(player.getUniqueId()).whenComplete((island, throwable) -> {
             if (throwable != null) {
                 ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", throwable);
                 return;
-            } else if (!hasIsland) {
+            } else if (island == null) {
                 Messages.FACTION_PLAYER_ISLAND_REQUIRED.send(player, locale);
                 return;
             }
 
-            SpigotFactionAPI.isInFaction(player).whenComplete((isInFaction, ex) -> {
+            SkyApi.getInstance().getFactionAPI().isInFaction(player.getUniqueId()).whenComplete((isInFaction, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                     return;
@@ -63,7 +65,7 @@ public class FactionCreateCommand extends CommandTemplate {
                 if (isInFaction) {
                     Messages.ALREADY_IN_FACTION.send(player, locale);
                 } else {
-                    SpigotFactionAPI.getFaction(name).whenComplete((faction, exc) -> {
+                    SkyApi.getInstance().getFactionAPI().getFaction(name).whenComplete((faction, exc) -> {
                         if (exc != null) {
                             ErrorUtil.handleError(player, "get the Faction", "SQL_FACTION_GET", exc);
                             return;
@@ -72,17 +74,17 @@ public class FactionCreateCommand extends CommandTemplate {
                         if (faction != null) {
                             Messages.FACTION_CREATION_NAME_DUPLICATE.send(player, locale);
                         } else {
-                            if (SpigotFactionAPI.hasValidName(player, name)) {
+                            if (SkyApi.getInstance().getFactionAPI().hasValidName(player, name)) {
                                 int cost = Settings.FACTION_CREATION_COST.getInt();
                                 if (cost > 0) {
-                                    SpigotRunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, err) -> {
+                                    player.getRunes().whenComplete((runes, err) -> {
                                         if (err != null) {
                                             ErrorUtil.handleError(player, "get your runes balance", "SQL_RUNES_GET", err);
                                         } else if (runes < cost) {
                                             Messages.FACTION_INSUFFICIENT_FUNDS.send(player, locale, "creation_cost", cost);
                                         } else {
-                                            SpigotRunesAPI.removeRunes(player.getUniqueId(), cost);
-                                            SpigotFactionAPI.createFaction(player, name);
+                                            player.removeRunes(cost);
+                                            SkyApi.getInstance().getFactionAPI().createFaction(player, name);
                                         }
                                     });
                                 }

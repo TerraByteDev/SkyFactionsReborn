@@ -3,6 +3,8 @@ package net.skullian.skyfactions.common.user;
 import lombok.Getter;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.skullian.skyfactions.common.api.InvitesAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.faction.JoinRequestData;
@@ -13,33 +15,102 @@ import net.skullian.skyfactions.common.util.SkyLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Getter
 public abstract class SkyUser {
 
-    public abstract boolean isConsole();
+    public final UUID uuid;
+    public final Optional<PlayerData> data = Optional.empty();
+    public Optional<Integer> gems = Optional.empty();
+    public Optional<Integer> runes = Optional.empty();
+    public Optional<PlayerIsland> island = Optional.empty();
+    public Optional<List<InviteData>> incomingInvites = Optional.empty();
+    public Optional<JoinRequestData> activeJoinRequest = Optional.empty();
+    public final boolean console;
+    @Getter
+    public Object commandSender;
 
-    public abstract UUID getUniqueId();
+    public SkyUser(UUID uuid, boolean console, Object commandSender) {
+        this.uuid = uuid;
+        this.console = console;
+        this.commandSender = commandSender;
+    }
+
+    public UUID getUniqueId() {
+        return this.uuid;
+    }
 
     public abstract String getName();
 
     public abstract void teleport(SkyLocation location);
 
-    public abstract PlayerData getPlayerData();
+    public PlayerData getPlayerData() {
+        return this.data.get();
+    }
 
-    public abstract CompletableFuture<Integer> getGems();
+    public CompletableFuture<Integer> getGems() {
+        if (this.gems.isEmpty()) return SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getGems(this.uuid).whenComplete((gems, ex) -> {
+            if (ex != null) return;
+            this.gems = Optional.of(this.gems.get() + gems);
+        });
 
-    public abstract CompletableFuture<Integer> getRunes();
+        if (SkyApi.getInstance().getCacheService().getPlayersToCache().containsKey(this.uuid) && this.gems.isPresent()) return CompletableFuture.completedFuture((this.gems.get() + SkyApi.getInstance().getCacheService().getEntry(this.uuid).getGems()));
+        else return CompletableFuture.completedFuture(this.gems.get());
+    }
 
-    @Nullable public abstract CompletableFuture<PlayerIsland> getIsland();
+    public void addGems(int amount) {
+        SkyApi.getInstance().getCacheService().getEntry(this.uuid).addGems(amount);
+    }
 
-    public abstract CompletableFuture<List<InviteData>> getIncomingInvites();
+    public void removeGems(int amount) {
+        SkyApi.getInstance().getCacheService().getEntry(this.uuid).removeGems(amount);
+    }
 
-    public abstract List<InviteData> getCachedInvites();
+    public CompletableFuture<Integer> getRunes() {
+        if (this.runes.isEmpty()) return SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getRunes(this.uuid).whenComplete((runes, ex) -> {
+            if (ex != null) return;
+            this.runes = Optional.of(this.runes.get() + runes);
+        });
 
-    public abstract void onCacheComplete(int runesAddition, int gemsAddition);
+        if (SkyApi.getInstance().getCacheService().getPlayersToCache().containsKey(this.uuid) && this.runes.isPresent()) return CompletableFuture.completedFuture((this.runes.get() + SkyApi.getInstance().getCacheService().getEntry(this.uuid).getRunes()));
+        else return CompletableFuture.completedFuture(this.runes.get());
+    }
+
+    public void addRunes(int amount) {
+        SkyApi.getInstance().getCacheService().getEntry(this.uuid).addRunes(amount);
+    }
+
+    public void removeRunes(int amount) {
+        SkyApi.getInstance().getCacheService().getEntry(this.uuid).removeRunes(amount);
+    }
+
+    @Nullable public CompletableFuture<PlayerIsland> getIsland() {
+        return this.island.map(CompletableFuture::completedFuture).orElseGet(() -> SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().getPlayerIsland(this.uuid).whenComplete((island, ex) -> {
+            if (ex != null) return;
+
+            this.island = Optional.of(island);
+        }));
+    }
+
+    public CompletableFuture<List<InviteData>> getIncomingInvites() {
+        return InvitesAPI.getPlayerIncomingInvites(this.uuid).whenComplete((invites, ex) -> {
+            if (ex != null) return;
+
+            this.incomingInvites = Optional.of(invites);
+        });
+    }
+
+    public List<InviteData> getCachedInvites() {
+        return this.incomingInvites.get();
+    }
+
+    public void onCacheComplete(int runesAddition, int gemsAddition) {
+        this.runes = Optional.of(this.runes.get() + runesAddition);
+        this.gems = Optional.of(this.gems.get() + gemsAddition);
+    }
 
     @Nullable public abstract CompletableFuture<JoinRequestData> getActiveJoinRequest();
 
@@ -69,7 +140,8 @@ public abstract class SkyUser {
 
     public abstract void addItem(SkyItemStack stack);
 
-    public abstract Object getCommandSender();
-
-    public SkyUser setCommandSender(Object commandSender);
+    public SkyUser setCommandSender(Object commandSender) {
+        this.commandSender = commandSender;
+        return this;
+    }
 }

@@ -1,17 +1,13 @@
 package net.skullian.skyfactions.common.command.faction.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.config.types.Settings;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.database.struct.InviteData;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -24,6 +20,11 @@ import java.util.stream.Collectors;
 
 @Command("faction")
 public class FactionInviteCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "faction";
+    }
+
     @Override
     public String getName() {
         return "invite";
@@ -40,28 +41,26 @@ public class FactionInviteCommand extends CommandTemplate {
     }
 
     @Suggestions("playerFactionName")
-    public List<String> suggestPlayers(CommandContext<CommandSourceStack> context, CommandInput input) {
-        return Bukkit.getOnlinePlayers().stream()
-                .map(Player::getName)
+    public List<String> suggestPlayers(CommandContext<SkyUser> context, CommandInput input) {
+        return SkyApi.getInstance().getPlayerAPI().getOnlinePlayers().stream()
+                .map(SkyUser::getName)
                 .collect(Collectors.toList());
     }
 
     @Command("invite <target>")
     @Permission(value = {"skyfactions.faction.invite", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player,
+            SkyUser player,
             @Argument(value = "target", suggestions = "playerFactionName") String playerName
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        String locale = SpigotPlayerAPI.getLocale(player.getUniqueId());
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
-        SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+        SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
-            }
-
-            if (faction == null) {
+            } else if (faction == null) {
                 Messages.NOT_IN_FACTION.send(player, locale);
                 return;
             } else if (!Settings.FACTION_MANAGE_INVITES_PERMISSIONS.getList().contains(faction.getRankType(player.getUniqueId()).getRankValue())) {
@@ -72,35 +71,35 @@ public class FactionInviteCommand extends CommandTemplate {
                 return;
             }
 
-            OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
-            SpigotPlayerAPI.isPlayerRegistered(target.getUniqueId()).whenComplete((isRegistered, ex2) -> {
+            SkyUser targetUser = SkyApi.getInstance().getUserManager().getUser(playerName);
+            SkyApi.getInstance().getPlayerAPI().isPlayerRegistered(targetUser.getUniqueId()).whenComplete((isRegistered, ex2) -> {
                 if (ex2 != null) {
                     ErrorUtil.handleError(player, "check if that player is registered", "SQL_PLAYER_GET", ex2);
                 } else if (!isRegistered) {
                     Messages.UNKNOWN_PLAYER.send(player, locale, "player", playerName);
-                }else if (faction.getAllMembers().contains(target)) {
+                }else if (faction.getAllMembers().contains(targetUser)) {
                     Messages.FACTION_INVITE_IN_SAME_FACTION.send(player, locale);
-                } else if (faction.isPlayerBanned(target)) {
+                } else if (faction.isPlayerBanned(targetUser)) {
                     Messages.FACTION_INVITE_PLAYER_BANNED.send(player, locale);
                 } else {
 
                     List<InviteData> invites = faction.getOutgoingInvites();
                     for (InviteData invite : invites) {
-                        if (invite.getPlayer().getName().equalsIgnoreCase(target.getName())) {
+                        if (invite.getPlayer().getName().equalsIgnoreCase(targetUser.getName())) {
                             Messages.FACTION_INVITE_DUPLICATE.send(player, locale);
                             return;
                         }
                     }
 
                     InviteData newInvite = new InviteData(
-                            target,
+                            targetUser,
                             player,
                             faction.getName(),
                             "outgoing",
                             System.currentTimeMillis()
                     );
                     faction.createInvite(newInvite);
-                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, locale, "player_name", target.getName());
+                    Messages.FACTION_INVITE_CREATE_SUCCESS.send(player, locale, "player_name", targetUser.getName());
                 }
             });
         });

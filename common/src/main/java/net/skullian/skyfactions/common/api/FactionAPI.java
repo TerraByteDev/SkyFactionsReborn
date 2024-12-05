@@ -13,10 +13,7 @@ import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.text.TextUtility;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -27,7 +24,7 @@ public abstract class FactionAPI {
     private final Map<UUID, String> factionUserCache = new ConcurrentHashMap<>();
     private final Map<String, Faction> factionCache = new ConcurrentHashMap<>();
 
-    private final HashSet<String> awaitingDeletion = new HashSet<>();
+    private final List<String> awaitingDeletion = new ArrayList<>();
 
     /**
      * Create a new faction.
@@ -173,7 +170,7 @@ public abstract class FactionAPI {
 
                 for (String blacklistedName : blacklistedNames) {
                     if (Pattern.compile(blacklistedName).matcher(name).find()) {
-                        Messages.FACTION_NAME_PROHIBITED.send(player, locale);
+                        Messages.BLACKLISTED_PHRASE.send(player, locale);
                         break;
                     }
                 }
