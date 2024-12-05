@@ -265,7 +265,11 @@ Messages:
 
     # Sent after a successful /gems paid command.
     # Placeholders: <amount> - Amount of gems given / <player> - Player affected.
-    GEM_ADD_SUCCESS: "<server_name><reset><green> Successfully paid<reset><yellow> <amount><reset><green> Gems to <reset><yellow><player>."
+    GEMS_PAY_SUCCESS: "<server_name><reset><green> Successfully paid<reset><yellow> <amount><reset><green> Gems to <reset><yellow><player>."
+
+    # Sent to the recipient (if online) when they are paid gems.
+    # Placeholders: <amount> - Amount of gems given / <player_name> - Name of player who paid.
+    GEMS_PAY_NOTIFY: "<server_name><reset> <green><player_name> <yellow>has paid you <greeen><bold><amount> <reset><yellow>Gems."
 
     # Sent after an admin successfully /gems give a player / faction gems.
     # Placeholders: <amount> - Amount of gems given / <name> - Name of Player / Faction affected.

@@ -1,15 +1,12 @@
 package net.skullian.skyfactions.common.command.gems.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotGemsAPI;
-import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 
@@ -17,6 +14,11 @@ import java.util.List;
 
 @Command("gems")
 public class GemsDepositCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "gems";
+    }
+
     @Override
     public String getName() {
         return "deposit";
@@ -34,74 +36,40 @@ public class GemsDepositCommand extends CommandTemplate {
 
     @Command("deposit <amount>")
     public void run(
-            Player player,
+            SkyUser player,
             @Argument(value = "amount") String amount
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
-        SpigotIslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {
+        SkyApi.getInstance().getIslandAPI().getPlayerIsland(player.getUniqueId()).whenComplete((island, throwable) -> {
             if (throwable != null) {
                 ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", throwable);
                 return;
-            } else if (!hasIsland) {
-                Messages.NO_ISLAND.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+            } else if (island == null) {
+                Messages.NO_ISLAND.send(player, locale);
+                return;
             }
 
-            ItemStack currencyItem = SpigotGemsAPI.createGemsStack(player);
+            SkyItemStack currencyItem = SkyApi.getInstance().getGemsAPI().createGemsStack(player);
             int totalDeposited = 0;
 
             if (amount.equalsIgnoreCase("all")) {
-                totalDeposited = depositAllItems(player, currencyItem);
+                totalDeposited = SkyApi.getInstance().getGemsAPI().depositAllItems(player, currencyItem);
             } else {
                 try {
                     int parsedAmount = Integer.parseInt(amount);
-                    totalDeposited = depositSpecificAmount(player, currencyItem, parsedAmount);
+                    totalDeposited = SkyApi.getInstance().getGemsAPI().depositSpecificAmount(player, currencyItem, parsedAmount);
                 } catch (NumberFormatException exception) {
-                    Messages.INCORRECT_USAGE.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "usage", getSyntax());
+                    Messages.INCORRECT_USAGE.send(player, locale, "usage", getSyntax());
                 }
             }
 
             int finalTotalDeposited = totalDeposited;
-            SpigotGemsAPI.subtractGems(player.getUniqueId(), totalDeposited);
-            Messages.GEMS_DEPOSIT_SUCCESS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "amount", finalTotalDeposited);
+            player.removeGems(totalDeposited);
+            Messages.GEMS_DEPOSIT_SUCCESS.send(player, locale, "amount", finalTotalDeposited);
         });
 
-    }
-
-    private int depositAllItems(Player player, ItemStack currencyItem) {
-        Inventory inventory = player.getInventory();
-        int totalDeposited = 0;
-
-        for (int i = 0; i < inventory.getSize(); i++) {
-            ItemStack slotContents = inventory.getItem(i);
-            if (slotContents != null && slotContents.isSimilar(currencyItem)) {
-                int amountInSlot = slotContents.getAmount();
-                slotContents.setAmount(0);
-                totalDeposited += amountInSlot;
-            }
-        }
-
-        player.updateInventory();
-        return totalDeposited;
-    }
-
-    private int depositSpecificAmount(Player player, ItemStack currencyItem, int amount) {
-        Inventory inventory = player.getInventory();
-        int totalDeposited = 0;
-
-        for (int i = 0; i < inventory.getSize(); i++) {
-            ItemStack slotContents = inventory.getItem(i);
-            if (slotContents != null && slotContents.isSimilar(currencyItem)) {
-                int amountInSlot = Math.min(amount, slotContents.getAmount());
-                slotContents.setAmount(slotContents.getAmount() - amountInSlot);
-                totalDeposited += amountInSlot;
-
-                if (totalDeposited >= amount) break;
-            }
-        }
-
-        player.updateInventory();
-        return totalDeposited;
     }
 
     @Override

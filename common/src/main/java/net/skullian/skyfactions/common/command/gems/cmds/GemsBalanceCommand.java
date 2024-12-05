@@ -1,13 +1,11 @@
 package net.skullian.skyfactions.common.command.gems.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotGemsAPI;
-import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
@@ -15,6 +13,11 @@ import java.util.List;
 
 @Command("gems")
 public class GemsBalanceCommand extends CommandTemplate {
+
+    @Override
+    public String getParent() {
+        return "gems";
+    }
 
     @Override
     public String getName() {
@@ -34,26 +37,23 @@ public class GemsBalanceCommand extends CommandTemplate {
     @Command("balance")
     @Permission(value = {"skyfactions.gems.balance", "skyfactions.gems"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player
+            SkyUser player
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
-        SpigotIslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
+        SkyApi.getInstance().getIslandAPI().getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your island", "SQL_GEMS_GET", ex);
-                return;
-            }
-
-            if (hasIsland) {
-                SpigotGemsAPI.getGems(player.getUniqueId()).whenComplete((gems, throwable) -> {
+            } else if (island != null) {
+                player.getGems().whenComplete((gems, throwable) -> {
                     if (throwable != null) {
                         ErrorUtil.handleError(player, "get your gems", "SQL_GEMS_GET", throwable);
                         return;
                     }
 
-                    Messages.GEMS_COUNT_MESSAGE.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "count", gems);
+                    Messages.GEMS_COUNT_MESSAGE.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "count", gems);
                 });
-            }
+            } else Messages.NO_ISLAND.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
         });
     }
 

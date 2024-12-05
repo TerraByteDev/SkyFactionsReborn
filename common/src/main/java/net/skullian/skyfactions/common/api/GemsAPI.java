@@ -53,6 +53,12 @@ public abstract class GemsAPI {
                 .build();
     }
 
+    public abstract int depositAllItems(SkyUser player, SkyItemStack currencyItem);
+
+    public abstract int depositSpecificAmount(SkyUser player, SkyItemStack currencyItem, int amount);
+
+    public abstract int addItemToInventory(SkyUser user, SkyItemStack stack);
+
     /**
      * Check if a stack is a gems stack.
      *

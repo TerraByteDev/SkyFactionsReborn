@@ -1,18 +1,11 @@
 package net.skullian.skyfactions.common.command.gems.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.paper.api.SpigotGemsAPI;
-import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -26,6 +19,11 @@ import java.util.stream.Collectors;
 
 @Command("gems")
 public class GemsGiveCommand extends CommandTemplate {
+
+    @Override
+    public String getParent() {
+        return "gems";
+    }
 
     @Override
     public String getName() {
@@ -43,39 +41,39 @@ public class GemsGiveCommand extends CommandTemplate {
     }
 
     @Suggestions("playerFactionName")
-    public List<String> suggestPlayers(CommandContext<CommandSourceStack> context, CommandInput input) {
+    public List<String> suggestPlayers(CommandContext<SkyUser> context, CommandInput input) {
         if (input.input().startsWith("gems give player")) {
-            return Bukkit.getOnlinePlayers().stream()
-                    .map(Player::getName)
+            return SkyApi.getInstance().getPlayerAPI().getOnlinePlayers().stream()
+                    .map(SkyUser::getName)
                     .collect(Collectors.toList());
         } else if (input.input().startsWith("gems give faction")) {
-            return new ArrayList<>(SpigotFactionAPI.factionNameCache.keySet());
+            return new ArrayList<>(SkyApi.getInstance().getFactionAPI().getFactionCache().keySet());
         }
 
         return List.of();
     }
 
     @Suggestions("giveTypeSelection")
-    public List<String> selectionSuggestion(CommandContext<CommandSourceStack> context, CommandInput input) {
+    public List<String> selectionSuggestion(CommandContext<SkyUser> context, CommandInput input) {
         return List.of("player", "faction");
     }
 
     @Command("give <type> <playerFactionName> <amount>")
     @Permission(value = {"skyfactions.gems.give"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender,
+            SkyUser sender,
             @Argument(value = "type", suggestions = "giveTypeSelection") String type,
             @Argument(value = "playerFactionName", suggestions = "playerFactionName") String playerFactionName,
             @Argument(value = "amount") int amount
     ) {
         
-        if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
-        String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
+        if (!sender.isConsole() && !CommandsUtility.hasPerm(sender, permission(), true)) return;
+        String locale = sender.isConsole() ? SkyApi.getInstance().getPlayerAPI().getLocale(sender.getUniqueId()) : Messages.getDefaulLocale();
 
         if (type.equalsIgnoreCase("player")) {
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerFactionName);
+            SkyUser offlinePlayer = SkyApi.getInstance().getUserManager().getUser(playerFactionName);
 
-            SpigotPlayerAPI.isPlayerRegistered(offlinePlayer.getUniqueId()).whenComplete((isRegistered, ex) -> {
+            SkyApi.getInstance().getPlayerAPI().isPlayerRegistered(offlinePlayer.getUniqueId()).whenComplete((isRegistered, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(sender, "check if that player is registered", "SQL_PLAYER_GET", ex);
                     return;
@@ -84,21 +82,21 @@ public class GemsGiveCommand extends CommandTemplate {
                     return;
                 }
 
-                SpigotIslandAPI.hasIsland(offlinePlayer.getUniqueId()).whenComplete((hasIsland, throwable) -> {
+                SkyApi.getInstance().getIslandAPI().getPlayerIsland(offlinePlayer.getUniqueId()).whenComplete((island, throwable) -> {
                     if (throwable != null) {
                         ErrorUtil.handleError(sender, "check if the specified player had an island", "SQL_ISLAND_GET", throwable);
                         return;
-                    } else if (!hasIsland) {
+                    } else if (island == null) {
                         Messages.PLAYER_HAS_NO_ISLAND.send(sender, locale);
                         return;
                     }
 
-                    SpigotGemsAPI.addGems(offlinePlayer.getUniqueId(), amount);
+                    offlinePlayer.addGems(amount);
                     Messages.GEM_GIVE_SUCCESS.send(sender, locale, "amount", amount, "name", offlinePlayer.getName());
                 });
             });
         } else if (type.equalsIgnoreCase("faction")) {
-            SpigotFactionAPI.getFaction(playerFactionName).whenComplete((faction, throwable) -> {
+            SkyApi.getInstance().getFactionAPI().getFaction(playerFactionName).whenComplete((faction, throwable) -> {
                 if (throwable != null) {
                     ErrorUtil.handleError(sender, "get the specified Faction", "SQL_FACTION_GET", throwable);
                     return;

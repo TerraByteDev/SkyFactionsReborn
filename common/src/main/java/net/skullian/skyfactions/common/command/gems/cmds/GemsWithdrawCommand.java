@@ -1,24 +1,24 @@
 package net.skullian.skyfactions.common.command.gems.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotGemsAPI;
-import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SkyItemStack;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Command("gems")
 public class GemsWithdrawCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "gems";
+    }
+
     @Override
     public String getName() {
         return "withdraw";
@@ -36,19 +36,18 @@ public class GemsWithdrawCommand extends CommandTemplate {
 
     @Command("withdraw <amount>")
     public void run(
-            Player player,
+            SkyUser player,
             @Argument(value = "amount") String amount
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
-        SpigotIslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, throwable) -> {
+        SkyApi.getInstance().getIslandAPI().getPlayerIsland(player.getUniqueId()).whenComplete((island, throwable) -> {
             if (throwable != null) {
                 ErrorUtil.handleError(player, "get your island", "SQL_GEMS_GET", throwable);
                 return;
-            }
-
-            if (hasIsland) {
-                SpigotGemsAPI.getGems(player.getUniqueId()).whenComplete((gems, err) -> {
+            } else if (island != null) {
+                player.getGems().whenComplete((gems, err) -> {
                     if (err != null) {
                         ErrorUtil.handleError(player, "get your gems", "SQL_GEMS_GET", err);
                         return;
@@ -56,85 +55,26 @@ public class GemsWithdrawCommand extends CommandTemplate {
 
                     try {
                         int parsedAmount = amount.equalsIgnoreCase("all") ? gems : (Integer.parseInt(amount) > gems ? gems : Integer.parseInt(amount));
-                        ItemStack stack = SpigotGemsAPI.createGemsStack(player);
+                        SkyItemStack stack = SkyApi.getInstance().getGemsAPI().createGemsStack(player);
                         stack.setAmount(parsedAmount);
 
-                        int remainingItems = addItemToInventory(player.getInventory(), stack);
+                        int remainingItems = SkyApi.getInstance().getGemsAPI().addItemToInventory(player, stack);
 
-                        SpigotGemsAPI.subtractGems(player.getUniqueId(), (parsedAmount - remainingItems));
+                        player.removeGems((parsedAmount - remainingItems));
 
-                        Messages.GEMS_WITHDRAW_SUCCESS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "amount", parsedAmount);
+                        Messages.GEMS_WITHDRAW_SUCCESS.send(player, locale, "amount", parsedAmount);
                         if (remainingItems > 0) {
-                            Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                            Messages.GEMS_INSUFFICIENT_INVENTORY_SPACE.send(player, locale);
                         }
                     } catch (NumberFormatException exception) {
-                        Messages.INCORRECT_USAGE.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "usage", getSyntax());
+                        Messages.INCORRECT_USAGE.send(player, locale, "usage", getSyntax());
                     }
                 });
             } else {
-                Messages.NO_ISLAND.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                Messages.NO_ISLAND.send(player, locale);
             }
         });
 
-    }
-
-    private int addItemToInventory(Inventory inventory, ItemStack itemStack) {
-        int remaining = itemStack.getAmount();
-        int[] blockedSlots = new int[]{103, 102, 101, 100}; // armor slots
-
-        while (remaining > 0) {
-            boolean added = false;
-
-            for (int i = 0; i < inventory.getSize(); i++) {
-                final int index = i;
-                if (Arrays.stream(blockedSlots).anyMatch(x -> x == index)) continue;
-
-                ItemStack slot = inventory.getItem(i);
-
-                if (slot == null || slot.getType() == Material.AIR) {
-                    int space = Math.min(remaining, 64);
-                    inventory.setItem(i, cloneItem(itemStack, space));
-                    remaining -= space;
-
-                    if (remaining <= 0) {
-                        return 0;
-                    }
-
-                    added = true;
-                    break;
-                } else if (slot.isSimilar(itemStack)) {
-                    int maxStackSize = Math.min(slot.getMaxStackSize(), inventory.getMaxStackSize());
-                    int space = maxStackSize - slot.getAmount();
-
-                    if (space > 0) {
-                        int addAmount = Math.min(space, remaining);
-
-                        ItemStack newSlot = cloneItem(slot, slot.getAmount() + addAmount);
-                        inventory.setItem(i, newSlot);
-                        remaining -= addAmount;
-
-                        if (remaining <= 0) {
-                            return 0;
-                        }
-
-                        added = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!added) {
-                return remaining;
-            }
-        }
-
-        return 0;
-    }
-
-    private ItemStack cloneItem(ItemStack original, int amount) {
-        ItemStack cloned = original.clone();
-        cloned.setAmount(Math.min(amount, 64));
-        return cloned;
     }
 
     @Override
