@@ -16,6 +16,7 @@ import org.incendo.cloud.meta.SimpleCommandMeta;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SpigotCommandHandler implements CommandHandler {
 
@@ -60,12 +61,8 @@ public class SpigotCommandHandler implements CommandHandler {
     }
 
     @Override
-    public void registerSubCommands(AnnotationParser<SkyUser> parser) {
-
-    }
-
-    @Override
     public void register(CommandTemplate template, AnnotationParser<?> parser) {
-
+        parser.parse(template);
+        commands.computeIfAbsent(template.getParent(), k -> new ConcurrentHashMap<>()).put(template.getParent(), template);
     }
 }
