@@ -68,4 +68,8 @@ public abstract class SkyUser {
     public abstract void playSound(Sound sound, float volume, float pitch);
 
     public abstract void addItem(SkyItemStack stack);
+
+    public abstract Object getCommandSender();
+
+    public SkyUser setCommandSender(Object commandSender);
 }

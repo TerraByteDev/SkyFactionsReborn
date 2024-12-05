@@ -3,7 +3,7 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.SLogger;
-import net.skullian.skyfactions.paper.module.impl.discord.DiscordConfig;
+import net.skullian.skyfactions.module.impl.discord.DiscordConfig;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;

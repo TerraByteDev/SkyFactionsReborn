@@ -4,6 +4,8 @@ import java.util.List;
 
 public abstract class CommandTemplate {
 
+    public abstract String getParent();
+
     public abstract String getName();
 
     public abstract String getDescription();

@@ -1,5 +1,7 @@
 package net.skullian.skyfactions.paper.user;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.common.api.InvitesAPI;
@@ -33,10 +35,12 @@ public class SpigotSkyUser extends SkyUser {
     private Optional<List<InviteData>> incomingInvites = Optional.empty();
     private Optional<JoinRequestData> activeJoinRequest = Optional.empty();
     private final boolean console;
+    private Object commandSender;
 
-    public SpigotSkyUser(UUID uuid, boolean console) {
+    public SpigotSkyUser(UUID uuid, boolean console, Object commandSender) {
         this.uuid = uuid;
         this.console = console;
+        this.commandSender = commandSender;
     }
 
     @Override
@@ -194,5 +198,16 @@ public class SpigotSkyUser extends SkyUser {
     public void addItem(SkyItemStack stack) {
         OfflinePlayer player = SpigotAdapter.adapt(this);
         if (player.isOnline()) player.getPlayer().getInventory().addItem(SpigotAdapter.adapt(stack, this, false));
+    }
+
+    @Override
+    public Object getCommandSender() {
+        return this.commandSender;
+    }
+
+    @Override
+    public SkyUser setCommandSender(Object commandSender) {
+        this.commandSender = commandSender;
+        return this;
     }
 }

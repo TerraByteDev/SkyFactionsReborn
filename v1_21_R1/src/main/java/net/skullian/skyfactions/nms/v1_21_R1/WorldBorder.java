@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.nms.v1_21_R1;
 
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.nms.NMSProvider;
 import net.skullian.skyfactions.common.util.worldborder.AWorldBorder;
@@ -44,6 +45,6 @@ public class WorldBorder extends AWorldBorder {
 
     @Override
     public void update(BorderUpdateAction action, SkyUser player) {
-        NMSProvider.getInstance().updateWorldBorder(action, player, border);
+        SkyApi.getInstance().getNMSProvider().getInstance().updateWorldBorder(action, player, border);
     }
 }

@@ -2,6 +2,7 @@ package net.skullian.skyfactions.common.api;
 
 import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
+import net.skullian.skyfactions.common.command.CommandHandler;
 import net.skullian.skyfactions.common.config.ConfigFileHandler;
 import net.skullian.skyfactions.common.database.DatabaseManager;
 import net.skullian.skyfactions.common.database.cache.CacheService;
@@ -178,6 +179,13 @@ public abstract class SkyApi {
      * @return {@link NMSProvider}
      */
    @NotNull public abstract NMSProvider getNMSProvider();
+
+    /**
+     * Get the Command Handler. This is used for handling commands.
+     *
+     * @return {@link CommandHandler}
+     */
+   @NotNull public abstract CommandHandler getCommandHandler();
 
     /**
      * Set the API Instance. Can depend on the platform (obviously a WIP)

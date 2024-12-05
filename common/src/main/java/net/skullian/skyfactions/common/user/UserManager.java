@@ -1,7 +1,5 @@
 package net.skullian.skyfactions.common.user;
 
-import net.kyori.adventure.text.Component;
-
 import java.util.UUID;
 
 public abstract class UserManager {
@@ -10,6 +8,6 @@ public abstract class UserManager {
 
     public abstract boolean isCached(UUID uuid);
 
-    public abstract SkyUser fromConsole();
+    public abstract SkyUser cloudFetch(UUID uuid, Object commandSender, boolean console);
 
 }
