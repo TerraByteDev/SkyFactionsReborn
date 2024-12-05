@@ -1,18 +1,11 @@
 package net.skullian.skyfactions.common.command.runes.subcommands;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.api.SpigotRunesAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -26,6 +19,12 @@ import java.util.stream.Collectors;
 
 @Command("runes")
 public class RunesResetCommand extends CommandTemplate {
+
+    @Override
+    public String getParent() {
+        return "runes";
+    }
+
     @Override
     public String getName() {
         return "reset";
@@ -42,18 +41,18 @@ public class RunesResetCommand extends CommandTemplate {
     }
 
     @Suggestions("resetTypeSelection")
-    public List<String> selectionSuggestion(CommandContext<CommandSourceStack> context, CommandInput input) {
+    public List<String> selectionSuggestion(CommandContext<SkyUser> context, CommandInput input) {
         return List.of("player", "faction");
     }
 
     @Suggestions("playerFactionName")
-    public List<String> suggestPlayerOrFaction(CommandContext<CommandSourceStack> context, CommandInput input) {
+    public List<String> suggestPlayerOrFaction(CommandContext<SkyUser> context, CommandInput input) {
         if (input.input().startsWith("runes reset player")) {
-            return Bukkit.getOnlinePlayers().stream()
-                    .map(Player::getName)
+            return SkyApi.getInstance().getPlayerAPI().getOnlinePlayers().stream()
+                    .map(SkyUser::getName)
                     .collect(Collectors.toList());
         } else if (input.input().startsWith("runes reset faction")) {
-            return new ArrayList<>(SpigotFactionAPI.factionNameCache.keySet());
+            return new ArrayList<>(SkyApi.getInstance().getFactionAPI().getFactionCache().keySet());
         }
 
         return List.of();
@@ -62,17 +61,17 @@ public class RunesResetCommand extends CommandTemplate {
     @Command("reset <type> <playerFactionName>")
     @Permission(value = {"skyfactions.runes.reset"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender,
+            SkyUser sender,
             @Argument(value = "type", suggestions = "giveTypeSelection") String type,
             @Argument(value = "playerFactionName", suggestions = "playerFactionName") String playerFactionName
     ) {
-        if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
-        String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
+        if (!sender.isConsole() && !CommandsUtility.hasPerm(sender, permission(), true)) return;
+        String locale = sender.isConsole() ? SkyApi.getInstance().getPlayerAPI().getLocale(sender.getUniqueId()) : Messages.getDefaulLocale();
 
         if (type.equalsIgnoreCase("player")) {
-            OfflinePlayer player = Bukkit.getOfflinePlayer(playerFactionName);
+            SkyUser player = SkyApi.getInstance().getUserManager().getUser(playerFactionName);
 
-            SpigotPlayerAPI.isPlayerRegistered(player.getUniqueId()).whenComplete((isRegistered, throwable) -> {
+            SkyApi.getInstance().getPlayerAPI().isPlayerRegistered(player.getUniqueId()).whenComplete((isRegistered, throwable) -> {
                 if (throwable != null) {
                     ErrorUtil.handleError(sender, "check if that player is registered", "SQL_PLAYER_GET", throwable);
                     return;
@@ -81,25 +80,24 @@ public class RunesResetCommand extends CommandTemplate {
                     return;
                 }
 
-                SpigotIslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
+                SkyApi.getInstance().getIslandAPI().getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
                     if (ex != null) {
                         ErrorUtil.handleError(sender, "check if the player had an island", "SQL_ISLAND_GET", ex);
                         return;
-                    } else if (!hasIsland) {
+                    } else if (island == null) {
                         Messages.PLAYER_HAS_NO_ISLAND.send(sender, locale);
                         return;
                     }
 
-                    SpigotRunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, ex2) -> {
+                    player.getRunes().whenComplete((runes, ex2) -> {
                         if (ex2 != null) {
                             ErrorUtil.handleError(sender, "get the player's runes", "SQL_RUNES_GET", ex2);
                             return;
                         }
 
-                        SpigotRunesAPI.removeRunes(player.getUniqueId(), runes);
+                        player.removeRunes(runes);
+                        Messages.RUNES_RESET_SUCCESS.send(sender, locale, "name", player.getName());
                     });
-
-                    Messages.RUNES_RESET_SUCCESS.send(sender, locale, "name", player.getName());
                 });
             });
         }

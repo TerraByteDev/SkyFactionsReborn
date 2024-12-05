@@ -1,13 +1,11 @@
 package net.skullian.skyfactions.common.command.runes.subcommands;
 
-import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
-import net.skullian.skyfactions.paper.api.SpigotRunesAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
@@ -15,6 +13,11 @@ import java.util.List;
 
 @Command("runes")
 public class RunesBalanceCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "runes";
+    }
+
     @Override
     public String getName() {
         return "balance";
@@ -33,24 +36,26 @@ public class RunesBalanceCommand extends CommandTemplate {
     @Command("balance")
     @Permission(value = {"skyfactions.runes.balance", "skyfactions.runes"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player
+            SkyUser player
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
-        SpigotIslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
+        SkyApi.getInstance().getIslandAPI().getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                 return;
-            } else if (!hasIsland) {
-                Messages.NO_ISLAND.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+            } else if (island == null) {
+                Messages.NO_ISLAND.send(player, locale);
                 return;
             }
-            SpigotRunesAPI.getRunes(player.getUniqueId()).whenComplete((runes, throwable) -> {
+
+            player.getRunes().whenComplete((runes, throwable) -> {
                 if (throwable != null) {
                     ErrorUtil.handleError(player, "get your runes balance", "SQL_RUNES_GET", throwable);
                     return;
                 }
-                Messages.RUNES_BALANCE_MESSAGE.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "count", runes);
+                Messages.RUNES_BALANCE_MESSAGE.send(player, locale, "count", runes);
             });
         });
     }
