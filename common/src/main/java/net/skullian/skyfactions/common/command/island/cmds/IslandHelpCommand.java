@@ -38,7 +38,6 @@ public class IslandHelpCommand extends CommandTemplate {
     public void perform(
             SkyUser sender
     ) {
-
         if (!sender.isConsole() && !CommandsUtility.hasPerm(sender, permission(), true)) return;
         String locale = sender.isConsole() ? SkyApi.getInstance().getPlayerAPI().getLocale(sender.getUniqueId()) : Messages.getDefaulLocale();
 

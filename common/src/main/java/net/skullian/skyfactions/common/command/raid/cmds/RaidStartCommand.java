@@ -1,14 +1,12 @@
 package net.skullian.skyfactions.common.command.raid.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotRaidAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.gui.screens.confirmation.PlayerRaidConfirmationUI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import net.skullian.skyfactions.paper.util.SoundUtil;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
@@ -16,6 +14,12 @@ import java.util.List;
 
 @Command("raid")
 public class RaidStartCommand extends CommandTemplate {
+
+    @Override
+    public String getParent() {
+        return "raid";
+    }
+
     @Override
     public String getName() {
         return "start";
@@ -34,21 +38,20 @@ public class RaidStartCommand extends CommandTemplate {
     @Command("start")
     @Permission(value = {"skyfactions.raid.start", "skyfactions.raid"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player
+            SkyUser player
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
 
-        SpigotRaidAPI.getCooldownDuration(player).whenComplete((cooldown, ex) -> {
+        SkyApi.getInstance().getRaidAPI().getCooldownDuration(player).whenComplete((cooldown, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "start a raid", "SQL_RAID_COOLDOWN_GET", ex);
                 return;
             }
 
             if (cooldown != null) {
-                Messages.RAID_ON_COOLDOWN.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "cooldown", cooldown);
+                Messages.RAID_ON_COOLDOWN.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "cooldown", cooldown);
             } else {
                 PlayerRaidConfirmationUI.promptPlayer(player);
-                SoundUtil.playSound(player, "ui.button.click", 1f, 1f);
             }
         });
     }
