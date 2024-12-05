@@ -15,15 +15,14 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.meta.SimpleCommandMeta;
 import org.incendo.cloud.paper.LegacyPaperCommandManager;
 
-import java.util.Map;
 import java.util.UUID;
 
-public class PaperCommandHandler implements CommandHandler {
+public class SpigotCommandHandler implements CommandHandler {
 
     private final LegacyPaperCommandManager<SkyUser> manager;
     private final AnnotationParser<SkyUser> parser;
 
-    public PaperCommandHandler() {
+    public SpigotCommandHandler() {
         SenderMapper<CommandSender, SkyUser> senderMapper = SenderMapper.create(
                 commandSender -> {
                     if (commandSender instanceof Player player) {

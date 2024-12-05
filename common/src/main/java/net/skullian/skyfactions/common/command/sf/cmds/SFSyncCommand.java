@@ -1,21 +1,24 @@
 package net.skullian.skyfactions.common.command.sf.cmds;
 
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.annotations.Command;
-
-import net.skullian.skyfactions.paper.SkyFactionsReborn;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import net.skullian.skyfactions.paper.util.SLogger;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SLogger;
+import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
+
+import java.util.List;
 
 @Command("sf")
 public class SFSyncCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "sf";
+    }
+
     @Override
     public String getName() {
         return "sync";
@@ -34,16 +37,15 @@ public class SFSyncCommand extends CommandTemplate {
     @Command("sync")
     @Permission(value = {"skyfactions.sf.sync"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender
+            SkyUser sender
     ) {
-        
-        if ((sender instanceof Player) &&!CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
-        String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
+        if (!sender.isConsole() && !CommandsUtility.hasPerm(sender, permission(), true)) return;
+        String locale = sender.isConsole() ? SkyApi.getInstance().getPlayerAPI().getLocale(sender.getUniqueId()) : Messages.getDefaulLocale();
 
         SLogger.warn("[{}] is forcing a database sync.", sender.getName());
 
         Messages.SYNC_RUNNING.send(sender, locale);
-        SkyFactionsReborn.getCacheService().cacheOnce().whenComplete((ignored, ex) -> {
+        SkyApi.getInstance().getCacheService().cacheOnce().whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(sender, "force a database sync", "SQL_CACHE_FAILURE", ex);
                 return;

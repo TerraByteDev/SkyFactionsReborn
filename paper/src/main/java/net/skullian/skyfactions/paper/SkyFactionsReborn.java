@@ -9,8 +9,8 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.util.SLogger;
+import net.skullian.skyfactions.module.SkyModuleManager;
 import net.skullian.skyfactions.paper.api.SpigotSkyAPI;
-import net.skullian.skyfactions.common.module.SkyModuleManager;
 import net.skullian.skyfactions.paper.npc.SpigotNPCManager;
 import net.skullian.skyfactions.paper.defence.block.BrokenBlockService;
 import net.skullian.skyfactions.paper.event.PlayerListener;
@@ -52,9 +52,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
         print();
 
-        SLogger.info("Initialising NMS Provider.");
-        NMSProvider.init();
-
         SLogger.info("Registering SkyAPI & Plugin instance.");
         SkyApi.setInstance(new SpigotSkyAPI());
         SkyApi.setPluginInstance(this);
@@ -67,13 +64,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
         SLogger.info("Loading InvLib Instance.");
         InvUI.getInstance().setPlugin(this);
-
-        new GemsCommandHandler();
-        new FactionCommandHandler();
-        new IslandCommandHandler();
-        new RaidCommandHandler();
-        new RunesCommandHandler();
-        new SFCommandHandler();
 
         SLogger.info("Registering Events.");
         getServer().getPluginManager().registerEvents(new ArmorListener(), this);

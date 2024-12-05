@@ -187,6 +187,13 @@ public abstract class SkyApi {
      */
    @NotNull public abstract CommandHandler getCommandHandler();
 
+   /**
+    * Get the Plugin Info API. This is used for getting information about the plugin.
+    *
+    * @return {@link PluginInfoAPI}
+    */
+   @NotNull public abstract PluginInfoAPI getPluginInfoAPI();
+
     /**
      * Set the API Instance. Can depend on the platform (obviously a WIP)
      *

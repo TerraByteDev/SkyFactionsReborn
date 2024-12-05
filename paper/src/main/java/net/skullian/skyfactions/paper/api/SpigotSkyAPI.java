@@ -3,6 +3,7 @@ package net.skullian.skyfactions.paper.api;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.skullian.skyfactions.common.api.*;
+import net.skullian.skyfactions.common.command.CommandHandler;
 import net.skullian.skyfactions.common.config.ConfigFileHandler;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.database.DatabaseManager;
@@ -15,6 +16,7 @@ import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.nms.NMSProvider;
 import net.skullian.skyfactions.common.util.worldborder.BorderAPI;
 import net.skullian.skyfactions.common.util.worldborder.persistence.Border;
+import net.skullian.skyfactions.paper.command.SpigotCommandHandler;
 import net.skullian.skyfactions.paper.util.worldborder.BorderPersistence;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.defence.SpigotDefencesFactory;
@@ -51,6 +53,8 @@ public final class SpigotSkyAPI extends SkyApi {
     private final DefenceFactory defenceFactory;
     private final BukkitAudiences audience;
     private final NMSProvider nmsProvider;
+    private final SpigotCommandHandler commandHandler;
+    private final SpigotPluginInfoAPI pluginInfoAPI;
 
     public SpigotSkyAPI() {
         // Store an instance of the ConfigHandler class in case it is needed.
@@ -92,6 +96,8 @@ public final class SpigotSkyAPI extends SkyApi {
         defenceFactory = new SpigotDefencesFactory();
         audience = BukkitAudiences.create(SkyFactionsReborn.getInstance());
         nmsProvider = new SpigotNMSProvider();
+        commandHandler = new SpigotCommandHandler();
+        pluginInfoAPI = new SpigotPluginInfoAPI();
     }
 
     @Override
@@ -223,5 +229,17 @@ public final class SpigotSkyAPI extends SkyApi {
     @Override
     public NMSProvider getNMSProvider() {
         return nmsProvider;
+    }
+
+    @NotNull
+    @Override
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
+    }
+
+    @NotNull
+    @Override
+    public PluginInfoAPI getPluginInfoAPI() {
+        return pluginInfoAPI;
     }
 }

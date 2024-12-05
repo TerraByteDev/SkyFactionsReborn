@@ -1,12 +1,12 @@
 package net.skullian.skyfactions.common.command.sf.cmds;
 
-import net.skullian.skyfactions.paper.SkyFactionsReborn;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.util.SLogger;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
+import net.skullian.skyfactions.module.SkyModuleManager;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
@@ -14,6 +14,11 @@ import java.util.List;
 
 @Command("sf")
 public class SFReloadCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "sf";
+    }
+
     @Override
     public String getName() {
         return "reload";
@@ -32,17 +37,16 @@ public class SFReloadCommand extends CommandTemplate {
     @Command("reload")
     @Permission(value = {"skyfactions.sf.reload"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            CommandSender sender
+            SkyUser sender
     ) {
-        
-        if ((sender instanceof Player) && !CommandsUtility.hasPerm((Player) sender, permission(), true)) return;
-        String locale = sender instanceof Player ? ((Player) sender).locale().getLanguage() : Messages.getDefaulLocale();
+        if (!sender.isConsole() && !CommandsUtility.hasPerm(sender, permission(), true)) return;
+        String locale = sender.isConsole() ? SkyApi.getInstance().getPlayerAPI().getLocale(sender.getUniqueId()) : Messages.getDefaulLocale();
 
         SLogger.warn("[{}] is reloading SkyFactionsReborn.", sender.getName());
         Messages.RELOADING.send(sender, locale);
 
-        SkyFactionsReborn.getConfigHandler().reloadFiles();
-        SkyFactionsReborn.getModuleManager().onReload();
+        SkyApi.getInstance().getConfigHandler().reloadFiles();
+        SkyModuleManager.onReload();
 
         Messages.RELOADED.send(sender, locale);
         SLogger.warn("SkyFactionsReborn reloaded.");
