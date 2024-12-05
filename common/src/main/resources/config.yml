@@ -49,6 +49,40 @@ Language:
   # Language to use / fallback to if the plugin cannot find a player's language config.
   DEFAULT_LANGUAGE: "en"
 
+  # This is used in text-related things such as faction creation, broadcasts etc.
+  # This supports both normal strings and regex.
+  BLACKLISTED_PHRASES:
+    - cunt
+    - retard
+    - motherfucker
+    - motherfuck
+    - fuck
+    - kys
+    - penis
+    - sped
+    - bollocks
+    - bastard
+    - asshat
+    - dumbass
+    - slapper
+    - anus
+    - anal
+    - cock
+    - dick
+    - whore
+    - suck
+    - twat
+    - shit
+    - bugger
+    - arse
+    - faggot
+    - bitch
+    - butt|ass(?:hole)?
+    - ^fag$
+    - nigg(?:a|er)
+    - tit(?:s|z|ies)?
+    - boob(?:s|z|ies)?
+
 # SkyFactions Hub Config
 Hub:
   # Name of the world that the hub is located in.
@@ -283,40 +317,6 @@ Factions:
     ALLOW_NON_ENGLISH: false
     # Allow symbols in the name.
     ALLOW_SYMBOLS: false
-
-    # The plugin will automatically run through all of these strings and check that the faction name does not contain any of these.
-    # Can be regex patterns or just strings.
-    BLACKLISTED_NAMES:
-      - cunt
-      - retard
-      - motherfucker
-      - motherfuck
-      - fuck
-      - kys
-      - penis
-      - sped
-      - bollocks
-      - bastard
-      - asshat
-      - dumbass
-      - slapper
-      - anus
-      - anal
-      - cock
-      - dick
-      - whore
-      - suck
-      - twat
-      - shit
-      - bugger
-      - arse
-      - faggot
-      - bitch
-      - butt|ass(?:hole)?
-      - ^fag$
-      - nigg(?:a|er)
-      - tit(?:s|z|ies)?
-      - boob(?:s|z|ies)?
 
   # Configuration for faction renaming.
   # The control measures (min/max name length, blacklisted keywords, allow symbols/numbers/non-english) in the FACTION_CREATION section (above)

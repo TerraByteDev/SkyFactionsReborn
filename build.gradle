@@ -137,6 +137,7 @@ allprojects {
 
         compileOnly("net.kyori:adventure-text-logger-slf4j:${adventure}")
         compileOnly("net.kyori:adventure-text-minimessage:${adventure}")
+        compileOnly("net.kyori:adventure-text-serializer-legacy:${adventure}")
 
         compileOnly("org.jooq:jooq:${jooq_codegen_version}")
         compileOnly("org.flywaydb:flyway-core:${flyway_core}")

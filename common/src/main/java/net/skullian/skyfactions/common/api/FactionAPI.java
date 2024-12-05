@@ -151,7 +151,7 @@ public abstract class FactionAPI {
      */
     public boolean hasValidName(SkyUser player, String name) {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
-        
+
         int minimumLength = Settings.FACTION_CREATION_MIN_LENGTH.getInt();
         int maximumLength = Settings.FACTION_CREATION_MAX_LENGTH.getInt();
         int length = name.length();
@@ -169,21 +169,13 @@ public abstract class FactionAPI {
                 Messages.FACTION_NON_ENGLISH.send(player, locale);
                 return false;
             } else {
-                boolean regexMatch = false;
-                List<String> blacklistedNames = Settings.FACTION_CREATION_BLACKLISTED_NAMES.getList();
+                List<String> blacklistedNames = Settings.BLACKLISTED_PHRASES.getList();
 
                 for (String blacklistedName : blacklistedNames) {
                     if (Pattern.compile(blacklistedName).matcher(name).find()) {
-                        regexMatch = true;
+                        Messages.FACTION_NAME_PROHIBITED.send(player, locale);
                         break;
                     }
-                }
-
-                if (regexMatch) {
-                    Messages.FACTION_NAME_PROHIBITED.send(player, locale);
-                    return false;
-                } else {
-                    return true;
                 }
             }
 

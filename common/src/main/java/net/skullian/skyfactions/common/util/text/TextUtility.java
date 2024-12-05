@@ -87,33 +87,6 @@ public class TextUtility {
         }
     }
 
-    /**
-     * Check if a string contains blacklisted words.
-     * Blacklisted words (regex) are configured in config.yml.
-     *
-     * @param user Player to check
-     * @param name   String to check.
-     * @return {@link Boolean}
-     */
-    public static boolean hasBlacklistedWords(SkyUser user, String name) {
-        boolean regexMatch = false;
-        List<String> blacklistedNames = Settings.FACTION_CREATION_BLACKLISTED_NAMES.getList();
-
-        for (String blacklistedName : blacklistedNames) {
-            if (Pattern.compile(blacklistedName).matcher(name).find()) {
-                regexMatch = true;
-                break;
-            }
-        }
-
-        if (regexMatch) {
-            Messages.FACTION_NAME_PROHIBITED.send(user, SkyApi.getInstance().getPlayerAPI().getLocale(user.getUniqueId()));
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public static boolean hasSymbols(@NotNull CharSequence seq) {
         if (seq == null) {
             return false;
@@ -131,6 +104,28 @@ public class TextUtility {
                 return false;
             }
         }
+    }
+
+    /**
+     * Check if a string contains blacklisted words.
+     * Blacklisted words (regex) are configured in config.yml.
+     *
+     * @param user Player to check
+     * @param name   String to check.
+     * @return {@link Boolean}
+     */
+    public static boolean containsBlockedPhrases(String name) {
+        boolean regexMatch = false;
+        List<String> blacklistedNames = Settings.BLACKLISTED_PHRASES.getList();
+
+        for (String blacklistedName : blacklistedNames) {
+            if (Pattern.compile(blacklistedName).matcher(name).find()) {
+                regexMatch = true;
+                break;
+            }
+        }
+
+        return regexMatch;
     }
 
     public static boolean containsNumbers(@NotNull CharSequence seq) {

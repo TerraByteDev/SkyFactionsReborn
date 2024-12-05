@@ -1,14 +1,14 @@
 package net.skullian.skyfactions.common.command.faction.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.config.types.Settings;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.faction.AuditLogType;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.text.TextUtility;
 import org.incendo.cloud.annotation.specifier.Greedy;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
@@ -19,7 +19,10 @@ import java.util.List;
 @Command("faction")
 public class FactionBroadcastCommand extends CommandTemplate {
 
-    FactionCommandHandler handler;
+    @Override
+    public String getParent() {
+        return "faction";
+    }
 
     @Override
     public String getName() {
@@ -39,12 +42,13 @@ public class FactionBroadcastCommand extends CommandTemplate {
     @Command("broadcast <message>")
     @Permission(value = {"skyfactions.faction.broadcast", "skyfactions.faction"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player,
+            SkyUser player,
             @Argument(value = "message") @Greedy String message
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
-        SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+        SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "get your Faction", "SQL_FACTION_GET", ex);
                 return;
@@ -52,12 +56,12 @@ public class FactionBroadcastCommand extends CommandTemplate {
 
             if (faction != null) {
                 if (!Settings.FACTION_CREATE_BROADCAST_PERMISSIONS.getList().contains(faction.getRankType(player.getUniqueId()).getRankValue())) {
-                    Messages.FACTION_ACTION_DENY.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                    Messages.FACTION_ACTION_DENY.send(player, locale);
                 } else {
-                    if (SpigotFactionAPI.hasValidName(player, message)) {
+                    if (!TextUtility.containsBlockedPhrases(message)) {
                         faction.createAuditLog(player.getUniqueId(), AuditLogType.BROADCAST_CREATE, "player_name", player.getName());
                         faction.createBroadcast(player, message);
-                    }
+                    } else Messages.BLACKLISTED_PHRASE.send(player, locale);
                 }
             }
         });
