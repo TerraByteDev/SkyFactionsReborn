@@ -1,16 +1,11 @@
 package net.skullian.skyfactions.common.command.island.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.paper.SkyFactionsReborn;
-import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -23,6 +18,11 @@ import java.util.stream.Collectors;
 
 @Command("island")
 public class IslandUntrustCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "island";
+    }
+
     @Override
     public String getName() {
         return "untrust";
@@ -39,56 +39,58 @@ public class IslandUntrustCommand extends CommandTemplate {
     }
 
     @Suggestions("onlinePlayers")
-    public List<String> suggestPlayers(CommandContext<CommandSourceStack> context, CommandInput input) {
-        return Bukkit.getOnlinePlayers().stream()
-                .map(Player::getName)
+    public List<String> suggestPlayers(CommandContext<SkyUser> context, CommandInput input) {
+        return SkyApi.getInstance().getPlayerAPI().getOnlinePlayers().stream()
+                .map(SkyUser::getName)
                 .collect(Collectors.toList());
     }
 
     @Command("untrust <target>")
     @Permission(value = {"skyfactions.island.untrust", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player,
+            SkyUser player,
             @Argument(value = "target", suggestions = "onlinePlayers") String playerName
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
-        OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
+        
+        SkyUser target = SkyApi.getInstance().getUserManager().getUser(playerName);
 
-        SpigotPlayerAPI.isPlayerRegistered(target.getUniqueId()).whenComplete((isRegistered, err) -> {
+        SkyApi.getInstance().getPlayerAPI().isPlayerRegistered(target.getUniqueId()).whenComplete((isRegistered, err) -> {
             if (err != null) {
                 ErrorUtil.handleError(player, "check if that player is registered", "SQL_PLAYER_GET", err);
                 return;
             } else if (!isRegistered) {
-                Messages.UNKNOWN_PLAYER.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "player", playerName);
+                Messages.UNKNOWN_PLAYER.send(player, locale, "player", playerName);
                 return;
             }
 
-            SpigotIslandAPI.getPlayerIsland(player.getUniqueId()).whenComplete((is, ex) -> {
+            SkyApi.getInstance().getIslandAPI().getPlayerIsland(player.getUniqueId()).whenComplete((is, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "get your island", "SQL_ISLAND_GET", ex);
                     return;
                 } else if (is == null) {
-                    Messages.NO_ISLAND.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                    Messages.NO_ISLAND.send(player, locale);
                     return;
                 }
 
-                SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().isPlayerTrusted(target.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
+                SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().isPlayerTrusted(target.getUniqueId(), is.getId()).whenComplete((isTrusted, throwable) -> {
                     if (throwable != null) {
                         ErrorUtil.handleError(player, "check if a player is trusted", "SQL_TRUST_GET", throwable);
                         return;
                     }
 
                     if (isTrusted) {
-                        SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().removePlayerTrust(target.getUniqueId(), is.getId()).whenComplete((ignored, exc) -> {
+                        SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().removePlayerTrust(target.getUniqueId(), is.getId()).whenComplete((ignored, exc) -> {
                             if (exc != null) {
                                 ErrorUtil.handleError(player, "untrust a player", "SQL_TRUST_REMOVE", exc);
                                 return;
                             }
 
-                            Messages.UNTRUST_SUCCESS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "player", target.getName());
+                            Messages.UNTRUST_SUCCESS.send(player, locale, "player", target.getName());
                         });
                     } else {
-                        Messages.UNTRUST_FAILURE.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                        Messages.UNTRUST_FAILURE.send(player, locale);
                     }
                 });
             });

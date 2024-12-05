@@ -1,21 +1,13 @@
 package net.skullian.skyfactions.common.command.island.cmds;
 
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import net.skullian.skyfactions.paper.SkyFactionsReborn;
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
-import net.skullian.skyfactions.paper.api.SpigotRaidAPI;
-import net.skullian.skyfactions.paper.api.SpigotRegionAPI;
+import net.skullian.skyfactions.common.api.FactionAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.config.types.Settings;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -30,10 +22,9 @@ import java.util.stream.Collectors;
 @Command("island")
 public class IslandVisitCommand extends CommandTemplate {
 
-    IslandCommandHandler handler;
-
-    public IslandVisitCommand(IslandCommandHandler handler) {
-        this.handler = handler;
+    @Override
+    public String getParent() {
+        return "island";
     }
 
     @Override
@@ -52,70 +43,72 @@ public class IslandVisitCommand extends CommandTemplate {
     }
 
     @Suggestions("onlinePlayers")
-    public List<String> suggestPlayers(CommandContext<CommandSourceStack> context, CommandInput input) {
-        return Bukkit.getOnlinePlayers().stream()
-                .map(Player::getName)
+    public List<String> suggestPlayers(CommandContext<SkyUser> context, CommandInput input) {
+        return SkyApi.getInstance().getPlayerAPI().getOnlinePlayers().stream()
+                .map(SkyUser::getName)
                 .collect(Collectors.toList());
     }
 
     @Command("visit <target>")
     @Permission(value = {"skyfactions.island.visit", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player,
+            SkyUser player,
             @Argument(value = "target", suggestions = "onlinePlayers") String playerName
     ) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
-        Messages.VISIT_PROCESSING.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
-        OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
+        Messages.VISIT_PROCESSING.send(player, locale);
+        SkyUser target = SkyApi.getInstance().getUserManager().getUser(playerName);
 
-        SpigotPlayerAPI.isPlayerRegistered(target.getUniqueId()).whenComplete((isRegistered, throwable) -> {
+        SkyApi.getInstance().getPlayerAPI().isPlayerRegistered(target.getUniqueId()).whenComplete((isRegistered, throwable) -> {
             if (throwable != null) {
                 ErrorUtil.handleError(player, "check if that player is registered", "SQL_PLAYER_GET", throwable);
                 return;
             } else if (!isRegistered) {
-                Messages.UNKNOWN_PLAYER.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "player", playerName);
+                Messages.UNKNOWN_PLAYER.send(player, locale, "player", playerName);
                 return;
             } else if (target.getUniqueId().equals(player.getUniqueId())) {
-                IslandTeleportCommand template = (IslandTeleportCommand) this.handler.getSubCommands().get("teleport");
+                IslandTeleportCommand template = (IslandTeleportCommand) SkyApi.getInstance().getCommandHandler().getSubCommands(getParent()).get("teleport");
                 template.perform(player);
                 return;
             }
 
-            SpigotIslandAPI.getPlayerIsland(target.getUniqueId()).whenComplete((is, ex) -> {
+            SkyApi.getInstance().getIslandAPI().getPlayerIsland(target.getUniqueId()).whenComplete((is, ex) -> {
                 if (ex != null) {
                     ErrorUtil.handleError(player, "get that player's island", "SQL_ISLAND_GET", ex);
                     return;
                 } else if (is == null) {
-                    Messages.VISIT_NO_ISLAND.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                    Messages.VISIT_NO_ISLAND.send(player, locale);
                     return;
-                } else if (SpigotRegionAPI.isLocationInRegion(player.getLocation(), "sfr_player_" + target.getUniqueId().toString())) {
-                    Messages.VISIT_ALREADY_ON_ISLAND.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "player", target.getName());
+                } else if (SkyApi.getInstance().getRegionAPI().isLocationInRegion(player.getLocation(), "sfr_player_" + target.getUniqueId().toString())) {
+                    Messages.VISIT_ALREADY_ON_ISLAND.send(player, locale, "player", target.getName());
                     return;
                 }
 
-                if ((SpigotRaidAPI.currentRaids.containsValue(player.getUniqueId()) || SpigotRaidAPI.processingRaid.containsValue(player.getUniqueId())) || (SpigotRaidAPI.currentRaids.containsValue(target.getUniqueId()) || SpigotRaidAPI.processingRaid.containsValue(target.getUniqueId()))) {
-                    Messages.VISIT_IN_RAID.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                // todo - fix this shit
+                if ((SkyApi.getInstance().getRaidAPI().currentRaids.containsValue(player.getUniqueId()) || SkyApi.getInstance().getRaidAPI().processingRaid.containsValue(player.getUniqueId())) || (SkyApi.getInstance().getRaidAPI().currentRaids.containsValue(target.getUniqueId()) || SkyApi.getInstance().getRaidAPI().processingRaid.containsValue(target.getUniqueId()))) {
+                    Messages.VISIT_IN_RAID.send(player, locale);
                 } else {
-                    SkyFactionsReborn.getDatabaseManager().getPlayerIslandManager().isPlayerTrusted(player.getUniqueId(), is.getId()).whenComplete((isTrusted, err) -> {
+                    SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().isPlayerTrusted(player.getUniqueId(), is.getId()).whenComplete((isTrusted, err) -> {
                         if (err != null) {
                             ErrorUtil.handleError(player, "check if your are trusted", "SQL_TRUST_GET", err);
                             return;
                         }
 
-                        World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
-                        if (world == null) {
-                            Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "visit a player", "debug", "WORLD_NOT_EXIST");
+                        String world = Settings.ISLAND_PLAYER_WORLD.getString();
+                        if (SkyApi.getInstance().getRegionAPI().worldExists(world)) {
+                            Messages.ERROR.send(player, locale, "operation", "visit a player", "debug", "WORLD_NOT_EXIST");
                         } else {
                             if (isTrusted) {
-                                SpigotIslandAPI.modifyDefenceOperation(SpigotFactionAPI.DefenceOperation.DISABLE, player.getUniqueId());
+                                if (SkyApi.getInstance().getRegionAPI().isLocationInRegion(player.getLocation(), "sfr_player_" + player.getUniqueId().toString())) SkyApi.getInstance().getIslandAPI().modifyDefenceOperation(FactionAPI.DefenceOperation.DISABLE, player);
 
-                                SpigotRegionAPI.modifyWorldBorder(player, is.getCenter(world), is.getSize()); // shift the worldborder
-                                SpigotRegionAPI.teleportPlayerToLocation(player, is.getCenter(world));
+                                SkyApi.getInstance().getRegionAPI().modifyWorldBorder(player, is.getCenter(world), is.getSize()); // shift the worldborder
+                                player.teleport(is.getCenter(world));
 
-                                SpigotIslandAPI.onIslandLoad(target.getUniqueId());
+                                SkyApi.getInstance().getIslandAPI().onIslandLoad(target);
                             } else {
-                                Messages.PLAYER_NOT_TRUSTED.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                                Messages.PLAYER_NOT_TRUSTED.send(player, locale);
                             }
                         }
                     });

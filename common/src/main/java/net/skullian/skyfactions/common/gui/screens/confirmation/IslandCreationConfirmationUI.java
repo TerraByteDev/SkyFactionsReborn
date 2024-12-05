@@ -19,8 +19,6 @@ public class IslandCreationConfirmationUI extends Screen {
     @Builder
     public IslandCreationConfirmationUI(SkyUser player) {
         super(GUIEnums.CREATE_ISLAND_GUI.getPath(), player);
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player) {

@@ -21,10 +21,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class SpigotRaidAPI extends RaidAPI {
 
-    // attacker, victim
-    public Map<UUID, UUID> processingRaid = new HashMap<>();
-    public Map<UUID, UUID> currentRaids = new HashMap<>();
-
     @Override
     public CompletableFuture<String> getCooldownDuration(SkyUser player) {
         long cooldownDurationInMilliseconds = Settings.RAIDING_COOLDOWN.getLong();

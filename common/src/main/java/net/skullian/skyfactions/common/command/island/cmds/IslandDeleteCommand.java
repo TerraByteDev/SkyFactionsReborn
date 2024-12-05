@@ -1,15 +1,12 @@
 package net.skullian.skyfactions.common.command.island.cmds;
 
-import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.config.types.Settings;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
 import org.incendo.cloud.annotations.Argument;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
@@ -19,6 +16,11 @@ import java.util.List;
 
 @Command("island")
 public class IslandDeleteCommand extends CommandTemplate {
+    @Override
+    public String getParent() {
+        return "island";
+    }
+
     @Override
     public String getName() {
         return "delete";
@@ -37,37 +39,41 @@ public class IslandDeleteCommand extends CommandTemplate {
     @Command("delete [confirm]")
     @Permission(value = {"skyfactions.island.delete", "skyfactions.island"}, mode = Permission.Mode.ANY_OF)
     public void perform(
-            Player player,
+            SkyUser player,
             @Argument(value = "confirm") @Nullable String confirm
     ) {
         if (!CommandsUtility.hasPerm(player, permission(), true)) return;
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
-        SpigotIslandAPI.hasIsland(player.getUniqueId()).whenComplete((hasIsland, ex) -> {
+        SkyApi.getInstance().getIslandAPI().getPlayerIsland(player.getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "check if you have an island", "SQL_ISLAND_CHECK", ex);
+                return;
+            } else if (island == null) {
+                Messages.NO_ISLAND.send(player, locale);
                 return;
             }
 
             if (confirm == null) {
-                Messages.DELETION_CONFIRM.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
-                SpigotIslandAPI.awaitingDeletion.add(player.getUniqueId());
+                Messages.DELETION_CONFIRM.send(player, locale);
+                SkyApi.getInstance().getIslandAPI().getAwaitingDeletion().add(player.getUniqueId());
             } else if (confirm.equalsIgnoreCase("confirm")) {
 
-                if (SpigotIslandAPI.awaitingDeletion.contains(player.getUniqueId())) {
-                    World hubWorld = Bukkit.getWorld(Settings.HUB_WORLD_NAME.getString());
+                if (SkyApi.getInstance().getIslandAPI().getAwaitingDeletion().contains(player.getUniqueId())) {
+                    String hubWorld = Settings.HUB_WORLD_NAME.getString();
                     // todo migrate to gui command conf
-                    if (hubWorld != null) {
-                        Messages.DELETION_PROCESSING.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                    if (SkyApi.getInstance().getRegionAPI().worldExists(hubWorld)) {
+                        Messages.DELETION_PROCESSING.send(player, locale);
 
-                        SpigotIslandAPI.onIslandRemove(player);
+                        SkyApi.getInstance().getIslandAPI().onIslandRemove(player);
                     } else {
-                        Messages.ERROR.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "operation", "delete your island", "debug", "WORLD_NOT_EXIST");
+                        Messages.ERROR.send(player, locale, "operation", "delete your island", "debug", "WORLD_NOT_EXIST");
                     }
                 } else {
-                    Messages.DELETION_BLOCK.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                    Messages.DELETION_BLOCK.send(player, locale);
                 }
             } else {
-                Messages.INCORRECT_USAGE.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()), "usage", getSyntax());
+                Messages.INCORRECT_USAGE.send(player, locale, "usage", getSyntax());
             }
         });
     }
