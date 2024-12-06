@@ -14,55 +14,55 @@ public class DependencyHandler {
 
     public static void init() {
         if (isPluginEnabled("PlaceholderAPI")) {
-            SLogger.info("Found {} installed on the server - Registering expansion.", "\u001B[33mPlaceholderAPI\u001B[34m");
+            SLogger.info("Found {} installed on the server - Registering expansion.", "<#05eb2f>PlaceholderAPI<#4294ed>");
             new PlaceholderAPIHook(SkyFactionsReborn.getInstance()).register();
             enabledDeps.add("PlaceholderAPI");
         } else alert("PlaceholderAPI");
 
         if (isPluginEnabled("JukeBox")) {
-            SLogger.info("Found {} installed on the server.", "\u001B[33mJukeBox\u001B[34m");
+            SLogger.info("Found {} installed on the server.", "<#05eb2f>JukeBox<#4294ed>");
             enabledDeps.add("JukeBox");
         } else alert("JukeBox");
 
         if (isPluginEnabled("NoteBlockAPI")) {
-            SLogger.info("Found {} installed on the server.", "\u001B[33mNoteBlockAPI\u001B[34m");
+            SLogger.info("Found {} installed on the server.", "<#05eb2f>NoteBlockAPI<#4294ed>");
             enabledDeps.add("NoteBlockAPI");
         } else alert("NoteBlockAPI");
 
         if (isPluginEnabled("MythicMobs")) {
-            SLogger.info("Found {} installed on the server.", "\u001B[33mMythicMobs\u001B[34m");
+            SLogger.info("Found {} installed on the server.", "<#05eb2f>MythicMobs<#4294ed>");
             enabledDeps.add("MythicMobs");
         } else alert("MythicMobs");
 
         if (isPluginEnabled("ZNPCsPlus")) {
-            SLogger.info("Found {} installed on the server.", "\u001B[33mZNPCsPlus\u001B[34m");
+            SLogger.info("Found {} installed on the server.", "<#05eb2f>ZNPCsPlus<#4294ed>");
             enabledDeps.add("ZNPCsPlus");
         } else alert("ZNPCsPlus");
 
         if (isPluginEnabled("fancynpcs")) {
-            SLogger.info("Found {} installed on the server.", "\001B[33mFancyNPCs\u001B[34m");
+            SLogger.info("Found {} installed on the server.", "<#05eb2f>FancyNPCs<#4294ed>");
             enabledDeps.add("FancyNPCs");
         } else alert("FancyNPCs");
 
         if (isPluginEnabled("Vault")) {
-            SLogger.info("Found {} installed on the server.", "\001B[33mVault\u001B[34m");
+            SLogger.info("Found {} installed on the server.", "<#05eb2f>Vault<#4294ed>");
             VaultAPIHook.init();
             enabledDeps.add("Vault");
         } else alert("Vault");
 
         if (isPluginEnabled("ItemJoin")) {
-            SLogger.info("Found {} installed on the server.", "\001B[33mItemJoin\u001B[34m");
+            SLogger.info("Found {} installed on the server.", "<#05eb2f>ItemJoin<#4294ed>");
             enabledDeps.add("ItemJoin");
             ItemJoinHook.init();
         } else alert("ItemJoin");
 
         if (isPluginEnabled("ItemsAdder")) {
-            SLogger.info("Found {} installed on the server.", "\001B[33mItemsAdder\u001B[34m");
+            SLogger.info("Found {} installed on the server.", "<#05eb2f>ItemsAdder<#4294ed>");
             enabledDeps.add("ItemsAdder");
         } else alert("ItemsAdder");
 
         if (isPluginEnabled("Oraxen")) {
-            SLogger.info("Found {} installed on the server.", "\001B[33mOraxen\u001B[34m");
+            SLogger.info("Found {} installed on the server.", "<#05eb2f>Oraxen<#4294ed>");
             enabledDeps.add("Oraxen");
         }
     }
@@ -76,6 +76,6 @@ public class DependencyHandler {
     }
 
     public static void alert(String name) {
-        SLogger.fatal("Could not find {} on the server! If you have this plugin installed, this is a bug!", "\u001B[33m" + name + "\u001B[31m");
+        SLogger.fatal("Could not find {} on the server! If you have this plugin installed, this is a bug!", "<#d9b100>" + name + "<#d9b100>");
     }
 }

@@ -291,7 +291,7 @@ public enum Messages {
             for (File dir : folder.listFiles()) {
                 
                 if (dir.isDirectory()) {
-                    SLogger.info("Registering Language: \u001B[32m{}", dir.getName());
+                    SLogger.info("Registering Language: <#05eb2f>{}<#4294ed>", dir.getName());
 
                     if (!dir.getName().equalsIgnoreCase(Settings.DEFAULT_LANGUAGE.getString())) configs.put(
                         dir.getName(),

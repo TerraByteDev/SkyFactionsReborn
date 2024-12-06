@@ -72,7 +72,7 @@ public abstract class DefenceFactory {
             for (File defenceFile : Objects.requireNonNull(dir.listFiles())) {
                 String fullPathName = defenceFile.getName();
                 String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
-                SLogger.info("Registering Defence: \u001B[32m{}", defenceName);
+                SLogger.info("Registering Defence: <#05eb2f>{}<#4294ed>", defenceName);
 
                 YamlDocument config = YamlDocument.create(defenceFile, GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(),
                         DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
