@@ -110,20 +110,26 @@ public final class SpigotSkyAPI extends SkyApi {
     @Override
     public void onDisable() {
         try {
-            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-            scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
-            cacheService.disable().get();
+            if (cacheService != null) {
+                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+                scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
+                cacheService.disable().get();
 
-            scheduler.shutdownNow();
+                scheduler.shutdownNow();
+            }
 
             SLogger.info("Disabling Module Manager.");
             SkyModuleManager.onDisable();
 
-            SLogger.info("Closing Database connection.");
-            databaseManager.closeConnection();
+            if (databaseManager != null) {
+                SLogger.info("Closing Database connection.");
+                databaseManager.closeConnection();
+            }
 
-            SLogger.info("Closing BukkitAudience.");
-            this.audience.close();
+            if (audience != null) {
+                SLogger.info("Closing BukkitAudience.");
+                this.audience.close();
+            }
 
             SkyFactionsReborn.getInstance().print();
             SLogger.info("SkyFactions has been disabled.");
