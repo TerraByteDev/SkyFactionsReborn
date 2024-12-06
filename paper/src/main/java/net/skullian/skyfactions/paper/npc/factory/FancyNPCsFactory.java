@@ -22,6 +22,10 @@ import net.skullian.skyfactions.common.npc.SkyNPC;
 
 public class FancyNPCsFactory implements SkyNPCFactory, Listener {
 
+    public FancyNPCsFactory() {
+        SkyFactionsReborn.getInstance().getServer().getPluginManager().registerEvents(this, SkyFactionsReborn.getInstance());
+    }
+
     @Override
     public boolean isNPC(Object entity) {
         return false;
@@ -59,7 +63,7 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
 
     @EventHandler
     public void onInteract(NpcInteractEvent event) {
-        SkyFactionsReborn.getNpcManager().onClick(new SkyFancyNPC(event.getNpc(), false), SkyApi.getInstance().getUserManager().getUser(event.getPlayer().getUniqueId()));
+        SkyApi.getInstance().getNPCManager().onClick(new SkyFancyNPC(event.getNpc(), false), SkyApi.getInstance().getUserManager().getUser(event.getPlayer().getUniqueId()));
     }
     
     @AllArgsConstructor

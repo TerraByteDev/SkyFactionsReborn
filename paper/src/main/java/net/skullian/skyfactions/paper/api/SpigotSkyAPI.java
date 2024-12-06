@@ -74,6 +74,9 @@ public final class SpigotSkyAPI extends SkyApi {
         configHandler = new ConfigFileHandler();
         configHandler.loadFiles();
 
+        SLogger.info("Initialising Module Manager.");
+        SkyModuleManager.onEnable();
+
         new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data").mkdir();
         databaseManager = new DatabaseManager();
         databaseManager.initialise(Settings.DATABASE_TYPE.getString());

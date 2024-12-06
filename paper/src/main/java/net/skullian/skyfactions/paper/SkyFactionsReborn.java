@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 public final class SkyFactionsReborn extends JavaPlugin {
 
     @Getter private static final BrokenBlockService blockService = new BrokenBlockService();
-    @Getter private static NPCManager npcManager;
 
     public void print() {
         ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
@@ -57,12 +56,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
         SkyModuleManager.registerModule(DiscordModule.class);
 
         print();
-
-        SLogger.info("Initialising NPC Manager.");
-        npcManager = new SpigotNPCManager();
-
-        SLogger.info("Initialising Module Manager.");
-        SkyModuleManager.onEnable();
 
         SLogger.info("Loading InvLib Instance.");
         InvUI.getInstance().setPlugin(this);

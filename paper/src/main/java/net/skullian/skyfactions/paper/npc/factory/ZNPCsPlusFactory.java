@@ -7,6 +7,7 @@ import java.net.URL;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.npc.factory.SkyNPCFactory;
 import net.skullian.skyfactions.common.util.SkyLocation;
+import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -24,11 +25,14 @@ import lol.pyr.znpcsplus.api.skin.SkinDescriptorFactory;
 import lol.pyr.znpcsplus.util.NpcLocation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.common.npc.SkyNPC;
 import net.skullian.skyfactions.common.util.text.TextUtility;
 
 public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
+
+    public ZNPCsPlusFactory() {
+        SkyFactionsReborn.getInstance().getServer().getPluginManager().registerEvents(this, SkyFactionsReborn.getInstance());
+    }
 
     @Override
     public boolean isNPC(Object entity) {
@@ -87,7 +91,7 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
 
     @EventHandler
     public void onInteract(NpcInteractEvent event) {
-        SkyFactionsReborn.getNpcManager().onClick(new SkyZNPCs(event.getEntry(), false), SkyApi.getInstance().getUserManager().getUser(event.getPlayer().getUniqueId()));
+        SkyApi.getInstance().getNPCManager().onClick(new SkyZNPCs(event.getEntry(), false), SkyApi.getInstance().getUserManager().getUser(event.getPlayer().getUniqueId()));
     }
 
     @AllArgsConstructor
