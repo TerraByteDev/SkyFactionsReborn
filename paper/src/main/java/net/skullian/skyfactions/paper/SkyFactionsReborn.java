@@ -48,12 +48,11 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
-        print();
-
-        SLogger.info("Registering SkyAPI & Plugin instance.");
         SkyApi.setInstance(new SpigotSkyAPI());
         SkyApi.setPluginInstance(this);
+        SLogger.info("Registered SkyAPI & Plugin instance.");
+
+        print();
 
         SLogger.info("Initialising NPC Manager.");
         npcManager = new SpigotNPCManager();
