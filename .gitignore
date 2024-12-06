@@ -36,3 +36,4 @@ bin/
 Server/
 run/
 assets/data.sqlite3
+/tasks

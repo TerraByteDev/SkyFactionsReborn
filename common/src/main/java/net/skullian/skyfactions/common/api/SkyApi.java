@@ -23,6 +23,16 @@ public abstract class SkyApi {
     private static Object pluginInstance = null;
 
     /**
+     * Called when the plugin is enabled.
+     */
+    public abstract void onEnable();
+
+    /**
+     * Called when the plugin is disabled.
+     */
+    public abstract void onDisable();
+
+    /**
      * Get the configuration handler. Not much need for this usually.
      *
      * @return {@link ConfigFileHandler} the initialised config handler.

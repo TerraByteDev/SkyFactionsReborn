@@ -10,9 +10,6 @@ import net.skullian.skyfactions.common.api.SkyApi;
 
 public class SLogger {
 
-    private static final ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
-    private static final Style infoStyle = Style.style(TextColor.color(25, 100, 230), TextDecoration.BOLD);
-
     public static void info(Object message, Object... args) {
         Component infoLog = MiniMessage.miniMessage().deserialize("<#4294ed>" + format(message, args) + "<#4294ed>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(infoLog);

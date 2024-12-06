@@ -23,7 +23,7 @@ plugins {
 }
 
 group = 'net.skullian.skyfactions'
-version = '1.21.1-v1.0.0-ALPHA'
+version = "${plugin_version}".toString()
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -262,10 +262,4 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
-}
-
-processResources {
-    filter ReplaceTokens, tokens: [
-            "version": project.property("version")
-    ]
 }

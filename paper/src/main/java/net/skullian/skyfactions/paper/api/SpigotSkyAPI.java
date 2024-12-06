@@ -10,6 +10,7 @@ import net.skullian.skyfactions.common.database.DatabaseManager;
 import net.skullian.skyfactions.common.database.cache.CacheService;
 import net.skullian.skyfactions.common.defence.DefenceFactory;
 import net.skullian.skyfactions.common.gui.UIShower;
+import net.skullian.skyfactions.common.module.SkyModuleManager;
 import net.skullian.skyfactions.common.npc.NPCManager;
 import net.skullian.skyfactions.common.user.UserManager;
 import net.skullian.skyfactions.common.util.SLogger;
@@ -28,35 +29,44 @@ import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public final class SpigotSkyAPI extends SkyApi {
 
-    private final ConfigFileHandler configHandler;
-    private final DatabaseManager databaseManager;
-    private final BorderAPI worldBorderAPI;
-    private final CacheService cacheService;
-    private final DefenceAPI defenceAPI;
-    private final RaidAPI raidAPI;
-    private final RegionAPI regionAPI;
-    private final RunesAPI runesAPI;
-    private final PlayerAPI playerAPI;
-    private final NotificationAPI notificationAPI;
-    private final UserManager userManager;
-    private final GemsAPI gemsAPI;
-    private final IslandAPI islandAPI;
-    private final FactionAPI factionAPI;
-    private final SoundAPI soundAPI;
-    private final FileAPI fileAPI;
-    private final NPCManager npcManager;
-    private final ObeliskAPI obeliskAPI;
-    private final UIShower uiShower;
-    private final DefenceFactory defenceFactory;
-    private final BukkitAudiences audience;
-    private final NMSProvider nmsProvider;
-    private final SpigotCommandHandler commandHandler;
-    private final SpigotPluginInfoAPI pluginInfoAPI;
+    private  ConfigFileHandler configHandler;
+    private DatabaseManager databaseManager;
+    private BorderAPI worldBorderAPI;
+    private CacheService cacheService;
+    private DefenceAPI defenceAPI;
+    private RaidAPI raidAPI;
+    private RegionAPI regionAPI;
+    private RunesAPI runesAPI;
+    private PlayerAPI playerAPI;
+    private NotificationAPI notificationAPI;
+    private UserManager userManager;
+    private GemsAPI gemsAPI;
+    private IslandAPI islandAPI;
+    private FactionAPI factionAPI;
+    private SoundAPI soundAPI;
+    private FileAPI fileAPI;
+    private NPCManager npcManager;
+    private ObeliskAPI obeliskAPI;
+    private UIShower uiShower;
+    private DefenceFactory defenceFactory;
+    private BukkitAudiences audience;
+    private NMSProvider nmsProvider;
+    private SpigotCommandHandler commandHandler;
+    private SpigotPluginInfoAPI pluginInfoAPI;
 
-    public SpigotSkyAPI() {
+    @Override
+    public void onEnable() {
+        // some APIs must be initialised before others
+        fileAPI = new SpigotFileAPI();
+        audience = BukkitAudiences.create(SkyFactionsReborn.getInstance());
+
         // Store an instance of the ConfigHandler class in case it is needed.
         // Primarily used for the discord integration.
         SLogger.info("Initialising Configs.");
@@ -89,15 +99,38 @@ public final class SpigotSkyAPI extends SkyApi {
         islandAPI = new SpigotIslandAPI();
         factionAPI = new SpigotFactionAPI();
         soundAPI = new SpigotSoundAPI();
-        fileAPI = new SpigotFileAPI();
         npcManager = new SpigotNPCManager();
         obeliskAPI = new SpigotObeliskAPI();
         uiShower = new SpigotUIShower();
         defenceFactory = new SpigotDefencesFactory();
-        audience = BukkitAudiences.create(SkyFactionsReborn.getInstance());
         nmsProvider = new SpigotNMSProvider();
         commandHandler = new SpigotCommandHandler();
         pluginInfoAPI = new SpigotPluginInfoAPI();
+    }
+
+    @Override
+    public void onDisable() {
+        try {
+            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
+            cacheService.disable().get();
+
+            scheduler.shutdownNow();
+
+            SLogger.info("Disabling Module Manager.");
+            SkyModuleManager.onDisable();
+
+            SLogger.info("Closing Database connection.");
+            databaseManager.closeConnection();
+
+            SLogger.info("Closing BukkitAudience.");
+            this.audience.close();
+
+            SkyFactionsReborn.getInstance().print();
+            SLogger.info("SkyFactions has been disabled.");
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException("Failed to disable Cache Service: " + e.getMessage(), e);
+        }
     }
 
     @Override

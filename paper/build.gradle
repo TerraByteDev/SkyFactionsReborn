@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     id 'java'
     id 'com.gradleup.shadow' version "${shadow_version}"
@@ -89,7 +91,6 @@ repositories {
 
 dependencies {
     compileOnly(project(":common"))
-    compileOnly(project(":modules"))
     compileOnly(project(":modules:discord"))
 
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
@@ -114,4 +115,10 @@ dependencies {
     compileOnly("com.github.LoneDev6:API-ItemsAdder:${itemsadder}")
 
     compileOnly("com.jeff-media:custom-block-data:${customblockdata}")
+}
+
+processResources {
+    filter ReplaceTokens, tokens: [
+            "version": "${plugin_version}".toString()
+    ]
 }

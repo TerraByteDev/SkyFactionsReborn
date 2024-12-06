@@ -10,6 +10,7 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.module.SkyModuleManager;
+import net.skullian.skyfactions.module.impl.discord.DiscordModule;
 import net.skullian.skyfactions.paper.api.SpigotSkyAPI;
 import net.skullian.skyfactions.paper.npc.SpigotNPCManager;
 import net.skullian.skyfactions.paper.defence.block.BrokenBlockService;
@@ -34,7 +35,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
     @Getter private static final BrokenBlockService blockService = new BrokenBlockService();
     @Getter private static NPCManager npcManager;
 
-    private void print() {
+    public void print() {
         ComponentLogger LOGGER = ComponentLogger.logger("SkyFactionsReborn");
         Style style = Style.style(TextColor.color(25, 100, 230), TextDecoration.BOLD);
         LOGGER.info(Component.text("╭────────────────────────────────────────────────────────────╮").style(style));
@@ -50,7 +51,10 @@ public final class SkyFactionsReborn extends JavaPlugin {
     public void onEnable() {
         SkyApi.setInstance(new SpigotSkyAPI());
         SkyApi.setPluginInstance(this);
+        SkyApi.getInstance().onEnable();
         SLogger.info("Registered SkyAPI & Plugin instance.");
+
+        SkyModuleManager.registerModule(DiscordModule.class);
 
         print();
 
@@ -84,33 +88,11 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        try {
-            SkyApi.getInstance().getCacheService();
-            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-            scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
-            SkyApi.getInstance().getCacheService().disable().get();
-
-            scheduler.shutdownNow();
-
-            SLogger.info("Disabling Module Manager.");
-            SkyModuleManager.onDisable();
-
-            SLogger.info("Closing Database connection.");
-            closeDatabase();
-
-            print();
-            SLogger.info("SkyFactions has been disabled.");
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException("Failed to disable Cache Service: " + e.getMessage(), e);
-        }
+        SkyApi.getInstance().onDisable();
     }
 
     public void disable() {
         getServer().getPluginManager().disablePlugin(this);
-    }
-
-    private void closeDatabase() {
-        SkyApi.getInstance().getDatabaseManager().closeConnection();
     }
 
     public static SkyFactionsReborn getInstance() {

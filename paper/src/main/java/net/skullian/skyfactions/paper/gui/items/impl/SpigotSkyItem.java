@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.invui.item.Item;
 import xyz.xenondevs.invui.item.ItemProvider;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.window.AbstractWindow;
 import xyz.xenondevs.invui.window.Window;
 
@@ -28,7 +29,6 @@ public class SpigotSkyItem extends SkyItem implements Item {
 
     public SpigotSkyItem(BaseSkyItem item) {
         super(item.getDATA(), item.getItemStack(), item.getPLAYER(), item.getOPTIONALS());
-
         this.IMPL = item;
     }
 

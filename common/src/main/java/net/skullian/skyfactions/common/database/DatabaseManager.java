@@ -151,7 +151,7 @@ public class DatabaseManager {
         SLogger.info("Beginning database migrations.");
 
         Flyway flyway = Flyway.configure(this.getClass().getClassLoader())
-                .locations("classpath:net/skullian/skyfactions/database/migrations").failOnMissingLocations(true).cleanDisabled(true)
+                .locations("classpath:net/skullian/skyfactions/common/database/migrations").failOnMissingLocations(true).cleanDisabled(true)
                 .dataSource(this.dataSource)
                 .load();
         MigrateResult result = flyway.migrate();
