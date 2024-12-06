@@ -40,6 +40,8 @@ public class ConfigFileHandler {
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         RunesConfig.setConfig(getFile(ConfigTypes.RUNES).getConfig());
         DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
+
+        SkyApi.getInstance().getDefenceAPI().refresh();
     }
 
     public void registerFile(ConfigTypes type, ConfigHandler handler) {

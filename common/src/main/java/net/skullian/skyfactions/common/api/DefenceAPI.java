@@ -173,4 +173,16 @@ public abstract class DefenceAPI {
 
         return "N/A";
     }
+
+    public void refresh() {
+        SLogger.info("Refreshing existing loaded defences...");
+
+        SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().values().stream()
+                .flatMap(List::stream)
+                .forEach(Defence::refresh);
+
+        SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences().values().stream()
+                .flatMap(List::stream)
+                .forEach(Defence::refresh);
+    }
 }

@@ -63,34 +63,43 @@ public final class SpigotSkyAPI extends SkyApi {
 
     @Override
     public void onEnable() {
+        audience = BukkitAudiences.create(SkyFactionsReborn.getInstance());
+
+        SLogger.noPrefix("╭────────────────────────────────────────────────────────────╮");
+        SLogger.noPrefix("│                                                            │");
+        SLogger.noPrefix("│    ____ _  _ _   _ ____ ____ ____ ___ _ ____ _  _ ____     │");
+        SLogger.noPrefix("│    [__  |_/   \\_/  |___ |__| |     |  | |  | |\\ | [__      │");
+        SLogger.noPrefix("│    ___] | \\_   |   |    |  | |___  |  | |__| | \\| ___]     │");
+        SLogger.noPrefix("│                                                            │");
+        SLogger.noPrefix("│                    SkyFactions is loading.                 │");
+
         // some APIs must be initialised before others
         fileAPI = new SpigotFileAPI();
-        audience = BukkitAudiences.create(SkyFactionsReborn.getInstance());
         nmsProvider = new SpigotNMSProvider();
 
         // Store an instance of the ConfigHandler class in case it is needed.
         // Primarily used for the discord integration.
-        SLogger.info("Initialising Configs.");
+        SLogger.setup("Initialising Configs.", false);
         configHandler = new ConfigFileHandler();
         configHandler.loadFiles();
 
-        SLogger.info("Initialising Module Manager.");
+        SLogger.setup("Initialising Module Manager.", false);
         SkyModuleManager.onEnable();
 
         new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data").mkdir();
         databaseManager = new DatabaseManager();
         databaseManager.initialise(Settings.DATABASE_TYPE.getString());
 
-        SLogger.info("Registering World Border service provider.");
+        SLogger.setup("Registering World Border service provider.", false);
         BorderAPI bApi = new BorderPersistence(new Border(), SkyFactionsReborn.getInstance());
         Bukkit.getServer().getServicesManager().register(BorderAPI.class, bApi, SkyFactionsReborn.getInstance(), ServicePriority.High);
         worldBorderAPI = bApi;
 
-        SLogger.info("Initialising Cache Service.");
+        SLogger.setup("Initialising Cache Service.", false);
         cacheService = new CacheService();
         cacheService.enable();
 
-        SLogger.info("Initialising APIs.");
+        SLogger.setup("Initialising APIs.", false);
         defenceAPI = new SpigotDefenceAPI();
         raidAPI = new SpigotRaidAPI();
         regionAPI = new SpigotRegionAPI();
@@ -134,7 +143,6 @@ public final class SpigotSkyAPI extends SkyApi {
                 this.audience.close();
             }
 
-            SkyFactionsReborn.getInstance().print();
             SLogger.info("SkyFactions has been disabled.");
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException("Failed to disable Cache Service: " + e.getMessage(), e);

@@ -29,11 +29,11 @@ public class ConfigHandler {
             this.config = YamlDocument.create(this.file, ConfigHandler.class.getClassLoader().getResourceAsStream(this.name),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
         } catch (IOException error) {
-            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
-            SLogger.fatal("There was an error loading config {}", name);
-            SLogger.fatal("Please check that config for any configuration mistakes.");
-            SLogger.fatal("Plugin will now disable.");
-            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+            SLogger.setup("----------------- CONFIGURATION EXCEPTION -----------------", true);
+            SLogger.setup("There was an error loading config {}", true, name);
+            SLogger.setup("Please check that config for any configuration mistakes.", true);
+            SLogger.setup("Plugin will now disable.", false);
+            SLogger.setup("----------------- CONFIGURATION EXCEPTION -----------------", true);
             error.printStackTrace();
             SkyApi.disablePlugin();
         }

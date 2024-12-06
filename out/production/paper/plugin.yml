@@ -1,6 +1,0 @@
-name: SkyFactionsReborn
-version: '@version@'
-main: net.skullian.skyfactions.paper.SkyFactionsReborn
-api-version: 1.21
-authors: [ Skullians, nouish ]
-website: https://github.com/TerraByteDev/SkyFactionsReborn

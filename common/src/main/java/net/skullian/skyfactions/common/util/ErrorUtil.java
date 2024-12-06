@@ -20,4 +20,14 @@ public class ErrorUtil {
         SLogger.fatal("----------------------- DATABASE EXCEPTION -----------------------");
     }
 
+    public static void handleDatabaseSetupError(Exception error) {
+        SLogger.setup("----------------- DATABASE EXCEPTION -----------------", true);
+        SLogger.setup("There was an error while initialising the database.", true);
+        SLogger.setup(error.getMessage(), true);
+        SLogger.setup("Please see https://docs.terrabytedev.com/skyfactions/errors-and-debugging for more information.", true);
+        SLogger.setup("Please contact the devs - SkyFactions will now disable.", true);
+        SLogger.setup("----------------- DATABASE EXCEPTION -----------------", true);
+        SkyApi.disablePlugin();
+    }
+
 }

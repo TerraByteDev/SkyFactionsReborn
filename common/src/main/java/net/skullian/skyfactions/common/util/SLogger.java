@@ -1,27 +1,54 @@
 package net.skullian.skyfactions.common.util;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.skullian.skyfactions.common.api.SkyApi;
 
 public class SLogger {
 
+    public static void setup(Object message, boolean fatal, Object... args) {
+        String text = fatal ? "✗  " : "➤  " + format(message, args);
+        int totalLength = 62;
+        String leftDelimiter = "│";
+        String rightDelimiter = "│";
+        int availableSpace = totalLength - (leftDelimiter.length() + rightDelimiter.length());
+
+        if (text.length() > availableSpace) {
+            text = text.substring(0, availableSpace);
+        }
+
+        int paddingLeft = (availableSpace - text.length()) / 2;
+        int paddingRight = availableSpace - text.length() - paddingLeft;
+        String formatted = leftDelimiter + getPadding(paddingLeft) + text + getPadding(paddingRight) + rightDelimiter;
+
+        SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize((fatal ? "<#e73f38>" : "<#4294ed>") + formatted + "<reset>"));
+    }
+
+    public static void noPrefix(Object message, Object... args) {
+        String formatted = format(message, args);
+        SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize("<#4294ed>" + formatted + "<reset>"));
+    }
+
+    private static String getPadding(int count) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+
     public static void info(Object message, Object... args) {
-        Component infoLog = MiniMessage.miniMessage().deserialize("<#4294ed>" + format(message, args) + "<#4294ed><reset>");
+        Component infoLog = MiniMessage.miniMessage().deserialize("<gray>[<reset><gradient:#0083FF:#00FFC7><bold>SkyFactions</gradient><reset><gray>]<reset> <#4294ed>" + format(message, args) + "<#4294ed><reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(infoLog);
     }
 
     public static void warn(Object message, Object... args) {
-        Component warnLog = MiniMessage.miniMessage().deserialize("<#f28f24>" + format(message, args) + "<#f28f24><reset>");
+        Component warnLog = MiniMessage.miniMessage().deserialize("<gray>[<reset><gradient:#0083FF:#00FFC7><bold>SkyFactions</gradient><reset><gray>]<reset> <#f28f24>" + format(message, args) + "<#f28f24><reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(warnLog);
     }
 
     public static void fatal(Object message, Object... args) {
-        Component fatalLog = MiniMessage.miniMessage().deserialize("<#e73f38>" + format(message, args) + "<#e73f38><reset>");
+        Component fatalLog = MiniMessage.miniMessage().deserialize("<gray>[<reset><gradient:#0083FF:#00FFC7><bold>SkyFactions</gradient><reset><gray>]<reset> <#e73f38>" + format(message, args) + "<#e73f38><reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(fatalLog);
     }
 

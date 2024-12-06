@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 public class NMSHandlerImpl implements NMSHandler {
 
     public NMSHandlerImpl() {
-        SLogger.info("v1_21_R1 NMSHandler initialized.");
+        SLogger.setup("v1_21_R1 NMSHandler initialized.", false);
     }
 
     @Override

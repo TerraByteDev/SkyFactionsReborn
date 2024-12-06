@@ -53,7 +53,10 @@ public class DatabaseManager {
     private void createDataSource(
             @NotNull File file, @NotNull String type) {
 
-        Configuration configuration = new DefaultConfiguration().set(new DefaultExecuteListenerProvider(new DatabaseExecutionListener()));
+        Configuration configuration = new org.jooq.met
+
+        Configuration configuration = new DefaultConfiguration()
+                .set(new DefaultExecuteListenerProvider(new DatabaseExecutionListener()));
         System.setProperty("org.jooq.no-tips", "true");
         System.setProperty("org.jooq.no-logo", "true");
         System.setProperty("net.skullian.codegen", "false");
@@ -76,7 +79,7 @@ public class DatabaseManager {
             sqliteConfig.setMaximumPoolSize(maxPoolSize);
 
             HikariDataSource dataSource = new HikariDataSource(sqliteConfig);
-            SLogger.info("Using SQLite Database.");
+            SLogger.setup("Using SQLite Database.", false);
 
             configuration
                     .set(dataSource)
@@ -127,7 +130,7 @@ public class DatabaseManager {
             mysqlConfig.setPassword(password);
             mysqlConfig.setMaximumPoolSize(maxPoolSize);
 
-            SLogger.info("Using MySQL database '{}' on: {}:{}.",
+            SLogger.setup("Using MySQL database '{}' on: {}:{}.", false,
                     databaseName, host.getHost(), host.getPortOrDefault(3306));
             HikariDataSource dataSource = new HikariDataSource(mysqlConfig);
 
@@ -139,9 +142,7 @@ public class DatabaseManager {
             this.dialect = SQLDialect.MYSQL;
             this.ctx = DSL.using(dataSource, SQLDialect.MYSQL);
         } else {
-            ErrorUtil.handleDatabaseError(new IllegalStateException("Unknown database type: " + type));
-            SLogger.fatal("SkyFactions will now disable.");
-            SkyApi.disablePlugin();
+            ErrorUtil.handleDatabaseSetupError(new IllegalStateException("Unknown database type: " + type));
         }
 
         setup();
@@ -171,10 +172,8 @@ public class DatabaseManager {
             this.factionsManager = new FactionsDatabaseManager(this.ctx);
             this.electionManager = new FactionElectionManager(this.ctx);
         } else {
-            result.getFailedMigrations().forEach(migration -> SLogger.fatal("Migration failed: {}", migration.description));
-            ErrorUtil.handleDatabaseError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed: " + result.getException()));
-            SLogger.fatal("SkyFactions will now disable.");
-            SkyApi.disablePlugin();
+            ErrorUtil.handleDatabaseSetupError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed: " + result.getException()));
+            result.getFailedMigrations().forEach(migration -> SLogger.setup("Migration failed: {}", true, migration.description));
         }
     }
 

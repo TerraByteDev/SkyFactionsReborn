@@ -281,16 +281,4 @@ public class DefencePlacementHandler implements Listener {
             SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().put(player.getUniqueId(), defences);
         });
     }
-
-    public static void refresh() {
-        SLogger.info("Refreshing existing loaded defences...");
-
-        SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().values().stream()
-                .flatMap(List::stream)
-                .forEach(Defence::refresh);
-
-        SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences().values().stream()
-                .flatMap(List::stream)
-                .forEach(Defence::refresh);
-    }
 }

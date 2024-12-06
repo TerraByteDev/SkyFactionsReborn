@@ -19,6 +19,7 @@ public class SkyModuleManager {
     }
 
     public static void onEnable() {
+        SLogger.setup("Loading {} Modules...", false, modules.size());
         for (String module : modules) {
             try {
                 Class<?> clazz = Class.forName(module);
@@ -29,11 +30,11 @@ public class SkyModuleManager {
 
                 enabledModules.put(skyModule.getClass().getName(), skyModule);
             } catch (Exception e) {
-                SLogger.fatal("----------------------- MODULES EXCEPTION -----------------------");
-                SLogger.fatal("There was an error initialising module {}:", module);
-                SLogger.fatal(e.getMessage());
-                SLogger.fatal("Please forward this error to the developers!");
-                SLogger.fatal("----------------------- MODULES EXCEPTION -----------------------");
+                SLogger.setup("----------------- MODULES EXCEPTION -----------------", true);
+                SLogger.setup("There was an error initialising module {}:", true, module);
+                SLogger.setup(e.getMessage(), true);
+                SLogger.setup("Please forward this error to the developers!", true);
+                SLogger.setup("----------------- MODULES EXCEPTION -----------------", true);
                 e.printStackTrace();
             }
         }

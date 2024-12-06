@@ -11,6 +11,10 @@ import java.util.stream.Stream;
 
 public class SpigotDefencesFactory extends DefenceFactory {
 
+    public SpigotDefencesFactory() {
+        registerDefaultDefences();
+    }
+
     @Override
     public List<String> getPlacementBlocks(YamlDocument config) {
         return config.getStringList("PLACEMENT.BLOCKS").stream()

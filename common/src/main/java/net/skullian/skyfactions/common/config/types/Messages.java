@@ -278,7 +278,7 @@ public enum Messages {
     public static void load() {
         try {
             new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath(), "/language").mkdirs();
-            SLogger.info("Saving default language [English].");
+            SLogger.setup("Saving default language <#05eb2f>[English]<#4294ed>.", false);
             YamlDocument doc = YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/en.yml"), Messages.class.getClassLoader().getResourceAsStream("language/en/en.yml"),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
@@ -291,7 +291,7 @@ public enum Messages {
             for (File dir : folder.listFiles()) {
                 
                 if (dir.isDirectory()) {
-                    SLogger.info("Registering Language: <#05eb2f>{}<#4294ed>", dir.getName());
+                    SLogger.setup("Registering Language: <#05eb2f>[{}]<#4294ed>", false, dir.getName());
 
                     if (!dir.getName().equalsIgnoreCase(Settings.DEFAULT_LANGUAGE.getString())) configs.put(
                         dir.getName(),
@@ -303,11 +303,11 @@ public enum Messages {
                 }
             }
         } catch (Exception exception) {
-            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
-            SLogger.fatal("There was an error loading language configs.");
-            SLogger.fatal("Please check that config for any configuration mistakes.");
-            SLogger.fatal("Plugin will now disable.");
-            SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
+            SLogger.setup("----------------- CONFIGURATION EXCEPTION -----------------", true);
+            SLogger.setup("There was an error loading language configs.", true);
+            SLogger.setup("Please check that config for any configuration mistakes.", true);
+            SLogger.setup("Plugin will now disable.", true);
+            SLogger.setup("----------------- CONFIGURATION EXCEPTION -----------------", true);
             exception.printStackTrace();
             SkyApi.disablePlugin();
         }
@@ -361,6 +361,7 @@ public enum Messages {
         YamlDocument config = configs.getOrDefault(locale, getFallbackDocument());
 
         Object value = config.get("Messages." + this.path);
+
 
         Component message;
         if (value == null) {

@@ -58,7 +58,7 @@ public class CacheService {
     }
 
     public void enable() {
-        this.task = executorService.scheduleAtFixedRate(() -> cacheOnce().thenRun(this::onCacheComplete), 0, Settings.CACHE_SAVE_INTERVAL.getInt(), TimeUnit.SECONDS);
+        this.task = executorService.scheduleAtFixedRate(() -> cacheOnce().thenRun(this::onCacheComplete), Settings.CACHE_SAVE_INTERVAL.getInt(), Settings.CACHE_SAVE_INTERVAL.getInt(), TimeUnit.SECONDS);
     }
 
     private void onCacheComplete() {

@@ -3,6 +3,7 @@ package net.skullian.skyfactions.common.util.nms;
 import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.worldborder.AWorldBorder;
 
 import java.lang.invoke.MethodHandle;
@@ -31,6 +32,7 @@ public abstract class NMSProvider {
             final MethodHandle handle = handleLookup.findConstructor(nmsClass, methodType);
             nmsHandler = (NMSHandler) handle.invoke();
         } catch (Throwable error) {
+            SLogger.setup("Failed to load NMSHandler!", true);
             error.printStackTrace();
             nmsHandler = null;
         }
