@@ -11,17 +11,17 @@ import net.skullian.skyfactions.common.api.SkyApi;
 public class SLogger {
 
     public static void info(Object message, Object... args) {
-        Component infoLog = MiniMessage.miniMessage().deserialize("<#4294ed>" + format(message, args) + "<#4294ed>");
+        Component infoLog = MiniMessage.miniMessage().deserialize("<#4294ed>" + format(message, args) + "<#4294ed><reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(infoLog);
     }
 
     public static void warn(Object message, Object... args) {
-        Component warnLog = MiniMessage.miniMessage().deserialize("<#f28f24>" + format(message, args) + "<#f28f24>");
+        Component warnLog = MiniMessage.miniMessage().deserialize("<#f28f24>" + format(message, args) + "<#f28f24><reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(warnLog);
     }
 
     public static void fatal(Object message, Object... args) {
-        Component fatalLog = MiniMessage.miniMessage().deserialize("<#e73f38>" + format(message, args) + "<#e73f38>");
+        Component fatalLog = MiniMessage.miniMessage().deserialize("<#e73f38>" + format(message, args) + "<#e73f38><reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(fatalLog);
     }
 
