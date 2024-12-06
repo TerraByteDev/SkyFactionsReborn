@@ -66,6 +66,7 @@ public final class SpigotSkyAPI extends SkyApi {
         // some APIs must be initialised before others
         fileAPI = new SpigotFileAPI();
         audience = BukkitAudiences.create(SkyFactionsReborn.getInstance());
+        nmsProvider = new SpigotNMSProvider();
 
         // Store an instance of the ConfigHandler class in case it is needed.
         // Primarily used for the discord integration.
@@ -102,7 +103,6 @@ public final class SpigotSkyAPI extends SkyApi {
         obeliskAPI = new SpigotObeliskAPI();
         uiShower = new SpigotUIShower();
         defenceFactory = new SpigotDefencesFactory();
-        nmsProvider = new SpigotNMSProvider();
         commandHandler = new SpigotCommandHandler();
         pluginInfoAPI = new SpigotPluginInfoAPI();
     }
