@@ -6,7 +6,7 @@ import net.skullian.skyfactions.common.command.CommandsUtility;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SLogger;
-import net.skullian.skyfactions.module.SkyModuleManager;
+import net.skullian.skyfactions.common.module.SkyModuleManager;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 

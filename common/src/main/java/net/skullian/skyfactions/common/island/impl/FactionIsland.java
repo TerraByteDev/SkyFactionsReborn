@@ -2,7 +2,6 @@ package net.skullian.skyfactions.common.island.impl;
 
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.island.SkyIsland;
-import org.bukkit.Location;
 
 public class FactionIsland extends SkyIsland {
     public FactionIsland(int id) {

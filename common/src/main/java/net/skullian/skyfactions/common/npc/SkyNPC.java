@@ -1,8 +1,6 @@
 package net.skullian.skyfactions.common.npc;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import net.skullian.skyfactions.common.util.SkyLocation;
 
 public interface SkyNPC {
 
@@ -10,17 +8,17 @@ public interface SkyNPC {
 
     public String getDisplayName();
 
-    public Location getLocation();
+    public SkyLocation getLocation();
 
     public boolean isPresent();
     
-    public Entity getEntity();
+    public Object getEntity();
 
-    public EntityType getEntityType();
+    public String getEntityType();
 
     public void updateDisplayName(String name);
 
-    public void updateEntityType(EntityType type);
+    public void updateEntityType(String type);
 
     public void updateSkin(String skin);
 

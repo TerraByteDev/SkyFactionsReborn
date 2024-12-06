@@ -29,8 +29,6 @@ public class MemberManagementUI extends PaginatedScreen {
     public MemberManagementUI(SkyUser player, Faction faction) {
         super(GUIEnums.OBELISK_MEMBER_MANAGEMENT_GUI.getPath(), player);
         this.faction = faction;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player, Faction faction) {
@@ -50,18 +48,6 @@ public class MemberManagementUI extends PaginatedScreen {
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             case "BACK" ->
                     new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player);
-            default -> null;
-        };
-    }
-
-    @Nullable
-    @Override
-    protected BaseSkyItem handlePaginationItem(@NotNull PaginationItemData paginationItem) {
-        return switch (paginationItem.getITEM_ID()) {
-            case "FORWARD_BUTTON" ->
-                    new PaginationForwardItem(paginationItem, player);
-            case "BACK_BUTTON" ->
-                    new PaginationBackItem(paginationItem, player);
             default -> null;
         };
     }

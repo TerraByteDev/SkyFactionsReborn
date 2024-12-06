@@ -113,11 +113,11 @@ public class SpigotDefenceAPI extends DefenceAPI {
 
     @Override
     public Defence getLoadedDefence(SkyLocation location) {
-        return DefencePlacementHandler.loadedFactionDefences.values().stream()
+        return SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences().values().stream()
                 .flatMap(List::stream)
                 .filter(d -> d.getDefenceLocation().equals(location))
                 .findFirst()
-                .orElseGet(() -> DefencePlacementHandler.loadedPlayerDefences.values().stream()
+                .orElseGet(() -> SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().values().stream()
                         .flatMap(List::stream)
                         .filter(d -> d.getDefenceLocation().equals(location))
                         .findFirst()

@@ -5,6 +5,5 @@ plugins {
 
 dependencies {
     compileOnly(project(":common"))
-    compileOnly(project(":modules"))
     compileOnly("net.dv8tion:JDA:${jda}")
 }

@@ -147,6 +147,23 @@ public abstract class DefenceFactory {
                 PLACEMENT_BLOCKED_MESSAGE, IS_WHITELIST, BLOCKS_LIST, HOLOGRAM_STACK, OUT_OF_STOCK_LINE, DURABILITY_LINE, APPEND_TO_TOP, APPEND_DURABILITY_TO_TOP, ENTITY_DATA);
     }
 
+    public List<DefenceEffectStruct> getEffects(YamlDocument config) {
+        Section section = config.getSection("EFFECTS");
+        if (section == null) return Collections.emptyList();
+
+        return section.getRoutesAsStrings(false).stream()
+                .map(name -> {
+                    Section effect = section.getSection(name);
+                    return new DefenceEffectStruct(
+                            effect.getString("EFFECT"),
+                            effect.getInt("DEFENCE_LEVEL"),
+                            effect.getInt("EFFECT_LEVEL"),
+                            effect.getInt("DURATION")
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
     public DefenceEntityStruct getEntityConfiguration(YamlDocument config) {
         boolean OVERRIDE = config.getBoolean("ENTITIES.OVERRIDE_GLOBAL_CONFIG");
 

@@ -4,10 +4,10 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
 import net.skullian.skyfactions.common.command.CommandsUtility;
 import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.module.abstraction.DiscordModule;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
-import net.skullian.skyfactions.module.SkyModules;
-import net.skullian.skyfactions.module.impl.discord.DiscordModule;
+import net.skullian.skyfactions.common.module.SkyModules;
 import org.incendo.cloud.annotations.Command;
 import org.incendo.cloud.annotations.Permission;
 
@@ -26,7 +26,6 @@ public class LinkCommand extends CommandTemplate {
         SkyApi.getInstance().getPlayerAPI().getPlayerData(player.getUniqueId()).whenComplete((data, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "link your Discord", "SQL_GET_DISCORD", ex);
-                return;
             } else if (data.getDISCORD_ID() == null) {
                 module.createLinkCode(player).whenComplete((code, err) -> {
                     if (err != null) {

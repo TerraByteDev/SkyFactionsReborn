@@ -41,7 +41,7 @@ public class FactionObeliskUI extends Screen {
             }
 
             try {
-                player.addMetadata("inFactionRelatedUI");
+                player.addMetadata("inFactionRelatedUI", true);
                 FactionObeliskUI.builder().player(player).faction(faction).build().show();
             } catch (Exception e) {
                 e.printStackTrace();

@@ -1,20 +1,25 @@
 package net.skullian.skyfactions.paper.event.defence;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.DefencesConfig;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;
+import net.skullian.skyfactions.common.faction.Faction;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SLogger;
+import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.api.SpigotRegionAPI;
 import net.skullian.skyfactions.common.database.tables.DefenceLocations;
 import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -30,31 +35,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeff_media.customblockdata.CustomBlockData;
 
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
-import net.skullian.skyfactions.paper.api.SpigotDefenceAPI;
 import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.paper.config.types.DefencesConfig;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.config.types.Settings;
 import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.paper.defence.SpigotDefencesFactory;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.paper.util.ErrorUtil;
-import net.skullian.skyfactions.paper.util.SLogger;
-import net.skullian.skyfactions.paper.util.SoundUtil;
-import net.skullian.skyfactions.paper.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.common.util.text.TextUtility;
 
 public class DefencePlacementHandler implements Listener {
-    public static Map<String, List<Defence>> loadedFactionDefences = new HashMap<>();
-    public static Map<UUID, List<Defence>> loadedPlayerDefences = new HashMap<>();
-
-    public static Map<String, DefenceTextHologram> hologramsMap = new ConcurrentHashMap<>();
-
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        String locale = SpigotPlayerAPI.getLocale(player.getUniqueId());
+        SkyUser user = SkyApi.getInstance().getUserManager().getUser(player.getUniqueId());
+        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
         ItemStack stack = event.getItemInHand();
         NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
@@ -63,7 +56,7 @@ public class DefencePlacementHandler implements Listener {
         if (container.has(defenceKey, PersistentDataType.STRING)) {
             Block placed = event.getBlockPlaced();
             returnOwnerDependingOnLocation(placed.getLocation(), player).whenComplete((owner, ex) -> {
-                boolean isFaction = SpigotDefenceAPI.isFaction(owner);
+                boolean isFaction = SkyApi.getInstance().getDefenceAPI().isFaction(owner);
                 if (ex != null) {
                     ErrorUtil.handleError(player, "place your defence", "SQL_FACTION_GET", ex);
                     event.setCancelled(true);
@@ -73,45 +66,36 @@ public class DefencePlacementHandler implements Listener {
                     return;
                 }
 
-                AtomicBoolean shouldContinue = new AtomicBoolean(false);
+                boolean shouldContinue = false;
                 if (isFaction) {
-                    SpigotFactionAPI.getFaction(owner).whenComplete((faction, throwable) -> {
-                        if (throwable != null) {
-                            ErrorUtil.handleError(player, "place your defence", "SQL_FACTION_GET", throwable);
-                            event.setCancelled(true);
-                            return;
-                        } else if (!SpigotDefenceAPI.hasPermissions(DefencesConfig.PERMISSION_PLACE_DEFENCE.getList(), player, faction)) {
+                    Faction fetchedFaction = SkyApi.getInstance().getFactionAPI().getCachedFaction(owner);
+                    if (fetchedFaction != null) {
+                        if (!SkyApi.getInstance().getDefenceAPI().hasPermissions(DefencesConfig.PERMISSION_PLACE_DEFENCE.getList(), user, fetchedFaction)) {
                             Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, locale);
-                            return;
+                        } else {
+                            List<Defence> loadedDefences = SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences().get(owner);
+                            if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_FACTION_DEFENCES.getInt()) {
+                                event.setCancelled(true);
+
+                                Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "defence_max", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
+                                SkyApi.getInstance().getSoundAPI().playSound(user, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
+                            } else shouldContinue = true;
                         }
-
-                        List<Defence> loadedDefences = loadedFactionDefences.get(owner);
-                        if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_FACTION_DEFENCES.getInt()) {
-                            event.setCancelled(true);
-
-                            Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "defence_max", DefencesConfig.MAX_FACTION_DEFENCES.getInt());
-                            SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
-                        }
-
-                        shouldContinue.set(true);
-                    });
+                    }
                 } else {
-                    List<Defence> loadedDefences = loadedPlayerDefences.get(UUID.fromString(owner));
+                    List<Defence> loadedDefences = SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().get(UUID.fromString(owner));
                     if (loadedDefences != null && loadedDefences.size() >= DefencesConfig.MAX_PLAYER_DEFENCES.getInt()) {
                         event.setCancelled(true);
 
                         Messages.TOO_MANY_DEFENCES_MESSAGE.send(player, locale, "defence_max", DefencesConfig.MAX_PLAYER_DEFENCES.getInt());
-                        SoundUtil.playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
-                        return;
-                    }
-
-                    shouldContinue.set(true);
+                        SkyApi.getInstance().getSoundAPI().playSound(user, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1f);
+                    } else shouldContinue = true;
                 }
 
-                if (!shouldContinue.get()) return;
+                if (!shouldContinue) return;
                 String defenceIdentifier = container.get(defenceKey, PersistentDataType.STRING);
 
-                DefenceStruct defence = SpigotDefencesFactory.defences.getOrDefault(locale, SpigotDefencesFactory.getDefaultStruct()).get(defenceIdentifier);
+                DefenceStruct defence = SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(locale, SkyApi.getInstance().getDefenceFactory().getDefaultStruct()).get(defenceIdentifier);
                 if (defence != null) {
                     Location belowLoc = placed.getLocation().clone();
                     belowLoc.setY(belowLoc.getY() - 1);
@@ -119,7 +103,7 @@ public class DefencePlacementHandler implements Listener {
                     Block belowBlock = placed.getWorld().getBlockAt(belowLoc);
                     if (!isAllowedBlock(belowBlock, defence)) {
                         event.setCancelled(true);
-                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE(), locale, player, "server_name", Messages.SERVER_NAME.getString(locale)));
+                        player.sendMessage(TextUtility.color(defence.getPLACEMENT_BLOCKED_MESSAGE(), locale, user, "server_name", Messages.SERVER_NAME.getString(locale)));
                         return;
                     }
 
@@ -149,21 +133,21 @@ public class DefencePlacementHandler implements Listener {
     private static Defence createDefence(DefenceData data, DefenceStruct defenceStruct, String owner, boolean isFaction, Optional<Player> player, Optional<BlockPlaceEvent> event, boolean isPlace, boolean shouldLoad) {
         Defence instance = null;
         try {
-            Class<?> clazz = Class.forName(SpigotDefencesFactory.defenceTypes.get(defenceStruct.getTYPE()));
+            Class<?> clazz = Class.forName(SkyApi.getInstance().getDefenceFactory().getDefenceTypes().get(defenceStruct.getTYPE()));
             Constructor<?> constr = clazz.getConstructor(DefenceData.class, DefenceStruct.class);
 
             instance = (Defence) constr.newInstance(data, defenceStruct);
             if (shouldLoad) instance.onLoad(owner);
 
-            if (isFaction && isPlace) SkyFactionsReborn.getCacheService().getEntry(SpigotFactionAPI.getCachedFaction(owner)).addDefence(instance.getDefenceLocation());
-                else if (!isFaction && isPlace) SkyFactionsReborn.getCacheService().getEntry(UUID.fromString(owner)).addDefence(instance.getDefenceLocation());
+            if (isFaction && isPlace) SkyApi.getInstance().getCacheService().getEntry(Objects.requireNonNull(SkyApi.getInstance().getFactionAPI().getCachedFaction(owner))).addDefence(instance.getDefenceLocation());
+                else if (!isFaction && isPlace) SkyApi.getInstance().getCacheService().getEntry(UUID.fromString(owner)).addDefence(instance.getDefenceLocation());
 
             addIntoMap(owner, isFaction, instance);
 
             return instance;
         } catch (Exception error) {
-            if (instance != null && isFaction && isPlace) SkyFactionsReborn.getCacheService().getEntry(SpigotFactionAPI.getCachedFaction(owner)).removeDefence(instance.getDefenceLocation());
-                else if (instance != null && !isFaction && isPlace) SkyFactionsReborn.getCacheService().getEntry(UUID.fromString(owner)).removeDefence(instance.getDefenceLocation());
+            if (instance != null && isFaction && isPlace) SkyApi.getInstance().getCacheService().getEntry(Objects.requireNonNull(SkyApi.getInstance().getFactionAPI().getCachedFaction(owner))).removeDefence(instance.getDefenceLocation());
+                else if (instance != null && !isFaction && isPlace) SkyApi.getInstance().getCacheService().getEntry(UUID.fromString(owner)).removeDefence(instance.getDefenceLocation());
 
             event.ifPresent(blockPlaceEvent -> blockPlaceEvent.setCancelled(true));
             player.ifPresent(value -> ErrorUtil.handleError(value, "place your defence", "DEFENCE_PROCESSING_EXCEPTION", error));
@@ -174,6 +158,7 @@ public class DefencePlacementHandler implements Listener {
 
     private static void addIntoMap(String owner, boolean isFaction, Defence defence) {
         if (isFaction) {
+            Map<String, List<Defence>> loadedFactionDefences = SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences();
             if (!loadedFactionDefences.containsKey(owner)) {
                 loadedFactionDefences.put(owner, List.of(defence));
             } else {
@@ -182,6 +167,8 @@ public class DefencePlacementHandler implements Listener {
                 loadedFactionDefences.replace(owner, defences);
             }
         } else {
+            Map<UUID, List<Defence>> loadedPlayerDefences = SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences();
+
             UUID playeruuid = UUID.fromString(owner);
             if (!loadedPlayerDefences.containsKey(playeruuid)) {
                 loadedPlayerDefences.put(playeruuid, List.of(defence));
@@ -194,11 +181,13 @@ public class DefencePlacementHandler implements Listener {
     }
 
     private CompletableFuture<String> returnOwnerDependingOnLocation(Location location, Player player) {
-        if (location.getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString()) && SpigotRegionAPI.isLocationInRegion(location, "sfr_player_" + player.getUniqueId())) {
+        SkyLocation skyLocation = SpigotAdapter.adapt(location);
+
+        if (location.getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString()) && SkyApi.getInstance().getRegionAPI().isLocationInRegion(skyLocation, "sfr_player_" + player.getUniqueId())) {
             return CompletableFuture.completedFuture(player.getUniqueId().toString());
         } else if (location.getWorld().getName().equals(Settings.ISLAND_FACTION_WORLD.getString())) {
-            return SpigotFactionAPI.getFaction(player.getUniqueId()).thenApply((faction) -> {
-                if (faction != null && SpigotRegionAPI.isLocationInRegion(location, "sfr_faction_" + faction.getName())) {
+            return SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).thenApply((faction) -> {
+                if (faction != null && SkyApi.getInstance().getRegionAPI().isLocationInRegion(skyLocation, "sfr_faction_" + faction.getName())) {
                     return faction.getName();
                 } else return null;
             });
@@ -215,16 +204,16 @@ public class DefencePlacementHandler implements Listener {
     }
 
     public static void addPlacedDefences(String factionName) {
-        if (loadedFactionDefences.get(factionName) != null) return;
-        SkyFactionsReborn.getDatabaseManager().getDefencesManager().getDefenceLocations(DefenceLocations.DEFENCE_LOCATIONS.FACTIONNAME.eq(factionName), "faction").whenComplete((locations, ex) -> {
+        if (SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences().get(factionName) != null) return;
+        SkyApi.getInstance().getDatabaseManager().getDefencesManager().getDefenceLocations(DefenceLocations.DEFENCE_LOCATIONS.FACTIONNAME.eq(factionName), "faction").whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
             }
 
             List<Defence> defences = new ArrayList<>();
-            for (Location location : locations) {
-                Block block = location.getBlock();
+            for (SkyLocation location : locations) {
+                Block block = SpigotAdapter.adapt(location).getBlock();
 
                 NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
                 NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
@@ -237,7 +226,7 @@ public class DefencePlacementHandler implements Listener {
                     ObjectMapper mapper = new ObjectMapper();
                     DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                    DefenceStruct defence = SpigotDefencesFactory.defences.getOrDefault(defenceData.getLOCALE(), SpigotDefencesFactory.getDefaultStruct()).get(name);
+                    DefenceStruct defence = SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(defenceData.getLOCALE(), SkyApi.getInstance().getDefenceFactory().getDefaultStruct()).get(name);
                         if (defence != null) {
 
                             Defence instance = createDefence(defenceData, defence, factionName, true, Optional.empty(), Optional.empty(), false, false);
@@ -251,21 +240,21 @@ public class DefencePlacementHandler implements Listener {
                 }
             }
 
-            loadedFactionDefences.put(factionName, defences);
+            SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences().put(factionName, defences);
         });
     }
 
     public static void addPlacedDefences(Player player) {
-        if (loadedPlayerDefences.get(player.getUniqueId()) != null) return;
-        SkyFactionsReborn.getDatabaseManager().getDefencesManager().getDefenceLocations(DefenceLocations.DEFENCE_LOCATIONS.UUID.eq(player.getUniqueId().toString()), "player").whenComplete((locations, ex) -> {
+        if (SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().get(player.getUniqueId()) != null) return;
+        SkyApi.getInstance().getDatabaseManager().getDefencesManager().getDefenceLocations(DefenceLocations.DEFENCE_LOCATIONS.UUID.eq(player.getUniqueId().toString()), "player").whenComplete((locations, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
             }
 
             List<Defence> defences = new ArrayList<>();
-            for (Location location : locations) {
-                Block block = location.getBlock();
+            for (SkyLocation location : locations) {
+                Block block = SpigotAdapter.adapt(location).getBlock();
 
                 NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
                 NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
@@ -273,7 +262,7 @@ public class DefencePlacementHandler implements Listener {
                 if (container.has(defenceKey, PersistentDataType.STRING)) {
                     String name = container.get(defenceKey, PersistentDataType.STRING);
                     String data = container.get(dataKey, PersistentDataType.STRING);
-                    DefenceStruct defence = SpigotDefencesFactory.defences.getOrDefault(SpigotPlayerAPI.getLocale(player.getUniqueId()), SpigotDefencesFactory.getDefaultStruct()).get(name);
+                    DefenceStruct defence = SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), SkyApi.getInstance().getDefenceFactory().getDefaultStruct()).get(name);
 
                     try {
                         if (defence != null) {
@@ -289,18 +278,18 @@ public class DefencePlacementHandler implements Listener {
                 }
             }
 
-            loadedPlayerDefences.put(player.getUniqueId(), defences);
+            SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().put(player.getUniqueId(), defences);
         });
     }
 
     public static void refresh() {
         SLogger.info("Refreshing existing loaded defences...");
 
-        loadedPlayerDefences.values().stream()
+        SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().values().stream()
                 .flatMap(List::stream)
                 .forEach(Defence::refresh);
 
-        loadedFactionDefences.values().stream()
+        SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences().values().stream()
                 .flatMap(List::stream)
                 .forEach(Defence::refresh);
     }

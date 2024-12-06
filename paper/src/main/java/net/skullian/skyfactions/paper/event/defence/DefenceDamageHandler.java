@@ -1,5 +1,7 @@
 package net.skullian.skyfactions.paper.event.defence;
 
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.SpigotDefenceAPI;
 import net.skullian.skyfactions.common.defence.Defence;
@@ -50,7 +52,9 @@ public class DefenceDamageHandler implements Listener {
             if (hitEntity.getType().equals(EntityType.PLAYER) && container.has(messageKey, PersistentDataType.STRING)) {
                 String message = container.get(messageKey, PersistentDataType.STRING);
                 Player player = (Player) hitEntity;
-                hitEntity.sendMessage(TextUtility.color(message, SpigotPlayerAPI.getLocale(player.getUniqueId()), player));
+                SkyUser user = SkyApi.getInstance().getUserManager().getUser(player.getUniqueId());
+
+                hitEntity.sendMessage(TextUtility.color(message, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), user));
             }
         }
     }
@@ -58,15 +62,17 @@ public class DefenceDamageHandler implements Listener {
     @EventHandler
     public void onPlayerDeathFromDefence(PlayerDeathEvent event) {
         Player player = event.getPlayer();
+        SkyUser user = SkyApi.getInstance().getUserManager().getUser(player.getUniqueId());
         if (toDie.containsKey(player.getUniqueId())) {
 
             DefenceEntityDeathData data = getData(player.getUniqueId(), event.getDamageSource().getDamageType());
             if (data == null) return;
 
+            String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
             String deathMessage = data.getDEATH_MESSAGE();
             event.deathMessage(TextUtility.color(deathMessage
                     .replaceAll("player_name", player.getName())
-                    .replaceAll("defender", "DEFENDER_NAME"), SpigotPlayerAPI.getLocale(player.getUniqueId()), player));
+                    .replaceAll("defender", "DEFENDER_NAME"), locale, user));
 
             removeDeadEntity(event.getPlayer(), data);
         }
@@ -86,7 +92,7 @@ public class DefenceDamageHandler implements Listener {
     private void removeDeadEntity(LivingEntity entity, DefenceEntityDeathData data) {
         for (Defence defence : getDefencesFromData(data)) {
             if (defence.getDefenceLocation().equals(data.getDEFENCE_LOCATION())) {
-                defence.removeDeadEntity(entity);
+                defence.removeDeadEntity(entity.getEntityId());
             }
         }
     }
@@ -98,7 +104,7 @@ public class DefenceDamageHandler implements Listener {
     }
 
     private List<Defence> getDefencesFromData(DefenceEntityDeathData data) {
-        if (SpigotDefenceAPI.isFaction(data.getOWNER())) return DefencePlacementHandler.loadedFactionDefences.get(data.getOWNER());
-        else return DefencePlacementHandler.loadedPlayerDefences.get(UUID.fromString(data.getOWNER()));
+        if (SkyApi.getInstance().getDefenceAPI().isFaction(data.getOWNER())) return SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences().get(data.getOWNER());
+            else return SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().get(UUID.fromString(data.getOWNER()));
     }
 }

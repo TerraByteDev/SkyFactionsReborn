@@ -144,4 +144,6 @@ public abstract class SkyUser {
         this.commandSender = commandSender;
         return this;
     }
+
+    public abstract void kick(Component reason);
 }

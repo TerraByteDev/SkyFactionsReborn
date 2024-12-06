@@ -1,11 +1,11 @@
 package net.skullian.skyfactions.paper.defence.hologram;
 
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.common.util.SkyLocation;
-import net.skullian.skyfactions.common.util.nms.NMSProvider;
 import org.bukkit.ChatColor;
 
 public class SpigotDefenceTextHologram extends DefenceTextHologram {
@@ -20,22 +20,22 @@ public class SpigotDefenceTextHologram extends DefenceTextHologram {
 
     @Override
     public void spawn(SkyLocation location) {
-        NMSProvider.getInstance().removeHologram(this);
+        SkyApi.getInstance().getNMSProvider().getInstance().removeHologram(this);
     }
 
     @Override
     public void update() {
-        NMSProvider.getInstance().removeHologram(this);
+        SkyApi.getInstance().getNMSProvider().getInstance().removeHologram(this);
     }
 
     @Override
     public void kill() {
-        NMSProvider.getInstance().removeHologram(this);
+        SkyApi.getInstance().getNMSProvider().getInstance().removeHologram(this);
     }
 
     @Override
     public void updateAffectedPlayers() {
-        NMSProvider.getInstance().updateHologram(this);
+        SkyApi.getInstance().getNMSProvider().getInstance().updateHologram(this);
     }
 
     @Override

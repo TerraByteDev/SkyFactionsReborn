@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.module;
+package net.skullian.skyfactions.common.module;
 
 import lombok.Getter;
 import net.skullian.skyfactions.common.util.SLogger;

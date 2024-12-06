@@ -1,15 +1,19 @@
 package net.skullian.skyfactions.paper.event;
 
 import net.kyori.adventure.text.Component;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.database.struct.PlayerData;
+import net.skullian.skyfactions.common.gui.CooldownManager;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
+import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.*;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.config.types.Settings;
-import net.skullian.skyfactions.common.database.struct.PlayerData;
+import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.event.defence.DefencePlacementHandler;
-import net.skullian.skyfactions.paper.util.CooldownManager;
-import net.skullian.skyfactions.paper.util.SLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -30,12 +34,13 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (SkyFactionsReborn.getDatabaseManager().closed) {
+        if (SkyApi.getInstance().getDatabaseManager().closed) {
             event.getPlayer().kick(Component.text("<red>A fatal error occurred. Please contact your server owners to check logs."));
             throw new RuntimeException("Database is closed! Cannot allow player to join without risking dupes and unexpected functionalities.");
         }
 
-        SpigotPlayerAPI.isPlayerRegistered(event.getPlayer().getUniqueId()).whenComplete((isRegistered, ex) -> {
+        SkyUser user = SkyApi.getInstance().getUserManager().getUser(event.getPlayer().getUniqueId());
+        SkyApi.getInstance().getPlayerAPI().isPlayerRegistered(event.getPlayer().getUniqueId()).whenComplete((isRegistered, ex) -> {
             if (ex != null) {
                 ex.printStackTrace();
                 return;
@@ -43,29 +48,28 @@ public class PlayerListener implements Listener {
 
             if (!isRegistered) {
                 SLogger.info("Player [{}] has not joined before. Syncing with database.", event.getPlayer().getName());
-                SkyFactionsReborn.getCacheService().getEntry(event.getPlayer().getUniqueId()).setShouldRegister(true);
+                SkyApi.getInstance().getCacheService().getEntry(event.getPlayer().getUniqueId()).setShouldRegister(true);
 
-                SpigotPlayerAPI.playerData.put(event.getPlayer().getUniqueId(), new PlayerData(
-                        event.getPlayer().getUniqueId(),
+                SkyApi.getInstance().getPlayerAPI().getPlayerData().put(event.getPlayer().getUniqueId(), new PlayerData(
                         "none",
                         0,
                         event.getPlayer().locale().getLanguage()
                 ));
             } else {
-                SkyFactionsReborn.getDatabaseManager().getPlayerManager().getPlayerLocale(event.getPlayer().getUniqueId()).whenComplete((locale, ex2) -> {
+                SkyApi.getInstance().getDatabaseManager().getPlayerManager().getPlayerLocale(event.getPlayer().getUniqueId()).whenComplete((locale, ex2) -> {
                     if (ex2 != null) {
                         ex2.printStackTrace();
                         return;
                     }
 
-                    SpigotPlayerAPI.getPlayerData(event.getPlayer().getUniqueId());
+                    SkyApi.getInstance().getPlayerAPI().getPlayerData(event.getPlayer().getUniqueId());
                 });
             }
         });
 
-        SpigotPlayerAPI.cacheData(event.getPlayer());
+        SkyApi.getInstance().getPlayerAPI().cacheData(event.getPlayer().getUniqueId());
 
-        SpigotIslandAPI.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
+        SkyApi.getInstance().getIslandAPI().getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
                 SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
                 ex.printStackTrace();
@@ -78,10 +82,10 @@ public class PlayerListener implements Listener {
 
                     World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                     if (world != null) {
-                        Location centerLocation = island.getCenter(world);
+                        SkyLocation centerLocation = island.getCenter(world.getName());
 
-                        SpigotRegionAPI.modifyWorldBorder(event.getPlayer(), island.getCenter(world), island.getSize());
-                        SpigotRegionAPI.teleportPlayerToLocation(event.getPlayer(), centerLocation);
+                        SkyApi.getInstance().getRegionAPI().modifyWorldBorder(user, island.getCenter(world.getName()), island.getSize());
+                        user.teleport(centerLocation);
 
                     }
                 }
@@ -89,49 +93,52 @@ public class PlayerListener implements Listener {
         });
 
         SLogger.info("Initialising Notification Task for {}", event.getPlayer().getName());
-        SpigotNotificationAPI.createCycle(event.getPlayer());
+        SkyApi.getInstance().getNotificationAPI().createCycle(user);
     }
 
     @EventHandler
     public void onPlayerSpawnLocationEvent(PlayerSpawnLocationEvent event) {
-        Location hubLoc = SpigotRegionAPI.getHubLocation();
-        SpigotFactionAPI.isInFaction(event.getPlayer()).whenComplete((is, ex) -> {
+        Location bukkitLoc = SpigotAdapter.adapt(SkyApi.getInstance().getRegionAPI().getHubLocation());
+        SkyApi.getInstance().getFactionAPI().isInFaction(event.getPlayer().getUniqueId()).whenComplete((is, ex) -> {
             if (ex != null) {
-                event.setSpawnLocation(hubLoc);
+                event.setSpawnLocation(bukkitLoc);
                 ex.printStackTrace();
             } else if (!is && event.getSpawnLocation().getWorld().getName().equals(Settings.ISLAND_FACTION_WORLD.getString())) {
-                event.setSpawnLocation(hubLoc);
+                event.setSpawnLocation(bukkitLoc);
             }
         });
 
-        SpigotIslandAPI.hasIsland(event.getPlayer().getUniqueId()).whenComplete((is, ex) -> {
+        SkyApi.getInstance().getIslandAPI().getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((is, ex) -> {
             if (ex != null) {
-                event.setSpawnLocation(hubLoc);
+                event.setSpawnLocation(bukkitLoc);
                 ex.printStackTrace();
-            } else if (!is && event.getSpawnLocation().getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString())) {
-                event.setSpawnLocation(hubLoc);
+            } else if (is == null && event.getSpawnLocation().getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString())) {
+                event.setSpawnLocation(bukkitLoc);
             }
         });
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
+        SkyUser user = SkyApi.getInstance().getUserManager().getUser(event.getPlayer().getUniqueId());
         SLogger.info("Cancelling Notification Task for {}...", event.getPlayer().getName());
         BukkitTask task = SpigotNotificationAPI.tasks.get(event.getPlayer().getUniqueId());
         if (task != null) task.cancel();
 
         SpigotIslandAPI.modifyDefenceOperation(SpigotFactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
 
-        CooldownManager.ITEMS.remove(event.getPlayer());
-        CooldownManager.COMMANDS.remove(event.getPlayer());
+        CooldownManager.ITEMS.remove(user);
+        CooldownManager.COMMANDS.remove(user);
     }
 
     @EventHandler
     public void playerRespawn(PlayerRespawnEvent event) {
+        SkyUser user = SkyApi.getInstance().getUserManager().getUser(event.getPlayer().getUniqueId());
+        SkyLocation playerLoc = SpigotAdapter.adapt(event.getPlayer().getLocation());
         if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
-            if (SpigotRegionAPI.isLocationInRegion(event.getPlayer().getLocation(), "sfr_player_" + event.getPlayer().getUniqueId().toString()))
+            if (SkyApi.getInstance().getRegionAPI().isLocationInRegion(playerLoc, "sfr_player_" + event.getPlayer().getUniqueId().toString()))
                 SpigotIslandAPI.modifyDefenceOperation(SpigotFactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
-            SpigotIslandAPI.getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
+            SkyApi.getInstance().getIslandAPI().getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
                 if (ex != null) {
                     SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
                     ex.printStackTrace();
@@ -140,7 +147,7 @@ public class PlayerListener implements Listener {
 
                 World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
                 if (island != null && world != null) {
-                    event.getPlayer().teleport(island.getCenter(world));
+                    user.teleport(island.getCenter(world.getName()));
                 }
             });
         }

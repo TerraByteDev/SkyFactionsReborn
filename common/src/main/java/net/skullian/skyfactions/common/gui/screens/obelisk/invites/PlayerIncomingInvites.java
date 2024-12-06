@@ -43,7 +43,7 @@ public class PlayerIncomingInvites extends PaginatedScreen {
             }
 
             try {
-                player.addMetadata("inFactionRelatedUI");
+                player.addMetadata("inFactionRelatedUI", true);
                 PlayerIncomingInvites.builder().player(player).inviteData(inviteData).build().show();
             } catch (IllegalArgumentException error) {
                 error.printStackTrace();
@@ -60,18 +60,6 @@ public class PlayerIncomingInvites extends PaginatedScreen {
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             case "BACK" ->
                     new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", player);
-            default -> null;
-        };
-    }
-
-    @Nullable
-    @Override
-    protected BaseSkyItem handlePaginationItem(@NotNull PaginationItemData paginationItem) {
-        return switch (paginationItem.getITEM_ID()) {
-            case "FORWARD_BUTTON" ->
-                    new PaginationForwardItem(paginationItem, player);
-            case "BACK_BUTTON" ->
-                    new PaginationBackItem(paginationItem, player);
             default -> null;
         };
     }

@@ -30,8 +30,6 @@ public class ObeliskPurchaseDefenceUI extends Screen {
         this.obeliskType = obeliskType;
         this.struct = struct;
         this.faction = faction;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player, String obeliskType, DefenceStruct struct, Faction faction) {

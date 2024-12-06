@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
@@ -46,12 +47,16 @@ public class NMSHandlerImpl implements NMSHandler {
         );
         textDisplay.setPos(hologram.getLocation().getX(), hologram.getLocation().getY(), hologram.getLocation().getZ());
         textDisplay.setNoGravity(true);
-        textDisplay.setBillboardConstraints(Display.BillboardConstraints.CENTER);
+        textDisplay.setBillboardConstraints(Display.BillboardConstraints.VERTICAL);
         textDisplay.setTextOpacity(hologram.getTextOpacity());
+
+        ServerLevel level = ((CraftWorld) Bukkit.getWorld(hologram.getLocation().getWorldName())).getHandle();
+        textDisplay.setLevel(level);
 
         hologram.setEntity(textDisplay);
         hologram.getViewers().stream()
                 .forEach((user) -> {
+                    if (!user.isOnline()) return;
                     Player player = SpigotAdapter.adapt(user).getPlayer();
                     textDisplay.setText(Component.literal(LegacyComponentSerializer.legacySection().serialize(hologram.createText(user))));
 

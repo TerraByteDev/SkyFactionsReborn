@@ -33,8 +33,6 @@ public class MemberManageRankUI extends Screen {
         super(GUIEnums.OBELISK_MANAGE_MEMBER_RANK_GUI.getPath(), player);
         this.faction = faction;
         this.subject = subject;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player, Faction faction, SkyUser subject) {

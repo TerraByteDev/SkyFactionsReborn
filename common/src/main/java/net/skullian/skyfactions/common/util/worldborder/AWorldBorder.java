@@ -1,8 +1,6 @@
 package net.skullian.skyfactions.common.util.worldborder;
 
 import net.skullian.skyfactions.common.user.SkyUser;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 import java.util.function.Supplier;
 

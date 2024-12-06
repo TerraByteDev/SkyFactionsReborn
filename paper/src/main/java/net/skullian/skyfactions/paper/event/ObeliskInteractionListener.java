@@ -1,11 +1,13 @@
 package net.skullian.skyfactions.paper.event;
 
 import com.jeff_media.customblockdata.CustomBlockData;
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.config.types.ObeliskConfig;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
 import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
-import net.skullian.skyfactions.paper.config.types.Messages;
-import net.skullian.skyfactions.paper.config.types.ObeliskConfig;
 import net.skullian.skyfactions.common.gui.screens.obelisk.FactionObeliskUI;
 import net.skullian.skyfactions.common.gui.screens.obelisk.PlayerObeliskUI;
 import org.bukkit.Material;
@@ -77,7 +79,7 @@ public class ObeliskInteractionListener implements Listener {
             return;
 
         event.setCancelled(true);
-        Messages.OBELISK_DESTROY_DENY.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+        Messages.OBELISK_DESTROY_DENY.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
     }
 
     // Listen for interaction with the Obelisk
@@ -103,26 +105,28 @@ public class ObeliskInteractionListener implements Listener {
 
         hasPermissions(player, type, owner).thenAccept((has) -> {
             if (!has) {
-                Messages.OBELISK_ACCESS_DENY.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                Messages.OBELISK_ACCESS_DENY.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
             }
         });
     }
 
     private CompletableFuture<Boolean> hasPermissions(Player player, String type, String owner) {
+        SkyUser user = SkyApi.getInstance().getUserManager().getUser(player.getUniqueId());
+
         if (type.equals("player")) {
             if (owner.equals(player.getUniqueId().toString())) {
-                PlayerObeliskUI.promptPlayer(player);
+                PlayerObeliskUI.promptPlayer(user);
                 return CompletableFuture.completedFuture(true);
             }
 
             return CompletableFuture.completedFuture(false);
         } else if (type.equals("faction")) {
-            return SpigotFactionAPI.getFaction(player.getUniqueId()).thenApply(faction -> {
+            return SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).thenApply(faction -> {
                 if (faction == null) {
                     return false;
                 }
                 if (faction.getName().equalsIgnoreCase(owner)) {
-                    FactionObeliskUI.promptPlayer(player);
+                    FactionObeliskUI.promptPlayer(user);
                     return true;
                 }
                 return false;

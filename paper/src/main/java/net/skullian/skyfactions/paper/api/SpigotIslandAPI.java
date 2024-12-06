@@ -63,7 +63,7 @@ public class SpigotIslandAPI extends IslandAPI {
     public static void modifyDefenceOperation(SpigotFactionAPI.DefenceOperation operation, UUID playerUUID) {
         if (operation == SpigotFactionAPI.DefenceOperation.DISABLE && !SkyApi.getInstance().getRegionAPI().isLocationInRegion(SkyApi.getInstance().getUserManager().getUser(playerUUID).getLocation(), "sfr_player_" + playerUUID.toString())) return;
 
-        List<Defence> defences = DefencePlacementHandler.loadedPlayerDefences.get(playerUUID);
+        List<Defence> defences = SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().get(playerUUID);
         if (defences == null || defences.isEmpty()) return;
 
         for (Defence defence : defences) {

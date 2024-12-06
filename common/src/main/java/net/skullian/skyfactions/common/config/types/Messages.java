@@ -369,8 +369,7 @@ public enum Messages {
             message = value instanceof List ? TextUtility.fromList((List<?>) value, locale, receiver instanceof SkyUser ? (SkyUser) receiver : null, replacements) : TextUtility.color(String.valueOf(value), locale, receiver instanceof SkyUser ? (SkyUser) receiver : null, replacements);
         }
 
-        assert receiver instanceof SkyUser;
-        ((SkyUser) receiver).sendMessage(message);
+        SkyApi.getInstance().getUserManager().of(receiver).sendMessage(message);
     }
 
     public static String replace(String value, SkyUser player, Object... replacements) {

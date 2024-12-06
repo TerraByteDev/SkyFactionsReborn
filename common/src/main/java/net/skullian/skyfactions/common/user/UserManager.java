@@ -10,6 +10,8 @@ public abstract class UserManager {
 
     public abstract boolean isCached(UUID uuid);
 
+    public abstract SkyUser of(Object receiver);
+
     public abstract SkyUser cloudFetch(UUID uuid, Object commandSender, boolean console);
 
 }

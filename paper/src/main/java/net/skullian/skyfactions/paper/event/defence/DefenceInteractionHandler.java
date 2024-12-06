@@ -3,10 +3,14 @@ package net.skullian.skyfactions.paper.event.defence;
 import java.util.Optional;
 import java.util.UUID;
 
+import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.DefencesConfig;
+import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.paper.config.types.DefencesConfig;
-import net.skullian.skyfactions.paper.config.types.Messages;
 import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.event.armor.ArmorEquipEvent;
 import net.skullian.skyfactions.common.gui.screens.defence.DefenceManageUI;
 import org.bukkit.block.Block;
@@ -26,9 +30,10 @@ public class DefenceInteractionHandler implements Listener {
     @EventHandler
     public void onDefenceExplode(BlockExplodeEvent event) {
         for (Block block : event.blockList()) {
-            if (SpigotDefenceAPI.isDefenceMaterial(block) && SpigotDefenceAPI.isDefence(block.getLocation())) {
+            SkyLocation skyLocation = SpigotAdapter.adapt(block.getLocation());
+            if (SkyApi.getInstance().getDefenceAPI().isDefenceMaterial(skyLocation) && SkyApi.getInstance().getDefenceAPI().isDefence(skyLocation)) {
 
-                Defence defence = SpigotDefenceAPI.getLoadedDefence(block.getLocation());
+                Defence defence = SkyApi.getInstance().getDefenceAPI().getLoadedDefence(skyLocation);
                 if (defence != null) defence.damage(Optional.empty());
 
                 event.blockList().remove(block);
@@ -38,15 +43,15 @@ public class DefenceInteractionHandler implements Listener {
 
     @EventHandler
     public void onDefenceBreak(BlockBreakEvent event) {
-        if (SpigotDefenceAPI.isDefence(event.getBlock().getLocation())) {
+        if (SkyApi.getInstance().getDefenceAPI().isDefence(SpigotAdapter.adapt(event.getBlock().getLocation()))) {
             event.setCancelled(true);
-            Messages.DEFENCE_DESTROY_DENY.send(event.getPlayer(), event.getPlayer().locale().getLanguage());
+            Messages.DEFENCE_DESTROY_DENY.send(event.getPlayer(), SkyApi.getInstance().getPlayerAPI().getLocale(event.getPlayer().getUniqueId()));
         }
     }
 
     @EventHandler
     public void onArmorEquip(ArmorEquipEvent event) {
-        if (SpigotDefenceAPI.isDefence(event.getItem())) {
+        if (SkyApi.getInstance().getDefenceAPI().isDefence(SpigotAdapter.adapt(event.getItem()))) {
             event.setCancelled(true);
         }
     }
@@ -54,27 +59,30 @@ public class DefenceInteractionHandler implements Listener {
     @EventHandler
     public void onDefenceInteract(PlayerInteractEvent event) {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || !event.hasBlock()) return;
-        if (!SpigotDefenceAPI.isDefenceMaterial(event.getClickedBlock()) || !SpigotDefenceAPI.isDefence(event.getClickedBlock().getLocation())) return;
+
+        SkyLocation skyLocation = SpigotAdapter.adapt(event.getClickedBlock().getLocation());
+        if (!SkyApi.getInstance().getDefenceAPI().isDefenceMaterial(skyLocation) || !SkyApi.getInstance().getDefenceAPI().isDefence(skyLocation)) return;
 
         Player player = event.getPlayer();
-        Defence defence = SpigotDefenceAPI.getLoadedDefence(event.getClickedBlock().getLocation());
+        SkyUser user = SkyApi.getInstance().getUserManager().getUser(player.getUniqueId());
+        Defence defence = SkyApi.getInstance().getDefenceAPI().getLoadedDefence(skyLocation);
 
         if (defence != null) {
             if (defence.getData().isIS_FACTION()) {
-                SpigotFactionAPI.getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
+                SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
                     if (ex != null) {
                         ex.printStackTrace();
                         return;
                     } else if (faction == null) return;
                         else if (!faction.getName().equals(defence.getData().getUUIDFactionName())) return;
-                        else if (SpigotDefenceAPI.hasPermissions(DefencesConfig.PERMISSION_ACCESS_DEFENCE.getList(), player, faction))
-                            Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(player, SpigotPlayerAPI.getLocale(player.getUniqueId()));
+                        else if (SkyApi.getInstance().getDefenceAPI().hasPermissions(DefencesConfig.PERMISSION_ACCESS_DEFENCE.getList(), user, faction))
+                            Messages.DEFENCE_INSUFFICIENT_PERMISSIONS.send(user, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
 
-                    DefenceManageUI.promptPlayer(player, defence.getData(), defence.getStruct(), faction);
+                    DefenceManageUI.promptPlayer(user, defence.getData(), defence.getStruct(), faction);
                 });
             } else {
                 if (UUID.fromString(defence.getData().getUUIDFactionName()).equals(player.getUniqueId())) {
-                    DefenceManageUI.promptPlayer(player, defence.getData(), defence.getStruct(), null);
+                    DefenceManageUI.promptPlayer(user, defence.getData(), defence.getStruct(), null);
                 }
             }
         }

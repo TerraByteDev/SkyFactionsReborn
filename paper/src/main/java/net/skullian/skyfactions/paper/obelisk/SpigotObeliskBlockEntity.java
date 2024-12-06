@@ -30,7 +30,7 @@ public class SpigotObeliskBlockEntity extends ObeliskBlockEntity {
         Location entityLocation = SpigotAdapter.adapt(getLocationFromBlock(location));
 
         world.spawn(entityLocation, ItemDisplay.class, entity -> {
-            ItemStack itemStack = SpigotAdapter.adapt(blockItem.getItem(1), null);
+            ItemStack itemStack = SpigotAdapter.adapt(blockItem.getItem(1), null, false);
             entity.setItemStack(itemStack);
             entity.setPersistent(true);
             entity.setInvisible(true);

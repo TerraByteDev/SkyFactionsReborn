@@ -9,7 +9,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.util.SLogger;
-import net.skullian.skyfactions.module.SkyModuleManager;
+import net.skullian.skyfactions.common.module.SkyModuleManager;
 import net.skullian.skyfactions.paper.api.SpigotSkyAPI;
 import net.skullian.skyfactions.paper.npc.SpigotNPCManager;
 import net.skullian.skyfactions.paper.defence.block.BrokenBlockService;
@@ -21,7 +21,6 @@ import net.skullian.skyfactions.paper.event.defence.DefencePlacementHandler;
 import net.skullian.skyfactions.paper.event.ObeliskInteractionListener;
 import net.skullian.skyfactions.common.npc.NPCManager;
 import net.skullian.skyfactions.paper.util.DependencyHandler;
-import net.skullian.skyfactions.common.util.nms.NMSProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.xenondevs.invui.InvUI;
 

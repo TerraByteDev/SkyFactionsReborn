@@ -2,16 +2,13 @@ package net.skullian.skyfactions.nms.v1_21_R1;
 
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.user.SkyUser;
-import net.skullian.skyfactions.common.util.nms.NMSProvider;
 import net.skullian.skyfactions.common.util.worldborder.AWorldBorder;
 import net.skullian.skyfactions.common.util.worldborder.BorderPos;
 import net.skullian.skyfactions.common.util.worldborder.BorderUpdateAction;
 import net.skullian.skyfactions.common.util.worldborder.ConsumerSupplier;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
-import org.bukkit.entity.Player;
 
 public class WorldBorder extends AWorldBorder {
 

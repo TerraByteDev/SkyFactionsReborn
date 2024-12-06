@@ -28,7 +28,7 @@ public class SkyLoader implements PluginLoader {
         centralResolver.addDependency(new Dependency(new DefaultArtifact("net.dv8tion:JDA:5.2.1"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.fasterxml.jackson.core:jackson-databind:2.18.1"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.jeff-media:custom-block-data:2.2.3"), null));
-        centralResolver.addDependency(new Dependency(new DefaultArtifact("org.apache.commons:commons-collections4:4.4"), null));
+        centralResolver.addDependency(new Dependency(new DefaultArtifact("org.apache.commons:commons-lang3:3.17.0"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.fasterxml.jackson.core:jackson-core:2.17.0"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.fasterxml.jackson.core:jackson-annotations:2.17.2"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("org.slf4j:slf4j-api:2.0.9"), null));

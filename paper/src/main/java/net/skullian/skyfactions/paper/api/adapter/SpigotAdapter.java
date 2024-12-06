@@ -49,8 +49,11 @@ public class SpigotAdapter {
 
     public static ItemStack adapt(SkyItemStack skyStack, SkyUser user, boolean legacy) {
         String locale = user != null ? SkyApi.getInstance().getPlayerAPI().getLocale(user.getUniqueId()) : Messages.getDefaulLocale();
-        
-        ItemStack stack = new ItemStack(Material.valueOf(skyStack.getMaterial()));
+
+        ItemStack stack;
+        if (skyStack.getSerializedBytes() != null) stack = ItemStack.deserializeBytes((byte[]) skyStack.getSerializedBytes());
+            else stack = new ItemStack(Material.valueOf(skyStack.getMaterial()));
+
         stack.setAmount(skyStack.getAmount());
 
         if (!skyStack.getOwningPlayerUUID().equals("none")) {
@@ -92,42 +95,9 @@ public class SpigotAdapter {
     }
 
     public static SkyItemStack adapt(ItemStack stack) {
-
         return SkyItemStack.builder()
-                .material(stack.getType().name())
-                .amount(stack.getAmount())
-                .displayName(MiniMessage.miniMessage().serialize(stack.getItemMeta().displayName()))
-                .customModelData(stack.getItemMeta().getCustomModelData() != -1 ? stack.getItemMeta().getCustomModelData() : -1)
-                .enchants(getEnchantData(stack))
-                .persistentDatas(getPDCData(stack))
-                .itemFlags(stack.getItemFlags().stream().map(ItemFlag::name).toList())
-                .owningPlayerUUID(stack.getItemMeta() instanceof SkullMeta ? (((SkullMeta) stack.getItemMeta()).getOwningPlayer()) != null ? ((SkullMeta) stack.getItemMeta()).getOwningPlayer().getUniqueId().toString() : "none" : "none")
-                .textures(stack.getItemMeta() instanceof SkullMeta ? ((SkullMeta) stack.getItemMeta()).getPlayerProfile().getProperties().stream().filter(property -> property.getName().equals("textures")).findFirst().map(ProfileProperty::getValue).orElse("none") : "none")
-                .lore(stack.getItemMeta().hasLore() ? stack.getItemMeta().lore().stream().map(component -> MiniMessage.miniMessage().serialize(component)).toList() : List.of())
+                .serializedBytes(stack.serializeAsBytes())
                 .build();
-    }
-
-    private static List<SkyItemStack.EnchantData> getEnchantData(ItemStack stack) {
-        List<SkyItemStack.EnchantData> enchantData = List.of();
-        for (Enchantment enchantment : stack.getEnchantments().keySet()) {
-            enchantData.add(new SkyItemStack.EnchantData(
-                    enchantment.getKey().getKey(),
-                    stack.getEnchantmentLevel(enchantment),
-                    stack.getItemMeta().hasConflictingEnchant(enchantment)
-            ));
-        }
-        return enchantData;
-    }
-
-    private static List<SkyItemStack.PersistentData> getPDCData(ItemStack stack) {
-        List<SkyItemStack.PersistentData> pdcData = List.of();
-        for (NamespacedKey key : stack.getItemMeta().getPersistentDataContainer().getKeys()) {
-            pdcData.add(new SkyItemStack.PersistentData(
-                    key.getKey(),
-                    stack.getItemMeta().getPersistentDataContainer().get(key)
-            ));
-        }
-        return pdcData;
     }
 
 

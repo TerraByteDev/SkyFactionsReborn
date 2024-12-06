@@ -103,8 +103,8 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
         }
 
         @Override
-        public Location getLocation() {
-            return npc.getNpc().getLocation().toBukkitLocation(npc.getNpc().getWorld());
+        public SkyLocation getLocation() {
+            return SpigotAdapter.adapt(npc.getNpc().getLocation().toBukkitLocation(npc.getNpc().getWorld()));
         }
 
         @Override
@@ -134,8 +134,8 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
         }
 
         @Override
-        public void updateEntityType(EntityType type) {
-            npc.getNpc().setType(NpcApiProvider.get().getNpcTypeRegistry().getByName(type.name()));
+        public void updateEntityType(String type) {
+            npc.getNpc().setType(NpcApiProvider.get().getNpcTypeRegistry().getByName(EntityType.valueOf(type).name()));
         }
 
         @Override
@@ -146,8 +146,8 @@ public class ZNPCsPlusFactory implements SkyNPCFactory, Listener {
         }
 
         @Override
-        public EntityType getEntityType() {
-            return EntityType.valueOf(npc.getNpc().getType().getName());
+        public String getEntityType() {
+            return EntityType.valueOf(npc.getNpc().getType().getName()).name();
         }
     }
 }

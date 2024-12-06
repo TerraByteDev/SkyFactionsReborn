@@ -3,7 +3,7 @@ package net.skullian.skyfactions.common.defence.struct;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Location;
+import net.skullian.skyfactions.common.util.SkyLocation;
 
 @AllArgsConstructor
 @Getter
@@ -12,6 +12,6 @@ public class DefenceEntityDeathData {
 
     private String DEATH_MESSAGE;
     private String OWNER;
-    private Location DEFENCE_LOCATION;
+    private SkyLocation DEFENCE_LOCATION;
 
 }

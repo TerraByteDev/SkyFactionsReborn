@@ -12,6 +12,7 @@ import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,15 +35,7 @@ public class SpigotSkyUser extends SkyUser {
         OfflinePlayer player = SpigotAdapter.adapt(this);
         if (!player.isOnline()) return;
 
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-            player.getPlayer().teleport(SpigotAdapter.adapt(location));
-        });
-    }
-
-    @Override
-    public void onCacheComplete(int runesAddition, int gemsAddition) {
-        this.runes = Optional.of(this.runes.get() + runesAddition);
-        this.gems = Optional.of(this.gems.get() + gemsAddition);
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> player.getPlayer().teleport(SpigotAdapter.adapt(location)));
     }
 
     @Nullable
@@ -118,5 +111,11 @@ public class SpigotSkyUser extends SkyUser {
     public void addItem(SkyItemStack stack) {
         OfflinePlayer player = SpigotAdapter.adapt(this);
         if (player.isOnline()) player.getPlayer().getInventory().addItem(SpigotAdapter.adapt(stack, this, false));
+    }
+
+    @Override
+    public void kick(Component reason) {
+        OfflinePlayer player = SpigotAdapter.adapt(this);
+        if (player.isOnline()) player.getPlayer().kick(reason, PlayerKickEvent.Cause.PLUGIN);
     }
 }

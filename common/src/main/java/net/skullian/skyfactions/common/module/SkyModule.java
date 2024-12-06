@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.module;
+package net.skullian.skyfactions.common.module;
 
 public interface SkyModule {
 

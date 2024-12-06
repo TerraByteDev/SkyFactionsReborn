@@ -3,8 +3,6 @@ package net.skullian.skyfactions.common.island;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.skullian.skyfactions.common.util.SkyLocation;
-import org.bukkit.Location;
-import org.bukkit.World;
 
 import java.util.List;
 

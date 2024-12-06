@@ -4,6 +4,7 @@ import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.user.UserManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.UUID;
@@ -33,6 +34,14 @@ public class SpigotUserManager extends UserManager {
     @Override
     public boolean isCached(UUID uuid) {
         return skyUsers.containsKey(uuid);
+    }
+
+    @Override
+    public SkyUser of(Object receiver) {
+        if (receiver instanceof Player) return getUser(((Player) receiver).getUniqueId());
+        if (receiver instanceof SkyUser) return (SkyUser) receiver;
+
+        return null;
     }
 
     @Override

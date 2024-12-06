@@ -80,8 +80,8 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
         }
 
         @Override
-        public Location getLocation() {
-            return npc.getData().getLocation();
+        public SkyLocation getLocation() {
+            return SpigotAdapter.adapt(npc.getData().getLocation());
         }
 
         @Override
@@ -90,7 +90,7 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
         }
 
         @Override
-        public Entity getEntity() {
+        public Object getEntity() {
             return null;
         }
 
@@ -107,8 +107,8 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
         }
 
         @Override
-        public void updateEntityType(EntityType type) {
-            npc.getData().setType(type);
+        public void updateEntityType(String type) {
+            npc.getData().setType(EntityType.valueOf(type));
             npc.updateForAll();
         }
 
@@ -125,8 +125,8 @@ public class FancyNPCsFactory implements SkyNPCFactory, Listener {
         }
 
         @Override
-        public EntityType getEntityType() {
-            return npc.getData().getType();
+        public String getEntityType() {
+            return npc.getData().getType().name();
         }
         
     }

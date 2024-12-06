@@ -12,11 +12,17 @@ import java.util.UUID;
 
 public class DiscordListener extends ListenerAdapter {
 
+    private DiscordModule module;
+
+    public DiscordListener(DiscordModule module) {
+         this.module = module;
+    }
+
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getName().equals(DiscordConfig.COMMAND_NAME.getString())) {
             String code = event.getOption(DiscordConfig.COMMAND_OPTION_NAME.getString()).getAsString();
-            UUID uuid = DiscordModule.getInstance().getUUIDFromCode(code);
+            UUID uuid = module.getUUIDFromCode(code);
 
             if (uuid != null) {
                 SkyUser player = SkyApi.getInstance().getUserManager().getUser(uuid);
@@ -27,7 +33,7 @@ public class DiscordListener extends ListenerAdapter {
                 }
 
                 event.reply("").setEmbeds(buildEmbed(Color.getColor(DiscordConfig.SUCCESS_COLOR.getString()), Messages.DISCORD_APP_LINK_SUCCESS.getString(Messages.getDefaulLocale()).replace("player_name", player.getName())).build()).queue();
-                DiscordModule.getInstance().onSuccessfulLink(code);
+                module.onSuccessfulLink(code);
             } else {
                 event.reply("").setEmbeds(buildEmbed(Color.getColor(DiscordConfig.ERROR_COLOR.getString()), Messages.DISCORD_APP_LINK_FAILED.getString(Messages.getDefaulLocale())).build()).queue();
             }

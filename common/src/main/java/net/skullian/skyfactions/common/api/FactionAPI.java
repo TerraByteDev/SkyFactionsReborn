@@ -178,8 +178,9 @@ public abstract class FactionAPI {
 
         } else {
             Messages.FACTION_NAME_LENGTH_LIMIT.send(player, locale, "min", minimumLength, "max", maximumLength);
-            return false;
         }
+
+        return false;
     }
 
     public abstract void createRegion(SkyUser player, FactionIsland island, String worldName, String factionName);

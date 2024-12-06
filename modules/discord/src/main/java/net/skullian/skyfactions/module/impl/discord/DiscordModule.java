@@ -16,7 +16,7 @@ import net.skullian.skyfactions.common.config.ConfigHandler;
 import net.skullian.skyfactions.common.config.types.ConfigTypes;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SLogger;
-import net.skullian.skyfactions.module.SkyModule;
+import net.skullian.skyfactions.common.module.SkyModule;
 
 import java.time.Duration;
 import java.util.*;
@@ -26,7 +26,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class DiscordModule implements SkyModule {
+public class DiscordModule extends net.skullian.skyfactions.common.module.abstraction.DiscordModule implements SkyModule {
 
     public DiscordModule() {}
 
@@ -49,7 +49,7 @@ public class DiscordModule implements SkyModule {
                 .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_WEBHOOKS)
                 .build();
 
-        this.JDA.addEventListener(new DiscordListener());
+        this.JDA.addEventListener(new DiscordListener(this));
         this.JDA.awaitReady();
 
         startPresenceScheduler();
@@ -130,6 +130,7 @@ public class DiscordModule implements SkyModule {
         }
     }
 
+    @Override
     public CompletableFuture<String> createLinkCode(SkyUser user) {
         return CompletableFuture.supplyAsync(() -> {
             String code;
@@ -144,19 +145,21 @@ public class DiscordModule implements SkyModule {
     }
 
     public void loadConfig() {
-
         SkyApi.getInstance().getConfigHandler().registerFile(ConfigTypes.DISCORD, new ConfigHandler("discord"));
         DiscordConfig.setConfig(SkyApi.getInstance().getConfigHandler().getFile(ConfigTypes.DISCORD).getConfig());
     }
 
+    @Override
     public String getUsernameByID(String id) {
         return JDA.getUserById(id).getName();
     }
 
+    @Override
     public UUID getUUIDFromCode(String code) {
         return this.codes.get(code);
     }
 
+    @Override
     public void onSuccessfulLink(String code) {
         this.codes.remove(code);
     }

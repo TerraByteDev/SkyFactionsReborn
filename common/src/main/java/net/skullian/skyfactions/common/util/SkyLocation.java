@@ -2,7 +2,6 @@ package net.skullian.skyfactions.common.util;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.util.NumberConversions;
 
 @Getter
 @Setter
@@ -90,6 +89,7 @@ public class SkyLocation implements Cloneable {
     }
 
     public static int toBlockLocation(double loc) {
-        return NumberConversions.floor(loc);
+        final int floor = (int) loc;
+        return floor == loc ? floor : floor - (int) (Double.doubleToRawLongBits(loc) >>> 63);
     }
 }

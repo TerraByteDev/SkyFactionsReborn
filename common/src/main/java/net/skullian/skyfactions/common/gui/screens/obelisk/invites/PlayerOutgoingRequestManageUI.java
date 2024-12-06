@@ -32,7 +32,7 @@ public class PlayerOutgoingRequestManageUI extends Screen {
 
     public static void promptPlayer(SkyUser player, JoinRequestData joinRequest) {
         try {
-            player.addMetadata("inFactionRelatedUI");
+            player.addMetadata("inFactionRelatedUI", true);
             PlayerOutgoingRequestManageUI.builder().player(player).joinRequest(joinRequest).build().show();
         } catch (IllegalArgumentException error) {
             error.printStackTrace();

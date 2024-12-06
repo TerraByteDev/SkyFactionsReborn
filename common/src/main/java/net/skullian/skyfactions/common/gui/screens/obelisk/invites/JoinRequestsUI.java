@@ -67,18 +67,6 @@ public class JoinRequestsUI extends PaginatedScreen {
         };
     }
 
-    @Nullable
-    @Override
-    protected BaseSkyItem handlePaginationItem(@NotNull PaginationItemData paginationItem) {
-        return switch (paginationItem.getITEM_ID()) {
-            case "FORWARD_BUTTON" ->
-                    new PaginationForwardItem(paginationItem, player);
-            case "BACK_BUTTON" ->
-                    new PaginationBackItem(paginationItem, player);
-            default -> null;
-        };
-    }
-
     @NotNull
     @Override
     public List<BaseSkyItem> getModels(SkyUser player, ItemData itemData) {

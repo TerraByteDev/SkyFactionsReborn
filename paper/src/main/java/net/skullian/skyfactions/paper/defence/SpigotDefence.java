@@ -7,6 +7,7 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.defence.Defence;
+import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
@@ -184,12 +185,10 @@ public abstract class SpigotDefence extends Defence {
     public void createHologram(SkyLocation location, DefenceStruct defence, String playerUUIDorFactionName) {
         String text = String.join("\n", defence.getHOLOGRAM_LIST());
 
-        SpigotDefenceTextHologram hologram = new SpigotDefenceTextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), TextHologram.RenderMode.ALL, data.getUUIDFactionName(), defence, data)
+        DefenceTextHologram hologram = new SpigotDefenceTextHologram(playerUUIDorFactionName + "_" + defence.getIDENTIFIER() + "_" + location.getBlockX() + "_" + location.getBlockY() + "_" + location.getBlockZ(), getData().getUUIDFactionName(), defence, getData())
                 .setText(text.replace("defence_name", defence.getNAME()))
-                .setBillboard(Display.Billboard.VERTICAL)
                 .setSeeThroughBlocks(false)
-                .setShadow(true)
-                .setScale(1.0F, 1.0F, 1.0F);
+                .setShadow(true);
 
         hologram.spawn(location.add(0.5, -0.2, 0.5));
         SkyApi.getInstance().getDefenceAPI().getHologramsMap().put(hologram.getId(), hologram);

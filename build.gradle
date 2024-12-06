@@ -149,7 +149,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":paper"))
 
-    implementation(project(":modules"))
+    implementation(project(":modules:discord"))
 
     implementation(project(":v1_21_R1"))
 
