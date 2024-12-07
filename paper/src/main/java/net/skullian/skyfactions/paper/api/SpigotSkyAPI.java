@@ -47,7 +47,7 @@ import static org.bukkit.Bukkit.getServer;
 
 public final class SpigotSkyAPI extends SkyApi {
 
-    private  ConfigFileHandler configHandler;
+    private ConfigFileHandler configHandler;
     private DatabaseManager databaseManager;
     private BorderAPI worldBorderAPI;
     private CacheService cacheService;

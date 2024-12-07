@@ -10,7 +10,6 @@ import net.skullian.skyfactions.common.database.impl.faction.*;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.SLogger;
-import org.apache.logging.log4j.LogManager;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
