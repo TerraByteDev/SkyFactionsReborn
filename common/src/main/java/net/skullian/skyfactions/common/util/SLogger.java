@@ -13,7 +13,7 @@ public class SLogger {
         String withoutFormating = fatal ? "✗ㅤㅤ" : "➤ㅤㅤ" + PlainTextComponentSerializer.plainText().serialize(MiniMessage.miniMessage().deserialize(format(message, args)));
         String formatted = getFormatted(text, withoutFormating);
 
-        SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize((fatal ? "<#e73f38>" : "<#4294ed>") + formatted + "<reset>"));
+        SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize((fatal ? "<#e73f38>" : "<#4294ed>") + "<bold>" + formatted + "<reset>"));
     }
 
     public static String getFormatted(String text, String without) {
@@ -33,7 +33,7 @@ public class SLogger {
 
     public static void noPrefix(Object message, Object... args) {
         String formatted = format(message, args);
-        SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize("<#4294ed>" + formatted + "<reset>"));
+        SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize("<#4294ed>"+ "<bold>" + formatted + "<reset>"));
     }
 
     private static String getPadding(int count) {

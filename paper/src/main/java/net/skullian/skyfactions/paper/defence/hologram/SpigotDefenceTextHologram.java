@@ -20,7 +20,7 @@ public class SpigotDefenceTextHologram extends DefenceTextHologram {
 
     @Override
     public void spawn(SkyLocation location) {
-        SkyApi.getInstance().getNMSProvider().getInstance().removeHologram(this);
+        SkyApi.getInstance().getNMSProvider().getInstance().spawnHologram(this);
     }
 
     @Override
