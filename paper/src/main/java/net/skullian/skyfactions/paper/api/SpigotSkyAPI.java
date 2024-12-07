@@ -33,8 +33,6 @@ import net.skullian.skyfactions.paper.defence.SpigotDefencesFactory;
 import net.skullian.skyfactions.paper.gui.SpigotUIShower;
 import net.skullian.skyfactions.paper.npc.SpigotNPCManager;
 import net.skullian.skyfactions.paper.user.SpigotUserManager;
-import org.apache.logging.log4j.LogManager;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.invui.InvUI;
