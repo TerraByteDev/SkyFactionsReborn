@@ -25,7 +25,7 @@ public class SpigotDefenceTextHologram extends DefenceTextHologram {
 
     @Override
     public void update() {
-        SkyApi.getInstance().getNMSProvider().getInstance().removeHologram(this);
+        SkyApi.getInstance().getNMSProvider().getInstance().updateHologram(this);
     }
 
     @Override
