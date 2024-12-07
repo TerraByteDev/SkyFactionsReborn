@@ -108,8 +108,8 @@ public abstract class SkyUser {
     }
 
     public void onCacheComplete(int runesAddition, int gemsAddition) {
-        this.runes = Optional.of(this.runes.get() + runesAddition);
-        this.gems = Optional.of(this.gems.get() + gemsAddition);
+        this.runes = Optional.of(this.runes.isPresent() ? this.runes.get() : 0 + runesAddition);
+        this.gems = Optional.of(this.gems.isPresent() ? this.gems.get() : 0 + gemsAddition);
     }
 
     @Nullable public abstract CompletableFuture<JoinRequestData> getActiveJoinRequest();
