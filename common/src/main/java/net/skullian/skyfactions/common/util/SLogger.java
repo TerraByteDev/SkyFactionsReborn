@@ -7,7 +7,7 @@ import net.skullian.skyfactions.common.api.SkyApi;
 public class SLogger {
 
     public static void setup(Object message, boolean fatal, Object... args) {
-        String text = fatal ? "✗  " : "➤  " + format(message, args);
+        String text = fatal ? "✗ㅤㅤ" : "➤ㅤㅤ" + format(message, args);
         int totalLength = 62;
         String leftDelimiter = "│";
         String rightDelimiter = "│";

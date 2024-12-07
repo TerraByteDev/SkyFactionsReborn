@@ -29,33 +29,6 @@ public final class SkyFactionsReborn extends JavaPlugin {
         SkyApi.setInstance(new SpigotSkyAPI());
         SkyApi.setPluginInstance(this);
         SkyApi.getInstance().onEnable();
-        SLogger.setup("Registered SkyAPI & Plugin instance.", false);
-
-        SkyModuleManager.registerModule(DiscordModule.class);
-
-        SLogger.setup("Loading InvLib Instance.", false);
-        InvUI.getInstance().setPlugin(this);
-
-        SLogger.setup("Registering Events.", false);
-        getServer().getPluginManager().registerEvents(new ArmorListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-        getServer().getPluginManager().registerEvents(new ObeliskInteractionListener(), this);
-        getServer().getPluginManager().registerEvents(new DefenceDamageHandler(), this);
-        getServer().getPluginManager().registerEvents(new DefencePlacementHandler(), this);
-        getServer().getPluginManager().registerEvents(new DefenceInteractionHandler(), this);
-
-        // This is kind of pointless.
-        // Just a class for handling dependencies and optional dependencies.
-        // Majorly incomplete.
-        SLogger.setup("Handling optional dependencies.", false);
-        DependencyHandler.init();
-
-        // Player Data Container (CustomBlockData API) listener.
-        SLogger.setup("Handling PDC Listener.", false);
-        CustomBlockData.registerListener(this);
-
-        SLogger.noPrefix("│                   ✗ SkyFactions has loaded.                │");
-        SLogger.noPrefix("╰────────────────────────────────────────────────────────────╯");
     }
 
     @Override

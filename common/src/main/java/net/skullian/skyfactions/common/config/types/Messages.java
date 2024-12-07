@@ -278,7 +278,7 @@ public enum Messages {
     public static void load() {
         try {
             new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath(), "/language").mkdirs();
-            SLogger.setup("Saving default language <#05eb2f>[English]<#4294ed>.", false);
+            SLogger.setup("Saving default language [English].", false);
             YamlDocument doc = YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/en.yml"), Messages.class.getClassLoader().getResourceAsStream("language/en/en.yml"),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
@@ -291,7 +291,7 @@ public enum Messages {
             for (File dir : folder.listFiles()) {
                 
                 if (dir.isDirectory()) {
-                    SLogger.setup("Registering Language: <#05eb2f>[{}]<#4294ed>", false, dir.getName());
+                    SLogger.setup("Registering Language: [{}]", false, dir.getName());
 
                     if (!dir.getName().equalsIgnoreCase(Settings.DEFAULT_LANGUAGE.getString())) configs.put(
                         dir.getName(),

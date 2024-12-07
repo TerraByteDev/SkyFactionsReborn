@@ -76,6 +76,6 @@ public class DependencyHandler {
     }
 
     public static void alert(String name) {
-        SLogger.setup("Could not find {} on the server! If you have this plugin installed, this is a bug!", false, "<#d9b100>" + name + "<#d9b100>");
+        SLogger.setup("Could not find {} on the server!", false, name );
     }
 }

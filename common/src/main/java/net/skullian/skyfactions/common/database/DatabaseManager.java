@@ -10,6 +10,7 @@ import net.skullian.skyfactions.common.database.impl.faction.*;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.SLogger;
+import org.apache.logging.log4j.LogManager;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.jetbrains.annotations.NotNull;
@@ -53,8 +54,6 @@ public class DatabaseManager {
     private void createDataSource(
             @NotNull File file, @NotNull String type) {
 
-        Configuration configuration = new org.jooq.met
-
         Configuration configuration = new DefaultConfiguration()
                 .set(new DefaultExecuteListenerProvider(new DatabaseExecutionListener()));
         System.setProperty("org.jooq.no-tips", "true");
@@ -79,7 +78,7 @@ public class DatabaseManager {
             sqliteConfig.setMaximumPoolSize(maxPoolSize);
 
             HikariDataSource dataSource = new HikariDataSource(sqliteConfig);
-            SLogger.setup("Using SQLite Database.", false);
+            SLogger.info("Using SQLite Database.", false);
 
             configuration
                     .set(dataSource)
@@ -130,7 +129,7 @@ public class DatabaseManager {
             mysqlConfig.setPassword(password);
             mysqlConfig.setMaximumPoolSize(maxPoolSize);
 
-            SLogger.setup("Using MySQL database '{}' on: {}:{}.", false,
+            SLogger.info("Using MySQL database '{}' on: {}:{}.", false,
                     databaseName, host.getHost(), host.getPortOrDefault(3306));
             HikariDataSource dataSource = new HikariDataSource(mysqlConfig);
 
@@ -149,7 +148,7 @@ public class DatabaseManager {
     }
 
     private void setup() {
-        SLogger.info("Beginning database migrations.");
+        SLogger.info("Beginning database migrations.", false);
 
         Flyway flyway = Flyway.configure(this.getClass().getClassLoader())
                 .locations("classpath:net/skullian/skyfactions/common/database/migrations").failOnMissingLocations(true).cleanDisabled(true)
@@ -158,7 +157,7 @@ public class DatabaseManager {
         MigrateResult result = flyway.migrate();
 
         if (result.success) {
-            SLogger.info("Database migrations complete: ({} Migrations completed in {}ms)", result.getSuccessfulMigrations().size(), result.getTotalMigrationTime());
+            SLogger.info("Database migrations complete: ({} Migrations completed in {}ms)", false, result.getSuccessfulMigrations().size(), result.getTotalMigrationTime());
 
             this.currencyManager = new CurrencyDatabaseManager(this.ctx);
             this.defencesManager = new DefencesDatabaseManager(this.ctx);
@@ -173,7 +172,7 @@ public class DatabaseManager {
             this.electionManager = new FactionElectionManager(this.ctx);
         } else {
             ErrorUtil.handleDatabaseSetupError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed: " + result.getException()));
-            result.getFailedMigrations().forEach(migration -> SLogger.setup("Migration failed: {}", true, migration.description));
+            result.getFailedMigrations().forEach(migration -> SLogger.info("Migration failed: {}", true, migration.description));
         }
     }
 
