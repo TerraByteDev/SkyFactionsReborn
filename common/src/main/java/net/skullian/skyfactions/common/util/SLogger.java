@@ -10,13 +10,14 @@ import java.util.regex.Pattern;
 public class SLogger {
     public static void setup(Object message, boolean fatal, Object... args) {
         String text = fatal ? "✗ㅤㅤ" : "➤ㅤㅤ" + format(message, args);
-        String withoutFormating = fatal ? "✗ㅤㅤ" : "➤ㅤㅤ" + PlainTextComponentSerializer.plainText().serialize(MiniMessage.miniMessage().deserialize(format(message, args)));
-        String formatted = getFormatted(text, withoutFormating);
+        String formatted = getFormatted(text);
 
         SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize((fatal ? "<#e73f38>" : "<#4294ed>") + "<bold>" + formatted + "<reset>"));
     }
 
-    public static String getFormatted(String text, String without) {
+    public static String getFormatted(String text) {
+        String without = PlainTextComponentSerializer.plainText().serialize(MiniMessage.miniMessage().deserialize(text));
+
         int totalLength = 62;
         String leftDelimiter = "│";
         String rightDelimiter = "│";

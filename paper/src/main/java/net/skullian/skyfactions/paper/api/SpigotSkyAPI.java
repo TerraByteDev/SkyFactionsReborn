@@ -86,6 +86,7 @@ public final class SpigotSkyAPI extends SkyApi {
         SLogger.noPrefix("│    ___) |   <| |_| |  _| (_| | (__| |_| | (_) | | | \\__ \\    │");
         SLogger.noPrefix("│   |____/|_|\\_\\\\__,  |_|  \\__,_|\\___|\\__|_|\\___/|_| |_|___/    │");
         SLogger.noPrefix("│                |___/                                         │");
+        SLogger.noPrefix(SLogger.getFormatted("<bold>by Skullians"));
         SLogger.noPrefix("│                                                              │");
         SLogger.noPrefix("│                    SkyFactions is loading.                   │");
 
@@ -153,8 +154,8 @@ public final class SpigotSkyAPI extends SkyApi {
         SLogger.setup("Handling PDC Listener.", false);
         CustomBlockData.registerListener(SkyFactionsReborn.getInstance());
 
-        SLogger.noPrefix(SLogger.getFormatted("✓ Finished initialising SkyAPI.ㅤ ㅤ", "✓ Finished initialising SkyAPI.ㅤ ㅤ"));
-        SLogger.noPrefix(SLogger.getFormatted("✓ SkyFactions has loaded.ㅤㅤ ", "✓ SkyFactions has loaded.ㅤ ㅤ"));
+        SLogger.noPrefix(SLogger.getFormatted("✓ Finished initialising SkyAPI.ㅤ ㅤ"));
+        SLogger.noPrefix(SLogger.getFormatted("✓ SkyFactions has loaded.ㅤㅤ "));
         SLogger.noPrefix("╰──────────────────────────────────────────────────────────────╯");
 
         new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data").mkdir();
