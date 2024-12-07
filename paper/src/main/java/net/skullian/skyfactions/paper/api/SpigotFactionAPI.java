@@ -4,6 +4,8 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -118,6 +120,7 @@ public class SpigotFactionAPI extends FactionAPI {
         BlockVector3 max = BlockVector3.at(corner2.getX(), 320, corner2.getZ());
         ProtectedRegion region = new ProtectedCuboidRegion("sfr_faction_" + faction_name, min, max);
         region.getMembers().addPlayer(player.getUniqueId());
+        region.setFlag(Flags.EXIT, StateFlag.State.DENY);
 
         manager.addRegion(region);
     }

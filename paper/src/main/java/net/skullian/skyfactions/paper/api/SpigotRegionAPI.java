@@ -17,6 +17,8 @@ import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -82,12 +84,11 @@ public class SpigotRegionAPI extends RegionAPI {
         RegionManager regionManager = container.get(BukkitAdapter.adapt(Bukkit.getWorld(world)));
         BlockVector3 min = BlockVector3.at(corner1.getBlockX(), -64, corner1.getBlockZ());
         BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 320, corner2.getBlockZ());
+
         ProtectedRegion region = new ProtectedCuboidRegion(regionName, min, max);
+        region.getMembers().addPlayer(player.getUniqueId());
+        region.setFlag(Flags.EXIT, StateFlag.State.DENY);
 
-        DefaultDomain owners = region.getOwners();
-        owners.addPlayer(player.getUniqueId());
-
-        region.setOwners(owners);
         regionManager.addRegion(region);
     }
 
