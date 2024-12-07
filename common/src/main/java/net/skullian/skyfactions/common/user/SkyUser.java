@@ -28,6 +28,7 @@ public abstract class SkyUser {
     public Optional<PlayerIsland> island = Optional.empty();
     public Optional<List<InviteData>> incomingInvites = Optional.empty();
     public Optional<JoinRequestData> activeJoinRequest = Optional.empty();
+    @Getter
     public final boolean console;
     @Getter
     public Object commandSender;

@@ -15,7 +15,7 @@ public class DatabaseExecutionListener implements ExecuteListener {
 
         new RuntimeException("Database is closed! Cannot allow player to join without risking dupes and unexpected functionalities. Kicking all online players.").printStackTrace();
         if (SkyApi.getInstance().getDatabaseManager().closed) {
-            SkyApi.getInstance().getPlayerAPI().getOnlinePlayers().forEach((player) -> player.kick(MiniMessage.miniMessage().deserialize(Messages.SERVER_NAME.getString(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUuid())) + " <red>A fatal error has occurred. Please contact your server administrators.")));
+            SkyApi.getInstance().getPlayerAPI().getOnlinePlayers().forEach((player) -> player.kick(MiniMessage.miniMessage().deserialize(Messages.SERVER_NAME.getString(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId())) + " <red>A fatal error has occurred. Please contact your server administrators.")));
         }
     }
 }
