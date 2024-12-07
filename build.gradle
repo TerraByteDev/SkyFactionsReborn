@@ -1,5 +1,3 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
 buildscript {
     repositories {
         maven {
@@ -138,6 +136,7 @@ allprojects {
         compileOnly("net.kyori:adventure-text-logger-slf4j:${adventure}")
         compileOnly("net.kyori:adventure-text-minimessage:${adventure}")
         compileOnly("net.kyori:adventure-text-serializer-legacy:${adventure}")
+        compileOnly("net.kyori:adventure-text-serializer-plain:${adventure}")
 
         compileOnly("org.jooq:jooq:${jooq_codegen_version}")
         compileOnly("org.flywaydb:flyway-core:${flyway_core}")
@@ -199,10 +198,6 @@ java {
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
-}
-
-configurations {
-    flywayMigration
 }
 
 flyway {

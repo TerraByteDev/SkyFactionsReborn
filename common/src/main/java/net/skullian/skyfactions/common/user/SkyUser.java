@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-@Getter
 public abstract class SkyUser {
 
     public final UUID uuid;
@@ -96,11 +95,12 @@ public abstract class SkyUser {
     }
 
     public CompletableFuture<List<InviteData>> getIncomingInvites() {
-        return InvitesAPI.getPlayerIncomingInvites(this.uuid).whenComplete((invites, ex) -> {
+        return this.incomingInvites.map(CompletableFuture::completedFuture).orElseGet(() -> SkyApi.getInstance().getDatabaseManager().getFactionInvitesManager().getInvitesOfPlayer(getUniqueId()).whenComplete((invites, ex) -> {
             if (ex != null) return;
 
             this.incomingInvites = Optional.of(invites);
-        });
+        }));
+
     }
 
     public List<InviteData> getCachedInvites() {

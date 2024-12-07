@@ -2,26 +2,33 @@ package net.skullian.skyfactions.common.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.skullian.skyfactions.common.api.SkyApi;
 
-public class SLogger {
+import java.util.regex.Pattern;
 
+public class SLogger {
     public static void setup(Object message, boolean fatal, Object... args) {
         String text = fatal ? "✗ㅤㅤ" : "➤ㅤㅤ" + format(message, args);
+        String withoutFormating = fatal ? "✗ㅤㅤ" : "➤ㅤㅤ" + PlainTextComponentSerializer.plainText().serialize(MiniMessage.miniMessage().deserialize(format(message, args)));
+        String formatted = getFormatted(text, withoutFormating);
+
+        SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize((fatal ? "<#e73f38>" : "<#4294ed>") + formatted + "<reset>"));
+    }
+
+    public static String getFormatted(String text, String without) {
         int totalLength = 62;
         String leftDelimiter = "│";
         String rightDelimiter = "│";
         int availableSpace = totalLength - (leftDelimiter.length() + rightDelimiter.length());
 
-        if (text.length() > availableSpace) {
-            text = text.substring(0, availableSpace);
+        if (without.length() > availableSpace) {
+            without = without.substring(0, availableSpace);
         }
 
-        int paddingLeft = (availableSpace - text.length()) / 2;
-        int paddingRight = availableSpace - text.length() - paddingLeft;
-        String formatted = leftDelimiter + getPadding(paddingLeft) + text + getPadding(paddingRight) + rightDelimiter;
-
-        SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize((fatal ? "<#e73f38>" : "<#4294ed>") + formatted + "<reset>"));
+        int paddingLeft = (availableSpace - without.length()) / 2;
+        int paddingRight = availableSpace - without.length() - paddingLeft;
+        return leftDelimiter + getPadding(paddingLeft) + text + getPadding(paddingRight) + rightDelimiter;
     }
 
     public static void noPrefix(Object message, Object... args) {

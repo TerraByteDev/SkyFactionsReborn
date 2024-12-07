@@ -31,7 +31,7 @@ public abstract class IslandAPI {
     public CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
         if (islands.containsKey(playerUUID)) return CompletableFuture.completedFuture(islands.get(playerUUID));
         return SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().getPlayerIsland(playerUUID).thenApply((island) -> {
-            islands.put(playerUUID, island);
+            if (island != null) islands.put(playerUUID, island);
 
             return island;
         });

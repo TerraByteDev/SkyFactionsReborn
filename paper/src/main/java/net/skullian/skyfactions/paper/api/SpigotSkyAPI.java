@@ -153,8 +153,8 @@ public final class SpigotSkyAPI extends SkyApi {
         SLogger.setup("Handling PDC Listener.", false);
         CustomBlockData.registerListener(SkyFactionsReborn.getInstance());
 
-        SLogger.noPrefix("│                   ✓ Finished initialising SkyAPI.            │");
-        SLogger.noPrefix("│                   ✓ SkyFactions has loaded.                  │");
+        SLogger.noPrefix(SLogger.getFormatted("✓ Finished initialising SkyAPI.ㅤ ㅤ", "✓ Finished initialising SkyAPI.ㅤ ㅤ"));
+        SLogger.noPrefix(SLogger.getFormatted("✓ SkyFactions has loaded.ㅤㅤ ", "✓ SkyFactions has loaded.ㅤ ㅤ"));
         SLogger.noPrefix("╰──────────────────────────────────────────────────────────────╯");
 
         new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data").mkdir();
