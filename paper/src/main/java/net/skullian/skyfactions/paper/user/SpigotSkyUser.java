@@ -3,6 +3,7 @@ package net.skullian.skyfactions.paper.user;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.common.api.InvitesAPI;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.faction.JoinRequestData;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
@@ -41,11 +42,12 @@ public class SpigotSkyUser extends SkyUser {
     @Nullable
     @Override
     public CompletableFuture<JoinRequestData> getActiveJoinRequest() {
-        return InvitesAPI.getPlayerJoinRequest(this.uuid).whenComplete((request, ex) -> {
+        return this.activeJoinRequest.map(CompletableFuture::completedFuture).orElseGet(() -> SkyApi.getInstance().getDatabaseManager().getFactionInvitesManager().getPlayerJoinRequest(getUniqueId()).whenComplete((request, ex) -> {
             if (ex != null) return;
 
             this.activeJoinRequest = Optional.of(request);
-        });
+        }));
+
     }
 
     @Override
