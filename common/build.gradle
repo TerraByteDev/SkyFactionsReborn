@@ -7,3 +7,11 @@ dependencies {
     compileOnly("com.google.guava:guava:${guava}")
     compileOnly("org.apache.commons:commons-lang3:${apache_commons}")
 }
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main'
+        }
+    }
+}
