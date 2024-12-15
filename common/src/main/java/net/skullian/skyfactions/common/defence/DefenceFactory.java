@@ -38,7 +38,7 @@ public abstract class DefenceFactory {
     private final List<String> cachedMaterials = new ArrayList<>();
 
     public void registerDefaultDefences() {
-        new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/languages/en/defences").mkdirs();
+        new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/defences").mkdirs();
 
         try {
             URI defencesFolder = DefenceFactory.class.getResource("/language/en/defences").toURI();
