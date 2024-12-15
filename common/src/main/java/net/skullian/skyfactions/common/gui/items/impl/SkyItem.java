@@ -22,8 +22,17 @@ public abstract class SkyItem extends BaseSkyItem {
         Object[] replacements = replacements();
 
         SkyItemStack.SkyItemStackBuilder builder = SkyItemStack.builder()
+                .serializedBytes(getSTACK().getSerializedBytes())
+                .material(getSTACK().getMaterial())
                 .displayName(Messages.replace(getDATA().getNAME(), getPLAYER(), replacements))
-                .lore(Messages.replace(getDATA().getLORE(),getPLAYER(), replacements));
+                .amount(getSTACK().getAmount())
+                .customModelData(getSTACK().getCustomModelData())
+                .persistentDatas(getSTACK().getPersistentData())
+                .enchants(getSTACK().getEnchants())
+                .itemFlags(getSTACK().getItemFlags())
+                .lore(Messages.replace(getDATA().getLORE(),getPLAYER(), replacements))
+                .textures(getSTACK().getTextures())
+                .owningPlayerUUID(getSTACK().getOwningPlayerUUID());
 
         return process(builder).build();
     }

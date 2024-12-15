@@ -30,6 +30,13 @@ public abstract class SkyPageItem extends BaseSkyItem {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(getPLAYER().getUniqueId());
 
         return SkyItemStack.builder()
+                .itemFlags(getSTACK().getItemFlags())
+                .enchants(getSTACK().getEnchants())
+                .persistentDatas(getSTACK().getPersistentData())
+                .customModelData(getSTACK().getCustomModelData())
+                .amount(getSTACK().getAmount())
+                .owningPlayerUUID(getSTACK().getOwningPlayerUUID())
+                .textures(getSTACK().getTextures())
                 .displayName(TextUtility.legacyColor(paginationItemData.getNAME(), locale, getPLAYER()))
                 .lore(new ArrayList<>(Collections.singleton(hasNextPage()
                         ? TextUtility.legacyColor(paginationItemData.getMORE_PAGES_LORE().replaceAll("next_page", String.valueOf(getCurrentPage() + 2)).replace("total_pages", String.valueOf(getPageAmount())), locale, getPLAYER())

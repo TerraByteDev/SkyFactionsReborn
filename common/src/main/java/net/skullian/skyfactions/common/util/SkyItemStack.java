@@ -27,57 +27,66 @@ public class SkyItemStack implements Cloneable {
 
     @Builder
     private SkyItemStack(Object serializedBytes, String displayName, String material, int amount, int customModelData, List<PersistentData> persistentDatas, PersistentData persistentData, List<EnchantData> enchants, EnchantData enchant, List<String> itemFlags, String itemFlag, List<String> lore, String loreLine, String textures, String owningPlayerUUID) {
-        this.serializedBytes = serializedBytes;
-        this.material = material;
-        this.displayName = displayName;
-        this.amount = amount;
-        this.customModelData = customModelData;
-        this.persistentData.add(persistentData);
-        this.persistentData.addAll(persistentDatas);
-        this.enchants.add(enchant);
-        this.enchants.addAll(enchants);
-        this.itemFlags.add(itemFlag);
-        this.itemFlags.addAll(itemFlags);
-        this.lore.add(loreLine);
-        this.lore.addAll(lore);
-        this.textures = textures;
-        this.owningPlayerUUID = owningPlayerUUID;
+        if (serializedBytes != null) this.serializedBytes = serializedBytes;
+        if (material != null) this.material = material;
+        if (displayName != null) this.displayName = displayName;
+        if (amount > 0) this.amount = amount;
+        if (customModelData >= 0) this.customModelData = customModelData;
+        if (persistentData != null) this.persistentData.add(persistentData);
+        if (persistentDatas != null) this.persistentData.addAll(persistentDatas);
+        if (enchant != null) this.enchants.add(enchant);
+        if (enchants != null) this.enchants.addAll(enchants);
+        if (itemFlag != null) this.itemFlags.add(itemFlag);
+        if (itemFlags != null) this.itemFlags.addAll(itemFlags);
+        if (loreLine != null) this.lore.add(loreLine);
+        if (lore != null) this.lore.addAll(lore);
+        if (textures != null) this.textures = textures;
+        if (owningPlayerUUID != null) this.owningPlayerUUID = owningPlayerUUID;
     }
 
-    public void lore(List<String> lore) {
+    public SkyItemStack lore(List<String> lore) {
         this.lore.addAll(lore);
+        return this;
     }
 
-    public void lore(String lore) {
+    public SkyItemStack lore(String lore) {
         this.lore.add(lore);
+        return this;
     }
 
-    public void displayName(String displayName) {
+    public SkyItemStack displayName(String displayName) {
         this.displayName = displayName;
+        return this;
     }
 
-    public void displayName(Component displayName) {
+    public SkyItemStack displayName(Component displayName) {
         this.displayName = MiniMessage.miniMessage().serialize(displayName);
+        return this;
     }
 
-    public void addPersistentData(String key, String type, Object data) {
+    public SkyItemStack addPersistentData(String key, String type, Object data) {
         persistentData.add(new PersistentData(key, type, data));
+        return this;
     }
 
-    public void addPersistentData(PersistentData data) {
+    public SkyItemStack addPersistentData(PersistentData data) {
         persistentData.add(data);
+        return this;
     }
 
-    public void addEnchant(String enchant, int level, boolean ignoreLevelRestriction) {
+    public SkyItemStack addEnchant(String enchant, int level, boolean ignoreLevelRestriction) {
         enchants.add(new EnchantData(enchant, level, ignoreLevelRestriction));
+        return this;
     }
 
-    public void addEnchant(EnchantData enchant) {
+    public SkyItemStack addEnchant(EnchantData enchant) {
         enchants.add(enchant);
+        return this;
     }
 
-    public void addItemFlag(String flag) {
+    public SkyItemStack addItemFlag(String flag) {
         itemFlags.add(flag);
+        return this;
     }
 
     public boolean hasPersistentData(String key) {

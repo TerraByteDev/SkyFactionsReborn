@@ -3,8 +3,6 @@ package net.skullian.skyfactions.paper.api.adapter;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.sk89q.worldedit.math.BlockVector3;
-import io.th0rgal.oraxen.items.ItemBuilder;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.user.SkyUser;
@@ -14,7 +12,6 @@ import net.skullian.skyfactions.common.util.text.TextUtility;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -22,8 +19,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.item.ItemProvider;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
-import java.util.List;
 import java.util.UUID;
 
 public class SpigotAdapter {
@@ -52,7 +49,7 @@ public class SpigotAdapter {
 
         ItemStack stack;
         if (skyStack.getSerializedBytes() != null) stack = ItemStack.deserializeBytes((byte[]) skyStack.getSerializedBytes());
-            else stack = new ItemStack(Material.valueOf(skyStack.getMaterial()));
+            else stack = new ItemStack(Material.valueOf(skyStack.getMaterial() != null ? skyStack.getMaterial() : "AIR"));
 
         stack.setAmount(skyStack.getAmount());
 
@@ -61,7 +58,7 @@ public class SpigotAdapter {
             skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString(skyStack.getOwningPlayerUUID())));
 
             stack.setItemMeta(skullMeta);
-        } else if (!skyStack.getTextures().isEmpty() || !skyStack.getTextures().equalsIgnoreCase("none")) {
+        } else if (skyStack.getTextures() != null && !skyStack.getTextures().equalsIgnoreCase("none")) {
             stack.editMeta(SkullMeta.class, skullMeta -> {
                 UUID uuid = UUID.randomUUID();
                 PlayerProfile playerProfile = Bukkit.createProfile(uuid, uuid.toString().substring(0, 16));
@@ -115,7 +112,7 @@ public class SpigotAdapter {
             @NotNull
             @Override
             public ItemStack get(@Nullable String lang) {
-                return new ItemBuilder(adapt(skyStack, user, true)).build();
+                return new ItemBuilder(adapt(skyStack, user, true)).get();
             }
         };
     }
