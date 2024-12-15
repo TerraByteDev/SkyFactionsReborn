@@ -86,6 +86,14 @@ public class NMSHandlerImpl implements NMSHandler {
 
     @Override
     public void removeHologram(DefenceTextHologram hologram) {
+        Display.TextDisplay textDisplay = (Display.TextDisplay) hologram.getEntity();
 
+        hologram.getViewers().stream()
+                .forEach((user) -> {
+                    Player player = SpigotAdapter.adapt(user).getPlayer();
+
+                    ServerGamePacketListenerImpl connection = ((CraftPlayer) player).getHandle().connection;
+                    connection.send(new ClientboundRemoveEntitiesPacket(textDisplay.getId()));
+                });
     }
 }
