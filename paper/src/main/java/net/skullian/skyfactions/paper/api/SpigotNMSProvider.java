@@ -39,7 +39,7 @@ public class SpigotNMSProvider extends NMSProvider {
 
         try {
             Class<?> clazz = Class.forName("net.skullian.skyfactions.nms." + getNMS_VERSION() + ".WorldBorder");
-            return (AWorldBorder) clazz.getDeclaredConstructor(World.class).newInstance(world);
+            return (AWorldBorder) clazz.getDeclaredConstructor(String.class).newInstance(world.getName());
         } catch (Throwable error) {
             error.printStackTrace();
         }
