@@ -80,7 +80,6 @@ public class NMSHandlerImpl implements NMSHandler {
                     textDisplay.setText(Component.literal(LegacyComponentSerializer.legacySection().serialize(hologram.createText(user))));
 
                     ServerGamePacketListenerImpl connection = ((CraftPlayer) player).getHandle().connection;
-                    connection.send(new ClientboundAddEntityPacket(textDisplay, 0, new BlockPos(hologram.getLocation().getBlockX(), hologram.getLocation().getBlockY(), hologram.getLocation().getBlockZ())));
                     connection.send(new ClientboundSetEntityDataPacket(textDisplay.getId(), textDisplay.getEntityData().packAll()));
                 });
     }
