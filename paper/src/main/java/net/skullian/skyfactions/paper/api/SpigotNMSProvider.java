@@ -19,11 +19,10 @@ public class SpigotNMSProvider extends NMSProvider {
     @Override
     public AWorldBorder getBorderFromPlayer(SkyUser player) {
         if (!player.isOnline()) throw new IllegalStateException("Attempted to fetch an offline player's border! Player: " + player.getName());
-        Player bukkitPlayer = SpigotAdapter.adapt(player).getPlayer();
 
         try {
             Class<?> clazz = Class.forName("net.skullian.skyfactions.nms." + getNMS_VERSION() + ".WorldBorder");
-            return (AWorldBorder) clazz.getDeclaredConstructor(Player.class).newInstance(bukkitPlayer);
+            return (AWorldBorder) clazz.getDeclaredConstructor(SkyUser.class).newInstance(player);
         } catch (Throwable error) {
             SLogger.fatal("Failed to fetch {}'s WorldBorder!", true, player.getName());
             error.printStackTrace();
