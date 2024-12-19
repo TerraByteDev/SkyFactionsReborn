@@ -23,7 +23,7 @@ public class ConfigFileHandler {
 
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
         DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());
-        Messages.load();
+        Messages.load(true);
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         RunesConfig.setConfig(getFile(ConfigTypes.RUNES).getConfig());
     }
@@ -36,7 +36,7 @@ public class ConfigFileHandler {
         configs.values().forEach(ConfigHandler::reload);
 
         Settings.setConfig(getFile(ConfigTypes.SETTINGS).getConfig());
-        Messages.load();
+        Messages.load(false);
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         RunesConfig.setConfig(getFile(ConfigTypes.RUNES).getConfig());
         DefencesConfig.setConfig(getFile(ConfigTypes.DEFENCES).getConfig());

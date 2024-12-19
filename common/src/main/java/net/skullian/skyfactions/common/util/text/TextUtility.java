@@ -58,15 +58,26 @@ public class TextUtility {
         return Component.join(JoinConfiguration.newlines(), components);
     }
 
+    public static List<String> fromListLegacy(List<?> list, String locale, SkyUser user, Object... replacements) {
+        if (list == null || list.isEmpty()) return null;
+
+        List<String> components = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            components.add(legacyColor(list.get(i).toString(), locale, user, replacements));
+        }
+
+        return components;
+    }
+
     public static List<Component> color(List<String> strings, String locale, SkyUser user, Object... replacements) {
         return strings.stream()
-                .map(text -> TextUtility.color(text, locale, user, replacements))
+                .map(text -> color(text, locale, user, replacements))
                 .toList();
     }
 
     public static List<String> legacyColor(List<String> strings, String locale, SkyUser user, Object... replacements) {
         return strings.stream()
-                .map(text -> TextUtility.legacyColor(text, locale, user, replacements))
+                .map(text -> legacyColor(text, locale, user, replacements))
                 .toList();
     }
 
@@ -110,7 +121,6 @@ public class TextUtility {
      * Check if a string contains blacklisted words.
      * Blacklisted words (regex) are configured in config.yml.
      *
-     * @param user Player to check
      * @param name   String to check.
      * @return {@link Boolean}
      */

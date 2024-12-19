@@ -16,10 +16,7 @@ import net.skullian.skyfactions.common.util.text.TextUtility;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 public enum Messages {
@@ -275,10 +272,12 @@ public enum Messages {
         this.path = path;
     }
 
-    public static void load() {
+    public static void load(boolean setup) {
         try {
             new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath(), "/language").mkdirs();
-            SLogger.setup("Saving default language <#05eb2f>[English]<#4294ed>.", false);
+            if (setup) SLogger.setup("Saving default language <#05eb2f>[English]<#4294ed>.", false);
+                else SLogger.info("Saving default language <#05eb2f>[English]<#4294ed>.");
+
             YamlDocument doc = YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/en.yml"), Messages.class.getClassLoader().getResourceAsStream("language/en/en.yml"),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
@@ -291,7 +290,8 @@ public enum Messages {
             for (File dir : folder.listFiles()) {
                 
                 if (dir.isDirectory()) {
-                    SLogger.setup("Registering Language: <#05eb2f>[{}]<#4294ed>", false, dir.getName());
+                    if (setup) SLogger.setup("Registering Language: <#05eb2f>[{}]<#4294ed>", false, dir.getName());
+                        else SLogger.info("Registering Language: <#05eb2f>[{}]<#4294ed>", dir.getName());
 
                     if (!dir.getName().equalsIgnoreCase(Settings.DEFAULT_LANGUAGE.getString())) configs.put(
                         dir.getName(),
@@ -362,7 +362,6 @@ public enum Messages {
 
         Object value = config.get("Messages." + this.path);
 
-
         Component message;
         if (value == null) {
             message = TextUtility.color(SERVER_NAME.get(locale) + "&r&7 Message not found: " + this.path, locale, receiver instanceof SkyUser ? (SkyUser) receiver : null , replacements);
@@ -377,7 +376,7 @@ public enum Messages {
         value = SkyApi.getInstance().getPlayerAPI().processText(player, value);
         for (int i = 0; i < replacements.length; i += 2) {
             if (i + 1 >= replacements.length) break;
-            value = value.replace(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
+            value = value.replace("<" + String.valueOf(replacements[i]) + ">", String.valueOf(replacements[i + 1]));
         }
 
         return value;
@@ -390,7 +389,7 @@ public enum Messages {
             val = SkyApi.getInstance().getPlayerAPI().processText(player, val);
             for (int i = 0; i < replacements.length; i += 2) {
                 if (i + 1 >= replacements.length) break;
-                val = val.replace(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
+                val = val.replace("<" + String.valueOf(replacements[i]) + ">", String.valueOf(replacements[i + 1]));
             }
 
             formatted.add(val);

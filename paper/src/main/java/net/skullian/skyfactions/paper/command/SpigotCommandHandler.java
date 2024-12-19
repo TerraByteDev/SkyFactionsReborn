@@ -63,6 +63,6 @@ public class SpigotCommandHandler implements CommandHandler {
     @Override
     public void register(CommandTemplate template, AnnotationParser<?> parser) {
         parser.parse(template);
-        commands.computeIfAbsent(template.getParent(), k -> new ConcurrentHashMap<>()).put(template.getParent(), template);
+        commands.computeIfAbsent(template.getParent(), k -> new ConcurrentHashMap<>()).put(template.getName(), template);
     }
 }

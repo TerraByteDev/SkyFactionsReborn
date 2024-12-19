@@ -12,6 +12,7 @@ import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -28,7 +29,7 @@ public class SpigotSkyUser extends SkyUser {
 
     @Override
     public String getName() {
-        return SpigotAdapter.adapt(this).getName();
+        return !isConsole() ? SpigotAdapter.adapt(this).getName() : "CONSOLE";
     }
 
     @Override
@@ -52,6 +53,10 @@ public class SpigotSkyUser extends SkyUser {
 
     @Override
     public void sendMessage(Component message) {
+        if (isConsole()) {
+            ((CommandSender) commandSender).sendMessage(message);
+            return;
+        }
         OfflinePlayer player = SpigotAdapter.adapt(this);
         if (player.isOnline()) player.getPlayer().sendMessage(message);
     }

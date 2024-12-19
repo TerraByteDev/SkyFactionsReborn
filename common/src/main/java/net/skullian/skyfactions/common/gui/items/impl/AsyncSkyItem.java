@@ -14,24 +14,19 @@ import java.util.concurrent.CompletableFuture;
 @Setter
 public abstract class AsyncSkyItem extends BaseSkyItem {
 
+    private boolean isLoading;
+    private SkyItemStack loadingStack;
+
     public AsyncSkyItem(ItemData data, SkyItemStack stack, SkyUser player, Object[] optionals) {
         super(data, stack, player, optionals, true);
 
-        setSTACK(ObeliskConfig.getLoadingItem(player));
-        CompletableFuture.runAsync(() -> {
-            Object[] replacements = replacements();
-
-            SkyItemStack.SkyItemStackBuilder builder = SkyItemStack.builder()
-                    .displayName(Messages.replace(getDATA().getNAME(), getPLAYER(), replacements))
-                    .lore(Messages.replace(data.getLORE(),getPLAYER(), replacements));
-
-            setSTACK(process(builder).build());
-            update();
-        });
+        this.loadingStack = ObeliskConfig.getLoadingItem(player);
     }
 
     @Override
     public SkyItemStack getItemStack() {
+        if (isLoading) return loadingStack;
+
         Object[] replacements = replacements();
 
         SkyItemStack.SkyItemStackBuilder builder = SkyItemStack.builder()
@@ -43,7 +38,7 @@ public abstract class AsyncSkyItem extends BaseSkyItem {
                 .persistentDatas(getSTACK().getPersistentData())
                 .enchants(getSTACK().getEnchants())
                 .itemFlags(getSTACK().getItemFlags())
-                .lore(Messages.replace(getDATA().getLORE(),getPLAYER(), replacements))
+                .lore(Messages.replace(getDATA().getLORE(), getPLAYER(), replacements))
                 .textures(getSTACK().getTextures())
                 .owningPlayerUUID(getSTACK().getOwningPlayerUUID());
 

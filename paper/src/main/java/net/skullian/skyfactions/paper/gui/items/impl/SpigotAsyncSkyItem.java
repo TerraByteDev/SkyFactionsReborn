@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.paper.gui.items.impl;
 
 import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.ObeliskConfig;
 import net.skullian.skyfactions.common.gui.CooldownManager;
 import net.skullian.skyfactions.common.gui.data.SkyClickType;
 import net.skullian.skyfactions.common.gui.items.impl.AsyncSkyItem;
@@ -22,6 +23,7 @@ import xyz.xenondevs.invui.window.Window;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public class SpigotAsyncSkyItem extends AsyncSkyItem implements Item {
 
@@ -31,6 +33,11 @@ public class SpigotAsyncSkyItem extends AsyncSkyItem implements Item {
         super(item.getDATA(), item.getItemStack(), item.getPLAYER(), item.getOPTIONALS());
 
         this.IMPL = item;
+        setLoading(true);
+        Bukkit.getScheduler().runTaskAsynchronously(SkyFactionsReborn.getInstance(), () -> {
+            setLoading(false);
+            notifyWindows();
+        });
     }
 
     @Override

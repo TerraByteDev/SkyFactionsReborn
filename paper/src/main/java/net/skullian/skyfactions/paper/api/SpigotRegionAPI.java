@@ -112,7 +112,6 @@ public class SpigotRegionAPI extends RegionAPI {
             try {
                 World world = Bukkit.getWorld(worldName);
                 if (world == null) {
-                    SLogger.fatal("Could not find world: {}", worldName);
                     throw new RuntimeException("Could not find world " + worldName);
                 } else {
                     File schemFile = null;

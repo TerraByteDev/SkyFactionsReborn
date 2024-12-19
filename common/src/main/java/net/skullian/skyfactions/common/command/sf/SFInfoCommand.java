@@ -44,10 +44,10 @@ public class SFInfoCommand extends CommandTemplate {
 
         Messages.COMMAND_HEAD.send(sender, locale);
         sender.sendMessage(TextUtility.color(
-                "<dark_aqua>Version: <reset><gray>" + SkyApi.getInstance().getPluginInfoAPI().getVersion() + "</gradient><reset>\n" +
-                        "<dark_aqua>Authors: <reset><gray>" + SkyApi.getInstance().getPluginInfoAPI().getAuthors().replace("[", "").replace("]", "") + "</gradient><reset>\n" +
-                        "<dark_aqua>Website: <reset><gray>" + SkyApi.getInstance().getPluginInfoAPI().getWebsite() + "</gradient><reset>\n" +
-                        "<dark_aqua>Contributors: <reset><gray>" + SkyApi.getInstance().getPluginInfoAPI().getContributors().replace("[", "").replace("]", "") + "</gradient><reset>",
+                "<dark_aqua>Version: <reset><gray>" + SkyApi.getInstance().getPluginInfoAPI().getVersion() + "><reset>\n" +
+                        "<dark_aqua>Authors: <reset><gray>" + SkyApi.getInstance().getPluginInfoAPI().getAuthors().replace("[", "").replace("]", "") + "<reset>\n" +
+                        "<dark_aqua>Website: <reset><gray>" + SkyApi.getInstance().getPluginInfoAPI().getWebsite() + "<reset>\n" +
+                        "<dark_aqua>Contributors: <reset><gray>" + SkyApi.getInstance().getPluginInfoAPI().getContributors().replace("[", "").replace("]", "") + "<reset>",
                         locale,
                         sender
         ));

@@ -25,7 +25,7 @@ public class SpigotPaginationForwardItem extends PageItem {
         this.ITEM.setCurrentPage(gui.getCurrentPage());
         this.ITEM.setPageAmount(gui.getPageAmount());
 
-        return SpigotAdapter.adapt(this.ITEM.getSTACK(), this.ITEM.getPLAYER());
+        return SpigotAdapter.adapt(this.ITEM.getItemStack(), this.ITEM.getPLAYER());
     }
 
     @Override

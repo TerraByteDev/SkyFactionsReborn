@@ -13,8 +13,6 @@ public abstract class SkyItem extends BaseSkyItem {
 
     public SkyItem(ItemData data, SkyItemStack stack, SkyUser player, Object[] optionals) {
         super(data, stack, player, optionals, false);
-
-        setSTACK(getItemStack());
     }
 
     @Override
@@ -30,7 +28,7 @@ public abstract class SkyItem extends BaseSkyItem {
                 .persistentDatas(getSTACK().getPersistentData())
                 .enchants(getSTACK().getEnchants())
                 .itemFlags(getSTACK().getItemFlags())
-                .lore(Messages.replace(getDATA().getLORE(),getPLAYER(), replacements))
+                .lore(Messages.replace(getDATA().getLORE(), getPLAYER(), replacements))
                 .textures(getSTACK().getTextures())
                 .owningPlayerUUID(getSTACK().getOwningPlayerUUID());
 
