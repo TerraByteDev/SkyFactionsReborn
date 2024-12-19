@@ -13,10 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SpigotNotificationAPI extends NotificationAPI {
@@ -36,6 +33,7 @@ public class SpigotNotificationAPI extends NotificationAPI {
             SkyApi.getInstance().getDatabaseManager().getNotificationManager().getNotifications(player).whenComplete((fetchedNotifs, throwable) -> {
                 if (throwable != null) {
                     throwable.printStackTrace();
+                    notifications.put(player.getUniqueId(), new ArrayList<>());
                     return;
                 } else notifications.put(player.getUniqueId(), fetchedNotifs);
 
