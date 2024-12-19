@@ -22,7 +22,7 @@ public class ObeliskPlayerNotificationsItem extends SkyItem {
         List<NotificationData> notifications = SkyApi.getInstance().getNotificationAPI().getNotifications(getPLAYER().getUniqueId());
 
         return List.of(
-            "notification_count", notifications != null ? notifications.size() : "ERROR"
+            "notification_count", notifications != null ? notifications.size() : "0"
         ).toArray();
     }
 

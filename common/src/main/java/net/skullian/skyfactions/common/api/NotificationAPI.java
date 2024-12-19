@@ -23,7 +23,7 @@ public abstract class NotificationAPI {
      * Initialise the notification cycle for a Player on join.
      * This will periodically check for unread notifications and send the player a message.
      *
-     * @param player Playerc who the notification cycle should be created for [{@link SkyUser}]
+     * @param player Player who the notification cycle should be created for [{@link SkyUser}]
      */
     public abstract void createCycle(SkyUser player);
 

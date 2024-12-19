@@ -26,24 +26,18 @@ public class SpigotScreen {
     public SpigotScreen(Screen screen) {
         this.screen = screen;
         this.builder = Gui.normal().setStructure(screen.guiData.getLAYOUT());
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-            SLogger.info("SHOWING");
-            show();
-        });
+        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), this::show);
     }
 
     public void show() {
-        SLogger.info("REGISTERING");
         registerItems();
         Gui gui = builder.build();
-        SLogger.info("REGISTERED AND BUILDED");
         Window window = Window.single()
                 .setViewer(SpigotAdapter.adapt(screen.player).getPlayer())
                 .setTitle(TextUtility.legacyColor(screen.guiData.getTITLE(), SkyApi.getInstance().getPlayerAPI().getLocale(screen.player.getUniqueId()), screen.player))
                 .setGui(gui)
                 .build();
 
-        SLogger.info("BUILDED");
         window.open();
     }
 

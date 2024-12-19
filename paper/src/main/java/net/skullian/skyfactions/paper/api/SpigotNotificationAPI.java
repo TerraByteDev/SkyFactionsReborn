@@ -20,8 +20,6 @@ public class SpigotNotificationAPI extends NotificationAPI {
 
     public static Map<UUID, BukkitTask> tasks = new HashMap<>();
 
-    public static Map<UUID, List<NotificationData>> notifications = new ConcurrentHashMap<>();
-
     @Override
     public void createCycle(SkyUser player) {
         SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
