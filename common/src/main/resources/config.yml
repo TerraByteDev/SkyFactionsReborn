@@ -1,0 +1,376 @@
+#     _____      __  __  _
+#   / ___/___  / /_/ /_(_)___  ____ ______
+#   \__ \/ _ \/ __/ __/ / __ \/ __ `/ ___/
+#  ___/ /  __/ /_/ /_/ / / / / /_/ (__  )
+# /____/\___/\__/\__/_/_/ /_/\__, /____/
+#                           /____/
+
+# =============== SKYFACTIONS CONFIG =============== #
+
+# DO NOT CHANGE THIS!!!!
+CONFIG_VERSION: 1
+
+# Database config. Requires a restart to apply.
+Database:
+  # You can either use 'sqlite' or 'sql' (MySQL). Default: sqlite.
+  TYPE: 'sqlite'
+
+  # Connection values for MySQL if you decide to use it.
+  # HOST: The MySQL Host. Format: "<host>[:<port>]". Port defaults to 3306.
+  # NAME: The name of the database to use.
+  # USERNAME: The MySQL User to use.
+  # PASSWORD: The Password for the MySQL User.
+  DATABASE_HOST: ''
+  DATABASE_NAME: ''
+  DATABASE_USERNAME: ''
+  DATABASE_PASSWORD: ''
+
+  # Max lifetime for the database connection.
+  # Format: MINUTES
+  # Only applies for MySQL!
+  MAX_LIFETIME: 30
+
+  # Max connection pool size.
+  # Applies for both SQLite and MySQL
+  MAX_POOL_SIZE: 10
+
+  # Because SkyFactions is very heavy on the database, we use a cache service.
+  # This will cache all island data modification, and will push it to the database at once.
+  # The cache service will also run on server stop.
+  # This means the database is not being repetitively interfaced with.
+  # There are more cache systems used internally, such as caching playerdata on join.
+  # You can modify the cache save interval here.
+  # It is in seconds -> Default 10 minutes (600 seconds)
+  CACHE_SAVE_INTERVAL: 600
+
+# This plugin has multi-language support.
+# This means players in different locations are sent plugin messages in their native language.
+Language:
+  # Language to use / fallback to if the plugin cannot find a player's language config.
+  DEFAULT_LANGUAGE: "en"
+
+  # This is used in text-related things such as faction creation, broadcasts etc.
+  # This supports both normal strings and regex.
+  BLACKLISTED_PHRASES:
+    - cunt
+    - retard
+    - motherfucker
+    - motherfuck
+    - fuck
+    - kys
+    - penis
+    - sped
+    - bollocks
+    - bastard
+    - asshat
+    - dumbass
+    - slapper
+    - anus
+    - anal
+    - cock
+    - dick
+    - whore
+    - suck
+    - twat
+    - shit
+    - bugger
+    - arse
+    - faggot
+    - bitch
+    - butt|ass(?:hole)?
+    - ^fag$
+    - nigg(?:a|er)
+    - tit(?:s|z|ies)?
+    - boob(?:s|z|ies)?
+
+# SkyFactions Hub Config
+Hub:
+  # Name of the world that the hub is located in.
+  WORLD_NAME: "world"
+
+  # This is where players will spawn when they first join the server (you'd have to do that by setworldspawn or whatever).
+  # Also where players are teleported when they do /hub or their island is deleted.
+  HUB_LOCATION: [ 0, 64, 0 ]
+
+# Configuration for cooldowns.
+# You do NOT want these to be too low, definitely not 0. These will avoid database spam and anything else.
+Cooldowns:
+  COMMAND: 5000 # Cooldown for commands
+  GUI_ITEM: 1500 # Global cooldown for all items
+
+# Configuration for all sounds (apart from GUI item clicks, they are configured in their respective GUI config files)
+# Set the sound to "NONE" to disable it.
+Sounds:
+  # Sent when an island is successfully created.
+  ISLAND_CREATE_SUCCESS: "ui.toast.challenge_complete"
+  ISLAND_CREATE_SUCCESS_PITCH: 1
+
+  # Sound played when an ONLINE player is about to be raided. Repeats quickly for 5s.
+  ALARM_SOUND: "block.note_block.bell"
+  ALARM_PITCH: 1
+
+  # Sound when counting down for the start.
+  COUNTDOWN_SOUND: "block.note_block.hat"
+  COUNTDOWN_PITCH: 1
+
+  # Generally used in GUIs, when something goes wrong
+  ERROR_SOUND: "block.note_block.bass"
+  ERROR_SOUND_PITCH: 1
+
+  # Sent when a player purchases a defence successfully.
+  DEFENCE_PURCHASE_SUCCESS_SOUND: "ui.toast.challenge_complete"
+  DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH: 1
+
+
+# General island config.
+Island:
+
+  # Cooldown for island deletion (in milliseconds).
+  # We don't put players on cooldown WHEN they delete, because then players have to wait to make a new island.
+  # By putting a cooldown on deletion (upon creating an island), players have an actual island to play on for whatever reason, rather
+  # than being stuck in the actual lobby. Fun right?
+  # This also prevents players from spamming and causing lag.
+  DELETION_COOLDOWN: 7200000 # 2 Hours
+
+  # Name of the WORLD where faction islands will be located.
+  FACTION_WORLD_NAME: "faction_islands"
+  # Name of the WORLD where player islands will be located.
+  ISLAND_WORLD_NAME: "player_islands"
+
+  # Name of the WorldEdit schematic file for the normal island. MUST INCLUDE THE FILE EXTENSION!
+  NORMAL_ISLAND_SCHEMATIC: 'island.schem'
+  # Name of the WorldEdit schematic file for the faction island. MUST INCLUDE THE FILE EXTENSION!
+  FACTION_ISLAND_SCHEMATIC: 'faction_island.schem'
+
+  # Whether to teleport the player to their island when they join.
+  TELEPORT_ON_JOIN: false
+
+  # Whether to teleport the player to their island on death / respawn.
+  TELEPORT_ON_DEATH: true
+
+  # Prevent players from entering nether portals in the overworld and nether. (and any other dimensions).
+  # This is so players can't get into other islands, and cause havoc.
+  PREVENT_NETHER_PORTALS: true
+  # Assuming PREVENT_NETHER_PORTALS is set to true, you can specify dimensions where players CAN enter nether portals.
+  ALLOWED_DIMENSIONS:
+    - "my_world_name"
+
+# SkyFactions can hook into numerous NPC plugins to add support
+# for per-island NPCs, such as Jerry from Hypixel SkyBlock.
+# You can configure the system for this here.
+NPC:
+  # Whether the NPC system should be enabled or not.
+  # If you disable this after previously having it enabled, YOU MUST RUN /sf disablenpcs
+  ENABLED: false
+
+  # If you have updated the skin of the NPC, or any other attribute you must
+  # run /sf updatenpcs.
+
+  # Specify which NPC plugin (factory) to use.
+  # Possible Factories: "znpcpsplus" / "fancynpcs"
+  # Specifing an invalid factory or a factory that is not installed will
+  # cause the plugin to disable.
+  FACTORY: "znpcsplus"
+
+  # Customise the entity of the NPC.
+  # See https://jd.papermc.io/paper/1.21.1/org/bukkit/entity/EntityType.html for a list
+  # of valid entity types.
+  ENTITY:
+    # Entity type for player islands.
+    PLAYER_ISLANDS: "PLAYER"
+
+    # Entity type for faction islands.
+    FACTION_ISLANDS: "PLAYER"
+
+  # Configure the names of the NPC.
+  # Unfortunately these cannot be configure in individual language files due to limitations. (Global Only).
+  NAMES:
+    # NPC name for player islands,
+    # You can use the placeholder "%player_name%" to display the name of the player.
+    # This placeholder does not apply for faction island NPC names!
+    PLAYER_ISLANDS: "&9Sky Master"
+    
+    # NPC Name for faction islands.
+    # You can use the placeholder "%faction_name%" to display the name of the faction instead.
+    FACTION_ISLANDS: "&9Sky Master"
+
+  # Allows you to configure the skin of the NPCs for island and faction islands
+  # Skin Format:
+  # "url:skin_url_here" - Specify a URL to a skin texture: ZNPCsPlus and FancyNPCs only.
+  # "player:name_of_player_here" - Specify the name of a player who's skim you want to display.
+  # "texture:texture_data_here" - Provide the texture data of the skin manually.
+  # None - no player skin, will go to the default of whatever factory provider plugin you use.
+  SKINS:
+    # Skin of the NPC on player islands.
+    # You can use the placeholder "%player_name%" for it to be the skin of the island's owner.
+    # The above placeholder does not work on the Faction Island NPC skins!
+    PLAYER_ISLANDS: "player:%player_name%"
+
+    # Skin of the NPC on faction islands.
+    # You can use the "%faction_owner%" placeholder to display the skim of the faction's owner.
+    FACTION_ISLANDS: "player:%faction_owner"
+
+  # This allows you to configure the offsets of where the NPC
+  # will spawn, relative to the center of the island.
+  OFFSETS:
+    # How far from the center of player islands should the NPC be spawned?
+    PLAYER_ISLANDS: [ 2, 0, 2 ] # [x, y, z]
+    
+    # How far from the center of faction islands should the NPC be spawned?
+    FACTION_ISLANDS: [ 2, 0, 2 ] # [x, y, z]
+
+# Island grid generation algorithm configuration
+Generation:
+  PLAYER_ISLANDS:
+    # Radius of each player region. The islands will be generated here, in the center of each region.
+    REGION_SIZE: 200
+    # Space between region islands.
+    REGION_PADDING: 100
+    # The center point where all islands start. [X, Y, Z]
+    GRID_ORIGIN: [ 0, 64, 0 ]
+
+  FACTION_ISLANDS:
+    # Radius of each faction region. The islands will be generated here, in the center of each region.
+    REGION_SIZE: 300
+    # Space between region islands.
+    REGION_PADDING: 100
+    # The center point where all islands start. [X, Y, Z]
+    GRID_ORIGIN: [ 0, 64, 0 ]
+
+Gems:
+  # Whether gems can be withdrawed into item form, and back.
+  # Disabling this will remove the /gems withdraw and /gems deposit commands.
+  CAN_WITHDRAW: true
+
+  # The withdrawable item format of the gems.
+  # You can find a list of items at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html.
+  MATERIAL: "EMERALD"
+
+  # Item lore for the gem.
+  ITEM_LORE: [ ] # No lore for me!
+
+  # Custom Model Data / ID for the block (if you want it). Keep at -1 to disable the feature.
+  CUSTOM_MODEL_DATA: -1
+
+Raiding:
+  # Cost of raiding a user in Gems.
+  RAIDING_COST: 2
+
+  # Cooldown for raiding (in milliseconds).
+  RAIDING_COOLDOWN: 10800000 # 3 Hours
+  # Cooldown for being raided (in milliseconds).
+  RAIDED_COOLDOWN: 86400000 # 24 Hours
+
+  # After a player has created their island, they will be immune to being raided for this specified amount of time (in milliseconds).
+  PLAYER_RAID_IMMUNITY: 21600000 # 6 Hours
+  # After a Faction has created their island, they will be immune to being raided for this specified amount of time (in milliseconds).
+  FACTION_RAID_IMMUNITY: 21600000 # 6 Hours
+
+  # Height of where the attackers of a raid will spawn
+  SPAWN_HEIGHT: 250
+
+  # List of .nbs song names that are played when raiding (IN ORDER).
+  MUSIC_FILE_NAMES:
+    - The_Grounds_Color_Is_Yellow.nbs
+
+  # Players are spawned in a random pos at SPAWN_HEIGHT. The radius from the centre of the region is dictated here.
+  RANDOM_SPAWN_RADIUS: 30
+
+  # After preparation, how long should the countdown last?
+  COUNTDOWN_DURATION: 5 # IN SECONDS
+
+  # This is a feature where players can be teleported to areas to prepare themselves for the raid.
+  TELEPORT_TO_PREPARATION: true
+  # This is the name of the world where raid defenders will be teleported to be prepared for the raid.
+  # Can be the same as the Hub world or normal world if you wish.
+  RAID_PREPARATION_WORLD: "world"
+  # Position where raid defenders are spawned to be prepared for the raid.
+  # [x, y, z]
+  RAID_PREPARATION_POS: [ 0, 64, 0 ]
+  # Time in seconds that they are in the preparation area before being teleported back to their island.
+  RAID_PREPARATION_TIME: 30
+
+
+Factions:
+  # All configurations related to creation factions.
+  FACTION_CREATION:
+
+    # Cooldown for faction creation (in milliseconds).
+    # We don't put players on cooldown WHEN they create, because then players have to wait to make a new faction.
+    # By putting a cooldown on deletion (upon creating an island), players have an actual faction island to play on for whatever reason, rather
+    # than being stuck in the actual lobby. Fun right?
+    # This also prevents players from spamming and causing lag.
+    DELETION_COOLDOWN: 10800000 # 3 Hours
+
+    # Cost of creating a faction in player runes.
+    # Set this to 0 if you wish it to be free.
+    CREATION_COST: 100
+
+    # Minimum length of faction name.
+    MINIMUM_NAME_LENGTH: 3
+    # Maximum length of faction name.
+    MAXIMUM_NAME_LENGTH: 16
+
+    # Whether to allow numbers in the name.
+    ALLOW_NUMBERS: true
+    # Whether to allow non-english characters & numbers in the name.
+    ALLOW_NON_ENGLISH: false
+    # Allow symbols in the name.
+    ALLOW_SYMBOLS: false
+
+  # Configuration for faction renaming.
+  # The control measures (min/max name length, blacklisted keywords, allow symbols/numbers/non-english) in the FACTION_CREATION section (above)
+  # will apply here, so don't worry!
+  FACTION_RENAMING:
+    # Allow renaming outright. This will mean players cannot even access /faction rename.
+    ALLOW_RENAMING: true
+
+    # Cost in runes to rename the faction.
+    # Set this to 0 for it to be free.
+    RENAME_COST: 200
+
+    # Time (in milliseconds) between being able to rename your faction.
+    COOLDOWN: 86400000 # 7 Days
+
+  # Configure who can do certain actions.
+  # Possible Ranks: "owner", "admin", "moderator", "fighter", "member"
+  # Some permission configs are in the defences.yml configuration.
+  FACTION_RANKS:
+
+    # Who can ban other members?
+    BAN: ["owner", "admin"]
+
+    # Who can ban other members?
+    KICK: ["owner", "admin", "moderator"]
+
+    # Who can promote and demote members?
+    MANAGE_RANK: ["owner", "admin"]
+
+    # Who can change the Faction MOTD? (Persistent)
+    MODIFY_MOTD: ["owner", "admin"]
+
+    # Who can manage faction invites? (Create, accept, deny)
+    MANAGE_INVITES: ["owner", "admin"]
+
+    # Who can create new broadcasts?
+    CREATE_BROADCAST: ["owner", "admin", "moderator"]
+
+  FACTION_MANAGE:
+
+    # Whether to broadcast kicks, and the reason for it.
+    BROADCAST_KICKS: true
+
+    # Whether to broadcast bans, and the reason for it.
+    BROADCAST_BANS: true
+
+    MANAGE_RANK:
+      # As a special aesthetic effect, show the selected item as enchanted.
+      SHOW_ENCHANTED: true
+
+
+# Notifications notify the player of things like pending invites (faction join requests, or player faction invites).
+Notifications:
+
+  # Interval in which the notifications are sent.
+  # IN SECONDS!
+  INTERVAL: 60 # TODO MOVE TO 10m AFTER DEVELOPMENT

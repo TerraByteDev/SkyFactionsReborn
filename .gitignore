@@ -25,7 +25,9 @@ replay_pid*
 
 .idea
 dependency-reduced-pom.xml
-SkyFactionsReborn.iml
+*.iml
+*.ipr
+*.iws
 build
 *.java~
 .gradle/
@@ -34,3 +36,4 @@ bin/
 Server/
 run/
 assets/data.sqlite3
+/tasks
