@@ -22,6 +22,12 @@ plugins {
 group = 'net.skullian.skyfactions'
 version = "${plugin_version}".toString()
 
+def SUPPORTED_NMS_VERSIONS = [
+        "v1_21_R1",
+        "v1_21_R3",
+        "v1_21_R4"
+]
+
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
@@ -148,7 +154,9 @@ dependencies {
 
     implementation(project(":modules:discord"))
 
-    implementation(project(":v1_21_R1"))
+    SUPPORTED_NMS_VERSIONS.forEach { nmsVersion -> {
+        implementation(project(":$nmsVersion"))
+    }}
 
     jooqCodegen("org.xerial:sqlite-jdbc:${sqlite_jdbc}")
 }
@@ -163,7 +171,9 @@ tasks {
         archiveClassifier.set('')
         configurations = [project.configurations.runtimeClasspath]
 
-        dependsOn(":v1_21_R1:reobfJar")
+        SUPPORTED_NMS_VERSIONS.forEach { nmsVersion -> {
+            dependsOn(":$nmsVersion:reobfJar")
+        }}
     }
 
     runServer {
@@ -203,7 +213,7 @@ flyway {
     url = 'jdbc:sqlite:file:./assets/data.sqlite3'
     user = 'sa'
     password = ''
-    locations = ["classpath:net/skullian/skyfactions/database/migrations"]
+    locations = ["classpath:net/skullian/skyfactions/common/database/migrations"]
 }
 
 jooq {

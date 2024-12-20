@@ -1,7 +1,13 @@
 rootProject.name = 'SkyFactionsReborn'
+include 'common'
 include 'paper'
+
 include 'v1_21_R1'
+include 'v1_21_R3'
+include 'v1_21_R4'
+
 include 'modules'
 include 'modules:discord'
 findProject(':modules:discord')?.name = 'discord'
-include 'common'
+include 'v1_21_R4'
+
