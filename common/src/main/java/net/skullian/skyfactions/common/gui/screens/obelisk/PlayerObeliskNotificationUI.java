@@ -29,8 +29,6 @@ public class PlayerObeliskNotificationUI extends PaginatedScreen {
     public PlayerObeliskNotificationUI(SkyUser player, List<NotificationData> notifications) {
         super(GUIEnums.OBELISK_PLAYER_NOTIFICATIONS_GUI.getPath(), player);
         this.notifications = notifications;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player) {

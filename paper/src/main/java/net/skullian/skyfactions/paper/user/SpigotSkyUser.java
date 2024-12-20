@@ -44,7 +44,7 @@ public class SpigotSkyUser extends SkyUser {
     @Override
     public CompletableFuture<JoinRequestData> getActiveJoinRequest() {
         return this.activeJoinRequest.map(CompletableFuture::completedFuture).orElseGet(() -> SkyApi.getInstance().getDatabaseManager().getFactionInvitesManager().getPlayerJoinRequest(getUniqueId()).whenComplete((request, ex) -> {
-            if (ex != null) return;
+            if (ex != null || request == null) return;
 
             this.activeJoinRequest = Optional.of(request);
         }));
