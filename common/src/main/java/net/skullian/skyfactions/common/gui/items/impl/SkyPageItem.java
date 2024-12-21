@@ -3,6 +3,7 @@ package net.skullian.skyfactions.common.gui.items.impl;
 import lombok.Getter;
 import lombok.Setter;
 import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.gui.data.ItemData;
 import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.user.SkyUser;
@@ -26,21 +27,17 @@ public abstract class SkyPageItem extends BaseSkyItem {
 
     @Override
     public SkyItemStack getItemStack() {
+        Object[] replacements = replacements();
         PaginationItemData paginationItemData = (PaginationItemData) getOPTIONALS()[1];
-        String locale = SkyApi.getInstance().getPlayerAPI().getLocale(getPLAYER().getUniqueId());
 
         return SkyItemStack.builder()
-                .itemFlags(getSTACK().getItemFlags())
-                .enchants(getSTACK().getEnchants())
-                .persistentDatas(getSTACK().getPersistentData())
-                .customModelData(getSTACK().getCustomModelData())
-                .amount(getSTACK().getAmount())
-                .owningPlayerUUID(getSTACK().getOwningPlayerUUID())
-                .textures(getSTACK().getTextures())
-                .displayName(TextUtility.legacyColor(paginationItemData.getNAME(), locale, getPLAYER()))
+                .material(paginationItemData.getMATERIAL())
+                .amount(1)
+                .textures(paginationItemData.getBASE64_TEXTURE())
+                .displayName(Messages.replace(paginationItemData.getNAME(), getPLAYER(), replacements))
                 .lore(new ArrayList<>(Collections.singleton(hasNextPage()
-                        ? TextUtility.legacyColor(paginationItemData.getMORE_PAGES_LORE().replaceAll("next_page", String.valueOf(getCurrentPage() + 2)).replace("total_pages", String.valueOf(getPageAmount())), locale, getPLAYER())
-                        : TextUtility.legacyColor(paginationItemData.getNO_PAGES_LORE(), locale, getPLAYER()))))
+                        ? Messages.replace(paginationItemData.getMORE_PAGES_LORE().replaceAll("next_page", String.valueOf(getCurrentPage() + 2)).replace("total_pages", String.valueOf(getPageAmount())), getPLAYER(), replacements)
+                        : Messages.replace(paginationItemData.getNO_PAGES_LORE(), getPLAYER(), replacements))))
                 .build();
     }
 
