@@ -76,6 +76,6 @@ public class DependencyHandler {
     }
 
     public static void alert(String name) {
-        SLogger.setup("Could not find {} on the server!", false, name );
+        SLogger.setup("<red>Could not find {} on the server!", false, name );
     }
 }
