@@ -3,6 +3,7 @@ package net.skullian.skyfactions.paper.api;
 import net.skullian.skyfactions.common.api.PluginInfoAPI;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 
+@SuppressWarnings("deprecation")
 public class SpigotPluginInfoAPI extends PluginInfoAPI {
     @Override
     public String getVersion() {

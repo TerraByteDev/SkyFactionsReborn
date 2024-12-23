@@ -39,6 +39,7 @@ public class SpigotDefenceTextHologram extends DefenceTextHologram {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public String getTextWithoutColor() {
         return ChatColor.stripColor(PlainTextComponentSerializer.plainText().serialize(getTextAsComponent()));
     }

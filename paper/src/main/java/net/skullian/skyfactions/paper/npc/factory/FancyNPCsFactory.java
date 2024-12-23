@@ -17,6 +17,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+@SuppressWarnings("deprecation")
 public class FancyNPCsFactory implements SkyNPCFactory, Listener {
 
     public FancyNPCsFactory() {

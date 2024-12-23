@@ -3,6 +3,7 @@ package net.skullian.skyfactions.common.module;
 import lombok.Getter;
 import net.skullian.skyfactions.common.util.SLogger;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +24,8 @@ public class SkyModuleManager {
         for (String module : modules) {
             try {
                 Class<?> clazz = Class.forName(module);
-                SkyModule skyModule = (SkyModule) clazz.newInstance();
+                Constructor<?> constructor = clazz.getConstructor();
+                SkyModule skyModule = (SkyModule) constructor.newInstance();
                 if (skyModule.shouldEnable()) {
                     skyModule.onEnable();
                 }
