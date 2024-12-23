@@ -136,7 +136,7 @@ public class PlayerListener implements Listener {
         SkyUser user = SkyApi.getInstance().getUserManager().getUser(event.getPlayer().getUniqueId());
         SkyLocation playerLoc = SpigotAdapter.adapt(event.getPlayer().getLocation());
         if (Settings.ISLAND_TELEPORT_ON_DEATH.getBoolean()) {
-            if (SkyApi.getInstance().getRegionAPI().isLocationInRegion(playerLoc, "sfr_player_" + event.getPlayer().getUniqueId().toString()))
+            if (SkyApi.getInstance().getRegionAPI().isLocationInRegion(playerLoc, "sfr_player_" + event.getPlayer().getUniqueId()))
                 SpigotIslandAPI.modifyDefenceOperation(SpigotFactionAPI.DefenceOperation.DISABLE, event.getPlayer().getUniqueId());
             SkyApi.getInstance().getIslandAPI().getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
                 if (ex != null) {
