@@ -3,7 +3,7 @@ package net.skullian.skyfactions.common.island;
 import lombok.Getter;
 import lombok.Setter;
 
-@SuppressWarnings("LombokSetterMayBeUsed")
+@SuppressWarnings("LombokSetterMayBeUsed, NonFinalFieldInEnum")
 @Getter
 public enum IslandModificationAction {
 

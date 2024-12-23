@@ -65,7 +65,7 @@ public class SLogger {
         String formattedMessage = message.toString();
         for (Object arg : args) {
             if (arg == null) continue;
-            formattedMessage = formattedMessage.replaceFirst("\\{\\}", arg.toString());
+            formattedMessage = formattedMessage.replaceFirst("\\{}", arg.toString());
         }
         return formattedMessage;
     }

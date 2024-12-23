@@ -46,7 +46,6 @@ public class DefenceAmmoItem extends SkyItem {
     public void onClick(SkyClickType clickType, SkyUser player) {
         if (!this.HAS_PERMISSIONS) {
             SkyApi.getInstance().getSoundAPI().playSound(player, Settings.ERROR_SOUND.getString(), Settings.ERROR_SOUND_PITCH.getInt(), 1);
-            return;
         }
         // todo
     }
