@@ -20,7 +20,6 @@ public class ObeliskFactionElectionMenuItem extends AsyncSkyItem {
     public void onClick(SkyClickType clickType, SkyUser player) {
         if (!FACTION.isElectionRunning()) {
             player.sendMessage(Component.text("There's no running elections right now"));
-            return;
         }
     }
 }
