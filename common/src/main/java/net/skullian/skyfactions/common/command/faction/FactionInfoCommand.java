@@ -99,7 +99,7 @@ public class FactionInfoCommand extends CommandTemplate {
 
     private String buildString(List<SkyUser> list) {
         if (!list.isEmpty()) {
-            return String.join(", ", list.stream().map(SkyUser::getName).collect(Collectors.toList()));
+            return list.stream().map(SkyUser::getName).collect(Collectors.joining(", "));
         }
 
         return "<red>None";
