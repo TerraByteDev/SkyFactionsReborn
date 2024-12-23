@@ -13,9 +13,9 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 
 import java.util.List;
 
+@Setter
 public class MemberRankChangeConfirmationItem extends SkyItem {
 
-    @Setter
     private RankType SELECTED;
 
     public MemberRankChangeConfirmationItem(ItemData data, SkyItemStack stack, SkyUser player, Faction faction, SkyUser subject, RankType currentType) {
