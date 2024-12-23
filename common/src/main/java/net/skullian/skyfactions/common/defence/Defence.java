@@ -2,6 +2,7 @@ package net.skullian.skyfactions.common.defence;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.skullian.skyfactions.common.api.DefenceAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
@@ -80,7 +81,7 @@ public abstract class Defence {
     }
 
     private int parseFormula(String formula) {
-        String solved = SkyApi.getInstance().getDefenceAPI().solveFormula(formula, this.data.getLEVEL());
+        String solved = DefenceAPI.solveFormula(formula, this.data.getLEVEL());
         return !solved.equals("N/A") ? Integer.parseInt(solved) : 0;
     }
 
