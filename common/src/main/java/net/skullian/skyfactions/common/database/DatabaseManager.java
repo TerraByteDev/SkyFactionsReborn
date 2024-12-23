@@ -73,7 +73,7 @@ public class DatabaseManager {
             sqliteConfig.addDataSourceProperty("enforceForeignKeys", "true");
             sqliteConfig.addDataSourceProperty("synchronous", "NORMAL");
             sqliteConfig.addDataSourceProperty("journalMode", "WAL");
-            sqliteConfig.setPoolName("SQLite");
+            sqliteConfig.setPoolName("SkyFactions SQLite Pool");
             sqliteConfig.setMaximumPoolSize(maxPoolSize);
 
             HikariDataSource dataSource = new HikariDataSource(sqliteConfig);
@@ -120,7 +120,7 @@ public class DatabaseManager {
                     host.getHost(), host.getPortOrDefault(3306), databaseName);
 
             HikariConfig mysqlConfig = new HikariConfig();
-            mysqlConfig.setPoolName("SkyFactions");
+            mysqlConfig.setPoolName("SkyFactions MySQL Pool");
             mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s",
                     host.getHost(), host.getPortOrDefault(3306), databaseName));
             mysqlConfig.setMaxLifetime(TimeUnit.MINUTES.toMillis(Settings.DATABASE_MAX_LIFETIME.getInt()));

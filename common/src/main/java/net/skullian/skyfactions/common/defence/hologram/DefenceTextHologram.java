@@ -61,7 +61,7 @@ public abstract class DefenceTextHologram {
     private final List<SkyUser> viewers = new CopyOnWriteArrayList<>();
 
     @Getter
-    private boolean dead = false;
+    private final boolean dead = false;
 
     @Getter
     private ScheduledFuture<?> task;
