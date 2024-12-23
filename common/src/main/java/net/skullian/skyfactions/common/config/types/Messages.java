@@ -351,7 +351,7 @@ public enum Messages {
 
         if (val == null) {
             // we don't auto color this as this is only used for item lore which is handled already
-            val = List.of(SERVER_NAME.get(locale) + "&r&7 Message not found: " + this.path);
+            val = List.of(SERVER_NAME.get(locale) + "<reset><gray> Message not found: " + this.path);
         }
 
         return val;
