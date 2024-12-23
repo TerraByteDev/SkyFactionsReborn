@@ -16,7 +16,6 @@ public abstract class NMSProvider {
     @Setter
     private String NMS_VERSION;
 
-    private final String NMS_CLASSPATH = "net.skullian.skyfactions.nms.%s.NMSHandlerImpl";
     private final NMSHandler NMS_HANDLER;
 
     public NMSProvider() {
@@ -24,6 +23,7 @@ public abstract class NMSProvider {
 
         try {
             String ver = fetchNMSVersion();
+            String NMS_CLASSPATH = "net.skullian.skyfactions.nms.%s.NMSHandlerImpl";
             String path = NMS_CLASSPATH.formatted(ver);
 
             Class<?> nmsClass = Class.forName(path);
