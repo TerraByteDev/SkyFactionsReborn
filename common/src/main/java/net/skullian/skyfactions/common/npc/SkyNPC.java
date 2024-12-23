@@ -4,23 +4,23 @@ import net.skullian.skyfactions.common.util.SkyLocation;
 
 public interface SkyNPC {
 
-    public String getId();
+    String getId();
 
-    public String getDisplayName();
+    String getDisplayName();
 
-    public SkyLocation getLocation();
+    SkyLocation getLocation();
 
-    public boolean isPresent();
+    boolean isPresent();
     
-    public Object getEntity();
+    Object getEntity();
 
-    public String getEntityType();
+    String getEntityType();
 
-    public void updateDisplayName(String name);
+    void updateDisplayName(String name);
 
-    public void updateEntityType(String type);
+    void updateEntityType(String type);
 
-    public void updateSkin(String skin);
+    void updateSkin(String skin);
 
     void remove();
     

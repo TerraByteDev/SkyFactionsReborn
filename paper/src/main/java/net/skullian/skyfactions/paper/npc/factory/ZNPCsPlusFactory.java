@@ -1,9 +1,7 @@
 package net.skullian.skyfactions.paper.npc.factory;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.npc.factory.SkyNPCFactory;
