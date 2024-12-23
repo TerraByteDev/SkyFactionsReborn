@@ -151,7 +151,7 @@ public class DiscordModule extends net.skullian.skyfactions.common.module.abstra
 
     @Override
     public String getUsernameByID(String id) {
-        return JDA.getUserById(id).getName();
+        return Objects.requireNonNull(JDA.getUserById(id)).getName();
     }
 
     @Override

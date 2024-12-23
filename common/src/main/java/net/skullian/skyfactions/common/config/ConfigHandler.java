@@ -12,6 +12,7 @@ import net.skullian.skyfactions.common.util.SLogger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ConfigHandler {
 
@@ -26,7 +27,7 @@ public class ConfigHandler {
         this.file = new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath(), this.name);
 
         try {
-            this.config = YamlDocument.create(this.file, ConfigHandler.class.getClassLoader().getResourceAsStream(this.name),
+            this.config = YamlDocument.create(this.file, Objects.requireNonNull(ConfigHandler.class.getClassLoader().getResourceAsStream(this.name)),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
         } catch (IOException error) {
             SLogger.setup("----------------- CONFIGURATION EXCEPTION -----------------", true);

@@ -34,7 +34,6 @@ public class UnlinkCommand extends CommandTemplate {
                 Messages.DISCORD_UNLINK_SUCCESS.send(player, locale);
             }
         });
-
     }
 
     @Override

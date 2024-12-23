@@ -115,6 +115,7 @@ public class SpigotFactionAPI extends FactionAPI {
 
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager manager = container.get(BukkitAdapter.adapt(Bukkit.getWorld(worldName)));
+        if (manager == null) throw new NullPointerException("Could not find region manager for world: " + worldName);
 
         BlockVector3 min = BlockVector3.at(corner1.getX(), -64, corner1.getZ());
         BlockVector3 max = BlockVector3.at(corner2.getX(), 320, corner2.getZ());
@@ -143,12 +144,14 @@ public class SpigotFactionAPI extends FactionAPI {
 
     @Override
     public void removeMemberFromRegion(SkyUser user, Faction faction) {
-        getFactionRegion(faction).getMembers().removePlayer(user.getUniqueId());
+        ProtectedRegion region = getFactionRegion(faction);
+        if (region != null) region.getMembers().removePlayer(user.getUniqueId());
     }
 
     @Override
     public void addMemberToRegion(SkyUser user, Faction faction) {
-        getFactionRegion(faction).getMembers().addPlayer(user.getUniqueId());
+        ProtectedRegion region = getFactionRegion(faction);
+        if (region != null) region.getMembers().addPlayer(user.getUniqueId());
     }
 
 }

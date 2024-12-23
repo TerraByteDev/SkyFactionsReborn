@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 
 import static net.skullian.skyfactions.paper.event.armor.ArmorEvent.ArmorAction;
 
+@SuppressWarnings("ConstantConditions")
 public class ArmorListener implements Listener {
 
     private ArmorEquipEvent callEquip(Player entity, ItemStack item, EquipmentSlot slot, ArmorAction action) {

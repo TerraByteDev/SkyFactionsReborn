@@ -43,7 +43,9 @@ public class SpigotObeliskAPI extends ObeliskAPI {
 
                     blockEntities.put(offsetLocation, bEntity);
                 } else {
-                    SpigotAdapter.adapt(offsetLocation).getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
+                    Material obeliskMaterial = Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString());
+                    if (obeliskMaterial == null) return;
+                    SpigotAdapter.adapt(offsetLocation).getBlock().setType(obeliskMaterial);
                 }
 
                 applyPersistentData(player.getUniqueId().toString(), offsetLocation, "player");
@@ -67,7 +69,9 @@ public class SpigotObeliskAPI extends ObeliskAPI {
 
                     blockEntities.put(offsetLocation, bEntity);
                 } else {
-                    SpigotAdapter.adapt(offsetLocation).getBlock().setType(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()));
+                    Material obeliskMaterial = Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString());
+                    if (obeliskMaterial == null) return;
+                    SpigotAdapter.adapt(offsetLocation).getBlock().setType(obeliskMaterial));
                 }
 
                 applyPersistentData(faction, offsetLocation, "faction");

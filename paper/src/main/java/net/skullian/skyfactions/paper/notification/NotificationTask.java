@@ -18,7 +18,7 @@ public class NotificationTask {
             public void run() {
                 String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
                 List<NotificationData> notifications = SkyApi.getInstance().getNotificationAPI().getNotifications(player.getUniqueId());
-                if (!notifications.isEmpty()) {
+                if (notifications != null && !notifications.isEmpty()) {
                     Messages.UNREAD_NOTIFICATIONS.send(player, locale, "count", notifications.size());
                 }
 

@@ -99,9 +99,6 @@ public abstract class FactionAPI {
 
             factionCache.put(faction.getName(), faction);
             for (SkyUser player : faction.getAllMembers()) {
-
-            }
-            for (SkyUser player : faction.getAllMembers()) {
                 if (!player.isOnline()) return;
                 factionCache.put(faction.getName(), faction);
             }

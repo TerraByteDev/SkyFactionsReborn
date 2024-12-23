@@ -8,6 +8,7 @@ import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.user.SkyUser;
 
 import java.awt.*;
+import java.util.Objects;
 import java.util.UUID;
 
 public class DiscordListener extends ListenerAdapter {
@@ -21,7 +22,7 @@ public class DiscordListener extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getName().equals(DiscordConfig.COMMAND_NAME.getString())) {
-            String code = event.getOption(DiscordConfig.COMMAND_OPTION_NAME.getString()).getAsString();
+            String code = Objects.requireNonNull(event.getOption(DiscordConfig.COMMAND_OPTION_NAME.getString())).getAsString();
             UUID uuid = module.getUUIDFromCode(code);
 
             if (uuid != null) {

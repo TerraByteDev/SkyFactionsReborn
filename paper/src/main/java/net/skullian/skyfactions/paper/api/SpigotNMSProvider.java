@@ -35,6 +35,7 @@ public class SpigotNMSProvider extends NMSProvider {
     public AWorldBorder getBorderFromWorld(String worldName) {
         if (!SkyApi.getInstance().getRegionAPI().worldExists(worldName)) throw new IllegalArgumentException("Attempted to fetch a non-existent world's border! World: " + worldName);
         World world = Bukkit.getWorld(worldName);
+        if (world == null) throw new IllegalArgumentException("Attempted to fetch a non-existent world's border! World: " + worldName);
 
         try {
             Class<?> clazz = Class.forName("net.skullian.skyfactions.nms." + getNMS_VERSION() + ".WorldBorder");

@@ -54,6 +54,7 @@ public class DefencePassiveToggleItem extends SkyItem {
         }
         DefenceData data = (DefenceData) getOPTIONALS()[0];
         Defence defence = SkyApi.getInstance().getDefenceAPI().getDefenceFromData(data);
+        if (defence == null) return;
 
         data.setTARGET_PASSIVE(!data.isTARGET_PASSIVE());
         defence.setData(data);

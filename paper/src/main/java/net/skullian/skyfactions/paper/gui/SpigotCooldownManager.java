@@ -9,6 +9,7 @@ import org.incendo.cloud.execution.postprocessor.CommandPostprocessingContext;
 import org.incendo.cloud.execution.postprocessor.CommandPostprocessor;
 import org.incendo.cloud.services.type.ConsumerService;
 
+@SuppressWarnings("UnstableApiUsage")
 public class SpigotCooldownManager {
     /*
         Cooldown Post processor for using in commands

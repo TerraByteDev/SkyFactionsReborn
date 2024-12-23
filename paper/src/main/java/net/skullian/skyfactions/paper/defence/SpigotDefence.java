@@ -80,16 +80,21 @@ public abstract class SpigotDefence extends Defence {
         if (isMaxEntitiesReached()) return getEntitiesFromUUIDs(defenceWorld);
 
         World world = Bukkit.getWorld(defenceWorld);
-        Location location = SpigotAdapter.adapt(getDefenceLocation());
-        int radius = getRadius();
+        if (world != null) {
+            Location location = SpigotAdapter.adapt(getDefenceLocation());
+            int radius = getRadius();
 
-        Collection<LivingEntity> nearbyEntities = world.getNearbyLivingEntities(location, radius, radius, radius);
-        if (nearbyEntities.isEmpty()) return new ArrayList<>();
+            Collection<LivingEntity> nearbyEntities = world.getNearbyLivingEntities(location, radius, radius, radius);
+            if (nearbyEntities.isEmpty()) return new ArrayList<>();
 
-        List<LivingEntity> filteredEntities = filterEntities(nearbyEntities);
-        List<Object> chosenEntities = selectRandomEntities(filteredEntities);
+            List<LivingEntity> filteredEntities = filterEntities(nearbyEntities);
+            List<Object> chosenEntities = selectRandomEntities(filteredEntities);
 
-        return chosenEntities;
+            return chosenEntities;
+        } else {
+            SLogger.fatal("Could not find world [{}] for defence [{}].", defenceWorld, getStruct().getIDENTIFIER());
+            return new ArrayList<>();
+        }
     }
 
     private List<LivingEntity> filterEntities(Collection<LivingEntity> entities) {
@@ -157,21 +162,28 @@ public abstract class SpigotDefence extends Defence {
     }
 
     public boolean isBlockedMythicMob(LivingEntity entity, List<String> blockedIdentifiers) {
-        AtomicBoolean isblocked = new AtomicBoolean(false);
-        MythicBukkit.inst().getMobManager().getActiveMob(entity.getUniqueId()).ifPresent(mm -> {
-            if (blockedIdentifiers.contains("mythicmobs:*")) isblocked.set(true);
-            if (blockedIdentifiers.contains(mm.getMobType())) isblocked.set(true);
-        });
+        AtomicBoolean isBlocked = new AtomicBoolean(false);
+        try (MythicBukkit mythicBukkit = MythicBukkit.inst()) {
+            mythicBukkit.getMobManager().getActiveMob(entity.getUniqueId()).ifPresent((mythicMob) -> {
+                if (blockedIdentifiers.contains("mythicmobs:*")) isBlocked.set(true);
+                if (blockedIdentifiers.contains(mm.getMobType())) isBlocked.set(true);
+            });
+        }
 
-        return isblocked.get();
+        return isBlocked.get();
     }
 
     private List<Object> getEntitiesFromUUIDs(String defenceWorld) {
         World world = Bukkit.getWorld(defenceWorld);
-        return getTargetedEntities().stream()
-                .map(uuid -> (Object) world.getEntity(uuid))
-                .filter(entity -> entity != null)
-                .toList();
+        if (world != null) {
+            return getTargetedEntities().stream()
+                    .map(uuid -> (Object) world.getEntity(uuid))
+                    .filter(entity -> entity != null)
+                    .toList();
+        } else {
+            SLogger.fatal("Failed to find world [{}] for defence [{}].", defenceWorld, getStruct().getIDENTIFIER());
+            return new ArrayList<>();
+        }
     }
 
     @Override

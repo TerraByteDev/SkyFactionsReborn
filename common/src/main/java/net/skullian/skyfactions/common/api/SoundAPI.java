@@ -19,11 +19,7 @@ public abstract class SoundAPI {
     public abstract void playSound(SkyLocation location, String identifier, float pitch, float volume);
 
     public Sound getSound(String identifier, float pitch, float volume) {
-        Sound sound = Sound.sound(Key.key(identifier), Sound.Source.MASTER, volume, pitch);
-        if (sound == null) {
-            SLogger.warn("Attempted to play a sound of {} when it returned null!", identifier);
-            return null;
-        } else return sound;
+        return Sound.sound(Key.key(identifier), Sound.Source.MASTER, volume, pitch);
     }
 
     public abstract void playMusic(SkyUser def, SkyUser att);

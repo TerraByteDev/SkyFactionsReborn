@@ -8,7 +8,9 @@ import org.eclipse.aether.graph.Dependency;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("UnstableApiUsage")
 public class SkyLoader implements PluginLoader {
+
     @Override
     public void classloader(@NotNull PluginClasspathBuilder pluginClasspathBuilder) {
         MavenLibraryResolver invUIResolver = new MavenLibraryResolver();

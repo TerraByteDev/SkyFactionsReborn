@@ -15,7 +15,7 @@ public class SkyModuleManager {
     private static final Map<String, SkyModule> enabledModules = new HashMap<>();
 
     public static void registerModule(Class<?> module) {
-        modules.add(module.getClass().getName());
+        modules.add(module.getName());
     }
 
     public static void onEnable() {

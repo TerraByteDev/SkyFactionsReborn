@@ -35,7 +35,7 @@ public class SpigotNPCManager extends NPCManager {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID);
         SkyNPC npc = factory.create(
                 "player-" + island.getId(),
-                TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", player.getName()), SkyApi.getInstance().getPlayerAPI().getLocale(playerUUID), null),
+                TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", player.getName() != null ? player.getName() : "Unknown"), SkyApi.getInstance().getPlayerAPI().getLocale(playerUUID), null),
                 getOffsetLocation(island.getCenter(Settings.ISLAND_PLAYER_WORLD.getString()), Settings.NPC_PLAYER_ISLANDS_OFFSET.getIntegerList()),
                 Settings.NPC_PLAYER_ISLANDS_SKIN.getString().replace("player_name", player.getName()),
                 EntityType.valueOf(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString()),
@@ -48,7 +48,7 @@ public class SpigotNPCManager extends NPCManager {
     @Override
     public void spawnNPC(Faction faction, FactionIsland island) {
         if (!Settings.NPC_INTEGRATION_ENABLED.getBoolean()) return;
-        if (getFactionNPCs().containsValue(faction) || factory.getNPC("faction-" + island.getId(), true) != null) return;
+        if (getFactionNPCs().containsValue(faction.getName()) || factory.getNPC("faction-" + island.getId(), true) != null) return;
 
         SkyNPC npc = factory.create(
                 "faction-" + island.getId(),
@@ -166,7 +166,7 @@ public class SpigotNPCManager extends NPCManager {
                                         return;
                                     }
                                     OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
-                                    npc.updateDisplayName(TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", owner.getName()), SkyApi.getInstance().getPlayerAPI().getLocale(uuid), SkyApi.getInstance().getUserManager().getUser(owner.getUniqueId())));
+                                    npc.updateDisplayName(TextUtility.legacyColor(Settings.NPC_PLAYER_ISLANDS_NAME.getString().replace("player_name", owner.getName() != null ? owner.getName() : "Unknown"), SkyApi.getInstance().getPlayerAPI().getLocale(uuid), SkyApi.getInstance().getUserManager().getUser(owner.getUniqueId())));
                                     npc.updateEntityType(Settings.NPC_PLAYER_ISLANDS_ENTITY.getString());
                                     npc.updateSkin(Settings.NPC_PLAYER_ISLANDS_SKIN.toString().replace("player_name", owner.getName()));
                                     affected.incrementAndGet();

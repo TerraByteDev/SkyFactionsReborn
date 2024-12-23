@@ -29,6 +29,7 @@ public class SpigotGemsAPI extends GemsAPI {
     public int depositAllItems(SkyUser player, SkyItemStack currencyItem) {
         if (!player.isOnline()) return 0;
         Player spigotPlayer = SpigotAdapter.adapt(player).getPlayer();
+        if (spigotPlayer == null) throw new NullPointerException("Adapted player is null!");
         ItemStack spigotCurrencyItem = SpigotAdapter.adapt(currencyItem, player, false);
 
         Inventory inventory = spigotPlayer.getInventory();
@@ -51,6 +52,7 @@ public class SpigotGemsAPI extends GemsAPI {
     public int depositSpecificAmount(SkyUser player, SkyItemStack currencyItem, int amount) {
         if (!player.isOnline()) return 0;
         Player spigotPlayer = SpigotAdapter.adapt(player).getPlayer();
+        if (spigotPlayer == null) throw new NullPointerException("Adapted player is null!");
         ItemStack spigotCurrencyItem = SpigotAdapter.adapt(currencyItem, player, false);
 
         Inventory inventory = spigotPlayer.getInventory();
@@ -75,6 +77,7 @@ public class SpigotGemsAPI extends GemsAPI {
     public int addItemToInventory(SkyUser user, SkyItemStack stack) {
         if (!user.isOnline()) return 0;
         Player player = SpigotAdapter.adapt(user).getPlayer();
+        if (player == null) throw new NullPointerException("Adapted player is null!");
         Inventory inventory = player.getInventory();
 
         ItemStack itemStack = SpigotAdapter.adapt(stack, user, false);

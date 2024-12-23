@@ -12,7 +12,9 @@ public class VaultAPIHook {
 
     public static void init() {
         RegisteredServiceProvider<Permission> serviceProvider = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
-        permissions = serviceProvider.getProvider();
+        if (serviceProvider != null) {
+            permissions = serviceProvider.getProvider();
+        } else throw new NullPointerException("Failed to fetch Vault Permissions API!");
     }
 
     public static boolean isEnabled() {

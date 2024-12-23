@@ -37,32 +37,37 @@ public abstract class DefenceFactory {
 
     private final List<String> cachedMaterials = new ArrayList<>();
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void registerDefaultDefences() {
         new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/defences").mkdirs();
 
         try {
-            URI defencesFolder = DefenceFactory.class.getResource("/language/en/defences").toURI();
-            FileSystem fileSystem = FileSystems.newFileSystem(defencesFolder, new HashMap());
+            URI defencesFolder = Objects.requireNonNull(DefenceFactory.class.getResource("/language/en/defences")).toURI();
+            try (FileSystem fileSystem = FileSystems.newFileSystem(defencesFolder, new HashMap<>())) {
+                for (Path yamlPath : fileSystem.getRootDirectories()) {
+                    try (Stream<Path> stream = Files.list(yamlPath.resolve("/language/en/defences"))) {
+                        stream.forEach(path -> {
+                            try {
+                                String fullPathName = path.getFileName().toString();
+                                String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
 
-            for (Path yamlPath : fileSystem.getRootDirectories()) {
-                Stream<Path> stream = Files.list(yamlPath.resolve("/language/en/defences"));
-                stream.forEach(path -> {
-                    try {
-                        String fullPathName = path.getFileName().toString();
-                        String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
-
-                        YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/defences/", defenceName + ".yml"), Objects.requireNonNull(DefenceFactory.class.getClassLoader().getResourceAsStream(String.format("language/en/defences/%s.yml", defenceName))),
-                                GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+                                YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/defences/", defenceName + ".yml"), Objects.requireNonNull(DefenceFactory.class.getClassLoader().getResourceAsStream(String.format("language/en/defences/%s.yml", defenceName))),
+                                        GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+                            } catch (IOException error) {
+                                handleError(error);
+                            }
+                        });
                     } catch (IOException error) {
                         handleError(error);
                     }
-                });
+                }
             }
         } catch (URISyntaxException | IOException error) {
             handleError(error);
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void register(File directory, String locale) {
         try {
             File dir = new File(directory + "/defences");
@@ -79,6 +84,8 @@ public abstract class DefenceFactory {
 
                 DefenceStruct struct = createStruct(config, defenceName);
                 dMap.put(struct.getIDENTIFIER(), struct);
+
+                defences.put(locale, dMap);
             }
         } catch (IOException error) {
             handleError(error);

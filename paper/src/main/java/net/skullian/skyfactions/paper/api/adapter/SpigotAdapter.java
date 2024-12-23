@@ -78,7 +78,10 @@ public class SpigotAdapter {
         if (skyStack.getCustomModelData() != -1) meta.setCustomModelData(skyStack.getCustomModelData());
 
         for (SkyItemStack.EnchantData enchantData : skyStack.getEnchants()) {
-            meta.addEnchant(Enchantment.getByName(enchantData.getEnchant()), enchantData.getLevel(), enchantData.isIgnoreLevelRestriction());
+            Enchantment enchantment = Enchantment.getByName(enchantData.getEnchant());
+            if (enchantment != null) {
+                meta.addEnchant(enchantment, enchantData.getLevel(), enchantData.isIgnoreLevelRestriction());
+            }
         }
 
         for (SkyItemStack.PersistentData pdcEntry : skyStack.getPersistentData()) {

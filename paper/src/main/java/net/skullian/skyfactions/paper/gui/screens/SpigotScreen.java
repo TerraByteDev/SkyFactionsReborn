@@ -13,6 +13,7 @@ import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.gui.items.impl.SpigotAsyncSkyItem;
 import net.skullian.skyfactions.paper.gui.items.impl.SpigotSkyItem;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.window.Window;
 
@@ -32,21 +33,31 @@ public class SpigotScreen {
     public void show() {
         registerItems();
         Gui gui = builder.build();
-        Window window = Window.single()
-                .setViewer(SpigotAdapter.adapt(screen.player).getPlayer())
-                .setTitle(TextUtility.legacyColor(screen.guiData.getTITLE(), SkyApi.getInstance().getPlayerAPI().getLocale(screen.player.getUniqueId()), screen.player))
-                .setGui(gui)
-                .build();
 
-        window.open();
+        Player player = SpigotAdapter.adapt(screen.player).getPlayer();
+        if (player != null) {
+            Window window = Window.single()
+                    .setViewer(player)
+                    .setTitle(TextUtility.legacyColor(screen.guiData.getTITLE(), SkyApi.getInstance().getPlayerAPI().getLocale(screen.player.getUniqueId()), screen.player))
+                    .setGui(gui)
+                    .build();
+
+            window.open();
+        } else {
+            SLogger.warn("Attempted to open GUI for null player. Did they disconnect?");
+        }
     }
 
     private void registerItems() {
         List<ItemData> data = GUIAPI.getItemData(screen.guiPath, screen.player);
         for (ItemData itemData : data) {
             BaseSkyItem item = screen.handleItem(itemData);
-            if (item.isASYNC()) builder.addIngredient(itemData.getCHARACTER(), new SpigotAsyncSkyItem(item));
-                else builder.addIngredient(itemData.getCHARACTER(), new SpigotSkyItem(item));
+            if (item != null) {
+                if (item.isASYNC()) builder.addIngredient(itemData.getCHARACTER(), new SpigotAsyncSkyItem(item));
+                    else builder.addIngredient(itemData.getCHARACTER(), new SpigotSkyItem(item));
+            } else {
+                SLogger.warn("Failed to fetch UI Item! ID: {} / CHAR: {}", itemData.getITEM_ID(), itemData.getCHARACTER());
+            }
         }
     }
 

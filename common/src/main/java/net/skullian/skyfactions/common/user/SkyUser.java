@@ -14,6 +14,7 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,8 +48,9 @@ public abstract class SkyUser {
 
     public abstract void teleport(SkyLocation location);
 
+    @SuppressWarnings("")
     public PlayerData getPlayerData() {
-        return this.data.get();
+        return this.data.orElse(null);
     }
 
     public CompletableFuture<Integer> getGems() {
@@ -105,12 +107,12 @@ public abstract class SkyUser {
     }
 
     public List<InviteData> getCachedInvites() {
-        return this.incomingInvites.get();
+        return this.incomingInvites.orElse(new ArrayList<>());
     }
 
     public void onCacheComplete(int runesAddition, int gemsAddition) {
-        this.runes = Optional.of(this.runes.isPresent() ? this.runes.get() : 0 + runesAddition);
-        this.gems = Optional.of(this.gems.isPresent() ? this.gems.get() : 0 + gemsAddition);
+        this.runes = Optional.of(this.runes.orElse(runesAddition));
+        this.gems = Optional.of(this.gems.orElse(gemsAddition));
     }
 
     @Nullable public abstract CompletableFuture<JoinRequestData> getActiveJoinRequest();

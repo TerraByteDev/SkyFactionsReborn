@@ -6,6 +6,7 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.gui.data.ItemData;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.screens.obelisk.RunesSubmitUI;
+import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.text.TextUtility;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
@@ -31,8 +32,11 @@ public class SpigotRunesSubmitScreen {
 
         VirtualInventory inventory = new VirtualInventory(screen.getInvSize());
         inventory.setPreUpdateHandler((handler) -> {
-            handler.setCancelled(SkyApi.getInstance().getRunesAPI().isStackProhibited(SpigotAdapter.adapt(handler.getNewItem()), screen.player));
-            if (!handler.isCancelled()) screen.getInventory().put(handler.getSlot(), SpigotAdapter.adapt(handler.getNewItem()));
+            ItemStack stack = handler.getNewItem();
+            if (stack == null) return;
+
+            handler.setCancelled(SkyApi.getInstance().getRunesAPI().isStackProhibited(SpigotAdapter.adapt(stack), screen.player));
+            if (!handler.isCancelled()) screen.getInventory().put(handler.getSlot(), SpigotAdapter.adapt(stack));
         });
 
         this.builder.addIngredient('.', inventory);
@@ -44,32 +48,45 @@ public class SpigotRunesSubmitScreen {
         registerItems();
         Gui gui = builder.build();
 
-        Window window = Window.single()
-                .setViewer(SpigotAdapter.adapt(screen.player).getPlayer())
-                .setTitle(TextUtility.legacyColor(screen.guiData.getTITLE(), SkyApi.getInstance().getPlayerAPI().getLocale(screen.player.getUniqueId()), screen.player))
-                .setGui(gui)
-                .addCloseHandler(() -> {
-                    Player player = SpigotAdapter.adapt(screen.player).getPlayer();
-                    for (SkyItemStack item : screen.getInventory().values()) {
-                        if (item == null || item.getMaterial().equals("AIR")) return;
+        Player player = SpigotAdapter.adapt(screen.player).getPlayer();
+        if (player != null) {
+            Window window = Window.single()
+                    .setViewer(player)
+                    .setTitle(TextUtility.legacyColor(screen.guiData.getTITLE(), SkyApi.getInstance().getPlayerAPI().getLocale(screen.player.getUniqueId()), screen.player))
+                    .setGui(gui)
+                    .addCloseHandler(() -> {
+                        Player fetchedPlayer = SpigotAdapter.adapt(screen.player).getPlayer();
+                        if (fetchedPlayer != null) {
+                            for (SkyItemStack item : screen.getInventory().values()) {
+                                if (item == null || item.getMaterial().equals("AIR")) return;
 
-                        Map<Integer, ItemStack> map = player.getInventory().addItem(SpigotAdapter.adapt(item, screen.player, false));
-                        for (ItemStack stack : map.values()) {
-                            player.getWorld().dropItemNaturally(player.getLocation(), stack);
+                                Map<Integer, ItemStack> map = fetchedPlayer.getInventory().addItem(SpigotAdapter.adapt(item, screen.player, false));
+                                for (ItemStack stack : map.values()) {
+                                    fetchedPlayer.getWorld().dropItemNaturally(fetchedPlayer.getLocation(), stack);
+                                }
+                            }
+                        } else {
+                            SLogger.warn("Attempted to handle rune UI for null player.");
                         }
-                    }
-                })
-                .build();
+                    })
+                    .build();
 
-        window.open();
+            window.open();
+        } else {
+            SLogger.warn("Attempted to open GUI for null player. Did they disconnect?");
+        }
     }
 
     private void registerItems() {
         List<ItemData> data = GUIAPI.getItemData(screen.guiPath, screen.player);
         for (ItemData itemData : data) {
             BaseSkyItem item = screen.handleItem(itemData);
-            if (item.isASYNC()) builder.addIngredient(itemData.getCHARACTER(), new SpigotAsyncSkyItem(item));
-                else builder.addIngredient(itemData.getCHARACTER(), new SpigotSkyItem(item));
+            if (item != null) {
+                if (item.isASYNC()) builder.addIngredient(itemData.getCHARACTER(), new SpigotAsyncSkyItem(item));
+                    else builder.addIngredient(itemData.getCHARACTER(), new SpigotSkyItem(item));
+            } else {
+                SLogger.warn("Failed to fetch UI Item! ID: {} / CHAR: {}", itemData.getITEM_ID(), itemData.getCHARACTER());
+            }
         }
     }
 

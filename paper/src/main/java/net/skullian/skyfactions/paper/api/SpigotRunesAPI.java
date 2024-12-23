@@ -23,6 +23,7 @@ import java.util.*;
 public class SpigotRunesAPI extends RunesAPI {
 
     @Override
+    @SuppressWarnings("ConstantConditions")
     public boolean isStackProhibited(SkyItemStack stack, SkyUser player) {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
         
@@ -179,6 +180,7 @@ public class SpigotRunesAPI extends RunesAPI {
 
                 ItemStack bukkitStack = SpigotAdapter.adapt(stack, player, false);
                 Player bukkitPlayer = SpigotAdapter.adapt(player).getPlayer();
+                if (bukkitPlayer == null) throw new NullPointerException("Adapted player is null!");
                 Map<Integer, ItemStack> map = bukkitPlayer.getInventory().addItem(bukkitStack);
 
                 // if the player's inventory is full, drop the item.

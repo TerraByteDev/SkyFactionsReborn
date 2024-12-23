@@ -37,3 +37,4 @@ Server/
 run/
 assets/data.sqlite3
 /tasks
+qodana.yaml

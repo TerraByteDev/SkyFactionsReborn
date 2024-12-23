@@ -9,8 +9,9 @@ import org.jooq.ExecuteListener;
 
 public class DatabaseExecutionListener implements ExecuteListener {
     @Override
+    @SuppressWarnings("ConstantConditions")
     public void exception(ExecuteContext ctx) {
-        ErrorUtil.handleDatabaseError(ctx.exception());
+        if (ctx.exception() != null) ErrorUtil.handleDatabaseError(ctx.exception());
         SkyApi.getInstance().getDatabaseManager().closed = SkyApi.getInstance().getDatabaseManager().getDataSource().isClosed();
 
         new RuntimeException("Database is closed! Cannot allow player to join without risking dupes and unexpected functionalities. Kicking all online players.").printStackTrace();

@@ -2,6 +2,7 @@ package net.skullian.skyfactions.common.config;
 
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.*;
+import net.skullian.skyfactions.paper.event.defence.DefencePlacementHandler;
 
 import java.io.File;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ public class ConfigFileHandler {
 
     private Map<ConfigTypes, ConfigHandler> configs = new HashMap<>();
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void loadFiles() {
         String configPath = SkyApi.getInstance().getFileAPI().getConfigFolderPath();
         new File(configPath, "/schematics").mkdirs();

@@ -19,27 +19,30 @@ public class LinkCommand extends CommandTemplate {
     public void perform(
             SkyUser player
     ) {
-        if (!CommandsUtility.hasPerm(player, List.of("skyfactions.command.link", "skyfactions.discord"), true)) return;
+        if (!hasPermission(player, true)) return;
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
         DiscordModule module = (DiscordModule) SkyModules.DISCORD.getModule();
 
-        SkyApi.getInstance().getPlayerAPI().getPlayerData(player.getUniqueId()).whenComplete((data, ex) -> {
-            if (ex != null) {
-                ErrorUtil.handleError(player, "link your Discord", "SQL_GET_DISCORD", ex);
-            } else if (data.getDISCORD_ID() == null) {
-                module.createLinkCode(player).whenComplete((code, err) -> {
-                    if (err != null) {
-                        err.printStackTrace();
-                        return;
+        SkyApi.getInstance().getPlayerAPI().getPlayerData(player.getUniqueId())
+                .thenApplyAsync(data -> {
+                    if (data == null) return null;
+                        else if (!data.getDISCORD_ID().equalsIgnoreCase("none")) {
+
+                        String retrievedUser = module.getUsernameByID(data.getDISCORD_ID());
+                        Messages.DISCORD_ALREADY_LINKED.send(player, locale, "discord_name", retrievedUser);
                     }
 
+                    return module.createLinkCode(player);
+                })
+                .thenAcceptAsync(code -> {
+                    if (code == null) return;
+
                     Messages.DISCORD_LINK_PROMPT.send(player, locale, "code", code);
+                })
+                .exceptionally(ex -> {
+                    ErrorUtil.handleError(player, "link your Discord", "SQL_GET_DISCORD", ex);
+                    return null;
                 });
-            } else {
-                String retrievedUser = module.getUsernameByID(data.getDISCORD_ID());
-                Messages.DISCORD_ALREADY_LINKED.send(player, locale, "discord_name", retrievedUser);
-            }
-        });
     }
 
     @Override
@@ -64,6 +67,6 @@ public class LinkCommand extends CommandTemplate {
 
     @Override
     public List<String> permission() {
-        return List.of("skyfactions.command.link");
+        return List.of("skyfactions.command.link", "skyfactions.discord");
     }
 }

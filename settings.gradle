@@ -1,3 +1,13 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            name = "papermc-repo"
+            url = "https://repo.papermc.io/repository/maven-public/"
+        }
+    }
+}
+
 rootProject.name = 'SkyFactionsReborn'
 include 'common'
 include 'paper'

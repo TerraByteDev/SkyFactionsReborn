@@ -84,6 +84,7 @@ public class ObeliskInteractionListener implements Listener {
 
     // Listen for interaction with the Obelisk
     @EventHandler
+    @SuppressWarnings("ConstantConditions")
     public void onInteract(PlayerInteractEvent event) {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
         if (!event.hasBlock()) return;

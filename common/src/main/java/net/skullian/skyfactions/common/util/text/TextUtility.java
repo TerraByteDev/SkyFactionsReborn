@@ -99,22 +99,16 @@ public class TextUtility {
     }
 
     public static boolean hasSymbols(@NotNull CharSequence seq) {
-        if (seq == null) {
-            return false;
-        } else {
-            int length = seq.length();
-            if (length == 0) {
-                return false;
-            } else {
-                for (int i = 0; i < length; i++) {
-                    char character = seq.charAt(i);
-                    if (character != ' ' && character != '_' && !Character.isLetterOrDigit(character)) {
-                        return true;
-                    }
+        int length = seq.length();
+        if (length != 0) {
+            for (int i = 0; i < length; i++) {
+                char character = seq.charAt(i);
+                if (character != ' ' && character != '_' && !Character.isLetterOrDigit(character)) {
+                    return true;
                 }
-                return false;
             }
         }
+        return false;
     }
 
     /**
@@ -139,9 +133,6 @@ public class TextUtility {
     }
 
     public static boolean containsNumbers(@NotNull CharSequence seq) {
-        if (seq == null) {
-            return false;
-        }
         return seq.chars().anyMatch(Character::isDigit);
     }
 

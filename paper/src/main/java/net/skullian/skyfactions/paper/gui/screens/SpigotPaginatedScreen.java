@@ -16,6 +16,7 @@ import net.skullian.skyfactions.paper.gui.items.impl.SpigotAsyncSkyItem;
 import net.skullian.skyfactions.paper.gui.items.impl.SpigotPaginationBackItem;
 import net.skullian.skyfactions.paper.gui.items.impl.SpigotPaginationForwardItem;
 import net.skullian.skyfactions.paper.gui.items.impl.SpigotSkyItem;
+import org.bukkit.entity.Player;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.PagedGui;
 import xyz.xenondevs.invui.gui.structure.Markers;
@@ -40,13 +41,18 @@ public class SpigotPaginatedScreen {
         registerItems();
         Gui gui = builder.build();
 
-        Window window = Window.single()
-                .setViewer(SpigotAdapter.adapt(screen.player).getPlayer())
-                .setTitle(TextUtility.legacyColor(screen.guiData.getTITLE(), SkyApi.getInstance().getPlayerAPI().getLocale(screen.player.getUniqueId()), screen.player))
-                .setGui(gui)
-                .build();
+        Player player = SpigotAdapter.adapt(screen.player).getPlayer();
+        if (player != null) {
+            Window window = Window.single()
+                    .setViewer(player)
+                    .setTitle(TextUtility.legacyColor(screen.guiData.getTITLE(), SkyApi.getInstance().getPlayerAPI().getLocale(screen.player.getUniqueId()), screen.player))
+                    .setGui(gui)
+                    .build();
 
-        window.open();
+            window.open();
+        } else {
+            SLogger.warn("Attempted to open GUI for null player. Did they disconnect?");
+        }
     }
 
     private void registerItems() {
@@ -60,8 +66,12 @@ public class SpigotPaginatedScreen {
             }
 
             BaseSkyItem item = screen.handleItem(itemData);
-            if (item.isASYNC()) builder.addIngredient(itemData.getCHARACTER(), new SpigotAsyncSkyItem(item));
-                else builder.addIngredient(itemData.getCHARACTER(), new SpigotSkyItem(item));
+            if (item != null) {
+                if (item.isASYNC()) builder.addIngredient(itemData.getCHARACTER(), new SpigotAsyncSkyItem(item));
+                    else builder.addIngredient(itemData.getCHARACTER(), new SpigotSkyItem(item));
+            } else {
+                SLogger.warn("Failed to fetch UI Item! ID: {} / CHAR: {}", itemData.getITEM_ID(), itemData.getCHARACTER());
+            }
         }
 
         List<PaginationItemData> paginationData = GUIAPI.getPaginationData(screen.player);

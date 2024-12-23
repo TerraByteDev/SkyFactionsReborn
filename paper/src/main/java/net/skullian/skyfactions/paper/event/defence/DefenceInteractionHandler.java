@@ -7,6 +7,7 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.DefencesConfig;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
 import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
@@ -57,6 +58,7 @@ public class DefenceInteractionHandler implements Listener {
     }
 
     @EventHandler
+    @SuppressWarnings("ConstantConditions")
     public void onDefenceInteract(PlayerInteractEvent event) {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || !event.hasBlock()) return;
 
@@ -71,7 +73,7 @@ public class DefenceInteractionHandler implements Listener {
             if (defence.getData().isIS_FACTION()) {
                 SkyApi.getInstance().getFactionAPI().getFaction(player.getUniqueId()).whenComplete((faction, ex) -> {
                     if (ex != null) {
-                        ex.printStackTrace();
+                        SLogger.fatal("Failed to fetch {}'s faction!", player.getUniqueId(), ex);
                         return;
                     } else if (faction == null) return;
                         else if (!faction.getName().equals(defence.getData().getUUIDFactionName())) return;

@@ -48,6 +48,7 @@ public class DefenceRemoveItem extends SkyItem {
         DefenceData defenceData = (DefenceData) getOPTIONALS()[1];
 
         Defence defence = SkyApi.getInstance().getDefenceAPI().getDefenceFromData(defenceData);
+        if (defence == null) return;
         defence.disable();
 
         defence.remove().whenComplete((ignored, ex) -> {

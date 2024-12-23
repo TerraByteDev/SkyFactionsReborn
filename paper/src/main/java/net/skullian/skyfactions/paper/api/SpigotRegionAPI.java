@@ -82,14 +82,17 @@ public class SpigotRegionAPI extends RegionAPI {
     public void createRegion(SkyUser player, SkyLocation corner1, SkyLocation corner2, String world, String regionName) {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regionManager = container.get(BukkitAdapter.adapt(Bukkit.getWorld(world)));
-        BlockVector3 min = BlockVector3.at(corner1.getBlockX(), -64, corner1.getBlockZ());
-        BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 320, corner2.getBlockZ());
 
-        ProtectedRegion region = new ProtectedCuboidRegion(regionName, min, max);
-        region.getMembers().addPlayer(player.getUniqueId());
-        region.setFlag(Flags.EXIT, StateFlag.State.DENY);
+        if (regionManager != null) {
+            BlockVector3 min = BlockVector3.at(corner1.getBlockX(), -64, corner1.getBlockZ());
+            BlockVector3 max = BlockVector3.at(corner2.getBlockX(), 320, corner2.getBlockZ());
 
-        regionManager.addRegion(region);
+            ProtectedRegion region = new ProtectedCuboidRegion(regionName, min, max);
+            region.getMembers().addPlayer(player.getUniqueId());
+            region.setFlag(Flags.EXIT, StateFlag.State.DENY);
+
+            regionManager.addRegion(region);
+        }
     }
 
     @NotNull
@@ -126,6 +129,7 @@ public class SpigotRegionAPI extends RegionAPI {
                     com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(world);
                     Clipboard clipboard;
                     ClipboardFormat format = ClipboardFormats.findByFile(schemFile);
+                    if (format == null) throw new RuntimeException("ClipboardFormat returned null for file " + schemFile.getName());
                     try (ClipboardReader reader = format.getReader(new FileInputStream(schemFile))) {
                         clipboard = reader.read();
                     }
@@ -153,7 +157,8 @@ public class SpigotRegionAPI extends RegionAPI {
     public CompletableFuture<Void> removeRegion(String regionName, String world) {
         return CompletableFuture.runAsync(() -> {
             RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-            container.get(BukkitAdapter.adapt(Bukkit.getWorld(world))).removeRegion(regionName);
+            RegionManager manager = container.get(BukkitAdapter.adapt(Bukkit.getWorld(world)));
+            if (manager != null) manager.removeRegion(regionName);
         });
     }
 

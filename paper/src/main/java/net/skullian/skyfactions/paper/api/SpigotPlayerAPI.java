@@ -43,9 +43,9 @@ public class SpigotPlayerAPI extends PlayerAPI {
     @Override
     public void clearInventory(SkyUser user) {
         OfflinePlayer offlinePlayer = SpigotAdapter.adapt(user);
-        if (!offlinePlayer.isOnline()) return;
 
         Player player = offlinePlayer.getPlayer();
+        if (player == null) return;
 
         ItemStack[] items = player.getInventory().getContents();
         for (int i = 0; i < items.length; i++) {
@@ -66,9 +66,9 @@ public class SpigotPlayerAPI extends PlayerAPI {
     @Override
     public void clearEnderChest(SkyUser user) {
         OfflinePlayer offlinePlayer = SpigotAdapter.adapt(user);
-        if (!offlinePlayer.isOnline()) return;
 
         Player player = offlinePlayer.getPlayer();
+        if (player == null) return;
         player.getEnderChest().clear();
     }
 
@@ -79,6 +79,7 @@ public class SpigotPlayerAPI extends PlayerAPI {
 
     @Override
     public boolean hasInventorySpace(SkyUser user) {
-        return SpigotAdapter.adapt(user).getPlayer().getInventory().firstEmpty() != -1;
+        Player player = SpigotAdapter.adapt(user).getPlayer();
+        return player != null && player.getInventory().firstEmpty() != -1;
     }
 }

@@ -21,11 +21,9 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
+@SuppressWarnings("UnstableApiUsage")
 public class DefenceDamageHandler implements Listener {
 
     public static Map<UUID, Map<DamageType, DefenceEntityDeathData>> toDie = new HashMap<>();
@@ -44,7 +42,7 @@ public class DefenceDamageHandler implements Listener {
             event.setCancelled(true);
             event.getEntity().remove();
 
-            int damage = container.get(damageKey, PersistentDataType.INTEGER);
+            int damage = Objects.requireNonNull(container.get(damageKey, PersistentDataType.INTEGER));
 
             hitEntity.damage(damage);
             hitEntity.knockback(0.5f, 0.5f, 0.5f);

@@ -8,6 +8,7 @@ import net.skullian.skyfactions.common.util.text.TextUtility;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("deprecation, ConstantConditions")
 public class PlaceholderAPIHook extends PlaceholderExpansion {
 
     private final SkyFactionsReborn plugin;
@@ -46,24 +47,24 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
         if (params.equalsIgnoreCase("player_runes")) {
             if (player == null) return "-1";
-            if (!user.runes.isEmpty()) return String.valueOf(user.runes.get());
+            if (user.runes.isPresent()) return String.valueOf(user.runes.get());
                 else user.getRunes();
 
             return "-1";
         } else if (params.equalsIgnoreCase("player_gems")) {
             if (player == null) return "-1";
-            if (!user.gems.isEmpty()) return String.valueOf(user.gems.get());
+            if (user.gems.isPresent()) return String.valueOf(user.gems.get());
                 else user.getGems();
 
             return "-1";
         } else if (params.equalsIgnoreCase("player_faction")) {
-            if (player == null || !player.hasPlayedBefore()) return "N/A";
+            if (player == null) return "N/A";
             if (SkyApi.getInstance().getFactionAPI().getFactionUserCache().containsKey(player.getUniqueId()))
                 return String.valueOf(SkyApi.getInstance().getFactionAPI().getCachedFaction(player.getUniqueId()).getName());
             else return TextUtility.legacyColor("&cN/A", locale, user);
 
         } else if (params.equalsIgnoreCase("faction_runes")) {
-            if (player == null || !player.hasPlayedBefore()) return "N/A";
+            if (player == null) return "N/A";
             if (SkyApi.getInstance().getFactionAPI().getFactionUserCache().containsKey(player.getUniqueId()))
                 return String.valueOf(SkyApi.getInstance().getFactionAPI().getCachedFaction(player.getUniqueId()).getRunes());
             else return TextUtility.legacyColor("&cN/A", locale, user);

@@ -265,29 +265,29 @@ public enum Messages {
     NOTIFICATION_FACTION_RANK_UPDATED_TITLE("Notifications.FACTION_RANK_UPDATED_TITLE"),
     NOTIFICATION_FACTION_RANK_UPDATED_DESCRIPTION("Notifications.FACTION_RANK_UPDATED_DESCRIPTION");
 
-    public static Map<String, YamlDocument> configs = new HashMap<>();
+    public static final Map<String, YamlDocument> configs = new HashMap<>();
     private final String path;
 
     Messages(String path) {
         this.path = path;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void load(boolean setup) {
         try {
             new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath(), "/language").mkdirs();
             if (setup) SLogger.setup("Saving default language <#05eb2f>[English]<#4294ed>.", false);
                 else SLogger.info("Saving default language <#05eb2f>[English]<#4294ed>.");
 
-            YamlDocument doc = YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/en.yml"), Messages.class.getClassLoader().getResourceAsStream("language/en/en.yml"),
+            YamlDocument doc = YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/en.yml"), Objects.requireNonNull(Messages.class.getClassLoader().getResourceAsStream("language/en/en.yml")),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
             configs.put("en", doc);
 
-
             File folder = new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath(), "/language");
             if (!folder.exists() || !folder.isDirectory()) throw new Exception("Could not find the language folder. Please report this error ASAP.");
 
-            for (File dir : folder.listFiles()) {
+            for (File dir : Objects.requireNonNull(folder.listFiles())) {
                 
                 if (dir.isDirectory()) {
                     if (setup) SLogger.setup("Registering Language: <#05eb2f>[{}]<#4294ed>", false, dir.getName());
@@ -300,6 +300,7 @@ public enum Messages {
                     );
 
                     registerGUIs(dir, dir.getName());
+                    SkyApi.getInstance().getDefenceFactory().register(dir, dir.getName());
                 }
             }
         } catch (Exception exception) {
@@ -308,7 +309,7 @@ public enum Messages {
             SLogger.setup("Please check that config for any configuration mistakes.", true);
             SLogger.setup("Plugin will now disable.", true);
             SLogger.setup("----------------- CONFIGURATION EXCEPTION -----------------", true);
-            exception.printStackTrace();
+            SLogger.fatal(exception);
             SkyApi.disablePlugin();
         }
         
@@ -317,7 +318,7 @@ public enum Messages {
     private static void registerGUIs(File dir, String locale) throws IOException {
         Map<String, YamlDocument> docs = new HashMap<>();
         for (GUIEnums enumEntry : GUIEnums.values()) {
-            YamlDocument doc = YamlDocument.create(new File(dir,  "guis/" + enumEntry.getPath() + ".yml"), Messages.class.getClassLoader().getResourceAsStream(String.format("language/%s/%s.yml", locale, "guis/" + enumEntry.getPath())),
+            YamlDocument doc = YamlDocument.create(new File(dir,  "guis/" + enumEntry.getPath() + ".yml"), Objects.requireNonNull(Messages.class.getClassLoader().getResourceAsStream(String.format("language/%s/%s.yml", locale, "guis/" + enumEntry.getPath()))),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
             docs.put(enumEntry.getPath(), doc);

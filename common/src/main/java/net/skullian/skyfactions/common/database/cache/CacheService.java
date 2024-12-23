@@ -41,6 +41,7 @@ public class CacheService {
 
                 String factionName = cachedFaction.getKey();
                 Faction faction = SkyApi.getInstance().getFactionAPI().getCachedFaction(factionName);
+                if (faction == null) continue;
 
                 int gemsModification = cachedFaction.getValue().getGems();
                 int runesModification = cachedFaction.getValue().getRunes();

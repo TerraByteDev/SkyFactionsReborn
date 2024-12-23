@@ -74,6 +74,7 @@ public final class SpigotSkyAPI extends SkyApi {
     private SpigotPluginInfoAPI pluginInfoAPI;
 
     @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void onEnable() {
         audience = BukkitAudiences.create(SkyFactionsReborn.getInstance());
 
@@ -168,11 +169,12 @@ public final class SpigotSkyAPI extends SkyApi {
     public void onDisable() {
         try {
             if (cacheService != null) {
-                ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-                scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
-                cacheService.disable().get();
+                try (ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor()) {
+                    scheduler.scheduleAtFixedRate(() -> SLogger.info("Waiting for periodic cache service to disable..."), 0, 5, TimeUnit.SECONDS);
+                    cacheService.disable().get();
 
-                scheduler.shutdownNow();
+                    scheduler.shutdownNow();
+                }
             }
 
             SLogger.info("Disabling Module Manager.");

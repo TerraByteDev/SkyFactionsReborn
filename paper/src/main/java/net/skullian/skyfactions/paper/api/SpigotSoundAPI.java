@@ -27,8 +27,7 @@ public class SpigotSoundAPI extends SoundAPI {
         Sound sound = Sound.valueOf(identifier);
         Location bukkitLocation = SpigotAdapter.adapt(location);
 
-        if (sound == null) SLogger.warn("Attempted to play a sound of {} when it returned null!", identifier);
-        else bukkitLocation.getWorld().playSound(bukkitLocation, sound, volume, pitch);
+        bukkitLocation.getWorld().playSound(bukkitLocation, sound, volume, pitch);
     }
 
     @Override

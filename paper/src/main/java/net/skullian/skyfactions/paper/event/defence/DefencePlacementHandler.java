@@ -94,6 +94,7 @@ public class DefencePlacementHandler implements Listener {
 
                 if (!shouldContinue) return;
                 String defenceIdentifier = container.get(defenceKey, PersistentDataType.STRING);
+                if (defenceIdentifier == null) return;
 
                 DefenceStruct defence = SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(locale, SkyApi.getInstance().getDefenceFactory().getDefaultStruct()).get(defenceIdentifier);
                 if (defence != null) {
