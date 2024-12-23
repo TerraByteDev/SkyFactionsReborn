@@ -10,8 +10,8 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class ObeliskDefencePurchaseItem extends SkyItem {
 
-    private String TYPE;
-    private Faction FACTION;
+    private final String TYPE;
+    private final Faction FACTION;
 
     public ObeliskDefencePurchaseItem(ItemData data, SkyItemStack stack, String type, Faction faction, SkyUser player) {
         super(data, stack, player, null);

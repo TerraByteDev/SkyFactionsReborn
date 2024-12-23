@@ -13,7 +13,7 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class PlayerIncomingInviteAccept extends SkyItem {
 
-    private InviteData DATA;
+    private final InviteData DATA;
 
     public PlayerIncomingInviteAccept(ItemData data, SkyItemStack stack, InviteData inviteData, SkyUser player) {
         super(data, stack, player, null);

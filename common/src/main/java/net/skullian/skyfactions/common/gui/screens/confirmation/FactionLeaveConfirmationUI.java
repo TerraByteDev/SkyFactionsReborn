@@ -12,6 +12,7 @@ import net.skullian.skyfactions.common.gui.items.faction_leave.LeaveConfirmation
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,15 +20,13 @@ public class FactionLeaveConfirmationUI extends Screen {
     @Builder
     public FactionLeaveConfirmationUI(SkyUser player) {
         super(GUIEnums.FACTION_LEAVE_GUI.getPath(), player);
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player) {
         try {
             FactionLeaveConfirmationUI.builder().player(player).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Faction Leave Confirmation GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "leave your faction", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

@@ -15,7 +15,7 @@ import java.util.Collections;
 
 public class AuditPaginationItem extends SkyItem {
 
-    private AuditLogData DATA;
+    private final AuditLogData DATA;
 
     public AuditPaginationItem(ItemData data, SkyItemStack stack, AuditLogData auditData, SkyUser player) {
         super(data, stack, player, null);

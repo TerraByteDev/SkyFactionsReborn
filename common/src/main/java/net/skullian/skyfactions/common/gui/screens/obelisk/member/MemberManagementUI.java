@@ -7,15 +7,13 @@ import net.skullian.skyfactions.common.config.types.GUIEnums;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.gui.data.ItemData;
-import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.gui.items.EmptyItem;
-import net.skullian.skyfactions.common.gui.items.PaginationBackItem;
-import net.skullian.skyfactions.common.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.member_manage.MemberPaginationItem;
 import net.skullian.skyfactions.common.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +33,7 @@ public class MemberManagementUI extends PaginatedScreen {
         try {
             MemberManagementUI.builder().player(player).faction(faction).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Member Management GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open the member management GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

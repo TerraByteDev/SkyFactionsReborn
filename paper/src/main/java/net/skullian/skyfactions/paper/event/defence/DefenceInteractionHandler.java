@@ -1,19 +1,15 @@
 package net.skullian.skyfactions.paper.event.defence;
 
-import java.util.Optional;
-import java.util.UUID;
-
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.DefencesConfig;
 import net.skullian.skyfactions.common.config.types.Messages;
+import net.skullian.skyfactions.common.defence.Defence;
+import net.skullian.skyfactions.common.gui.screens.defence.DefenceManageUI;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.event.armor.ArmorEquipEvent;
-import net.skullian.skyfactions.common.gui.screens.defence.DefenceManageUI;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,10 +17,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
-
-import net.skullian.skyfactions.paper.api.SpigotDefenceAPI;
-import net.skullian.skyfactions.common.defence.Defence;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import java.util.Optional;
+import java.util.UUID;
 
 public class DefenceInteractionHandler implements Listener {
 

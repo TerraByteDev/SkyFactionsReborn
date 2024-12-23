@@ -10,11 +10,10 @@ import net.skullian.skyfactions.common.gui.items.impl.SkyItem;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.SkyItemStack;
-import org.jetbrains.annotations.NotNull;
 
 public class FactionPlayerJoinRequestRevoke extends SkyItem {
 
-    private JoinRequestData DATA;
+    private final JoinRequestData DATA;
 
     public FactionPlayerJoinRequestRevoke(ItemData data, SkyItemStack stack, JoinRequestData joinRequestData, SkyUser player) {
         super(data, stack, player, null);

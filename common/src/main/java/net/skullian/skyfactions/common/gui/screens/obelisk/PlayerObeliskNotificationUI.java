@@ -6,16 +6,14 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.GUIEnums;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.gui.data.ItemData;
-import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.gui.items.EmptyItem;
-import net.skullian.skyfactions.common.gui.items.PaginationBackItem;
-import net.skullian.skyfactions.common.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.notification.ObeliskNotificationPaginationItem;
 import net.skullian.skyfactions.common.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.common.notification.NotificationData;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +35,7 @@ public class PlayerObeliskNotificationUI extends PaginatedScreen {
             player.addMetadata("inFactionRelatedUI", true);
             PlayerObeliskNotificationUI.builder().player(player).notifications(notifications).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Notifications GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open the notifications GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

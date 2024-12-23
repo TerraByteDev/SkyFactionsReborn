@@ -18,10 +18,10 @@ import java.util.List;
 
 public class ObeliskPaginatedDefenceItem extends AsyncSkyItem {
 
-    private DefenceStruct STRUCT;
-    private boolean SHOULD_REDIRECT;
-    private String TYPE;
-    private Faction FACTION;
+    private final DefenceStruct STRUCT;
+    private final boolean SHOULD_REDIRECT;
+    private final String TYPE;
+    private final Faction FACTION;
     private boolean HAS_PERMISSIONS = false;
 
     public ObeliskPaginatedDefenceItem(ItemData data, SkyItemStack stack, DefenceStruct struct, boolean shouldRedirect, String type, Faction faction, SkyUser player) {

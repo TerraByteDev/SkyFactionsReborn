@@ -15,6 +15,7 @@ import net.skullian.skyfactions.common.gui.items.obelisk.member_manage.rank.Memb
 import net.skullian.skyfactions.common.gui.items.obelisk.member_manage.rank.MemberRankChangeItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +40,7 @@ public class MemberManageRankUI extends Screen {
         try {
             MemberManageRankUI.builder().player(player).faction(faction).subject(subject).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Manage Member GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open the member rank management GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

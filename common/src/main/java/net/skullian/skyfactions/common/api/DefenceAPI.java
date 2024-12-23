@@ -167,8 +167,7 @@ public abstract class DefenceAPI {
 
             return String.valueOf(Math.round(expression.evaluate()));
         } catch (Exception e) {
-            SLogger.fatal("Encountered an error when trying to evaluate defence formulas: {}", e.getMessage());
-            e.printStackTrace();
+            SLogger.fatal("Encountered an error when trying to evaluate defence formulas - {}", e);
         }
 
         return "N/A";

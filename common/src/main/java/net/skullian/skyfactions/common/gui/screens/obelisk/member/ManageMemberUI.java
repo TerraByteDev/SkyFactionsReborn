@@ -15,6 +15,7 @@ import net.skullian.skyfactions.common.gui.items.obelisk.member_manage.MemberKic
 import net.skullian.skyfactions.common.gui.items.obelisk.member_manage.MemberRankItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,8 +33,8 @@ public class ManageMemberUI extends Screen {
     public static void promptPlayer(SkyUser player, SkyUser subject, Faction faction) {
         try {
             ManageMemberUI.builder().player(player).subject(subject).faction(faction).build().show();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException error) {
+            SLogger.fatal("Failed to create Manage Member GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "manage a member", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

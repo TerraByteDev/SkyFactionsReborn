@@ -16,6 +16,7 @@ import net.skullian.skyfactions.common.gui.items.obelisk.invites.FactionPlayerJo
 import net.skullian.skyfactions.common.gui.items.obelisk.invites.InvitePromptItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,8 +27,6 @@ public class PlayerOutgoingRequestManageUI extends Screen {
     public PlayerOutgoingRequestManageUI(SkyUser player, JoinRequestData joinRequest) {
         super(GUIEnums.OBELISK_INVITE_OUTGOING_GUI.getPath(), player);
         this.joinRequest = joinRequest;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player, JoinRequestData joinRequest) {
@@ -35,7 +34,7 @@ public class PlayerOutgoingRequestManageUI extends Screen {
             player.addMetadata("inFactionRelatedUI", true);
             PlayerOutgoingRequestManageUI.builder().player(player).joinRequest(joinRequest).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Outgoing Join Request Manage GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "manage your outgoing join request", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

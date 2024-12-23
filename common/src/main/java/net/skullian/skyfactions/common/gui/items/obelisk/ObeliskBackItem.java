@@ -10,7 +10,7 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class ObeliskBackItem extends SkyItem {
 
-    private String TYPE;
+    private final String TYPE;
 
     public ObeliskBackItem(ItemData data, SkyItemStack stack, String type, SkyUser player) {
         super(data, stack, player, null);

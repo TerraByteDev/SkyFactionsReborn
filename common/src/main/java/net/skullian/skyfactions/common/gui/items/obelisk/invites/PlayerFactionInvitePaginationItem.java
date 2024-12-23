@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PlayerFactionInvitePaginationItem extends SkyItem {
 
-    private InviteData DATA;
+    private final InviteData DATA;
 
     public PlayerFactionInvitePaginationItem(ItemData data, SkyItemStack stack, SkyUser player, InviteData inviteData) {
         super(data, stack, player, List.of(inviteData).toArray());

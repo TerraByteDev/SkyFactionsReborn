@@ -240,7 +240,7 @@ public abstract class DefenceFactory {
         SLogger.fatal("Please check the below error and proceed accordingly.");
         SLogger.fatal("Plugin will now disable.");
         SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
-        error.printStackTrace();
+        SLogger.fatal(error);
         SkyApi.disablePlugin();
     }
 }

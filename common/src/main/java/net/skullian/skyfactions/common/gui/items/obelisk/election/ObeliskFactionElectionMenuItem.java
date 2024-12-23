@@ -9,7 +9,7 @@ import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class ObeliskFactionElectionMenuItem extends AsyncSkyItem {
-    private Faction FACTION;
+    private final Faction FACTION;
 
     public ObeliskFactionElectionMenuItem(ItemData data, SkyItemStack stack, Faction faction, SkyUser player) {
         super(data, stack, player, null);

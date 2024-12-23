@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MemberPaginationItem extends SkyItem {
 
-    private SkyUser SUBJECT;
+    private final SkyUser SUBJECT;
 
     public MemberPaginationItem(ItemData data, SkyItemStack stack, String rankTitle, SkyUser player, SkyUser actor, Faction faction) {
         super(data, stack, actor, List.of(rankTitle, player, faction).toArray());

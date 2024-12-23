@@ -13,7 +13,7 @@ import java.util.List;
 
 public class FactionJoinRequestPaginationItem extends SkyItem {
 
-    private InviteData DATA;
+    private final InviteData DATA;
 
     public FactionJoinRequestPaginationItem(ItemData data, SkyItemStack stack, SkyUser player, InviteData inviteData) {
         super(data, stack, player, List.of(inviteData).toArray());

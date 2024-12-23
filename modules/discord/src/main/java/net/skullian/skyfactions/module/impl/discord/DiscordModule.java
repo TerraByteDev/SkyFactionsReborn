@@ -33,7 +33,7 @@ public class DiscordModule extends net.skullian.skyfactions.common.module.abstra
     private JDA JDA;
     private TextChannel RAID_NOTIFICATION_CHANNEL;
 
-    private Map<String, UUID> codes = new HashMap<>();
+    private final Map<String, UUID> codes = new HashMap<>();
 
     private List<PresenceData> presenceData;
     private int currentPresence = 0;
@@ -76,7 +76,7 @@ public class DiscordModule extends net.skullian.skyfactions.common.module.abstra
             SLogger.fatal("There was an error while stopping the bot.");
             SLogger.fatal("Please contact the devs.");
             SLogger.fatal("----------------------- DISCORD EXCEPTION -----------------------");
-            error.printStackTrace();
+            SLogger.fatal(error);
         }
     }
 

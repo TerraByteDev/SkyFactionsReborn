@@ -13,7 +13,7 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class FactionPlayerJoinRequestDenyItem extends SkyItem {
 
-    private JoinRequestData DATA;
+    private final JoinRequestData DATA;
 
     public FactionPlayerJoinRequestDenyItem(ItemData data, SkyItemStack stack, JoinRequestData joinRequestData, SkyUser player) {
         super(data, stack, player, null);

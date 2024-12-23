@@ -2,13 +2,11 @@ package net.skullian.skyfactions.common.gui.items.impl;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.gui.data.ItemData;
 import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
-import net.skullian.skyfactions.common.util.text.TextUtility;
 
 import java.util.ArrayList;
 import java.util.Arrays;

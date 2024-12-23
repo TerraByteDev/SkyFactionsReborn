@@ -16,6 +16,7 @@ import net.skullian.skyfactions.common.gui.items.obelisk.defence.ObeliskConfirmP
 import net.skullian.skyfactions.common.gui.items.obelisk.defence.ObeliskPaginatedDefenceItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +37,7 @@ public class ObeliskPurchaseDefenceUI extends Screen {
         try {
             ObeliskPurchaseDefenceUI.builder().player(player).obeliskType(obeliskType).struct(struct).faction(faction).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Purchase Defence GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open the defence purchase confirmation GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

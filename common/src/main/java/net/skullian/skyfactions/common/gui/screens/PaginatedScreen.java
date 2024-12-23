@@ -5,7 +5,6 @@ import net.skullian.skyfactions.common.api.GUIAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.gui.data.GUIData;
 import net.skullian.skyfactions.common.gui.data.ItemData;
-import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.user.SkyUser;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +30,7 @@ public abstract class PaginatedScreen {
 
     public abstract @Nullable BaseSkyItem handleItem(@NotNull ItemData itemData);
 
-    public void registerItems() {};
+    public void registerItems() {}
 
     public abstract @NotNull List<BaseSkyItem> getModels(SkyUser player, ItemData data);
 }

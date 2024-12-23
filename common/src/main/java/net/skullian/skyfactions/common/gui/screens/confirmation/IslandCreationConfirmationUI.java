@@ -12,6 +12,7 @@ import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.items.island_creation.CreationConfirmationItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,8 +25,8 @@ public class IslandCreationConfirmationUI extends Screen {
     public static void promptPlayer(SkyUser player) {
         try {
             IslandCreationConfirmationUI.builder().player(player).build().show();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException error) {
+            SLogger.fatal("Failed to create Island Creation Confirmation GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "create your island", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

@@ -1,19 +1,18 @@
 package net.skullian.skyfactions.common.defence;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
-import net.skullian.skyfactions.common.api.DefenceAPI;
+import lombok.Getter;
+import lombok.Setter;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
-
-import lombok.Getter;
-import lombok.Setter;
 import net.skullian.skyfactions.common.util.SkyLocation;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.*;
 
 @Getter
 @Setter

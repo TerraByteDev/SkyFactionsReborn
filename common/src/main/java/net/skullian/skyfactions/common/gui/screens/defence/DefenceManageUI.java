@@ -14,6 +14,7 @@ import net.skullian.skyfactions.common.gui.items.defence.*;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,15 +29,13 @@ public class DefenceManageUI extends Screen {
         this.defenceData = defenceData;
         this.struct = struct;
         this.faction = faction;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player, DefenceData defenceData, DefenceStruct struct, Faction faction) {
         try {
             DefenceManageUI.builder().player(player).defenceData(defenceData).struct(struct).faction(faction).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Defence Manage GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open your defence management GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

@@ -14,6 +14,7 @@ import net.skullian.skyfactions.common.gui.items.obelisk.invites.FactionJoinRequ
 import net.skullian.skyfactions.common.gui.items.obelisk.invites.FactionJoinRequestRejectItem;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.gui.screens.Screen;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,15 +25,13 @@ public class JoinRequestManageUI extends Screen {
     public JoinRequestManageUI(SkyUser player, InviteData inviteData) {
         super(GUIEnums.OBELISK_JOIN_REQUEST_MANAGE_GUI.getPath(), player);
         this.inviteData = inviteData;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player, InviteData inviteData) {
         try {
             JoinRequestManageUI.builder().player(player).inviteData(inviteData).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Join Request Management GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open the join request manage GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

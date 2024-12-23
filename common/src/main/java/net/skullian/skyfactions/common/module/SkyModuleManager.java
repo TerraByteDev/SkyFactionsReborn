@@ -35,7 +35,7 @@ public class SkyModuleManager {
                 SLogger.setup(e.getMessage(), true);
                 SLogger.setup("Please forward this error to the developers!", true);
                 SLogger.setup("----------------- MODULES EXCEPTION -----------------", true);
-                e.printStackTrace();
+                SLogger.fatal(e);
             }
         }
     }

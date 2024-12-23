@@ -78,7 +78,7 @@ public abstract class NPCManager {
         SLogger.fatal("There was an error initialising the NPC integration.");
         SLogger.fatal("Plugin will now disable.");
         SLogger.fatal("----------------------- NPC EXCEPTION -----------------------");
-        new Exception(String.format("Attempted to use the %s NPC factory when %s was not present on the server!", plugin, plugin)).printStackTrace();
+        SLogger.fatal(new IllegalStateException(String.format("Attempted to use the %s NPC factory when %s was not present on the server!", plugin, plugin)));
         SkyApi.disablePlugin();
     }
 }

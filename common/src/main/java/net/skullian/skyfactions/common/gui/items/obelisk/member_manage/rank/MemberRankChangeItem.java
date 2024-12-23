@@ -20,7 +20,7 @@ public class MemberRankChangeItem extends SkyItem {
     @Setter
     private RankType TYPE;
 
-    private MemberManageRankUI UI;
+    private final MemberManageRankUI UI;
 
     public MemberRankChangeItem(ItemData data, SkyItemStack stack, SkyUser player, RankType thisType, Faction faction, SkyUser subject, MemberManageRankUI ui) {
         super(data, stack, player, List.of(thisType, faction, subject).toArray());

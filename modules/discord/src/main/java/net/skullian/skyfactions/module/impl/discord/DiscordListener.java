@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class DiscordListener extends ListenerAdapter {
 
-    private DiscordModule module;
+    private final DiscordModule module;
 
     public DiscordListener(DiscordModule module) {
          this.module = module;

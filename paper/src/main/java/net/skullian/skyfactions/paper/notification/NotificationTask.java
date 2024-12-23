@@ -4,8 +4,6 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.notification.NotificationData;
 import net.skullian.skyfactions.common.user.SkyUser;
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.paper.api.SpigotNotificationAPI;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;

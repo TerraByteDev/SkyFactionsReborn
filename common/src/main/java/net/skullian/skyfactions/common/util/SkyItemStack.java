@@ -18,10 +18,10 @@ public class SkyItemStack implements Cloneable {
     @Setter private String material;
     @Setter private int amount = 1;
     @Setter private int customModelData = -1;
-    private List<PersistentData> persistentData = new ArrayList<>();
-    private List<EnchantData> enchants = new ArrayList<>();
-    private List<String> itemFlags = new ArrayList<>();
-    private List<String> lore = new ArrayList<>();
+    private final List<PersistentData> persistentData = new ArrayList<>();
+    private final List<EnchantData> enchants = new ArrayList<>();
+    private final List<String> itemFlags = new ArrayList<>();
+    private final List<String> lore = new ArrayList<>();
     @Setter private String textures;
     @Setter private String owningPlayerUUID = "none";
 

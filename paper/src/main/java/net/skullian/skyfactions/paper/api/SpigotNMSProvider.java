@@ -5,10 +5,8 @@ import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.nms.NMSProvider;
 import net.skullian.skyfactions.common.util.worldborder.AWorldBorder;
-import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
@@ -24,8 +22,7 @@ public class SpigotNMSProvider extends NMSProvider {
             Class<?> clazz = Class.forName("net.skullian.skyfactions.nms." + getNMS_VERSION() + ".WorldBorder");
             return (AWorldBorder) clazz.getDeclaredConstructor(SkyUser.class).newInstance(player);
         } catch (Throwable error) {
-            SLogger.fatal("Failed to fetch {}'s WorldBorder!", true, player.getName());
-            error.printStackTrace();
+            SLogger.fatal("Failed to fetch {}'s WorldBorder! - {}", player.getName(), error);
         }
 
         return null;
@@ -41,7 +38,7 @@ public class SpigotNMSProvider extends NMSProvider {
             Class<?> clazz = Class.forName("net.skullian.skyfactions.nms." + getNMS_VERSION() + ".WorldBorder");
             return (AWorldBorder) clazz.getDeclaredConstructor(String.class).newInstance(world.getName());
         } catch (Throwable error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to fetch WorldBorder for NMS Version {}! - {}", getNMS_VERSION(), error);
         }
 
         return null;
@@ -62,7 +59,7 @@ public class SpigotNMSProvider extends NMSProvider {
             return getNMS_VERSION();
         } else {
             SLogger.setup("Failed to initialise NMS Provider", true);
-            new UnsupportedOperationException("This server version is unsupported!").printStackTrace();
+            SLogger.fatal(new UnsupportedOperationException("This server version is unsupported!"));
         }
 
         return null;

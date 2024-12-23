@@ -8,16 +8,14 @@ import net.skullian.skyfactions.common.config.types.GUIEnums;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.gui.data.ItemData;
-import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.gui.items.EmptyItem;
-import net.skullian.skyfactions.common.gui.items.PaginationBackItem;
-import net.skullian.skyfactions.common.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.invites.PlayerFactionInvitePaginationItem;
 import net.skullian.skyfactions.common.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,8 +29,6 @@ public class PlayerIncomingInvites extends PaginatedScreen {
     public PlayerIncomingInvites(SkyUser player, List<InviteData> inviteData) {
         super(GUIEnums.OBELISK_PLAYER_INCOMING_INVITES_GUI.getPath(), player);
         this.inviteData = inviteData;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player) {
@@ -46,7 +42,7 @@ public class PlayerIncomingInvites extends PaginatedScreen {
                 player.addMetadata("inFactionRelatedUI", true);
                 PlayerIncomingInvites.builder().player(player).inviteData(inviteData).build().show();
             } catch (IllegalArgumentException error) {
-                error.printStackTrace();
+                SLogger.fatal("Failed to create Incoming Invites GUI for player {} - {}", player.getUniqueId(), error);
                 Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open the incoming faction invites GUI", "debug", "GUI_LOAD_EXCEPTION");
             }
         });

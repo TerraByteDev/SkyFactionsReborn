@@ -9,9 +9,9 @@ import java.util.List;
 @Getter
 public class ObeliskItem {
 
-    private String displayName;
-    private List<String> lore;
-    private int customModelData;
+    private final String displayName;
+    private final List<String> lore;
+    private final int customModelData;
 
     public ObeliskItem(SkyItemStack itemStack) {
         this.displayName = itemStack.getDisplayName();

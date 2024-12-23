@@ -13,7 +13,7 @@ import xyz.xenondevs.invui.item.impl.controlitem.PageItem;
 
 public class SpigotPaginationForwardItem extends PageItem {
 
-    private SkyPageItem ITEM;
+    private final SkyPageItem ITEM;
 
     public SpigotPaginationForwardItem(SkyPageItem item) {
         super(true);

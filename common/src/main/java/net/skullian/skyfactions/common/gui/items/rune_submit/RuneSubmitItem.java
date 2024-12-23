@@ -10,8 +10,8 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class RuneSubmitItem extends SkyItem {
 
-    private RunesSubmitUI INVENTORY;
-    private String TYPE;
+    private final RunesSubmitUI INVENTORY;
+    private final String TYPE;
 
     public RuneSubmitItem(ItemData data, SkyItemStack stack, String type, RunesSubmitUI inventory, SkyUser player) {
         super(data, stack, player, null);

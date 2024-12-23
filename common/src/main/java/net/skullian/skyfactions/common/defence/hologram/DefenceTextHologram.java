@@ -14,9 +14,7 @@ import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.common.util.text.TextUtility;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.*;
 
 public abstract class DefenceTextHologram {

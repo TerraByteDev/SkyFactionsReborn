@@ -35,7 +35,7 @@ public class ConfigHandler {
             SLogger.setup("Please check that config for any configuration mistakes.", true);
             SLogger.setup("Plugin will now disable.", false);
             SLogger.setup("----------------- CONFIGURATION EXCEPTION -----------------", true);
-            error.printStackTrace();
+            SLogger.fatal(error);
             SkyApi.disablePlugin();
         }
     }
@@ -45,7 +45,7 @@ public class ConfigHandler {
         try {
             getConfig().save(file);
         } catch (IOException error) {
-            error.printStackTrace();
+            SLogger.fatal(error);
         }
     }
 
@@ -57,7 +57,7 @@ public class ConfigHandler {
             SLogger.fatal("There was an error reloading config {}", name);
             SLogger.fatal("Please see the below error.");
             SLogger.fatal("----------------------- CONFIGURATION EXCEPTION -----------------------");
-            error.printStackTrace();
+            SLogger.fatal(error);
         }
     }
 

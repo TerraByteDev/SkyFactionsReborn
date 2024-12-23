@@ -7,16 +7,14 @@ import net.skullian.skyfactions.common.config.types.GUIEnums;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.gui.data.ItemData;
-import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.gui.items.EmptyItem;
-import net.skullian.skyfactions.common.gui.items.PaginationBackItem;
-import net.skullian.skyfactions.common.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.invites.OutgoingInvitePaginationItem;
 import net.skullian.skyfactions.common.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,8 +28,6 @@ public class OutgoingInvitesUI extends PaginatedScreen {
     public OutgoingInvitesUI(SkyUser player, List<InviteData> inviteData) {
         super(GUIEnums.OBELISK_INVITE_OUTGOING_GUI.getPath(), player);
         this.inviteData = inviteData;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player) {
@@ -49,7 +45,7 @@ public class OutgoingInvitesUI extends PaginatedScreen {
             try {
                 OutgoingInvitesUI.builder().player(player).inviteData(outgoingInvites).build().show();
             } catch (IllegalArgumentException error) {
-                error.printStackTrace();
+                SLogger.fatal("Failed to create Outgoing Invites GUI for player {} - {}", player.getUniqueId(), error);
                 Messages.ERROR.send(player, locale, "operation", "open the outgoing invites GUI", "debug", "GUI_LOAD_EXCEPTION");
             }
         });

@@ -15,7 +15,7 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 
 public class JoinRequestsTypeItem extends SkyItem {
 
-    private String TYPE;
+    private final String TYPE;
 
     public JoinRequestsTypeItem(ItemData data, SkyItemStack stack, String type, SkyUser player) {
         super(data, stack, player, null);

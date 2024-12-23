@@ -8,15 +8,13 @@ import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.gui.data.ItemData;
-import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.gui.items.EmptyItem;
-import net.skullian.skyfactions.common.gui.items.PaginationBackItem;
-import net.skullian.skyfactions.common.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.defence.ObeliskPaginatedDefenceItem;
 import net.skullian.skyfactions.common.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,15 +31,13 @@ public class ObeliskDefencePurchaseOverviewUI extends PaginatedScreen {
         super(GUIEnums.OBELISK_DEFENCE_PURCHASE_OVERVIEW_GUI.getPath(), player);
         this.obeliskType = obeliskType;
         this.faction = faction;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player, String obeliskType, Faction faction) {
         try {
             ObeliskDefencePurchaseOverviewUI.builder().player(player).obeliskType(obeliskType).faction(faction).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Defence Purchase Overview GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open the defences purchase GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

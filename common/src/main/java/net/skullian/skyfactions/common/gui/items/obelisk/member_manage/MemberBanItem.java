@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MemberBanItem extends SkyItem {
 
-    private SkyUser SUBJECT;
+    private final SkyUser SUBJECT;
 
     public MemberBanItem(ItemData data, SkyItemStack stack, SkyUser player, SkyUser viewer, Faction faction) {
         super(data, stack, viewer, List.of(faction).toArray());

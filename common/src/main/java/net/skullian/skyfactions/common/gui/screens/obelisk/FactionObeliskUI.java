@@ -16,6 +16,7 @@ import net.skullian.skyfactions.common.gui.items.obelisk.election.ObeliskFaction
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 
 public class FactionObeliskUI extends Screen {
@@ -25,8 +26,6 @@ public class FactionObeliskUI extends Screen {
     public FactionObeliskUI(SkyUser player, Faction faction) {
         super(GUIEnums.OBELISK_FACTION_GUI.getPath(), player);
         this.faction = faction;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player) {
@@ -43,8 +42,8 @@ public class FactionObeliskUI extends Screen {
             try {
                 player.addMetadata("inFactionRelatedUI", true);
                 FactionObeliskUI.builder().player(player).faction(faction).build().show();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IllegalArgumentException error) {
+                SLogger.fatal("Failed to create Faction Obelisk GUI for player {} - {}", player.getUniqueId(), error);
                 Messages.ERROR.send(player, locale, "operation", "open faction obelisk", "debug", "GUI_LOAD_EXCEPTION");
             }
         });

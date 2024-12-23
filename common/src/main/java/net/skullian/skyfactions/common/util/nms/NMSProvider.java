@@ -33,7 +33,7 @@ public abstract class NMSProvider {
             nmsHandler = (NMSHandler) handle.invoke();
         } catch (Throwable error) {
             SLogger.setup("Failed to load NMSHandler!", true);
-            error.printStackTrace();
+            SLogger.fatal(error);
             nmsHandler = null;
         }
 

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ObeliskRuneItem extends AsyncSkyItem {
 
-    private String TYPE;
+    private final String TYPE;
 
     public ObeliskRuneItem(ItemData data, SkyItemStack stack, String type, SkyUser player) {
         super(data, stack, player, List.of(type).toArray());

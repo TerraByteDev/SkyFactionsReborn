@@ -2,7 +2,6 @@ package net.skullian.skyfactions.common.command.discord;
 
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.command.CommandTemplate;
-import net.skullian.skyfactions.common.command.CommandsUtility;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.module.abstraction.DiscordModule;
 import net.skullian.skyfactions.common.user.SkyUser;

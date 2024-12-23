@@ -14,7 +14,7 @@ import net.skullian.skyfactions.common.util.text.TextUtility;
 
 public class ObeliskMemberManagementItem extends SkyItem {
 
-    private Faction FACTION;
+    private final Faction FACTION;
 
     public ObeliskMemberManagementItem(ItemData data, SkyItemStack stack, Faction faction, SkyUser player) {
         super(data, stack, player, null);

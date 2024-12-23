@@ -8,8 +8,6 @@ import net.skullian.skyfactions.common.gui.data.ItemData;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
 
-import java.util.concurrent.CompletableFuture;
-
 @Getter
 @Setter
 public abstract class AsyncSkyItem extends BaseSkyItem {

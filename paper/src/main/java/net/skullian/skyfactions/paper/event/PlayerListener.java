@@ -9,9 +9,10 @@ import net.skullian.skyfactions.common.gui.CooldownManager;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
-import net.skullian.skyfactions.paper.api.*;
+import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
+import net.skullian.skyfactions.paper.api.SpigotIslandAPI;
+import net.skullian.skyfactions.paper.api.SpigotNotificationAPI;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.event.defence.DefencePlacementHandler;
 import org.bukkit.Bukkit;
@@ -29,7 +30,6 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import java.util.List;
 
-
 public class PlayerListener implements Listener {
 
     @EventHandler
@@ -42,7 +42,7 @@ public class PlayerListener implements Listener {
         SkyUser user = SkyApi.getInstance().getUserManager().getUser(event.getPlayer().getUniqueId());
         SkyApi.getInstance().getPlayerAPI().isPlayerRegistered(event.getPlayer().getUniqueId()).whenComplete((isRegistered, ex) -> {
             if (ex != null) {
-                ex.printStackTrace();
+                SLogger.fatal("Failed to get registration status for player {} - {}", event.getPlayer().getName(), ex);
                 return;
             }
 
@@ -58,7 +58,7 @@ public class PlayerListener implements Listener {
             } else {
                 SkyApi.getInstance().getDatabaseManager().getPlayerManager().getPlayerLocale(event.getPlayer().getUniqueId()).whenComplete((locale, ex2) -> {
                     if (ex2 != null) {
-                        ex2.printStackTrace();
+                        SLogger.fatal("Failed to get locale for player {} - {}", event.getPlayer().getName(), ex2);
                         return;
                     }
 
@@ -72,7 +72,6 @@ public class PlayerListener implements Listener {
         SkyApi.getInstance().getIslandAPI().getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
                 SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
-                ex.printStackTrace();
                 return;
             }
 
@@ -99,10 +98,11 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerSpawnLocationEvent(PlayerSpawnLocationEvent event) {
         Location bukkitLoc = SpigotAdapter.adapt(SkyApi.getInstance().getRegionAPI().getHubLocation());
+
         SkyApi.getInstance().getFactionAPI().isInFaction(event.getPlayer().getUniqueId()).whenComplete((is, ex) -> {
             if (ex != null) {
+                SLogger.fatal("Failed to resolve faction island for player {}. Failling back to configured hub location - {}", event.getPlayer().getUniqueId(), ex);
                 event.setSpawnLocation(bukkitLoc);
-                ex.printStackTrace();
             } else if (!is && event.getSpawnLocation().getWorld().getName().equals(Settings.ISLAND_FACTION_WORLD.getString())) {
                 event.setSpawnLocation(bukkitLoc);
             }
@@ -110,8 +110,8 @@ public class PlayerListener implements Listener {
 
         SkyApi.getInstance().getIslandAPI().getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((is, ex) -> {
             if (ex != null) {
+                SLogger.fatal("Failed to resolve island for player {}. Falling back to configured hub location - {}", event.getPlayer().getUniqueId(), ex);
                 event.setSpawnLocation(bukkitLoc);
-                ex.printStackTrace();
             } else if (is == null && event.getSpawnLocation().getWorld().getName().equals(Settings.ISLAND_PLAYER_WORLD.getString())) {
                 event.setSpawnLocation(bukkitLoc);
             }
@@ -141,7 +141,6 @@ public class PlayerListener implements Listener {
             SkyApi.getInstance().getIslandAPI().getPlayerIsland(event.getPlayer().getUniqueId()).whenComplete((island, ex) -> {
                 if (ex != null) {
                     SLogger.fatal("Failed to get player {}'s Island - {}", event.getPlayer().getName(), ex.getMessage());
-                    ex.printStackTrace();
                     return;
                 }
 

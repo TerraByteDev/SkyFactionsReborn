@@ -1,9 +1,8 @@
 package net.skullian.skyfactions.paper.defence.defences;
 
-import net.skullian.skyfactions.paper.SkyFactionsReborn;
-import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
+import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.defence.SpigotDefence;
 import org.bukkit.Bukkit;

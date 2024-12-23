@@ -6,8 +6,8 @@ import net.skullian.skyfactions.common.user.SkyUser;
 
 public class ErrorUtil {
 
-    public static void handleError(Object sender, String operation, String debug, Throwable err) {
-        err.printStackTrace();
+    public static void handleError(Object sender, String operation, String debug, Throwable error) {
+        SLogger.fatal("Failed to handle error while {} [DEBUG: {}] | {}", operation, debug, error);
         Messages.ERROR.send(sender, sender instanceof SkyUser ? SkyApi.getInstance().getPlayerAPI().getLocale(((SkyUser) sender).getUniqueId()) : Messages.getDefaulLocale(), "operation", operation, "debug", debug);
     }
 

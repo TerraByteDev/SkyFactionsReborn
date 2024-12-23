@@ -5,8 +5,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.skullian.skyfactions.common.api.SkyApi;
 
-import java.util.regex.Pattern;
-
 public class SLogger {
     public static void setup(Object message, boolean fatal, Object... args) {
         String text = fatal ? "✗ㅤㅤ" : "➤ㅤㅤ" + format(message, args);

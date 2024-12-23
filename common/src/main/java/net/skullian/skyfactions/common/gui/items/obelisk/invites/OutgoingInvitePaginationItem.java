@@ -11,13 +11,12 @@ import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.text.TextUtility;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class OutgoingInvitePaginationItem extends SkyItem {
 
-    private InviteData DATA;
+    private final InviteData DATA;
 
     public OutgoingInvitePaginationItem(ItemData data, SkyItemStack stack, InviteData inviteData, SkyUser player) {
         super(data, stack, player, List.of(inviteData).toArray());

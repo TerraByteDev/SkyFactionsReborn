@@ -12,6 +12,7 @@ import net.skullian.skyfactions.common.gui.items.raid_start.RaidCancelItem;
 import net.skullian.skyfactions.common.gui.items.raid_start.RaidConfirmationItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,8 +26,8 @@ public class PlayerRaidConfirmationUI extends Screen {
     public static void promptPlayer(SkyUser player) {
         try {
             PlayerRaidConfirmationUI.builder().player(player).build().show();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException error) {
+            SLogger.fatal("Failed to create Player Raid Confirmation GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

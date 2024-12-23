@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ObeliskNotificationPaginationItem extends SkyItem {
 
-    private NotificationData DATA;
+    private final NotificationData DATA;
 
     public ObeliskNotificationPaginationItem(ItemData data, SkyItemStack stack, NotificationData inviteData, SkyUser player) {
         super(data, stack, player, List.of(inviteData).toArray());

@@ -2,7 +2,6 @@ package net.skullian.skyfactions.common.gui.screens.obelisk;
 
 import net.skullian.skyfactions.common.config.types.GUIEnums;
 import net.skullian.skyfactions.common.gui.data.ItemData;
-import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.common.user.SkyUser;

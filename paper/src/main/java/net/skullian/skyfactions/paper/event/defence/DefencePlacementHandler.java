@@ -29,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -200,7 +201,7 @@ public class DefencePlacementHandler implements Listener {
         if (SkyApi.getInstance().getDefenceAPI().getLoadedFactionDefences().get(factionName) != null) return;
         SkyApi.getInstance().getDatabaseManager().getDefencesManager().getDefenceLocations(DefenceLocations.DEFENCE_LOCATIONS.FACTIONNAME.eq(factionName), "faction").whenComplete((locations, ex) -> {
             if (ex != null) {
-                ex.printStackTrace();
+                SLogger.fatal("Failed to fetch defence locations for faction {} - {}", factionName, ex);
                 return;
             }
 
@@ -212,14 +213,13 @@ public class DefencePlacementHandler implements Listener {
                 NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
                 PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
                 if (container.has(defenceKey, PersistentDataType.STRING)) {
-                try {
+                    try {
+                        String name = container.get(defenceKey, PersistentDataType.STRING);
+                        String data = container.get(dataKey, PersistentDataType.STRING);
+                        ObjectMapper mapper = new ObjectMapper();
+                        DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
-                    String name = container.get(defenceKey, PersistentDataType.STRING);
-                    String data = container.get(dataKey, PersistentDataType.STRING);
-                    ObjectMapper mapper = new ObjectMapper();
-                    DefenceData defenceData = mapper.readValue(data, DefenceData.class);
-
-                    DefenceStruct defence = SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(defenceData.getLOCALE(), SkyApi.getInstance().getDefenceFactory().getDefaultStruct()).get(name);
+                        DefenceStruct defence = SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(defenceData.getLOCALE(), SkyApi.getInstance().getDefenceFactory().getDefaultStruct()).get(name);
                         if (defence != null) {
 
                             Defence instance = createDefence(defenceData, defence, factionName, true, Optional.empty(), Optional.empty(), false, false);
@@ -227,8 +227,8 @@ public class DefencePlacementHandler implements Listener {
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
 
-                    } catch (Exception error) {
-                        error.printStackTrace();
+                    } catch (IOException error) {
+                        SLogger.fatal("Failed to write defence data to JSON string - {}", error);
                     }
                 }
             }
@@ -241,7 +241,7 @@ public class DefencePlacementHandler implements Listener {
         if (SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().get(player.getUniqueId()) != null) return;
         SkyApi.getInstance().getDatabaseManager().getDefencesManager().getDefenceLocations(DefenceLocations.DEFENCE_LOCATIONS.UUID.eq(player.getUniqueId().toString()), "player").whenComplete((locations, ex) -> {
             if (ex != null) {
-                ex.printStackTrace();
+                SLogger.fatal("Failed to fetch defence locations for player {} - {}", player.getUniqueId(), ex);
                 return;
             }
 
@@ -265,8 +265,8 @@ public class DefencePlacementHandler implements Listener {
                             Defence instance = createDefence(defenceData, defence, player.getUniqueId().toString(), false, Optional.of(player), Optional.empty(), false, Settings.ISLAND_TELEPORT_ON_JOIN.getBoolean());
                             defences.add(instance);
                         } else SLogger.fatal("Failed to find defence with the name of " + name);
-                    } catch (Exception error) {
-                        error.printStackTrace();
+                    } catch (IOException error) {
+                        SLogger.fatal("Failed to write defence data to JSON string - {}", error);
                     }
                 }
             }

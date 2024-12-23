@@ -6,11 +6,11 @@ import net.skullian.skyfactions.common.api.IslandAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
-import net.skullian.skyfactions.common.defence.Defence;
+import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
-import net.skullian.skyfactions.paper.event.defence.DefencePlacementHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 
@@ -43,7 +43,7 @@ public class SpigotIslandAPI extends IslandAPI {
                         SkyApi.getInstance().getDatabaseManager().getDefencesManager().removeAllDefences(player.getUniqueId().toString(), false)
                 ).whenComplete((ignored, throwable) -> {
                     if (throwable != null) {
-                        throwable.printStackTrace();
+                        SLogger.fatal(throwable);
                         return;
                     }
 

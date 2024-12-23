@@ -3,25 +3,18 @@ package net.skullian.skyfactions.paper.api;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.skullian.skyfactions.common.api.PlayerAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
-import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
-import net.skullian.skyfactions.paper.util.DependencyHandler;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.hooks.ItemJoinHook;
+import net.skullian.skyfactions.paper.util.DependencyHandler;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class SpigotPlayerAPI extends PlayerAPI {
 

@@ -132,7 +132,7 @@ public class SpigotNPCManager extends NPCManager {
                 break;
 
             default:
-                new Exception("Unknown NPC Factory: " + Settings.NPC_FACTORY.getString()).printStackTrace();
+                SLogger.fatal(new IllegalArgumentException("Unknown NPC Factory: " + Settings.NPC_FACTORY.getString()));
                 SkyFactionsReborn.getInstance().disable();
         }
 
@@ -161,8 +161,7 @@ public class SpigotNPCManager extends NPCManager {
                         SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().getOwnerOfIsland(new PlayerIsland(i))
                                 .whenComplete((uuid, ex) -> {
                                     if (ex != null) {
-                                        SLogger.fatal("Failed to get owner of island [{}] in order to refresh their NPC.", i);
-                                        ex.printStackTrace();
+                                        SLogger.fatal("Failed to get owner of island [{}] in order to refresh their NPC - {}", i, ex);
                                         return;
                                     }
                                     OfflinePlayer owner = Bukkit.getOfflinePlayer(uuid);
@@ -185,8 +184,7 @@ public class SpigotNPCManager extends NPCManager {
                         SkyApi.getInstance().getDatabaseManager().getFactionsManager().getFactionByIslandID(i)
                                 .whenComplete((faction, ex) -> {
                                     if (ex != null) {
-                                        SLogger.fatal("Failed to get faction owner of island [{}] in order to refresh their NPCs.", i);
-                                        ex.printStackTrace();
+                                        SLogger.fatal("Failed to get faction owner of island [{}] in order to refresh their NPCs - {}", i, ex);
                                         return;
                                     }
                                     npc.updateDisplayName(Settings.NPC_FACTION_ISLANDS_NAME.getString().replace("faction_name", faction.getName()));

@@ -8,15 +8,13 @@ import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.database.struct.AuditLogData;
 import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.gui.data.ItemData;
-import net.skullian.skyfactions.common.gui.data.PaginationItemData;
 import net.skullian.skyfactions.common.gui.items.EmptyItem;
-import net.skullian.skyfactions.common.gui.items.PaginationBackItem;
-import net.skullian.skyfactions.common.gui.items.PaginationForwardItem;
 import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.ObeliskBackItem;
 import net.skullian.skyfactions.common.gui.items.obelisk.audit_log.AuditPaginationItem;
 import net.skullian.skyfactions.common.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,8 +28,6 @@ public class FactionAuditLogUI extends PaginatedScreen {
     public FactionAuditLogUI(SkyUser player, List<AuditLogData> auditLogData) {
         super(GUIEnums.OBELISK_AUDIT_LOG_GUI.getPath(), player);
         this.auditLogData = auditLogData;
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player, Faction faction) {
@@ -39,8 +35,8 @@ public class FactionAuditLogUI extends PaginatedScreen {
 
         try {
             FactionAuditLogUI.builder().player(player).auditLogData(auditLogData).build().show();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException error) {
+            SLogger.fatal("Failed to create Audit Log GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open faction audit log", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

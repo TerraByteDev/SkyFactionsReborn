@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class ConfigFileHandler {
 
-    private Map<ConfigTypes, ConfigHandler> configs = new HashMap<>();
+    private final Map<ConfigTypes, ConfigHandler> configs = new HashMap<>();
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void loadFiles() {

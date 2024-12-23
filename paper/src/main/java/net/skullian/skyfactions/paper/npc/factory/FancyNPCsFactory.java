@@ -1,15 +1,5 @@
 package net.skullian.skyfactions.paper.npc.factory;
 
-import net.skullian.skyfactions.common.api.SkyApi;
-import net.skullian.skyfactions.common.npc.factory.SkyNPCFactory;
-import net.skullian.skyfactions.common.util.SkyLocation;
-import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-
 import de.oliver.fancynpcs.api.FancyNpcsPlugin;
 import de.oliver.fancynpcs.api.Npc;
 import de.oliver.fancynpcs.api.NpcData;
@@ -17,8 +7,15 @@ import de.oliver.fancynpcs.api.events.NpcInteractEvent;
 import de.oliver.fancynpcs.api.utils.SkinFetcher;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.skullian.skyfactions.paper.SkyFactionsReborn;
+import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.npc.SkyNPC;
+import net.skullian.skyfactions.common.npc.factory.SkyNPCFactory;
+import net.skullian.skyfactions.common.util.SkyLocation;
+import net.skullian.skyfactions.paper.SkyFactionsReborn;
+import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 public class FancyNPCsFactory implements SkyNPCFactory, Listener {
 

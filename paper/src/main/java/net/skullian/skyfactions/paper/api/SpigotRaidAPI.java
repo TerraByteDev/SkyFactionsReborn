@@ -6,6 +6,8 @@ import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.database.struct.IslandRaidData;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.common.util.text.TextUtility;
 import org.apache.commons.lang3.time.DurationFormatUtils;
@@ -26,7 +28,7 @@ public class SpigotRaidAPI extends RaidAPI {
         long cooldownDurationInMilliseconds = Settings.RAIDING_COOLDOWN.getLong();
         return SkyApi.getInstance().getPlayerAPI().getPlayerData(player.getUniqueId()).handle((data, ex) -> {
             if (ex != null) {
-                ex.printStackTrace();
+                SLogger.fatal("Failed to get player data for player {} - {}", player.getUniqueId(), ex);
                 return null;
             }
 
@@ -70,8 +72,7 @@ public class SpigotRaidAPI extends RaidAPI {
             }
 
         } catch (Exception error) {
-            error.printStackTrace();
-            Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "MAIN_RAID_START");
+            ErrorUtil.handleError(player, "start a raid", "MAIN_RAID_START", error);
             handleRaidExecutionError(player, false);
         }
     }
@@ -161,8 +162,7 @@ public class SpigotRaidAPI extends RaidAPI {
         try {
             AtomicReference<List<IslandRaidData>> data = new AtomicReference<>(new ArrayList<>());
             SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().getRaidableIslands(player).thenAccept(data::set).exceptionally(ex -> {
-                ex.printStackTrace();
-                Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
+                ErrorUtil.handleError(player, "start a raid", "SQL_RAIDABLE_GET", ex);
                 return null;
             }).get();
 
@@ -173,8 +173,7 @@ public class SpigotRaidAPI extends RaidAPI {
                 return data.get().get(random.nextInt(data.get().size()));
             }
         } catch (InterruptedException | ExecutionException error) {
-            error.printStackTrace();
-            Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "start a raid", "debug", "SQL_RAIDABLE_GET");
+            ErrorUtil.handleError(player, "start a raid", "SQL_RAIDABLE_GET", error);
         }
         return null;
     }

@@ -9,6 +9,7 @@ import net.skullian.skyfactions.common.island.SkyIsland;
 import net.skullian.skyfactions.common.island.impl.PlayerIsland;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
+import net.skullian.skyfactions.common.util.SLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,7 @@ public abstract class IslandAPI {
 
         getPlayerIsland(user.getUniqueId()).whenComplete((island, ex) -> {
             if (ex != null) {
-                ex.printStackTrace();
+                SLogger.fatal("Failed to fetch island for user {} - {}", user.getUniqueId(), ex);
                 return;
             }
 

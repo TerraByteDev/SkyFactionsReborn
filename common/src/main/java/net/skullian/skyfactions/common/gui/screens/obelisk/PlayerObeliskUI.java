@@ -15,6 +15,7 @@ import net.skullian.skyfactions.common.gui.items.obelisk.defence.ObeliskDefenceP
 import net.skullian.skyfactions.common.gui.items.obelisk.notification.ObeliskPlayerNotificationsItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,15 +24,13 @@ public class PlayerObeliskUI extends Screen {
     @Builder
     public PlayerObeliskUI(SkyUser player) {
         super(GUIEnums.OBELISK_PLAYER_GUI.getPath(), player);
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player) {
         try {
             PlayerObeliskUI.builder().player(player).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Player Obelisk GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open player obelisk", "debug", "GUI_LOAD_EXCEPTION");
         }
     }

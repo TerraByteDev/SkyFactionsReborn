@@ -1,13 +1,11 @@
 package net.skullian.skyfactions.paper.event.defence;
 
 import net.skullian.skyfactions.common.api.SkyApi;
-import net.skullian.skyfactions.common.user.SkyUser;
-import net.skullian.skyfactions.paper.SkyFactionsReborn;
-import net.skullian.skyfactions.paper.api.SpigotDefenceAPI;
 import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.common.defence.struct.DefenceEntityDeathData;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.text.TextUtility;
+import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import org.bukkit.NamespacedKey;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.EntityType;

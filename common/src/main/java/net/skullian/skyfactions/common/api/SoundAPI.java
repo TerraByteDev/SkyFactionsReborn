@@ -38,7 +38,7 @@ public abstract class SoundAPI {
                     try {
                         Thread.sleep(val);
                     } catch (InterruptedException error) {
-                        error.printStackTrace();
+                        SLogger.fatal("Failed to sound alarm for player {} - {}", player.getUniqueId(), error);
                     }
                 }
             }

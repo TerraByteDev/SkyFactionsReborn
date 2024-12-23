@@ -179,6 +179,6 @@ public abstract class ArmorEvent extends Event implements Cancellable {
         /**
          * Use this if you call this event by yourself.
          */
-        CUSTOM;
+        CUSTOM
     }
 }

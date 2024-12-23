@@ -6,6 +6,7 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public enum GUIEnums {
 
     RUNES_SUBMIT_GUI("runes_ui"),
@@ -36,7 +37,6 @@ public enum GUIEnums {
 
     PAGINATION_MODEL("pagination");
 
-    @Getter
     private final String path;
     public static final Map<String, Map<String, YamlDocument>> configs = new HashMap<>();
 

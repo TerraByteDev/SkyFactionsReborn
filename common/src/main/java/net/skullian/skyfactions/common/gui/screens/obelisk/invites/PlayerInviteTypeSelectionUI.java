@@ -13,6 +13,7 @@ import net.skullian.skyfactions.common.gui.items.obelisk.invites.JoinRequestsTyp
 import net.skullian.skyfactions.common.gui.items.obelisk.invites.PlayerFactionInvitesTypeItem;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,15 +22,13 @@ public class PlayerInviteTypeSelectionUI extends Screen {
     @Builder
     public PlayerInviteTypeSelectionUI(SkyUser player) {
         super(GUIEnums.OBELISK_PLAYER_INVITE_TYPE_SELECTION_GUI.getPath(), player);
-
-        ;
     }
 
     public static void promptPlayer(SkyUser player) {
         try {
             PlayerInviteTypeSelectionUI.builder().player(player).build().show();
         } catch (IllegalArgumentException error) {
-            error.printStackTrace();
+            SLogger.fatal("Failed to create Player Invites Type Selection GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open the invite selection GUI", "debug", "GUI_LOAD_EXCEPTION");
         }
     }
