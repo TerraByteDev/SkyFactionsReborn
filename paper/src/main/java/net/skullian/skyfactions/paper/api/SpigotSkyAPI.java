@@ -76,8 +76,7 @@ public final class SpigotSkyAPI extends SkyApi {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void onEnable() {
         audience = BukkitAudiences.create(SkyFactionsReborn.getInstance());
-
-
+        setPluginInstance(SkyFactionsReborn.getInstance());
 
         SLogger.noPrefix("╭──────────────────────────────────────────────────────────────╮");
         SLogger.noPrefix("│                                                              │");

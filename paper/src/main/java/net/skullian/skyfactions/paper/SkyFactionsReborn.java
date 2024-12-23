@@ -12,10 +12,7 @@ public final class SkyFactionsReborn extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
-
         SkyApi.setInstance(new SpigotSkyAPI());
-        SkyApi.setPluginInstance(this);
         SkyApi.getInstance().onEnable();
     }
 
