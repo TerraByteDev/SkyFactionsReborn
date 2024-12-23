@@ -1,24 +1,22 @@
 package net.skullian.skyfactions.paper.event.defence;
 
-import java.lang.reflect.Constructor;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jeff_media.customblockdata.CustomBlockData;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.DefencesConfig;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
-import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;
+import net.skullian.skyfactions.common.database.tables.DefenceLocations;
+import net.skullian.skyfactions.common.defence.Defence;
+import net.skullian.skyfactions.common.defence.struct.DefenceData;
+import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
-import net.skullian.skyfactions.paper.api.SpigotRegionAPI;
-import net.skullian.skyfactions.common.database.tables.DefenceLocations;
-import net.skullian.skyfactions.paper.api.SpigotPlayerAPI;
+import net.skullian.skyfactions.common.util.text.TextUtility;
+import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -31,17 +29,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jeff_media.customblockdata.CustomBlockData;
+import java.lang.reflect.Constructor;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
-import net.skullian.skyfactions.paper.SkyFactionsReborn;
-import net.skullian.skyfactions.paper.api.SpigotFactionAPI;
-import net.skullian.skyfactions.common.defence.Defence;
-import net.skullian.skyfactions.paper.defence.SpigotDefencesFactory;
-import net.skullian.skyfactions.common.defence.struct.DefenceData;
-import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
-import net.skullian.skyfactions.common.util.text.TextUtility;
-
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class DefencePlacementHandler implements Listener {
     @EventHandler
     public void onDefencePlace(BlockPlaceEvent event) {

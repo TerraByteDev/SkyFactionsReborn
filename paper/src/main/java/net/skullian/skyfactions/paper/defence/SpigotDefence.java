@@ -166,7 +166,7 @@ public abstract class SpigotDefence extends Defence {
         try (MythicBukkit mythicBukkit = MythicBukkit.inst()) {
             mythicBukkit.getMobManager().getActiveMob(entity.getUniqueId()).ifPresent((mythicMob) -> {
                 if (blockedIdentifiers.contains("mythicmobs:*")) isBlocked.set(true);
-                if (blockedIdentifiers.contains(mm.getMobType())) isBlocked.set(true);
+                if (blockedIdentifiers.contains(mythicMob.getMobType())) isBlocked.set(true);
             });
         }
 

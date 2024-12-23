@@ -40,7 +40,7 @@ public abstract class Defence {
         this.data.setAMMO(this.data.getAMMO() - 1);
         updatePDC();
     }
-
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public void damage(Optional<Integer> amount) {
         this.data.setDURABILITY(Math.max(this.data.getDURABILITY() - amount.orElseGet(this::getExplosionDamage), 0));
         updatePDC();

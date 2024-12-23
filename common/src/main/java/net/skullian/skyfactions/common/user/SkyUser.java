@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public abstract class SkyUser {
 
     public final UUID uuid;

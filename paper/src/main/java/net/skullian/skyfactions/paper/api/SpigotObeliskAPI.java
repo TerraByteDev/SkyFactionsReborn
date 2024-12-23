@@ -71,7 +71,7 @@ public class SpigotObeliskAPI extends ObeliskAPI {
                 } else {
                     Material obeliskMaterial = Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString());
                     if (obeliskMaterial == null) return;
-                    SpigotAdapter.adapt(offsetLocation).getBlock().setType(obeliskMaterial));
+                    SpigotAdapter.adapt(offsetLocation).getBlock().setType(obeliskMaterial);
                 }
 
                 applyPersistentData(faction, offsetLocation, "faction");
