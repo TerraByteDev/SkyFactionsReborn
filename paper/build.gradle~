@@ -5,8 +5,8 @@ plugins {
     id 'com.gradleup.shadow' version "${shadow_version}"
 }
 
-configurations.all {
-    exclude group: "com.google.guava", module: "guava"
+configurations {
+    all.exclude group : "com.google.guava", module: "guava"
 }
 
 repositories {

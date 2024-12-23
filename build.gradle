@@ -131,6 +131,8 @@ allprojects {
         compileOnly("com.mojang:authlib:${authlib}")
         compileOnly("com.jeff-media:custom-block-data:${customblockdata}")
         compileOnly("net.objecthunter:exp4j:${exp4j}")
+        compileOnly("org.apache.commons:commons-lang3:${apache_commons}")
+        compileOnly("com.google.guava:guava:${guava}")
 
         compileOnly("dev.dejvokep:boosted-yaml:${boostedyaml}")
 
