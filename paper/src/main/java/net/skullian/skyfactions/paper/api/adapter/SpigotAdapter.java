@@ -23,6 +23,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
 import java.util.UUID;
 
+@SuppressWarnings("rawtypes")
 public class SpigotAdapter {
 
     public static Location adapt(SkyLocation location) {
@@ -44,6 +45,7 @@ public class SpigotAdapter {
         return Bukkit.getOfflinePlayer(user.getUniqueId());
     }
 
+    @SuppressWarnings("deprecation, unchecked")
     public static ItemStack adapt(SkyItemStack skyStack, SkyUser user, boolean legacy) {
         String locale = user != null ? SkyApi.getInstance().getPlayerAPI().getLocale(user.getUniqueId()) : Messages.getDefaulLocale();
 
