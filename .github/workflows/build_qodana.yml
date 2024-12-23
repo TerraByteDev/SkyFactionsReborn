@@ -13,6 +13,11 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v3
 
+      - name: actions/setup-java@v4
+        with:
+          distributions: temurin
+          java-version: 21
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
