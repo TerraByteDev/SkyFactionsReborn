@@ -98,7 +98,7 @@ public class SpigotGemsAPI extends GemsAPI {
                     inventory.setItem(i, cloneItem(itemStack, space));
                     remaining -= space;
 
-                    if (remaining <= 0) {
+                    if (remaining == 0) {
                         return 0;
                     }
 
@@ -115,7 +115,7 @@ public class SpigotGemsAPI extends GemsAPI {
                         inventory.setItem(i, newSlot);
                         remaining -= addAmount;
 
-                        if (remaining <= 0) {
+                        if (remaining == 0) {
                             return 0;
                         }
 
