@@ -42,5 +42,4 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
         with:
-          args: "-i,JVM/intellij-coverage-agent/gradle,--linter,jetbrains/qodana-jvm:latest"
-          pr-mode: false
+          pr-mode: true
