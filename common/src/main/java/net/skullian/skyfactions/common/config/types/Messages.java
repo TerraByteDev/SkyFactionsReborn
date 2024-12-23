@@ -377,7 +377,7 @@ public enum Messages {
         value = SkyApi.getInstance().getPlayerAPI().processText(player, value);
         for (int i = 0; i < replacements.length; i += 2) {
             if (i + 1 >= replacements.length) break;
-            value = value.replace("<" + String.valueOf(replacements[i]) + ">", String.valueOf(replacements[i + 1]));
+            value = value.replace("<" + replacements[i] + ">", String.valueOf(replacements[i + 1]));
         }
 
         return value;
@@ -390,7 +390,7 @@ public enum Messages {
             val = SkyApi.getInstance().getPlayerAPI().processText(player, val);
             for (int i = 0; i < replacements.length; i += 2) {
                 if (i + 1 >= replacements.length) break;
-                val = val.replace("<" + String.valueOf(replacements[i]) + ">", String.valueOf(replacements[i + 1]));
+                val = val.replace("<" + replacements[i] + ">", String.valueOf(replacements[i + 1]));
             }
 
             formatted.add(val);

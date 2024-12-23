@@ -13,3 +13,4 @@ include:
   - name: LombokGetterMayBeUsed
   - name: UnnecessarySemicolon
   - name: UNUSED_IMPORT
+  - name: UnnecessaryCallToStringValueOf
