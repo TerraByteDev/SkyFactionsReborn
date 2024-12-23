@@ -94,6 +94,10 @@ public final class SpigotSkyAPI extends SkyApi {
         fileAPI = new SpigotFileAPI();
         nmsProvider = new SpigotNMSProvider();
 
+        // The config handler directly references the defences factory, so we must load before.
+        SLogger.setup("Initialising Defences Factory.", false);
+        defenceFactory = new SpigotDefencesFactory();
+
         // Store an instance of the ConfigHandler class in case it is needed.
         // Primarily used for the discord integration.
         SLogger.setup("Initialising Configs.", false);
@@ -127,7 +131,6 @@ public final class SpigotSkyAPI extends SkyApi {
         npcManager = new SpigotNPCManager();
         obeliskAPI = new SpigotObeliskAPI();
         uiShower = new SpigotUIShower();
-        defenceFactory = new SpigotDefencesFactory();
         commandHandler = new SpigotCommandHandler();
         pluginInfoAPI = new SpigotPluginInfoAPI();
 
