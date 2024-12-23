@@ -36,7 +36,22 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+
+      - name: Create coverage-data directory and copy contents
+        run: |
+          mkdir -p JVM/intellij-coverage-agent/gradle/.qodana/code-coverage
+          cp -R JVM/intellij-coverage-agent/gradle/build/kover/bin-reports/* JVM/intellij-coverage-agent/gradle/.qodana/code-coverage/
+        
+      - name: Archive coverage data
+        uses: actions/upload-artifact@v2
+        with:
+          name: gradle-coverage-data.zip
+          path: JVM/intellij-coverage-agent/gradle/.qodana/code-coverage
+
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2024.3
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+        with:
+          args: "-i,JVM/intellij-coverage-agent/gradle,--linter,jetbrains/qodana-jvm:latest"
+          pr-mode: false
