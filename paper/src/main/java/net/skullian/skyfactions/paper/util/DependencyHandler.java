@@ -5,6 +5,7 @@ import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.hooks.ItemJoinHook;
 import net.skullian.skyfactions.paper.hooks.PlaceholderAPIHook;
 import net.skullian.skyfactions.paper.hooks.VaultAPIHook;
+import net.skullian.skyfactions.paper.hooks.CoreProtectHook;
 
 import java.util.ArrayList;
 
@@ -67,8 +68,10 @@ public class DependencyHandler {
         }
 
         if (isPluginEnabled("CoreProtect")) {
-            SLogger.setup();
-        }
+            SLogger.setup("Found {} installed on the server.", false, "<#05eb2f>CoreProtect<#4294ed>");
+            CoreProtectHook.init();
+            enabledDeps.add("CoreProtect");
+        } else alert("CoreProtect");
     }
 
     public static boolean isEnabled(String name) {
