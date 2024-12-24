@@ -77,6 +77,7 @@ public interface CommandHandler {
 
         register(new SFHelpCommand(), parser);
         register(new SFInfoCommand(), parser);
+        register(new SFLanguageCommand(), parser);
         register(new SFNPCDisableCommand(), parser);
         register(new SFNPCReloadCommand(), parser);
         register(new SFReloadCommand(), parser);

@@ -15,7 +15,7 @@ import org.incendo.cloud.context.CommandInput;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SFLanguageTab extends CommandTemplate {
+public class SFLanguageCommand extends CommandTemplate {
     @Override
     public String getParent() {
         return "sf";
