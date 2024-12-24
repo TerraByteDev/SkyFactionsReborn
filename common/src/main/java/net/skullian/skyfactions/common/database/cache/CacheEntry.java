@@ -123,14 +123,6 @@ public class CacheEntry {
         }
     }
 
-    public void setNewLocale(UUID playerUUID, String locale) {
-        this.newLocale = locale;
-
-        if (SkyApi.getInstance().getPlayerAPI().isPlayerCached(playerUUID)) {
-            SkyApi.getInstance().getPlayerAPI().getCachedPlayerData(playerUUID).setLOCALE(locale);
-        }
-    }
-
     public void setNewLastRaid(UUID playerUUID, long time) {
         this.newLastRaid = time;
 

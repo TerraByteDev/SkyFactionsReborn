@@ -100,6 +100,26 @@ public abstract class PlayerAPI {
     public String getLocale(UUID uuid) { return playerData.getOrDefault(uuid, getDefaultPlayerData()).getLOCALE(); }
 
     /**
+     * Modify a player's locale.
+     *
+     * @param player The player whose locale should be changed.
+     * @param newLanguage The new (valid) language.
+     * @return {@link CompletableFuture<Void>}
+     */
+    public CompletableFuture<Void> modifyLocale(SkyUser player, String newLanguage, String oldLanguage) {
+        Messages.MODIFYING_LANGUAGE.send(player, oldLanguage);
+        return CompletableFuture.runAsync(() -> {
+            // In the rare case that the player is not cached, fetch their data. Lock the thread until this is complete.
+            if (!playerData.containsKey(player.getUniqueId())) getPlayerData(player.getUniqueId()).join();
+
+            playerData.get(player.getUniqueId()).setLOCALE(newLanguage);
+            SkyApi.getInstance().getCacheService().getEntry(player.getUniqueId()).setNewLocale(newLanguage);
+
+            Messages.LANGUAGE_MODIFIED.send(player, newLanguage);
+        });
+    }
+
+    /**
      * Typically used internally.
      * This method is used to get the default player data object, e.g. if you attempt to use {@link #getLocale(UUID)} while the player is uncached, and will
      * default to the configured default locale.

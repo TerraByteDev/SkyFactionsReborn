@@ -46,6 +46,19 @@ Messages:
     # Sent when a player runs a command and there are no commands to show (e.g. they don't have perms to see them).
     NO_COMMANDS_FOUND: '<red><bold>No commands found!'
 
+  # /sf language configurations.
+  Language:
+    # Sent when a player tries to use an unsupported language.
+    # All available languages are present in tab complete when using the command.
+    INVALID_LANGUAGE: "<server_name><red><bold>Hey!<reset><gray> That language does not exist or is not supported."
+
+    # Sent while the language is being modified.
+    MODIFYING_LANGUAGE: "<server_name><reset><yellow> Modifying language, please wait..."
+
+    # Sent once the language was successfully changed.
+    # Placeholders: <language> - The new language.
+    LANGUAGE_MODIFIED: "<server_name><reset><green><bold> Language modified to <yellow><language>!"
+
   Islands:
     # Sent when a player tries to create an island when they already have one.
     ISLAND_CREATION_DENY: "<server_name> <reset><red><bold>Hey! <reset><gray>You already have an island!"

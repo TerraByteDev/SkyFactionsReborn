@@ -19,5 +19,3 @@ include 'v1_21_R4'
 include 'modules'
 include 'modules:discord'
 findProject(':modules:discord')?.name = 'discord'
-include 'v1_21_R4'
-
