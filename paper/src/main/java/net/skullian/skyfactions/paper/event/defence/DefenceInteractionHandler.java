@@ -86,36 +86,5 @@ public class DefenceInteractionHandler implements Listener {
         }
     }
 
-    /*private static HashSet<Material> transparentBlocks = new HashSet<>();
-
-    static {
-        transparentBlocks.add(Material.WATER);
-        transparentBlocks.add(Material.AIR);
-    }
-
-    @EventHandler
-    public void onBlockBreak(BlockDamageEvent event){
-
-        SkyFactionsReborn.blockService.createBrokenBlock(event.getBlock(), 30);
-    }
-
-    @EventHandler
-    public void onBreakingBlock(PlayerAnimationEvent event) {
-        Player player = event.getPlayer();
-
-        Block block = player.getTargetBlock(transparentBlocks, 5);
-        Location blockPos = block.getLocation();
-
-        if (!SkyFactionsReborn.blockService.isBrokenBlock(blockPos)) return;
-
-        double distanceX = blockPos.getX() - player.getLocation().getX();
-        double distanceY = blockPos.getY() - player.getLocation().getY();
-        double distanceZ = blockPos.getZ() - player.getLocation().getZ();
-
-        if(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ >= 1024.0D) return;
-        DefenceDestructionManager.addSlowDig(event.getPlayer(), 200);
-        SkyFactionsReborn.blockService.getBrokenBlock(blockPos).incrementDamage(player, 1);
-    }*/
-
 
 }
