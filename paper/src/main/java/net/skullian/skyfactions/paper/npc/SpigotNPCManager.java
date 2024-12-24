@@ -88,13 +88,13 @@ public class SpigotNPCManager extends NPCManager {
                     break;
 
                 case "[givepermission]":
-                    if (DependencyHandler.isEnabled("Vault")) {
+                    if (VaultAPIHook.isEnabled()) {
                         VaultAPIHook.addPermission(player, cmd);
                     } else SLogger.warn("Attempted to give player a permission node on NPC interact when Vault is not present!");
                     break;
 
                 case "[removepermission]":
-                    if (DependencyHandler.isEnabled("Vault")) {
+                    if (VaultAPIHook.isEnabled()) {
                         VaultAPIHook.removePermission(player, cmd);
                     } else SLogger.warn("Attempted to remove a permission node from a player on NPC interact when Vault is not present!");
                     break;

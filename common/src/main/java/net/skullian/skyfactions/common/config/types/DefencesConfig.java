@@ -9,22 +9,22 @@ import java.util.List;
 @Getter
 public enum DefencesConfig {
 
-    MAX_PLAYER_DEFENCES("Limits.MAX_PLAYER_DEFENCES"),
-    MAX_FACTION_DEFENCES("Limits.MAX_FACTION_DEFENCES"),
-    ALLOW_PLACEMENTS_IN_OTHER_WORLDS("Limits.ALLOW_PLACEMENTS_IN_OTHER_WORLDS"),
-    ALLOWED_PLACEMENT_WORLDS("Limits.ALLOWED_WORLDS"),
+    MAX_PLAYER_DEFENCES("limits.max-player-defences"),
+    MAX_FACTION_DEFENCES("limits.max-faction-defences"),
+    ALLOW_PLACEMENTS_IN_OTHER_WORLDS("limits.allow-placements-in-other-worlds"),
+    ALLOWED_PLACEMENT_WORLDS("limits.allowed-worlds"),
 
-    GLOBAL_PASSIVE_ENTITIES("Global.ENTITIES.PASSIVE_ENTITIES"),
-    GLOBAL_HOSTILE_ENTITIES("Global.ENTITIES.HOSTILE_ENTITIES"),
-    GLOBAL_ENTITIES_ENTITY_LIST("Global.ENTITIES.ENTITY_LIST"),
+    GLOBAL_PASSIVE_ENTITIES("global.entities.passive-entities"),
+    GLOBAL_HOSTILE_ENTITIES("global.entities.hostile-entities"),
+    GLOBAL_ENTITIES_ENTITY_LIST("global.entities.entity-list"),
 
-    PERMISSION_PURCHASE_DEFENCE("Permissions.PURCHASE_DEFENCE"),
-    PERMISSION_PLACE_DEFENCE("Permissions.PLACE_DEFENCE"),
-    PERMISSION_ACCESS_DEFENCE("Permissions.ACCESS_DEFENCE"),
-    PERMISSION_REPLENISH_AMMO("Permissions.REPLENISH_AMMO"),
-    PERMISSION_UPGRADE_DEFENCE("Permissions.UPGRADE_DEFENCE"),
-    PERMISSION_REMOVE_DEFENCE("Permissions.REMOVE_DEFENCE"),
-    PERMISSION_TOGGLE_ENTITY_TARGETING("Permissions.TOGGLE_ENTITY_TARGETING");
+    PERMISSION_PURCHASE_DEFENCE("permissions.purchase-defence"),
+    PERMISSION_PLACE_DEFENCE("permissions.place-defence"),
+    PERMISSION_ACCESS_DEFENCE("permissions.access-defence"),
+    PERMISSION_REPLENISH_AMMO("permissions.replenish-ammo"),
+    PERMISSION_UPGRADE_DEFENCE("permissions.upgrade-defence"),
+    PERMISSION_REMOVE_DEFENCE("permissions.remove-defence"),
+    PERMISSION_TOGGLE_ENTITY_TARGETING("permissions.toggle-entity-targeting");
 
     @Setter
     private static YamlDocument config;

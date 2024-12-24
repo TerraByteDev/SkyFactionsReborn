@@ -65,6 +65,10 @@ public class DependencyHandler {
             SLogger.setup("Found {} installed on the server.", false, "<#05eb2f>Oraxen<#4294ed>");
             enabledDeps.add("Oraxen");
         }
+
+        if (isPluginEnabled("CoreProtect")) {
+            SLogger.setup();
+        }
     }
 
     public static boolean isEnabled(String name) {

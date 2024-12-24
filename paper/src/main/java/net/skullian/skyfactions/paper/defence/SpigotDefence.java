@@ -10,16 +10,15 @@ import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
+import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.defence.hologram.SpigotDefenceTextHologram;
 import net.skullian.skyfactions.paper.util.DependencyHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -30,6 +29,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -43,7 +43,22 @@ public abstract class SpigotDefence extends Defence {
 
     @Override
     public CompletableFuture<Void> remove() {
-        return null;
+        return CompletableFuture.runAsync(() -> {
+            Block block = SpigotAdapter.adapt(getDefenceLocation()).getBlock();
+            PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
+            NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
+
+            container.remove(dataKey);
+            block.setType(Material.AIR);
+
+            if (getData().isIS_FACTION()) {
+                Faction faction = SkyApi.getInstance().getFactionAPI().getFactionCache().get(getData().getUUIDFactionName());
+                SkyApi.getInstance().getCacheService().getEntry(faction).removeDefence(getDefenceLocation());
+            } else {
+                SkyApi.getInstance().getCacheService().getEntry(UUID.fromString(getData().getUUIDFactionName()))
+                        .removeDefence(getDefenceLocation());
+            }
+        });
     }
 
     @Override

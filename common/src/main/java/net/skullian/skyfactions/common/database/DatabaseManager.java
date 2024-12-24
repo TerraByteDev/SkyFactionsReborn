@@ -95,11 +95,11 @@ public class DatabaseManager {
             List<String> missingProperties = new ArrayList<>();
 
             if (rawHost == null || rawHost.isBlank()) {
-                missingProperties.add("DATABASE_HOST");
+                missingProperties.add("database-host");
             }
 
             if (databaseName == null || databaseName.isBlank()) {
-                missingProperties.add("DATABASE_NAME");
+                missingProperties.add("database-name");
             }
 
             if (username == null || username.isBlank()) {
@@ -121,12 +121,14 @@ public class DatabaseManager {
 
             HikariConfig mysqlConfig = new HikariConfig();
             mysqlConfig.setPoolName("SkyFactions MySQL Pool");
-            mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s",
-                    host.getHost(), host.getPortOrDefault(3306), databaseName));
+            mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s?%s",
+                    host.getHost(), host.getPortOrDefault(3306), databaseName, Settings.DATABASE_USE_SSL.getBoolean()));
             mysqlConfig.setMaxLifetime(TimeUnit.MINUTES.toMillis(Settings.DATABASE_MAX_LIFETIME.getInt()));
             mysqlConfig.setUsername(username);
             mysqlConfig.setPassword(password);
             mysqlConfig.setMaximumPoolSize(maxPoolSize);
+            mysqlConfig.setAutoCommit(false);
+            mysqlConfig.setMinimumIdle(1);
 
             SLogger.info("Using MySQL database '{}' on: {}:{}.", false,
                     databaseName, host.getHost(), host.getPortOrDefault(3306));

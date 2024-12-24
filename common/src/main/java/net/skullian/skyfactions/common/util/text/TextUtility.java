@@ -35,7 +35,7 @@ public class TextUtility {
             resolvers[index] = Placeholder.parsed(String.valueOf(replacements[i]), String.valueOf(replacements[i + 1]));
         }
 
-        String prefix = config.getString("Messages." + Messages.SERVER_NAME.getPath());
+        String prefix = config.getString(Messages.SERVER_NAME.getPath());
         resolvers[replacements.length != 0 ? (replacements.length / 2) : 0] = Placeholder.parsed("server_name", prefix != null && !prefix.isEmpty() ? prefix : "");
 
         string = SkyApi.getInstance().getPlayerAPI().processText(user, string);
@@ -189,6 +189,7 @@ public class TextUtility {
         return Arrays.asList(string.split("/"));
     }
 
+    @SafeVarargs
     public static List<String> merge(List<String>... lists) {
         return Arrays.stream(lists)
                 .flatMap(Collection::stream)

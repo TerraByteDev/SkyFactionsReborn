@@ -8,22 +8,22 @@
 # =============== OBELISK CONFIG =============== #
 
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # The Obelisk is one of the main features of SkyFactions. It allows you to
 # manage defences, resources, and more.
 
 # This is the configuration for the Obelisk block itself.
-Block:
+block:
   # SOME OF THE CONFIGURATIONS WILL BE IN THE LANGUAGE FILES
 
   # The Obelisk Block is automatically placed upon island creation.
-  # The SPAWN_OFFSET is how far from the island center it should be spawned.
-  SPAWN_OFFSET: [ 1, 0, 0 ]
+  # The spawn-offset is how far from the island center it should be spawned.
+  spawn-offset: [ 1, 0, 0 ]
 
   # Material of the Obelisk.
   # AFTER YOU CHANGE THIS, ALL EXISTING OBELISKS WILL BE BROKEN.
-  MATERIAL: "BEACON"
+  material: "BEACON"
 
   # Custom Model Data / ID for the block (if you want it). Keep at -1 to disable the feature.
-  CUSTOM_MODEL_DATA: -1
+  custom-model-data: -1

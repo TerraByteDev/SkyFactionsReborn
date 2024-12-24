@@ -8,7 +8,7 @@
 # =============== DISCORD CONFIG =============== #
 
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # All of these settings require a restart apart from:
 # - Raid Channel
@@ -17,47 +17,47 @@ CONFIG_VERSION: 1
 
 # The Discord feature allows you to send raid notifications to a Discord channel.
 # Players can link their Discord account to their Minecraft account to receive notifications.
-Discord:
+discord:
   # Whether the discord feature is enabled.
-  ENABLED: false
+  enabled: false
   # Token of the Discord Bot
-  TOKEN: "DISCORD_TOKEN_HERE"
+  token: "DISCORD_TOKEN_HERE"
 
   # Where all raid notifications are sent.
-  RAID_CHANNEL: "CHANNEL_ID_HERE"
+  raid-channel: "CHANNEL_ID_HERE"
 
   # API URL for getting the attacker's head.
-  AVATAR_API: "https://mc-heads.net/avatar/%player%.png/500"
+  avatar-api: "https://mc-heads.net/avatar/%player%.png/500"
 
   # This allows you to customise the link command on the Discord.
-  COMMANDS:
+  commands:
     # Name and description of the application command itself.
-    COMMAND_NAME: "link-mc"
-    COMMAND_DESCRIPTION: "Links your discord account to your minecraft account for SkyFactions."
+    command-name: "link-mc"
+    command-description: "Links your discord account to your minecraft account for SkyFactions."
 
     # The application command has a single String input option for the code provided ingame.
     # You can customise the name and description of this input here.
-    CODE_OPTION_NAME: "code"
-    CODE_OPTION_DESCRIPTION: "Code that you were given on the SkyFactions server when running /link."
+    code-option-name: "code"
+    code-option-description: "Code that you were given on the SkyFactions server when running /link."
 
   # Color when successfully linking a Discord account.
-  SUCCESS_COLOR: "GREEN"
+  success-color: "GREEN"
   # Color when something fails.
-  ERROR_COLOR: "RED"
+  error-color: "RED"
 
   # How often the presence should be changed. In seconds - Do not see this too low!
-  PRESENCE_INTERVAL: 300 # 5 Minutes
+  presence-interval: 300 # 5 Minutes
 
   # Configure the bot status & activity.
   # Available activity types: PLAYING, COMPETING, LISTENING, STREAMING, WATCHING
   # Available status types: IDLE, ONLINE, DO_NOT_DISTURB, OFFLINE, INVISIBLE
-  PRESENCE:
+  presence:
     1:
-      STATUS: "ONLINE"
-      TYPE: "PLAYING"
-      DESCRIPTION: "SkyFactions"
+      status: "ONLINE"
+      type: "PLAYING"
+      description: "SkyFactions"
 
     2:
-      STATUS: "ONLINE" # Status
-      TYPE: "WATCHING" # Type
-      DESCRIPTION: "over the server" # e.g. "Watching... over the server" - Assuming the TYPE is WATCHING
+      status: "ONLINE" # Status
+      type: "WATCHING" # Type
+      description: "over the server" # e.g. "Watching... over the server" - Assuming the TYPE is WATCHING

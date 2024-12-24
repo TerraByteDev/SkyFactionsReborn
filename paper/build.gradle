@@ -91,6 +91,11 @@ repositories {
         name = "Oraxen Repository"
         url = "https://repo.oraxen.com/releases"
     }
+
+    maven {
+        name = "PlayPro Repository"
+        url = "https://maven.playpro.com/"
+    }
 }
 
 dependencies {
@@ -119,6 +124,7 @@ dependencies {
     compileOnly("me.RockinChaos.itemjoin:ItemJoin:${itemjoin}")
     compileOnly("io.th0rgal:oraxen:${oraxen}")
     compileOnly("com.github.LoneDev6:API-ItemsAdder:${itemsadder}")
+    compileOnly("net.coreprotect:coreprotect:${coreprotect}")
 
     compileOnly("com.jeff-media:custom-block-data:${customblockdata}")
 }

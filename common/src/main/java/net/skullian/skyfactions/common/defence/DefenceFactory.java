@@ -52,7 +52,7 @@ public abstract class DefenceFactory {
                                 String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
 
                                 YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en_US/defences/", defenceName + ".yml"), Objects.requireNonNull(DefenceFactory.class.getClassLoader().getResourceAsStream(String.format("language/en_US/defences/%s.yml", defenceName))),
-                                        GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+                                        GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version")).build());
                             } catch (IOException error) {
                                 handleError(error);
                             }
@@ -80,7 +80,7 @@ public abstract class DefenceFactory {
                 SLogger.setup("Registering Defence: <#05eb2f>{}<#4294ed>", false, defenceName);
 
                 YamlDocument config = YamlDocument.create(defenceFile, GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(),
-                        DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+                        DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version")).build());
 
                 DefenceStruct struct = createStruct(config, defenceName);
                 dMap.put(struct.getIDENTIFIER(), struct);
@@ -97,53 +97,53 @@ public abstract class DefenceFactory {
     }
 
     public DefenceStruct createStruct(YamlDocument config, String fileName) {
-        String COLOR_NAME = config.getString("NAME");
-        String TYPE = config.getString("TYPE");
-        String IDENTIFIER = config.getString("IDENTIFIER");
+        String COLOR_NAME = config.getString("name");
+        String TYPE = config.getString("type");
+        String IDENTIFIER = config.getString("identifier");
 
-        int BUY_COST = config.getInt("COST.BUY");
-        int SELL_COST = config.getInt("COST.SELL");
-        String AMMO_COST = config.getString("COST.AMMO_COST");
-        String REPAIR_STEP = config.getString("COST.REPAIR_STEP");
-        String REPAIR_COST = config.getString("COST.REPAIR_COST");
+        int BUY_COST = config.getInt("cost.buy");
+        int SELL_COST = config.getInt("cost.sell");
+        String AMMO_COST = config.getString("cost.ammo-cost");
+        String REPAIR_STEP = config.getString("cost.repair-step");
+        String REPAIR_COST = config.getString("cost.repair-cost");
 
-        int MAX_LEVEL = config.getInt("MAX_LEVEL");
+        int MAX_LEVEL = config.getInt("max-level");
 
-        String PLACE_SOUND = config.getString("SOUNDS.PLACE");
-        int PLACE_PITCH = config.getInt("SOUNDS.PLACE_PITCH");
-        String BREAK_SOUND = config.getString("SOUNDS.BREAK");
-        int BREAK_PITCH = config.getInt("SOUNDS.BREAK_PITCH");
-        String ACTIVATE_SOUND = config.getString("SOUNDS.ACTIVATE");
-        int ACTIVATE_PITCH = config.getInt("SOUNDS.ACTIVATE_PITCH");
+        String PLACE_SOUND = config.getString("sounds.place");
+        int PLACE_PITCH = config.getInt("sounds.place-pitch");
+        String BREAK_SOUND = config.getString("sounds.break");
+        int BREAK_PITCH = config.getInt("sounds.break-pitch");
+        String ACTIVATE_SOUND = config.getString("sounds.activate");
+        int ACTIVATE_PITCH = config.getInt("sounds.activate-pitch");
 
         List<DefenceEffectStruct> EFFECTS = getEffects(config);
 
-        List<String> DEATH_MESSAGES = config.getStringList("MESSAGES.DEATH");
-        List<String> EFFECT_MESSAGES = config.getStringList("MESSAGES.DAMAGE"); // can be healing, etc
+        List<String> DEATH_MESSAGES = config.getStringList("messages.death");
+        List<String> EFFECT_MESSAGES = config.getStringList("messages.damage"); // can be healing, etc
 
         DefenceAttributeStruct ATTRIBUTES = getAttributes(config);
 
         Map<String, String> EXPERIENCE_DROPS = getXPFormulas(config);
 
-        String PROJECTILE = config.getString("PROJECTILE");
+        String PROJECTILE = config.getString("projectile");
 
-        String BLOCK_MATERIAL = config.getString("BLOCK.MATERIAL");
-        String BLOCK_SKULL = config.getString("BLOCK.SKULL");
+        String BLOCK_MATERIAL = config.getString("block.material");
+        String BLOCK_SKULL = config.getString("block.skull");
 
-        String ITEM_MATERIAL = config.getString("ITEM.MATERIAL");
-        String ITEM_SKULL = config.getString("ITEM.SKULL");
-        List<String> ITEM_LORE = config.getStringList("ITEM.LORE");
-        List<String> UPGRADE_LORE = config.getStringList("UPGRADE.LORE");
+        String ITEM_MATERIAL = config.getString("item.material");
+        String ITEM_SKULL = config.getString("item.skull");
+        List<String> ITEM_LORE = config.getStringList("item.lore");
+        List<String> UPGRADE_LORE = config.getStringList("upgrade.lore");
 
-        String PLACEMENT_BLOCKED_MESSAGE = config.getString("PLACEMENT.DEFENCE_INCORRECT_BLOCK");
-        boolean IS_WHITELIST = config.getBoolean("PLACEMENT.WHITELIST");
+        String PLACEMENT_BLOCKED_MESSAGE = config.getString("placement.defence-incorrect-block");
+        boolean IS_WHITELIST = config.getBoolean("placement.whitelist");
         List<String> BLOCKS_LIST = getPlacementBlocks(config);
 
-        List<String> HOLOGRAM_STACK = config.getStringList("HOLOGRAMS.LINES");
-        String OUT_OF_STOCK_LINE = config.getString("HOLOGRAMS.OUT_OF_STOCK_LINE");
-        String DURABILITY_LINE = config.getString("HOLOGRAMS.DURABILITY_LINE");
-        boolean APPEND_TO_TOP = config.getBoolean("HOLOGRAMS.STOCK_AT_TOP");
-        boolean APPEND_DURABILITY_TO_TOP = config.getBoolean("HOLOGRAMS.DURABILITY_AT_TOP");
+        List<String> HOLOGRAM_STACK = config.getStringList("holograms.lines");
+        String OUT_OF_STOCK_LINE = config.getString("holograms.out-of-stock-line");
+        String DURABILITY_LINE = config.getString("holograms.durability-line");
+        boolean APPEND_TO_TOP = config.getBoolean("holograms.stock-at-top");
+        boolean APPEND_DURABILITY_TO_TOP = config.getBoolean("holograms.durability-at-top");
 
         DefenceEntityStruct ENTITY_DATA = getEntityConfiguration(config);
 
@@ -155,53 +155,53 @@ public abstract class DefenceFactory {
     }
 
     public List<DefenceEffectStruct> getEffects(YamlDocument config) {
-        Section section = config.getSection("EFFECTS");
+        Section section = config.getSection("effects");
         if (section == null) return Collections.emptyList();
 
         return section.getRoutesAsStrings(false).stream()
                 .map(name -> {
                     Section effect = section.getSection(name);
                     return new DefenceEffectStruct(
-                            effect.getString("EFFECT"),
-                            effect.getInt("DEFENCE_LEVEL"),
-                            effect.getInt("EFFECT_LEVEL"),
-                            effect.getInt("DURATION")
+                            effect.getString("effect"),
+                            effect.getInt("defence-level"),
+                            effect.getInt("effect-level"),
+                            effect.getInt("duration")
                     );
                 })
                 .collect(Collectors.toList());
     }
 
     public DefenceEntityStruct getEntityConfiguration(YamlDocument config) {
-        boolean OVERRIDE = config.getBoolean("ENTITIES.OVERRIDE_GLOBAL_CONFIG");
+        boolean OVERRIDE = config.getBoolean("entities.override-global-config");
 
         List<String> PASSIVE_LIST = new ArrayList<>();
         List<String> HOSTILE_LIST = new ArrayList<>();
         List<String> ENTITY_LIST = new ArrayList<>();
 
         if (!OVERRIDE) {
-            if (config.getBoolean("ENTITIES.ALLOW_HOSTILE_TARGETING")) {
+            if (config.getBoolean("entities.allow-hostile-targeting")) {
                 HOSTILE_LIST.addAll(DefencesConfig.GLOBAL_HOSTILE_ENTITIES.getList());
             }
-            if (config.getBoolean("ENTITIES.ALLOW_PASSIVE_TARGETING")) {
+            if (config.getBoolean("entities.allow-passive-targeting")) {
                 PASSIVE_LIST.addAll(DefencesConfig.GLOBAL_PASSIVE_ENTITIES.getList());
             }
             ENTITY_LIST.addAll(DefencesConfig.GLOBAL_ENTITIES_ENTITY_LIST.getList());
         }
 
-        if (config.getBoolean("ENTITIES.WHITELIST")) {
-            ENTITY_LIST.addAll(config.getStringList("ENTITIES.ENTITY_LIST"));
+        if (config.getBoolean("entities.whitelist")) {
+            ENTITY_LIST.addAll(config.getStringList("entities.entity-list"));
         }
 
         return new DefenceEntityStruct(
                 OVERRIDE,
-                config.getBoolean("ENTITIES.ALLOW_HOSTILE_TARGETING"),
-                config.getBoolean("ENTITIES.ALLOW_TOGGLE_HOSTILE_TARGETING"),
-                config.getBoolean("ENTITIES.TARGET_HOSTILE_ON_DEFAULT"),
-                config.getBoolean("ENTITIES.ALLOW_PASSIVE_TARGETING"),
-                config.getBoolean("ENTITIES.ALLOW_TOGGLE_PASSIVE_TARGETING"),
-                config.getBoolean("ENTITIES.TARGET_PASSIVE_ON_DEFAULT"),
-                config.getBoolean("ENTITIES.ALLOW_ATTACK_PLAYERS"),
-                config.getBoolean("ENTITIES.WHITELIST"),
+                config.getBoolean("entities.allow-hostile-targeting"),
+                config.getBoolean("entities.allow-toggle_hostile_targeting"),
+                config.getBoolean("entities.target-hostile-on-default"),
+                config.getBoolean("entities.allow-passive-targeting"),
+                config.getBoolean("entities.allow-toggle_passive_targeting"),
+                config.getBoolean("entities.target-passive-on-default"),
+                config.getBoolean("entities.allow-attack-players"),
+                config.getBoolean("entities.whitelist"),
                 PASSIVE_LIST,
                 HOSTILE_LIST,
                 ENTITY_LIST
@@ -210,22 +210,22 @@ public abstract class DefenceFactory {
 
     public DefenceAttributeStruct getAttributes(YamlDocument config) {
         return new DefenceAttributeStruct(
-                config.getString("ATTRIBUTES.RANGE"),
-                config.getString("ATTRIBUTES.COOLDOWN"),
-                config.getString("ATTRIBUTES.TARGET_MAX"),
-                config.getString("ATTRIBUTES.MAX_AMMO"),
-                config.getString("UPGRADE_COST"),
-                config.getString("ATTRIBUTES.DAMAGE"),
-                config.getString("ATTRIBUTES.DISTANCE"),
-                config.getString("ATTRIBUTES.HEALING"),
-                config.getString("ATTRIBUTES.EXPLOSION_DAMAGE_PERCENT"),
-                config.getInt("ATTRIBUTES.TARGET_HOSTILE_MOBS_LEVEL"),
-                config.getInt("ATTRIBUTES.TARGET_PASSIVE_MOBS_LEVEL")
+                config.getString("attributes.range"),
+                config.getString("attributes.cooldown"),
+                config.getString("attributes.target-max"),
+                config.getString("attributes.max-ammo"),
+                config.getString("upgrade-cost"),
+                config.getString("attributes.damage"),
+                config.getString("attributes.distance"),
+                config.getString("attributes.healing"),
+                config.getString("attributes.explosion-damage-percent"),
+                config.getInt("attributes.target-hostile-mobs-level"),
+                config.getInt("attributes.target-passive-mobs-level")
         );
     }
 
     public Map<String, String> getXPFormulas(YamlDocument config) {
-        Section drops = config.getSection("EXPERIENCE_DROPS");
+        Section drops = config.getSection("experience-drops");
         if (drops == null) return Collections.emptyMap();
 
         return drops.getRoutesAsStrings(false).stream()

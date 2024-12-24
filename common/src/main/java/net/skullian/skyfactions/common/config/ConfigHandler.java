@@ -28,7 +28,7 @@ public class ConfigHandler {
 
         try {
             this.config = YamlDocument.create(this.file, Objects.requireNonNull(ConfigHandler.class.getClassLoader().getResourceAsStream(this.name)),
-                    GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
+                    GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version")).build());
         } catch (IOException error) {
             SLogger.setup("----------------- CONFIGURATION EXCEPTION -----------------", true);
             SLogger.setup("There was an error loading config {}", true, name);

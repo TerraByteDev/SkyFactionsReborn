@@ -8,7 +8,7 @@
 # =============== RUNES CONFIG =============== #
 
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Runes are SkyFaction's 'currency'. It allows you to advance in the game,
 # including purchase defences, upgrade islands / factions and more.
@@ -21,23 +21,23 @@ CONFIG_VERSION: 1
 # This is the base configuration for runes.
 # Unless overriden in the OVERRIDES section, all items & blocks
 # will apply to this configuration.
-RUNES:
-  FOR_EACH: 4 # For every 4 blocks / items input...
-  GIVE: 1 # You will get one rune in return.
+runes:
+  for_each: 4 # For every 4 blocks / items input...
+  give: 1 # You will get one rune in return.
 
 # General filters to what items / blocks are allowed or not.
-FILTERS:
-  ALLOW_LORE: true # Allow items with custom lore.
-  ALLOW_ENCHANTS: true # Allow items with enchants.
-  ALLOW_ORAXEN_ITEMS: false # Allow the outright selling of Oraxen items. Unless overriden in the OVERRIDES section with their respective ID, the prices will be default.
-  ALLOW_ITEMSADDER_ITEMS: false # Allows the outright selling of ItemsAdder items. Read the line above.
+filters:
+  allow_lore: true # Allow items with custom lore.
+  allow_enchants: true # Allow items with enchants.
+  allow_oraxen_items: false # Allow the outright selling of Oraxen items. Unless overriden in the OVERRIDES section with their respective ID, the prices will be default.
+  allow_itemsadder_items: false # Allows the outright selling of ItemsAdder items. Read the line above.
 
-  MATERIALS:
-    # If enabled, all items in LIST will not be convertible. If disabled, only items in LIST will be convertible.
+  materials:
+    # If enabled, all items in list will not be convertible. If disabled, only items in list will be convertible.
     # The OVERRIDES entries bypass this.
-    IS_BLACKLIST: true
+    is_blacklist: true
 
-    LIST:
+    list:
       - STRING
       - STICK
       - MINECART
@@ -51,12 +51,12 @@ FILTERS:
       - ARMOR_STAND
 
 # Override the default configuration for certain blocks / items.
-# FOR_EACH does not apply here.
+# for_each does not apply here.
 # Runes given PER ITEM.
-# FOR ITEMSADDER / ORAXEN COMPATIBILITY:
+# For itemsadder / oraxen compatibility:
 # Specify the ID of the item, beginning with the prefix "ITEMSADDER:" or "ORAXEN:"
 # E.g. "ITEMSADDER:ITEM_ID: 5" would give 5 runes per itemsadder item (with the id of ITEM_ID).
-OVERRIDES:
+overrides:
   COAL: 1
   COAL_ORE: 3
   COAL_BLOCK: 9
@@ -78,7 +78,7 @@ OVERRIDES:
   LAPIS_BLOCK: 54
 
   EMERALD: 7
-  EMERADLD_ORE: 21
+  EMERALD_ORE: 21
   EMERALD_BLOCK: 63
 
   GOLD: 8
@@ -91,4 +91,3 @@ OVERRIDES:
 
   ANCIENT_DEBRIS: 20
   NETHERITE_BLOCK: 810
-

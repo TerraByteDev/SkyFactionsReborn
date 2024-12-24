@@ -12,17 +12,17 @@ import java.util.Map;
 @Getter
 public enum RunesConfig {
 
-    BASE_FOR_EACH("RUNES.FOR_EACH"),
-    BASE_RUNE_RETURN("RUNES.GIVE"),
+    BASE_FOR_EACH("runes.for_each"),
+    BASE_RUNE_RETURN("runes.give"),
 
-    ALLOW_LORE("FILTERS.ALLOW_LORE"),
-    ALLOW_ENCHANTS("FILTERS.ALLOW_ENCHANTS"),
-    ALLOW_ORAXEN_ITEMS("FILTERS.ALLOW_ORAXEN_ITEMS"),
-    ALLOW_ITEMSADDER_ITEMS("FILTERS.ALLOW_ITEMSADDER_ITEMS"),
-    MATERIALS_IS_BLACKLIST("FILTERS.MATERIALS.IS_BLACKLIST"),
-    MATERIALS_LIST("FILTERS.MATERIALS.LIST"),
+    ALLOW_LORE("filters.allow_lore"),
+    ALLOW_ENCHANTS("filters.allow_enchants"),
+    ALLOW_ORAXEN_ITEMS("filters.allow_oraxen_items"),
+    ALLOW_ITEMSADDER_ITEMS("filters.allow_itemsadder_items"),
+    MATERIALS_IS_BLACKLIST("filters.materials.is_blacklist"),
+    MATERIALS_LIST("filters.materials.list"),
 
-    RUNE_OVERRIDES("OVERRIDES");
+    RUNE_OVERRIDES("overrides");
 
     @Setter
     private static YamlDocument config;

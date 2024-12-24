@@ -12,9 +12,9 @@ import java.util.List;
 @Getter
 public enum ObeliskConfig {
 
-    OBELISK_MATERIAL("Block.MATERIAL"),
-    OBELISK_SPAWN_OFFSET("Block.SPAWN_OFFSET"),
-    OBELISK_CUSTOM_MODEL_DATA("Block.CUSTOM_MODEL_DATA");
+    OBELISK_MATERIAL("block.material"),
+    OBELISK_SPAWN_OFFSET("block.spawn-offset"),
+    OBELISK_CUSTOM_MODEL_DATA("block.custom-model-data");
 
     @Setter
     private static YamlDocument config;

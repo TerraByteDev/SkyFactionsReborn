@@ -9,20 +9,20 @@ import java.util.List;
 @Getter
 public enum DiscordConfig {
 
-    ENABLED("Discord.ENABLED"),
-    TOKEN("Discord.TOKEN,"),
-    RAID_CHANNEL("Discord.RAID_CHANNEL"),
-    AVATAR_API("Discord.AVATAR_API"),
+    ENABLED("discord.enabled"),
+    TOKEN("discord.token"),
+    RAID_CHANNEL("discord.raid_channel"),
+    AVATAR_API("discord.avatar_api"),
 
-    COMMAND_NAME("Discord.COMMANDS.COMMAND_NAME"),
-    COMMAND_DESCRIPTION("Discord.COMMANDS.COMMAND_DESCRIPTION"),
-    COMMAND_OPTION_NAME("Discord.COMMANDS.CODE_OPTION_NAME"),
-    COMMAND_OPTION_DESCRIPTION("Discord.COMMANDS.CODE_OPTION_DESCRIPTION"),
+    COMMAND_NAME("discord.commands.command_name"),
+    COMMAND_DESCRIPTION("discord.commands.command_description"),
+    COMMAND_OPTION_NAME("discord.commands.code_option_name"),
+    COMMAND_OPTION_DESCRIPTION("discord.commands.code_option_description"),
 
-    SUCCESS_COLOR("Discord.SUCCESS_COLOR"),
-    ERROR_COLOR("Discord.ERROR_COLOR"),
+    SUCCESS_COLOR("discord.success_color"),
+    ERROR_COLOR("discord.error_color"),
 
-    PRESENCE_INTERVAL("Discord.PRESENCE_INTERVAL");
+    PRESENCE_INTERVAL("discord.presence_interval");
 
     @Setter
     @Getter

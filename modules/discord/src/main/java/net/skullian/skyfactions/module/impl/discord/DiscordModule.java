@@ -93,16 +93,16 @@ public class DiscordModule extends net.skullian.skyfactions.common.module.abstra
     }
 
     private List<PresenceData> fetchPresenceData() {
-        Section section = DiscordConfig.getConfig().getSection("Discord.PRESENCE");
+        Section section = DiscordConfig.getConfig().getSection("discord.presence");
         if (section == null) return Collections.emptyList();
 
         return section.getRoutesAsStrings(false).stream()
                 .map(data -> {
                     Section activity = section.getSection(data);
                     return new PresenceData(
-                            activity.getString("STATUS"),
-                            activity.getString("TYPE"),
-                            activity.getString("DESCRIPTION")
+                            activity.getString("status"),
+                            activity.getString("type"),
+                            activity.getString("description")
                     );
                 }).collect(Collectors.toList());
     }
