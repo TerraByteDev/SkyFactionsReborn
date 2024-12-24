@@ -45,7 +45,6 @@ public class GemsWithdrawCommand extends CommandTemplate {
         SkyApi.getInstance().getIslandAPI().getPlayerIsland(player.getUniqueId()).whenComplete((island, throwable) -> {
             if (throwable != null) {
                 ErrorUtil.handleError(player, "get your island", "SQL_GEMS_GET", throwable);
-                return;
             } else if (island != null) {
                 player.getGems().whenComplete((gems, err) -> {
                     if (err != null) {

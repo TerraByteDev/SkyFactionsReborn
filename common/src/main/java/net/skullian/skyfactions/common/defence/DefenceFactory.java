@@ -39,19 +39,19 @@ public abstract class DefenceFactory {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void registerDefaultDefences() {
-        new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/defences").mkdirs();
+        new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en_US/defences").mkdirs();
 
         try {
-            URI defencesFolder = Objects.requireNonNull(DefenceFactory.class.getResource("/language/en/defences")).toURI();
+            URI defencesFolder = Objects.requireNonNull(DefenceFactory.class.getResource("/language/en_US/defences")).toURI();
             try (FileSystem fileSystem = FileSystems.newFileSystem(defencesFolder, new HashMap<>())) {
                 for (Path yamlPath : fileSystem.getRootDirectories()) {
-                    try (Stream<Path> stream = Files.list(yamlPath.resolve("/language/en/defences"))) {
+                    try (Stream<Path> stream = Files.list(yamlPath.resolve("/language/en_US/defences"))) {
                         stream.forEach(path -> {
                             try {
                                 String fullPathName = path.getFileName().toString();
                                 String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
 
-                                YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/defences/", defenceName + ".yml"), Objects.requireNonNull(DefenceFactory.class.getClassLoader().getResourceAsStream(String.format("language/en/defences/%s.yml", defenceName))),
+                                YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en_US/defences/", defenceName + ".yml"), Objects.requireNonNull(DefenceFactory.class.getClassLoader().getResourceAsStream(String.format("language/en_US/defences/%s.yml", defenceName))),
                                         GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
                             } catch (IOException error) {
                                 handleError(error);

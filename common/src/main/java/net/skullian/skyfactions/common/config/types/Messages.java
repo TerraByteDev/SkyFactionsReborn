@@ -281,10 +281,10 @@ public enum Messages {
             if (setup) SLogger.setup("Saving default language <#05eb2f>[English]<#4294ed>.", false);
                 else SLogger.info("Saving default language <#05eb2f>[English]<#4294ed>.");
 
-            YamlDocument doc = YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en/en.yml"), Objects.requireNonNull(Messages.class.getClassLoader().getResourceAsStream("language/en/en.yml")),
+            YamlDocument doc = YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en_US/en_US.yml"), Objects.requireNonNull(Messages.class.getClassLoader().getResourceAsStream("language/en_US/en_US.yml")),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("CONFIG_VERSION")).build());
 
-            configs.put("en", doc);
+            configs.put("en_US", doc);
 
             File folder = new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath(), "/language");
             if (!folder.exists() || !folder.isDirectory()) throw new Exception("Could not find the language folder. Please report this error ASAP.");

@@ -36,7 +36,7 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (SkyApi.getInstance().getDatabaseManager().closed) {
             event.getPlayer().kick(Component.text("<red>A fatal error occurred. Please contact your server owners to check logs."));
-            throw new RuntimeException("Database is closed! Cannot allow player to join without risking dupes and unexpected functionalities.");
+            throw new IllegalStateException("Database is closed! Cannot allow player to join without risking dupes and unexpected functionalities.");
         }
 
         SkyUser user = SkyApi.getInstance().getUserManager().getUser(event.getPlayer().getUniqueId());
@@ -53,7 +53,7 @@ public class PlayerListener implements Listener {
                 SkyApi.getInstance().getPlayerAPI().getPlayerData().put(event.getPlayer().getUniqueId(), new PlayerData(
                         "none",
                         0,
-                        event.getPlayer().locale().getLanguage()
+                        event.getPlayer().locale().toString()
                 ));
             } else {
                 SkyApi.getInstance().getDatabaseManager().getPlayerManager().getPlayerLocale(event.getPlayer().getUniqueId()).whenComplete((locale, ex2) -> {

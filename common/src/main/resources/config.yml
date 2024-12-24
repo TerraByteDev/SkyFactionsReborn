@@ -47,7 +47,7 @@ Database:
 # This means players in different locations are sent plugin messages in their native language.
 Language:
   # Language to use / fallback to if the plugin cannot find a player's language config.
-  DEFAULT_LANGUAGE: "en"
+  DEFAULT_LANGUAGE: "en_US"
 
   # This is used in text-related things such as faction creation, broadcasts etc.
   # This supports both normal strings and regex.

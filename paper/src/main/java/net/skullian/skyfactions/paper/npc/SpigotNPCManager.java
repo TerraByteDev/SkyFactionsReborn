@@ -66,7 +66,7 @@ public class SpigotNPCManager extends NPCManager {
     public void process(List<String> actions, SkyUser player) {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
         for (String request : actions) {
-            String[] parts = request.split("\\[([^]]+)\\]: (.+)");
+            String[] parts = request.split("\\[([^]]+)]: (.+)");
             String action = parts[0].trim().toLowerCase();
             String cmd = parts[1].trim();
 
