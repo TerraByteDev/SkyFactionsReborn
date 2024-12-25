@@ -28,7 +28,7 @@ import java.util.List;
 public class NMSHandlerImpl implements NMSHandler {
 
     public NMSHandlerImpl() {
-        SLogger.setup("v1_21_R1 NMSHandler initialized.", false);
+        SLogger.setup("<#05eb2f>v1_21_R1<#4294ed> NMSHandler initialized.", false);
     }
 
     @Override

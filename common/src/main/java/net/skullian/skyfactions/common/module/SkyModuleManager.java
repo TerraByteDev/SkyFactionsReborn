@@ -20,7 +20,7 @@ public class SkyModuleManager {
     }
 
     public static void onEnable() {
-        SLogger.setup("Loading {} Modules...", false, modules.size());
+        SLogger.setup("Loading <#05eb2f>{}<#4294ed> Modules...", false, modules.size());
         for (String module : modules) {
             try {
                 Class<?> clazz = Class.forName(module);
