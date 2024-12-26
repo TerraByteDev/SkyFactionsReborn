@@ -19,6 +19,8 @@ import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
+
 public class FactionObeliskUI extends Screen {
     private final Faction faction;
 
@@ -51,29 +53,29 @@ public class FactionObeliskUI extends Screen {
 
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "FACTION" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "faction" ->
                     new ObeliskFactionOverviewItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "DEFENCES" ->
+            case "defences" ->
                     new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction, player);
 
-            case "RUNES_CONVERSION" ->
+            case "runes-conversion" ->
                     new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player);
 
-            case "MEMBER_MANAGEMENT" ->
+            case "member-management" ->
                     new ObeliskMemberManagementItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), faction, player);
 
-            case "AUDIT_LOGS" ->
+            case "audit-logs" ->
                     new ObeliskAuditLogItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
 
-            case "INVITES" ->
+            case "invites" ->
                     new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", faction, player);
 
-            case "ELECTION" -> faction.isElectionRunning() ?
+            case "election" -> faction.isElectionRunning() ?
                     new ObeliskFactionElectionMenuItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), faction, player) :
                     new AirItem(player);
 
-            case "BORDER" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "border" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };
     }

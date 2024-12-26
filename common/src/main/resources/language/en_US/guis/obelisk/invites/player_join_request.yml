@@ -1,31 +1,31 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<blue>View Join Request"
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+title: "<blue>View Join Request"
+open-sound: "ui.button.click"
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
 # Each character represents an item / slot.
 # '.' represents an empty slot.
-# Any other characters are shown below under ITEMS
+# Any other characters are shown below under items
 # Each character corresponds to an item.
 
 # This GUI allows players to view their outgoing join request.
 # The Accept (a) and Deny (d) buttons will only appear if the join request had been accepted,
 # therefore the player can choose to proceed and join the faction, or deny.
 
-LAYOUT:
+layout:
   - "b # # # # # # # #"
   - "# . . . p . . . #"
   - "# . a . r . d . #"
   - "# # # # # # # # #"
 
-ITEMS:
+items:
   # Prompt to see what invite type you want to view.
-  PROMPT:
+  prompt:
     char: "p" # This is the character to use in the LAYOUT!
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTczZGI5NmY3YjlmNzhlZGU5MjY5NDEwYzY1OTI4NWZjYTIwZWZiYzhkZmE5ZGVmZjRiYmU1NDM0OTNhNDQ0NSJ9fX0=" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
@@ -36,7 +36,7 @@ ITEMS:
       - "nothing here atm"
 
   # Back button, return to the main Obelisk UI
-  BACK:
+  back:
     char: "b"
     material: "BARRIER"
     skull: ""
@@ -48,7 +48,7 @@ ITEMS:
   # If the join request was accepted by the Faction in question, this item will display.
   # It is almost like 'finalising' the join request.
   # Clicking this make you join the Faction.
-  ACCEPT:
+  accept:
     char: "a"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWVmZDRjZmE5MTQzMzk4ZTExZWJjZTNmYjJlY2JiZjU2YTA3M2UzNTYzZjZlZjZhY2FlNGNiNzM5N2U1ODhiMiJ9fX0="
@@ -62,7 +62,7 @@ ITEMS:
       - "<yellow>request and join the Faction."
 
   # Revoke the join request altogether.
-  REVOKE:
+  revoke:
     char: "r"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTVlZmZjZTEwOWRlNTBmNTg1M2IwYzMyZGNjMWEyOGNmNjJhNTA0YjYxMGU3MWUyMmYxZmRlNmZjMWE0YjkzZCJ9fX0="
@@ -76,7 +76,7 @@ ITEMS:
       - "<gray>permanent and irreversible."
 
   # If the join request was accepted by the Faction in question, you can choose to deny it instead.
-  DENY:
+  deny:
     char: "d"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDZhZTIxMWI0NDAzYjg5NjNjNjc0NWYzYzk4ZWJlNzNhMmI0ZTk3YzQwYTc4YjJmZDQwM2EwOWMwZmNhZDZkIn19fQ=="
@@ -91,7 +91,7 @@ ITEMS:
       - "<gray>This action is permanent and"
       - "<gray>irreversible."
 
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""

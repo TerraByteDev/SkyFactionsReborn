@@ -19,6 +19,8 @@ import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class PlayerObeliskUI extends Screen {
 
     @Builder
@@ -38,22 +40,22 @@ public class PlayerObeliskUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "HEAD" -> new ObeliskHeadItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "head" -> new ObeliskHeadItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
 
-            case "DEFENCES" ->
+            case "defences" ->
                     new ObeliskDefencePurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", null, player);
 
-            case "RUNES_CONVERSION" ->
+            case "runes-conversion" ->
                     new ObeliskRuneItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", player);
 
-            case "INVITES" ->
+            case "invites" ->
                     new ObeliskInvitesItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", null, player);
 
-            case "NOTIFICATIONS" ->
+            case "notifications" ->
                     new ObeliskPlayerNotificationsItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
 
-            case "BORDER" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "border" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };
     }

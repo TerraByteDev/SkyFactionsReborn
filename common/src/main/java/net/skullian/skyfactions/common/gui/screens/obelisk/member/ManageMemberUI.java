@@ -19,6 +19,8 @@ import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class ManageMemberUI extends Screen {
     private final SkyUser subject;
     private final Faction faction;
@@ -42,16 +44,16 @@ public class ManageMemberUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "BORDER", "PLAYER_HEAD" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "border", "player-head" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, subject.getUniqueId()), player);
-            case "KICK" ->
+            case "kick" ->
                     new MemberKickItem(itemData, GUIAPI.createItem(itemData, subject.getUniqueId()), subject, player, faction);
-            case "BAN" ->
+            case "ban" ->
                     new MemberBanItem(itemData, GUIAPI.createItem(itemData, subject.getUniqueId()), subject, player, faction);
-            case "RANK" ->
+            case "rank" ->
                     new MemberRankItem(itemData, GUIAPI.createItem(itemData, subject.getUniqueId()), subject, player, faction);
-            case "BACK" ->
+            case "back" ->
                     new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, subject.getUniqueId()), "faction", player);
             default -> null;
         };

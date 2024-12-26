@@ -18,6 +18,8 @@ import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class DefenceManageUI extends Screen {
     private final DefenceData defenceData;
     private final DefenceStruct struct;
@@ -43,20 +45,20 @@ public class DefenceManageUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "DEFENCE" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "defence" ->
                     new DefenceDisplayItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, struct, defenceData);
-            case "AMMO" ->
+            case "ammo" ->
                     new DefenceAmmoItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, defenceData, faction);
-            case "PASSIVE_TOGGLE" ->
+            case "passive-toggle" ->
                     new DefencePassiveToggleItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, defenceData, faction);
-            case "HOSTILE_TOGGLE" ->
+            case "hostile-toggle" ->
                     new DefenceHostileToggleItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, defenceData, faction);
-            case "UPGRADE" ->
+            case "upgrade" ->
                     new DefenceUpgradeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, struct, defenceData, faction);
-            case "REMOVE" ->
+            case "remove" ->
                     new DefenceRemoveItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, struct, defenceData, faction);
-            case "BORDER" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "border" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };
     }

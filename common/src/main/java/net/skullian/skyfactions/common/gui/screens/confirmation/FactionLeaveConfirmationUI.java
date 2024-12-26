@@ -16,6 +16,8 @@ import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class FactionLeaveConfirmationUI extends Screen {
     @Builder
     public FactionLeaveConfirmationUI(SkyUser player) {
@@ -34,12 +36,12 @@ public class FactionLeaveConfirmationUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "PROMPT", "BORDER" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "prompt", "border" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "CONFIRM" ->
+            case "confirm" ->
                     new LeaveConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "CANCEL" -> new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "cancel" -> new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };
     }

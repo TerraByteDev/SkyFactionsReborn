@@ -1,41 +1,41 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<blue>View Faction Invite"
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+title: "<blue>View Faction Invite"
+open-sound: "ui.button.click"
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
 # Each character represents an item / slot.
 # '.' represents an empty slot.
-# Any other characters are shown below under ITEMS
+# Any other characters are shown below under items
 # Each character corresponds to an item.
 
 # This GUI allows players to view their outgoing join request.
 # The Accept (a) and Deny (d) buttons will only appear if the join request had been accepted,
 # therefore the player can choose to proceed and join the faction, or deny.
 
-LAYOUT:
+layout:
   - "b # # # # # # # #"
   - "# . . . p . . . #"
   - "# . a . . . d . #"
   - "# # # # # # # # #"
 
-ITEMS:
-  PROMPT:
-    char: "p" # This is the character to use in the LAYOUT!
+items:
+  prompt:
+    char: "p" # This is the character to use in the layout!
     material: "PLAYER_HEAD"
-    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTczZGI5NmY3YjlmNzhlZGU5MjY5NDEwYzY1OTI4NWZjYTIwZWZiYzhkZmE5ZGVmZjRiYmU1NDM0OTNhNDQ0NSJ9fX0=" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
-    text: "<red><bold><faction_name>" # Placeholders: <faction_name> - Name of the Faction you are requesting to join.
+    skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTczZGI5NmY3YjlmNzhlZGU5MjY5NDEwYzY1OTI4NWZjYTIwZWZiYzhkZmE5ZGVmZjRiYmU1NDM0OTNhNDQ0NSJ9fX0=" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player-skull> - Skull texture of the player.
+    text: "<red><bold><faction-name>" # Placeholders: <faction-name> - Name of the Faction you are requesting to join.
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
       - "nothing here atm"
 
   # Back button, return to the main Obelisk UI
-  BACK:
+  back:
     char: "b"
     material: "BARRIER"
     skull: ""
@@ -45,7 +45,7 @@ ITEMS:
     lore: ""
 
   # Accept the invite.
-  ACCEPT:
+  accept:
     char: "a"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWVmZDRjZmE5MTQzMzk4ZTExZWJjZTNmYjJlY2JiZjU2YTA3M2UzNTYzZjZlZjZhY2FlNGNiNzM5N2U1ODhiMiJ9fX0="
@@ -59,7 +59,7 @@ ITEMS:
       - "<gray>the Faction."
 
   # If the join request was accepted by the Faction in question, you can choose to deny it instead.
-  DENY:
+  deny:
     char: "d"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDZhZTIxMWI0NDAzYjg5NjNjNjc0NWYzYzk4ZWJlNzNhMmI0ZTk3YzQwYTc4YjJmZDQwM2EwOWMwZmNhZDZkIn19fQ=="
@@ -72,7 +72,7 @@ ITEMS:
       - "<gray>This is a permanent and"
       - "<gray>irreversible action."
 
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""

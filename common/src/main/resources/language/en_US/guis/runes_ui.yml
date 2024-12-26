@@ -1,10 +1,10 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<gradient:#A908FB:#004FFF>Runes Menu"
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+title: "<gradient:#A908FB:#004FFF>Runes Menu"
+open-sound: "ui.button.click"
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
@@ -14,17 +14,17 @@ OPEN_PITCH: 1
 # Each character (#, p, y, n) corresponds to an item.
 
 # In this case, the "." characters are where players can input blocks.
-LAYOUT:
+layout:
   - "# # # # # # # # #"
   - "# . . . . . . . #"
   - "# . . . . . . . #"
   - "# . . . . . . . #"
   - "b # # # p # # # s"
 
-ITEMS:
+items:
 
   # Prompt
-  PROMPT:
+  prompt:
     char: "p"
     material: "NETHER_STAR"
     skull: ""
@@ -37,7 +37,7 @@ ITEMS:
       - "<blue>runes in return!"
 
   # Back button, return to the main Obelisk UI
-  BACK:
+  back:
     char: "b"
     material: "BARRIER"
     skull: ""
@@ -47,7 +47,7 @@ ITEMS:
     lore: ""
 
   # Confirmation to convert blocks into runes.
-  SUBMIT:
+  submit:
     char: "s"
     material: "GREEN_TERRACOTTA"
     skull: ""
@@ -58,7 +58,7 @@ ITEMS:
       - "<green>Convert all blocks"
       - "<green>submitted into runes."
 
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""

@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.skullian.skyfactions.common.obelisk.ObeliskBlockEntity;
 import net.skullian.skyfactions.common.obelisk.ObeliskItem;
 import net.skullian.skyfactions.common.util.SkyLocation;
+import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Location;
@@ -35,8 +36,7 @@ public class SpigotObeliskBlockEntity extends ObeliskBlockEntity {
             entity.setPersistent(true);
             entity.setInvisible(true);
 
-            NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk");
-            entity.getPersistentDataContainer().set(key, PersistentDataType.BOOLEAN, true);
+            entity.getPersistentDataContainer().set(PaperSharedConstants.OBELISK_KEY, PersistentDataType.BOOLEAN, true);
 
             setEntity(entity);
             setLocation(location);

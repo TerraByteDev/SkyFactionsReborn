@@ -1,16 +1,16 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<red>Manage <player_name>"
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+title: "<red>Manage <player_name>"
+open-sound: "ui.button.click"
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
 # Each character represents an item / slot.
 # '.' represents an empty slot.
-# Any other characters are shown below under ITEMS
+# Any other characters are shown below under items
 # Each character corresponds to an item.
 
 # This GUI is where Faction owners / admins can manage a faction member.
@@ -19,21 +19,19 @@ OPEN_PITCH: 1
 # THE LETTER 'x' CORRESPONDS TO WHERE THE PAGINATED ITEMS WILL BE!
 # YOU CANNOT CHANGE THIS!
 # PAGINATION ITEMS ARE CONFIGURED IN 'pagination.yml'!
-LAYOUT:
+layout:
   - "b # # # # # # # #"
   - "# . . . p . . . #"
   - "# . z . k . r . #"
   - "# . . . . . . . #"
   - "# # # # # # # # #"
 
-
-
-ITEMS:
+items:
 
   # Just a general prompt for what this GUI is about.
   # Placeholders: <player_name> - Name of player who is being managed.
-  PLAYER_HEAD:
-    char: "p" # This is the character to use in the LAYOUT!
+  player-head:
+    char: "p" # This is the character to use in the layout!
     material: "PLAYER_HEAD"
     skull: "<player_skull>" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
     text: "<red><player_name>"
@@ -43,7 +41,7 @@ ITEMS:
       - "<yellow>Manage this player."
 
   # Back button, return to the main Obelisk UI
-  BACK:
+  back:
     char: "b"
     material: "BARRIER"
     skull: ""
@@ -53,7 +51,7 @@ ITEMS:
     lore: ""
 
   # Ban button, ban the player from the Faction.
-  BAN:
+  ban:
     char: "z"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2U4ODFlYjgxNjVmMjYxMDYwOWEzYWUwYzRkOTNhMmUxODEwYWQ0ZmUyZDg0NzcwOTY4MDJmN2EyYTBkZTQ3YyJ9fX0="
@@ -63,7 +61,7 @@ ITEMS:
     lore: "<red>Ban this player permanently."
 
   # Back button, return to the main Obelisk UI
-  KICK:
+  kick:
     char: "k"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzA3ZjQ3OTU4NGZjY2FlNjg2MDAzYTYwODAwZGRmZWU3MmFmZmUxMGU0YmIyNmE3ZDRhMDBjY2I5OTc5N2QyIn19fQ=="
@@ -73,7 +71,7 @@ ITEMS:
     lore: "<yellow>Kick this player from the Faction."
 
   # Manage the player's rank.
-  RANK:
+  rank:
     char: "r"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDAxYWZlOTczYzU0ODJmZGM3MWU2YWExMDY5ODgzM2M3OWM0MzdmMjEzMDhlYTlhMWEwOTU3NDZlYzI3NGEwZiJ9fX0="
@@ -82,7 +80,7 @@ ITEMS:
     pitch: 1
     lore: "<green>Manage this player's rank."
 
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""

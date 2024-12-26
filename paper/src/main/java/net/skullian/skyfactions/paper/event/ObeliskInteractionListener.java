@@ -7,6 +7,7 @@ import net.skullian.skyfactions.common.config.types.ObeliskConfig;
 import net.skullian.skyfactions.common.gui.screens.obelisk.FactionObeliskUI;
 import net.skullian.skyfactions.common.gui.screens.obelisk.PlayerObeliskUI;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -32,12 +33,7 @@ public class ObeliskInteractionListener implements Listener {
         for (Block block : event.blockList()) {
             if (!block.getType().equals(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString())) && !block.getType().equals(Material.BARRIER))
                 continue;
-
-            PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
-            NamespacedKey typeKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_type");
-            NamespacedKey ownerKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_owner");
-            if (!container.has(typeKey, PersistentDataType.STRING) || !container.has(ownerKey, PersistentDataType.STRING))
-                continue;
+            if (!isObelisk(block)) return;
 
             event.blockList().remove(block);
             break;
@@ -50,11 +46,7 @@ public class ObeliskInteractionListener implements Listener {
             if (!block.getType().equals(Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString())) && !block.getType().equals(Material.BARRIER))
                 continue;
 
-            PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
-            NamespacedKey typeKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_type");
-            NamespacedKey ownerKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_owner");
-            if (!container.has(typeKey, PersistentDataType.STRING) || !container.has(ownerKey, PersistentDataType.STRING))
-                continue;
+            if (!isObelisk(block)) return;
 
             event.blockList().remove(block);
             break;
@@ -68,13 +60,7 @@ public class ObeliskInteractionListener implements Listener {
 
         Block block = event.getBlock();
         Player player = event.getPlayer();
-
-        PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
-
-        NamespacedKey typeKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_type");
-        NamespacedKey ownerKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_owner");
-        if (!container.has(typeKey, PersistentDataType.STRING) || !container.has(ownerKey, PersistentDataType.STRING))
-            return;
+        if (!isObelisk(block)) return;
 
         event.setCancelled(true);
         Messages.OBELISK_DESTROY_DENY.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()));
@@ -92,15 +78,11 @@ public class ObeliskInteractionListener implements Listener {
         Player player = event.getPlayer();
 
         PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
-
-        NamespacedKey typeKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_type");
-        NamespacedKey ownerKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_owner");
-        if (!container.has(typeKey, PersistentDataType.STRING) || !container.has(ownerKey, PersistentDataType.STRING))
-            return;
+        if (!isObelisk(block)) return;
 
         event.setCancelled(true);
-        String type = container.get(typeKey, PersistentDataType.STRING);
-        String owner = container.get(ownerKey, PersistentDataType.STRING);
+        String type = container.get(PaperSharedConstants.OBELISK_TYPE_KEY, PersistentDataType.STRING);
+        String owner = container.get(PaperSharedConstants.OBELISK_OWNER_KEY, PersistentDataType.STRING);
 
         hasPermissions(player, type, owner).thenAccept((has) -> {
             if (!has) {
@@ -133,5 +115,12 @@ public class ObeliskInteractionListener implements Listener {
         }
 
         return CompletableFuture.completedFuture(false);
+    }
+
+    private boolean isObelisk(Block block) {
+        PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
+
+        return (container.has(PaperSharedConstants.OBELISK_TYPE_KEY, PersistentDataType.STRING) ||
+                container.has(PaperSharedConstants.OBELISK_OWNER_KEY, PersistentDataType.STRING));
     }
 }

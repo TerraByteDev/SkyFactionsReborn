@@ -12,12 +12,11 @@ public class CoreProtectHook {
 
     public static void init() {
         Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CoreProtect");
-        if (plugin == null || (!(plugin instanceof CoreProtect))) {
+        if (!(plugin instanceof CoreProtect pluginInstance)) {
             SLogger.setup("Failed to fetch CoreProtect Instance!", true);
             return;
         }
 
-        CoreProtect pluginInstance = (CoreProtect) plugin;
         if (!pluginInstance.getAPI().isEnabled()) {
             SLogger.setup("CoreProtect's API is not enabled!", true);
         } else {

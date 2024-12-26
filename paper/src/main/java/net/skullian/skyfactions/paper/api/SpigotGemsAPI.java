@@ -3,6 +3,7 @@ package net.skullian.skyfactions.paper.api;
 import net.skullian.skyfactions.common.api.GemsAPI;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
+import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Material;
@@ -19,10 +20,9 @@ public class SpigotGemsAPI extends GemsAPI {
 
     public boolean isGemsStack(ItemStack stack) {
         if (stack == null) return false;
-        NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), "gem");
         PersistentDataContainer container = stack.getItemMeta().getPersistentDataContainer();
 
-        return container.has(key, PersistentDataType.BOOLEAN);
+        return container.has(PaperSharedConstants.GEM_IDENTIFIER_KEY, PersistentDataType.BOOLEAN);
     }
 
     @Override

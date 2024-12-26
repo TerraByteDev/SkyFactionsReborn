@@ -19,6 +19,8 @@ import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class PlayerManageIncomingInviteUI extends Screen {
     private final InviteData inviteData;
 
@@ -40,16 +42,16 @@ public class PlayerManageIncomingInviteUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "PROMPT" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "prompt" ->
                     new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData.getFactionName(), player);
-            case "ACCEPT" ->
+            case "accept" ->
                     new PlayerIncomingInviteAccept(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player);
-            case "DENY" ->
+            case "deny" ->
                     new PlayerIncomingInviteDeny(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player);
-            case "BACK" ->
+            case "back" ->
                     new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "player", player);
-            case "BORDER" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "border" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };
     }

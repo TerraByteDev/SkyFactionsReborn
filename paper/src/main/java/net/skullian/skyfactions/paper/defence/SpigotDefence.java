@@ -13,6 +13,7 @@ import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
+import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.defence.hologram.SpigotDefenceTextHologram;
@@ -46,9 +47,8 @@ public abstract class SpigotDefence extends Defence {
         return CompletableFuture.runAsync(() -> {
             Block block = SpigotAdapter.adapt(getDefenceLocation()).getBlock();
             PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
-            NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
 
-            container.remove(dataKey);
+            container.remove(PaperSharedConstants.DEFENCE_DATA_KEY);
             block.setType(Material.AIR);
 
             if (getData().isIS_FACTION()) {
@@ -66,10 +66,9 @@ public abstract class SpigotDefence extends Defence {
         DefenceData data = getData();
         try {
             PersistentDataContainer container = new CustomBlockData(SpigotAdapter.adapt(getDefenceLocation()).getBlock(), SkyFactionsReborn.getInstance());
-            NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
 
             ObjectMapper mapper = new ObjectMapper();
-            container.set(dataKey, PersistentDataType.STRING, mapper.writeValueAsString(data));
+            container.set(PaperSharedConstants.DEFENCE_DATA_KEY, PersistentDataType.STRING, mapper.writeValueAsString(data));
 
             SkyApi.getInstance().getDefenceAPI().getHologramsMap().get(getHologramID(data.getUUIDFactionName())).setData(data);
         } catch (JsonProcessingException exception) {
@@ -80,14 +79,12 @@ public abstract class SpigotDefence extends Defence {
     @Override
     public void applyPDC(Object entity) {
         Entity bukkitEntity = (Entity) entity;
-        NamespacedKey damageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-damage");
 
         PersistentDataContainer container = bukkitEntity.getPersistentDataContainer();
-        container.set(damageKey, PersistentDataType.INTEGER, getDamage());
+        container.set(PaperSharedConstants.DEFENCE_DAMAGE_KEY, PersistentDataType.INTEGER, getDamage());
 
         if (bukkitEntity.getType().equals(EntityType.PLAYER)) {
-            NamespacedKey messageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "damage-message");
-            container.set(messageKey, PersistentDataType.STRING, getRandomActionMessage());
+            container.set(PaperSharedConstants.DEFENCE_DAMAGE_MESSAGE_KEY, PersistentDataType.STRING, getRandomActionMessage());
         }
     }
 

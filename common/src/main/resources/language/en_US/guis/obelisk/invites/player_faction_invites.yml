@@ -1,16 +1,16 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<blue>Faction Invites"
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+title: "<blue>Faction Invites"
+open-sound: "ui.button.click"
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
 # Each character represents an item / slot.
 # '.' represents an empty slot.
-# Any other characters are shown below under ITEMS
+# Any other characters are shown below under items
 # Each character corresponds to an item.
 
 # This GUI is where Players can view all the incoming Faction invites.
@@ -19,22 +19,20 @@ OPEN_PITCH: 1
 # THE LETTER 'x' CORRESPONDS TO WHERE THE PAGINATED ITEMS WILL BE!
 # YOU CANNOT CHANGE THIS!
 # PAGINATION ITEMS ARE CONFIGURED IN 'pagination.yml'!
-LAYOUT:
+layout:
   - "b # # # # # # # #"
   - "# x x x x x x x #"
   - "# x x x x x x x #"
   - "# x x x x x x x #"
   - "# < # # p # # > #"
 
-
-
-ITEMS:
+items:
 
   # Just a general prompt for what this GUI is about.
-  PROMPT:
-    char: "p" # This is the character to use in the LAYOUT!
+  prompt:
+    char: "p" # This is the character to use in the layout!
     material: "NETHER_STAR"
-    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player-skull> - Skull texture of the player.
     text: "<blue>Incoming Invites"
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
@@ -43,7 +41,7 @@ ITEMS:
       - "<yellow>incoming Faction invites."
 
   # Back button, return to the main Obelisk UI
-  BACK:
+  back:
     char: "b"
     material: "BARRIER"
     skull: ""
@@ -55,20 +53,20 @@ ITEMS:
   # This is the item that displays each outgoing faction invite.
   # By default, the item is the player's head, and you shouldn't change this unless you're... insane?
   # You can customise the text, lore and sound though.
-  MODEL:
+  model:
     material: "PLAYER_HEAD"
-    skull: "<player_skull>"
-    text: "<blue><faction_name>" # Placeholders: <faction_name> - Name of the faction who is inviting you.
+    skull: "<player-skull>"
+    text: "<blue><faction-name>" # Placeholders: <faction-name> - Name of the faction who is inviting you.
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
-    # Placeholders: <player_name> - Name of player / <faction_name> - Name of Faction.
+    # Placeholders: <player-name> - Name of player / <faction-name> - Name of Faction.
     lore:
-      - "<green><player_name> <yellow>wants you"
-      - "<yellow>to join <green><faction_name>."
+      - "<green><player-name> <yellow>wants you"
+      - "<yellow>to join <green><faction-name>."
       - ""
       - "<gray>Click for actions."
 
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""

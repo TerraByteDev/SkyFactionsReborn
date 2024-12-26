@@ -1,39 +1,39 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<red>Manage Defence"
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+title: "<red>Manage Defence"
+open-sound: "ui.button.click"
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
 # Each character represents an item / slot.
 # '.' represents an empty slot.
-# Any other characters are shown below under ITEMS
+# Any other characters are shown below under items
 # Each character corresponds to an item.
 
-LAYOUT:
+layout:
   - "# # # # d # # # #"
   - "# a . p h u . r #"
   - "# # # # # # # # #"
 
-ITEMS:
+items:
   # Item format of the defence.
-  DEFENCE:
-    char: "p" # This is the character to use in the LAYOUT!
+  defence:
+    char: "p" # This is the character to use in the layout!
     material: "NETHER_STAR"
     skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
     text: "<defence_name>" # Supported placeholders: <defence_name> - Name of the defence
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
-    pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
+    pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'
     lore: # Placeholders: <ammo> - Current Ammo of the defence / <level> - Defence Level / <durability> - Defence Durability
       - "&aAmmo: &7<ammo>"
       - "&aLevel: &7<level>"
       - "&aDurability: &7<durability>"
 
   # Item to purchase more ammo for the defence.
-  AMMO:
+  ammo:
     char: "a"
     material: "SPECTRAL_ARROW"
     skull: ""
@@ -45,7 +45,7 @@ ITEMS:
       - ""
       - "<gray>You currently have <yellow><ammo><reset><gray> remaining ammo."
 
-  PASSIVE_TOGGLE:
+  passive-toggle:
     char: "h"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTcyMzg5M2RmNGNmYjljNzI0MGZjNDdiNTYwY2NmNmRkZWIxOWRhOTE4M2QzMzA4M2YyYzcxZjQ2ZGFkMjkwYSJ9fX0="
@@ -55,7 +55,7 @@ ITEMS:
     lore:
       - "<gray>Toggle passive entity targeting."
 
-  HOSTILE_TOGGLE:
+  hostile-toggle:
     char: "p"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWMyMzJkMDY4M2JhMWUzNjI1OTNmYTFhOTdkNzQ0YzI5MGIxNjU1ZDcyYjIyNzc5ODhhNmM4NWE5Mzg1NDI1NSJ9fX0="
@@ -65,7 +65,7 @@ ITEMS:
     lore:
       - "<gray>Toggle hostile entity targeting."
 
-  UPGRADE:
+  upgrade:
     char: "u"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGNlMzZmY2IxZTVmNmIzNjUxN2ZiYmViOWNiZjRiMGMwNWMzMGQ4YmRiNTE1NDgyNGU2MGU2ZDU1MGY1MjhlOSJ9fX0="
@@ -75,9 +75,9 @@ ITEMS:
     lore:  #Available placeholders: <upgrade_lore> - Configured upgrade lore of the defence. This will span multiple lines.
       - "<upgrade_lore>" # The INSUFFICIENT_RUNES_LORE messages will be appended to the bottom of this if the player does not have enough runes.
 
-  REMOVE:
+  remove:
     char: "r"
-    MATERIAL: "BARRIER"
+    material: "BARRIER"
     skull: ""
     text: "<red>Remove Defence"
     sound: "ui.button.click"
@@ -85,7 +85,7 @@ ITEMS:
     lore:
       - "Remove this defence."
 
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""
@@ -93,4 +93,3 @@ ITEMS:
     sound: "none"
     pitch: 1
     lore: "" # Empty lore
-

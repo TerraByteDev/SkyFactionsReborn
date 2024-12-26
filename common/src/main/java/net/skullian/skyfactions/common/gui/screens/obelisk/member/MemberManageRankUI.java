@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MemberManageRankUI extends Screen {
     private final List<MemberRankChangeItem> items = new ArrayList<>();
@@ -56,24 +57,24 @@ public class MemberManageRankUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        if (itemData.getITEM_ID().equals("CONFIRM")) {
+        if (itemData.getITEM_ID().equalsIgnoreCase("confirm")) {
             MemberRankChangeConfirmationItem confirmationItem = new MemberRankChangeConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, faction, subject, faction.getRankType(player.getUniqueId()));
 
             this.confirmItem = confirmationItem;
             return confirmationItem;
         }
 
-        if (List.of("MEMBER", "FIGHTER", "MODERATOR", "ADMIN").contains(itemData.getITEM_ID())) {
+        if (List.of("member", "fighter", "moderator", "admin").contains(itemData.getITEM_ID().toLowerCase(Locale.ROOT))) {
             MemberRankChangeItem item = new MemberRankChangeItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player, RankType.valueOf(itemData.getITEM_ID()), faction, subject, this);
 
             this.items.add(item);
             return item;
         }
 
-        return switch (itemData.getITEM_ID()) {
-            case "BORDER", "PLAYER_HEAD" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "border", "player-head" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "BACK" ->
+            case "back" ->
                     new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player);
             default -> null;
         };

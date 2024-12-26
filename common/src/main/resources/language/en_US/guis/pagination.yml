@@ -1,32 +1,32 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # This is a special configuration file.
 # This is the configuration for all the items related to pagination.
 
-ITEMS:
+items:
   # Button to move to next page along the paginated GUI.
-  FORWARD_BUTTON:
-    char: ">" # This is the character used in the LAYOUT.
+  forward-button:
+    char: ">" # This is the character used in the layout.
     material: "PLAYER_HEAD"
-    # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player-skull> - Skull texture of the player.
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTYzMzlmZjJlNTM0MmJhMThiZGM0OGE5OWNjYTY1ZDEyM2NlNzgxZDg3ODI3MmY5ZDk2NGVhZDNiOGFkMzcwIn19fQ==" #
     name: "<green><bold>Next Page" # Name of the item.
     sound: "item.book.page_turn" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
 
     # Lore of the item when there are more pages.
-    # Placeholders: <next_page> - Number of the next page / <total_pages> - Total number of pages.
+    # Placeholders: <next-page> - Number of the next page / <total-pages> - Total number of pages.
     # Only supports one lore line.
-    more_pages_lore: "<green>Go to page <yellow><next_page> <green>/<yellow> <total_pages>"
+    more-pages-lore: "<green>Go to page <yellow><next-page> <green>/<yellow> <total-pages>"
 
     # Lore of the item when there are no more pages.
     # Only supports one lore line.
-    no_pages_lore: "<red>There are no more pages!"
+    no-pages-lore: "<red>There are no more pages!"
 
 
   # Button to move to previous pages along the paginated GUI.
-  BACK_BUTTON:
+  back-button:
     char: "<"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjg0ZjU5NzEzMWJiZTI1ZGMwNThhZjg4OGNiMjk4MzFmNzk1OTliYzY3Yzk1YzgwMjkyNWNlNGFmYmEzMzJmYyJ9fX0="
@@ -35,10 +35,10 @@ ITEMS:
     pitch: 1
 
     # Lore of the item when there are more pages.
-    # Placeholders: <next_page> - Number of the next page / <total_pages> - Total number of pages.
+    # Placeholders: <next-page> - Number of the next page / <total-pages> - Total number of pages.
     # Only supports one lore line.
-    more_pages_lore: "<green>Go to page <yellow><next_page> <green>/<yellow> <total_pages>"
+    more-pages-lore: "<green>Go to page <yellow><next-page> <green>/<yellow> <total-pages>"
 
     # Lore of the item when there are no more pages.
     # Only supports one lore line.
-    no_pages_lore: "<red>You cannot go further back!"
+    no-pages-lore: "<red>You cannot go further back!"

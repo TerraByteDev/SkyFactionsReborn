@@ -1,33 +1,33 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<yellow>Manage Join Request"
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+title: "<yellow>Manage Join Request"
+open-sound: "ui.button.click"
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
 # Each character represents an item / slot.
 # '.' represents an empty slot.
-# Any other characters are shown below under ITEMS
+# Any other characters are shown below under items
 # Each character corresponds to an item.
 
 # This GUI allows Faction moderators / admins / owners to manage a join request.
 
-LAYOUT:
+layout:
   - "b # # # # # # # #"
   - "# . . . p . . . #"
   - "# . a . . . r . #"
   - "# # # # # # # # #"
 
-ITEMS:
+items:
   # Prompt of the faction join request.
   # Usually the head of the Player who sent the join request.
-  PROMPT:
-    char: "p" # This is the character to use in the LAYOUT!
+  prompt:
+    char: "p" # This is the character to use in the layout!
     material: "NETHER_STAR"
-    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player-skull> - Skull texture of the player.
     text: "<blue>Invite Type"
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
@@ -37,7 +37,7 @@ ITEMS:
       - "<yellow>invites."
 
   # Back button, return to the main Obelisk UI
-  BACK:
+  back:
     char: "b"
     material: "BARRIER"
     skull: ""
@@ -47,7 +47,7 @@ ITEMS:
     lore: ""
 
   # Accept the Faction join request.
-  ACCEPT:
+  accept:
     char: "a"
     material: "LIME_TERRACOTTA"
     skull: ""
@@ -61,7 +61,7 @@ ITEMS:
       - "<yellow>your Faction."
 
   # Reject the Faction join request.
-  REJECT:
+  reject:
     char: "r"
     material: "RED_TERRACOTTA"
     skull: ""
@@ -71,7 +71,7 @@ ITEMS:
     lore:
       - "<red>Reject this join request."
 
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""

@@ -20,6 +20,8 @@ import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class PlayerOutgoingRequestManageUI extends Screen {
     private final JoinRequestData joinRequest;
 
@@ -42,16 +44,16 @@ public class PlayerOutgoingRequestManageUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "PROMPT" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "prompt" ->
                     new InvitePromptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest.getFactionName(), player);
-            case "ACCEPT" -> joinRequest.isAccepted() ?
+            case "accept" -> joinRequest.isAccepted() ?
                     new FactionPlayerJoinRequestConfirmItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player) : new AirItem(player);
-            case "DENY" -> joinRequest.isAccepted() ?
+            case "deny" -> joinRequest.isAccepted() ?
                     new FactionPlayerJoinRequestDenyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player) : new AirItem(player);
-            case "REVOKE" ->
+            case "revoke" ->
                     new FactionPlayerJoinRequestRevoke(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), joinRequest, player);
-            case "BORDER" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "border" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };
     }

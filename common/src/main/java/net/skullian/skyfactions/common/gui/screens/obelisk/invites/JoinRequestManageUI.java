@@ -18,6 +18,8 @@ import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class JoinRequestManageUI extends Screen {
     private final InviteData inviteData;
 
@@ -39,14 +41,14 @@ public class JoinRequestManageUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "PROMPT", "BORDER" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "prompt", "border" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "BACK" ->
+            case "back" ->
                     new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), "faction", player);
-            case "REJECT" ->
+            case "reject" ->
                     new FactionJoinRequestRejectItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player);
-            case "ACCEPT" ->
+            case "accept" ->
                     new FactionJoinRequestAcceptItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), inviteData, player);
             default -> null;
         };

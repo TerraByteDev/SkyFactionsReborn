@@ -1,16 +1,16 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<blue>Faction Election"
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+title: "<blue>Faction Election"
+open-sound: "ui.button.click"
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
 # Each character represents an item / slot.
 # '.' represents an empty slot.
-# Any other characters are shown below under ITEMS
+# Any other characters are shown below under items
 # Each character corresponds to an item.
 
 # This GUI is where Faction members can vote for next owner.
@@ -19,7 +19,7 @@ OPEN_PITCH: 1
 # THE LETTER 'x' CORRESPONDS TO WHERE THE PAGINATED ITEMS WILL BE!
 # YOU CANNOT CHANGE THIS!
 # PAGINATION ITEMS ARE CONFIGURED IN 'pagination.yml'!
-LAYOUT:
+layout:
   - "b # # # # # # # #"
   - "# x x x x x x x #"
   - "# x x x x x x x #"
@@ -28,10 +28,10 @@ LAYOUT:
 
 
 
-ITEMS:
+items:
 
   # Back button, return to the main Obelisk UI
-  BACK:
+  back:
     char: "b"
     material: "BARRIER"
     skull: ""
@@ -43,7 +43,7 @@ ITEMS:
   # This is the item that displays each player.
   # By default, the item is the player's head, and you shouldn't change this unless you're... insane?
   # You can customise the text, lore and sound though.
-  MODEL:
+  model:
     material: "PLAYER_HEAD"
     skull: "<player_skull>"
     text: "<blue><player_name>" # Placeholders: <player_name> - Name of player.
@@ -60,7 +60,7 @@ ITEMS:
   # This is the item that displays player with most votes.
   # By default, the item is the player's head, and you shouldn't change this unless you're... insane?
   # You can customise the text, lore and sound though.
-  TOP:
+  top:
     char: "t"
     material: "PLAYER_HEAD"
     skull: "<player_skull>"
@@ -74,7 +74,7 @@ ITEMS:
       - "<green><player_name> has the most votes"
       - "<green>Votes: <yellow><votes>"
 
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""
@@ -82,4 +82,3 @@ ITEMS:
     sound: "none"
     pitch: 1
     lore: "" # Empty lore
-

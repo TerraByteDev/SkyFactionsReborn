@@ -2,6 +2,7 @@ package net.skullian.skyfactions.paper.api;
 
 import com.jeff_media.customblockdata.CustomBlockData;
 import lombok.Getter;
+import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.ObeliskAPI;
 import net.skullian.skyfactions.common.config.types.ObeliskConfig;
 import net.skullian.skyfactions.common.config.types.Settings;
@@ -11,10 +12,12 @@ import net.skullian.skyfactions.common.obelisk.ObeliskItem;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.SkyLocation;
+import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.obelisk.SpigotObeliskBlockEntity;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -83,12 +86,10 @@ public class SpigotObeliskAPI extends ObeliskAPI {
     public void applyPersistentData(String ownerIdentifier, SkyLocation location, String type) {
         Location sLocation = SpigotAdapter.adapt(location);
         PersistentDataContainer container = new CustomBlockData(sLocation.getBlock(), SkyFactionsReborn.getInstance());
-        NamespacedKey obeliskKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_type");
-        container.set(obeliskKey, PersistentDataType.STRING, type);
+        container.set(PaperSharedConstants.OBELISK_TYPE_KEY, PersistentDataType.STRING, type);
 
-        // This can either be a player UUID (as string), or faction name. Depends on the obelisk_type
-        NamespacedKey ownerKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk_owner");
-        container.set(ownerKey, PersistentDataType.STRING, ownerIdentifier);
+        // This can either be a player UUID (as string), or faction name. Depends on the obelisk-type
+        container.set(PaperSharedConstants.OBELISK_OWNER_KEY, PersistentDataType.STRING, ownerIdentifier);
     }
 
     @Override
@@ -119,7 +120,6 @@ public class SpigotObeliskAPI extends ObeliskAPI {
 
     @Override
     public void preLoad() {
-        NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), "obelisk");
 
         List<World> worlds = new ArrayList<>();
         worlds.add(Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString()));
@@ -127,10 +127,13 @@ public class SpigotObeliskAPI extends ObeliskAPI {
 
         for (World world : worlds) {
             for (ItemDisplay entity : world.getEntitiesByClass(ItemDisplay.class)) {
-                if (!entity.getPersistentDataContainer().has(key)) return;
+                if (!entity.getPersistentDataContainer().has(PaperSharedConstants.OBELISK_KEY)) return;
 
                 Location location = getLocationFromEntity(entity.getLocation());
-                ItemStack itemStack = entity.getItemStack();
+                SpigotObeliskBlockEntity blockEntity = new SpigotObeliskBlockEntity();
+                blockEntity.setEntity(entity);
+
+                blockEntities.put(SpigotAdapter.adapt(location), blockEntity);
             }
         }
     }

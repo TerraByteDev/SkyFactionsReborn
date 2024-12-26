@@ -1,11 +1,11 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<red><bold>Leave Faction"
+title: "<red><bold>Leave Faction"
 # Sound when GUI is opened.
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1 # Pitch of the sound.
+open-sound: "ui.button.click"
+open-pitch: 1 # Pitch of the sound.
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
@@ -14,15 +14,17 @@ OPEN_PITCH: 1 # Pitch of the sound.
 # Any other characters are shown below under ITEMS
 # Each character corresponds to an item.
 
-LAYOUT:
+# This GUI is for when players decide to leave the faction. It is a confirmation GUI of some sort.
+
+layout:
   - "# # # # # # # # #"
   - "# . . . p . . . #"
   - "# . y . . . n . #"
   - "# # # # # # # # #"
 
-ITEMS:
-  # Confirm island creation
-  CONFIRM:
+items:
+  # Confirm faction leave.
+  confirm:
     char: "y" # This is the character to use in the LAYOUT!
     material: "LIME_TERRACOTTA"
     skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
@@ -32,8 +34,8 @@ ITEMS:
     lore:
       - "<red>Click to leave your Faction."
 
-  # 'Prompt' to create a new island.
-  PROMPT:
+  # 'Prompt' to leave the faction.
+  prompt:
     char: "p"
     material: "PLAYER_HEAD"
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzA3ZjQ3OTU4NGZjY2FlNjg2MDAzYTYwODAwZGRmZWU3MmFmZmUxMGU0YmIyNmE3ZDRhMDBjY2I5OTc5N2QyIn19fQ=="
@@ -44,8 +46,8 @@ ITEMS:
       - "<yellow>Are you sure you want to"
       - "<yellow>leave your Faction?"
 
-  # Cancel island creation.
-  CANCEL:
+  # Cancel faction leave.
+  cancel:
     char: "n"
     material: "RED_TERRACOTTA"
     skull: ""
@@ -56,7 +58,7 @@ ITEMS:
       - "<yellow>Click to cancel."
 
   # Border of the GUI.
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""

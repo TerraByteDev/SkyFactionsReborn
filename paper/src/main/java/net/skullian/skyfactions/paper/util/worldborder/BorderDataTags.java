@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.paper.util.worldborder;
 
 import net.skullian.skyfactions.common.util.worldborder.persistence.WBData;
+import net.skullian.skyfactions.paper.PaperSharedConstants;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -17,11 +18,10 @@ public class BorderDataTags implements PersistentDataType<PersistentDataContaine
     private final NamespacedKey sizeKey;
 
     public BorderDataTags(JavaPlugin plugin) {
-        this.xKey = new NamespacedKey(plugin, "center_x");
-        this.zKey = new NamespacedKey(plugin, "center_z");
-        this.sizeKey = new NamespacedKey(plugin, "size");
+        this.xKey = PaperSharedConstants.WORLD_BORDER_X_KEY;
+        this.zKey = PaperSharedConstants.WORLD_BORDER_Z_KEY;
+        this.sizeKey = PaperSharedConstants.WORLD_BORDER_SIZE_KEY;
     }
-
 
     @NotNull
     @Override

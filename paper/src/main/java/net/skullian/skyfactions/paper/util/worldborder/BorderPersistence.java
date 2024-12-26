@@ -6,6 +6,7 @@ import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.worldborder.BorderAPI;
 import net.skullian.skyfactions.common.util.worldborder.BorderPos;
 import net.skullian.skyfactions.common.util.worldborder.persistence.WBData;
+import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -22,7 +23,7 @@ public class BorderPersistence implements BorderAPI.PersistentBorderAPI {
 
     public BorderPersistence(WorldBorderAPI api, JavaPlugin plugin) {
         this.borderAPI = api;
-        this.dataKey = new NamespacedKey(plugin, "world_border_data");
+        this.dataKey = PaperSharedConstants.WORLD_BORDER_DATA_KEY;
         this.tags = new BorderDataTags(plugin);
     }
 

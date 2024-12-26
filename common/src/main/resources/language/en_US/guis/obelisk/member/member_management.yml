@@ -1,40 +1,38 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<blue>Manage Members"
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+title: "<blue>Manage Members"
+open-sound: "ui.button.click"
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
 # Each character represents an item / slot.
 # '.' represents an empty slot.
-# Any other characters are shown below under ITEMS
+# Any other characters are shown below under items
 # Each character corresponds to an item.
 
-# This GUI is where Faction owners / admins can manage their faction members.
+# This GUI is where faction owners / admins can manage their faction members.
 
 # THIS IS A PAGINATED GUI! This means it can have multiple pages.
 # THE LETTER 'x' CORRESPONDS TO WHERE THE PAGINATED ITEMS WILL BE!
 # YOU CANNOT CHANGE THIS!
 # PAGINATION ITEMS ARE CONFIGURED IN 'pagination.yml'!
-LAYOUT:
+layout:
   - "b # # # # # # # #"
   - "# x x x x x x x #"
   - "# x x x x x x x #"
   - "# x x x x x x x #"
   - "# < # # p # # > #"
 
-
-
-ITEMS:
+items:
 
   # Just a general prompt for what this GUI is about.
-  PROMPT:
-    char: "p" # This is the character to use in the LAYOUT!
+  prompt:
+    char: "p" # This is the character to use in the layout!
     material: "NETHER_STAR"
-    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player-skull> - Skull texture of the player.
     text: "<gold>Manage Members"
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
@@ -43,7 +41,7 @@ ITEMS:
       - "<yellow>Demote, Kick, Ban, etc."
 
   # Back button, return to the main Obelisk UI
-  BACK:
+  back:
     char: "b"
     material: "BARRIER"
     skull: ""
@@ -55,19 +53,19 @@ ITEMS:
   # This is the item that displays each player.
   # By default, the item is the player's head, and you shouldn't change this unless you're... insane?
   # You can customise the text, lore and sound though.
-  MODEL:
+  model:
     material: "PLAYER_HEAD"
-    skull: "<player_skull>"
-    text: "<blue><player_name>" # Placeholders: <player_name> - Name of player.
-    sound: "" # Sound already configured in manage_member.yml
+    skull: "<player-skull>"
+    text: "<blue><player-name>" # Placeholders: <player-name> - Name of player.
+    sound: "" # Sound already configured in manage-member.yml
     pitch: 1
-    # Placeholders: <player_rank> - Rank of player.
+    # Placeholders: <player-rank> - Rank of player.
     lore:
-      - "<green>Rank: <yellow><player_rank>"
+      - "<green>Rank: <yellow><player-rank>"
       - ""
       - "<yellow>Click to manage this player."
 
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""
@@ -75,4 +73,3 @@ ITEMS:
     sound: "none"
     pitch: 1
     lore: "" # Empty lore
-

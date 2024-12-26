@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @Getter
@@ -51,12 +52,12 @@ public class RunesSubmitUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "PROMPT", "BORDER" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "prompt", "border" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "BACK" ->
+            case "back" ->
                     new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), type, player);
-            case "SUBMIT" ->
+            case "submit" ->
                     new RuneSubmitItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), type, this, player);
             default -> null;
         };

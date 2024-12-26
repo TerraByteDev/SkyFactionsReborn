@@ -1,16 +1,16 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<green>Purchase Defence"
-OPEN_SOUND: "" # Already played in the overview config
-OPEN_PITCH: 1
+title: "<green>Purchase Defence"
+open-sound: "" # Already played in the overview config
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
 # Each character represents an item / slot.
 # '.' represents an empty slot.
-# Any other characters are shown below under ITEMS
+# Any other characters are shown below under items
 # Each character corresponds to an item.
 
 # This GUI is where players can confirm the purchase of a selected defence.
@@ -19,18 +19,18 @@ OPEN_PITCH: 1
 # THE LETTER 'x' CORRESPONDS TO WHERE THE PAGINATED ITEMS WILL BE!
 # YOU CANNOT CHANGE THIS!
 # PAGINATION ITEMS ARE CONFIGURED IN 'pagination.yml'!
-LAYOUT:
+layout:
   - "b # # # # # # # #"
   - "# . . . d . . . #"
   - "# . a . . . c . #"
   - "# # # # # # # # #"
 
-ITEMS:
+items:
 
   # Just a general prompt for what this GUI is about.
   # Placeholders: <player_name> - Name of player who is being managed.
-  DEFENCE:
-    char: "d" # This is the character to use in the LAYOUT!
+  defence:
+    char: "d" # This is the character to use in the layout!
     material: "<defence_material>" # Placeholders: <defence_material> - Configured item material of the defence.
     skull: "<defence_skull>" # Placeholders: <defence_skull> - Skull texture of the defence, assuming the configured item material is a player head.
     text: "<defence_name>" # Placeholders: <defence_name> - Name of the defence
@@ -43,7 +43,7 @@ ITEMS:
       - "<yellow>Cost: <green><defence_cost> Runes"
 
   # Back button, return to the main Obelisk UI
-  BACK:
+  back:
     char: "b"
     material: "BARRIER"
     skull: ""
@@ -52,7 +52,7 @@ ITEMS:
     pitch: 1
     lore: ""
 
-  CONFIRM:
+  confirm:
     char: "a"
     material: "LIME_TERRACOTTA"
     skull: ""
@@ -63,7 +63,7 @@ ITEMS:
       - "<gray>This will cost you"
       - "<gray><defence_cost> Runes."
 
-  CANCEL:
+  cancel:
     char: "c"
     material: "RED_TERRACOTTA"
     skull: ""
@@ -71,8 +71,8 @@ ITEMS:
     sound: "block.note_block.bass"
     pitch: 1
     lore: ""
-  
-  BORDER:
+
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""
@@ -80,4 +80,3 @@ ITEMS:
     sound: "none"
     pitch: 1
     lore: "" # Empty lore
-

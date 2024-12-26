@@ -1,10 +1,10 @@
 # DO NOT CHANGE THIS!!!!
-CONFIG_VERSION: 1
+config-version: 1
 
 # Title of the GUI (Inventory)
-TITLE: "<blue>Purchase Defences"
-OPEN_SOUND: "ui.button.click"
-OPEN_PITCH: 1
+title: "<blue>Purchase Defences"
+open-sound: "ui.button.click"
+open-pitch: 1
 
 # This allows you to customise the shape of the GUI.
 # You can only have a maximum of 54 slots (9 x 6).
@@ -19,17 +19,17 @@ OPEN_PITCH: 1
 # THE LETTER 'x' CORRESPONDS TO WHERE THE PAGINATED ITEMS WILL BE!
 # YOU CANNOT CHANGE THIS!
 # PAGINATION ITEMS ARE CONFIGURED IN 'pagination.yml'!
-LAYOUT:
+layout:
   - "b # # # # # # # #"
   - "# x x x x x x x #"
   - "# x x x x x x x #"
   - "# x x x x x x x #"
   - "# < # # p # # > #"
 
-ITEMS:
+items:
 
   # Just a general prompt for what this GUI is about.
-  PROMPT:
+  prompt:
     char: "p" # This is the character to use in the LAYOUT!
     material: "NETHER_STAR"
     skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
@@ -41,7 +41,7 @@ ITEMS:
       - "<yellow>defences to defend your island."
 
   # Back button, return to the main Obelisk UI
-  BACK:
+  back:
     char: "b"
     material: "BARRIER"
     skull: ""
@@ -52,7 +52,7 @@ ITEMS:
 
   # This is the item that displays each audit log.
   # You cannot edit the character, however everythign else is customisable.
-  MODEL:
+  model:
     material: "<defence_material>" # Placeholders: <defence_material> - The configured item material of the defence.
     skull: "<defence_skull>" # Placeholders: <defence_skull> - Skull texture of the defence, assuming the configured item material is a player head.
     text: "<defence_name>" # Placeholders: <defence_name> - Name of the defence (e.g. "Arrow")
@@ -61,7 +61,7 @@ ITEMS:
     # Placeholders: <defence_lore> - Configured lore of the defence.
     lore: "<defence_lore>" # You should only need to do this. The configured lore lines are in their respective defence configs.
 
-  BORDER:
+  border:
     char: "#"
     material: "GRAY_STAINED_GLASS_PANE"
     skull: ""

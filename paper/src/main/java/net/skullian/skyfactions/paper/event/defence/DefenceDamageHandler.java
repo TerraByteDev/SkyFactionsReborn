@@ -5,6 +5,7 @@ import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.common.defence.struct.DefenceEntityDeathData;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.text.TextUtility;
+import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import org.bukkit.NamespacedKey;
 import org.bukkit.damage.DamageType;
@@ -32,8 +33,8 @@ public class DefenceDamageHandler implements Listener {
 
         if (!(event.getHitEntity() instanceof LivingEntity hitEntity)) return;
 
-        NamespacedKey damageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-damage");
-        NamespacedKey messageKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "damage-message");
+        NamespacedKey damageKey = PaperSharedConstants.DEFENCE_DAMAGE_KEY;
+        NamespacedKey messageKey = PaperSharedConstants.DEFENCE_DAMAGE_MESSAGE_KEY;
 
         PersistentDataContainer container = event.getEntity().getPersistentDataContainer();
         if (container.has(damageKey, PersistentDataType.INTEGER)) {

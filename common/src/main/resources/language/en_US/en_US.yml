@@ -241,15 +241,15 @@ defences:
     - "<red><italic>rank to do this!"
 
   # Sent when a player successfully purchases a defence.
-  # Placeholders: <defence-name> - Name of the defence purchased
-  defence-purchase-success: "<server-name> <yellow>Successfully purchased <reset><defence-name><yellow>!"
+  # Placeholders: <defence_name> - Name of the defence purchased
+  defence-purchase-success: "<server_name> <yellow>Successfully purchased <reset><defence_name><yellow>!"
 
   # Sent when a player successfully places a defence.
-  # Placeholders: <defence-name> - Name of the defence placed
-  defence-place-success: "<server-name> <gray>Successfully placed <reset><defence-name><gray>!"
+  # Placeholders: <defence_name> - Name of the defence placed
+  defence-place-success: "<server_name> <gray>Successfully placed <reset><defence_name><gray>!"
 
   # Sent when the player tries to mine the defence.
-  defence-destroy-deny: "<server-name> <red><bold>Hey! <reset><gray>You must remove the defence from the management GUI!"
+  defence-destroy-deny: "<server_name> <red><bold>Hey! <reset><gray>You must remove the defence from the management GUI!"
 
   # In the defence management GUI, the "<operation>" placeholder is used (by default) to dynamically show whether
   # the passive/hostile targeting is enabled or disabled.
@@ -262,14 +262,14 @@ defences:
   disable-placeholder: "<red>Disable"
 
   # Sent when a player tries to place too many defences.
-  # Placeholders: <defence-max> - Configured (in defences.yml) maximum defence count for players / factions.
-  too-many-defences: "<server-name><red><bold> Hey!<reset><yellow> You have too many defences! <gray>(Max <defence-max>)"
+  # Placeholders: <defence_max> - Configured (in defences.yml) maximum defence count for players / factions.
+  too-many-defences: "<server_name><red><bold> Hey!<reset><yellow> You have too many defences! <gray>(Max <defence_max>)"
 
   # Sent when a player removes a defence via the GUI.
-  defence-remove-success: "<server-name><green> Successfully removed defence."
+  defence-remove-success: "<server_name><green> Successfully removed defence."
 
-  # Sent when a player tries to access the
-  defence-insufficient-permissions: "<server-name><red><bold> Hey!<reset><yellow> You don't have the sufficient rank to do that!"
+  # Sent when a player tries to access a portion of a defence that they do not have the sufficient rank for.
+  defence-insufficient-permissions: "<server_name><red><bold> Hey!<reset><yellow> You don't have the sufficient rank to do that!"
 
 gems:
   # Sent when the player runs /gems or /gems balance
@@ -277,35 +277,34 @@ gems:
 
   # Sent after a successful /gems paid command.
   # Placeholders: <amount> - Amount of gems given / <player> - Player affected.
-  gems-pay-success: "<server-name><reset><green> Successfully paid<reset><yellow> <amount><reset><green> Gems to <reset><yellow><player>."
+  gems-pay-success: "<server_name><reset><green> Successfully paid<reset><yellow> <amount><reset><green> Gems to <reset><yellow><player>."
 
   # Sent to the recipient (if online) when they are paid gems.
-  # Placeholders: <amount> - Amount of gems given / <player-name> - Name of player who paid.
-  gems-pay-notify: "<server-name><reset> <green><player-name> <yellow>has paid you <greeen><bold><amount> <reset><yellow>Gems."
+  # Placeholders: <amount> - Amount of gems given / <player_name> - Name of player who paid.
+  gems-pay-notify: "<server_name><reset> <green><player_name> <yellow>has paid you <greeen><bold><amount> <reset><yellow>Gems."
 
   # Sent after an admin successfully /gems give a player / faction gems.
   # Placeholders: <amount> - Amount of gems given / <name> - Name of Player / Faction affected.
-  gem-give-success: "<server-name><reset><green> Successfully gave<reset><yellow> <amount><reset><green> Gems to<reset><yellow> <name>."
+  gem-give-success: "<server_name><reset><green> Successfully gave<reset><yellow> <amount><reset><green> Gems to<reset><yellow> <name>."
 
   # Sent when a player successfully withdraws gems.
   # Placeholders: <amount> - Amount of gems withdrawn
-  gems-withdraw-success: "<server-name><reset><green> Successfully withdrew <reset><yellow><amount> Gems."
+  gems-withdraw-success: "<server_name><reset><green> Successfully withdrew <reset><yellow><amount> Gems."
 
   # Sent when a player successfully deposits gems.
   # Placeholders: <amount> - Amount of gems deposited
-  gems-deposit-success: "<server-name><reset><green> Successfully deposited <reset><yellow><amount> Gems."
+  gems-deposit-success: "<server_name><reset><green> Successfully deposited <reset><yellow><amount> Gems."
 
   # Sent when a player tries to pay another player more gems than they have in their balance.
-  # Also occurs if they try to
-  insufficient-gem-count: "<server-name> <red><bold>Hey!<reset><gray> You do not have enough gems for that!"
+  insufficient-gem-count: "<server_name> <red><bold>Hey!<reset><gray> You do not have enough gems for that!"
 
   # Sent when a player tries to withdraw more gems than they have in their inventory.
-  insufficient-inventory-space: "<server-name><red> There was not enough space in your inventory to withdraw the desired amount of gems."
+  insufficient-inventory-space: "<server_name><red> There was not enough space in your inventory to withdraw the desired amount of gems."
 
   # Sent when a player tries to deposit gems when there are none in their inventory.
-  no-gems-present: "<server-name> <red><bold>Hey! <reset><gray>You do not have any gems in your inventory!"
+  no-gems-present: "<server_name> <red><bold>Hey! <reset><gray>You do not have any gems in your inventory!"
 
-  # Item name of the gem item (when withdrawed).
+  # Item name of the gem item (when withdrew).
   item-name: "<bold>{#37FF00}Gem{/#89FF58"
 
   # Item lore for the gem (when withdrawed).
@@ -351,8 +350,8 @@ factions:
 
 
     # Sent when a player tries to create a faction but does not have enough runes.
-    # Placeholders: <creation-cost> - Cost of faction creation.
-    insufficient-funds: "<server_name><red><bold> Hey!<reset><gray> You do not have enough runes to create a faction. You need <green><bold><creation-cost> Runes<reset><gray> to create a faction."
+    # Placeholders: <creation_cost> - Cost of faction creation.
+    insufficient-funds: "<server_name><red><bold> Hey!<reset><gray> You do not have enough runes to create a faction. You need <green><bold><creation_cost> Runes<reset><gray> to create a faction."
 
     # Sent when a player successfully creates a new faction.
     faction-create-success: "<server_name><green> Successfully created your faction!"
@@ -363,9 +362,9 @@ factions:
     # Placeholders: <motd> - MOTD of the faction.
     # Placeholders: <owner> - Owner of the faction. / <admins> - Admins of the faction.
     # Placeholders: <moderators> - Moderators of the faction / <fighters> - Fighters of the faction
-    # Placeholders: <members> - Members of the faction / <faction-name> - Name of the faction
+    # Placeholders: <members> - Members of the faction / <faction_name> - Name of the faction
     information-message:
-      - "<gold><bold>------------- <red><bold><faction-name> <gold><bold>-------------<reset>"
+      - "<gold><bold>------------- <red><bold><faction_name> <gold><bold>-------------<reset>"
       - "<yellow>MOTD:<reset> <motd><reset>"
       - ""
       - "<yellow>Lord: <green><owner><reset>"
@@ -373,7 +372,7 @@ factions:
       - "<yellow>Barons: <green><moderators><reset>"
       - "<yellow>Knights: <green><fighters><reset>"
       - "<yellow>Subjects: <green><members><reset>"
-      - "<gold><bold>------------- <red><bold><faction-name> <gold><bold>-------------<reset>"
+      - "<gold><bold>------------- <red><bold><faction_name> <gold><bold>-------------<reset>"
 
   faction-rename:
     # Sent when a faction owner attempts to rename their faction when they are still on cooldown (configured in config.yml).
@@ -407,8 +406,8 @@ factions:
 
   faction-leave:
     # Sent when a player successfully leaves a faction.
-    # Placeholders: <faction-name> - Name of the faction.
-    faction-leave-success: "<server_name> <green>You have successfully left <yellow><faction-name>."
+    # Placeholders: <faction_name> - Name of the faction.
+    faction-leave-success: "<server_name> <green>You have successfully left <yellow><faction_name>."
 
     # Appended to the bottom of the leave confirmation gui item lore when the player is the owner.
     owner-confirmation-lore:
@@ -470,8 +469,8 @@ factions:
     selected: "<green><italic>(Selected) " # Purposefully leave a space here. Essential.
 
     # Sent when a player's rank is successfully changed (in the faction rank manage UI, assuming they have permission).
-    # Placeholders: <player-name> - Name of the player whose rank was changed / <new-rank> - New rank of the player.
-    rank-change-success: "<server_name> <reset><yellow>Successfully changed <green><player-name>'s<yellow> rank to <green><new-rank>."
+    # Placeholders: <player_name> - Name of the player whose rank was changed / <new-rank> - New rank of the player.
+    rank-change-success: "<server_name> <reset><yellow>Successfully changed <green><player_name>'s<yellow> rank to <green><new-rank>."
 
   faction-invite:
 
@@ -482,8 +481,8 @@ factions:
     invite-in-same-faction: "<server_name> <red><bold>Hey!<reset><gray> That player is already in your Faction!"
 
     # Sent when the player successfully invites another player to their Faction.
-    # Placeholders: <player-name> - Name of the player being invited.
-    invite-create-success: "<server_name> <yellow>Successfully invited <green><player-name> <yellow>to your Faction."
+    # Placeholders: <player_name> - Name of the player being invited.
+    invite-create-success: "<server_name> <yellow>Successfully invited <green><player_name> <yellow>to your Faction."
 
     # Sent to a player when they are invited to another Faction, if online.
     invite-notification: "<server_name> <green>You have a new Faction invitation. Check your Obelisk."
@@ -501,8 +500,8 @@ factions:
     join-request-notification: "<server_name> <green>You have a new Faction join request. Check your Obelisk."
 
     # Sent to a player when they create a join request for a Faction.
-    # Placeholders: <faction-name> - Name of the Faction.
-    join-request-create-success: "<server_name> <yellow>Successfully created a join request for <green><faction-name>."
+    # Placeholders: <faction_name> - Name of the Faction.
+    join-request-create-success: "<server_name> <yellow>Successfully created a join request for <green><faction_name>."
 
     # Sent when a player tries to create another join request when they already have an outgoing one.
     join-request-already-exists: "<server_name> <red>You already have a join request for that Faction!"
@@ -514,44 +513,44 @@ factions:
     join-request-same-faction: "<server_name> <red>You are already in that Faction!"
 
     # Sent when a player revokes a Faction invite.
-    # Placeholders: <player-name> - Player who the invite was going to.
-    invite-revoke-success: "<server_name> <green>Successfully revoked your invitation to <green><player-name>."
+    # Placeholders: <player_name> - Player who the invite was going to.
+    invite-revoke-success: "<server_name> <green>Successfully revoked your invitation to <green><player_name>."
 
     # Sent when a player (moderator, admin or owner) accepts a Faction join request.
-    # Placeholders: <player-name> - Player who was accepted.
-    join-request-accept-success: "<server_name> <green>Successfully accepted <yellow><player-name>'s <green>join request."
+    # Placeholders: <player_name> - Player who was accepted.
+    join-request-accept-success: "<server_name> <green>Successfully accepted <yellow><player_name>'s <green>join request."
 
     # Sent when a player (moderator, admin or owner) accepts a Faction join request.
-    # Placeholders: <player-name> - Player who was rejected.
-    join-request-reject-success: "<server_name> <yellow>Successfully rejected <red><bold><player-name>'s <reset><yellow> join request."
+    # Placeholders: <player_name> - Player who was rejected.
+    join-request-reject-success: "<server_name> <yellow>Successfully rejected <red><bold><player_name>'s <reset><yellow> join request."
 
     # Sent when a player revokes their outgoing join request.
-    # Placeholders: <faction-name> - Name of the Faction your join request WAS going to.
-    join-request-revoke-success: "<server_name> <green>Your join request to <yellow><faction-name> <green>has been revoked."
+    # Placeholders: <faction_name> - Name of the Faction your join request WAS going to.
+    join-request-revoke-success: "<server_name> <green>Your join request to <yellow><faction_name> <green>has been revoked."
 
     # Sent when a player confirms the acceptance of their join request, or accepted a Faction invite.
-    # Placeholders: <faction-name> - Name of the Faction you are now part of.
-    player-faction-join-success: "<server_name> <yellow>You are now part of the Faction <green><faction-name>!"
+    # Placeholders: <faction_name> - Name of the Faction you are now part of.
+    player-faction-join-success: "<server_name> <yellow>You are now part of the Faction <green><faction_name>!"
 
     # Sent when a player, after their join request is accepted by the Faction, rejects it.
-    # Placeholders: <faction-name> - Name of the Faction your join request was going to.
-    join-request-deny-success: "<server_name> <red>You have rejected <yellow><faction-name>'s join request acceptance."
+    # Placeholders: <faction_name> - Name of the Faction your join request was going to.
+    join-request-deny-success: "<server_name> <red>You have rejected <yellow><faction_name>'s join request acceptance."
 
     # Sent to the player (if online) when their join request to a Faction is accepted.
-    # Placeholders: <faction-name> - Name of the Faction.
-    join-request-accept-notification: "<server_name> <green>Your join request to <yellow><faction-name> <yellow>has been accepted!"
+    # Placeholders: <faction_name> - Name of the Faction.
+    join-request-accept-notification: "<server_name> <green>Your join request to <yellow><faction_name> <yellow>has been accepted!"
 
     # Sent to the player (if online) when their join request to a Faction is rejected.
-    # Placeholders: <faction-name> - Name of the Faction.
-    join-request-reject-notification: "<server_name> <yellow>Your join request to <red><bold><faction-name><reset><yellow> has been rejected."
+    # Placeholders: <faction_name> - Name of the Faction.
+    join-request-reject-notification: "<server_name> <yellow>Your join request to <red><bold><faction_name><reset><yellow> has been rejected."
 
     # Sent to the player when they denied a Faction's invite.
-    # Placeholders: <faction-name> - Name of the Faction.
-    faction-invite-deny-success: "<server_name> <yellow>You successfully denied <green><faction-name>'s <yellow>invite."
+    # Placeholders: <faction_name> - Name of the Faction.
+    faction-invite-deny-success: "<server_name> <yellow>You successfully denied <green><faction_name>'s <yellow>invite."
 
     # Sent to online players (of the Faction) when a new player joins the Faction.
-    # Placeholders: <player-name> - Name of the player who joined.
-    faction-join-broadcast: "<green><player-name> <yellow>Has joined the Faction!"
+    # Placeholders: <player_name> - Name of the player who joined.
+    faction-join-broadcast: "<green><player_name> <yellow>Has joined the Faction!"
 
   faction-disband:
 
@@ -711,31 +710,31 @@ audit-logs:
   # Use '/' for a new lore line! This is so it is not put onto a singular line of lore!
 
   # When the faction is first created.
-  # Placeholders: <player-name> - Name of player who created the faction.
-  # Placeholders: <faction-name> - Name of the faction.
+  # Placeholders: <player_name> - Name of player who created the faction.
+  # Placeholders: <faction_name> - Name of the faction.
   faction-create-title: "<green><bold>Faction Created"
-  faction-create-description: "<green><player-name><reset><yellow> created the /<yellow>faction <green><faction-name>."
+  faction-create-description: "<green><player_name><reset><yellow> created the /<yellow>faction <green><faction_name>."
 
   # Sent when a player joins the faction.
-  # Placeholders: <player-name> - Player who joined.
+  # Placeholders: <player_name> - Player who joined.
   join-title: "<green><bold>Player Joined"
-  join-description: "<green><player-name><reset><yellow> joined the faction."
+  join-description: "<green><player_name><reset><yellow> joined the faction."
 
   # Sent when a player leaves the faction.
-  # Placeholders: <player-name> - Player who left.
+  # Placeholders: <player_name> - Player who left.
   leave-title: "<red><bold>Player Left"
-  leave-description: "<red><player-name><reset><yellow> left the faction."
+  leave-description: "<red><player_name><reset><yellow> left the faction."
 
   # Sent when a player updates the MOTD.
-  # Placeholders: <player-name> - Player who updated the MOTD.
+  # Placeholders: <player_name> - Player who updated the MOTD.
   # Placeholders: <new-motd> - New MOTD.
   motd-title: "<yellow><bold>MOTD Updated"
-  motd-description: "<green><player-name> <reset><yellow>updated the /<yellow>Faction's MOTD to<reset> /<new-motd>" # Reset colors as the MOTD may contain formatting.
+  motd-description: "<green><player_name> <reset><yellow>updated the /<yellow>Faction's MOTD to<reset> /<new-motd>" # Reset colors as the MOTD may contain formatting.
 
   # Sent when a player (moderator, admin or owner) creates a broadcast.
-  # Placeholders: <player-name> - Player who created the broadcast.
+  # Placeholders: <player_name> - Player who created the broadcast.
   broadcast-title: "<green><bold>Broadcast Created"
-  broadcast-description: "<green><player-name> <reset><yellow>created a new broadcast."
+  broadcast-description: "<green><player_name> <reset><yellow>created a new broadcast."
 
   # Sent when a player (moderator, admin or owner) kicks a player.
   # Placeholders: <kicked> - Name of player who was kicked. <player> - Player who kicked them.
@@ -748,14 +747,14 @@ audit-logs:
   ban-description: "<green><banned> <yellow>was banned from the Faction/<yellow>by <green><player>."
 
   # Sent when a player (moderator, admin or owner) creates an invitation.
-  # Placeholder: <inviter> - Name of player who created the invite / <player-name> - Invited player.
+  # Placeholder: <inviter> - Name of player who created the invite / <player_name> - Invited player.
   invite-create-title: "<green><bold>Invite Created"
-  invite-create-description: "<green><inviter> <yellow>invited <green><player-name> <yellow>to the Faction."
+  invite-create-description: "<green><inviter> <yellow>invited <green><player_name> <yellow>to the Faction."
 
   # Sent when a player creates a join request to the Faction.
-  # Placeholder: <player-name> - Player who created the join request.
+  # Placeholder: <player_name> - Player who created the join request.
   join-request-title: "<green><bold>Join Request Created"
-  join-request-description: "<green><player-name> <yellow>wants to join the Faction."
+  join-request-description: "<green><player_name> <yellow>wants to join the Faction."
 
   # Sent when a player (moderator, admin or owner) revokes an invitation.
   # Placeholders: <player> - Player who revoked the invite / <invited> - Player who was invited.
@@ -763,41 +762,41 @@ audit-logs:
   invite-revoke-description: "<green><player> <yellow>revoked a Faction invite for <green><invited>"
 
   # Sent when a player (moderator, admin or owner) accepts a join request.
-  # Placeholders: <player-name> - Player who was accepted. <member> - Player who accepted the join request.
+  # Placeholders: <player_name> - Player who was accepted. <member> - Player who accepted the join request.
   join-request-accept-title: "<green><bold>Join Request Accepted"
-  join-request-accept-description: "<green><player-name> <yellow>was accepted into the Faction/<yellow>by <green><member>."
+  join-request-accept-description: "<green><player_name> <yellow>was accepted into the Faction/<yellow>by <green><member>."
 
   # Sent when a player (moderator, admin or owner) rejects a join request.
-  # Placeholders: <faction-player> - Faction member who rejected the join request / <player> - Player who made the join request in the first place.
+  # Placeholders: <faction_player> - Faction member who rejected the join request / <player> - Player who made the join request in the first place.
   join-request-reject-title: "<red><bold>Join Request Rejected"
-  join-request-reject-description: "<green><faction-player> <yellow>rejected <green><player>'s/<yellow>join request."
+  join-request-reject-description: "<green><faction_player> <yellow>rejected <green><player>'s/<yellow>join request."
 
   # Sent when a player revokes their outgoing join request to join your Faction.
-  # Placeholders: <player-name> - Owner of the join request.
+  # Placeholders: <player_name> - Owner of the join request.
   player-join-request-revoke-title: "<red><bold>Join Request Revoked"
-  player-join-request-revoke-description: "<green><player-name> <yellow>revoked their/join request to the Faction."
+  player-join-request-revoke-description: "<green><player_name> <yellow>revoked their/join request to the Faction."
 
   # Sent when, after you accept a player's join request, they deny your acceptance.
-  # Placeholders: <player-name> - Owner of the join request.
+  # Placeholders: <player_name> - Owner of the join request.
   player-join-request-deny-title: "<red><bold>Join Request Denied"
-  player-join-request-deny-description: "<green><player-name> <yellow>denied your acceptance/of their join request."
+  player-join-request-deny-description: "<green><player_name> <yellow>denied your acceptance/of their join request."
 
   # Sent when a player accepts a Faction's invite.
-  # Placeholders: <player-name> - Player who accepted the invite.
+  # Placeholders: <player_name> - Player who accepted the invite.
   invite-accept-title: "<green><bold>Invite Accepted"
-  invite-accept-description: "<green><player-name> <yellow>accepted your Faction invite."
+  invite-accept-description: "<green><player_name> <yellow>accepted your Faction invite."
 
   # Sent when a player denies a Faction's invite.
-  # Placeholders: <player-name> - Player who denied the invite.
+  # Placeholders: <player_name> - Player who denied the invite.
   invite-deny-title: "<red><bold>Invite Denied"
-  invite-deny-description: "<green><player-name> <yellow>denied your Faction invite."
+  invite-deny-description: "<green><player_name> <yellow>denied your Faction invite."
 
   # Sent when a player (moderator, admin or owner) purchases a defence.
-  # Placeholders: <player-name> - Name of the player / <defence-name> - Configured name of the defence bought.
+  # Placeholders: <player_name> - Name of the player / <defence_name> - Configured name of the defence bought.
   defence-purchase-title: "<yellow>Defence Purchased"
-  defence-purchase-description: "<green><player-name> <yellow>purchased the <reset><defence-name><yellow> defence."
+  defence-purchase-description: "<green><player_name> <yellow>purchased the <reset><defence_name><yellow> defence."
 
   # Sent when a player (moderator, admin or owner) removes a defence.
-  # Placeholders: <player-name> - Player who removed it / <defence-name> - Configured name of the defence bought.
+  # Placeholders: <player_name> - Player who removed it / <defence_name> - Configured name of the defence bought.
   defence-removal-title: "<red><bold>Defence Removed"
-  defence-removal-description: "<green><player-name> <yellow>removed a <reset><defence-name><yellow> defence."
+  defence-removal-description: "<green><player_name> <yellow>removed a <reset><defence_name><yellow> defence."

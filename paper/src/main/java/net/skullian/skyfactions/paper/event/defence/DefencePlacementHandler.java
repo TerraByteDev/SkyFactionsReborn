@@ -16,6 +16,7 @@ import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.common.util.text.TextUtility;
+import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Location;
@@ -43,7 +44,7 @@ public class DefencePlacementHandler implements Listener {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
         ItemStack stack = event.getItemInHand();
-        NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
+        NamespacedKey defenceKey = PaperSharedConstants.DEFENCE_IDENTIFIER_KEY;
 
         PersistentDataContainer container = stack.getItemMeta().getPersistentDataContainer();
         if (container.has(defenceKey, PersistentDataType.STRING)) {
@@ -106,10 +107,9 @@ public class DefencePlacementHandler implements Listener {
                         ObjectMapper mapper = new ObjectMapper();
 
                         PersistentDataContainer blockContainer = new CustomBlockData(placed, SkyFactionsReborn.getInstance());
-                        NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
 
                         blockContainer.set(defenceKey, PersistentDataType.STRING, defenceIdentifier);
-                        blockContainer.set(dataKey, PersistentDataType.STRING, mapper.writeValueAsString(data));
+                        blockContainer.set(PaperSharedConstants.DEFENCE_DATA_KEY, PersistentDataType.STRING, mapper.writeValueAsString(data));
 
                         createDefence(data, defence, owner, isFaction, Optional.of(player), Optional.of(event), true, true);
                     } catch (Exception error) {
@@ -209,13 +209,12 @@ public class DefencePlacementHandler implements Listener {
             for (SkyLocation location : locations) {
                 Block block = SpigotAdapter.adapt(location).getBlock();
 
-                NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
-                NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
+                NamespacedKey defenceKey = PaperSharedConstants.DEFENCE_IDENTIFIER_KEY;
                 PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
                 if (container.has(defenceKey, PersistentDataType.STRING)) {
                     try {
                         String name = container.get(defenceKey, PersistentDataType.STRING);
-                        String data = container.get(dataKey, PersistentDataType.STRING);
+                        String data = container.get(PaperSharedConstants.DEFENCE_DATA_KEY, PersistentDataType.STRING);
                         ObjectMapper mapper = new ObjectMapper();
                         DefenceData defenceData = mapper.readValue(data, DefenceData.class);
 
@@ -249,12 +248,11 @@ public class DefencePlacementHandler implements Listener {
             for (SkyLocation location : locations) {
                 Block block = SpigotAdapter.adapt(location).getBlock();
 
-                NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
-                NamespacedKey dataKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-data");
+                NamespacedKey defenceKey = PaperSharedConstants.DEFENCE_IDENTIFIER_KEY;
                 PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
                 if (container.has(defenceKey, PersistentDataType.STRING)) {
                     String name = container.get(defenceKey, PersistentDataType.STRING);
-                    String data = container.get(dataKey, PersistentDataType.STRING);
+                    String data = container.get(PaperSharedConstants.DEFENCE_DATA_KEY, PersistentDataType.STRING);
                     DefenceStruct defence = SkyApi.getInstance().getDefenceFactory().getDefences().getOrDefault(SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), SkyApi.getInstance().getDefenceFactory().getDefaultStruct()).get(name);
 
                     try {

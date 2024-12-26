@@ -20,6 +20,8 @@ import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class ObeliskPurchaseDefenceUI extends Screen {
     private final String obeliskType;
     private final DefenceStruct struct;
@@ -45,7 +47,7 @@ public class ObeliskPurchaseDefenceUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        if (itemData.getITEM_ID().equals("DEFENCE")) {
+        if (itemData.getITEM_ID().equalsIgnoreCase("defence")) {
             itemData.setBASE64_TEXTURE(struct.getITEM_SKULL());
             itemData.setMATERIAL(struct.getITEM_MATERIAL());
             itemData.setLORE(struct.getITEM_LORE());
@@ -53,13 +55,13 @@ public class ObeliskPurchaseDefenceUI extends Screen {
             return new ObeliskPaginatedDefenceItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), struct, false, obeliskType, faction, player);
         }
 
-        return switch (itemData.getITEM_ID()) {
-            case "BACK" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "back" ->
                     new ObeliskBackItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), obeliskType, player);
-            case "CONFIRM" ->
+            case "confirm" ->
                     new ObeliskConfirmPurchaseItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), obeliskType, struct, faction, player);
-            case "CANCEL" -> new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "BORDER" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "cancel" -> new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "border" -> new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };
     }

@@ -16,6 +16,8 @@ import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class PlayerRaidConfirmationUI extends Screen {
 
     @Builder
@@ -35,11 +37,11 @@ public class PlayerRaidConfirmationUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "CANCEL" -> new RaidCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "CONFIRM" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "cancel" -> new RaidCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "confirm" ->
                     new RaidConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "PROMPT", "BORDER" ->
+            case "prompt", "border" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };

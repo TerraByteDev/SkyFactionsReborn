@@ -16,6 +16,8 @@ import net.skullian.skyfactions.common.util.SLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
+
 public class IslandCreationConfirmationUI extends Screen {
     @Builder
     public IslandCreationConfirmationUI(SkyUser player) {
@@ -34,11 +36,11 @@ public class IslandCreationConfirmationUI extends Screen {
     @Nullable
     @Override
     public BaseSkyItem handleItem(@NotNull ItemData itemData) {
-        return switch (itemData.getITEM_ID()) {
-            case "CANCEL" -> new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "CONFIRM" ->
+        return switch (itemData.getITEM_ID().toLowerCase(Locale.ROOT)) {
+            case "cancel" -> new GeneralCancelItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
+            case "confirm" ->
                     new CreationConfirmationItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
-            case "PROMPT", "BORDER" ->
+            case "prompt", "border" ->
                     new EmptyItem(itemData, GUIAPI.createItem(itemData, player.getUniqueId()), player);
             default -> null;
         };

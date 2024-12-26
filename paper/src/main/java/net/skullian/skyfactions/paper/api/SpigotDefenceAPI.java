@@ -14,6 +14,7 @@ import net.skullian.skyfactions.common.faction.Faction;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.SkyLocation;
+import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.NamespacedKey;
@@ -69,10 +70,9 @@ public class SpigotDefenceAPI extends DefenceAPI {
     @Override
     public boolean isDefence(SkyLocation location) {
         Block block = SpigotAdapter.adapt(location).getBlock();
-        NamespacedKey defenceKey = new NamespacedKey(SkyFactionsReborn.getInstance(), "defence-identifier");
 
         PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
-        return container.has(defenceKey, PersistentDataType.STRING);
+        return container.has(PaperSharedConstants.DEFENCE_IDENTIFIER_KEY, PersistentDataType.STRING);
     }
 
     @Override
