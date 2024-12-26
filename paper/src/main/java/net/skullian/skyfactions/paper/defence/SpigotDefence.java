@@ -2,6 +2,7 @@ package net.skullian.skyfactions.paper.defence;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.puregero.multilib.MultiLib;
 import com.jeff_media.customblockdata.CustomBlockData;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import net.skullian.skyfactions.common.api.SkyApi;
@@ -105,9 +106,8 @@ public abstract class SpigotDefence extends Defence {
             if (nearbyEntities.isEmpty()) return new ArrayList<>();
 
             List<LivingEntity> filteredEntities = filterEntities(nearbyEntities);
-            List<Object> chosenEntities = selectRandomEntities(filteredEntities);
 
-            return chosenEntities;
+            return selectRandomEntities(filteredEntities);
         } else {
             SLogger.fatal("Could not find world [{}] for defence [{}].", defenceWorld, getStruct().getIDENTIFIER());
             return new ArrayList<>();
@@ -123,6 +123,8 @@ public abstract class SpigotDefence extends Defence {
         getTargetedEntities().removeIf(currentlyTargeted -> entities.stream().noneMatch(entity -> entity.getUniqueId().equals(currentlyTargeted)));
 
         for (LivingEntity entity : entities) {
+            if (MultiLib.isChunkExternal(entity)) continue;
+
             if (isEntityAllowed(entity, allowedEntities, shouldBlockNPCS, blockedMythicMobs)) {
                 filteredEntities.add(entity);
             }
