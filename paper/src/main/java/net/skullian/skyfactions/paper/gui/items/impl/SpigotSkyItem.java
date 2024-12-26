@@ -29,7 +29,6 @@ public class SpigotSkyItem extends SkyItem implements Item {
         this.IMPL = item;
     }
 
-
     @Override
     public ItemProvider getItemProvider() {
         return SpigotAdapter.adapt(getSTACK(), getPLAYER());
