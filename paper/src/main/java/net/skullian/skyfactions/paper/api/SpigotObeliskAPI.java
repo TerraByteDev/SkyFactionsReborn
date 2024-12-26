@@ -125,7 +125,7 @@ public class SpigotObeliskAPI extends ObeliskAPI {
 
         for (World world : worlds) {
             for (ItemDisplay entity : world.getEntitiesByClass(ItemDisplay.class)) {
-                if (!entity.getPersistentDataContainer().has(PaperSharedConstants.OBELISK_KEY) || MultiLib.isChunkExternal(entity)) return;
+                if (!entity.getPersistentDataContainer().has(PaperSharedConstants.OBELISK_KEY) || MultiLib.isChunkExternal(entity)) continue;
 
                 Location location = getLocationFromEntity(entity.getLocation());
                 SpigotObeliskBlockEntity blockEntity = new SpigotObeliskBlockEntity();
