@@ -22,6 +22,12 @@ public enum Settings {
     DEFAULT_LANGUAGE("language.default-language"),
     BLACKLISTED_PHRASES("language.blacklisted-phrases"),
 
+    ITEM_JOIN_INTEGRATION("integration.itemjoin"),
+    COREPROTECT_INTEGRATION("integration.coreprotect"),
+    VAULT_INTEGRATION("integration.vault"),
+    PLACEHOLDERAPI_INTEGRATION("integration.placeholderapi"),
+    JUKEBOX_INTEGRATION("integration.jukebox"),
+
     HUB_WORLD_NAME("hub.world-name"),
     HUB_LOCATION("hub.hub-location"),
 

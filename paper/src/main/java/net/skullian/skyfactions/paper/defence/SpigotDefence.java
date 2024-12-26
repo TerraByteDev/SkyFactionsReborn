@@ -11,12 +11,14 @@ import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceEntityStruct;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.common.faction.Faction;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.defence.hologram.SpigotDefenceTextHologram;
+import net.skullian.skyfactions.paper.hooks.CoreProtectHook;
 import net.skullian.skyfactions.paper.util.DependencyHandler;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -43,10 +45,13 @@ public abstract class SpigotDefence extends Defence {
     }
 
     @Override
-    public CompletableFuture<Void> remove() {
+    public CompletableFuture<Void> remove(SkyUser skyUser) {
         return CompletableFuture.runAsync(() -> {
             Block block = SpigotAdapter.adapt(getDefenceLocation()).getBlock();
             PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());
+
+            Player player = SpigotAdapter.adapt(skyUser).getPlayer();
+            if (player != null) CoreProtectHook.onDefenceBreak(player, block);
 
             container.remove(PaperSharedConstants.DEFENCE_DATA_KEY);
             block.setType(Material.AIR);

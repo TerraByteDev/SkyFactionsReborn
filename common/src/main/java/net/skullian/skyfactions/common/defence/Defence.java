@@ -7,6 +7,7 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
+import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyLocation;
 
 import java.util.ArrayList;
@@ -34,12 +35,13 @@ public abstract class Defence {
         this.struct = defenceStruct;
     }
 
-    public abstract CompletableFuture<Void> remove();
+    public abstract CompletableFuture<Void> remove(SkyUser skyUser);
 
     public void onShoot() {
         this.data.setAMMO(this.data.getAMMO() - 1);
         updatePDC();
     }
+
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public void damage(Optional<Integer> amount) {
         this.data.setDURABILITY(Math.max(this.data.getDURABILITY() - amount.orElseGet(this::getExplosionDamage), 0));

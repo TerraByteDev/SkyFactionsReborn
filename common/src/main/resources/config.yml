@@ -88,8 +88,9 @@ language:
 integration:
   itemjoin: true # On island deletion a player's inventory and enderchest are wiped. We can hook into ItemJoin and NOT wipe items from ItemJoin.
   coreprotect: true # On obelisk relocation and defence removal, we can hook into CoreProtect to log interactions.
-  vault: true # Used in the NPC integration
-  placeholderapi: true
+  vault: true # Used in the NPC integration (for actions).
+  placeholderapi: true # Hook into PlaceholderAPI and parse placeholders.
+  jukebox: true # Hook into the Jukebox plugin, to stop playing music when a raid begins.
 
 # SkyFactions Hub Config
 hub:

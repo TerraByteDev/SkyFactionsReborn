@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.util;
 
+import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.hooks.ItemJoinHook;
@@ -14,13 +15,13 @@ public class DependencyHandler {
     public static ArrayList<String> enabledDeps = new ArrayList<>();
 
     public static void init() {
-        if (isPluginEnabled("PlaceholderAPI")) {
+        if (isPluginEnabled("PlaceholderAPI") && Settings.PLACEHOLDERAPI_INTEGRATION.getBoolean()) {
             SLogger.setup("Found {} installed on the server - Registering expansion.", false, "<#05eb2f>PlaceholderAPI<#4294ed>");
             new PlaceholderAPIHook(SkyFactionsReborn.getInstance()).register();
             enabledDeps.add("PlaceholderAPI");
         } else alert("PlaceholderAPI");
 
-        if (isPluginEnabled("JukeBox")) {
+        if (isPluginEnabled("JukeBox") && Settings.JUKEBOX_INTEGRATION.getBoolean()) {
             SLogger.setup("Found {} installed on the server.", false, "<#05eb2f>JukeBox<#4294ed>");
             enabledDeps.add("JukeBox");
         } else alert("JukeBox");
@@ -45,13 +46,13 @@ public class DependencyHandler {
             enabledDeps.add("FancyNPCs");
         } else alert("FancyNPCs");
 
-        if (isPluginEnabled("Vault")) {
+        if (isPluginEnabled("Vault") && Settings.VAULT_INTEGRATION.getBoolean()) {
             SLogger.setup("Found {} installed on the server.", false, "<#05eb2f>Vault<#4294ed>");
             VaultAPIHook.init();
             enabledDeps.add("Vault");
         } else alert("Vault");
 
-        if (isPluginEnabled("ItemJoin")) {
+        if (isPluginEnabled("ItemJoin") && Settings.ITEM_JOIN_INTEGRATION.getBoolean()) {
             SLogger.setup("Found {} installed on the server.", false, "<#05eb2f>ItemJoin<#4294ed>");
             enabledDeps.add("ItemJoin");
             ItemJoinHook.init();
@@ -67,7 +68,7 @@ public class DependencyHandler {
             enabledDeps.add("Oraxen");
         }
 
-        if (isPluginEnabled("CoreProtect")) {
+        if (isPluginEnabled("CoreProtect") && Settings.COREPROTECT_INTEGRATION.getBoolean()) {
             SLogger.setup("Found {} installed on the server.", false, "<#05eb2f>CoreProtect<#4294ed>");
             CoreProtectHook.init();
             enabledDeps.add("CoreProtect");
