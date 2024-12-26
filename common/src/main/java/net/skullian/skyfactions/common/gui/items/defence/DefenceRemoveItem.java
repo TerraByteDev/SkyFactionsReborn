@@ -51,7 +51,7 @@ public class DefenceRemoveItem extends SkyItem {
         if (defence == null) return;
         defence.disable();
 
-        defence.remove().whenComplete((ignored, ex) -> {
+        defence.remove(player).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "remove a defence", "DEFENCE_PROCESSING_EXCEPTION", ex);
                 return;

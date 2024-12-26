@@ -27,6 +27,8 @@ public enum Settings {
     VAULT_INTEGRATION("integration.vault"),
     PLACEHOLDERAPI_INTEGRATION("integration.placeholderapi"),
     JUKEBOX_INTEGRATION("integration.jukebox"),
+    NOTEBLOCKAPI_INTEGRATION("integration.noteblockapi"),
+    MYTHICMOBS_INTEGRATION("integration.mythicmobs"),
 
     HUB_WORLD_NAME("hub.world-name"),
     HUB_LOCATION("hub.hub-location"),

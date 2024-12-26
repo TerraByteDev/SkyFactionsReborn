@@ -26,12 +26,12 @@ public class DependencyHandler {
             enabledDeps.add("JukeBox");
         } else alert("JukeBox");
 
-        if (isPluginEnabled("NoteBlockAPI")) {
+        if (isPluginEnabled("NoteBlockAPI") && Settings.NOTEBLOCKAPI_INTEGRATION.getBoolean()) {
             SLogger.setup("Found {} installed on the server.", false, "<#05eb2f>NoteBlockAPI<#4294ed>");
             enabledDeps.add("NoteBlockAPI");
         } else alert("NoteBlockAPI");
 
-        if (isPluginEnabled("MythicMobs")) {
+        if (isPluginEnabled("MythicMobs") && Settings.MYTHICMOBS_INTEGRATION.getBoolean()) {
             SLogger.setup("Found {} installed on the server.", false, "<#05eb2f>MythicMobs<#4294ed>");
             enabledDeps.add("MythicMobs");
         } else alert("MythicMobs");

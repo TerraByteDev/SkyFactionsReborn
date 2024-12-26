@@ -170,11 +170,11 @@ public abstract class SpigotDefence extends Defence {
 
     // acts as a boolean too
     public List<String> getBlockedMythicMobs(List<String> entities) {
-        if (DependencyHandler.enabledDeps.contains("MythicMobs")) {
-            return entities.stream()
-                    .filter(s -> s.startsWith("mythicmobs:"))
-                    .collect(Collectors.toList());
-        }
+        List<String> blockedMythicMobs = entities.stream()
+                .filter(s -> s.startsWith("mythicmobs:"))
+                .toList();
+        if (DependencyHandler.isEnabled("MythicMobs")) return blockedMythicMobs;
+            else if (!blockedMythicMobs.isEmpty()) SLogger.warn("Found {} blocked Mythic Mob IDs in defence [{}], but MythicMobs is not present / enabled in the integrations config!\nPlease see https://docs.terrabytedev.com/skyfactions/mechanics/defences/integrations.html#mythicmobs for more information.", getStruct().getIDENTIFIER());
 
         return null;
     }

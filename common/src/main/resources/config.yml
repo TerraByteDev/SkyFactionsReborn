@@ -91,6 +91,8 @@ integration:
   vault: true # Used in the NPC integration (for actions).
   placeholderapi: true # Hook into PlaceholderAPI and parse placeholders.
   jukebox: true # Hook into the Jukebox plugin, to stop playing music when a raid begins.
+  noteblockapi: true # Hook into the NoteBlockAPI plugin, used to play music when a raid begins.
+  mythicmobs: true # Hook into mythicmobs, used in defences. See https://docs.terrabytedev.com/skyfactions/mechanics/defences/integrations.html#mythicmobs for more info.
 
 # SkyFactions Hub Config
 hub:
@@ -279,6 +281,7 @@ raiding:
   spawn-height: 250
 
   # List of .nbs song names that are played when raiding (IN ORDER).
+  # Requires NoteBlockAPI to be installed and enabled in the integrations section.
   music-file-names:
     - The_Grounds_Color_Is_Yellow.nbs
 
