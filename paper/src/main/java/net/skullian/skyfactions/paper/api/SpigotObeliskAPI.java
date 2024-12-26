@@ -2,7 +2,6 @@ package net.skullian.skyfactions.paper.api;
 
 import com.jeff_media.customblockdata.CustomBlockData;
 import lombok.Getter;
-import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.ObeliskAPI;
 import net.skullian.skyfactions.common.config.types.ObeliskConfig;
 import net.skullian.skyfactions.common.config.types.Settings;
@@ -17,9 +16,7 @@ import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.obelisk.SpigotObeliskBlockEntity;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
