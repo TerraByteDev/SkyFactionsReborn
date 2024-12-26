@@ -134,9 +134,6 @@ public final class SpigotSkyAPI extends SkyApi {
         commandHandler = new SpigotCommandHandler();
         pluginInfoAPI = new SpigotPluginInfoAPI();
 
-        SLogger.info("Preloading Obelisks.");
-        obeliskAPI.preLoad();
-
         SkyModuleManager.registerModule(DiscordModule.class);
 
         SLogger.setup("Loading InvLib Instance.", false);

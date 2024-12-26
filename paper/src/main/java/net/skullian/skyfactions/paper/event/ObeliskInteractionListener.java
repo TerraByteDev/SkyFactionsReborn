@@ -7,6 +7,7 @@ import net.skullian.skyfactions.common.config.types.ObeliskConfig;
 import net.skullian.skyfactions.common.gui.screens.obelisk.FactionObeliskUI;
 import net.skullian.skyfactions.common.gui.screens.obelisk.PlayerObeliskUI;
 import net.skullian.skyfactions.common.user.SkyUser;
+import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import org.bukkit.Material;
@@ -19,6 +20,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -26,6 +28,12 @@ import java.util.concurrent.CompletableFuture;
 
 
 public class ObeliskInteractionListener implements Listener {
+
+    @EventHandler
+    public void onServerStart(ServerLoadEvent event) {
+        SLogger.info("Preloading Obelisks.");
+        SkyApi.getInstance().getObeliskAPI().preLoad();
+    }
 
     @EventHandler
     public void onBlockExplode(BlockExplodeEvent event) {
