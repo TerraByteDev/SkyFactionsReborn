@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.api;
 
+import com.github.puregero.multilib.MultiLib;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
@@ -33,7 +34,7 @@ public class SpigotFactionAPI extends FactionAPI {
 
     @Override
     public void handleFactionWorldBorder(SkyUser player, FactionIsland island) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+        MultiLib.getGlobalRegionScheduler().run(SkyFactionsReborn.getInstance(), (consumer) -> {
             SkyLocation center = island.getCenter(null);
 
             SkyApi.getInstance().getWorldBorderAPI().setWorldBorder(player, (island.getSize() * 2), new BorderPos(center.getX(), center.getZ()));

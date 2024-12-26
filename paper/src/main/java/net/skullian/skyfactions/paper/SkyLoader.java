@@ -49,7 +49,14 @@ public class SkyLoader implements PluginLoader {
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.google.guava:guava:33.3.1-jre"), null));
 
 
+        MavenLibraryResolver multiLibResolver = new MavenLibraryResolver();
+        multiLibResolver.addRepository(new RemoteRepository.Builder("multipaper", "default", "https://repo.clojars.org/").build());
+
+        multiLibResolver.addDependency(new Dependency(new DefaultArtifact("com.github.puregero:multilib:1.2.4"), null));
+
+
         pluginClasspathBuilder.addLibrary(invUIResolver);
         pluginClasspathBuilder.addLibrary(centralResolver);
+        pluginClasspathBuilder.addLibrary(multiLibResolver);
     }
 }

@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.event.armor;
 
+import com.github.puregero.multilib.MultiLib;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -97,7 +98,7 @@ public class ArmorListener implements Listener {
                     // Only cancel the armor to collect.
                     if (armorEvent.isCancelled()) {
                         holding.setAmount(holding.getAmount() - armorEvent.getItem().getAmount());
-                        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+                        MultiLib.getGlobalRegionScheduler().run(SkyFactionsReborn.getInstance(), (consumer) -> {
                             p.getInventory().setItem(armorEvent.getArmorSlot(), armorEvent.getItem());
                             p.updateInventory();
                         });
@@ -120,7 +121,7 @@ public class ArmorListener implements Listener {
                     // Move clicked item to other inventory when cancelled.
                     if (armorEvent.isCancelled()) {
                         p.getInventory().setItem(armorEvent.getArmorSlot(), armorEvent.getItem());
-                        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+                        MultiLib.getAsyncScheduler().runNow(SkyFactionsReborn.getInstance(), (consumer) -> {
                             p.getInventory().setItem(armorEvent.getArmorSlot(), null);
                             p.updateInventory();
                         });
@@ -212,7 +213,7 @@ public class ArmorListener implements Listener {
         final Player p = e.getPlayer();
         if (p.getInventory().getItem(equipmentSlot) != null) return;
 
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+        MultiLib.getGlobalRegionScheduler().run(SkyFactionsReborn.getInstance(), (consumer) -> {
             if (p.getInventory().getItem(equipmentSlot) != null) {
                 ArmorEvent armorEvent = callEquip(p, useItem, equipmentSlot, ArmorAction.HOTBAR);
                 // When cancelled unequip item in armor slot and put it back in the hand of the player.
@@ -222,7 +223,6 @@ public class ArmorListener implements Listener {
                 }
             }
         });
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

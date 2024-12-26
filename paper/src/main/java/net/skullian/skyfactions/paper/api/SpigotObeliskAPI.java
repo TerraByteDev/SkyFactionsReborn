@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.api;
 
+import com.github.puregero.multilib.MultiLib;
 import com.jeff_media.customblockdata.CustomBlockData;
 import lombok.Getter;
 import net.skullian.skyfactions.common.api.ObeliskAPI;
@@ -29,7 +30,7 @@ public class SpigotObeliskAPI extends ObeliskAPI {
 
     @Override
     public void spawnPlayerObelisk(SkyUser player, SkyIsland island) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+        MultiLib.getGlobalRegionScheduler().run(SkyFactionsReborn.getInstance(), (consumer) -> {
             World world = Bukkit.getWorld(Settings.ISLAND_PLAYER_WORLD.getString());
             if (world != null) {
                 SkyLocation center = island.getCenter(world.getName());
@@ -55,7 +56,7 @@ public class SpigotObeliskAPI extends ObeliskAPI {
 
     @Override
     public void spawnFactionObelisk(String faction, SkyIsland island) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+        MultiLib.getGlobalRegionScheduler().run(SkyFactionsReborn.getInstance(), (consumer) -> {
             World world = Bukkit.getWorld(Settings.ISLAND_FACTION_WORLD.getString());
             if (world != null) {
                 SkyLocation center = island.getCenter(world.getName());
@@ -124,7 +125,7 @@ public class SpigotObeliskAPI extends ObeliskAPI {
 
         for (World world : worlds) {
             for (ItemDisplay entity : world.getEntitiesByClass(ItemDisplay.class)) {
-                if (!entity.getPersistentDataContainer().has(PaperSharedConstants.OBELISK_KEY)) return;
+                if (!entity.getPersistentDataContainer().has(PaperSharedConstants.OBELISK_KEY) || MultiLib.isChunkExternal(entity)) continue;
 
                 Location location = getLocationFromEntity(entity.getLocation());
                 SpigotObeliskBlockEntity blockEntity = new SpigotObeliskBlockEntity();

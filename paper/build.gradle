@@ -96,16 +96,22 @@ repositories {
         name = "PlayPro Repository"
         url = "https://maven.playpro.com/"
     }
+
+    maven {
+        name = "MultiPaper (MultiLib) Repository"
+        url = "https://repo.clojars.org/"
+    }
 }
 
 dependencies {
     compileOnly(project(":common"))
     compileOnly(project(":modules:discord"))
 
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:${minecraft_version}-R0.1-SNAPSHOT")
     compileOnly("org.incendo:cloud-paper:${cloud}-SNAPSHOT")
     compileOnly("xyz.xenondevs.invui:invui:${invui}")
     compileOnly("net.kyori:adventure-platform-bukkit:${adventure_bukkit}")
+    compileOnly("com.github.puregero:multilib:${multilib}")
 
     implementation(platform("com.intellectualsites.bom:bom-newest:${fawe_bom}")) {
         exclude group : "com.google.guava", module: "guava"

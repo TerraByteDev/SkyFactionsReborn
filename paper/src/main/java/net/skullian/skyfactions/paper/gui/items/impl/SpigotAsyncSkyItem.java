@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.gui.items.impl;
 
+import com.github.puregero.multilib.MultiLib;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.gui.CooldownManager;
 import net.skullian.skyfactions.common.gui.data.SkyClickType;
@@ -8,7 +9,6 @@ import net.skullian.skyfactions.common.gui.items.impl.BaseSkyItem;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -31,7 +31,8 @@ public class SpigotAsyncSkyItem extends AsyncSkyItem implements Item {
 
         this.IMPL = item;
         setLoading(true);
-        Bukkit.getScheduler().runTaskAsynchronously(SkyFactionsReborn.getInstance(), () -> {
+
+        MultiLib.getAsyncScheduler().runNow(SkyFactionsReborn.getInstance(), (consumer) -> {
             setLoading(false);
             notifyWindows();
         });
@@ -71,8 +72,8 @@ public class SpigotAsyncSkyItem extends AsyncSkyItem implements Item {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
-            event.setCancelled(true);
+        event.setCancelled(true);
+        MultiLib.getAsyncScheduler().runNow(SkyFactionsReborn.getInstance(), (consumer) -> {
             SkyUser user = SkyApi.getInstance().getUserManager().getUser(player.getUniqueId());
 
             if (CooldownManager.ITEMS.manage(user)) return;

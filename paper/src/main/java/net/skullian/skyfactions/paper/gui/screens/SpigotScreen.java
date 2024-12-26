@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.gui.screens;
 
+import com.github.puregero.multilib.MultiLib;
 import lombok.Builder;
 import net.skullian.skyfactions.common.api.GUIAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
@@ -12,7 +13,6 @@ import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.gui.items.impl.SpigotAsyncSkyItem;
 import net.skullian.skyfactions.paper.gui.items.impl.SpigotSkyItem;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.window.Window;
@@ -27,7 +27,8 @@ public class SpigotScreen {
     public SpigotScreen(Screen screen) {
         this.screen = screen;
         this.builder = Gui.normal().setStructure(screen.guiData.getLAYOUT());
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), this::show);
+
+        MultiLib.getGlobalRegionScheduler().run(SkyFactionsReborn.getInstance(), (consumer) -> show());
     }
 
     public void show() {

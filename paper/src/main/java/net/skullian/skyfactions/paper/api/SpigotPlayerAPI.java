@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.api;
 
+import com.github.puregero.multilib.MultiLib;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.skullian.skyfactions.common.api.PlayerAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
@@ -8,7 +9,6 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.hooks.ItemJoinHook;
 import net.skullian.skyfactions.paper.util.DependencyHandler;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -67,7 +67,7 @@ public class SpigotPlayerAPI extends PlayerAPI {
 
     @Override
     public List<SkyUser> getOnlinePlayers() {
-        return Bukkit.getOnlinePlayers().stream().map(player -> SkyApi.getInstance().getUserManager().getUser(player.getUniqueId())).toList();
+        return MultiLib.getAllOnlinePlayers().stream().map(player -> SkyApi.getInstance().getUserManager().getUser(player.getUniqueId())).toList();
     }
 
     @Override
