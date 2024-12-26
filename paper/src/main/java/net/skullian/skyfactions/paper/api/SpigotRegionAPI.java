@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.api;
 
+import com.github.puregero.multilib.MultiLib;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -101,7 +102,7 @@ public class SpigotRegionAPI extends RegionAPI {
 
     @Override
     public void modifyWorldBorder(SkyUser player, SkyLocation center, int size) {
-        Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+        MultiLib.getGlobalRegionScheduler().run(SkyFactionsReborn.getInstance(), (consumer) -> {
             SkyApi.getInstance().getWorldBorderAPI().setWorldBorder(player, (size * 2), new BorderPos(center.getX(), center.getZ()));
         });
     }

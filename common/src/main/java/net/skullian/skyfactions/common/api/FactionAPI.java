@@ -33,7 +33,7 @@ public abstract class FactionAPI {
      * @param name   Name of the faction.
      */
     public void createFaction(SkyUser player, String name) {
-        SkyApi.getInstance().getDatabaseManager().getFactionsManager().registerFaction(player, name).whenComplete((ignored, ex) -> {
+        SkyApi.getInstance().getDatabaseManager().getFactionsManager().registerFaction(player, name).whenCompleteAsync((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "create a new Faction", "SQL_FACTION_CREATE", ex);
                 // todo disband faction?
@@ -42,7 +42,7 @@ public abstract class FactionAPI {
             // Creating & Registering the island in the database before getting the Faction.
             // This stops the Faction retrieval returning null for the island, and causing issues, seeing as the Faction
             // is immediately cached.
-            createIsland(player, name);
+            createIsland(player, name).join();
 
             SkyApi.getInstance().getFactionAPI().getFaction(name).whenComplete((faction, exc) -> {
                 if (exc != null) {

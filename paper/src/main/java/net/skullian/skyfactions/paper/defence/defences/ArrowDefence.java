@@ -1,11 +1,11 @@
 package net.skullian.skyfactions.paper.defence.defences;
 
+import com.github.puregero.multilib.MultiLib;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
 import net.skullian.skyfactions.common.defence.struct.DefenceStruct;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import net.skullian.skyfactions.paper.defence.SpigotDefence;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -27,7 +27,7 @@ public class ArrowDefence extends SpigotDefence {
         }
 
         //✨✨ hacky!!
-        setTask(getService().scheduleAtFixedRate(() -> Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> {
+        setTask(getService().scheduleAtFixedRate(() -> MultiLib.getAsyncScheduler().runNow(SkyFactionsReborn.getInstance(), (consumer) -> {
             if (!isAllowed(getStruct().getPROJECTILE()) || !canShoot()) return;
 
             List<Object> entities = getRandomEntity(getDefenceLocation().getWorldName());

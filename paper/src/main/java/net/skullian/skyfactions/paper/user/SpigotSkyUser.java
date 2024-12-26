@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.user;
 
+import com.github.puregero.multilib.MultiLib;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.skullian.skyfactions.common.api.SkyApi;
@@ -36,7 +37,7 @@ public class SpigotSkyUser extends SkyUser {
     public void teleport(SkyLocation location) {
         Player player = SpigotAdapter.adapt(this).getPlayer();
 
-        if (player != null) Bukkit.getScheduler().runTask(SkyFactionsReborn.getInstance(), () -> player.teleport(SpigotAdapter.adapt(location), PlayerTeleportEvent.TeleportCause.PLUGIN));
+        if (player != null) MultiLib.teleportAsync(player, SpigotAdapter.adapt(location), PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 
     @Nullable
