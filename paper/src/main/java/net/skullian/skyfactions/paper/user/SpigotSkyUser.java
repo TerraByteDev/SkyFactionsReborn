@@ -10,7 +10,6 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent.Reason;
