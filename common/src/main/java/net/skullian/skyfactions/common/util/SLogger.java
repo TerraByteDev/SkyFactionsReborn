@@ -7,10 +7,10 @@ import net.skullian.skyfactions.common.api.SkyApi;
 
 public class SLogger {
     public static void setup(Object message, boolean fatal, Object... args) {
-        String text = fatal ? "✗ㅤㅤ" : "➤ㅤㅤ" + format(message, args);
+        String text = fatal ? "<#4294ed>✗ㅤㅤ" + format(message, args) + "<#e73f38>" : "<#4294ed>➤ㅤㅤ" + format(message, args);
         String formatted = getFormatted(text);
 
-        SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize((fatal ? "<#e73f38>" : "<#4294ed>") + "<bold>" + formatted + "<reset>"));
+        SkyApi.getInstance().getConsoleAudience().sendMessage(MiniMessage.miniMessage().deserialize("<bold>" + formatted + "<reset>"));
     }
 
     public static String getFormatted(String text) {
