@@ -130,7 +130,7 @@ public class DatabaseManager {
             mysqlConfig.setAutoCommit(false);
             mysqlConfig.setMinimumIdle(1);
 
-            SLogger.info("Using MySQL database '{}' on: {}:{}.", false,
+            SLogger.info("Using MySQL database '{}' on: {}:{}.",
                     databaseName, host.getHost(), host.getPortOrDefault(3306));
             HikariDataSource dataSource = new HikariDataSource(mysqlConfig);
 
@@ -158,7 +158,7 @@ public class DatabaseManager {
         MigrateResult result = flyway.migrate();
 
         if (result.success) {
-            SLogger.info("Database migrations complete: ({} Migrations completed in {}ms)", false, result.getSuccessfulMigrations().size(), result.getTotalMigrationTime());
+            SLogger.info("Database migrations complete: ({} Migrations completed in {}ms)", result.getSuccessfulMigrations().size(), result.getTotalMigrationTime());
 
             this.currencyManager = new CurrencyDatabaseManager(this.ctx);
             this.defencesManager = new DefencesDatabaseManager(this.ctx);
@@ -173,7 +173,7 @@ public class DatabaseManager {
             this.electionManager = new FactionElectionManager(this.ctx);
         } else {
             ErrorUtil.handleDatabaseSetupError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed: " + result.getException()));
-            result.getFailedMigrations().forEach(migration -> SLogger.info("Migration failed: {}", true, migration.description));
+            result.getFailedMigrations().forEach(migration -> SLogger.info("Migration failed: {}", migration.description));
         }
     }
 
