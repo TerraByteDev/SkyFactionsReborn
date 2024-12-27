@@ -6,6 +6,9 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.skullian.skyfactions.common.api.SkyApi;
 
 public class SLogger {
+
+    private static final String PREFIX = "<gray>[<reset><gradient:#0083FF:#00FFC7><bold>SkyFactions</gradient><reset><gray>]<reset>";
+
     public static void setup(Object message, boolean fatal, Object... args) {
         String text = fatal ? "<#e73f38>✗ㅤㅤ" + format(message, args) + "<#4294ed>" : "<#4294ed>➤ㅤㅤ" + format(message, args);
         String formatted = getFormatted(text);
@@ -44,17 +47,17 @@ public class SLogger {
     }
 
     public static void info(Object message, Object... args) {
-        Component infoLog = MiniMessage.miniMessage().deserialize("<gray>[<reset><gradient:#0083FF:#00FFC7><bold>SkyFactions</gradient><reset><gray>]<reset> <#4294ed>" + format(message, args) + "<#4294ed><reset>");
+        Component infoLog = MiniMessage.miniMessage().deserialize(PREFIX + " <#4294ed>" + format(message, args) + "<#4294ed><reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(infoLog);
     }
 
     public static void warn(Object message, Object... args) {
-        Component warnLog = MiniMessage.miniMessage().deserialize("<gray>[<reset><gradient:#0083FF:#00FFC7><bold>SkyFactions</gradient><reset><gray>]<reset> <#f28f24>" + format(message, args) + "<#f28f24><reset>");
+        Component warnLog = MiniMessage.miniMessage().deserialize(PREFIX + " <#f28f24>" + format(message, args) + "<#f28f24><reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(warnLog);
     }
 
     public static void fatal(Object message, Object... args) {
-        Component fatalLog = MiniMessage.miniMessage().deserialize("<gray>[<reset><gradient:#0083FF:#00FFC7><bold>SkyFactions</gradient><reset><gray>]<reset> <#e73f38>" + format(message, args) + "<#e73f38><reset>");
+        Component fatalLog = MiniMessage.miniMessage().deserialize(PREFIX + " <#e73f38>" + format(message, args) + "<#e73f38><reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(fatalLog);
     }
 
