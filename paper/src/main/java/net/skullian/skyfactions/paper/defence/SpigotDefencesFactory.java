@@ -27,8 +27,8 @@ public class SpigotDefencesFactory extends DefenceFactory {
                         return Stream.of(match.name());
                     } else {
                         return Arrays.stream(Material.values())
-                                .filter(material -> material.name().toLowerCase().contains(cleaned.toLowerCase()))
-                                .map(Material::name);
+                                .map(Material::name)
+                                .filter(name -> name.toLowerCase().contains(cleaned.toLowerCase()));
                     }
                 })
                 .collect(Collectors.toList());

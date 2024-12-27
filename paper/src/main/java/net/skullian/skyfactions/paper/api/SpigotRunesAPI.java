@@ -129,7 +129,7 @@ public class SpigotRunesAPI extends RunesAPI {
 
     @Override
     public boolean hasEnchants(SkyItemStack stack) {
-        return SpigotAdapter.adapt(stack, null, false).getEnchantments().size() > 0;
+        return !SpigotAdapter.adapt(stack, null, false).getEnchantments().isEmpty();
     }
 
     @Override
