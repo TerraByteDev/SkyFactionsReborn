@@ -47,7 +47,6 @@ public abstract class SkyUser {
 
     public abstract void teleport(SkyLocation location);
 
-    @SuppressWarnings("")
     public PlayerData getPlayerData() {
         return this.data.orElse(null);
     }
@@ -55,7 +54,7 @@ public abstract class SkyUser {
     public CompletableFuture<Integer> getGems() {
         if (this.gems.isEmpty()) return SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getGems(this.uuid).whenComplete((gems, ex) -> {
             if (ex != null) return;
-            this.gems = Optional.of((this.gems.isPresent() ? this.gems.get() : 0) + gems);
+            this.gems = Optional.of((this.gems.orElse(0)) + gems);
         });
 
         if (SkyApi.getInstance().getCacheService().getPlayersToCache().containsKey(this.uuid) && this.gems.isPresent()) return CompletableFuture.completedFuture((this.gems.get() + SkyApi.getInstance().getCacheService().getEntry(this.uuid).getGems()));
@@ -73,7 +72,7 @@ public abstract class SkyUser {
     public CompletableFuture<Integer> getRunes() {
         if (this.runes.isEmpty()) return SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getRunes(this.uuid).whenComplete((runes, ex) -> {
             if (ex != null) return;
-            this.runes = Optional.of((this.runes.isPresent() ? this.runes.get() : 0) + runes);
+            this.runes = Optional.of((this.runes.orElse(0)) + runes);
         });
 
         if (SkyApi.getInstance().getCacheService().getPlayersToCache().containsKey(this.uuid) && this.runes.isPresent()) return CompletableFuture.completedFuture((this.runes.get() + SkyApi.getInstance().getCacheService().getEntry(this.uuid).getRunes()));
