@@ -1,38 +1,36 @@
 package net.skullian.skyfactions.common.database.impl;
 
 import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.database.AbstractTableManager;
 import org.jooq.DSLContext;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import static net.skullian.skyfactions.common.database.tables.Islands.ISLANDS;
 import static net.skullian.skyfactions.common.database.tables.FactionIslands.FACTION_ISLANDS;
 
-public class CurrencyDatabaseManager {
+public class CurrencyDatabaseManager extends AbstractTableManager {
 
-    private final DSLContext ctx;
-
-    public CurrencyDatabaseManager(DSLContext ctx) {
-        this.ctx = ctx;
+    public CurrencyDatabaseManager(DSLContext ctx, Executor executor) {
+        super(ctx, executor);
     }
 
     // ------------------ GEMS  ------------------ //
 
     public CompletableFuture<Integer> getGems(UUID playerUUID) {
-
-
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.GEMS)
                 .from(ISLANDS)
                 .where(ISLANDS.UUID.eq(playerUUID.toString()))
-                .fetchOneInto(Integer.class));
+                .fetchOneInto(Integer.class), executor);
     }
 
     public CompletableFuture<Integer> getGems(String factionName) {
         return CompletableFuture.supplyAsync(() -> ctx.select(FACTION_ISLANDS.GEMS)
                 .from(FACTION_ISLANDS)
                 .where(FACTION_ISLANDS.FACTIONNAME.eq(factionName))
-                .fetchOneInto(Integer.class));
+                .fetchOneInto(Integer.class), executor);
     }
 
     public CompletableFuture<Void> modifyGems(UUID playerUUID, int amount, boolean subtract) {
@@ -44,7 +42,7 @@ public class CurrencyDatabaseManager {
                     .set(ISLANDS.GEMS, (subtract ? current - amount : current + amount))
                     .where(ISLANDS.UUID.eq(playerUUID.toString()))
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> modifyGems(String factionName, int amount, boolean subtract) {
@@ -56,7 +54,7 @@ public class CurrencyDatabaseManager {
                     .set(FACTION_ISLANDS.GEMS, (subtract ? current - amount : current + amount))
                     .where(FACTION_ISLANDS.FACTIONNAME.eq(factionName))
                     .execute();
-        });
+        }, executor);
     }
 
     // ------------------ RUNES  ------------------ //
@@ -66,14 +64,14 @@ public class CurrencyDatabaseManager {
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.RUNES)
                 .from(ISLANDS)
                 .where(ISLANDS.UUID.eq(playerUUID.toString()))
-                .fetchOneInto(Integer.class));
+                .fetchOneInto(Integer.class), executor);
     }
 
     public CompletableFuture<Integer> getRunes(String factionName) {
         return CompletableFuture.supplyAsync(() -> ctx.select(FACTION_ISLANDS.RUNES)
                 .from(FACTION_ISLANDS)
                 .where(FACTION_ISLANDS.FACTIONNAME.eq(factionName))
-                .fetchOneInto(Integer.class));
+                .fetchOneInto(Integer.class), executor);
     }
 
     public CompletableFuture<Void> modifyRunes(UUID playerUUID, int amount, boolean subtract) {
@@ -85,7 +83,7 @@ public class CurrencyDatabaseManager {
                     .set(ISLANDS.RUNES, (subtract ? current - amount : current + amount))
                     .where(ISLANDS.UUID.eq(playerUUID.toString()))
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> modifyRunes(String factionName, int amount, boolean subtract) {
@@ -97,7 +95,7 @@ public class CurrencyDatabaseManager {
                     .set(FACTION_ISLANDS.RUNES, (subtract ? current - amount : current + amount))
                     .where(FACTION_ISLANDS.FACTIONNAME.eq(factionName))
                     .execute();
-        });
+        }, executor);
     }
 
 

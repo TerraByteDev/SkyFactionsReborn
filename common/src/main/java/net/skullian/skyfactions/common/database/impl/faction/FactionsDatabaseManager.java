@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.common.database.impl.faction;
 
 import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.database.AbstractTableManager;
 import net.skullian.skyfactions.common.database.tables.records.FactionBansRecord;
 import net.skullian.skyfactions.common.database.tables.records.FactionIslandsRecord;
 import net.skullian.skyfactions.common.database.tables.records.FactionMembersRecord;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import static net.skullian.skyfactions.common.database.tables.DefenceLocations.DEFENCE_LOCATIONS;
 import static net.skullian.skyfactions.common.database.tables.FactionBans.FACTION_BANS;
@@ -28,12 +30,10 @@ import static net.skullian.skyfactions.common.database.tables.AuditLogs.AUDIT_LO
 import static net.skullian.skyfactions.common.database.tables.FactionElections.FACTION_ELECTIONS;
 import static net.skullian.skyfactions.common.database.tables.ElectionVotes.ELECTION_VOTES;
 
-public class FactionsDatabaseManager {
+public class FactionsDatabaseManager extends AbstractTableManager {
 
-    private final DSLContext ctx;
-
-    public FactionsDatabaseManager(DSLContext ctx) {
-        this.ctx = ctx;
+    public FactionsDatabaseManager(DSLContext ctx, Executor executor) {
+        super(ctx, executor);
     }
 
     public CompletableFuture<Void> registerFaction(SkyUser factionOwner, String factionName) {
@@ -47,7 +47,7 @@ public class FactionsDatabaseManager {
                     .columns(FACTION_MEMBERS.FACTIONNAME, FACTION_MEMBERS.UUID, FACTION_MEMBERS.RANK)
                     .values(factionName, factionOwner.getUniqueId().toString(), "owner")
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<Faction> getFaction(String factionName) {
@@ -77,7 +77,7 @@ public class FactionsDatabaseManager {
                             SkyApi.getInstance().getDatabaseManager().getFactionInvitesManager().getAllInvites(factionName).join(),
                             SkyApi.getInstance().getDatabaseManager().getFactionAuditLogManager().getAuditLogs(factionName).join()
                     ) : null;
-        });
+        }, executor);
     }
 
     public CompletableFuture<Faction> getFaction(UUID playerUUID) {
@@ -87,7 +87,7 @@ public class FactionsDatabaseManager {
                     .fetchOne();
 
             return result != null ? getFaction(result.getFactionname()).join() : null;
-        });
+        }, executor);
     }
 
     public CompletableFuture<Faction> getFactionByIslandID(int id) {
@@ -97,7 +97,7 @@ public class FactionsDatabaseManager {
                     .fetchOne();
 
             return result != null ? getFaction(result.getFactionname()).join() : null;
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> updateFactionName(String oldName, String newName) {
@@ -143,14 +143,14 @@ public class FactionsDatabaseManager {
                         .where(FACTION_ELECTIONS.FACTIONNAME.eq(oldName))
                         .execute();
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<String> getFactionMOTD(String factionName) {
         return CompletableFuture.supplyAsync(() -> ctx.select(FACTIONS.MOTD)
                 .from(FACTIONS)
                 .where(FACTIONS.NAME.eq(factionName))
-                .fetchOneInto(String.class));
+                .fetchOneInto(String.class), executor);
     }
 
     public CompletableFuture<Void> updateFactionMOTD(String factionName, String newMOTD) {
@@ -159,7 +159,7 @@ public class FactionsDatabaseManager {
                     .set(FACTIONS.MOTD, newMOTD)
                     .where(FACTIONS.NAME.eq(factionName))
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> updateFactionLocale(String factionName, String newLocale) {
@@ -204,7 +204,7 @@ public class FactionsDatabaseManager {
                         .where(ELECTION_VOTES.ELECTION.eq(id))
                         .execute();
             });
-        });
+        }, executor);
     }
 
 
@@ -220,7 +220,7 @@ public class FactionsDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> updateFactionMemberRanks(String factionName, Map<UUID, RankType> ranks) {
@@ -233,11 +233,11 @@ public class FactionsDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<Boolean> isInFaction(UUID playerUUID) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_MEMBERS, FACTION_MEMBERS.UUID.eq(playerUUID.toString())));
+        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_MEMBERS, FACTION_MEMBERS.UUID.eq(playerUUID.toString())), executor);
     }
 
     public CompletableFuture<SkyUser> getFactionOwner(String factionName) {
@@ -247,7 +247,7 @@ public class FactionsDatabaseManager {
                     .fetchOne();
 
             return result != null ? SkyApi.getInstance().getUserManager().getUser(UUID.fromString(result.getUuid())) : null;
-        });
+        }, executor);
     }
 
     public CompletableFuture<List<SkyUser>> getFactionMembersByRank(String factionName, RankType rank) {
@@ -263,7 +263,7 @@ public class FactionsDatabaseManager {
             }
 
             return players;
-        });
+        }, executor);
     }
 
     // ------------------ ADMINISTRATION  ------------------ //
@@ -277,7 +277,7 @@ public class FactionsDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> banMembers(List<SkyUser> players, String factionName) {
@@ -292,7 +292,7 @@ public class FactionsDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> unbanMembers(List<SkyUser> players, String factionName) {
@@ -304,7 +304,7 @@ public class FactionsDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<List<SkyUser>> getBannedPlayers(String factionName) {
@@ -320,11 +320,11 @@ public class FactionsDatabaseManager {
             }
 
             return players;
-        });
+        }, executor);
     }
 
     public CompletableFuture<Boolean> isPlayerBanned(SkyUser player, String factionName) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_BANS, FACTION_BANS.FACTIONNAME.eq(factionName), FACTION_BANS.UUID.eq(player.getUniqueId().toString())));
+        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_BANS, FACTION_BANS.FACTIONNAME.eq(factionName), FACTION_BANS.UUID.eq(player.getUniqueId().toString())), executor);
     }
 
 }

@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.common.database.impl.faction;
 
 import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.database.AbstractTableManager;
 import net.skullian.skyfactions.common.database.struct.AuditLogData;
 import net.skullian.skyfactions.common.database.tables.records.AuditLogsRecord;
 import net.skullian.skyfactions.common.util.text.TextUtility;
@@ -13,15 +14,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import static net.skullian.skyfactions.common.database.tables.AuditLogs.AUDIT_LOGS;
 
-public class FactionAuditLogDatabaseManager {
+public class FactionAuditLogDatabaseManager extends AbstractTableManager {
 
-    private final DSLContext ctx;
-
-    public FactionAuditLogDatabaseManager(DSLContext ctx) {
-        this.ctx = ctx;
+    public FactionAuditLogDatabaseManager(DSLContext ctx, Executor executor) {
+        super(ctx, executor);
     }
 
     public CompletableFuture<Void> createAuditLogs(List<AuditLogData> auditLogs) {
@@ -35,7 +35,7 @@ public class FactionAuditLogDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<List<AuditLogData>> getAuditLogs(String factionName) {
@@ -57,6 +57,6 @@ public class FactionAuditLogDatabaseManager {
             }
 
             return data;
-        });
+        }, executor);
     }
 }

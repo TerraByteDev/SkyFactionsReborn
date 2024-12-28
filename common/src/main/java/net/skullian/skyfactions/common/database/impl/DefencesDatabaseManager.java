@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.common.database.impl;
 
 import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.database.AbstractTableManager;
 import net.skullian.skyfactions.common.database.tables.records.DefenceLocationsRecord;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import org.jooq.Condition;
@@ -11,15 +12,14 @@ import org.jooq.Result;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import static net.skullian.skyfactions.common.database.tables.DefenceLocations.DEFENCE_LOCATIONS;
 
-public class DefencesDatabaseManager {
+public class DefencesDatabaseManager extends AbstractTableManager {
 
-    private final DSLContext ctx;
-
-    public DefencesDatabaseManager(DSLContext ctx) {
-        this.ctx = ctx;
+    public DefencesDatabaseManager(DSLContext ctx, Executor executor) {
+        super(ctx, executor);
     }
 
     public CompletableFuture<List<SkyLocation>> getDefenceLocations(Condition condition, String type) {
@@ -41,7 +41,7 @@ public class DefencesDatabaseManager {
             }
 
             return locations;
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> registerDefenceLocations(List<SkyLocation> locations, String owner, boolean faction) {
@@ -54,7 +54,7 @@ public class DefencesDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> removeDefenceLocations(List<SkyLocation> locations, String owner, boolean isFaction) {
@@ -67,7 +67,7 @@ public class DefencesDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> removeAllDefences(String owner, boolean isFaction) {
@@ -75,7 +75,7 @@ public class DefencesDatabaseManager {
             ctx.deleteFrom(DEFENCE_LOCATIONS)
                     .where((isFaction ? DEFENCE_LOCATIONS.FACTIONNAME.eq(owner) : DEFENCE_LOCATIONS.UUID.eq(owner)), (isFaction ? DEFENCE_LOCATIONS.TYPE.eq("faction") : DEFENCE_LOCATIONS.TYPE.eq("player")))
                     .execute();
-        });
+        }, executor);
     }
 
 

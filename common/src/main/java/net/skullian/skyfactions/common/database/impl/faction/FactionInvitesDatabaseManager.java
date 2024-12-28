@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.common.database.impl.faction;
 
 import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.database.AbstractTableManager;
 import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.database.tables.records.FactionInvitesRecord;
 import net.skullian.skyfactions.common.faction.JoinRequestData;
@@ -12,15 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import static net.skullian.skyfactions.common.database.tables.FactionInvites.FACTION_INVITES;
 
-public class FactionInvitesDatabaseManager {
+public class FactionInvitesDatabaseManager extends AbstractTableManager {
 
-    private final DSLContext ctx;
-
-    public FactionInvitesDatabaseManager(DSLContext ctx) {
-        this.ctx = ctx;
+    public FactionInvitesDatabaseManager(DSLContext ctx, Executor executor) {
+        super(ctx, executor);
     }
 
     // ------------------ INVITES  ------------------ //
@@ -36,7 +36,7 @@ public class FactionInvitesDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<List<InviteData>> getAllInvites(String factionName) {
@@ -58,7 +58,7 @@ public class FactionInvitesDatabaseManager {
             }
 
             return data;
-        });
+        }, executor);
     }
 
     public CompletableFuture<List<InviteData>> getInvitesOfPlayer(UUID playerUUID) {
@@ -80,7 +80,7 @@ public class FactionInvitesDatabaseManager {
             }
 
             return data;
-        });
+        }, executor);
     }
 
     public CompletableFuture<JoinRequestData> getPlayerJoinRequest(UUID playerUUID) {
@@ -94,7 +94,7 @@ public class FactionInvitesDatabaseManager {
                     false,
                     result.getTimestamp()
             ) : null;
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> removeInvites(List<InviteData> invites) {
@@ -106,6 +106,6 @@ public class FactionInvitesDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 }

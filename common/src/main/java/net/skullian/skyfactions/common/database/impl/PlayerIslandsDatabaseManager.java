@@ -2,6 +2,7 @@ package net.skullian.skyfactions.common.database.impl;
 
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.database.AbstractTableManager;
 import net.skullian.skyfactions.common.database.struct.IslandRaidData;
 import net.skullian.skyfactions.common.database.tables.records.IslandsRecord;
 import net.skullian.skyfactions.common.database.tables.records.TrustedPlayersRecord;
@@ -18,18 +19,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import static net.skullian.skyfactions.common.database.tables.Islands.ISLANDS;
 import static net.skullian.skyfactions.common.database.tables.TrustedPlayers.TRUSTED_PLAYERS;
 
-public class PlayerIslandsDatabaseManager {
-
-    private final DSLContext ctx;
+public class PlayerIslandsDatabaseManager extends AbstractTableManager {
 
     public int cachedPlayerIslandID;
 
-    public PlayerIslandsDatabaseManager(DSLContext ctx) {
-        this.ctx = ctx;
+    public PlayerIslandsDatabaseManager(DSLContext ctx, Executor executor) {
+        super(ctx, executor);
         setIslandCachedNextID();
     }
 
@@ -40,7 +40,7 @@ public class PlayerIslandsDatabaseManager {
                     .fetch();
 
             return !result.isEmpty();
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> createIsland(UUID playerUUID, IslandModificationAction action) {
@@ -50,14 +50,14 @@ public class PlayerIslandsDatabaseManager {
                     .columns(ISLANDS.ID, ISLANDS.UUID, ISLANDS.LEVEL, ISLANDS.GEMS, ISLANDS.RUNES, ISLANDS.DEFENCECOUNT, ISLANDS.LAST_RAIDED, ISLANDS.LAST_RAIDER, ISLANDS.CREATED)
                     .values(action.getId(), playerUUID.toString(), 0, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_PLAYER_IMMUNITY.getLong(), "N/A", System.currentTimeMillis())
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<UUID> getOwnerOfIsland(SkyIsland island) {
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.UUID)
                 .from(ISLANDS)
                 .where(ISLANDS.ID.eq(island.getId()))
-                .fetchOneInto(UUID.class));
+                .fetchOneInto(UUID.class), executor);
     }
 
     public CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
@@ -67,25 +67,25 @@ public class PlayerIslandsDatabaseManager {
                    .fetchOne();
 
            return result != null ? new PlayerIsland(result.getId()) : null;
-        });
+        }, executor);
     }
 
-    public CompletableFuture<Void> setIslandCachedNextID() {
-        return CompletableFuture.runAsync(() -> {
+    public void setIslandCachedNextID() {
+        CompletableFuture.runAsync(() -> {
             Integer result = ctx.select(DSL.max(ISLANDS.ID))
                     .from(ISLANDS)
                     .fetchOneInto(Integer.class);
 
             if (result == null) this.cachedPlayerIslandID = 1;
-                else this.cachedPlayerIslandID = (result + 1);
-        });
+            else this.cachedPlayerIslandID = (result + 1);
+        }, executor);
     }
 
     public CompletableFuture<Integer> getIslandLevel(SkyIsland island) {
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.LEVEL)
                 .from(ISLANDS)
                 .where(ISLANDS.ID.eq(island.getId()))
-                .fetchOneInto(Integer.class));
+                .fetchOneInto(Integer.class), executor);
     }
 
     public CompletableFuture<Void> setIslandCooldown(SkyIsland island, long time) {
@@ -94,7 +94,7 @@ public class PlayerIslandsDatabaseManager {
                     .set(ISLANDS.LAST_RAIDED, time)
                     .where(ISLANDS.ID.eq(island.getId()))
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> removeIsland(SkyUser player) {
@@ -103,7 +103,7 @@ public class PlayerIslandsDatabaseManager {
             ctx.deleteFrom(ISLANDS)
                     .where(ISLANDS.UUID.eq(player.getUniqueId().toString()))
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<List<IslandRaidData>> getRaidableIslands(SkyUser player) {
@@ -122,13 +122,13 @@ public class PlayerIslandsDatabaseManager {
             }
 
             return islands;
-        });
+        }, executor);
     }
 
     // ------------------ TRUSTING ------------------ //
 
     public CompletableFuture<Boolean> isPlayerTrusted(UUID playerUUID, int id) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(TRUSTED_PLAYERS, TRUSTED_PLAYERS.UUID.eq(playerUUID.toString()), TRUSTED_PLAYERS.ISLAND_ID.eq(id)));
+        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(TRUSTED_PLAYERS, TRUSTED_PLAYERS.UUID.eq(playerUUID.toString()), TRUSTED_PLAYERS.ISLAND_ID.eq(id)), executor);
     }
 
     public CompletableFuture<Void> trustPlayer(UUID playerUUID, int islandID) {
@@ -137,7 +137,7 @@ public class PlayerIslandsDatabaseManager {
                     .columns(TRUSTED_PLAYERS.ISLAND_ID, TRUSTED_PLAYERS.UUID)
                     .values(islandID, playerUUID.toString())
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> removePlayerTrust(UUID playerUUID, int islandID) {
@@ -145,7 +145,7 @@ public class PlayerIslandsDatabaseManager {
             ctx.deleteFrom(TRUSTED_PLAYERS)
                     .where(TRUSTED_PLAYERS.ISLAND_ID.eq(islandID), TRUSTED_PLAYERS.UUID.eq(playerUUID.toString()))
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> removeAllTrustedPlayers(int islandID) {
@@ -153,7 +153,7 @@ public class PlayerIslandsDatabaseManager {
             ctx.deleteFrom(TRUSTED_PLAYERS)
                     .where(TRUSTED_PLAYERS.ISLAND_ID.eq(islandID))
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<List<SkyUser>> getTrustedPlayers(int islandID) {
@@ -169,6 +169,6 @@ public class PlayerIslandsDatabaseManager {
             }
 
             return players;
-        });
+        }, executor);
     }
 }

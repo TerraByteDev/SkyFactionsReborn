@@ -24,6 +24,8 @@ import org.sqlite.JDBC;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class DatabaseManager {
@@ -46,7 +48,10 @@ public class DatabaseManager {
     @Getter private FactionsDatabaseManager factionsManager;
     @Getter private FactionElectionManager electionManager;
 
+    private Executor databaseExecutor;
+
     public void initialise(String type) {
+        this.databaseExecutor = Executors.newVirtualThreadPerTaskExecutor();
         createDataSource(SkyApi.getInstance().getFileAPI().getDatabasePath(), type);
     }
 
@@ -160,17 +165,17 @@ public class DatabaseManager {
         if (result.success) {
             SLogger.info("Database migrations complete: ({} Migrations completed in {}ms)", result.getSuccessfulMigrations().size(), result.getTotalMigrationTime());
 
-            this.currencyManager = new CurrencyDatabaseManager(this.ctx);
-            this.defencesManager = new DefencesDatabaseManager(this.ctx);
-            this.notificationManager = new NotificationDatabaseManager(this.ctx);
-            this.playerIslandManager = new PlayerIslandsDatabaseManager(this.ctx);
-            this.playerManager = new PlayerDatabaseManager(this.ctx);
+            this.currencyManager = new CurrencyDatabaseManager(this.ctx, this.databaseExecutor);
+            this.defencesManager = new DefencesDatabaseManager(this.ctx, this.databaseExecutor);
+            this.notificationManager = new NotificationDatabaseManager(this.ctx, this.databaseExecutor);
+            this.playerIslandManager = new PlayerIslandsDatabaseManager(this.ctx, this.databaseExecutor);
+            this.playerManager = new PlayerDatabaseManager(this.ctx, this.databaseExecutor);
 
-            this.factionAuditLogManager = new FactionAuditLogDatabaseManager(this.ctx);
-            this.factionInvitesManager = new FactionInvitesDatabaseManager(this.ctx);
-            this.factionIslandManager = new FactionIslandDatabaseManager(this.ctx);
-            this.factionsManager = new FactionsDatabaseManager(this.ctx);
-            this.electionManager = new FactionElectionManager(this.ctx);
+            this.factionAuditLogManager = new FactionAuditLogDatabaseManager(this.ctx, this.databaseExecutor);
+            this.factionInvitesManager = new FactionInvitesDatabaseManager(this.ctx, this.databaseExecutor);
+            this.factionIslandManager = new FactionIslandDatabaseManager(this.ctx, this.databaseExecutor);
+            this.factionsManager = new FactionsDatabaseManager(this.ctx, this.databaseExecutor);
+            this.electionManager = new FactionElectionManager(this.ctx, this.databaseExecutor);
         } else {
             ErrorUtil.handleDatabaseSetupError(new Exception("Failed to complete migrations - " + result.getFailedMigrations().size() + " Migrations failed: " + result.getException()));
             result.getFailedMigrations().forEach(migration -> SLogger.info("Migration failed: {}", migration.description));

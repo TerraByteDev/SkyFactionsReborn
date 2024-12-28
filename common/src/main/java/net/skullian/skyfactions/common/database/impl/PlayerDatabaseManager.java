@@ -1,21 +1,21 @@
 package net.skullian.skyfactions.common.database.impl;
 
 import net.skullian.skyfactions.common.api.SkyApi;
+import net.skullian.skyfactions.common.database.AbstractTableManager;
 import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.database.tables.records.PlayerDataRecord;
 import org.jooq.DSLContext;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import static net.skullian.skyfactions.common.database.tables.PlayerData.PLAYER_DATA;
 
-public class PlayerDatabaseManager {
+public class PlayerDatabaseManager extends AbstractTableManager {
 
-    private final DSLContext ctx;
-
-    public PlayerDatabaseManager(DSLContext ctx) {
-        this.ctx = ctx;
+    public PlayerDatabaseManager(DSLContext ctx, Executor executor) {
+        super(ctx, executor);
     }
 
     public CompletableFuture<Void> registerPlayer(UUID uuid, boolean shouldRegister) {
@@ -25,7 +25,7 @@ public class PlayerDatabaseManager {
                     .columns(PLAYER_DATA.UUID, PLAYER_DATA.DISCORD_ID, PLAYER_DATA.LAST_RAID, PLAYER_DATA.LOCALE)
                     .values(uuid.toString(), "none", (long) 0, SkyApi.getInstance().getPlayerAPI().getLocale(uuid))
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<PlayerData> getPlayerData(UUID uuid) {
@@ -40,7 +40,7 @@ public class PlayerDatabaseManager {
                             result.getLastRaid(),
                             result.getLocale()
                     ) : null;
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> registerDiscordLink(UUID playerUUID, String discordID) {
@@ -51,7 +51,7 @@ public class PlayerDatabaseManager {
                     .set(PLAYER_DATA.DISCORD_ID, discordID)
                     .where(PLAYER_DATA.UUID.eq(playerUUID.toString()))
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> updateLastRaid(UUID playerUUID, long time) {
@@ -61,14 +61,14 @@ public class PlayerDatabaseManager {
                     .set(PLAYER_DATA.LAST_RAID, time)
                     .where(PLAYER_DATA.UUID.eq(playerUUID.toString()))
                     .execute();
-        });
+        }, executor);
     }
 
     public CompletableFuture<String> getPlayerLocale(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> ctx.select(PLAYER_DATA.LOCALE)
                 .from(PLAYER_DATA)
                 .where(PLAYER_DATA.UUID.eq(uuid.toString()))
-                .fetchOneInto(String.class));
+                .fetchOneInto(String.class), executor);
     }
 
     public CompletableFuture<Void> setPlayerLocale(UUID uuid, String locale) {
@@ -78,7 +78,7 @@ public class PlayerDatabaseManager {
                     .set(PLAYER_DATA.LOCALE, locale)
                     .where(PLAYER_DATA.UUID.eq(uuid.toString()))
                     .execute();
-        });
+        }, executor);
     }
 
 

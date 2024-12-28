@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.common.database.impl;
 
+import net.skullian.skyfactions.common.database.AbstractTableManager;
 import net.skullian.skyfactions.common.database.tables.records.NotificationsRecord;
 import net.skullian.skyfactions.common.notification.NotificationData;
 import net.skullian.skyfactions.common.user.SkyUser;
@@ -12,15 +13,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import static net.skullian.skyfactions.common.database.tables.Notifications.NOTIFICATIONS;
 
-public class NotificationDatabaseManager {
+public class NotificationDatabaseManager extends AbstractTableManager {
 
-    private final DSLContext ctx;
-
-    public NotificationDatabaseManager(DSLContext ctx) {
-        this.ctx = ctx;
+    public NotificationDatabaseManager(DSLContext ctx, Executor executor) {
+        super(ctx, executor);
     }
 
     public CompletableFuture<Void> createNotifications(List<NotificationData> notifications) {
@@ -34,7 +34,7 @@ public class NotificationDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<Void> removeNotifications(List<NotificationData> notifications) {
@@ -47,7 +47,7 @@ public class NotificationDatabaseManager {
                             .execute();
                 }
             });
-        });
+        }, executor);
     }
 
     public CompletableFuture<List<NotificationData>> getNotifications(SkyUser player) {
@@ -68,6 +68,6 @@ public class NotificationDatabaseManager {
             }
 
             return data;
-        });
+        }, executor);
     }
 }
