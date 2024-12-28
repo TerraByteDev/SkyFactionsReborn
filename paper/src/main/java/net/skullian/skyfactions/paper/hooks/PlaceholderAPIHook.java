@@ -47,13 +47,13 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
         if (params.equalsIgnoreCase("player_runes")) {
             if (player == null) return "-1";
-            if (user.runes.isPresent()) return String.valueOf(user.runes.get());
+            if (user.runes.isPresent()) return String.valueOf(user.runes.getAsInt());
                 else user.getRunes();
 
             return "-1";
         } else if (params.equalsIgnoreCase("player_gems")) {
             if (player == null) return "-1";
-            if (user.gems.isPresent()) return String.valueOf(user.gems.get());
+            if (user.gems.isPresent()) return String.valueOf(user.gems.getAsInt());
                 else user.getGems();
 
             return "-1";
