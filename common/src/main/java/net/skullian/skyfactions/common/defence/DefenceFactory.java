@@ -26,6 +26,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,6 +37,7 @@ public abstract class DefenceFactory {
     private final Map<String, String> defenceTypes = new HashMap<>();
 
     private final List<String> cachedMaterials = new ArrayList<>();
+    private final ScheduledExecutorService defenceExecutor = Executors.newScheduledThreadPool(DefencesConfig.THREAD_LIMIT.getInt());
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void registerDefaultDefences() {

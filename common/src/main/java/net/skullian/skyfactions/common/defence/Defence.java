@@ -25,7 +25,6 @@ public abstract class Defence {
     private ScheduledFuture<?> task;
     private List<UUID> targetedEntities = new ArrayList<>();
     private boolean noAmmoNotified;
-    private ScheduledExecutorService service = Executors.newScheduledThreadPool(1);
 
     public Defence(DefenceData defenceData, DefenceStruct defenceStruct) {
         this.data = defenceData;
@@ -33,6 +32,10 @@ public abstract class Defence {
             throw new NullPointerException("Could not find defence with the type of " + data.getTYPE());
         }
         this.struct = defenceStruct;
+    }
+
+    public ScheduledExecutorService getService() {
+        return SkyApi.getInstance().getDefenceFactory().getDefenceExecutor();
     }
 
     public abstract CompletableFuture<Void> remove(SkyUser skyUser);

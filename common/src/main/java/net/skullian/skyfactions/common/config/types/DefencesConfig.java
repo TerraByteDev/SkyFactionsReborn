@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 public enum DefencesConfig {
 
+    THREAD_LIMIT("limits.thread-limit"),
     MAX_PLAYER_DEFENCES("limits.max-player-defences"),
     MAX_FACTION_DEFENCES("limits.max-faction-defences"),
     ALLOW_PLACEMENTS_IN_OTHER_WORLDS("limits.allow-placements-in-other-worlds"),

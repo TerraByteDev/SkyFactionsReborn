@@ -15,6 +15,9 @@ config-version: 1
 
 # This is the configuration for limits surrounding defences.
 limits:
+  # How many threads can be devoted to running defences.
+  thread-limit: 2
+
   # Maximum amount of defences a player island can have.
   max-player-defences: 10
   # Maximum amount of defences a faction island can have.
