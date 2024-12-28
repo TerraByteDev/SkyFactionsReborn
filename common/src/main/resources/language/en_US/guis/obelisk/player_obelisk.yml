@@ -25,17 +25,17 @@ items:
   head:
     char: "p" # This is the character to use in the layout!
     material: "PLAYER_HEAD"
-    skull: "<player-skull>" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player-skull> - Skull texture of the player.
-    text: "<red><player-name>'s Obelisk" # Supported placeholders: <player-name> - Player's Name
+    skull: "<player_skull>" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
+    text: "<red><player_name>'s Obelisk" # Supported placeholders: <player_name> - Player's Name
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
     lore:
       # Placeholders: <level> - Current Island Level
-      # Placeholders: <rune-count> - Total Rune Count / <gem-count> - Total Gem Count
+      # Placeholders: <rune_count> - Total Rune Count / <gem_count> - Total Gem Count
       - "<blue>Stats<reset>"
       - "<green>Level: <yellow><level>"
-      - "<green>Runes: <yellow><rune-count>"
-      - "<green>Gems: <yellow><gem-count>"
+      - "<green>Runes: <yellow><rune_count>"
+      - "<green>Gems: <yellow><gem_count>"
 
   notifications:
     char: "n"
@@ -45,11 +45,11 @@ items:
     sound: ""
     pitch: 1
     lore:
-      # Placeholders: <notification-count> - Current unread notification count.
+      # Placeholders: <notification_count> - Current unread notification count.
       - "<yellow>View and Manage your"
       - "<yellow>unread Notifications."
       - ""
-      - "<gray>You currently have <notification-count> unread"
+      - "<gray>You currently have <notification_count> unread"
       - "<gray>Notifications."
 
   # UI to convert select blocks into runes

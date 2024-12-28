@@ -9,7 +9,7 @@ items:
   forward-button:
     char: ">" # This is the character used in the layout.
     material: "PLAYER_HEAD"
-    # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player-skull> - Skull texture of the player.
+    # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
     skull: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTYzMzlmZjJlNTM0MmJhMThiZGM0OGE5OWNjYTY1ZDEyM2NlNzgxZDg3ODI3MmY5ZDk2NGVhZDNiOGFkMzcwIn19fQ==" #
     name: "<green><bold>Next Page" # Name of the item.
     sound: "item.book.page_turn" # Sound played when the item is clicked. Set to 'none' to disable.

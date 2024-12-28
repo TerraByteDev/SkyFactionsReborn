@@ -23,7 +23,7 @@ public abstract class SkyUser {
     public OptionalInt gems = OptionalInt.empty();
     public OptionalInt runes = OptionalInt.empty();
     public Optional<PlayerIsland> island = Optional.empty();
-    public Optional<List<InviteData>> incomingInvites = Optional.empty();
+    public List<InviteData> incomingInvites;
     public Optional<JoinRequestData> activeJoinRequest = Optional.empty();
     @Getter
     public final boolean console;
@@ -93,16 +93,16 @@ public abstract class SkyUser {
     }
 
     public CompletableFuture<List<InviteData>> getIncomingInvites() {
-        return this.incomingInvites.map(CompletableFuture::completedFuture).orElseGet(() -> SkyApi.getInstance().getDatabaseManager().getFactionInvitesManager().getInvitesOfPlayer(getUniqueId()).whenComplete((invites, ex) -> {
+        return this.incomingInvites != null ? CompletableFuture.completedFuture(this.incomingInvites) : SkyApi.getInstance().getDatabaseManager().getFactionInvitesManager().getInvitesOfPlayer(getUniqueId()).whenComplete((invites, ex) -> {
             if (ex != null) return;
 
-            this.incomingInvites = Optional.of(invites);
-        }));
-
+            this.incomingInvites = invites;
+        });
     }
 
+    @Nullable
     public List<InviteData> getCachedInvites() {
-        return this.incomingInvites.orElse(new ArrayList<>());
+        return this.incomingInvites;
     }
 
     public void onCacheComplete(int runesAddition, int gemsAddition) {

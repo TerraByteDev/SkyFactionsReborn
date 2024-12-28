@@ -3,6 +3,7 @@ package net.skullian.skyfactions.paper.api;
 import com.github.puregero.multilib.MultiLib;
 import com.jeff_media.customblockdata.CustomBlockData;
 import lombok.Getter;
+import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.ObeliskAPI;
 import net.skullian.skyfactions.common.config.types.ObeliskConfig;
 import net.skullian.skyfactions.common.config.types.Settings;

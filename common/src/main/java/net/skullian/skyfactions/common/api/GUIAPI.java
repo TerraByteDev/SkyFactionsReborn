@@ -28,7 +28,7 @@ public class GUIAPI {
     public static GUIData getGUIData(String guiName, SkyUser user) throws IllegalArgumentException {
         YamlDocument config = GUIEnums.configs.getOrDefault(SkyApi.getInstance().getPlayerAPI().getLocale(user.getUniqueId()), getFallbackLanguage()).get(guiName);
         if (config != null) {
-            String guiTitle = config.getString("title").replace("<player-name>", user.getName());
+            String guiTitle = config.getString("title").replace("<player_name>", user.getName());
             String openSound = config.getString("open-sound");
             int openPitch = config.getInt("open-pitch");
             List<String> layout = config.getStringList("layout");
@@ -60,7 +60,7 @@ public class GUIAPI {
 
                 char charValue = !isModel ? itemData.getString("char").charAt(0) : 'x';
                 String material = itemData.getString("material");
-                String text = itemData.getString("text").replace("<player-name>", user.getName());
+                String text = itemData.getString("text").replace("<player_name>", user.getName());
                 String sound = itemData.getString("sound");
                 String texture = itemData.getString("skull");
                 int pitch = itemData.getInt("pitch");
@@ -93,7 +93,7 @@ public class GUIAPI {
                 char charValue = itemData.getString("char").charAt(0);
                 String material = itemData.getString("material");
                 String texture = itemData.getString("skull");
-                String itemName = itemData.getString("name").replace("<player-name>", user.getName());
+                String itemName = itemData.getString("name").replace("<player_name>", user.getName());
                 String sound = itemData.getString("sound");
                 int pitch = itemData.getInt("pitch");
                 String morePagesLore = itemData.getString("more-pages-lore");
@@ -122,8 +122,9 @@ public class GUIAPI {
 
     private static SkyItemStack create(String material, String texture, UUID playerUUID) {
         SkyItemStack stack;
-        if (material.equalsIgnoreCase("player-head")) {
-            if (texture.equalsIgnoreCase("<player-skull>")) {
+
+        if (material.equalsIgnoreCase("PLAYER_HEAD")) {
+            if (texture.equalsIgnoreCase("<player_skull>")) {
                 stack = SkyApi.getInstance().getPlayerAPI().getPlayerSkull(SkyItemStack.builder().material("PLAYER_HEAD").build(), playerUUID);
             } else {
                 stack = PlayerAPI.convertToSkull(SkyItemStack.builder().material("PLAYER_HEAD"), texture).build();

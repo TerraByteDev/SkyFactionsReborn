@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.paper.event;
 
 import com.jeff_media.customblockdata.CustomBlockData;
+import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.ObeliskConfig;
@@ -11,6 +12,7 @@ import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -79,9 +81,11 @@ public class ObeliskInteractionListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
         if (!event.hasBlock()) return;
+
         Block block = event.getClickedBlock();
         if (block.getType() != Material.getMaterial(ObeliskConfig.OBELISK_MATERIAL.getString()) && block.getType() != Material.BARRIER)
             return;
+
         Player player = event.getPlayer();
 
         PersistentDataContainer container = new CustomBlockData(block, SkyFactionsReborn.getInstance());

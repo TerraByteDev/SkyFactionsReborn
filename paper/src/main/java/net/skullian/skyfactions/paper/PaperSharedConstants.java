@@ -24,6 +24,6 @@ public class PaperSharedConstants {
 
     @NotNull
     private static NamespacedKey from(@NotNull String key) {
-        return new NamespacedKey(SharedConstants.PLUGIN_NAMESPACE, key);
+        return new NamespacedKey(SkyFactionsReborn.getInstance(), key);
     }
 }

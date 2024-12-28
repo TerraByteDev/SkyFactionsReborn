@@ -32,7 +32,7 @@ items:
   prompt:
     char: "p" # This is the character to use in the layout!
     material: "NETHER_STAR"
-    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player-skull> - Skull texture of the player.
+    skull: "" # You can set custom skull textures (e.g. from minecraft-heads.com). 'material' MUST BE SET TO 'PLAYER_HEAD'. Placeholders: <player_skull> - Skull texture of the player.
     text: "<blue>Incoming Invites"
     sound: "" # Sound played when the item is clicked. Set to 'none' to disable.
     pitch: 1 # Pitch of the sound. Does not apply if 'sound' is 'none.'.
@@ -55,14 +55,14 @@ items:
   # You can customise the text, lore and sound though.
   model:
     material: "PLAYER_HEAD"
-    skull: "<player-skull>"
-    text: "<blue><faction-name>" # Placeholders: <faction-name> - Name of the faction who is inviting you.
+    skull: "<player_skull>"
+    text: "<blue><faction_name>" # Placeholders: <faction_name> - Name of the faction who is inviting you.
     sound: "" # The obelisk UI by default is set to make a sound. Don't want to trigger it twice.
     pitch: 1
-    # Placeholders: <player-name> - Name of player / <faction-name> - Name of Faction.
+    # Placeholders: <player_name> - Name of player / <faction_name> - Name of Faction.
     lore:
-      - "<green><player-name> <yellow>wants you"
-      - "<yellow>to join <green><faction-name>."
+      - "<green><player_name> <yellow>wants you"
+      - "<yellow>to join <green><faction_name>."
       - ""
       - "<gray>Click for actions."
 
