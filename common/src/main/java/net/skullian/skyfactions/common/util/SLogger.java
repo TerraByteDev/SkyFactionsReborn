@@ -39,11 +39,7 @@ public class SLogger {
     }
 
     private static String getPadding(int count) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < count; i++) {
-            sb.append(" ");
-        }
-        return sb.toString();
+        return " ".repeat(Math.max(0, count));
     }
 
     public static void info(Object message, Object... args) {
