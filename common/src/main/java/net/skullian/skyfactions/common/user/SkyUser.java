@@ -12,10 +12,7 @@ import net.skullian.skyfactions.common.util.SkyItemStack;
 import net.skullian.skyfactions.common.util.SkyLocation;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -23,8 +20,8 @@ public abstract class SkyUser {
 
     public final UUID uuid;
     public final Optional<PlayerData> data = Optional.empty();
-    public Optional<Integer> gems = Optional.empty();
-    public Optional<Integer> runes = Optional.empty();
+    public OptionalInt gems = OptionalInt.empty();
+    public OptionalInt runes = OptionalInt.empty();
     public Optional<PlayerIsland> island = Optional.empty();
     public Optional<List<InviteData>> incomingInvites = Optional.empty();
     public Optional<JoinRequestData> activeJoinRequest = Optional.empty();
@@ -54,11 +51,11 @@ public abstract class SkyUser {
     public CompletableFuture<Integer> getGems() {
         if (this.gems.isEmpty()) return SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getGems(this.uuid).whenComplete((gems, ex) -> {
             if (ex != null) return;
-            this.gems = Optional.of((this.gems.orElse(0)) + gems);
+            this.gems = OptionalInt.of((this.gems.orElse(0)) + gems);
         });
 
-        if (SkyApi.getInstance().getCacheService().getPlayersToCache().containsKey(this.uuid) && this.gems.isPresent()) return CompletableFuture.completedFuture((this.gems.get() + SkyApi.getInstance().getCacheService().getEntry(this.uuid).getGems()));
-        else return CompletableFuture.completedFuture(this.gems.get());
+        if (SkyApi.getInstance().getCacheService().getPlayersToCache().containsKey(this.uuid) && this.gems.isPresent()) return CompletableFuture.completedFuture((this.gems.getAsInt() + SkyApi.getInstance().getCacheService().getEntry(this.uuid).getGems()));
+        else return CompletableFuture.completedFuture(this.gems.getAsInt());
     }
 
     public void addGems(int amount) {
@@ -72,11 +69,11 @@ public abstract class SkyUser {
     public CompletableFuture<Integer> getRunes() {
         if (this.runes.isEmpty()) return SkyApi.getInstance().getDatabaseManager().getCurrencyManager().getRunes(this.uuid).whenComplete((runes, ex) -> {
             if (ex != null) return;
-            this.runes = Optional.of((this.runes.orElse(0)) + runes);
+            this.runes = OptionalInt.of((this.runes.orElse(0)) + runes);
         });
 
-        if (SkyApi.getInstance().getCacheService().getPlayersToCache().containsKey(this.uuid) && this.runes.isPresent()) return CompletableFuture.completedFuture((this.runes.get() + SkyApi.getInstance().getCacheService().getEntry(this.uuid).getRunes()));
-        else return CompletableFuture.completedFuture(this.runes.get());
+        if (SkyApi.getInstance().getCacheService().getPlayersToCache().containsKey(this.uuid) && this.runes.isPresent()) return CompletableFuture.completedFuture((this.runes.getAsInt() + SkyApi.getInstance().getCacheService().getEntry(this.uuid).getRunes()));
+        else return CompletableFuture.completedFuture(this.runes.getAsInt());
     }
 
     public void addRunes(int amount) {
@@ -109,8 +106,8 @@ public abstract class SkyUser {
     }
 
     public void onCacheComplete(int runesAddition, int gemsAddition) {
-        this.runes = Optional.of(this.runes.orElse(runesAddition));
-        this.gems = Optional.of(this.gems.orElse(gemsAddition));
+        this.runes = OptionalInt.of(this.runes.orElse(runesAddition));
+        this.gems = OptionalInt.of(this.gems.orElse(gemsAddition));
     }
 
     @Nullable public abstract CompletableFuture<JoinRequestData> getActiveJoinRequest();
