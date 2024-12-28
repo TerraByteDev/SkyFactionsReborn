@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public abstract class SkyUser {
 
     public final UUID uuid;
