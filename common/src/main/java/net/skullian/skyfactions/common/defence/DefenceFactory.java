@@ -37,7 +37,7 @@ public abstract class DefenceFactory {
     private final Map<String, String> defenceTypes = new HashMap<>();
 
     private final List<String> cachedMaterials = new ArrayList<>();
-    private final ScheduledExecutorService defenceExecutor = Executors.newScheduledThreadPool(DefencesConfig.THREAD_LIMIT.getInt());
+    private ScheduledExecutorService defenceExecutor;
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void registerDefaultDefences() {
@@ -67,6 +67,10 @@ public abstract class DefenceFactory {
         } catch (URISyntaxException | IOException error) {
             handleError(error);
         }
+    }
+
+    public void onConfigEnable() {
+        this.defenceExecutor = Executors.newScheduledThreadPool(DefencesConfig.THREAD_LIMIT.getInt());
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

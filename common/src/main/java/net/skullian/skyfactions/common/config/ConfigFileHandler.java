@@ -27,6 +27,8 @@ public class ConfigFileHandler {
         Messages.load(true);
         ObeliskConfig.setConfig(getFile(ConfigTypes.OBELISK).getConfig());
         RunesConfig.setConfig(getFile(ConfigTypes.RUNES).getConfig());
+
+        SkyApi.getInstance().getDefenceFactory().onConfigEnable();
     }
 
     public ConfigHandler getFile(ConfigTypes type) {
