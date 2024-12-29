@@ -1,7 +1,6 @@
 package net.skullian.skyfactions.paper.event;
 
 import com.jeff_media.customblockdata.CustomBlockData;
-import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.ObeliskConfig;
@@ -12,7 +11,6 @@ import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.paper.PaperSharedConstants;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

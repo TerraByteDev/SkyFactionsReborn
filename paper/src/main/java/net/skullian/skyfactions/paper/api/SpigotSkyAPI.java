@@ -33,6 +33,7 @@ import net.skullian.skyfactions.paper.npc.SpigotNPCManager;
 import net.skullian.skyfactions.paper.user.SpigotUserManager;
 import net.skullian.skyfactions.paper.util.DependencyHandler;
 import net.skullian.skyfactions.paper.util.worldborder.BorderPersistence;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.invui.InvUI;
@@ -160,6 +161,18 @@ public final class SpigotSkyAPI extends SkyApi {
         SLogger.noPrefix("│                ✓ Finished initialising SkyAPI.               │");
         SLogger.noPrefix("│                   ✓ SkyFactions has loaded.                  │");
         SLogger.noPrefix("╰──────────────────────────────────────────────────────────────╯");
+
+        if (Settings.GUI_LOOKUP_PLAYER_SKINS.getBoolean() && !Bukkit.getOnlineMode()) SLogger.warn("""
+                 \n
+               \s* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                * You have enabled the GUI lookup for player skins, but your server is offline mode! *
+                * If you are an online mode network with v4 UUID forwarding, you can ignore this.    *
+                * Otherwise, set lookup-player-skins to false in the config. If you do not do this,  *
+                * you may run the risk of many 429 errors from mojang's API, which will cause        *
+                * excessive log spam and possibly unintended behaviour.                              *
+               \s* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+               """,
+                true);
 
         new File(SkyFactionsReborn.getInstance().getDataFolder(), "/data").mkdir();
         databaseManager = new DatabaseManager();

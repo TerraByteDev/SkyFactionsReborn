@@ -4,6 +4,7 @@ import net.skullian.skyfactions.common.database.struct.InviteData;
 import net.skullian.skyfactions.common.faction.JoinRequestData;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -18,11 +19,11 @@ public class InvitesAPI {
     }
 
     public static void onInviteCreate(UUID playerUUID, InviteData data) {
-        SkyApi.getInstance().getUserManager().getUser(playerUUID).getCachedInvites().add(data);
+        Objects.requireNonNull(SkyApi.getInstance().getUserManager().getUser(playerUUID).getCachedInvites()).add(data);
     }
 
     public static void onInviteRemove(UUID playerUUID, InviteData data) {
-        SkyApi.getInstance().getUserManager().getUser(playerUUID).getCachedInvites().remove(data);
+        Objects.requireNonNull(SkyApi.getInstance().getUserManager().getUser(playerUUID).getCachedInvites()).remove(data);
     }
 
 }

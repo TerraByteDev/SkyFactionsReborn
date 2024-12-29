@@ -2,7 +2,6 @@ package net.skullian.skyfactions.paper.event.defence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jeff_media.customblockdata.CustomBlockData;
-import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.DefencesConfig;
 import net.skullian.skyfactions.common.config.types.Messages;

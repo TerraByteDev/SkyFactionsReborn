@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.puregero.multilib.MultiLib;
 import com.jeff_media.customblockdata.CustomBlockData;
 import io.lumine.mythic.bukkit.MythicBukkit;
-import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.common.defence.hologram.DefenceTextHologram;

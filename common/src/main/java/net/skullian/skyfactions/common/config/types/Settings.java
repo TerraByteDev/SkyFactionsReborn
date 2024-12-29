@@ -47,6 +47,9 @@ public enum Settings {
     DEFENCE_PURCHASE_SUCCESS_SOUND("sounds.defence-purchase-success-sound"),
     DEFENCE_PURCHASE_SUCCESS_SOUND_PITCH("sounds.defence-purchase-success-sound-pitch"),
 
+    GUI_LOOKUP_PLAYER_SKINS("gui.lookup-player-skins"),
+    GUI_OVERRIDE_TEXTURE("gui.override-texture"),
+
     ISLAND_FACTION_WORLD("island.faction-world-name"),
     ISLAND_PLAYER_WORLD("island.island-world-name"),
     ISLAND_PLAYER_SCHEMATIC("island.normal-island-schematic"),

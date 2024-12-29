@@ -1,7 +1,6 @@
 package net.skullian.skyfactions.paper.api;
 
 import com.jeff_media.customblockdata.CustomBlockData;
-import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.DefenceAPI;
 import net.skullian.skyfactions.common.api.PlayerAPI;
 import net.skullian.skyfactions.common.api.SkyApi;

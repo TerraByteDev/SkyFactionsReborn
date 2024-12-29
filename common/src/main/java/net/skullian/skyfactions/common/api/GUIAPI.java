@@ -125,7 +125,8 @@ public class GUIAPI {
 
         if (material.equalsIgnoreCase("PLAYER_HEAD")) {
             if (texture.equalsIgnoreCase("<player_skull>")) {
-                stack = SkyApi.getInstance().getPlayerAPI().getPlayerSkull(SkyItemStack.builder().material("PLAYER_HEAD").build(), playerUUID);
+                stack = Settings.GUI_LOOKUP_PLAYER_SKINS.getBoolean() ? SkyApi.getInstance().getPlayerAPI().getPlayerSkull(SkyItemStack.builder().material("PLAYER_HEAD").build(), playerUUID)
+                        : PlayerAPI.convertToSkull(SkyItemStack.builder().material("PLAYER_HEAD"), Settings.GUI_OVERRIDE_TEXTURE.getString()).build();
             } else {
                 stack = PlayerAPI.convertToSkull(SkyItemStack.builder().material("PLAYER_HEAD"), texture).build();
             }

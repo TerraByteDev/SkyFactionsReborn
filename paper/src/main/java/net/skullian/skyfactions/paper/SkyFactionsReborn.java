@@ -2,7 +2,6 @@ package net.skullian.skyfactions.paper;
 
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.paper.api.SpigotSkyAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SkyFactionsReborn extends JavaPlugin {
