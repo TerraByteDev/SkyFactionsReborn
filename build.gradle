@@ -134,7 +134,7 @@ allprojects {
         compileOnly("org.apache.commons:commons-lang3:${apache_commons}")
         compileOnly("com.google.guava:guava:${guava}")
 
-        compileOnly("dev.dejvokep:boosted-yaml:${boostedyaml}")
+        compileOnly("de.exlll:configlib-yaml:${configlib}")
 
         compileOnly("org.incendo:cloud-core:${cloud}")
         compileOnly("org.incendo:cloud-annotations:${cloud}")
