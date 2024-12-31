@@ -9,7 +9,6 @@ import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.common.island.SkyIsland;
 import net.skullian.skyfactions.common.user.SkyUser;
-import net.skullian.skyfactions.common.util.ErrorUtil;
 import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.paper.api.adapter.SpigotAdapter;
 import org.bukkit.Bukkit;
