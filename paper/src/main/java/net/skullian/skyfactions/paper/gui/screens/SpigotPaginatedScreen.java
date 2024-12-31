@@ -86,9 +86,9 @@ public class SpigotPaginatedScreen {
 
     private PageItem handlePaginationItem(PaginationItemData paginationItem) {
         return switch(paginationItem.getITEM_ID()) {
-            case "FORWARD_BUTTON" ->
+            case "forward-button" ->
                     new SpigotPaginationForwardItem(new PaginationForwardItem(paginationItem, screen.player));
-            case "BACK_BUTTON" ->
+            case "back-button" ->
                     new SpigotPaginationBackItem(new PaginationBackItem(paginationItem, screen.player));
             default -> null;
         };

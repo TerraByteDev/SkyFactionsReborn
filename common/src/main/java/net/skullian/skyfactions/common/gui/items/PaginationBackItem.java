@@ -6,7 +6,6 @@ import net.skullian.skyfactions.common.user.SkyUser;
 
 public class PaginationBackItem extends SkyPageItem {
 
-
     public PaginationBackItem(PaginationItemData paginationItemData, SkyUser player) {
         super(null, null, player, null, paginationItemData, false);
     }

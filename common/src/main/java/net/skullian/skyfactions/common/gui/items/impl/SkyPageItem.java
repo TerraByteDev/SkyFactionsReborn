@@ -18,9 +18,12 @@ public abstract class SkyPageItem extends BaseSkyItem {
 
     private int currentPage;
     private int pageAmount;
+    private PaginationItemData paginationItemData;
 
     public SkyPageItem(ItemData data, SkyItemStack stack, SkyUser player, Object[] optionals, PaginationItemData paginationItemData, boolean forward) {
         super(data, stack, player, Arrays.asList(optionals, paginationItemData, forward).toArray(), false);
+
+        this.paginationItemData = paginationItemData;
     }
 
     @Override

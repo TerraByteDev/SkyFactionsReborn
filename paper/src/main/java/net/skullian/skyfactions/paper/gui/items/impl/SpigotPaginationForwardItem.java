@@ -34,8 +34,8 @@ public class SpigotPaginationForwardItem extends PageItem {
             getGui().goForward();
         }
 
-        if (!ITEM.getDATA().getSOUND().equalsIgnoreCase("none")) {
-            SkyApi.getInstance().getSoundAPI().playSound(SkyApi.getInstance().getUserManager().getUser(player.getUniqueId()), ITEM.getDATA().getSOUND(), ITEM.getDATA().getPITCH(), 1);
+        if (!ITEM.getPaginationItemData().getSOUND().equalsIgnoreCase("none")) {
+            SkyApi.getInstance().getSoundAPI().playSound(SkyApi.getInstance().getUserManager().getUser(player.getUniqueId()), ITEM.getPaginationItemData().getSOUND(), ITEM.getPaginationItemData().getPITCH(), 1);
         }
     }
 
