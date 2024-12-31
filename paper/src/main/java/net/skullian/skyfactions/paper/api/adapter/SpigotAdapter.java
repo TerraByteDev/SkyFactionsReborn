@@ -28,7 +28,7 @@ public class SpigotAdapter {
 
     public static Location adapt(SkyLocation location) {
         return new Location(
-                Bukkit.getWorld(location.getWorldName()),
+                location.getWorldName() != null ? Bukkit.getWorld(location.getWorldName()) : null,
                 location.getX(),
                 location.getY(),
                 location.getZ(),

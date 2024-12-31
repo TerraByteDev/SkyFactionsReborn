@@ -38,7 +38,7 @@ public abstract class IslandAPI {
         });
     }
 
-    public CompletableFuture<Void> createIsland(SkyUser player) {
+    public void createIsland(SkyUser player) {
         String locale = SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId());
 
         PlayerIsland island = new PlayerIsland(SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().cachedPlayerIslandID);
@@ -57,13 +57,13 @@ public abstract class IslandAPI {
         IslandModificationAction action = IslandModificationAction.CREATE;
         action.setId(island.getId());
 
-        return CompletableFuture.allOf(
+        CompletableFuture.allOf(
                 SkyApi.getInstance().getRegionAPI().pasteIslandSchematic(player, island.getCenter(worldName), worldName, "player"),
                 SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().createIsland(player.getUniqueId(), action)
         ).whenComplete((ignored, ex) -> {
             if (ex != null) {
                 ErrorUtil.handleError(player, "create your island", "SQL_ISLAND_CREATE", ex);
-                removePlayerIsland(player);
+                removePlayerIsland(player, island);
                 SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().removeIsland(player);
                 return;
             }
@@ -78,7 +78,7 @@ public abstract class IslandAPI {
         });
     }
 
-    public abstract void removePlayerIsland(SkyUser player);
+    public abstract void removePlayerIsland(SkyUser player, SkyIsland island);
 
     public void onIslandLoad(SkyUser user) {
         modifyDefenceOperation(FactionAPI.DefenceOperation.ENABLE, user);
@@ -94,12 +94,16 @@ public abstract class IslandAPI {
     }
 
     public void onIslandRemove(SkyUser user) {
+        SkyIsland island = islands.get(user.getUniqueId());
+
+        this.awaitingDeletion.remove(user.getUniqueId());
         user.teleport(SkyApi.getInstance().getRegionAPI().getHubLocation());
         SkyApi.getInstance().getWorldBorderAPI().resetBorder(user);
 
         SkyApi.getInstance().getCacheService().getEntry(user.getUniqueId()).onIslandRemove();
+        this.islands.remove(user.getUniqueId());
 
-        removePlayerIsland(user);
+        removePlayerIsland(user, island);
     }
 
     public void modifyDefenceOperation(FactionAPI.DefenceOperation operation, SkyUser user) {

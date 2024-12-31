@@ -22,7 +22,6 @@ public abstract class SkyUser {
     public final Optional<PlayerData> data = Optional.empty();
     public OptionalInt gems = OptionalInt.empty();
     public OptionalInt runes = OptionalInt.empty();
-    public Optional<PlayerIsland> island = Optional.empty();
     public List<InviteData> incomingInvites;
     public Optional<JoinRequestData> activeJoinRequest = Optional.empty();
     @Getter
@@ -84,12 +83,9 @@ public abstract class SkyUser {
         SkyApi.getInstance().getCacheService().getEntry(this.uuid).removeRunes(amount);
     }
 
-    @Nullable public CompletableFuture<PlayerIsland> getIsland() {
-        return this.island.map(CompletableFuture::completedFuture).orElseGet(() -> SkyApi.getInstance().getDatabaseManager().getPlayerIslandManager().getPlayerIsland(this.uuid).whenComplete((island, ex) -> {
-            if (ex != null) return;
-
-            this.island = Optional.of(island);
-        }));
+    @Nullable
+    public CompletableFuture<PlayerIsland> getIsland() {
+        return SkyApi.getInstance().getIslandAPI().getPlayerIsland(uuid);
     }
 
     public CompletableFuture<List<InviteData>> getIncomingInvites() {
