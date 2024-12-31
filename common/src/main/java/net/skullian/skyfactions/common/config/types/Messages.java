@@ -280,8 +280,10 @@ public enum Messages {
     public static void load(boolean setup) {
         try {
             new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath(), "/language").mkdirs();
-            if (setup) SLogger.setup("Saving default language <#05eb2f>[English]<#4294ed>.", false);
-                else SLogger.info("Saving default language <#05eb2f>[English]<#4294ed>.");
+
+            String defaultLog = "Loading language <#05eb2f>[English]<#4294ed>.";
+            if (setup) SLogger.setup(defaultLog, false);
+                else SLogger.info(defaultLog);
 
             YamlDocument doc = YamlDocument.create(new File(SkyApi.getInstance().getFileAPI().getConfigFolderPath() + "/language/en_US/en_US.yml"), Objects.requireNonNull(Messages.class.getClassLoader().getResourceAsStream("language/en_US/en_US.yml")),
                     GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(), DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version")).build());
@@ -294,8 +296,9 @@ public enum Messages {
             for (File dir : Objects.requireNonNull(folder.listFiles())) {
                 
                 if (dir.isDirectory()) {
-                    if (setup) SLogger.setup("Registering Language: <#05eb2f>[{}]<#4294ed>", false, dir.getName());
-                        else SLogger.info("Registering Language: <#05eb2f>[{}]<#4294ed>", dir.getName());
+                    String log = "Registering Language: <#05eb2f>[" + dir.getName() + "]<#4294ed>";
+                    if (setup) SLogger.setup(log, false);
+                        else SLogger.info(log);
 
                     if (!dir.getName().equalsIgnoreCase(Settings.DEFAULT_LANGUAGE.getString())) configs.put(
                         dir.getName(),
@@ -304,7 +307,7 @@ public enum Messages {
                     );
 
                     registerGUIs(dir, dir.getName());
-                    SkyApi.getInstance().getDefenceFactory().register(dir, dir.getName());
+                    SkyApi.getInstance().getDefenceFactory().register(dir, dir.getName(), setup);
                 }
             }
         } catch (Exception exception) {

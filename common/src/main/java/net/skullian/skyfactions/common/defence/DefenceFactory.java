@@ -74,7 +74,7 @@ public abstract class DefenceFactory {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void register(File directory, String locale) {
+    public void register(File directory, String locale, boolean setup) {
         try {
             File dir = new File(directory + "/defences");
             dir.mkdirs();
@@ -83,7 +83,10 @@ public abstract class DefenceFactory {
             for (File defenceFile : Objects.requireNonNull(dir.listFiles())) {
                 String fullPathName = defenceFile.getName();
                 String defenceName = fullPathName.substring(0, fullPathName.length() - 4);
-                SLogger.setup("Registering Defence: <#05eb2f>{}<#4294ed>", false, defenceName);
+
+                String log = "Registering Defence: <#05eb2f>" + defenceName + "<#4294ed>";
+                if (setup) SLogger.setup(log, false);
+                        else SLogger.info(log);
 
                 YamlDocument config = YamlDocument.create(defenceFile, GeneralSettings.DEFAULT, LoaderSettings.builder().setAutoUpdate(true).build(),
                         DumperSettings.DEFAULT, UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version")).build());
