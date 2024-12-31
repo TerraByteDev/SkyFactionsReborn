@@ -4,7 +4,6 @@ import net.skullian.skyfactions.common.gui.UIShower;
 import net.skullian.skyfactions.common.gui.screens.PaginatedScreen;
 import net.skullian.skyfactions.common.gui.screens.Screen;
 import net.skullian.skyfactions.common.gui.screens.obelisk.RunesSubmitUI;
-import net.skullian.skyfactions.common.util.SLogger;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import net.skullian.skyfactions.paper.gui.screens.SpigotPaginatedScreen;
 import net.skullian.skyfactions.paper.gui.screens.SpigotRunesSubmitScreen;

@@ -18,7 +18,6 @@ import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.inventory.VirtualInventory;
 import xyz.xenondevs.invui.window.Window;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +33,7 @@ public class SpigotRunesSubmitScreen {
         show();
     }
 
+    @SuppressWarnings("ConstantValue")
     public void show() {
         registerItems();
 

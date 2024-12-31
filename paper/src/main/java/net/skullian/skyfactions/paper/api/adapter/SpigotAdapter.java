@@ -105,6 +105,7 @@ public class SpigotAdapter {
         return stack;
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public static SkyItemStack adapt(ItemStack stack) {
         ItemMeta meta = stack.getItemMeta();
         List<String> lore = stack.lore() != null ? stack.lore().stream().map(MiniMessage.miniMessage()::serialize).collect(Collectors.toList()) : new ArrayList<>();
@@ -120,6 +121,7 @@ public class SpigotAdapter {
                 .build(); // todo textures
     }
 
+    @SuppressWarnings("deprecation")
     private static List<SkyItemStack.EnchantData> getEnchants(ItemMeta meta) {
         return meta.getEnchants().entrySet().stream()
                 .map(entry -> new SkyItemStack.EnchantData(

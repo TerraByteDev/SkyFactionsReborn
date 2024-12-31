@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+@SuppressWarnings("ConstantValue")
 public class SpigotRunesAPI extends RunesAPI {
 
     @Override
