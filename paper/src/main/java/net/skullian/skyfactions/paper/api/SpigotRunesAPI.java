@@ -75,9 +75,10 @@ public class SpigotRunesAPI extends RunesAPI {
         Map<String, Integer> overrides = RunesConfig.RUNE_OVERRIDES.getMap();
 
         Map<SkyItemStack, Integer> quantities = new HashMap<>();
-        for (SkyItemStack stack : stacks) {
-            if (stack == null || stack.getMaterial().equals(Material.AIR.name())) continue;
-            quantities.put(stack, quantities.getOrDefault(stack, 0) + stack.getAmount());
+        for (SkyItemStack skyItemStack : stacks) {
+            ItemStack stack = ItemStack.deserializeBytes((byte[]) skyItemStack.getSerializedBytes());
+            if (stack == null || stack.getType().equals(Material.AIR)) continue;
+            quantities.put(skyItemStack, quantities.getOrDefault(skyItemStack, 0) + stack.getAmount());
         }
 
         List<SkyItemStack> remainingItems = new ArrayList<>();
@@ -142,13 +143,14 @@ public class SpigotRunesAPI extends RunesAPI {
     }
 
     @Override
-    public boolean isAllowed(SkyItemStack stack) {
-        if (stack == null || stack.getMaterial().equals(Material.AIR.name()) || SkyApi.getInstance().getDefenceAPI().isDefence(stack)) return true;
+    public boolean isAllowed(SkyItemStack skyItemStack) {
+        ItemStack stack = ItemStack.deserializeBytes((byte[]) skyItemStack.getSerializedBytes());
+        if (stack == null || stack.getType().equals(Material.AIR) || SkyApi.getInstance().getDefenceAPI().isDefence(skyItemStack)) return true;
 
         List<String> list = RunesConfig.MATERIALS_LIST.getList();
         boolean isBlacklist = RunesConfig.MATERIALS_IS_BLACKLIST.getBoolean();
 
-        String identifier = getItemID(stack);
+        String identifier = getItemID(skyItemStack);
 
         if (isBlacklist && list.contains(identifier)) {
             return false;
@@ -157,28 +159,30 @@ public class SpigotRunesAPI extends RunesAPI {
 
     @Override
     public @NotNull String getItemID(SkyItemStack stack) {
+        ItemStack itemStack = stack.getSerializedBytes() != null ? ItemStack.deserializeBytes((byte[]) stack.getSerializedBytes()) : SpigotAdapter.adapt(stack, null, false);
         if (DependencyHandler.isEnabled("ItemsAdder")) {
 
-            CustomStack itemsAdderStack = CustomStack.byItemStack(SpigotAdapter.adapt(stack, null, false));
+            CustomStack itemsAdderStack = CustomStack.byItemStack(itemStack);
             if (itemsAdderStack != null) return "ITEMSADDER:" + itemsAdderStack.getId();
 
         } else if (DependencyHandler.isEnabled("Oraxen")) {
 
-            String oraxenID = OraxenItems.getIdByItem(SpigotAdapter.adapt(stack, null, false));
+            String oraxenID = OraxenItems.getIdByItem(itemStack);
             if (oraxenID != null) return "ORAXEN:" + oraxenID;
 
         }
 
-        return stack.getMaterial();
+        return itemStack.getType().name();
     }
 
     @Override
     public void returnItems(List<SkyItemStack> stacks, SkyUser player) {
         if (!stacks.isEmpty()) {
-            for (SkyItemStack stack : stacks) {
-                if (stack == null || stack.getMaterial().equals(Material.AIR.name())) return;
+            for (SkyItemStack skyItemStack : stacks) {
+                ItemStack stack = ItemStack.deserializeBytes((byte[]) skyItemStack.getSerializedBytes());
+                if (stack == null || stack.getType().equals(Material.AIR)) return;
 
-                ItemStack bukkitStack = SpigotAdapter.adapt(stack, player, false);
+                ItemStack bukkitStack = SpigotAdapter.adapt(skyItemStack, player, false);
                 Player bukkitPlayer = SpigotAdapter.adapt(player).getPlayer();
                 if (bukkitPlayer == null) throw new NullPointerException("Adapted player is null!");
                 Map<Integer, ItemStack> map = bukkitPlayer.getInventory().addItem(bukkitStack);

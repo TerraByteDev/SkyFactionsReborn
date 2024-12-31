@@ -42,7 +42,7 @@ public class RunesSubmitUI extends Screen {
 
     public static void promptPlayer(SkyUser player, String type) {
         try {
-            RunesSubmitUI.builder().player(player).type(type).build().show();
+            SkyApi.getInstance().getUIShower().show(RunesSubmitUI.builder().player(player).type(type).build());
         } catch (IllegalArgumentException error) {
             SLogger.fatal("Failed to create Runes Submit GUI for player {} - {}", player.getUniqueId(), error);
             Messages.ERROR.send(player, SkyApi.getInstance().getPlayerAPI().getLocale(player.getUniqueId()), "operation", "open your runes submit GUI", "debug", "GUI_LOAD_EXCEPTION");

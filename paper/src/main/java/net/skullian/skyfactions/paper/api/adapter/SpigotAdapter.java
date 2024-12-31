@@ -3,6 +3,7 @@ package net.skullian.skyfactions.paper.api.adapter;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.sk89q.worldedit.math.BlockVector3;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.user.SkyUser;
@@ -12,6 +13,7 @@ import net.skullian.skyfactions.common.util.text.TextUtility;
 import net.skullian.skyfactions.paper.SkyFactionsReborn;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -21,7 +23,10 @@ import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("rawtypes")
 public class SpigotAdapter {
@@ -73,9 +78,9 @@ public class SpigotAdapter {
         ItemMeta meta = stack.getItemMeta();
         if (!legacy) meta.lore(TextUtility.color(skyStack.getLore(), locale, user));
             else meta.setLore(TextUtility.legacyColor(skyStack.getLore(), locale, user));
-            
-        if (!legacy) meta.displayName(TextUtility.color(skyStack.getDisplayName(), locale, user));
-            else meta.setDisplayName(TextUtility.legacyColor(skyStack.getDisplayName(), locale, user));
+
+        if (!legacy && skyStack.getDisplayName() != null) meta.displayName(TextUtility.color(skyStack.getDisplayName(), locale, user));
+            else if (skyStack.getDisplayName() != null) meta.setDisplayName(TextUtility.legacyColor(skyStack.getDisplayName(), locale, user));
             
         if (skyStack.getCustomModelData() != -1) meta.setCustomModelData(skyStack.getCustomModelData());
 
@@ -90,6 +95,10 @@ public class SpigotAdapter {
             NamespacedKey key = new NamespacedKey(SkyFactionsReborn.getInstance(), pdcEntry.getKey());
             meta.getPersistentDataContainer().set(key, getPersistentDataType(pdcEntry.getType()), pdcEntry.getData());
         }
+
+        for (String itemFlag : skyStack.getItemFlags()) {
+            meta.addItemFlags(ItemFlag.valueOf(itemFlag));
+        }
         
         stack.setItemMeta(meta);
 
@@ -97,9 +106,28 @@ public class SpigotAdapter {
     }
 
     public static SkyItemStack adapt(ItemStack stack) {
+        ItemMeta meta = stack.getItemMeta();
+        List<String> lore = stack.lore() != null ? stack.lore().stream().map(MiniMessage.miniMessage()::serialize).collect(Collectors.toList()) : new ArrayList<>();
         return SkyItemStack.builder()
                 .serializedBytes(stack.serializeAsBytes())
-                .build();
+                .material(stack.getType().name())
+                .amount(stack.getAmount())
+                .displayName(MiniMessage.miniMessage().serialize(stack.displayName()))
+                .customModelData(meta.getCustomModelData())
+                .enchants(getEnchants(meta))
+                .lore(lore)
+                .itemFlags(meta.getItemFlags().stream().map(ItemFlag::name).collect(Collectors.toList()))
+                .build(); // todo textures
+    }
+
+    private static List<SkyItemStack.EnchantData> getEnchants(ItemMeta meta) {
+        return meta.getEnchants().entrySet().stream()
+                .map(entry -> new SkyItemStack.EnchantData(
+                        entry.getKey().getName(),
+                        entry.getValue(),
+                        entry.getValue() > entry.getKey().getMaxLevel()
+                ))
+                .collect(Collectors.toList());
     }
 
 

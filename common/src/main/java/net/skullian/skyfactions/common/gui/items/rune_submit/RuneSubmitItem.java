@@ -8,6 +8,9 @@ import net.skullian.skyfactions.common.gui.screens.obelisk.RunesSubmitUI;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SkyItemStack;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RuneSubmitItem extends SkyItem {
 
     private final RunesSubmitUI INVENTORY;
@@ -21,14 +24,16 @@ public class RuneSubmitItem extends SkyItem {
 
     @Override
     public void onClick(SkyClickType clickType, SkyUser player) {
+        Map<Integer, SkyItemStack> stacks = new HashMap<>(INVENTORY.getInventory());
+        INVENTORY.getInventory().clear();
+
         player.closeInventory();
         player.removeMetadata("rune_ui");
-        if (TYPE.equals("player")) {
-            SkyApi.getInstance().getRunesAPI().handlePlayerRuneConversion(INVENTORY.getInventory().values().stream().toList(), player);
-        } else if (TYPE.equals("faction")) {
-            SkyApi.getInstance().getRunesAPI().handleFactionRuneConversion(INVENTORY.getInventory().values().stream().toList(), player);
-        }
 
-        INVENTORY.getInventory().clear();
+        if (TYPE.equals("player")) {
+            SkyApi.getInstance().getRunesAPI().handlePlayerRuneConversion(stacks.values().stream().toList(), player);
+        } else if (TYPE.equals("faction")) {
+            SkyApi.getInstance().getRunesAPI().handleFactionRuneConversion(stacks.values().stream().toList(), player);
+        }
     }
 }

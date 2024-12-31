@@ -18,6 +18,7 @@ import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.inventory.VirtualInventory;
 import xyz.xenondevs.invui.window.Window;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,12 @@ public class SpigotRunesSubmitScreen {
         this.screen = screen;
         this.builder = Gui.normal().setStructure(screen.guiData.getLAYOUT());
 
+        show();
+    }
+
+    public void show() {
+        registerItems();
+
         VirtualInventory inventory = new VirtualInventory(screen.getInvSize());
         inventory.setPreUpdateHandler((handler) -> {
             ItemStack stack = handler.getNewItem();
@@ -38,14 +45,8 @@ public class SpigotRunesSubmitScreen {
             handler.setCancelled(SkyApi.getInstance().getRunesAPI().isStackProhibited(SpigotAdapter.adapt(stack), screen.player));
             if (!handler.isCancelled()) screen.getInventory().put(handler.getSlot(), SpigotAdapter.adapt(stack));
         });
-
         this.builder.addIngredient('.', inventory);
 
-        show();
-    }
-
-    public void show() {
-        registerItems();
         Gui gui = builder.build();
 
         Player player = SpigotAdapter.adapt(screen.player).getPlayer();
@@ -57,10 +58,11 @@ public class SpigotRunesSubmitScreen {
                     .addCloseHandler(() -> {
                         Player fetchedPlayer = SpigotAdapter.adapt(screen.player).getPlayer();
                         if (fetchedPlayer != null) {
-                            for (SkyItemStack item : screen.getInventory().values()) {
-                                if (item == null || item.getMaterial().equals("AIR")) return;
+                            for (SkyItemStack skyItemStack : screen.getInventory().values()) {
+                                ItemStack item = ItemStack.deserializeBytes((byte[]) skyItemStack.getSerializedBytes());
+                                if (item == null || item.getType().name().equalsIgnoreCase("AIR")) return;
 
-                                Map<Integer, ItemStack> map = fetchedPlayer.getInventory().addItem(SpigotAdapter.adapt(item, screen.player, false));
+                                Map<Integer, ItemStack> map = fetchedPlayer.getInventory().addItem(SpigotAdapter.adapt(skyItemStack, screen.player, false));
                                 for (ItemStack stack : map.values()) {
                                     fetchedPlayer.getWorld().dropItemNaturally(fetchedPlayer.getLocation(), stack);
                                 }
