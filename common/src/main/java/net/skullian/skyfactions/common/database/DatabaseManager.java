@@ -86,7 +86,7 @@ public class DatabaseManager {
             sqliteConfig.setMaximumPoolSize(maxPoolSize);
 
             HikariDataSource dataSource = new HikariDataSource(sqliteConfig);
-            SLogger.info("Using SQLite Database.", false);
+            SLogger.info("Using SQLite Database.");
 
             configuration
                     .set(dataSource)
@@ -144,8 +144,8 @@ public class DatabaseManager {
 
             HikariConfig mysqlConfig = new HikariConfig();
             mysqlConfig.setPoolName("SkyFactions MySQL Pool");
-            mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s?%s",
-                    host.getHost(), host.getPortOrDefault(3306), databaseName, Settings.DATABASE_USE_SSL.getBoolean()));
+            mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s?useSSL=%s",
+                    host.getHost(), host.getPort(), databaseName, Settings.DATABASE_USE_SSL.getBoolean()));
             mysqlConfig.setMaxLifetime(maxLifetime);
             mysqlConfig.setUsername(username);
             mysqlConfig.setPassword(password);
@@ -174,7 +174,7 @@ public class DatabaseManager {
     }
 
     private void setup() {
-        SLogger.info("Beginning database migrations.", false);
+        SLogger.info("Beginning database migrations.");
 
         Flyway flyway = Flyway.configure(this.getClass().getClassLoader())
                 .locations("classpath:net/skullian/skyfactions/common/database/migrations").failOnMissingLocations(true).cleanDisabled(true)
