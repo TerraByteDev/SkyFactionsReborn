@@ -24,6 +24,8 @@ import org.sqlite.JDBC;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -65,6 +67,7 @@ public class DatabaseManager {
         System.setProperty("net.skullian.codegen", "false");
 
         int maxPoolSize = Settings.DATABASE_MAX_POOL_SIZE.getInt();
+        long maxLifetime = Settings.DATABASE_MAX_LIFETIME.getLong();
 
         if (type.equals("sqlite")) {
 
@@ -73,7 +76,9 @@ public class DatabaseManager {
             this.url = JDBC.PREFIX + file.getAbsolutePath();
 
             sqliteConfig.setDataSourceClassName("org.sqlite.SQLiteDataSource");
+            sqliteConfig.setConnectionTestQuery("SELECT 1");
             sqliteConfig.addDataSourceProperty("url", JDBC.PREFIX + file.getAbsolutePath());
+            sqliteConfig.setMaxLifetime(maxLifetime);
             sqliteConfig.addDataSourceProperty("encoding", "UTF-8");
             sqliteConfig.addDataSourceProperty("enforceForeignKeys", "true");
             sqliteConfig.addDataSourceProperty("synchronous", "NORMAL");
@@ -119,8 +124,22 @@ public class DatabaseManager {
                 throw new IllegalStateException("Missing MySQL Configuration Properties: " + missingProperties);
             }
 
-            HostAndPort host = HostAndPort.fromHost(rawHost);
+            Properties properties = new Properties();
+            properties.putAll(Map.of(
+                    "prepStmtCacheSize", "250",
+                    "useLocalSessionState", "true",
+                    "useLocalTransactionState", "true",
+                    "useSererPrepStmts", "true",
+                    "cachePrepStmts", "true",
 
+                    "rewriteBatchedStatements", "true",
+                    "maintainTimeStats", "false",
+                    "cacheResultSetMetadata", "true",
+                    "cacheServerConfiguration", "true",
+                    "elideSetAutoCommits", "true"
+            ));
+
+            HostAndPort host = HostAndPort.fromHost(rawHost);
             this.url = String.format("jdbc:mysql://%s:%d/%s",
                     host.getHost(), host.getPortOrDefault(3306), databaseName);
 
@@ -128,12 +147,14 @@ public class DatabaseManager {
             mysqlConfig.setPoolName("SkyFactions MySQL Pool");
             mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s?%s",
                     host.getHost(), host.getPortOrDefault(3306), databaseName, Settings.DATABASE_USE_SSL.getBoolean()));
-            mysqlConfig.setMaxLifetime(TimeUnit.MINUTES.toMillis(Settings.DATABASE_MAX_LIFETIME.getInt()));
+            mysqlConfig.setMaxLifetime(maxLifetime);
             mysqlConfig.setUsername(username);
             mysqlConfig.setPassword(password);
             mysqlConfig.setMaximumPoolSize(maxPoolSize);
-            mysqlConfig.setAutoCommit(false);
-            mysqlConfig.setMinimumIdle(1);
+            mysqlConfig.setMinimumIdle(maxPoolSize);
+            mysqlConfig.setKeepaliveTime(0);
+            mysqlConfig.setConnectionTimeout(5000);
+            mysqlConfig.setDataSourceProperties(properties);
 
             SLogger.info("Using MySQL database '{}' on: {}:{}.",
                     databaseName, host.getHost(), host.getPortOrDefault(3306));

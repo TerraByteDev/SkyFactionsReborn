@@ -28,9 +28,8 @@ database:
   use-ssl: true
 
   # Max lifetime for the database connection.
-  # Format: MINUTES
-  # Only applies for MySQL!
-  max-lifetime: 30
+  # Format: MILLISECONDS
+  max-lifetime: 30000
 
   # Max connection pool size.
   # Applies for both SQLite and MySQL
