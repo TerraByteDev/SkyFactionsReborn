@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.DefenceLocations;
+import net.skullian.skyfactions.common.database.tables.DefenceLocations;
 
 import org.jooq.impl.TableRecordImpl;
 
@@ -115,14 +115,14 @@ public class DefenceLocationsRecord extends TableRecordImpl<DefenceLocationsReco
      * Create a detached DefenceLocationsRecord
      */
     public DefenceLocationsRecord() {
-        super(net.skullian.skyfactions.common.database.tables.DefenceLocations.DEFENCE_LOCATIONS);
+        super(DefenceLocations.DEFENCE_LOCATIONS);
     }
 
     /**
      * Create a detached, initialised DefenceLocationsRecord
      */
     public DefenceLocationsRecord(String uuid, String type, String factionname, Integer x, Integer y, Integer z) {
-        super(net.skullian.skyfactions.common.database.tables.DefenceLocations.DEFENCE_LOCATIONS);
+        super(DefenceLocations.DEFENCE_LOCATIONS);
 
         setUuid(uuid);
         setType(type);
@@ -136,8 +136,8 @@ public class DefenceLocationsRecord extends TableRecordImpl<DefenceLocationsReco
     /**
      * Create a detached, initialised DefenceLocationsRecord
      */
-    public DefenceLocationsRecord(DefenceLocations value) {
-        super(net.skullian.skyfactions.common.database.tables.DefenceLocations.DEFENCE_LOCATIONS);
+    public DefenceLocationsRecord(net.skullian.skyfactions.common.database.tables.pojos.DefenceLocations value) {
+        super(DefenceLocations.DEFENCE_LOCATIONS);
 
         if (value != null) {
             setUuid(value.getUuid());

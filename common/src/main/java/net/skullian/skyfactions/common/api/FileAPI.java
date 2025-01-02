@@ -9,6 +9,7 @@ public abstract class FileAPI {
     public abstract String getConfigFolderPath();
 
     public File getDatabasePath() {
+
         return new File(getConfigFolderPath(), "/data/data.sqlite3");
     }
 

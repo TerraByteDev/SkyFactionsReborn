@@ -28,7 +28,7 @@ public class V1__Init extends BaseJavaMigration {
 
         ctx.createTableIfNotExists("player_data")
                 .column("uuid", VARCHAR(36))
-                .column("faction", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("faction", VARCHAR(65535))
                 .column("discord_id", VARCHAR(18))
                 .column("last_raid", BIGINT)
                 .column("locale", VARCHAR(4))
@@ -37,7 +37,7 @@ public class V1__Init extends BaseJavaMigration {
 
         ctx.createTableIfNotExists("faction_islands")
                 .column("id", INTEGER)
-                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("factionName", VARCHAR(65535))
                 .column("runes", INTEGER)
                 .column("defenceCount", INTEGER)
                 .column("gems", INTEGER)
@@ -47,8 +47,8 @@ public class V1__Init extends BaseJavaMigration {
                 .execute();
 
         ctx.createTableIfNotExists("factions")
-                .column("name", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
-                .column("motd", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("name", VARCHAR(65535))
+                .column("motd", VARCHAR(65535))
                 .column("level", INTEGER)
                 .column("last_raid", BIGINT)
                 .column("locale", VARCHAR(4))
@@ -70,14 +70,14 @@ public class V1__Init extends BaseJavaMigration {
         ctx.createTableIfNotExists("defence_locations")
                 .column("uuid", VARCHAR(36))
                 .column("type", VARCHAR(128))
-                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("factionName", VARCHAR(65535))
                 .column("x", INTEGER)
                 .column("y", INTEGER)
                 .column("z", INTEGER)
                 .execute();
 
         ctx.createTableIfNotExists("audit_logs")
-                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("factionName", VARCHAR(65535))
                 .column("type", VARCHAR(128))
                 .column("uuid", VARCHAR(36))
                 .column("replacements", VARCHAR(5120))
@@ -85,12 +85,12 @@ public class V1__Init extends BaseJavaMigration {
                 .execute();
 
         ctx.createTableIfNotExists("faction_bans")
-                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("factionName", VARCHAR(65535))
                 .column("uuid", VARCHAR(36))
                 .execute();
 
         ctx.createTableIfNotExists("faction_invites")
-                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("factionName", VARCHAR(65535))
                 .column("uuid", VARCHAR(36))
                 .column("inviter", VARCHAR(36))
                 .column("type", VARCHAR(128))

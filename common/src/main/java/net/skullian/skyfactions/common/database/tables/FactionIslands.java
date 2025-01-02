@@ -57,7 +57,7 @@ public class FactionIslands extends TableImpl<FactionIslandsRecord> {
     /**
      * The column <code>faction_islands.factionName</code>.
      */
-    public final TableField<FactionIslandsRecord, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.VARCHAR, this, "");
+    public final TableField<FactionIslandsRecord, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.VARCHAR(65535), this, "");
 
     /**
      * The column <code>faction_islands.runes</code>.
@@ -82,7 +82,7 @@ public class FactionIslands extends TableImpl<FactionIslandsRecord> {
     /**
      * The column <code>faction_islands.last_raider</code>.
      */
-    public final TableField<FactionIslandsRecord, String> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.VARCHAR, this, "");
+    public final TableField<FactionIslandsRecord, String> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.VARCHAR(36), this, "");
 
     private FactionIslands(Name alias, Table<FactionIslandsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

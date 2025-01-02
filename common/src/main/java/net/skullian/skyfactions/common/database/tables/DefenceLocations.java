@@ -50,17 +50,17 @@ public class DefenceLocations extends TableImpl<DefenceLocationsRecord> {
     /**
      * The column <code>defence_locations.uuid</code>.
      */
-    public final TableField<DefenceLocationsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR, this, "");
+    public final TableField<DefenceLocationsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>defence_locations.type</code>.
      */
-    public final TableField<DefenceLocationsRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR, this, "");
+    public final TableField<DefenceLocationsRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(128), this, "");
 
     /**
      * The column <code>defence_locations.factionName</code>.
      */
-    public final TableField<DefenceLocationsRecord, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.VARCHAR, this, "");
+    public final TableField<DefenceLocationsRecord, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.VARCHAR(65535), this, "");
 
     /**
      * The column <code>defence_locations.x</code>.

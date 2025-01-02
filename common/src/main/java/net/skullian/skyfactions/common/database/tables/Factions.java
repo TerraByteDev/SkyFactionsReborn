@@ -52,12 +52,12 @@ public class Factions extends TableImpl<FactionsRecord> {
     /**
      * The column <code>factions.name</code>.
      */
-    public final TableField<FactionsRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR, this, "");
+    public final TableField<FactionsRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(65535), this, "");
 
     /**
      * The column <code>factions.motd</code>.
      */
-    public final TableField<FactionsRecord, String> MOTD = createField(DSL.name("motd"), SQLDataType.VARCHAR, this, "");
+    public final TableField<FactionsRecord, String> MOTD = createField(DSL.name("motd"), SQLDataType.VARCHAR(65535), this, "");
 
     /**
      * The column <code>factions.level</code>.
@@ -72,7 +72,7 @@ public class Factions extends TableImpl<FactionsRecord> {
     /**
      * The column <code>factions.locale</code>.
      */
-    public final TableField<FactionsRecord, String> LOCALE = createField(DSL.name("locale"), SQLDataType.VARCHAR, this, "");
+    public final TableField<FactionsRecord, String> LOCALE = createField(DSL.name("locale"), SQLDataType.VARCHAR(4), this, "");
 
     /**
      * The column <code>factions.last_renamed</code>.

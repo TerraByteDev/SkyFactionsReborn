@@ -6,7 +6,7 @@ package net.skullian.skyfactions.common.database.tables.records;
 
 import java.time.LocalDate;
 
-import net.skullian.skyfactions.common.database.tables.pojos.FactionElections;
+import net.skullian.skyfactions.common.database.tables.FactionElections;
 
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -82,14 +82,14 @@ public class FactionElectionsRecord extends UpdatableRecordImpl<FactionElections
      * Create a detached FactionElectionsRecord
      */
     public FactionElectionsRecord() {
-        super(net.skullian.skyfactions.common.database.tables.FactionElections.FACTION_ELECTIONS);
+        super(FactionElections.FACTION_ELECTIONS);
     }
 
     /**
      * Create a detached, initialised FactionElectionsRecord
      */
     public FactionElectionsRecord(Integer id, String factionname, LocalDate enddate) {
-        super(net.skullian.skyfactions.common.database.tables.FactionElections.FACTION_ELECTIONS);
+        super(FactionElections.FACTION_ELECTIONS);
 
         setId(id);
         setFactionname(factionname);
@@ -100,8 +100,8 @@ public class FactionElectionsRecord extends UpdatableRecordImpl<FactionElections
     /**
      * Create a detached, initialised FactionElectionsRecord
      */
-    public FactionElectionsRecord(FactionElections value) {
-        super(net.skullian.skyfactions.common.database.tables.FactionElections.FACTION_ELECTIONS);
+    public FactionElectionsRecord(net.skullian.skyfactions.common.database.tables.pojos.FactionElections value) {
+        super(FactionElections.FACTION_ELECTIONS);
 
         if (value != null) {
             setId(value.getId());

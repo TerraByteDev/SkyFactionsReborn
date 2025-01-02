@@ -17,7 +17,7 @@ public class V2__Faction_Election extends BaseJavaMigration {
 
         ctx.createTableIfNotExists("faction_elections")
                 .column("id", INTEGER.identity(true))
-                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("factionName", VARCHAR(65535))
                 .column("endDate", DATE)
                 .primaryKey("id")
                 .execute();

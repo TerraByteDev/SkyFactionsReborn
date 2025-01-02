@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.Notifications;
+import net.skullian.skyfactions.common.database.tables.Notifications;
 
 import org.jooq.impl.TableRecordImpl;
 
@@ -85,14 +85,14 @@ public class NotificationsRecord extends TableRecordImpl<NotificationsRecord> {
      * Create a detached NotificationsRecord
      */
     public NotificationsRecord() {
-        super(net.skullian.skyfactions.common.database.tables.Notifications.NOTIFICATIONS);
+        super(Notifications.NOTIFICATIONS);
     }
 
     /**
      * Create a detached, initialised NotificationsRecord
      */
     public NotificationsRecord(String uuid, String type, String replacements, Long timestamp) {
-        super(net.skullian.skyfactions.common.database.tables.Notifications.NOTIFICATIONS);
+        super(Notifications.NOTIFICATIONS);
 
         setUuid(uuid);
         setType(type);
@@ -104,8 +104,8 @@ public class NotificationsRecord extends TableRecordImpl<NotificationsRecord> {
     /**
      * Create a detached, initialised NotificationsRecord
      */
-    public NotificationsRecord(Notifications value) {
-        super(net.skullian.skyfactions.common.database.tables.Notifications.NOTIFICATIONS);
+    public NotificationsRecord(net.skullian.skyfactions.common.database.tables.pojos.Notifications value) {
+        super(Notifications.NOTIFICATIONS);
 
         if (value != null) {
             setUuid(value.getUuid());

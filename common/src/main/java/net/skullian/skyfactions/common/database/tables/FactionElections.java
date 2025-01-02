@@ -68,7 +68,7 @@ public class FactionElections extends TableImpl<FactionElectionsRecord> {
     /**
      * The column <code>faction_elections.factionName</code>.
      */
-    public final TableField<FactionElectionsRecord, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.VARCHAR, this, "");
+    public final TableField<FactionElectionsRecord, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.VARCHAR(65535), this, "");
 
     /**
      * The column <code>faction_elections.endDate</code>.

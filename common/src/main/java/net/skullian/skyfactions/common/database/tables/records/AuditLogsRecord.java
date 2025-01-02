@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.AuditLogs;
+import net.skullian.skyfactions.common.database.tables.AuditLogs;
 
 import org.jooq.impl.TableRecordImpl;
 
@@ -100,14 +100,14 @@ public class AuditLogsRecord extends TableRecordImpl<AuditLogsRecord> {
      * Create a detached AuditLogsRecord
      */
     public AuditLogsRecord() {
-        super(net.skullian.skyfactions.common.database.tables.AuditLogs.AUDIT_LOGS);
+        super(AuditLogs.AUDIT_LOGS);
     }
 
     /**
      * Create a detached, initialised AuditLogsRecord
      */
     public AuditLogsRecord(String factionname, String type, String uuid, String replacements, Long timestamp) {
-        super(net.skullian.skyfactions.common.database.tables.AuditLogs.AUDIT_LOGS);
+        super(AuditLogs.AUDIT_LOGS);
 
         setFactionname(factionname);
         setType(type);
@@ -120,8 +120,8 @@ public class AuditLogsRecord extends TableRecordImpl<AuditLogsRecord> {
     /**
      * Create a detached, initialised AuditLogsRecord
      */
-    public AuditLogsRecord(AuditLogs value) {
-        super(net.skullian.skyfactions.common.database.tables.AuditLogs.AUDIT_LOGS);
+    public AuditLogsRecord(net.skullian.skyfactions.common.database.tables.pojos.AuditLogs value) {
+        super(AuditLogs.AUDIT_LOGS);
 
         if (value != null) {
             setFactionname(value.getFactionname());

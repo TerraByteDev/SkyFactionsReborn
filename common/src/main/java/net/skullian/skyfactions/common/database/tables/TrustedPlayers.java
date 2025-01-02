@@ -7,7 +7,6 @@ package net.skullian.skyfactions.common.database.tables;
 import java.util.Collection;
 
 import net.skullian.skyfactions.common.database.DefaultSchema;
-import net.skullian.skyfactions.common.database.Keys;
 import net.skullian.skyfactions.common.database.tables.records.TrustedPlayersRecord;
 
 import org.jooq.Condition;
@@ -22,7 +21,6 @@ import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
-import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -57,7 +55,7 @@ public class TrustedPlayers extends TableImpl<TrustedPlayersRecord> {
     /**
      * The column <code>trusted_players.uuid</code>.
      */
-    public final TableField<TrustedPlayersRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR, this, "");
+    public final TableField<TrustedPlayersRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
 
     private TrustedPlayers(Name alias, Table<TrustedPlayersRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -91,11 +89,6 @@ public class TrustedPlayers extends TableImpl<TrustedPlayersRecord> {
     @Override
     public Schema getSchema() {
         return aliased() ? null : DefaultSchema.DEFAULT_SCHEMA;
-    }
-
-    @Override
-    public UniqueKey<TrustedPlayersRecord> getPrimaryKey() {
-        return Keys.TRUSTED_PLAYERS__PK_TRUSTED_PLAYERS;
     }
 
     @Override

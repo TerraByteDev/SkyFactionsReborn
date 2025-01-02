@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.FlywaySchemaHistory;
+import net.skullian.skyfactions.common.database.tables.FlywaySchemaHistory;
 
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -185,14 +185,14 @@ public class FlywaySchemaHistoryRecord extends UpdatableRecordImpl<FlywaySchemaH
      * Create a detached FlywaySchemaHistoryRecord
      */
     public FlywaySchemaHistoryRecord() {
-        super(net.skullian.skyfactions.common.database.tables.FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY);
+        super(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY);
     }
 
     /**
      * Create a detached, initialised FlywaySchemaHistoryRecord
      */
     public FlywaySchemaHistoryRecord(Integer installedRank, String version, String description, String type, String script, Integer checksum, String installedBy, String installedOn, Integer executionTime, Boolean success) {
-        super(net.skullian.skyfactions.common.database.tables.FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY);
+        super(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY);
 
         setInstalledRank(installedRank);
         setVersion(version);
@@ -210,8 +210,8 @@ public class FlywaySchemaHistoryRecord extends UpdatableRecordImpl<FlywaySchemaH
     /**
      * Create a detached, initialised FlywaySchemaHistoryRecord
      */
-    public FlywaySchemaHistoryRecord(FlywaySchemaHistory value) {
-        super(net.skullian.skyfactions.common.database.tables.FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY);
+    public FlywaySchemaHistoryRecord(net.skullian.skyfactions.common.database.tables.pojos.FlywaySchemaHistory value) {
+        super(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY);
 
         if (value != null) {
             setInstalledRank(value.getInstalledRank());

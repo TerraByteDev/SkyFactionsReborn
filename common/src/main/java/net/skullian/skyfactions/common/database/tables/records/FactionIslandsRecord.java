@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.FactionIslands;
+import net.skullian.skyfactions.common.database.tables.FactionIslands;
 
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -140,14 +140,14 @@ public class FactionIslandsRecord extends UpdatableRecordImpl<FactionIslandsReco
      * Create a detached FactionIslandsRecord
      */
     public FactionIslandsRecord() {
-        super(net.skullian.skyfactions.common.database.tables.FactionIslands.FACTION_ISLANDS);
+        super(FactionIslands.FACTION_ISLANDS);
     }
 
     /**
      * Create a detached, initialised FactionIslandsRecord
      */
     public FactionIslandsRecord(Integer id, String factionname, Integer runes, Integer defencecount, Integer gems, Long lastRaided, String lastRaider) {
-        super(net.skullian.skyfactions.common.database.tables.FactionIslands.FACTION_ISLANDS);
+        super(FactionIslands.FACTION_ISLANDS);
 
         setId(id);
         setFactionname(factionname);
@@ -162,8 +162,8 @@ public class FactionIslandsRecord extends UpdatableRecordImpl<FactionIslandsReco
     /**
      * Create a detached, initialised FactionIslandsRecord
      */
-    public FactionIslandsRecord(FactionIslands value) {
-        super(net.skullian.skyfactions.common.database.tables.FactionIslands.FACTION_ISLANDS);
+    public FactionIslandsRecord(net.skullian.skyfactions.common.database.tables.pojos.FactionIslands value) {
+        super(FactionIslands.FACTION_ISLANDS);
 
         if (value != null) {
             setId(value.getId());

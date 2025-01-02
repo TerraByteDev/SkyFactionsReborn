@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.ElectionVotes;
+import net.skullian.skyfactions.common.database.tables.ElectionVotes;
 
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -80,14 +80,14 @@ public class ElectionVotesRecord extends UpdatableRecordImpl<ElectionVotesRecord
      * Create a detached ElectionVotesRecord
      */
     public ElectionVotesRecord() {
-        super(net.skullian.skyfactions.common.database.tables.ElectionVotes.ELECTION_VOTES);
+        super(ElectionVotes.ELECTION_VOTES);
     }
 
     /**
      * Create a detached, initialised ElectionVotesRecord
      */
     public ElectionVotesRecord(Integer election, String uuid, String votedfor) {
-        super(net.skullian.skyfactions.common.database.tables.ElectionVotes.ELECTION_VOTES);
+        super(ElectionVotes.ELECTION_VOTES);
 
         setElection(election);
         setUuid(uuid);
@@ -98,8 +98,8 @@ public class ElectionVotesRecord extends UpdatableRecordImpl<ElectionVotesRecord
     /**
      * Create a detached, initialised ElectionVotesRecord
      */
-    public ElectionVotesRecord(ElectionVotes value) {
-        super(net.skullian.skyfactions.common.database.tables.ElectionVotes.ELECTION_VOTES);
+    public ElectionVotesRecord(net.skullian.skyfactions.common.database.tables.pojos.ElectionVotes value) {
+        super(ElectionVotes.ELECTION_VOTES);
 
         if (value != null) {
             setElection(value.getElection());

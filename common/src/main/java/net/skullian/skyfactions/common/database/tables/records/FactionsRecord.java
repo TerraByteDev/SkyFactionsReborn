@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.Factions;
+import net.skullian.skyfactions.common.database.tables.Factions;
 
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -125,14 +125,14 @@ public class FactionsRecord extends UpdatableRecordImpl<FactionsRecord> {
      * Create a detached FactionsRecord
      */
     public FactionsRecord() {
-        super(net.skullian.skyfactions.common.database.tables.Factions.FACTIONS);
+        super(Factions.FACTIONS);
     }
 
     /**
      * Create a detached, initialised FactionsRecord
      */
     public FactionsRecord(String name, String motd, Integer level, Long lastRaid, String locale, Long lastRenamed) {
-        super(net.skullian.skyfactions.common.database.tables.Factions.FACTIONS);
+        super(Factions.FACTIONS);
 
         setName(name);
         setMotd(motd);
@@ -146,8 +146,8 @@ public class FactionsRecord extends UpdatableRecordImpl<FactionsRecord> {
     /**
      * Create a detached, initialised FactionsRecord
      */
-    public FactionsRecord(Factions value) {
-        super(net.skullian.skyfactions.common.database.tables.Factions.FACTIONS);
+    public FactionsRecord(net.skullian.skyfactions.common.database.tables.pojos.Factions value) {
+        super(Factions.FACTIONS);
 
         if (value != null) {
             setName(value.getName());

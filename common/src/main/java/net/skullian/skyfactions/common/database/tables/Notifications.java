@@ -50,17 +50,17 @@ public class Notifications extends TableImpl<NotificationsRecord> {
     /**
      * The column <code>notifications.uuid</code>.
      */
-    public final TableField<NotificationsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR, this, "");
+    public final TableField<NotificationsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>notifications.type</code>.
      */
-    public final TableField<NotificationsRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR, this, "");
+    public final TableField<NotificationsRecord, String> TYPE = createField(DSL.name("type"), SQLDataType.VARCHAR(128), this, "");
 
     /**
      * The column <code>notifications.replacements</code>.
      */
-    public final TableField<NotificationsRecord, String> REPLACEMENTS = createField(DSL.name("replacements"), SQLDataType.VARCHAR, this, "");
+    public final TableField<NotificationsRecord, String> REPLACEMENTS = createField(DSL.name("replacements"), SQLDataType.VARCHAR(5120), this, "");
 
     /**
      * The column <code>notifications.timestamp</code>.

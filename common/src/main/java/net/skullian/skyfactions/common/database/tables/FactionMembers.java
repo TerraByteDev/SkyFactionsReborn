@@ -52,17 +52,17 @@ public class FactionMembers extends TableImpl<FactionMembersRecord> {
     /**
      * The column <code>faction_members.factionName</code>.
      */
-    public final TableField<FactionMembersRecord, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.VARCHAR, this, "");
+    public final TableField<FactionMembersRecord, String> FACTIONNAME = createField(DSL.name("factionName"), SQLDataType.VARCHAR(4), this, "");
 
     /**
      * The column <code>faction_members.uuid</code>.
      */
-    public final TableField<FactionMembersRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR, this, "");
+    public final TableField<FactionMembersRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>faction_members.rank</code>.
      */
-    public final TableField<FactionMembersRecord, String> RANK = createField(DSL.name("rank"), SQLDataType.VARCHAR, this, "");
+    public final TableField<FactionMembersRecord, String> RANK = createField(DSL.name("rank"), SQLDataType.VARCHAR(128), this, "");
 
     private FactionMembers(Name alias, Table<FactionMembersRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.FactionBans;
+import net.skullian.skyfactions.common.database.tables.FactionBans;
 
 import org.jooq.impl.TableRecordImpl;
 
@@ -55,14 +55,14 @@ public class FactionBansRecord extends TableRecordImpl<FactionBansRecord> {
      * Create a detached FactionBansRecord
      */
     public FactionBansRecord() {
-        super(net.skullian.skyfactions.common.database.tables.FactionBans.FACTION_BANS);
+        super(FactionBans.FACTION_BANS);
     }
 
     /**
      * Create a detached, initialised FactionBansRecord
      */
     public FactionBansRecord(String factionname, String uuid) {
-        super(net.skullian.skyfactions.common.database.tables.FactionBans.FACTION_BANS);
+        super(FactionBans.FACTION_BANS);
 
         setFactionname(factionname);
         setUuid(uuid);
@@ -72,8 +72,8 @@ public class FactionBansRecord extends TableRecordImpl<FactionBansRecord> {
     /**
      * Create a detached, initialised FactionBansRecord
      */
-    public FactionBansRecord(FactionBans value) {
-        super(net.skullian.skyfactions.common.database.tables.FactionBans.FACTION_BANS);
+    public FactionBansRecord(net.skullian.skyfactions.common.database.tables.pojos.FactionBans value) {
+        super(FactionBans.FACTION_BANS);
 
         if (value != null) {
             setFactionname(value.getFactionname());

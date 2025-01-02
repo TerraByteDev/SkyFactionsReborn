@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.PlayerData;
+import net.skullian.skyfactions.common.database.tables.PlayerData;
 
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -95,14 +95,14 @@ public class PlayerDataRecord extends UpdatableRecordImpl<PlayerDataRecord> {
      * Create a detached PlayerDataRecord
      */
     public PlayerDataRecord() {
-        super(net.skullian.skyfactions.common.database.tables.PlayerData.PLAYER_DATA);
+        super(PlayerData.PLAYER_DATA);
     }
 
     /**
      * Create a detached, initialised PlayerDataRecord
      */
     public PlayerDataRecord(String uuid, String discordId, Long lastRaid, String locale) {
-        super(net.skullian.skyfactions.common.database.tables.PlayerData.PLAYER_DATA);
+        super(PlayerData.PLAYER_DATA);
 
         setUuid(uuid);
         setDiscordId(discordId);
@@ -114,8 +114,8 @@ public class PlayerDataRecord extends UpdatableRecordImpl<PlayerDataRecord> {
     /**
      * Create a detached, initialised PlayerDataRecord
      */
-    public PlayerDataRecord(PlayerData value) {
-        super(net.skullian.skyfactions.common.database.tables.PlayerData.PLAYER_DATA);
+    public PlayerDataRecord(net.skullian.skyfactions.common.database.tables.pojos.PlayerData value) {
+        super(PlayerData.PLAYER_DATA);
 
         if (value != null) {
             setUuid(value.getUuid());

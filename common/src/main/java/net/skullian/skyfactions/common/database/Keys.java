@@ -12,7 +12,6 @@ import net.skullian.skyfactions.common.database.tables.Factions;
 import net.skullian.skyfactions.common.database.tables.FlywaySchemaHistory;
 import net.skullian.skyfactions.common.database.tables.Islands;
 import net.skullian.skyfactions.common.database.tables.PlayerData;
-import net.skullian.skyfactions.common.database.tables.TrustedPlayers;
 import net.skullian.skyfactions.common.database.tables.records.ElectionVotesRecord;
 import net.skullian.skyfactions.common.database.tables.records.FactionElectionsRecord;
 import net.skullian.skyfactions.common.database.tables.records.FactionIslandsRecord;
@@ -21,7 +20,6 @@ import net.skullian.skyfactions.common.database.tables.records.FactionsRecord;
 import net.skullian.skyfactions.common.database.tables.records.FlywaySchemaHistoryRecord;
 import net.skullian.skyfactions.common.database.tables.records.IslandsRecord;
 import net.skullian.skyfactions.common.database.tables.records.PlayerDataRecord;
-import net.skullian.skyfactions.common.database.tables.records.TrustedPlayersRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -49,7 +47,6 @@ public class Keys {
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY__PK_FLYWAY_SCHEMA_HISTORY = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("pk_flyway_schema_history"), new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
     public static final UniqueKey<IslandsRecord> ISLANDS__PK_ISLANDS = Internal.createUniqueKey(Islands.ISLANDS, DSL.name("pk_islands"), new TableField[] { Islands.ISLANDS.ID }, true);
     public static final UniqueKey<PlayerDataRecord> PLAYER_DATA__PK_PLAYER_DATA = Internal.createUniqueKey(PlayerData.PLAYER_DATA, DSL.name("pk_player_data"), new TableField[] { PlayerData.PLAYER_DATA.UUID }, true);
-    public static final UniqueKey<TrustedPlayersRecord> TRUSTED_PLAYERS__PK_TRUSTED_PLAYERS = Internal.createUniqueKey(TrustedPlayers.TRUSTED_PLAYERS, DSL.name("pk_trusted_players"), new TableField[] { TrustedPlayers.TRUSTED_PLAYERS.ISLAND_ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions

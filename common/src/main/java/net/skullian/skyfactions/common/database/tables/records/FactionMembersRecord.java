@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.FactionMembers;
+import net.skullian.skyfactions.common.database.tables.FactionMembers;
 
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -80,14 +80,14 @@ public class FactionMembersRecord extends UpdatableRecordImpl<FactionMembersReco
      * Create a detached FactionMembersRecord
      */
     public FactionMembersRecord() {
-        super(net.skullian.skyfactions.common.database.tables.FactionMembers.FACTION_MEMBERS);
+        super(FactionMembers.FACTION_MEMBERS);
     }
 
     /**
      * Create a detached, initialised FactionMembersRecord
      */
     public FactionMembersRecord(String factionname, String uuid, String rank) {
-        super(net.skullian.skyfactions.common.database.tables.FactionMembers.FACTION_MEMBERS);
+        super(FactionMembers.FACTION_MEMBERS);
 
         setFactionname(factionname);
         setUuid(uuid);
@@ -98,8 +98,8 @@ public class FactionMembersRecord extends UpdatableRecordImpl<FactionMembersReco
     /**
      * Create a detached, initialised FactionMembersRecord
      */
-    public FactionMembersRecord(FactionMembers value) {
-        super(net.skullian.skyfactions.common.database.tables.FactionMembers.FACTION_MEMBERS);
+    public FactionMembersRecord(net.skullian.skyfactions.common.database.tables.pojos.FactionMembers value) {
+        super(FactionMembers.FACTION_MEMBERS);
 
         if (value != null) {
             setFactionname(value.getFactionname());

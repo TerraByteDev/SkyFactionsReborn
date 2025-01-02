@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.FactionInvites;
+import net.skullian.skyfactions.common.database.tables.FactionInvites;
 
 import org.jooq.impl.TableRecordImpl;
 
@@ -100,14 +100,14 @@ public class FactionInvitesRecord extends TableRecordImpl<FactionInvitesRecord> 
      * Create a detached FactionInvitesRecord
      */
     public FactionInvitesRecord() {
-        super(net.skullian.skyfactions.common.database.tables.FactionInvites.FACTION_INVITES);
+        super(FactionInvites.FACTION_INVITES);
     }
 
     /**
      * Create a detached, initialised FactionInvitesRecord
      */
     public FactionInvitesRecord(String factionname, String uuid, String inviter, String type, Long timestamp) {
-        super(net.skullian.skyfactions.common.database.tables.FactionInvites.FACTION_INVITES);
+        super(FactionInvites.FACTION_INVITES);
 
         setFactionname(factionname);
         setUuid(uuid);
@@ -120,8 +120,8 @@ public class FactionInvitesRecord extends TableRecordImpl<FactionInvitesRecord> 
     /**
      * Create a detached, initialised FactionInvitesRecord
      */
-    public FactionInvitesRecord(FactionInvites value) {
-        super(net.skullian.skyfactions.common.database.tables.FactionInvites.FACTION_INVITES);
+    public FactionInvitesRecord(net.skullian.skyfactions.common.database.tables.pojos.FactionInvites value) {
+        super(FactionInvites.FACTION_INVITES);
 
         if (value != null) {
             setFactionname(value.getFactionname());

@@ -133,7 +133,8 @@ public class DatabaseManager {
                     "useLocalSessionState", "true",
                     "useLocalTransactionState", "true",
                     "useServerPrepStmts", "true",
-                    "cachePrepStmts", "true"
+                    "cachePrepStmts", "true",
+                    "useSSL", Settings.DATABASE_USE_SSL.getBoolean()
             ));
             properties.putAll(Map.of(
                     "rewriteBatchedStatements", "true",
@@ -146,12 +147,11 @@ public class DatabaseManager {
 
 
             HostAndPort host = HostAndPort.fromString(rawHost);
-            this.url = String.format("jdbc:%s://%s:%d/%s?useSSL=%s",
+            this.url = String.format("jdbc:%s://%s:%d/%s",
                     type.equalsIgnoreCase("mysql") ? "mysql" : "postgresql",
                     host.getHost(),
                     host.getPortOrDefault(3306),
-                    databaseName,
-                    Settings.DATABASE_USE_SSL.getBoolean()
+                    databaseName
             );
 
             HikariConfig mysqlConfig = new HikariConfig();

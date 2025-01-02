@@ -52,12 +52,12 @@ public class PlayerData extends TableImpl<PlayerDataRecord> {
     /**
      * The column <code>player_data.uuid</code>.
      */
-    public final TableField<PlayerDataRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR, this, "");
+    public final TableField<PlayerDataRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
 
     /**
      * The column <code>player_data.discord_id</code>.
      */
-    public final TableField<PlayerDataRecord, String> DISCORD_ID = createField(DSL.name("discord_id"), SQLDataType.VARCHAR, this, "");
+    public final TableField<PlayerDataRecord, String> DISCORD_ID = createField(DSL.name("discord_id"), SQLDataType.VARCHAR(18), this, "");
 
     /**
      * The column <code>player_data.last_raid</code>.
@@ -67,7 +67,7 @@ public class PlayerData extends TableImpl<PlayerDataRecord> {
     /**
      * The column <code>player_data.locale</code>.
      */
-    public final TableField<PlayerDataRecord, String> LOCALE = createField(DSL.name("locale"), SQLDataType.VARCHAR, this, "");
+    public final TableField<PlayerDataRecord, String> LOCALE = createField(DSL.name("locale"), SQLDataType.VARCHAR(4), this, "");
 
     private PlayerData(Name alias, Table<PlayerDataRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

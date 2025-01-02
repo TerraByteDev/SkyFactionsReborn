@@ -211,7 +211,6 @@ java {
 }
 
 flyway {
-    configurations = ['flywayMigration']
     url = 'jdbc:sqlite:file:./assets/data.sqlite3'
     user = 'sa'
     password = ''

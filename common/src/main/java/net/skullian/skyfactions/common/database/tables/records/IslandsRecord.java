@@ -4,7 +4,7 @@
 package net.skullian.skyfactions.common.database.tables.records;
 
 
-import net.skullian.skyfactions.common.database.tables.pojos.Islands;
+import net.skullian.skyfactions.common.database.tables.Islands;
 
 import org.jooq.Record1;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -170,14 +170,14 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
      * Create a detached IslandsRecord
      */
     public IslandsRecord() {
-        super(net.skullian.skyfactions.common.database.tables.Islands.ISLANDS);
+        super(Islands.ISLANDS);
     }
 
     /**
      * Create a detached, initialised IslandsRecord
      */
     public IslandsRecord(Integer id, String uuid, Integer level, Integer gems, Integer runes, Integer defencecount, Long lastRaided, String lastRaider, Long created) {
-        super(net.skullian.skyfactions.common.database.tables.Islands.ISLANDS);
+        super(Islands.ISLANDS);
 
         setId(id);
         setUuid(uuid);
@@ -194,8 +194,8 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
     /**
      * Create a detached, initialised IslandsRecord
      */
-    public IslandsRecord(Islands value) {
-        super(net.skullian.skyfactions.common.database.tables.Islands.ISLANDS);
+    public IslandsRecord(net.skullian.skyfactions.common.database.tables.pojos.Islands value) {
+        super(Islands.ISLANDS);
 
         if (value != null) {
             setId(value.getId());
