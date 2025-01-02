@@ -12,7 +12,12 @@ config-version: 1
 
 # Database config. Requires a restart to apply.
 database:
-  # You can either use 'sqlite' or 'mysql' or 'mariadb' Default: sqlite.
+  # Supported types:
+  # 'sqlite' = SQLite
+  # 'mysql' = MySQL
+  # 'mariadb' = MariaDB
+  # 'postgres' = PostgreSQL
+  # Default: sqlite
   type: 'sqlite'
 
   # Connection values for MySQL if you decide to use it.

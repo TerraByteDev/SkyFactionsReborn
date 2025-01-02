@@ -97,7 +97,7 @@ public class DatabaseManager {
             this.dataSource = dataSource;
             this.dialect = SQLDialect.SQLITE;
             this.ctx = DSL.using(configuration);
-        } else if (type.equalsIgnoreCase("mysql") || type.equalsIgnoreCase("mariadb")) {
+        } else if (List.of("mysql", "mariadb", "postgres").contains(type)) {
 
             String rawHost = Settings.DATABASE_HOST.getString();
             String databaseName = Settings.DATABASE_NAME.getString();

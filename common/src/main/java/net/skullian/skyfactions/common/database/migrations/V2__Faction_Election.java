@@ -22,12 +22,10 @@ public class V2__Faction_Election extends BaseJavaMigration {
                 .primaryKey("id")
                 .execute();
 
-        //tx.createIndexIfNotExists("factionElectionsFactionNameIndex")
-        //        .on("faction_elections", "factionName")
-        //        .execute();
-
-        ctx.execute("CREATE INDEX factionElectionsFactionNameIndex ON faction_elections (factionName);"); // workaround for now
-
+        ctx.createIndex("factionElectionsFactionNameIndex")
+                .on("faction_elections", "factionName")
+                .execute();
+        
         ctx.createTableIfNotExists("election_votes")
                 .column("election", INTEGER)
                 .column("uuid", CLOB(36))
