@@ -99,6 +99,8 @@ public class DatabaseManager {
             this.ctx = DSL.using(configuration);
         } else if (List.of("mysql", "mariadb", "postgres").contains(type)) {
 
+            SQLDialect sqlDialect = SQLDialect.valueOf(type.toUpperCase());
+
             String rawHost = Settings.DATABASE_HOST.getString();
             String databaseName = Settings.DATABASE_NAME.getString();
             String username = Settings.DATABASE_USERNAME.getString();
@@ -172,11 +174,11 @@ public class DatabaseManager {
 
             configuration
                     .set(dataSource)
-                    .set(SQLDialect.valueOf(type.toUpperCase(Locale.ROOT)));
+                    .set(sqlDialect);
 
             this.dataSource = dataSource;
-            this.dialect = SQLDialect.valueOf(type.toUpperCase(Locale.ROOT));
-            this.ctx = DSL.using(dataSource, SQLDialect.valueOf(type.toUpperCase(Locale.ROOT)));
+            this.dialect = sqlDialect;
+            this.ctx = DSL.using(dataSource, sqlDialect);
         } else {
             ErrorUtil.handleDatabaseSetupError(new IllegalStateException("Unknown database type: " + type));
         }
