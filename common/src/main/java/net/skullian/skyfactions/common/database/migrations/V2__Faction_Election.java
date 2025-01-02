@@ -25,7 +25,7 @@ public class V2__Faction_Election extends BaseJavaMigration {
         ctx.createIndex("factionElectionsFactionNameIndex")
                 .on("faction_elections", "factionName")
                 .execute();
-        
+
         ctx.createTableIfNotExists("election_votes")
                 .column("election", INTEGER)
                 .column("uuid", CLOB(36))
