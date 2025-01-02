@@ -27,7 +27,7 @@ public class V2__Faction_Election extends BaseJavaMigration {
 
         ctx.createTableIfNotExists("election_votes")
                 .column("election", INTEGER)
-                .column("uuid", CLOB(36))
+                .column("uuid", BLOB(16))
                 .column("votedFor", CLOB(36))
                 .primaryKey("election")
                 .constraint(DSL.foreignKey("election").references("faction_elections", "id").onDeleteCascade())
