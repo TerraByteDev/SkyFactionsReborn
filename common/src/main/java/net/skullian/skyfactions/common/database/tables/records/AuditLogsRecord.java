@@ -50,7 +50,7 @@ public class AuditLogsRecord extends TableRecordImpl<AuditLogsRecord> {
     /**
      * Setter for <code>audit_logs.uuid</code>.
      */
-    public AuditLogsRecord setUuid(String value) {
+    public AuditLogsRecord setUuid(byte[] value) {
         set(2, value);
         return this;
     }
@@ -58,8 +58,8 @@ public class AuditLogsRecord extends TableRecordImpl<AuditLogsRecord> {
     /**
      * Getter for <code>audit_logs.uuid</code>.
      */
-    public String getUuid() {
-        return (String) get(2);
+    public byte[] getUuid() {
+        return (byte[]) get(2);
     }
 
     /**
@@ -106,7 +106,7 @@ public class AuditLogsRecord extends TableRecordImpl<AuditLogsRecord> {
     /**
      * Create a detached, initialised AuditLogsRecord
      */
-    public AuditLogsRecord(String factionname, String type, String uuid, String replacements, Long timestamp) {
+    public AuditLogsRecord(String factionname, String type, byte[] uuid, String replacements, Long timestamp) {
         super(AuditLogs.AUDIT_LOGS);
 
         setFactionname(factionname);

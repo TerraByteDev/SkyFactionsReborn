@@ -38,7 +38,7 @@ public class FactionIslandDatabaseManager extends AbstractTableManager {
             if (action == null) return;
             ctx.insertInto(FACTION_ISLANDS)
                     .columns(FACTION_ISLANDS.ID, FACTION_ISLANDS.FACTIONNAME, FACTION_ISLANDS.RUNES, FACTION_ISLANDS.DEFENCECOUNT, FACTION_ISLANDS.GEMS, FACTION_ISLANDS.LAST_RAIDED, FACTION_ISLANDS.LAST_RAIDER)
-                    .values(action.getId(), factionName, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_FACTION_IMMUNITY.getLong(), "N/A")
+                    .values(action.getId(), factionName, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_FACTION_IMMUNITY.getLong(), "N/A".getBytes())
                     .execute();
         }, executor);
     }

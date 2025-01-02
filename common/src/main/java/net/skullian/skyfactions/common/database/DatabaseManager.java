@@ -22,6 +22,7 @@ import org.jooq.impl.DefaultExecuteListenerProvider;
 import org.sqlite.JDBC;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -156,7 +157,7 @@ public class DatabaseManager {
 
             HikariConfig mysqlConfig = new HikariConfig();
             mysqlConfig.setDataSourceProperties(properties);
-            mysqlConfig.setPoolName("SkyFactions MySQL Pool");
+            mysqlConfig.setPoolName("SkyFactions SQL Pool");
             mysqlConfig.setJdbcUrl(url);
             mysqlConfig.setMaxLifetime(maxLifetime);
             mysqlConfig.setUsername(username);
@@ -171,7 +172,7 @@ public class DatabaseManager {
             SLogger.info("Using {} database '{}' on: {}:{}.",
                     type.equalsIgnoreCase("mysql") ? "MySQL" : "PostgreSQL", databaseName, host.getHost(), host.getPortOrDefault(3306));
             HikariDataSource dataSource = new HikariDataSource(mysqlConfig);
-
+            
             configuration
                     .set(dataSource)
                     .set(sqlDialect);

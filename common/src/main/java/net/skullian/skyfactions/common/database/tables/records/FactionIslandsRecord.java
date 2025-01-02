@@ -111,7 +111,7 @@ public class FactionIslandsRecord extends UpdatableRecordImpl<FactionIslandsReco
     /**
      * Setter for <code>faction_islands.last_raider</code>.
      */
-    public FactionIslandsRecord setLastRaider(String value) {
+    public FactionIslandsRecord setLastRaider(byte[] value) {
         set(6, value);
         return this;
     }
@@ -119,8 +119,8 @@ public class FactionIslandsRecord extends UpdatableRecordImpl<FactionIslandsReco
     /**
      * Getter for <code>faction_islands.last_raider</code>.
      */
-    public String getLastRaider() {
-        return (String) get(6);
+    public byte[] getLastRaider() {
+        return (byte[]) get(6);
     }
 
     // -------------------------------------------------------------------------
@@ -146,7 +146,7 @@ public class FactionIslandsRecord extends UpdatableRecordImpl<FactionIslandsReco
     /**
      * Create a detached, initialised FactionIslandsRecord
      */
-    public FactionIslandsRecord(Integer id, String factionname, Integer runes, Integer defencecount, Integer gems, Long lastRaided, String lastRaider) {
+    public FactionIslandsRecord(Integer id, String factionname, Integer runes, Integer defencecount, Integer gems, Long lastRaided, byte[] lastRaider) {
         super(FactionIslands.FACTION_ISLANDS);
 
         setId(id);

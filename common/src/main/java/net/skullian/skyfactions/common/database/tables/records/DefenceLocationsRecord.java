@@ -20,7 +20,7 @@ public class DefenceLocationsRecord extends TableRecordImpl<DefenceLocationsReco
     /**
      * Setter for <code>defence_locations.uuid</code>.
      */
-    public DefenceLocationsRecord setUuid(String value) {
+    public DefenceLocationsRecord setUuid(byte[] value) {
         set(0, value);
         return this;
     }
@@ -28,8 +28,8 @@ public class DefenceLocationsRecord extends TableRecordImpl<DefenceLocationsReco
     /**
      * Getter for <code>defence_locations.uuid</code>.
      */
-    public String getUuid() {
-        return (String) get(0);
+    public byte[] getUuid() {
+        return (byte[]) get(0);
     }
 
     /**
@@ -121,7 +121,7 @@ public class DefenceLocationsRecord extends TableRecordImpl<DefenceLocationsReco
     /**
      * Create a detached, initialised DefenceLocationsRecord
      */
-    public DefenceLocationsRecord(String uuid, String type, String factionname, Integer x, Integer y, Integer z) {
+    public DefenceLocationsRecord(byte[] uuid, String type, String factionname, Integer x, Integer y, Integer z) {
         super(DefenceLocations.DEFENCE_LOCATIONS);
 
         setUuid(uuid);

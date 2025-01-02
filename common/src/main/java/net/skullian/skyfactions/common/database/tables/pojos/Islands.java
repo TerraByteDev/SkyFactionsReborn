@@ -5,6 +5,7 @@ package net.skullian.skyfactions.common.database.tables.pojos;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -16,13 +17,13 @@ public class Islands implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Integer id;
-    private final String uuid;
+    private final byte[] uuid;
     private final Integer level;
     private final Integer gems;
     private final Integer runes;
     private final Integer defencecount;
     private final Long lastRaided;
-    private final String lastRaider;
+    private final byte[] lastRaider;
     private final Long created;
 
     public Islands(Islands value) {
@@ -39,13 +40,13 @@ public class Islands implements Serializable {
 
     public Islands(
         Integer id,
-        String uuid,
+        byte[] uuid,
         Integer level,
         Integer gems,
         Integer runes,
         Integer defencecount,
         Long lastRaided,
-        String lastRaider,
+        byte[] lastRaider,
         Long created
     ) {
         this.id = id;
@@ -69,7 +70,7 @@ public class Islands implements Serializable {
     /**
      * Getter for <code>islands.uuid</code>.
      */
-    public String getUuid() {
+    public byte[] getUuid() {
         return this.uuid;
     }
 
@@ -111,7 +112,7 @@ public class Islands implements Serializable {
     /**
      * Getter for <code>islands.last_raider</code>.
      */
-    public String getLastRaider() {
+    public byte[] getLastRaider() {
         return this.lastRaider;
     }
 
@@ -141,7 +142,7 @@ public class Islands implements Serializable {
             if (other.uuid != null)
                 return false;
         }
-        else if (!this.uuid.equals(other.uuid))
+        else if (!Arrays.equals(this.uuid, other.uuid))
             return false;
         if (this.level == null) {
             if (other.level != null)
@@ -177,7 +178,7 @@ public class Islands implements Serializable {
             if (other.lastRaider != null)
                 return false;
         }
-        else if (!this.lastRaider.equals(other.lastRaider))
+        else if (!Arrays.equals(this.lastRaider, other.lastRaider))
             return false;
         if (this.created == null) {
             if (other.created != null)
@@ -193,13 +194,13 @@ public class Islands implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
-        result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
+        result = prime * result + ((this.uuid == null) ? 0 : Arrays.hashCode(this.uuid));
         result = prime * result + ((this.level == null) ? 0 : this.level.hashCode());
         result = prime * result + ((this.gems == null) ? 0 : this.gems.hashCode());
         result = prime * result + ((this.runes == null) ? 0 : this.runes.hashCode());
         result = prime * result + ((this.defencecount == null) ? 0 : this.defencecount.hashCode());
         result = prime * result + ((this.lastRaided == null) ? 0 : this.lastRaided.hashCode());
-        result = prime * result + ((this.lastRaider == null) ? 0 : this.lastRaider.hashCode());
+        result = prime * result + ((this.lastRaider == null) ? 0 : Arrays.hashCode(this.lastRaider));
         result = prime * result + ((this.created == null) ? 0 : this.created.hashCode());
         return result;
     }
@@ -209,13 +210,13 @@ public class Islands implements Serializable {
         StringBuilder sb = new StringBuilder("Islands (");
 
         sb.append(id);
-        sb.append(", ").append(uuid);
+        sb.append(", ").append("[binary...]");
         sb.append(", ").append(level);
         sb.append(", ").append(gems);
         sb.append(", ").append(runes);
         sb.append(", ").append(defencecount);
         sb.append(", ").append(lastRaided);
-        sb.append(", ").append(lastRaider);
+        sb.append(", ").append("[binary...]");
         sb.append(", ").append(created);
 
         sb.append(")");

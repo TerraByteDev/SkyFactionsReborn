@@ -21,7 +21,7 @@ public class PlayerDataRecord extends UpdatableRecordImpl<PlayerDataRecord> {
     /**
      * Setter for <code>player_data.uuid</code>.
      */
-    public PlayerDataRecord setUuid(String value) {
+    public PlayerDataRecord setUuid(byte[] value) {
         set(0, value);
         return this;
     }
@@ -29,8 +29,8 @@ public class PlayerDataRecord extends UpdatableRecordImpl<PlayerDataRecord> {
     /**
      * Getter for <code>player_data.uuid</code>.
      */
-    public String getUuid() {
-        return (String) get(0);
+    public byte[] getUuid() {
+        return (byte[]) get(0);
     }
 
     /**
@@ -83,7 +83,7 @@ public class PlayerDataRecord extends UpdatableRecordImpl<PlayerDataRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Record1<String> key() {
+    public Record1<byte[]> key() {
         return (Record1) super.key();
     }
 
@@ -101,7 +101,7 @@ public class PlayerDataRecord extends UpdatableRecordImpl<PlayerDataRecord> {
     /**
      * Create a detached, initialised PlayerDataRecord
      */
-    public PlayerDataRecord(String uuid, String discordId, Long lastRaid, String locale) {
+    public PlayerDataRecord(byte[] uuid, String discordId, Long lastRaid, String locale) {
         super(PlayerData.PLAYER_DATA);
 
         setUuid(uuid);

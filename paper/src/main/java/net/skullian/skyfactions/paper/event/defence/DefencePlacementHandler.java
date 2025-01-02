@@ -6,6 +6,7 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.DefencesConfig;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
+import net.skullian.skyfactions.common.database.AbstractTableManager;
 import net.skullian.skyfactions.common.database.tables.DefenceLocations;
 import net.skullian.skyfactions.common.defence.Defence;
 import net.skullian.skyfactions.common.defence.struct.DefenceData;
@@ -238,7 +239,7 @@ public class DefencePlacementHandler implements Listener {
 
     public static void addPlacedDefences(Player player) {
         if (SkyApi.getInstance().getDefenceAPI().getLoadedPlayerDefences().get(player.getUniqueId()) != null) return;
-        SkyApi.getInstance().getDatabaseManager().getDefencesManager().getDefenceLocations(DefenceLocations.DEFENCE_LOCATIONS.UUID.eq(player.getUniqueId().toString()), "player").whenComplete((locations, ex) -> {
+        SkyApi.getInstance().getDatabaseManager().getDefencesManager().getDefenceLocations(DefenceLocations.DEFENCE_LOCATIONS.UUID.eq(AbstractTableManager.fromUUID(player.getUniqueId())), "player").whenComplete((locations, ex) -> {
             if (ex != null) {
                 SLogger.fatal("Failed to fetch defence locations for player {} - {}", player.getUniqueId(), ex);
                 return;

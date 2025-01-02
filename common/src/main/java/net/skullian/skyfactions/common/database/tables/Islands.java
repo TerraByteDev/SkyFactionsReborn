@@ -57,7 +57,7 @@ public class Islands extends TableImpl<IslandsRecord> {
     /**
      * The column <code>islands.uuid</code>.
      */
-    public final TableField<IslandsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<IslandsRecord, byte[]> UUID = createField(DSL.name("uuid"), SQLDataType.BLOB, this, "");
 
     /**
      * The column <code>islands.level</code>.
@@ -87,7 +87,7 @@ public class Islands extends TableImpl<IslandsRecord> {
     /**
      * The column <code>islands.last_raider</code>.
      */
-    public final TableField<IslandsRecord, String> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<IslandsRecord, byte[]> LAST_RAIDER = createField(DSL.name("last_raider"), SQLDataType.BLOB, this, "");
 
     /**
      * The column <code>islands.created</code>.

@@ -55,12 +55,12 @@ public class FactionInvites extends TableImpl<FactionInvitesRecord> {
     /**
      * The column <code>faction_invites.uuid</code>.
      */
-    public final TableField<FactionInvitesRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<FactionInvitesRecord, byte[]> UUID = createField(DSL.name("uuid"), SQLDataType.BLOB, this, "");
 
     /**
      * The column <code>faction_invites.inviter</code>.
      */
-    public final TableField<FactionInvitesRecord, String> INVITER = createField(DSL.name("inviter"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<FactionInvitesRecord, byte[]> INVITER = createField(DSL.name("inviter"), SQLDataType.BLOB, this, "");
 
     /**
      * The column <code>faction_invites.type</code>.

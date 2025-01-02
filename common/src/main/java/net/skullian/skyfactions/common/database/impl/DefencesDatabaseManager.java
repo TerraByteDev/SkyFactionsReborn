@@ -11,6 +11,7 @@ import org.jooq.Result;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
@@ -50,7 +51,7 @@ public class DefencesDatabaseManager extends AbstractTableManager {
                 for (SkyLocation location : locations) {
                     trx.dsl().insertInto(DEFENCE_LOCATIONS)
                             .columns(DEFENCE_LOCATIONS.UUID, DEFENCE_LOCATIONS.TYPE, DEFENCE_LOCATIONS.FACTIONNAME, DEFENCE_LOCATIONS.X, DEFENCE_LOCATIONS.Y, DEFENCE_LOCATIONS.Z)
-                            .values((faction ? "N/A" : owner), (faction ? "faction" : "player"), (faction ? owner : "N/A"), location.getBlockX(), location.getBlockY(), location.getBlockZ())
+                            .values((faction ? "N/A".getBytes() : fromUUID(UUID.fromString(owner))), (faction ? "faction" : "player"), (faction ? owner : "N/A"), location.getBlockX(), location.getBlockY(), location.getBlockZ())
                             .execute();
                 }
             });
@@ -62,7 +63,7 @@ public class DefencesDatabaseManager extends AbstractTableManager {
             ctx.transaction((Configuration trx) -> {
                 for (SkyLocation location : locations) {
                     trx.dsl().deleteFrom(DEFENCE_LOCATIONS)
-                            .where((isFaction ? DEFENCE_LOCATIONS.FACTIONNAME.eq(owner) : DEFENCE_LOCATIONS.UUID.eq(owner)), (isFaction ? DEFENCE_LOCATIONS.TYPE.eq("faction") : DEFENCE_LOCATIONS.TYPE.eq("player")),
+                            .where((isFaction ? DEFENCE_LOCATIONS.FACTIONNAME.eq(owner) : DEFENCE_LOCATIONS.UUID.eq(fromUUID(UUID.fromString(owner)))), (isFaction ? DEFENCE_LOCATIONS.TYPE.eq("faction") : DEFENCE_LOCATIONS.TYPE.eq("player")),
                                     DEFENCE_LOCATIONS.X.eq(location.getBlockX()), DEFENCE_LOCATIONS.Y.eq(location.getBlockY()), DEFENCE_LOCATIONS.Z.eq(location.getBlockZ()))
                             .execute();
                 }
@@ -73,7 +74,7 @@ public class DefencesDatabaseManager extends AbstractTableManager {
     public CompletableFuture<Void> removeAllDefences(String owner, boolean isFaction) {
         return CompletableFuture.runAsync(() -> {
             ctx.deleteFrom(DEFENCE_LOCATIONS)
-                    .where((isFaction ? DEFENCE_LOCATIONS.FACTIONNAME.eq(owner) : DEFENCE_LOCATIONS.UUID.eq(owner)), (isFaction ? DEFENCE_LOCATIONS.TYPE.eq("faction") : DEFENCE_LOCATIONS.TYPE.eq("player")))
+                    .where((isFaction ? DEFENCE_LOCATIONS.FACTIONNAME.eq(owner) : DEFENCE_LOCATIONS.UUID.eq(fromUUID(UUID.fromString(owner)))), (isFaction ? DEFENCE_LOCATIONS.TYPE.eq("faction") : DEFENCE_LOCATIONS.TYPE.eq("player")))
                     .execute();
         }, executor);
     }

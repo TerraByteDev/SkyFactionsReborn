@@ -36,7 +36,7 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
     /**
      * Setter for <code>islands.uuid</code>.
      */
-    public IslandsRecord setUuid(String value) {
+    public IslandsRecord setUuid(byte[] value) {
         set(1, value);
         return this;
     }
@@ -44,8 +44,8 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
     /**
      * Getter for <code>islands.uuid</code>.
      */
-    public String getUuid() {
-        return (String) get(1);
+    public byte[] getUuid() {
+        return (byte[]) get(1);
     }
 
     /**
@@ -126,7 +126,7 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
     /**
      * Setter for <code>islands.last_raider</code>.
      */
-    public IslandsRecord setLastRaider(String value) {
+    public IslandsRecord setLastRaider(byte[] value) {
         set(7, value);
         return this;
     }
@@ -134,8 +134,8 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
     /**
      * Getter for <code>islands.last_raider</code>.
      */
-    public String getLastRaider() {
-        return (String) get(7);
+    public byte[] getLastRaider() {
+        return (byte[]) get(7);
     }
 
     /**
@@ -176,7 +176,7 @@ public class IslandsRecord extends UpdatableRecordImpl<IslandsRecord> {
     /**
      * Create a detached, initialised IslandsRecord
      */
-    public IslandsRecord(Integer id, String uuid, Integer level, Integer gems, Integer runes, Integer defencecount, Long lastRaided, String lastRaider, Long created) {
+    public IslandsRecord(Integer id, byte[] uuid, Integer level, Integer gems, Integer runes, Integer defencecount, Long lastRaided, byte[] lastRaider, Long created) {
         super(Islands.ISLANDS);
 
         setId(id);

@@ -23,7 +23,7 @@ public class PlayerDatabaseManager extends AbstractTableManager {
             if (!shouldRegister) return;
             ctx.insertInto(PLAYER_DATA)
                     .columns(PLAYER_DATA.UUID, PLAYER_DATA.DISCORD_ID, PLAYER_DATA.LAST_RAID, PLAYER_DATA.LOCALE)
-                    .values(uuid.toString(), "none", (long) 0, SkyApi.getInstance().getPlayerAPI().getLocale(uuid))
+                    .values(fromUUID(uuid), "none", (long) 0, SkyApi.getInstance().getPlayerAPI().getLocale(uuid))
                     .execute();
         }, executor);
     }
@@ -31,7 +31,7 @@ public class PlayerDatabaseManager extends AbstractTableManager {
     public CompletableFuture<PlayerData> getPlayerData(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
             PlayerDataRecord result = ctx.selectFrom(PLAYER_DATA)
-                    .where(PLAYER_DATA.UUID.eq(uuid.toString()))
+                    .where(PLAYER_DATA.UUID.eq(fromUUID(uuid)))
                     .fetchOne();
 
             return result != null ?
@@ -49,7 +49,7 @@ public class PlayerDatabaseManager extends AbstractTableManager {
 
             ctx.update(PLAYER_DATA)
                     .set(PLAYER_DATA.DISCORD_ID, discordID)
-                    .where(PLAYER_DATA.UUID.eq(playerUUID.toString()))
+                    .where(PLAYER_DATA.UUID.eq(fromUUID(playerUUID)))
                     .execute();
         }, executor);
     }
@@ -59,7 +59,7 @@ public class PlayerDatabaseManager extends AbstractTableManager {
             if (time == -1) return;
             ctx.update(PLAYER_DATA)
                     .set(PLAYER_DATA.LAST_RAID, time)
-                    .where(PLAYER_DATA.UUID.eq(playerUUID.toString()))
+                    .where(PLAYER_DATA.UUID.eq(fromUUID(playerUUID)))
                     .execute();
         }, executor);
     }
@@ -67,7 +67,7 @@ public class PlayerDatabaseManager extends AbstractTableManager {
     public CompletableFuture<String> getPlayerLocale(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> ctx.select(PLAYER_DATA.LOCALE)
                 .from(PLAYER_DATA)
-                .where(PLAYER_DATA.UUID.eq(uuid.toString()))
+                .where(PLAYER_DATA.UUID.eq(fromUUID(uuid)))
                 .fetchOneInto(String.class), executor);
     }
 
@@ -76,7 +76,7 @@ public class PlayerDatabaseManager extends AbstractTableManager {
             if (locale == null) return;
             ctx.update(PLAYER_DATA)
                     .set(PLAYER_DATA.LOCALE, locale)
-                    .where(PLAYER_DATA.UUID.eq(uuid.toString()))
+                    .where(PLAYER_DATA.UUID.eq(fromUUID(uuid)))
                     .execute();
         }, executor);
     }

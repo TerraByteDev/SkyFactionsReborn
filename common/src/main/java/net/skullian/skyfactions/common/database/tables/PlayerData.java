@@ -52,7 +52,7 @@ public class PlayerData extends TableImpl<PlayerDataRecord> {
     /**
      * The column <code>player_data.uuid</code>.
      */
-    public final TableField<PlayerDataRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<PlayerDataRecord, byte[]> UUID = createField(DSL.name("uuid"), SQLDataType.BLOB, this, "");
 
     /**
      * The column <code>player_data.discord_id</code>.

@@ -55,7 +55,7 @@ public class FactionBans extends TableImpl<FactionBansRecord> {
     /**
      * The column <code>faction_bans.uuid</code>.
      */
-    public final TableField<FactionBansRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<FactionBansRecord, byte[]> UUID = createField(DSL.name("uuid"), SQLDataType.BLOB, this, "");
 
     private FactionBans(Name alias, Table<FactionBansRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

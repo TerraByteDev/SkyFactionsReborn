@@ -5,6 +5,7 @@ package net.skullian.skyfactions.common.database.tables.pojos;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -15,7 +16,7 @@ public class DefenceLocations implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String uuid;
+    private final byte[] uuid;
     private final String type;
     private final String factionname;
     private final Integer x;
@@ -32,7 +33,7 @@ public class DefenceLocations implements Serializable {
     }
 
     public DefenceLocations(
-        String uuid,
+        byte[] uuid,
         String type,
         String factionname,
         Integer x,
@@ -50,7 +51,7 @@ public class DefenceLocations implements Serializable {
     /**
      * Getter for <code>defence_locations.uuid</code>.
      */
-    public String getUuid() {
+    public byte[] getUuid() {
         return this.uuid;
     }
 
@@ -102,7 +103,7 @@ public class DefenceLocations implements Serializable {
             if (other.uuid != null)
                 return false;
         }
-        else if (!this.uuid.equals(other.uuid))
+        else if (!Arrays.equals(this.uuid, other.uuid))
             return false;
         if (this.type == null) {
             if (other.type != null)
@@ -141,7 +142,7 @@ public class DefenceLocations implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
+        result = prime * result + ((this.uuid == null) ? 0 : Arrays.hashCode(this.uuid));
         result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         result = prime * result + ((this.factionname == null) ? 0 : this.factionname.hashCode());
         result = prime * result + ((this.x == null) ? 0 : this.x.hashCode());
@@ -154,7 +155,7 @@ public class DefenceLocations implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("DefenceLocations (");
 
-        sb.append(uuid);
+        sb.append("[binary...]");
         sb.append(", ").append(type);
         sb.append(", ").append(factionname);
         sb.append(", ").append(x);

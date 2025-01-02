@@ -36,7 +36,7 @@ public class ElectionVotesRecord extends UpdatableRecordImpl<ElectionVotesRecord
     /**
      * Setter for <code>election_votes.uuid</code>.
      */
-    public ElectionVotesRecord setUuid(String value) {
+    public ElectionVotesRecord setUuid(byte[] value) {
         set(1, value);
         return this;
     }
@@ -44,8 +44,8 @@ public class ElectionVotesRecord extends UpdatableRecordImpl<ElectionVotesRecord
     /**
      * Getter for <code>election_votes.uuid</code>.
      */
-    public String getUuid() {
-        return (String) get(1);
+    public byte[] getUuid() {
+        return (byte[]) get(1);
     }
 
     /**
@@ -86,7 +86,7 @@ public class ElectionVotesRecord extends UpdatableRecordImpl<ElectionVotesRecord
     /**
      * Create a detached, initialised ElectionVotesRecord
      */
-    public ElectionVotesRecord(Integer election, String uuid, String votedfor) {
+    public ElectionVotesRecord(Integer election, byte[] uuid, String votedfor) {
         super(ElectionVotes.ELECTION_VOTES);
 
         setElection(election);

@@ -60,7 +60,7 @@ public class AuditLogs extends TableImpl<AuditLogsRecord> {
     /**
      * The column <code>audit_logs.uuid</code>.
      */
-    public final TableField<AuditLogsRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<AuditLogsRecord, byte[]> UUID = createField(DSL.name("uuid"), SQLDataType.BLOB, this, "");
 
     /**
      * The column <code>audit_logs.replacements</code>.

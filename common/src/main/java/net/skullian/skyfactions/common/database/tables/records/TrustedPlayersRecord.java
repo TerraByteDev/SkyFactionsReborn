@@ -35,7 +35,7 @@ public class TrustedPlayersRecord extends TableRecordImpl<TrustedPlayersRecord> 
     /**
      * Setter for <code>trusted_players.uuid</code>.
      */
-    public TrustedPlayersRecord setUuid(String value) {
+    public TrustedPlayersRecord setUuid(byte[] value) {
         set(1, value);
         return this;
     }
@@ -43,8 +43,8 @@ public class TrustedPlayersRecord extends TableRecordImpl<TrustedPlayersRecord> 
     /**
      * Getter for <code>trusted_players.uuid</code>.
      */
-    public String getUuid() {
-        return (String) get(1);
+    public byte[] getUuid() {
+        return (byte[]) get(1);
     }
 
     // -------------------------------------------------------------------------
@@ -61,7 +61,7 @@ public class TrustedPlayersRecord extends TableRecordImpl<TrustedPlayersRecord> 
     /**
      * Create a detached, initialised TrustedPlayersRecord
      */
-    public TrustedPlayersRecord(Integer islandId, String uuid) {
+    public TrustedPlayersRecord(Integer islandId, byte[] uuid) {
         super(TrustedPlayers.TRUSTED_PLAYERS);
 
         setIslandId(islandId);

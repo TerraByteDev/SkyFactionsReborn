@@ -55,7 +55,7 @@ public class TrustedPlayers extends TableImpl<TrustedPlayersRecord> {
     /**
      * The column <code>trusted_players.uuid</code>.
      */
-    public final TableField<TrustedPlayersRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<TrustedPlayersRecord, byte[]> UUID = createField(DSL.name("uuid"), SQLDataType.BLOB, this, "");
 
     private TrustedPlayers(Name alias, Table<TrustedPlayersRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);

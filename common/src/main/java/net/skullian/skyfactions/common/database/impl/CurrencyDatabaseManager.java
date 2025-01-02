@@ -22,7 +22,7 @@ public class CurrencyDatabaseManager extends AbstractTableManager {
     public CompletableFuture<Integer> getGems(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.GEMS)
                 .from(ISLANDS)
-                .where(ISLANDS.UUID.eq(playerUUID.toString()))
+                .where(ISLANDS.UUID.eq(fromUUID(playerUUID)))
                 .fetchOneInto(Integer.class), executor);
     }
 
@@ -40,7 +40,7 @@ public class CurrencyDatabaseManager extends AbstractTableManager {
 
             ctx.update(ISLANDS)
                     .set(ISLANDS.GEMS, (subtract ? current - amount : current + amount))
-                    .where(ISLANDS.UUID.eq(playerUUID.toString()))
+                    .where(ISLANDS.UUID.eq(fromUUID(playerUUID)))
                     .execute();
         }, executor);
     }
@@ -63,7 +63,7 @@ public class CurrencyDatabaseManager extends AbstractTableManager {
     public CompletableFuture<Integer> getRunes(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> ctx.select(ISLANDS.RUNES)
                 .from(ISLANDS)
-                .where(ISLANDS.UUID.eq(playerUUID.toString()))
+                .where(ISLANDS.UUID.eq(fromUUID(playerUUID)))
                 .fetchOneInto(Integer.class), executor);
     }
 
@@ -81,7 +81,7 @@ public class CurrencyDatabaseManager extends AbstractTableManager {
 
             ctx.update(ISLANDS)
                     .set(ISLANDS.RUNES, (subtract ? current - amount : current + amount))
-                    .where(ISLANDS.UUID.eq(playerUUID.toString()))
+                    .where(ISLANDS.UUID.eq(fromUUID(playerUUID)))
                     .execute();
         }, executor);
     }

@@ -20,7 +20,7 @@ public class NotificationsRecord extends TableRecordImpl<NotificationsRecord> {
     /**
      * Setter for <code>notifications.uuid</code>.
      */
-    public NotificationsRecord setUuid(String value) {
+    public NotificationsRecord setUuid(byte[] value) {
         set(0, value);
         return this;
     }
@@ -28,8 +28,8 @@ public class NotificationsRecord extends TableRecordImpl<NotificationsRecord> {
     /**
      * Getter for <code>notifications.uuid</code>.
      */
-    public String getUuid() {
-        return (String) get(0);
+    public byte[] getUuid() {
+        return (byte[]) get(0);
     }
 
     /**
@@ -91,7 +91,7 @@ public class NotificationsRecord extends TableRecordImpl<NotificationsRecord> {
     /**
      * Create a detached, initialised NotificationsRecord
      */
-    public NotificationsRecord(String uuid, String type, String replacements, Long timestamp) {
+    public NotificationsRecord(byte[] uuid, String type, String replacements, Long timestamp) {
         super(Notifications.NOTIFICATIONS);
 
         setUuid(uuid);

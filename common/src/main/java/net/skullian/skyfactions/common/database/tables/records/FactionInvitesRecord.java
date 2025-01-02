@@ -35,7 +35,7 @@ public class FactionInvitesRecord extends TableRecordImpl<FactionInvitesRecord> 
     /**
      * Setter for <code>faction_invites.uuid</code>.
      */
-    public FactionInvitesRecord setUuid(String value) {
+    public FactionInvitesRecord setUuid(byte[] value) {
         set(1, value);
         return this;
     }
@@ -43,14 +43,14 @@ public class FactionInvitesRecord extends TableRecordImpl<FactionInvitesRecord> 
     /**
      * Getter for <code>faction_invites.uuid</code>.
      */
-    public String getUuid() {
-        return (String) get(1);
+    public byte[] getUuid() {
+        return (byte[]) get(1);
     }
 
     /**
      * Setter for <code>faction_invites.inviter</code>.
      */
-    public FactionInvitesRecord setInviter(String value) {
+    public FactionInvitesRecord setInviter(byte[] value) {
         set(2, value);
         return this;
     }
@@ -58,8 +58,8 @@ public class FactionInvitesRecord extends TableRecordImpl<FactionInvitesRecord> 
     /**
      * Getter for <code>faction_invites.inviter</code>.
      */
-    public String getInviter() {
-        return (String) get(2);
+    public byte[] getInviter() {
+        return (byte[]) get(2);
     }
 
     /**
@@ -106,7 +106,7 @@ public class FactionInvitesRecord extends TableRecordImpl<FactionInvitesRecord> 
     /**
      * Create a detached, initialised FactionInvitesRecord
      */
-    public FactionInvitesRecord(String factionname, String uuid, String inviter, String type, Long timestamp) {
+    public FactionInvitesRecord(String factionname, byte[] uuid, byte[] inviter, String type, Long timestamp) {
         super(FactionInvites.FACTION_INVITES);
 
         setFactionname(factionname);

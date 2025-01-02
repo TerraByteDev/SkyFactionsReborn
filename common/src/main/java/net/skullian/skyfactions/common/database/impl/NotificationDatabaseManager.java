@@ -30,7 +30,7 @@ public class NotificationDatabaseManager extends AbstractTableManager {
                 for (NotificationData notification : notifications) {
                     trx.dsl().insertInto(NOTIFICATIONS)
                             .columns(NOTIFICATIONS.UUID, NOTIFICATIONS.TYPE, NOTIFICATIONS.REPLACEMENTS, NOTIFICATIONS.TIMESTAMP)
-                            .values(notification.getUuid().toString(), notification.getType(), Arrays.toString(notification.getReplacements()), System.currentTimeMillis())
+                            .values(fromUUID(notification.getUuid()), notification.getType(), Arrays.toString(notification.getReplacements()), System.currentTimeMillis())
                             .execute();
                 }
             });
@@ -43,7 +43,7 @@ public class NotificationDatabaseManager extends AbstractTableManager {
             ctx.transaction((Configuration trx) -> {
                 for (NotificationData notification : notifications) {
                     trx.dsl().deleteFrom(NOTIFICATIONS)
-                            .where(NOTIFICATIONS.UUID.eq(notification.getUuid().toString()), NOTIFICATIONS.TIMESTAMP.eq(notification.getTimestamp()))
+                            .where(NOTIFICATIONS.UUID.eq(fromUUID(notification.getUuid())), NOTIFICATIONS.TIMESTAMP.eq(notification.getTimestamp()))
                             .execute();
                 }
             });
@@ -53,7 +53,7 @@ public class NotificationDatabaseManager extends AbstractTableManager {
     public CompletableFuture<List<NotificationData>> getNotifications(SkyUser player) {
         return CompletableFuture.supplyAsync(() -> {
             Result<NotificationsRecord> results = ctx.selectFrom(NOTIFICATIONS)
-                    .where(NOTIFICATIONS.UUID.eq(player.getUniqueId().toString()))
+                    .where(NOTIFICATIONS.UUID.eq(fromUUID(player.getUniqueId())))
                     .orderBy(NOTIFICATIONS.TIMESTAMP.desc())
                     .fetch();
 

@@ -35,7 +35,7 @@ public class FactionBansRecord extends TableRecordImpl<FactionBansRecord> {
     /**
      * Setter for <code>faction_bans.uuid</code>.
      */
-    public FactionBansRecord setUuid(String value) {
+    public FactionBansRecord setUuid(byte[] value) {
         set(1, value);
         return this;
     }
@@ -43,8 +43,8 @@ public class FactionBansRecord extends TableRecordImpl<FactionBansRecord> {
     /**
      * Getter for <code>faction_bans.uuid</code>.
      */
-    public String getUuid() {
-        return (String) get(1);
+    public byte[] getUuid() {
+        return (byte[]) get(1);
     }
 
     // -------------------------------------------------------------------------
@@ -61,7 +61,7 @@ public class FactionBansRecord extends TableRecordImpl<FactionBansRecord> {
     /**
      * Create a detached, initialised FactionBansRecord
      */
-    public FactionBansRecord(String factionname, String uuid) {
+    public FactionBansRecord(String factionname, byte[] uuid) {
         super(FactionBans.FACTION_BANS);
 
         setFactionname(factionname);

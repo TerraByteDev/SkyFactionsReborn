@@ -36,7 +36,7 @@ public class FactionMembersRecord extends UpdatableRecordImpl<FactionMembersReco
     /**
      * Setter for <code>faction_members.uuid</code>.
      */
-    public FactionMembersRecord setUuid(String value) {
+    public FactionMembersRecord setUuid(byte[] value) {
         set(1, value);
         return this;
     }
@@ -44,8 +44,8 @@ public class FactionMembersRecord extends UpdatableRecordImpl<FactionMembersReco
     /**
      * Getter for <code>faction_members.uuid</code>.
      */
-    public String getUuid() {
-        return (String) get(1);
+    public byte[] getUuid() {
+        return (byte[]) get(1);
     }
 
     /**
@@ -68,7 +68,7 @@ public class FactionMembersRecord extends UpdatableRecordImpl<FactionMembersReco
     // -------------------------------------------------------------------------
 
     @Override
-    public Record1<String> key() {
+    public Record1<byte[]> key() {
         return (Record1) super.key();
     }
 
@@ -86,7 +86,7 @@ public class FactionMembersRecord extends UpdatableRecordImpl<FactionMembersReco
     /**
      * Create a detached, initialised FactionMembersRecord
      */
-    public FactionMembersRecord(String factionname, String uuid, String rank) {
+    public FactionMembersRecord(String factionname, byte[] uuid, String rank) {
         super(FactionMembers.FACTION_MEMBERS);
 
         setFactionname(factionname);

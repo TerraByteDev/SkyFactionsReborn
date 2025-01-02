@@ -5,6 +5,7 @@ package net.skullian.skyfactions.common.database.tables.pojos;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -16,7 +17,7 @@ public class TrustedPlayers implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Integer islandId;
-    private final String uuid;
+    private final byte[] uuid;
 
     public TrustedPlayers(TrustedPlayers value) {
         this.islandId = value.islandId;
@@ -25,7 +26,7 @@ public class TrustedPlayers implements Serializable {
 
     public TrustedPlayers(
         Integer islandId,
-        String uuid
+        byte[] uuid
     ) {
         this.islandId = islandId;
         this.uuid = uuid;
@@ -41,7 +42,7 @@ public class TrustedPlayers implements Serializable {
     /**
      * Getter for <code>trusted_players.uuid</code>.
      */
-    public String getUuid() {
+    public byte[] getUuid() {
         return this.uuid;
     }
 
@@ -64,7 +65,7 @@ public class TrustedPlayers implements Serializable {
             if (other.uuid != null)
                 return false;
         }
-        else if (!this.uuid.equals(other.uuid))
+        else if (!Arrays.equals(this.uuid, other.uuid))
             return false;
         return true;
     }
@@ -74,7 +75,7 @@ public class TrustedPlayers implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((this.islandId == null) ? 0 : this.islandId.hashCode());
-        result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
+        result = prime * result + ((this.uuid == null) ? 0 : Arrays.hashCode(this.uuid));
         return result;
     }
 
@@ -83,7 +84,7 @@ public class TrustedPlayers implements Serializable {
         StringBuilder sb = new StringBuilder("TrustedPlayers (");
 
         sb.append(islandId);
-        sb.append(", ").append(uuid);
+        sb.append(", ").append("[binary...]");
 
         sb.append(")");
         return sb.toString();

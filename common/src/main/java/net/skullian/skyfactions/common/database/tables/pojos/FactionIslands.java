@@ -5,6 +5,7 @@ package net.skullian.skyfactions.common.database.tables.pojos;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -21,7 +22,7 @@ public class FactionIslands implements Serializable {
     private final Integer defencecount;
     private final Integer gems;
     private final Long lastRaided;
-    private final String lastRaider;
+    private final byte[] lastRaider;
 
     public FactionIslands(FactionIslands value) {
         this.id = value.id;
@@ -40,7 +41,7 @@ public class FactionIslands implements Serializable {
         Integer defencecount,
         Integer gems,
         Long lastRaided,
-        String lastRaider
+        byte[] lastRaider
     ) {
         this.id = id;
         this.factionname = factionname;
@@ -96,7 +97,7 @@ public class FactionIslands implements Serializable {
     /**
      * Getter for <code>faction_islands.last_raider</code>.
      */
-    public String getLastRaider() {
+    public byte[] getLastRaider() {
         return this.lastRaider;
     }
 
@@ -149,7 +150,7 @@ public class FactionIslands implements Serializable {
             if (other.lastRaider != null)
                 return false;
         }
-        else if (!this.lastRaider.equals(other.lastRaider))
+        else if (!Arrays.equals(this.lastRaider, other.lastRaider))
             return false;
         return true;
     }
@@ -164,7 +165,7 @@ public class FactionIslands implements Serializable {
         result = prime * result + ((this.defencecount == null) ? 0 : this.defencecount.hashCode());
         result = prime * result + ((this.gems == null) ? 0 : this.gems.hashCode());
         result = prime * result + ((this.lastRaided == null) ? 0 : this.lastRaided.hashCode());
-        result = prime * result + ((this.lastRaider == null) ? 0 : this.lastRaider.hashCode());
+        result = prime * result + ((this.lastRaider == null) ? 0 : Arrays.hashCode(this.lastRaider));
         return result;
     }
 
@@ -178,7 +179,7 @@ public class FactionIslands implements Serializable {
         sb.append(", ").append(defencecount);
         sb.append(", ").append(gems);
         sb.append(", ").append(lastRaided);
-        sb.append(", ").append(lastRaider);
+        sb.append(", ").append("[binary...]");
 
         sb.append(")");
         return sb.toString();

@@ -5,6 +5,7 @@ package net.skullian.skyfactions.common.database.tables.pojos;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -16,7 +17,7 @@ public class ElectionVotes implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Integer election;
-    private final String uuid;
+    private final byte[] uuid;
     private final String votedfor;
 
     public ElectionVotes(ElectionVotes value) {
@@ -27,7 +28,7 @@ public class ElectionVotes implements Serializable {
 
     public ElectionVotes(
         Integer election,
-        String uuid,
+        byte[] uuid,
         String votedfor
     ) {
         this.election = election;
@@ -45,7 +46,7 @@ public class ElectionVotes implements Serializable {
     /**
      * Getter for <code>election_votes.uuid</code>.
      */
-    public String getUuid() {
+    public byte[] getUuid() {
         return this.uuid;
     }
 
@@ -75,7 +76,7 @@ public class ElectionVotes implements Serializable {
             if (other.uuid != null)
                 return false;
         }
-        else if (!this.uuid.equals(other.uuid))
+        else if (!Arrays.equals(this.uuid, other.uuid))
             return false;
         if (this.votedfor == null) {
             if (other.votedfor != null)
@@ -91,7 +92,7 @@ public class ElectionVotes implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((this.election == null) ? 0 : this.election.hashCode());
-        result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
+        result = prime * result + ((this.uuid == null) ? 0 : Arrays.hashCode(this.uuid));
         result = prime * result + ((this.votedfor == null) ? 0 : this.votedfor.hashCode());
         return result;
     }
@@ -101,7 +102,7 @@ public class ElectionVotes implements Serializable {
         StringBuilder sb = new StringBuilder("ElectionVotes (");
 
         sb.append(election);
-        sb.append(", ").append(uuid);
+        sb.append(", ").append("[binary...]");
         sb.append(", ").append(votedfor);
 
         sb.append(")");

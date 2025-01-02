@@ -64,7 +64,7 @@ public class ElectionVotes extends TableImpl<ElectionVotesRecord> {
     /**
      * The column <code>election_votes.uuid</code>.
      */
-    public final TableField<ElectionVotesRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.CLOB, this, "");
+    public final TableField<ElectionVotesRecord, byte[]> UUID = createField(DSL.name("uuid"), SQLDataType.BLOB, this, "");
 
     /**
      * The column <code>election_votes.votedFor</code>.

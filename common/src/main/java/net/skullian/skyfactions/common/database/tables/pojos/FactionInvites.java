@@ -5,6 +5,7 @@ package net.skullian.skyfactions.common.database.tables.pojos;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -16,8 +17,8 @@ public class FactionInvites implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String factionname;
-    private final String uuid;
-    private final String inviter;
+    private final byte[] uuid;
+    private final byte[] inviter;
     private final String type;
     private final Long timestamp;
 
@@ -31,8 +32,8 @@ public class FactionInvites implements Serializable {
 
     public FactionInvites(
         String factionname,
-        String uuid,
-        String inviter,
+        byte[] uuid,
+        byte[] inviter,
         String type,
         Long timestamp
     ) {
@@ -53,14 +54,14 @@ public class FactionInvites implements Serializable {
     /**
      * Getter for <code>faction_invites.uuid</code>.
      */
-    public String getUuid() {
+    public byte[] getUuid() {
         return this.uuid;
     }
 
     /**
      * Getter for <code>faction_invites.inviter</code>.
      */
-    public String getInviter() {
+    public byte[] getInviter() {
         return this.inviter;
     }
 
@@ -97,13 +98,13 @@ public class FactionInvites implements Serializable {
             if (other.uuid != null)
                 return false;
         }
-        else if (!this.uuid.equals(other.uuid))
+        else if (!Arrays.equals(this.uuid, other.uuid))
             return false;
         if (this.inviter == null) {
             if (other.inviter != null)
                 return false;
         }
-        else if (!this.inviter.equals(other.inviter))
+        else if (!Arrays.equals(this.inviter, other.inviter))
             return false;
         if (this.type == null) {
             if (other.type != null)
@@ -125,8 +126,8 @@ public class FactionInvites implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((this.factionname == null) ? 0 : this.factionname.hashCode());
-        result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
-        result = prime * result + ((this.inviter == null) ? 0 : this.inviter.hashCode());
+        result = prime * result + ((this.uuid == null) ? 0 : Arrays.hashCode(this.uuid));
+        result = prime * result + ((this.inviter == null) ? 0 : Arrays.hashCode(this.inviter));
         result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         result = prime * result + ((this.timestamp == null) ? 0 : this.timestamp.hashCode());
         return result;
@@ -137,8 +138,8 @@ public class FactionInvites implements Serializable {
         StringBuilder sb = new StringBuilder("FactionInvites (");
 
         sb.append(factionname);
-        sb.append(", ").append(uuid);
-        sb.append(", ").append(inviter);
+        sb.append(", ").append("[binary...]");
+        sb.append(", ").append("[binary...]");
         sb.append(", ").append(type);
         sb.append(", ").append(timestamp);
 

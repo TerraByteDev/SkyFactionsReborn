@@ -31,7 +31,7 @@ public class FactionAuditLogDatabaseManager extends AbstractTableManager {
                 for (AuditLogData auditLog : auditLogs) {
                     trx.dsl().insertInto(AUDIT_LOGS)
                             .columns(AUDIT_LOGS.FACTIONNAME, AUDIT_LOGS.TYPE, AUDIT_LOGS.UUID, AUDIT_LOGS.REPLACEMENTS, AUDIT_LOGS.TIMESTAMP)
-                            .values(auditLog.getFactionName(), auditLog.getType(), auditLog.getPlayer().getUniqueId().toString(), Arrays.toString(auditLog.getReplacements()), System.currentTimeMillis())
+                            .values(auditLog.getFactionName(), auditLog.getType(), fromUUID(auditLog.getPlayer().getUniqueId()), Arrays.toString(auditLog.getReplacements()), System.currentTimeMillis())
                             .execute();
                 }
             });
@@ -48,7 +48,7 @@ public class FactionAuditLogDatabaseManager extends AbstractTableManager {
             List<AuditLogData> data = new ArrayList<>();
             for (AuditLogsRecord log : results) {
                 data.add(new AuditLogData(
-                        SkyApi.getInstance().getUserManager().getUser(UUID.fromString(log.getUuid())),
+                        SkyApi.getInstance().getUserManager().getUser(fromBytes(log.getUuid())),
                         log.getFactionname(),
                         log.getType(),
                         TextUtility.convertFromString(log.getReplacements()),

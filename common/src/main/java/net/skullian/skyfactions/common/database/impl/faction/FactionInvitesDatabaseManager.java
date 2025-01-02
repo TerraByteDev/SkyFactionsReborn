@@ -32,7 +32,7 @@ public class FactionInvitesDatabaseManager extends AbstractTableManager {
                 for (InviteData invite : invites) {
                     trx.dsl().insertInto(FACTION_INVITES)
                             .columns(FACTION_INVITES.FACTIONNAME, FACTION_INVITES.UUID, FACTION_INVITES.INVITER, FACTION_INVITES.TYPE, FACTION_INVITES.TIMESTAMP)
-                            .values(invite.getFactionName(), invite.getPlayer().getUniqueId().toString(), (invite.getInviter() != null ? invite.getInviter().getUniqueId().toString() : ""), invite.getType(), invite.getTimestamp())
+                            .values(invite.getFactionName(), fromUUID(invite.getPlayer().getUniqueId()), (invite.getInviter() != null ? fromUUID(invite.getInviter().getUniqueId()) : "".getBytes()), invite.getType(), invite.getTimestamp())
                             .execute();
                 }
             });
@@ -49,8 +49,8 @@ public class FactionInvitesDatabaseManager extends AbstractTableManager {
             List<InviteData> data = new ArrayList<>();
             for (FactionInvitesRecord record : results) {
                 data.add(new InviteData(
-                        SkyApi.getInstance().getUserManager().getUser(UUID.fromString(record.getUuid())),
-                        SkyApi.getInstance().getUserManager().getUser(UUID.fromString(record.getInviter())),
+                        SkyApi.getInstance().getUserManager().getUser(fromBytes(record.getUuid())),
+                        SkyApi.getInstance().getUserManager().getUser(fromBytes(record.getInviter())),
                         record.getFactionname(),
                         record.getType(),
                         record.getTimestamp()
@@ -64,15 +64,15 @@ public class FactionInvitesDatabaseManager extends AbstractTableManager {
     public CompletableFuture<List<InviteData>> getInvitesOfPlayer(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
             Result<FactionInvitesRecord> results = ctx.selectFrom(FACTION_INVITES)
-                    .where(FACTION_INVITES.UUID.eq(playerUUID.toString()), FACTION_INVITES.TYPE.eq("outgoing"))
+                    .where(FACTION_INVITES.UUID.eq(fromUUID(playerUUID)), FACTION_INVITES.TYPE.eq("outgoing"))
                     .orderBy(FACTION_INVITES.TIMESTAMP.desc())
                     .fetch();
 
             List<InviteData> data = new ArrayList<>();
             for (FactionInvitesRecord record : results) {
                 data.add(new InviteData(
-                        SkyApi.getInstance().getUserManager().getUser(UUID.fromString(record.getUuid())),
-                        SkyApi.getInstance().getUserManager().getUser(UUID.fromString(record.getInviter())),
+                        SkyApi.getInstance().getUserManager().getUser(fromBytes(record.getUuid())),
+                        SkyApi.getInstance().getUserManager().getUser(fromBytes(record.getInviter())),
                         record.getFactionname(),
                         record.getType(),
                         record.getTimestamp()
@@ -86,7 +86,7 @@ public class FactionInvitesDatabaseManager extends AbstractTableManager {
     public CompletableFuture<JoinRequestData> getPlayerJoinRequest(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
             FactionInvitesRecord result = ctx.selectFrom(FACTION_INVITES)
-                    .where(FACTION_INVITES.UUID.eq(playerUUID.toString()), FACTION_INVITES.TYPE.eq("incoming"))
+                    .where(FACTION_INVITES.UUID.eq(fromUUID(playerUUID)), FACTION_INVITES.TYPE.eq("incoming"))
                     .fetchOne();
 
             return result != null ? new JoinRequestData(
@@ -102,7 +102,7 @@ public class FactionInvitesDatabaseManager extends AbstractTableManager {
             ctx.transaction((Configuration trx) -> {
                 for (InviteData invite : invites) {
                     trx.dsl().deleteFrom(FACTION_INVITES)
-                            .where(FACTION_INVITES.FACTIONNAME.eq(invite.getFactionName()), FACTION_INVITES.UUID.eq(invite.getPlayer().getUniqueId().toString()), FACTION_INVITES.TYPE.eq(invite.getType()))
+                            .where(FACTION_INVITES.FACTIONNAME.eq(invite.getFactionName()), FACTION_INVITES.UUID.eq(fromUUID(invite.getPlayer().getUniqueId())), FACTION_INVITES.TYPE.eq(invite.getType()))
                             .execute();
                 }
             });

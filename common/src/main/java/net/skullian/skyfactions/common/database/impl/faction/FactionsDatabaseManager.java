@@ -45,7 +45,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
 
             ctx.insertInto(FACTION_MEMBERS)
                     .columns(FACTION_MEMBERS.FACTIONNAME, FACTION_MEMBERS.UUID, FACTION_MEMBERS.RANK)
-                    .values(factionName, factionOwner.getUniqueId().toString(), "owner")
+                    .values(factionName, fromUUID(factionOwner.getUniqueId()), "owner")
                     .execute();
         }, executor);
     }
@@ -83,7 +83,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
     public CompletableFuture<Faction> getFaction(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
             FactionMembersRecord result = ctx.selectFrom(FACTION_MEMBERS)
-                    .where(FACTION_MEMBERS.UUID.eq(playerUUID.toString()))
+                    .where(FACTION_MEMBERS.UUID.eq(fromUUID(playerUUID)))
                     .fetchOne();
 
             return result != null ? getFaction(result.getFactionname()).join() : null;
@@ -216,7 +216,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
                 for (SkyUser player : players) {
                     trx.dsl().insertInto(FACTION_MEMBERS)
                             .columns(FACTION_MEMBERS.FACTIONNAME, FACTION_MEMBERS.UUID, FACTION_MEMBERS.RANK)
-                            .values(factionName, player.getUniqueId().toString(), "member")
+                            .values(factionName, fromUUID(player.getUniqueId()), "member")
                             .execute();
                 }
             });
@@ -229,7 +229,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
                 for (Map.Entry<UUID, RankType> entry : ranks.entrySet()) {
                     trx.dsl().update(FACTION_MEMBERS)
                             .set(FACTION_MEMBERS.RANK, entry.getValue().getRankValue())
-                            .where(FACTION_MEMBERS.UUID.eq(entry.getKey().toString()), FACTION_MEMBERS.FACTIONNAME.eq(factionName))
+                            .where(FACTION_MEMBERS.UUID.eq(fromUUID(entry.getKey())), FACTION_MEMBERS.FACTIONNAME.eq(factionName))
                             .execute();
                 }
             });
@@ -237,7 +237,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
     }
 
     public CompletableFuture<Boolean> isInFaction(UUID playerUUID) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_MEMBERS, FACTION_MEMBERS.UUID.eq(playerUUID.toString())), executor);
+        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_MEMBERS, FACTION_MEMBERS.UUID.eq(fromUUID(playerUUID))), executor);
     }
 
     public CompletableFuture<SkyUser> getFactionOwner(String factionName) {
@@ -246,7 +246,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
                     .where(FACTION_MEMBERS.FACTIONNAME.eq(factionName), FACTION_MEMBERS.RANK.eq("owner"))
                     .fetchOne();
 
-            return result != null ? SkyApi.getInstance().getUserManager().getUser(UUID.fromString(result.getUuid())) : null;
+            return result != null ? SkyApi.getInstance().getUserManager().getUser(fromBytes(result.getUuid())) : null;
         }, executor);
     }
 
@@ -258,7 +258,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
 
             List<SkyUser> players = new ArrayList<>();
             for (FactionMembersRecord member : results) {
-                SkyUser player = SkyApi.getInstance().getUserManager().getUser(UUID.fromString(member.getUuid()));
+                SkyUser player = SkyApi.getInstance().getUserManager().getUser(fromBytes(member.getUuid()));
                 players.add(player);
             }
 
@@ -273,7 +273,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
             ctx.transaction((Configuration trx) -> {
                 for (SkyUser player : players) {
                     trx.dsl().deleteFrom(FACTION_MEMBERS)
-                            .where(FACTION_MEMBERS.UUID.eq(player.getUniqueId().toString()), FACTION_MEMBERS.FACTIONNAME.eq(factionName))
+                            .where(FACTION_MEMBERS.UUID.eq(fromUUID(player.getUniqueId())), FACTION_MEMBERS.FACTIONNAME.eq(factionName))
                             .execute();
                 }
             });
@@ -288,7 +288,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
                 for (SkyUser player : players) {
                     trx.dsl().insertInto(FACTION_BANS)
                             .columns(FACTION_BANS.FACTIONNAME, FACTION_BANS.UUID)
-                            .values(factionName, player.getUniqueId().toString())
+                            .values(factionName, fromUUID(player.getUniqueId()))
                             .execute();
                 }
             });
@@ -300,7 +300,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
             ctx.transaction((Configuration trx) -> {
                 for (SkyUser player : players) {
                     trx.dsl().deleteFrom(FACTION_BANS)
-                            .where(FACTION_BANS.UUID.eq(player.getUniqueId().toString()), FACTION_BANS.FACTIONNAME.eq(factionName))
+                            .where(FACTION_BANS.UUID.eq(fromUUID(player.getUniqueId())), FACTION_BANS.FACTIONNAME.eq(factionName))
                             .execute();
                 }
             });
@@ -315,7 +315,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
 
             List<SkyUser> players = new ArrayList<>();
             for (FactionBansRecord bannedPlayer : results) {
-                SkyUser player = SkyApi.getInstance().getUserManager().getUser(UUID.fromString(bannedPlayer.getUuid()));
+                SkyUser player = SkyApi.getInstance().getUserManager().getUser(fromBytes(bannedPlayer.getUuid()));
                 players.add(player);
             }
 
@@ -324,7 +324,7 @@ public class FactionsDatabaseManager extends AbstractTableManager {
     }
 
     public CompletableFuture<Boolean> isPlayerBanned(SkyUser player, String factionName) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_BANS, FACTION_BANS.FACTIONNAME.eq(factionName), FACTION_BANS.UUID.eq(player.getUniqueId().toString())), executor);
+        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(FACTION_BANS, FACTION_BANS.FACTIONNAME.eq(factionName), FACTION_BANS.UUID.eq(fromUUID(player.getUniqueId()))), executor);
     }
 
 }

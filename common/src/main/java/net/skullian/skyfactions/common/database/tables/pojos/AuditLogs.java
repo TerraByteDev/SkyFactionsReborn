@@ -5,6 +5,7 @@ package net.skullian.skyfactions.common.database.tables.pojos;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -17,7 +18,7 @@ public class AuditLogs implements Serializable {
 
     private final String factionname;
     private final String type;
-    private final String uuid;
+    private final byte[] uuid;
     private final String replacements;
     private final Long timestamp;
 
@@ -32,7 +33,7 @@ public class AuditLogs implements Serializable {
     public AuditLogs(
         String factionname,
         String type,
-        String uuid,
+        byte[] uuid,
         String replacements,
         Long timestamp
     ) {
@@ -60,7 +61,7 @@ public class AuditLogs implements Serializable {
     /**
      * Getter for <code>audit_logs.uuid</code>.
      */
-    public String getUuid() {
+    public byte[] getUuid() {
         return this.uuid;
     }
 
@@ -103,7 +104,7 @@ public class AuditLogs implements Serializable {
             if (other.uuid != null)
                 return false;
         }
-        else if (!this.uuid.equals(other.uuid))
+        else if (!Arrays.equals(this.uuid, other.uuid))
             return false;
         if (this.replacements == null) {
             if (other.replacements != null)
@@ -126,7 +127,7 @@ public class AuditLogs implements Serializable {
         int result = 1;
         result = prime * result + ((this.factionname == null) ? 0 : this.factionname.hashCode());
         result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
-        result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
+        result = prime * result + ((this.uuid == null) ? 0 : Arrays.hashCode(this.uuid));
         result = prime * result + ((this.replacements == null) ? 0 : this.replacements.hashCode());
         result = prime * result + ((this.timestamp == null) ? 0 : this.timestamp.hashCode());
         return result;
@@ -138,7 +139,7 @@ public class AuditLogs implements Serializable {
 
         sb.append(factionname);
         sb.append(", ").append(type);
-        sb.append(", ").append(uuid);
+        sb.append(", ").append("[binary...]");
         sb.append(", ").append(replacements);
         sb.append(", ").append(timestamp);
 

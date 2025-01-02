@@ -36,7 +36,7 @@ public class PlayerIslandsDatabaseManager extends AbstractTableManager {
     public CompletableFuture<Boolean> hasIsland(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
             Result<IslandsRecord> result = ctx.selectFrom(ISLANDS)
-                    .where(ISLANDS.UUID.eq(playerUUID.toString()))
+                    .where(ISLANDS.UUID.eq(fromUUID(playerUUID)))
                     .fetch();
 
             return !result.isEmpty();
@@ -48,7 +48,7 @@ public class PlayerIslandsDatabaseManager extends AbstractTableManager {
             if (action == null) return;
             ctx.insertInto(ISLANDS)
                     .columns(ISLANDS.ID, ISLANDS.UUID, ISLANDS.LEVEL, ISLANDS.GEMS, ISLANDS.RUNES, ISLANDS.DEFENCECOUNT, ISLANDS.LAST_RAIDED, ISLANDS.LAST_RAIDER, ISLANDS.CREATED)
-                    .values(action.getId(), playerUUID.toString(), 0, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_PLAYER_IMMUNITY.getLong(), "N/A", System.currentTimeMillis())
+                    .values(action.getId(), fromUUID(playerUUID), 0, 0, 0, 0, System.currentTimeMillis() + Settings.RAIDING_PLAYER_IMMUNITY.getLong(), "N/A".getBytes(), System.currentTimeMillis())
                     .execute();
         }, executor);
     }
@@ -63,7 +63,7 @@ public class PlayerIslandsDatabaseManager extends AbstractTableManager {
     public CompletableFuture<PlayerIsland> getPlayerIsland(UUID playerUUID) {
         return CompletableFuture.supplyAsync(() -> {
            IslandsRecord result = ctx.selectFrom(ISLANDS)
-                   .where(ISLANDS.UUID.eq(playerUUID.toString()))
+                   .where(ISLANDS.UUID.eq(fromUUID(playerUUID)))
                    .fetchOne();
 
            return result != null ? new PlayerIsland(result.getId()) : null;
@@ -98,10 +98,10 @@ public class PlayerIslandsDatabaseManager extends AbstractTableManager {
     }
 
     public CompletableFuture<Void> removeIsland(SkyUser player) {
-        SLogger.info("Removing island [{}] from Database.", player.getUniqueId().toString());
+        SLogger.info("Removing island [{}] from Database.", player.getUniqueId());
         return CompletableFuture.runAsync(() -> {
             ctx.deleteFrom(ISLANDS)
-                    .where(ISLANDS.UUID.eq(player.getUniqueId().toString()))
+                    .where(ISLANDS.UUID.eq(fromUUID(player.getUniqueId())))
                     .execute();
         }, executor);
     }
@@ -115,9 +115,9 @@ public class PlayerIslandsDatabaseManager extends AbstractTableManager {
             List<IslandRaidData> islands = new ArrayList<>();
             for (IslandsRecord data : results) {
                 islands.add(new IslandRaidData(
-                        data.get(ISLANDS.ID),
-                        data.get(ISLANDS.UUID),
-                        data.get(ISLANDS.LAST_RAIDED)
+                        data.getId(),
+                        fromBytes(data.getUuid()).toString(),
+                        data.getLastRaided()
                 ));
             }
 
@@ -128,14 +128,14 @@ public class PlayerIslandsDatabaseManager extends AbstractTableManager {
     // ------------------ TRUSTING ------------------ //
 
     public CompletableFuture<Boolean> isPlayerTrusted(UUID playerUUID, int id) {
-        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(TRUSTED_PLAYERS, TRUSTED_PLAYERS.UUID.eq(playerUUID.toString()), TRUSTED_PLAYERS.ISLAND_ID.eq(id)), executor);
+        return CompletableFuture.supplyAsync(() -> ctx.fetchExists(TRUSTED_PLAYERS, TRUSTED_PLAYERS.UUID.eq(fromUUID(playerUUID)), TRUSTED_PLAYERS.ISLAND_ID.eq(id)), executor);
     }
 
     public CompletableFuture<Void> trustPlayer(UUID playerUUID, int islandID) {
         return CompletableFuture.runAsync(() -> {
             ctx.insertInto(TRUSTED_PLAYERS)
                     .columns(TRUSTED_PLAYERS.ISLAND_ID, TRUSTED_PLAYERS.UUID)
-                    .values(islandID, playerUUID.toString())
+                    .values(islandID, fromUUID(playerUUID))
                     .execute();
         }, executor);
     }
@@ -143,7 +143,7 @@ public class PlayerIslandsDatabaseManager extends AbstractTableManager {
     public CompletableFuture<Void> removePlayerTrust(UUID playerUUID, int islandID) {
         return CompletableFuture.runAsync(() -> {
             ctx.deleteFrom(TRUSTED_PLAYERS)
-                    .where(TRUSTED_PLAYERS.ISLAND_ID.eq(islandID), TRUSTED_PLAYERS.UUID.eq(playerUUID.toString()))
+                    .where(TRUSTED_PLAYERS.ISLAND_ID.eq(islandID), TRUSTED_PLAYERS.UUID.eq(fromUUID(playerUUID)))
                     .execute();
         }, executor);
     }
@@ -164,7 +164,7 @@ public class PlayerIslandsDatabaseManager extends AbstractTableManager {
 
             List<SkyUser> players = new ArrayList<>();
             for (TrustedPlayersRecord data : results) {
-                SkyUser player = SkyApi.getInstance().getUserManager().getUser(UUID.fromString(data.get(TRUSTED_PLAYERS.UUID)));
+                SkyUser player = SkyApi.getInstance().getUserManager().getUser(fromBytes(data.getUuid()));
                 players.add(player);
             }
 

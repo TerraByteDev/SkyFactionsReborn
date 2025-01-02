@@ -5,6 +5,7 @@ package net.skullian.skyfactions.common.database.tables.pojos;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -15,7 +16,7 @@ public class PlayerData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String uuid;
+    private final byte[] uuid;
     private final String discordId;
     private final Long lastRaid;
     private final String locale;
@@ -28,7 +29,7 @@ public class PlayerData implements Serializable {
     }
 
     public PlayerData(
-        String uuid,
+        byte[] uuid,
         String discordId,
         Long lastRaid,
         String locale
@@ -42,7 +43,7 @@ public class PlayerData implements Serializable {
     /**
      * Getter for <code>player_data.uuid</code>.
      */
-    public String getUuid() {
+    public byte[] getUuid() {
         return this.uuid;
     }
 
@@ -80,7 +81,7 @@ public class PlayerData implements Serializable {
             if (other.uuid != null)
                 return false;
         }
-        else if (!this.uuid.equals(other.uuid))
+        else if (!Arrays.equals(this.uuid, other.uuid))
             return false;
         if (this.discordId == null) {
             if (other.discordId != null)
@@ -107,7 +108,7 @@ public class PlayerData implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
+        result = prime * result + ((this.uuid == null) ? 0 : Arrays.hashCode(this.uuid));
         result = prime * result + ((this.discordId == null) ? 0 : this.discordId.hashCode());
         result = prime * result + ((this.lastRaid == null) ? 0 : this.lastRaid.hashCode());
         result = prime * result + ((this.locale == null) ? 0 : this.locale.hashCode());
@@ -118,7 +119,7 @@ public class PlayerData implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("PlayerData (");
 
-        sb.append(uuid);
+        sb.append("[binary...]");
         sb.append(", ").append(discordId);
         sb.append(", ").append(lastRaid);
         sb.append(", ").append(locale);

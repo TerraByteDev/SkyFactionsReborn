@@ -5,6 +5,7 @@ package net.skullian.skyfactions.common.database.tables.pojos;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 
 /**
@@ -16,7 +17,7 @@ public class FactionMembers implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String factionname;
-    private final String uuid;
+    private final byte[] uuid;
     private final String rank;
 
     public FactionMembers(FactionMembers value) {
@@ -27,7 +28,7 @@ public class FactionMembers implements Serializable {
 
     public FactionMembers(
         String factionname,
-        String uuid,
+        byte[] uuid,
         String rank
     ) {
         this.factionname = factionname;
@@ -45,7 +46,7 @@ public class FactionMembers implements Serializable {
     /**
      * Getter for <code>faction_members.uuid</code>.
      */
-    public String getUuid() {
+    public byte[] getUuid() {
         return this.uuid;
     }
 
@@ -75,7 +76,7 @@ public class FactionMembers implements Serializable {
             if (other.uuid != null)
                 return false;
         }
-        else if (!this.uuid.equals(other.uuid))
+        else if (!Arrays.equals(this.uuid, other.uuid))
             return false;
         if (this.rank == null) {
             if (other.rank != null)
@@ -91,7 +92,7 @@ public class FactionMembers implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((this.factionname == null) ? 0 : this.factionname.hashCode());
-        result = prime * result + ((this.uuid == null) ? 0 : this.uuid.hashCode());
+        result = prime * result + ((this.uuid == null) ? 0 : Arrays.hashCode(this.uuid));
         result = prime * result + ((this.rank == null) ? 0 : this.rank.hashCode());
         return result;
     }
@@ -101,7 +102,7 @@ public class FactionMembers implements Serializable {
         StringBuilder sb = new StringBuilder("FactionMembers (");
 
         sb.append(factionname);
-        sb.append(", ").append(uuid);
+        sb.append(", ").append("[binary...]");
         sb.append(", ").append(rank);
 
         sb.append(")");

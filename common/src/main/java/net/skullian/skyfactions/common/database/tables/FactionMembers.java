@@ -57,7 +57,7 @@ public class FactionMembers extends TableImpl<FactionMembersRecord> {
     /**
      * The column <code>faction_members.uuid</code>.
      */
-    public final TableField<FactionMembersRecord, String> UUID = createField(DSL.name("uuid"), SQLDataType.VARCHAR(36), this, "");
+    public final TableField<FactionMembersRecord, byte[]> UUID = createField(DSL.name("uuid"), SQLDataType.BLOB, this, "");
 
     /**
      * The column <code>faction_members.rank</code>.
