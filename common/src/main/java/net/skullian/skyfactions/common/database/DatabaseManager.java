@@ -22,10 +22,7 @@ import org.jooq.impl.DefaultExecuteListenerProvider;
 import org.sqlite.JDBC;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -74,14 +71,19 @@ public class DatabaseManager {
 
             this.url = JDBC.PREFIX + file.getAbsolutePath();
 
+            Properties properties = new Properties();
+            properties.putAll(Map.of(
+                    "encoding", "UTF-8",
+                    "enforceForeignKeys", "true",
+                    "synchronous", "NORMAL",
+                    "journalMode", "WAL"
+            ));
+
             sqliteConfig.setDataSourceClassName("org.sqlite.SQLiteDataSource");
             sqliteConfig.setConnectionTestQuery("SELECT 1");
             sqliteConfig.addDataSourceProperty("url", JDBC.PREFIX + file.getAbsolutePath());
             sqliteConfig.setMaxLifetime(maxLifetime);
-            sqliteConfig.addDataSourceProperty("encoding", "UTF-8");
-            sqliteConfig.addDataSourceProperty("enforceForeignKeys", "true");
-            sqliteConfig.addDataSourceProperty("synchronous", "NORMAL");
-            sqliteConfig.addDataSourceProperty("journalMode", "WAL");
+            sqliteConfig.setDataSourceProperties(properties);
             sqliteConfig.setPoolName("SkyFactions SQLite Pool");
             sqliteConfig.setMaximumPoolSize(maxPoolSize);
 
@@ -95,7 +97,7 @@ public class DatabaseManager {
             this.dataSource = dataSource;
             this.dialect = SQLDialect.SQLITE;
             this.ctx = DSL.using(configuration);
-        } else if (type.equals("sql")) {
+        } else if (type.equalsIgnoreCase("mysql") || type.equalsIgnoreCase("mariadb")) {
 
             String rawHost = Settings.DATABASE_HOST.getString();
             String databaseName = Settings.DATABASE_NAME.getString();
@@ -139,13 +141,12 @@ public class DatabaseManager {
             ));
 
             HostAndPort host = HostAndPort.fromHost(rawHost);
-            this.url = String.format("jdbc:mysql://%s:%d/%s",
-                    host.getHost(), host.getPortOrDefault(3306), databaseName);
+            this.url = String.format("jdbc:mysql://%s:%d/%s?useSSL=%s",
+                    host.getHost(), host.getPortOrDefault(3306), databaseName, Settings.DATABASE_USE_SSL.getBoolean());
 
             HikariConfig mysqlConfig = new HikariConfig();
             mysqlConfig.setPoolName("SkyFactions MySQL Pool");
-            mysqlConfig.setJdbcUrl(String.format("jdbc:mysql://%s:%d/%s?useSSL=%s",
-                    host.getHost(), host.getPort(), databaseName, Settings.DATABASE_USE_SSL.getBoolean()));
+            mysqlConfig.setJdbcUrl(url);
             mysqlConfig.setMaxLifetime(maxLifetime);
             mysqlConfig.setUsername(username);
             mysqlConfig.setPassword(password);
@@ -161,7 +162,7 @@ public class DatabaseManager {
 
             configuration
                     .set(dataSource)
-                    .set(SQLDialect.MYSQL);
+                    .set(SQLDialect.valueOf(type.toUpperCase(Locale.ROOT)));
 
             this.dataSource = dataSource;
             this.dialect = SQLDialect.MYSQL;

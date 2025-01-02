@@ -43,17 +43,17 @@ public class SLogger {
     }
 
     public static void info(Object message, Object... args) {
-        Component infoLog = MiniMessage.miniMessage().deserialize(PREFIX + " <#4294ed>" + format(message, args) + "<#4294ed><reset>");
+        Component infoLog = MiniMessage.miniMessage().deserialize(PREFIX + " <#4294ed>" + format(message, args) + "<reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(infoLog);
     }
 
     public static void warn(Object message, Object... args) {
-        Component warnLog = MiniMessage.miniMessage().deserialize(PREFIX + " <#f28f24>" + format(message, args) + "<#f28f24><reset>");
+        Component warnLog = MiniMessage.miniMessage().deserialize(PREFIX + " <#f28f24>" + format(message, args) + "<reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(warnLog);
     }
 
     public static void fatal(Object message, Object... args) {
-        Component fatalLog = MiniMessage.miniMessage().deserialize(PREFIX + " <#e73f38>" + format(message, args) + "<#e73f38><reset>");
+        Component fatalLog = MiniMessage.miniMessage().deserialize(PREFIX + " <#e73f38>" + format(message, args) + "<reset>");
         SkyApi.getInstance().getConsoleAudience().sendMessage(fatalLog);
     }
 

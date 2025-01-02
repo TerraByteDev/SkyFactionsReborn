@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.common.database.migrations;
 
+import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.util.MigrationUtil;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
@@ -15,92 +16,92 @@ public class V1__Init extends BaseJavaMigration {
 
         ctx.createTableIfNotExists("islands")
                 .column("id", INTEGER)
-                .column("uuid", VARCHAR)
+                .column("uuid", VARCHAR(36))
                 .column("level", INTEGER)
                 .column("gems", INTEGER)
                 .column("runes", INTEGER)
                 .column("defenceCount", INTEGER)
                 .column("last_raided", BIGINT)
-                .column("last_raider", VARCHAR)
+                .column("last_raider", VARCHAR(36))
                 .primaryKey("id")
                 .execute();
 
         ctx.createTableIfNotExists("player_data")
-                .column("uuid", VARCHAR)
-                .column("faction", VARCHAR)
-                .column("discord_id", VARCHAR)
+                .column("uuid", VARCHAR(36))
+                .column("faction", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("discord_id", VARCHAR(18))
                 .column("last_raid", BIGINT)
-                .column("locale", VARCHAR)
+                .column("locale", VARCHAR(4))
                 .primaryKey("uuid")
                 .execute();
 
         ctx.createTableIfNotExists("faction_islands")
                 .column("id", INTEGER)
-                .column("factionName", VARCHAR)
+                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
                 .column("runes", INTEGER)
                 .column("defenceCount", INTEGER)
                 .column("gems", INTEGER)
                 .column("last_raided", BIGINT)
-                .column("last_raider", VARCHAR)
+                .column("last_raider", VARCHAR(36))
                 .primaryKey("id")
                 .execute();
 
         ctx.createTableIfNotExists("factions")
-                .column("name", VARCHAR)
-                .column("motd", VARCHAR)
+                .column("name", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("motd", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
                 .column("level", INTEGER)
                 .column("last_raid", BIGINT)
-                .column("locale", VARCHAR)
+                .column("locale", VARCHAR(4))
                 .primaryKey("name")
                 .execute();
 
         ctx.createTableIfNotExists("faction_members")
-                .column("factionName", VARCHAR)
-                .column("uuid", VARCHAR)
-                .column("rank", VARCHAR)
+                .column("factionName", VARCHAR(4))
+                .column("uuid", VARCHAR(36))
+                .column("rank", VARCHAR(128))
                 .primaryKey("uuid")
                 .execute();
 
         ctx.createTableIfNotExists("trusted_players")
                 .column("island_id", INTEGER)
-                .column("uuid", VARCHAR)
+                .column("uuid", VARCHAR(36))
                 .execute();
 
         ctx.createTableIfNotExists("defence_locations")
-                .column("uuid", VARCHAR)
-                .column("type", VARCHAR)
-                .column("factionName", VARCHAR)
+                .column("uuid", VARCHAR(36))
+                .column("type", VARCHAR(128))
+                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
                 .column("x", INTEGER)
                 .column("y", INTEGER)
                 .column("z", INTEGER)
                 .execute();
 
         ctx.createTableIfNotExists("audit_logs")
-                .column("factionName", VARCHAR)
-                .column("type", VARCHAR)
-                .column("uuid", VARCHAR)
-                .column("replacements", VARCHAR)
+                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("type", VARCHAR(128))
+                .column("uuid", VARCHAR(36))
+                .column("replacements", VARCHAR(5120))
                 .column("timestamp", BIGINT)
                 .execute();
 
         ctx.createTableIfNotExists("faction_bans")
-                .column("factionName", VARCHAR)
-                .column("uuid", VARCHAR)
+                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("uuid", VARCHAR(36))
                 .execute();
 
         ctx.createTableIfNotExists("faction_invites")
-                .column("factionName", VARCHAR)
-                .column("uuid", VARCHAR)
-                .column("inviter", VARCHAR)
-                .column("type", VARCHAR)
-                .column("accepted", INTEGER)
+                .column("factionName", VARCHAR(Settings.FACTION_CREATION_MAX_LENGTH.getInt()))
+                .column("uuid", VARCHAR(36))
+                .column("inviter", VARCHAR(36))
+                .column("type", VARCHAR(128))
+                .column("accepted", BOOLEAN)
                 .column("timestamp", BIGINT)
                 .execute();
 
         ctx.createTableIfNotExists("notifications")
-                .column("uuid", VARCHAR)
-                .column("type", VARCHAR)
-                .column("replacements", VARCHAR)
+                .column("uuid", VARCHAR(36))
+                .column("type", VARCHAR(128))
+                .column("replacements", VARCHAR(5120))
                 .column("timestamp", BIGINT)
                 .execute();
     }

@@ -46,6 +46,7 @@ public class SkyLoader implements PluginLoader {
         centralResolver.addDependency(new Dependency(new DefaultArtifact("net.kyori:adventure-platform-bukkit:4.3.4"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("org.jooq:jooq:3.19.16"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("org.flywaydb:flyway-core:11.1.0"), null));
+        centralResolver.addDependency(new Dependency(new DefaultArtifact("org.flywaydb:flyway-mysql:11.1.0"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.google.guava:guava:33.3.1-jre"), null));
 
 
