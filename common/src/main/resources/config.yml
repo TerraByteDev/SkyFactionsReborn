@@ -34,7 +34,7 @@ database:
 
   # Max lifetime for the database connection.
   # Format: MILLISECONDS
-  max-lifetime: 30000
+  max-lifetime: 1800000
 
   # Max connection pool size.
   # Applies for both SQLite and MySQL

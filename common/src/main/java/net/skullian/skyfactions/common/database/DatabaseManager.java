@@ -122,7 +122,7 @@ public class DatabaseManager {
             }
 
             if (!missingProperties.isEmpty()) {
-                throw new IllegalStateException("Missing MySQL Configuration Properties: " + missingProperties);
+                throw new IllegalStateException("Missing Database Configuration Properties: " + missingProperties);
             }
 
             Properties properties = new Properties();
@@ -130,21 +130,30 @@ public class DatabaseManager {
                     "prepStmtCacheSize", "250",
                     "useLocalSessionState", "true",
                     "useLocalTransactionState", "true",
-                    "useSererPrepStmts", "true",
-                    "cachePrepStmts", "true",
-
+                    "useServerPrepStmts", "true",
+                    "cachePrepStmts", "true"
+            ));
+            properties.putAll(Map.of(
                     "rewriteBatchedStatements", "true",
                     "maintainTimeStats", "false",
                     "cacheResultSetMetadata", "true",
                     "cacheServerConfiguration", "true",
-                    "elideSetAutoCommits", "true"
+                    "elideSetAutoCommits", "true",
+                    "prepStmtCacheSqlLimit", "2048"
             ));
 
-            HostAndPort host = HostAndPort.fromHost(rawHost);
-            this.url = String.format("jdbc:mysql://%s:%d/%s?useSSL=%s",
-                    host.getHost(), host.getPortOrDefault(3306), databaseName, Settings.DATABASE_USE_SSL.getBoolean());
+
+            HostAndPort host = HostAndPort.fromString(rawHost);
+            this.url = String.format("jdbc:%s://%s:%d/%s?useSSL=%s",
+                    type.equalsIgnoreCase("mysql") ? "mysql" : "postgresql",
+                    host.getHost(),
+                    host.getPortOrDefault(3306),
+                    databaseName,
+                    Settings.DATABASE_USE_SSL.getBoolean()
+            );
 
             HikariConfig mysqlConfig = new HikariConfig();
+            mysqlConfig.setDataSourceProperties(properties);
             mysqlConfig.setPoolName("SkyFactions MySQL Pool");
             mysqlConfig.setJdbcUrl(url);
             mysqlConfig.setMaxLifetime(maxLifetime);
@@ -154,10 +163,11 @@ public class DatabaseManager {
             mysqlConfig.setMinimumIdle(maxPoolSize);
             mysqlConfig.setKeepaliveTime(0);
             mysqlConfig.setConnectionTimeout(5000);
-            mysqlConfig.setDataSourceProperties(properties);
 
-            SLogger.info("Using MySQL database '{}' on: {}:{}.",
-                    databaseName, host.getHost(), host.getPortOrDefault(3306));
+            if (type.equalsIgnoreCase("postgres")) mysqlConfig.setDriverClassName("org.postgresql.Driver");
+
+            SLogger.info("Using {} database '{}' on: {}:{}.",
+                    type.equalsIgnoreCase("mysql") ? "MySQL" : "PostgreSQL", databaseName, host.getHost(), host.getPortOrDefault(3306));
             HikariDataSource dataSource = new HikariDataSource(mysqlConfig);
 
             configuration
@@ -165,8 +175,8 @@ public class DatabaseManager {
                     .set(SQLDialect.valueOf(type.toUpperCase(Locale.ROOT)));
 
             this.dataSource = dataSource;
-            this.dialect = SQLDialect.MYSQL;
-            this.ctx = DSL.using(dataSource, SQLDialect.MYSQL);
+            this.dialect = SQLDialect.valueOf(type.toUpperCase(Locale.ROOT));
+            this.ctx = DSL.using(dataSource, SQLDialect.valueOf(type.toUpperCase(Locale.ROOT)));
         } else {
             ErrorUtil.handleDatabaseSetupError(new IllegalStateException("Unknown database type: " + type));
         }
