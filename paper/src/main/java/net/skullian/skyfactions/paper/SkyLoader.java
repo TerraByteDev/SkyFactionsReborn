@@ -27,7 +27,7 @@ public class SkyLoader implements PluginLoader {
         centralResolver.addRepository(new RemoteRepository.Builder("maven-central", "default", "https://repo1.maven.org/maven2/").build());
 
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.zaxxer:HikariCP:6.2.1"), null));
-        centralResolver.addDependency(new Dependency(new DefaultArtifact("org.xerial:sqlite-jdbc:3.47.1.0"), null));
+        centralResolver.addDependency(new Dependency(new DefaultArtifact("org.xerial:sqlite-jdbc:3.47.2.0"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("net.dv8tion:JDA:5.2.2"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.fasterxml.jackson.core:jackson-databind:2.18.1"), null));
         centralResolver.addDependency(new Dependency(new DefaultArtifact("com.jeff-media:custom-block-data:2.2.3"), null));
