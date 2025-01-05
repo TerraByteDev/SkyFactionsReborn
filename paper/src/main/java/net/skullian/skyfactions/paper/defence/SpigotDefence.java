@@ -63,7 +63,7 @@ public abstract class SpigotDefence extends Defence {
                 SkyApi.getInstance().getCacheService().getEntry(UUID.fromString(getData().getUUIDFactionName()))
                         .removeDefence(getDefenceLocation());
             }
-        });
+        }, SkyApi.getInstance().getDefenceFactory().getDefenceExecutor());
     }
 
     @Override

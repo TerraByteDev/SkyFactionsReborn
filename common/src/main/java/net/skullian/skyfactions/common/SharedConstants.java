@@ -1,11 +1,23 @@
 package net.skullian.skyfactions.common;
 
+import net.skullian.skyfactions.common.config.types.Settings;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @ApiStatus.Internal
 public class SharedConstants {
 
-    public static final String PLUGIN_NAMESPACE = "skyfactionsreborn"; // Namespace of all NamespacedKeys
+    private static final BasicThreadFactory THREAD_FACTORY = new BasicThreadFactory.Builder()
+            .namingPattern("SkyFactions-Global-Executor-%s")
+            .build();
+    public static ExecutorService GLOBAL_EXECUTOR;
+
+    static {
+        GLOBAL_EXECUTOR = Executors.newFixedThreadPool(Settings.GLOBAL_EXECUTOR_SIZE.getInt(), THREAD_FACTORY);
+    }
 
     public static final String DEFENCE_IDENTIFIER_KEY = "defence-identifier"; // Used to store the Defence ID of a defence item. [STRING]
     public static final String DEFENCE_DATA_KEY = "defence-data"; // Used to store all defence data in a block - a JSON string containing durability, ammo, etc. [STRING]

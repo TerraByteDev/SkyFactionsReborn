@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.npc;
 
+import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.faction.Faction;
@@ -195,6 +196,6 @@ public class SpigotNPCManager extends NPCManager {
                     });
 
             return affected.get();
-        });
+        }, SharedConstants.GLOBAL_EXECUTOR);
     }
 }

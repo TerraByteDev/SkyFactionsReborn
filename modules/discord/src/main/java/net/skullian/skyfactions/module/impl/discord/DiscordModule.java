@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.ConfigHandler;
 import net.skullian.skyfactions.common.config.types.ConfigTypes;
@@ -141,7 +142,7 @@ public class DiscordModule extends net.skullian.skyfactions.common.module.abstra
             codes.put(code, user.getUniqueId());
 
             return code;
-        });
+        }, SharedConstants.GLOBAL_EXECUTOR);
     }
 
     public void loadConfig() {

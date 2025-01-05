@@ -24,6 +24,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
+import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.RegionAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Settings;
@@ -56,7 +57,7 @@ public class SpigotRegionAPI extends RegionAPI {
             try (EditSession editSession = WorldEdit.getInstance().newEditSession(region.getWorld())) {
                 editSession.setBlocks(region, BlockType.REGISTRY.get("air"));
             }
-        });
+        }, SharedConstants.GLOBAL_EXECUTOR);
     }
 
     @Override
@@ -148,7 +149,7 @@ public class SpigotRegionAPI extends RegionAPI {
                 SLogger.fatal("Error pasting island schematic", e);
                 throw new RuntimeException(e);
             }
-        });
+        }, SharedConstants.GLOBAL_EXECUTOR);
     }
 
     @Override
@@ -157,7 +158,7 @@ public class SpigotRegionAPI extends RegionAPI {
             RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
             RegionManager manager = container.get(BukkitAdapter.adapt(Bukkit.getWorld(world)));
             if (manager != null) manager.removeRegion(regionName);
-        });
+        }, SharedConstants.GLOBAL_EXECUTOR);
     }
 
     @Override

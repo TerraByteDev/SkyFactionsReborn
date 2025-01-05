@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.api;
 
+import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.api.RaidAPI;
 import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
@@ -227,7 +228,7 @@ public class SpigotRaidAPI extends RaidAPI {
             } catch (InterruptedException error) {
                 throw new RuntimeException(error);
             }*/
-        });
+        }, SharedConstants.GLOBAL_EXECUTOR);
 
     }
 

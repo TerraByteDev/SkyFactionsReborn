@@ -19,6 +19,8 @@ public enum Settings {
     DATABASE_MAX_POOL_SIZE("database.max-pool-size"),
     CACHE_SAVE_INTERVAL("database.cache-save-interval"),
 
+    GLOBAL_EXECUTOR_SIZE("global.global-executor-thread-size"),
+
     DEFAULT_LANGUAGE("language.default-language"),
     BLACKLISTED_PHRASES("language.blacklisted-phrases"),
 

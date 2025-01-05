@@ -2,6 +2,7 @@ package net.skullian.skyfactions.common.api;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
+import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.user.SkyUser;
 import net.skullian.skyfactions.common.util.SLogger;
@@ -42,6 +43,6 @@ public abstract class SoundAPI {
                     }
                 }
             }
-        });
+        }, SharedConstants.GLOBAL_EXECUTOR);
     }
 }

@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.common.api;
 
 import lombok.Getter;
+import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.database.struct.PlayerData;
 import net.skullian.skyfactions.common.user.SkyUser;
@@ -102,13 +103,12 @@ public abstract class PlayerAPI {
     /**
      * Modify a player's locale.
      *
-     * @param player The player whose locale should be changed.
+     * @param player      The player whose locale should be changed.
      * @param newLanguage The new (valid) language.
-     * @return {@link CompletableFuture<Void>}
      */
-    public CompletableFuture<Void> modifyLocale(SkyUser player, String newLanguage, String oldLanguage) {
+    public void modifyLocale(SkyUser player, String newLanguage, String oldLanguage) {
         Messages.MODIFYING_LANGUAGE.send(player, oldLanguage);
-        return CompletableFuture.runAsync(() -> {
+        CompletableFuture.runAsync(() -> {
             // In the rare case that the player is not cached, fetch their data. Lock the thread until this is complete.
             if (!playerData.containsKey(player.getUniqueId())) getPlayerData(player.getUniqueId()).join();
 
@@ -116,7 +116,7 @@ public abstract class PlayerAPI {
             SkyApi.getInstance().getCacheService().getEntry(player.getUniqueId()).setNewLocale(newLanguage);
 
             Messages.LANGUAGE_MODIFIED.send(player, newLanguage);
-        });
+        }, SharedConstants.GLOBAL_EXECUTOR);
     }
 
     /**

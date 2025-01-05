@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.common.api;
 
 import lombok.Getter;
+import net.skullian.skyfactions.common.SharedConstants;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.config.types.Settings;
 import net.skullian.skyfactions.common.defence.Defence;
@@ -82,7 +83,7 @@ public abstract class FactionAPI {
             if (factionUserCache.containsKey(user)) return true;
 
             return SkyApi.getInstance().getDatabaseManager().getFactionsManager().isInFaction(user).join();
-        });
+        }, SharedConstants.GLOBAL_EXECUTOR);
     }
 
     /**

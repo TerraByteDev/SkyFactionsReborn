@@ -49,6 +49,10 @@ database:
   # It is in seconds -> Default 10 minutes (600 seconds)
   cache-save-interval: 600
 
+global:
+  # How many threads should the global executor have?
+  global-executor-thread-size: 2
+
 # This plugin has multi-language support.
 # This means players in different locations are sent plugin messages in their native language.
 language:

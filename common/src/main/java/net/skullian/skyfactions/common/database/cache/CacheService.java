@@ -13,9 +13,9 @@ import net.skullian.skyfactions.common.util.SLogger;
 
 public class CacheService {
 
-    @Getter private final Map<UUID, CacheEntry> playersToCache = new HashMap<>();
-    @Getter private final Map<String, CacheEntry> factionsToCache = new HashMap<>();
-    private final Map<String, String> toRename = new HashMap<>();
+    @Getter private final Map<UUID, CacheEntry> playersToCache = new ConcurrentHashMap<>();
+    @Getter private final Map<String, CacheEntry> factionsToCache = new ConcurrentHashMap<>();
+    private final Map<String, String> toRename = new ConcurrentHashMap<>();
 
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> task;
@@ -55,7 +55,7 @@ public class CacheService {
             }
 
             SLogger.info("Periodic Save - Done.");
-        });
+        }, executorService);
     }
 
     public void enable() {

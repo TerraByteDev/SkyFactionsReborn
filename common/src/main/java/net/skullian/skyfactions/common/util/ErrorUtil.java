@@ -4,6 +4,8 @@ import net.skullian.skyfactions.common.api.SkyApi;
 import net.skullian.skyfactions.common.config.types.Messages;
 import net.skullian.skyfactions.common.user.SkyUser;
 
+import java.util.concurrent.Executors;
+
 public class ErrorUtil {
 
     public static void handleError(Object sender, String operation, String debug, Throwable error) {
