@@ -219,11 +219,11 @@ npc:
     # NPC name for player islands,
     # You can use the placeholder "%player_name%" to display the name of the player.
     # This placeholder does not apply for faction island NPC names!
-    player-islands: "&9Sky Master"
+    player-islands: "<blue>Sky Master"
 
     # NPC Name for faction islands.
     # You can use the placeholder "%faction_name%" to display the name of the faction instead.
-    faction-islands: "&9Sky Master"
+    faction-islands: "<blue>Sky Master"
 
   # Allows you to configure the skin of the NPCs for island and faction islands
   # Skin Format:
