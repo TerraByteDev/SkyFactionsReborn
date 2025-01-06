@@ -12,14 +12,14 @@ import java.util.Map;
 @Getter
 public enum RunesConfig {
 
-    BASE_FOR_EACH("runes.for_each"),
+    BASE_FOR_EACH("runes.for-each"),
     BASE_RUNE_RETURN("runes.give"),
 
-    ALLOW_LORE("filters.allow_lore"),
-    ALLOW_ENCHANTS("filters.allow_enchants"),
-    ALLOW_ORAXEN_ITEMS("filters.allow_oraxen_items"),
-    ALLOW_ITEMSADDER_ITEMS("filters.allow_itemsadder_items"),
-    MATERIALS_IS_BLACKLIST("filters.materials.is_blacklist"),
+    ALLOW_LORE("filters.allow-lore"),
+    ALLOW_ENCHANTS("filters.allow-enchants"),
+    ALLOW_ORAXEN_ITEMS("filters.allow-oraxen-items"),
+    ALLOW_ITEMSADDER_ITEMS("filters.allow-itemsadder-items"),
+    MATERIALS_IS_BLACKLIST("filters.materials.is-blacklist"),
     MATERIALS_LIST("filters.materials.list"),
 
     RUNE_OVERRIDES("overrides");
