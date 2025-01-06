@@ -22,20 +22,20 @@ config-version: 1
 # Unless overriden in the OVERRIDES section, all items & blocks
 # will apply to this configuration.
 runes:
-  for_each: 4 # For every 4 blocks / items input...
+  for-each: 4 # For every 4 blocks / items input...
   give: 1 # You will get one rune in return.
 
 # General filters to what items / blocks are allowed or not.
 filters:
-  allow_lore: true # Allow items with custom lore.
-  allow_enchants: true # Allow items with enchants.
-  allow_oraxen_items: false # Allow the outright selling of Oraxen items. Unless overriden in the OVERRIDES section with their respective ID, the prices will be default.
-  allow_itemsadder_items: false # Allows the outright selling of ItemsAdder items. Read the line above.
+  allow-lore: true # Allow items with custom lore.
+  allow-enchants: true # Allow items with enchants.
+  allow-oraxen-items: false # Allow the outright selling of Oraxen items. Unless overriden in the OVERRIDES section with their respective ID, the prices will be default.
+  allow-itemsadder-items: false # Allows the outright selling of ItemsAdder items. Read the line above.
 
   materials:
     # If enabled, all items in list will not be convertible. If disabled, only items in list will be convertible.
     # The OVERRIDES entries bypass this.
-    is_blacklist: true
+    is-blacklist: true
 
     list:
       - STRING
