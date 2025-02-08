@@ -46,7 +46,7 @@ public class SFNPCDisableCommand extends CommandTemplate {
         SLogger.warn("[{}] is disabling SkyFactions NPCs.", sender.getName());
         Messages.NPC_DISABLING.send(sender, locale);
 
-        SkyApi.getInstance().getNPCManager().updateNPCs(false).whenComplete((affected, exc) -> {
+        SkyApi.getInstance().getNPCManager().updateNPCs(true).whenComplete((affected, exc) -> {
             if (exc != null) {
                 ErrorUtil.handleError(sender, "disable NPCs", "NPC_DISABLE_EXCEPTION", exc);
                 return;
