@@ -1,0 +1,16 @@
+[versions]
+kotlin-version = "2.1.10"
+kotlinx-version = "1.8.0"
+
+[libraries]
+## Common
+kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-version" }
+
+## Paper
+paper-api = { group = "io.papermc.paper", name = "paper-api", version = "1.21.4-R0.1-SNAPSHOT" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
+
+shadow = { id = "com.gradleup.shadow", version = "9.0.0-beta11" }

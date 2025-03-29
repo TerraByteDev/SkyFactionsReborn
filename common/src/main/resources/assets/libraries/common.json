@@ -1,0 +1,12 @@
+{
+  "repositories": [
+    {
+      "id": "central",
+      "type": "default",
+      "url": "https://repo.maven.apache.org/maven2"
+    }
+  ],
+  "artifacts": [
+
+  ]
+}
