@@ -1,12 +1,13 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.shadow)
     alias(libs.plugins.detekt)
 }
-
-group = "net.skullian.skyfactions"
-version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -15,6 +16,15 @@ repositories {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+allprojects {
+    group = "net.skullian.skyfactions"
+    version = "1.0.0-SNAPSHOT"
+
+    repositories {
+        mavenCentral()
+    }
 }
 
 subprojects {
@@ -31,6 +41,49 @@ subprojects {
         }
     }
 
+    kotlin {
+        jvmToolchain(jdkVersion = 21)
+    }
+
+    sourceSets {
+        main {
+            java {
+                setSrcDirs(listOf("src/main/java", "src/main/kotlin"))
+            }
+        }
+    }
+
+    tasks.withType<ShadowJar> {
+        archiveClassifier.set("")
+        exclude(
+            "**/*.kotlin_metadata",
+            "**/*.kotlin_builtins",
+            "META-INF/",
+            "kotlin/**",
+            "org/**"
+        )
+
+        archiveFileName.set("${rootProject.name}-${project.name}.jar")
+    }
+
+    tasks.withType<JavaCompile> {
+        options.compilerArgs.add("-parameters")
+        options.fork()
+        options.encoding = "UTF-8"
+    }
+
+    tasks.withType<KotlinCompile> {
+        compilerOptions {
+            javaParameters = true
+            jvmTarget.set(JvmTarget.JVM_21)
+        }
+    }
+
+    tasks.getByName("build")
+        .dependsOn(
+            "shadowJar"
+        )
+
     detekt {
         toolVersion = "1.23.8"
         config.setFrom(rootDir.resolve("config/detekt/detekt.yml"))
@@ -40,7 +93,11 @@ subprojects {
 
 tasks.shadowJar {
     archiveClassifier.set("")
-    configurations = project.configurations.compileClasspath.map { listOf(it) }
+    configurations = listOf(project.configurations.runtimeClasspath.get())
+    dependencies {
+        include(project(":common"))
+        include(project(":api"))
+    }
 }
 
 /**

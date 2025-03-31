@@ -1,6 +1,3 @@
-group = "net.skullian.skyfactions.paper"
-version = "${rootProject.version}"
-
 repositories {
     maven {
         name = "papermc"
@@ -9,12 +6,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":common"))
-    implementation(project(":api"))
+    api(project(":common"))
 
     compileOnly(libs.paper.api)
-}
-
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
