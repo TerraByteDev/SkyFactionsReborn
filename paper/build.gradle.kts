@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":api"))
 
     compileOnly(libs.paper.api)
 }

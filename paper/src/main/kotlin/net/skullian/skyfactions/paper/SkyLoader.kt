@@ -8,22 +8,28 @@ import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.graph.Dependency
 import org.eclipse.aether.repository.RemoteRepository
 
+/**
+ * The dependency loader for the SkyFactions plugin.
+ * To avoid large plugin sizes, we use paper's (experimental) dependency loader to load
+ * dependencies during runtime.
+ */
 @Suppress("UnstableApiUsage")
 class SkyLoader : PluginLoader {
 
     private val parser = LibraryParser()
 
     override fun classloader(classpathBuilder: PluginClasspathBuilder) {
-        val (libraries, repositories) = parser.parseLibraries()
+
+        val libraryData = parser.parseLibraries()
         val resolver = MavenLibraryResolver()
 
-        repositories.forEach { repository ->
+        libraryData.repositories.forEach { repository ->
             resolver.addRepository(
                 RemoteRepository.Builder(repository.name, repository.type, repository.url).build()
             )
         }
 
-        libraries.forEach { library ->
+        libraryData.artifacts.forEach { library ->
             resolver.addDependency(
                 Dependency(DefaultArtifact("${library.groupId}:${library.artifactId}:${library.version}"), null)
             )

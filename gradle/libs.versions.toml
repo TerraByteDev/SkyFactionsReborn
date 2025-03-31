@@ -1,10 +1,15 @@
 [versions]
 kotlin-version = "2.1.10"
 kotlinx-version = "1.8.0"
+adventure-version = "4.18.0"
 
 [libraries]
 ## Common
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-version" }
+
+adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure-version" }
+adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure-version" }
+
 
 ## Paper
 paper-api = { group = "io.papermc.paper", name = "paper-api", version = "1.21.4-R0.1-SNAPSHOT" }
@@ -14,3 +19,4 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
 
 shadow = { id = "com.gradleup.shadow", version = "9.0.0-beta11" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }

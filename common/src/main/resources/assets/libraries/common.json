@@ -7,6 +7,20 @@
     }
   ],
   "artifacts": [
-
+    {
+      "groupId": "org.jetbrains.kotlinx",
+      "artifactId": "kotlinx-serialization-json",
+      "version": "${kotlinxVersion}"
+    },
+    {
+      "groupId": "net.kyori",
+      "artifactId": "adventure-api",
+      "version": "${adventureVersion}"
+    },
+    {
+      "groupId": "net.kyori",
+      "artifactId": "adventure-text-minimessage",
+      "version": "${adventureVersion}"
+    }
   ]
 }

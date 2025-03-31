@@ -4,5 +4,4 @@ plugins {
 
 rootProject.name = "skyfactionsreborn"
 
-include("common")
-include("paper")
+include(":common", ":api", ":paper")
