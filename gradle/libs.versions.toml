@@ -3,12 +3,15 @@ kotlin-version = "2.1.10"
 kotlinx-version = "1.8.0"
 adventure-version = "4.18.0"
 adventure-platform-version = "4.3.4"
-flavor-version = "0.1.2"
+reflections-version = "0.10.2"
+jakarta-version = "2.0.1"
 
 [libraries]
 ## Common
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-version" }
-flavor = { group = "com.github.GrowlyX", name = "flavor", version.ref = "flavor-version" }
+reflections = { group = "org.reflections", name = "reflections", version.ref = "reflections-version" }
+jakarta-inject = { group = "jakarta.inject", name = "jakarta.inject-api", version.ref = "jakarta-version" }
+javax-inject = { group = "javax.inject", name = "javax.inject", version = "1" }
 
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure-version" }
 adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure-version" }

@@ -1,7 +1,7 @@
 package net.skullian.skyfactions.api.service
 
-import gg.scala.flavor.service.Service
-import gg.scala.flavor.service.ignore.IgnoreAutoScan
+import net.skullian.skyfactions.api.library.flavor.service.Service
+import net.skullian.skyfactions.api.library.flavor.service.ignore.IgnoreAutoScan
 import net.skullian.skyfactions.api.model.user.SkyUser
 import java.util.Optional
 import java.util.UUID

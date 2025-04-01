@@ -24,7 +24,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven { url = uri("https://jitpack.io") }
     }
 }
 
@@ -111,5 +110,6 @@ fun variables(): Map<String, String> = mapOf(
     "kotlinxVersion" to libs.versions.kotlinx.version.get(),
     "adventureVersion" to libs.versions.adventure.version.get(),
     "adventurePlatformVersion" to libs.versions.adventure.platform.version.get(),
-    "flavorVersion" to libs.versions.flavor.version.get(),
+    "reflectionsVersion" to libs.versions.reflections.version.get(),
+    "jakartaVersion" to libs.versions.jakarta.version.get(),
 )

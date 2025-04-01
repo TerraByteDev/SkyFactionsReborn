@@ -4,11 +4,6 @@
       "id": "central",
       "type": "default",
       "url": "https://repo.maven.apache.org/maven2"
-    },
-    {
-      "id": "jitpack",
-      "type": "default",
-      "url": "https://jitpack.io"
     }
   ],
   "artifacts": [
@@ -28,9 +23,9 @@
       "version": "${adventureVersion}"
     },
     {
-      "groupId": "com.github.GrowlyX",
-      "artifactId": "flavor",
-      "version": "${flavorVersion}"
+      "groupId": "org.reflections",
+      "artifactId": "reflections",
+      "version": "${reflectionsVersion}"
     }
   ]
 }

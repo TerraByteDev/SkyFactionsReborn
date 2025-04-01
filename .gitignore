@@ -44,4 +44,5 @@ run/
 assets/data.sqlite3
 /tasks
 # Ignore Gradle project-specific cache directory
-.gradle
+.gradle/
+.kotlin/

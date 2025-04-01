@@ -6,6 +6,7 @@ import net.skullian.skyfactions.api.SkyApi
 import net.skullian.skyfactions.api.SkyPlatform
 import net.skullian.skyfactions.api.event.bus.EventBus
 import net.skullian.skyfactions.common.eventbus.EventBusImpl
+import net.skullian.skyfactions.common.libraries.flavor.Flavor
 import net.skullian.skyfactions.paper.SkyFactionsReborn
 
 /**
@@ -17,6 +18,7 @@ class PaperSkyApi : SkyApi {
     private lateinit var audience: BukkitAudiences
 
     private val eventBus = EventBusImpl()
+    private lateinit var flavor: Flavor
 
     override fun onEnable() {
         this.platform = SkyFactionsReborn.getInstance()
