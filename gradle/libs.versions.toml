@@ -2,17 +2,20 @@
 kotlin-version = "2.1.10"
 kotlinx-version = "1.8.0"
 adventure-version = "4.18.0"
+adventure-platform-version = "4.3.4"
+flavor-version = "0.1.2"
 
 [libraries]
 ## Common
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-version" }
+flavor = { group = "com.github.GrowlyX", name = "flavor", version.ref = "flavor-version" }
 
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure-version" }
 adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure-version" }
 
-
 ## Paper
 paper-api = { group = "io.papermc.paper", name = "paper-api", version = "1.21.4-R0.1-SNAPSHOT" }
+adventure-platform-bukkit = { group = "net.kyori", name = "adventure-platform-bukkit", version.ref = "adventure-platform-version"}
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }

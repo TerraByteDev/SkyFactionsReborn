@@ -9,4 +9,5 @@ dependencies {
     api(project(":common"))
 
     compileOnly(libs.paper.api)
+    compileOnly(libs.adventure.platform.bukkit)
 }

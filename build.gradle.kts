@@ -24,6 +24,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
@@ -63,7 +64,8 @@ subprojects {
             "org/**"
         )
 
-        archiveFileName.set("${rootProject.name}-${project.name}.jar")
+        archiveFileName.set("${rootProject.name}-${project.name}-${rootProject.version}.jar")
+        destinationDirectory.set(rootProject.rootDir.resolve("./libs"))
     }
 
     tasks.withType<JavaCompile> {
@@ -108,4 +110,6 @@ fun variables(): Map<String, String> = mapOf(
     "version" to rootProject.version.toString(),
     "kotlinxVersion" to libs.versions.kotlinx.version.get(),
     "adventureVersion" to libs.versions.adventure.version.get(),
+    "adventurePlatformVersion" to libs.versions.adventure.platform.version.get(),
+    "flavorVersion" to libs.versions.flavor.version.get(),
 )

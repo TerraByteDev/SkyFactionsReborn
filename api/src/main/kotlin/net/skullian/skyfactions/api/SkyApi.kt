@@ -33,9 +33,15 @@ interface SkyApi {
         }
     }
 
-    private fun onEnable() {}
+    /**
+     * Called when the platform is initialising.
+     */
+    fun onEnable() {}
 
-    private fun onDisable() {}
+    /**
+     * Called on server shutdown.
+     */
+    fun onDisable() {}
 
     /**
      * Get the [SkyPlatform] instance.

@@ -2,6 +2,6 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-rootProject.name = "skyfactionsreborn"
+rootProject.name = "SkyFactionsReborn"
 
 include(":common", ":api", ":paper")

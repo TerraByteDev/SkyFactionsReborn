@@ -4,6 +4,11 @@
       "id": "central",
       "type": "default",
       "url": "https://repo.maven.apache.org/maven2"
+    },
+    {
+      "id": "jitpack",
+      "type": "default",
+      "url": "https://jitpack.io"
     }
   ],
   "artifacts": [
@@ -21,6 +26,11 @@
       "groupId": "net.kyori",
       "artifactId": "adventure-text-minimessage",
       "version": "${adventureVersion}"
+    },
+    {
+      "groupId": "com.github.GrowlyX",
+      "artifactId": "flavor",
+      "version": "${flavorVersion}"
     }
   ]
 }
