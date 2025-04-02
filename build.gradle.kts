@@ -9,11 +9,11 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.shadow)
     alias(libs.plugins.detekt)
-    alias(libs.plugins.grgit)
 }
 
-var grgit: Grgit = Grgit.open(mapOf("dir" to project.rootDir))
-val branchProvider = providers.provider { grgit.branch.current().name }
+val branchProvider = providers.exec {
+    commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
+}.standardOutput.asText
 
 allprojects {
     group = "net.skullian.skyfactions"
