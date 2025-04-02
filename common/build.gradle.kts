@@ -12,4 +12,5 @@ dependencies {
     compileOnly(libs.kotlinx.serialization)
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.text.minimessage)
+    compileOnly(libs.reflections)
 }

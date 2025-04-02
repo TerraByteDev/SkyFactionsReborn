@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.common.libraries.flavor.reflections
 
+import net.skullian.skyfactions.common.libraries.flavor.FlavorOptions
 import org.reflections.Reflections
 import org.reflections.Store
 import org.reflections.scanners.MethodAnnotationsScanner
@@ -34,6 +35,12 @@ class PackageIndexer(
                 )
         )
 
+    /**
+     * Returns a list of subtypes of the specified type.
+     *
+     * @param T the type whose subtypes are to be retrieved
+     * @return a list of subtypes of the specified type
+     */
     inline fun <reified T> getSubTypes(): List<Class<*>>
     {
         return reflections
@@ -41,6 +48,12 @@ class PackageIndexer(
             .toList()
     }
 
+    /**
+     * Returns a list of methods annotated with the specified annotation.
+     *
+     * @param T the annotation type
+     * @return a list of methods annotated with the specified annotation
+     */
     inline fun <reified T : Annotation> getMethodsAnnotatedWith(): List<Method>
     {
         return reflections
@@ -48,6 +61,12 @@ class PackageIndexer(
             .toList()
     }
 
+    /**
+     * Returns a list of types annotated with the specified annotation.
+     *
+     * @param T the annotation type
+     * @return a list of types annotated with the specified annotation
+     */
     inline fun <reified T : Annotation> getTypesAnnotatedWith(): List<Class<*>>
     {
         return reflections
@@ -55,6 +74,12 @@ class PackageIndexer(
             .toList()
     }
 
+    /**
+     * Returns a query function for methods annotated with the specified annotation.
+     *
+     * @param T the annotation type
+     * @return a query function for methods annotated with the specified annotation
+     */
     inline fun <reified T> annotated(): QueryFunction<Store, Method>
     {
         return Scanners.MethodsAnnotated
@@ -62,6 +87,12 @@ class PackageIndexer(
             .`as`(Method::class.java)
     }
 
+    /**
+     * Returns a query function for subtypes of the specified type.
+     *
+     * @param T the type whose subtypes are to be retrieved
+     * @return a query function for subtypes of the specified type
+     */
     inline fun <reified T> subTypes(): QueryFunction<Store, Class<*>>
     {
         return Scanners.SubTypes

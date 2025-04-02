@@ -7,6 +7,7 @@ import net.skullian.skyfactions.api.SkyPlatform
 import net.skullian.skyfactions.api.event.bus.EventBus
 import net.skullian.skyfactions.common.eventbus.EventBusImpl
 import net.skullian.skyfactions.common.libraries.flavor.Flavor
+import net.skullian.skyfactions.common.libraries.flavor.FlavorOptions
 import net.skullian.skyfactions.paper.SkyFactionsReborn
 
 /**
@@ -23,6 +24,12 @@ class PaperSkyApi : SkyApi {
     override fun onEnable() {
         this.platform = SkyFactionsReborn.getInstance()
         this.audience = BukkitAudiences.create(SkyFactionsReborn.getInstance())
+
+        this.flavor = Flavor.create<PaperSkyApi>(
+            options = FlavorOptions(
+                "net.skullians.skyfactions.paper"
+            )
+        )
     }
 
     // -------- PROVIDERS -------- //

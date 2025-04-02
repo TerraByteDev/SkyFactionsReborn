@@ -7,6 +7,7 @@ import net.skullian.skyfactions.common.libraries.flavor.reflections.PackageIndex
 import net.skullian.skyfactions.api.library.flavor.service.Service
 import net.skullian.skyfactions.api.library.flavor.service.ignore.IgnoreAutoScan
 import net.skullian.skyfactions.common.libraries.flavor.inject.Inject
+import net.skullian.skyfactions.common.util.FlavorException
 import net.skullian.skyfactions.common.util.SLogger
 import java.lang.reflect.Method
 import kotlin.reflect.KClass
@@ -25,6 +26,10 @@ class Flavor(
         /**
          * Creates a new [Flavor] instance using [T]'s [KClass],
          * and the [options], if any are given.
+         *
+         * @param T the type of the flavor
+         * @param options the flavor options
+         * @return a new [Flavor] instance
          */
         @JvmStatic
         inline fun <reified T> create(
@@ -34,12 +39,18 @@ class Flavor(
             return Flavor(T::class, options)
         }
 
+        /**
+         * Creates a new [Flavor] instance using the specified [initializer] and [options].
+         *
+         * @param initializer the class used to initialize the flavor
+         * @param options the flavor options
+         * @return a new [Flavor] instance
+         */
         @JvmStatic
         fun create(
             initializer: KClass<*>,
             options: FlavorOptions = FlavorOptions()
-        ): Flavor
-        {
+        ): Flavor {
             return Flavor(initializer, options)
         }
     }
@@ -52,6 +63,12 @@ class Flavor(
     val scanners =
         mutableMapOf<KClass<out Annotation>, (Method, Any) -> Unit>()
 
+    /**
+     * Registers a listener for the specified annotation type.
+     *
+     * @param T the annotation type
+     * @param lambda the function to be invoked when the annotation is found
+     */
     inline fun <reified T : Annotation> listen(
         noinline lambda: (Method, Any) -> Unit
     )
@@ -60,8 +77,10 @@ class Flavor(
     }
 
     /**
-     * Inherit an arbitrary [FlavorBinderContainer]
-     * and populate our binders with its ones.
+     * Inherits an arbitrary [FlavorBinderContainer] and populates our binders with its ones.
+     *
+     * @param container the flavor binder container to inherit
+     * @return the current [Flavor] instance
      */
     fun inherit(container: FlavorBinderContainer): Flavor
     {
@@ -71,23 +90,25 @@ class Flavor(
     }
 
     /**
-     * Searches for & returns a
-     * service matching type [T].
+     * Searches for and returns a service matching type [T].
      *
-     * @return the service
-     * @throws RuntimeException if there is
-     * no service matching type [T].
+     * @param T the service type
+     * @return the service instance
+     * @throws RuntimeException if there is no service matching type [T]
      */
     inline fun <reified T> service(): T
     {
         val service = services[T::class]
-            ?: throw RuntimeException("A non-service class was provided.")
+            ?: throw FlavorException(Throwable("A non-service class was provided."))
 
         return service as T
     }
 
     /**
      * Creates a new [FlavorBinder] for type [T].
+     *
+     * @param T the type to bind
+     * @return a new [FlavorBinder] instance
      */
     inline fun <reified T : Any> bind(): FlavorBinder<T>
     {
@@ -97,6 +118,12 @@ class Flavor(
         return binder
     }
 
+    /**
+     * Finds and returns a list of singletons annotated with the specified annotation.
+     *
+     * @param A the annotation type
+     * @return a list of singletons annotated with the specified annotation
+     */
     inline fun <reified A : Annotation> findSingletons(): List<Any>
     {
         return reflections.getTypesAnnotatedWith<A>()
@@ -107,7 +134,11 @@ class Flavor(
     }
 
     /**
-     * Creates & inject a new injected instance of [T].
+     * Creates and injects a new instance of [T].
+     *
+     * @param T the type to inject
+     * @param params the parameters for the constructor
+     * @return a new injected instance of [T]
      */
     inline fun <reified T : Any> injected(
         vararg params: Any
@@ -132,7 +163,9 @@ class Flavor(
     }
 
     /**
-     * Injects fields into a pre-existing class, [any].
+     * Injects fields into a pre-existing class.
+     *
+     * @param any the object to inject fields into
      */
     fun inject(any: Any)
     {
@@ -222,13 +255,21 @@ class Flavor(
             lambda.invoke()
         } catch (exception: Exception)
         {
-            exception.printStackTrace()
+            SLogger.fatal("Failed to invoke lambda: {}", exception)
             return -1
         }
 
         return System.currentTimeMillis() - start
     }
 
+    /**
+     * Finds an instance for injection based on the specified type and annotations.
+     *
+     * @param type the class type
+     * @param annotations the annotations
+     * @return the instance for injection
+     * @throws IllegalArgumentException if no binder is found for the specified type and annotations
+     */
     fun findInstanceForInjection(type: Class<*>, annotations: Array<Annotation>): Any
     {
         // trying to find [FlavorBinder]s
@@ -350,6 +391,11 @@ class Flavor(
         }
     }
 
+    /**
+     * Returns the singleton instance of the class, if any.
+     *
+     * @return the singleton instance, or null if there is none
+     */
     fun Class<*>.objectInstance(): Any?
     {
         return kotlin
