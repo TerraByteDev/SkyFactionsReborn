@@ -131,6 +131,7 @@ fun RepositoryHandler.configureRepo(development: Boolean = false) {
     val pw: String? = properties["repo_password"]?.toString()
 
     if (user != null && pw != null) {
+        println("Using authenticated credentials for TerraByteDev repository.")
         maven("https://repo.terrabytedev.com/${if (development) "snapshots" else "releases"}/") {
             name = "TerrabyteDev"
             credentials {
@@ -141,6 +142,8 @@ fun RepositoryHandler.configureRepo(development: Boolean = false) {
 
         return
     }
+
+    println("Using TerraByteDev repository without credentials.")
 
     maven("https://repo.terrabytedev.com/${if (development) "snapshots" else "releases"}/") {
         name = "TerraByteDev"
