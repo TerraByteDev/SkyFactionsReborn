@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.ajoberstar.grgit.Grgit
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -11,7 +12,8 @@ plugins {
     alias(libs.plugins.grgit)
 }
 
-var branch: String = grgit.branch.current().name
+var grgit: Grgit = Grgit.open(mapOf("dir" to project.rootDir))
+val branchProvider = providers.provider { grgit.branch.current().name }
 
 allprojects {
     group = "net.skullian.skyfactions"
@@ -19,7 +21,7 @@ allprojects {
 
     repositories {
         mavenCentral()
-        configureRepo(branch != "master")
+        configureRepo(branchProvider.get() != "master")
     }
 }
 
@@ -89,7 +91,7 @@ subprojects {
     }
 
     publishing {
-        repositories.configureRepo(branch != "master")
+        repositories.configureRepo(branchProvider.get() != "master")
 
         publications {
             register(
@@ -127,8 +129,8 @@ fun variables(): Map<String, String> = mapOf(
  * Configure the TerraByteDev repository.
  */
 fun RepositoryHandler.configureRepo(development: Boolean = false) {
-    val user: String? = properties["repo_username"]?.toString()
-    val pw: String? = properties["repo_password"]?.toString()
+    val user: String? = properties["repo_username"]?.toString() ?: System.getenv("repo_username")
+    val pw: String? = properties["repo_password"]?.toString() ?: System.getenv("repo_password")
 
     if (user != null && pw != null) {
         println("Using authenticated credentials for TerraByteDev repository.")
