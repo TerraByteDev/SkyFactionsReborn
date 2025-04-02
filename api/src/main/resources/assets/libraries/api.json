@@ -1,0 +1,17 @@
+{
+  "repositories": [
+
+  ],
+  "artifacts": [
+    {
+      "groupId": "jakarta.inject",
+      "artifactId": "jakarta.inject-api",
+      "version": "${jakartaVersion}"
+    },
+    {
+      "groupId": "javax.inject",
+      "artifactId": "javax.inject",
+      "version": "1"
+    }
+  ]
+}

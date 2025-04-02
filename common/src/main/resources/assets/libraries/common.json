@@ -1,0 +1,31 @@
+{
+  "repositories": [
+    {
+      "id": "central",
+      "type": "default",
+      "url": "https://repo.maven.apache.org/maven2"
+    }
+  ],
+  "artifacts": [
+    {
+      "groupId": "org.jetbrains.kotlinx",
+      "artifactId": "kotlinx-serialization-json",
+      "version": "${kotlinxVersion}"
+    },
+    {
+      "groupId": "net.kyori",
+      "artifactId": "adventure-api",
+      "version": "${adventureVersion}"
+    },
+    {
+      "groupId": "net.kyori",
+      "artifactId": "adventure-text-minimessage",
+      "version": "${adventureVersion}"
+    },
+    {
+      "groupId": "org.reflections",
+      "artifactId": "reflections",
+      "version": "${reflectionsVersion}"
+    }
+  ]
+}

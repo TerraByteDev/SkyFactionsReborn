@@ -1,0 +1,12 @@
+{
+  "repositories": [
+
+  ],
+  "artifacts": [
+    {
+      "groupId": "net.kyori",
+      "artifactId": "adventure-platform-bukkit",
+      "version": "${adventurePlatformVersion}"
+    }
+  ]
+}

@@ -28,12 +28,21 @@ dependency-reduced-pom.xml
 *.iml
 *.ipr
 *.iws
+
+# Gradle
 build
 *.java~
 .gradle/
+
+# Server
 bin/
 .vscode/
 Server/
 run/
+
+# Misc
 assets/data.sqlite3
 /tasks
+# Ignore Gradle project-specific cache directory
+.gradle/
+.kotlin/

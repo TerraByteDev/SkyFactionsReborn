@@ -2,7 +2,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "refactor/v2" ]
   pull_request:
     branches: [ "main" ]
   schedule:
@@ -25,7 +25,7 @@ jobs:
       matrix:
         include:
         - language: java-kotlin
-          build-mode: none
+          build-mode: autobuild
         
     steps:
     - name: Checkout repository
