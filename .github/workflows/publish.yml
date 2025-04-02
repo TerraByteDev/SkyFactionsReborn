@@ -1,0 +1,31 @@
+name: Publish API
+
+on:
+  release:
+    types: [ "published" ]
+  push:
+    branches: [ "main", "refactor/v2" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+        name: Set up JDK 21
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build & Publish
+        env:
+          repo_username: ${{ secrets.REPO_USERNAME }}
+          repo_password: ${{ secrets.REPO_PASSWORD }}
+        run: ./gradlew :api:publish

@@ -3,20 +3,15 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    `maven-publish`
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.shadow)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.grgit)
 }
 
-repositories {
-    mavenCentral()
-    mavenLocal()
-}
-
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
-}
+var branch: String = grgit.branch.current().name
 
 allprojects {
     group = "net.skullian.skyfactions"
@@ -24,11 +19,13 @@ allprojects {
 
     repositories {
         mavenCentral()
+        configureRepo(branch != "master")
     }
 }
 
 subprojects {
     apply(plugin = "java")
+    apply(plugin = "maven-publish")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
     apply(plugin = "com.gradleup.shadow")
@@ -90,6 +87,18 @@ subprojects {
         config.setFrom(rootDir.resolve("config/detekt/detekt.yml"))
         buildUponDefaultConfig = true
     }
+
+    publishing {
+        repositories.configureRepo(branch != "master")
+
+        publications {
+            register(
+                name = "mavenJava",
+                type = MavenPublication::class,
+                configurationAction = shadow::component
+            )
+        }
+    }
 }
 
 tasks.shadowJar {
@@ -113,3 +122,27 @@ fun variables(): Map<String, String> = mapOf(
     "reflectionsVersion" to libs.versions.reflections.version.get(),
     "jakartaVersion" to libs.versions.jakarta.version.get(),
 )
+
+/**
+ * Configure the TerraByteDev repository.
+ */
+fun RepositoryHandler.configureRepo(development: Boolean = false) {
+    val user: String? = properties["repo_username"]?.toString()
+    val pw: String? = properties["repo_password"]?.toString()
+
+    if (user != null && pw != null) {
+        maven("https://repo.terrabytedev.com/${if (development) "snapshots" else "releases"}/") {
+            name = "TerrabyteDev"
+            credentials {
+                username = user
+                password = pw
+            }
+        }
+
+        return
+    }
+
+    maven("https://repo.terrabytedev.com/${if (development) "snapshots" else "releases"}/") {
+        name = "TerraByteDev"
+    }
+}

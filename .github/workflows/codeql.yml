@@ -2,7 +2,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "refactor/v2" ]
   pull_request:
     branches: [ "main" ]
   schedule:
