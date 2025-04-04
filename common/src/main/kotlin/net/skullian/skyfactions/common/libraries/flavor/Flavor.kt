@@ -17,8 +17,8 @@ import kotlin.reflect.KClass
  * @since 1/2/2022
  */
 class Flavor(
-    val initializer: KClass<*>,
-    val options: FlavorOptions
+    initializer: KClass<*>,
+    options: FlavorOptions
 )
 {
     companion object
@@ -178,12 +178,15 @@ class Flavor(
      */
     fun startup()
     {
+
         val classes = reflections
             .getTypesAnnotatedWith<Service>()
             .sortedByDescending {
                 it.getAnnotation(Service::class.java)
                     ?.priority ?: 1
             }
+
+        println("CLASSES WITH ANNOTATION: " + classes.size)
 
         for (clazz in classes)
         {

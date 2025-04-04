@@ -1,6 +1,7 @@
 package net.skullian.skyfactions.common.hook
 
 import net.skullian.skyfactions.api.SkyApi
+import net.skullian.skyfactions.api.library.flavor.service.Service
 import net.skullian.skyfactions.common.hook.annotation.HookData
 import net.skullian.skyfactions.common.util.SLogger
 import java.io.IOException
@@ -13,6 +14,7 @@ import java.util.jar.JarFile
  * An interface for the hook manager.
  * This is used to load and manage hooks.
  */
+@Service
 interface HookManager {
 
     val hooks: MutableMap<HookLoadOrder, MutableList<SkyHook>>

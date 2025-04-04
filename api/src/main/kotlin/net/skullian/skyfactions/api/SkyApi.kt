@@ -2,6 +2,8 @@ package net.skullian.skyfactions.api
 
 import net.kyori.adventure.audience.Audience
 import net.skullian.skyfactions.api.event.bus.EventBus
+import net.skullian.skyfactions.api.model.user.SkyUser
+import net.skullian.skyfactions.api.service.UserService
 
 /**
  * The main API class for SkyFactions.
@@ -48,6 +50,14 @@ interface SkyApi {
      * This provides useful methods to interact with the platform.
      */
     fun getPlatform(): SkyPlatform
+
+    // ------- Services ------- //
+
+    /**
+     * Get the user service.
+     * This facilitates fetching [SkyUser] instances.
+     */
+    fun getUserService(): UserService
 
     // ------ Components ------ //
 

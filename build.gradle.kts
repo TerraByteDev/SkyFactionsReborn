@@ -10,17 +10,12 @@ plugins {
     alias(libs.plugins.detekt)
 }
 
-val branchProvider = providers.exec {
-    commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
-}.standardOutput.asText
-
 allprojects {
     group = "net.skullian.skyfactions"
-    version = "1.0.0-SNAPSHOT"
+    version = "1.0.0-ALPHA"
 
     repositories {
         mavenCentral()
-        configureRepo(branchProvider.get() != "master")
     }
 }
 
@@ -61,7 +56,7 @@ subprojects {
             "org/**"
         )
 
-        archiveFileName.set("${rootProject.name}-${project.name}-${rootProject.version}.jar")
+        archiveFileName.set("${rootProject.name}-${project.name}-v${rootProject.version}.jar")
         destinationDirectory.set(rootProject.rootDir.resolve("./libs"))
     }
 
@@ -88,18 +83,6 @@ subprojects {
         config.setFrom(rootDir.resolve("config/detekt/detekt.yml"))
         buildUponDefaultConfig = true
     }
-
-    publishing {
-        repositories.configureRepo(branchProvider.get() != "master")
-
-        publications {
-            register(
-                name = "mavenJava",
-                type = MavenPublication::class,
-                configurationAction = shadow::component
-            )
-        }
-    }
 }
 
 tasks.shadowJar {
@@ -117,36 +100,10 @@ tasks.shadowJar {
  */
 fun variables(): Map<String, String> = mapOf(
     "version" to rootProject.version.toString(),
+    "kotlinVersion" to libs.versions.kotlin.version.get(),
     "kotlinxVersion" to libs.versions.kotlinx.version.get(),
     "adventureVersion" to libs.versions.adventure.version.get(),
     "adventurePlatformVersion" to libs.versions.adventure.platform.version.get(),
     "reflectionsVersion" to libs.versions.reflections.version.get(),
     "jakartaVersion" to libs.versions.jakarta.version.get(),
 )
-
-/**
- * Configure the TerraByteDev repository.
- */
-fun RepositoryHandler.configureRepo(development: Boolean = false) {
-    val user: String? = properties["repo_username"]?.toString() ?: System.getenv("repo_username")
-    val pw: String? = properties["repo_password"]?.toString() ?: System.getenv("repo_password")
-
-    if (user != null && pw != null) {
-        println("Using authenticated credentials for TerraByteDev repository.")
-        maven("https://repo.terrabytedev.com/${if (development) "snapshots" else "releases"}/") {
-            name = "TerrabyteDev"
-            credentials {
-                username = user
-                password = pw
-            }
-        }
-
-        return
-    }
-
-    println("Using TerraByteDev repository without credentials.")
-
-    maven("https://repo.terrabytedev.com/${if (development) "snapshots" else "releases"}/") {
-        name = "TerraByteDev"
-    }
-}

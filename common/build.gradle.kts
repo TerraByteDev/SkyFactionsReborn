@@ -10,6 +10,8 @@ dependencies {
     }
 
     compileOnly(libs.kotlinx.serialization)
+    implementation(libs.jackson.databind)
+
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.text.minimessage)
     compileOnly(libs.reflections)

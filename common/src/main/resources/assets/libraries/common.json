@@ -8,6 +8,11 @@
   ],
   "artifacts": [
     {
+      "groupId": "org.jetbrains.kotlin",
+      "artifactId": "kotlin-stdlib",
+      "version": "${kotlinVersion}"
+    },
+    {
       "groupId": "org.jetbrains.kotlinx",
       "artifactId": "kotlinx-serialization-json",
       "version": "${kotlinxVersion}"
