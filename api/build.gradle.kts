@@ -11,8 +11,6 @@ dependencies {
     compileOnly(libs.adventure.api)
 
     compileOnly(libs.reflections)
-    compileOnly(libs.jakarta.inject)
-    compileOnly(libs.javax.inject)
 }
 
 tasks.publish {

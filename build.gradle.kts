@@ -105,5 +105,6 @@ fun variables(): Map<String, String> = mapOf(
     "adventureVersion" to libs.versions.adventure.version.get(),
     "adventurePlatformVersion" to libs.versions.adventure.platform.version.get(),
     "reflectionsVersion" to libs.versions.reflections.version.get(),
-    "jakartaVersion" to libs.versions.jakarta.version.get(),
+    "jakartaInjectVersion" to libs.versions.jakarta.inject.version.get(),
+    "jakartaAnnotationsVersion" to libs.versions.jakarta.annotations.version.get(),
 )

@@ -1,5 +1,7 @@
 package net.skullian.skyfactions.api.library.flavor.service
 
+import java.lang.annotation.Inherited
+
 /**
  * Marks a class as a flavor Service.
  *
@@ -12,6 +14,8 @@ package net.skullian.skyfactions.api.library.flavor.service
  * @author GrowlyX
  * @since 1/2/2022
  */
+@Inherited
+@Target(AnnotationTarget.CLASS)
 annotation class Service(
     val name: String = "",
     val priority: Int = 1

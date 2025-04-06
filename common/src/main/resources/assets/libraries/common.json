@@ -31,6 +31,21 @@
       "groupId": "org.reflections",
       "artifactId": "reflections",
       "version": "${reflectionsVersion}"
+    },
+    {
+      "groupId": "jakarta.inject",
+      "artifactId": "jakarta.inject-api",
+      "version": "${jakartaInjectVersion}"
+    },
+    {
+      "groupId": "jakarta.annotation",
+      "artifactId": "jakarta.annotation-api",
+      "version": "${jakartaAnnotationsVersion}"
+    },
+    {
+      "groupId": "javax.inject",
+      "artifactId": "javax.inject",
+      "version": "1"
     }
   ]
 }

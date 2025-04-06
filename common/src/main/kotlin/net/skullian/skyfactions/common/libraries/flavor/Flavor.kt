@@ -1,12 +1,12 @@
 package net.skullian.skyfactions.common.libraries.flavor
 
-import net.skullian.skyfactions.api.library.flavor.service.Close
-import net.skullian.skyfactions.api.library.flavor.service.Configure
 import net.skullian.skyfactions.common.libraries.flavor.binder.FlavorBinderContainer
 import net.skullian.skyfactions.common.libraries.flavor.reflections.PackageIndexer
 import net.skullian.skyfactions.api.library.flavor.service.Service
 import net.skullian.skyfactions.api.library.flavor.service.ignore.IgnoreAutoScan
 import net.skullian.skyfactions.common.libraries.flavor.inject.Inject
+import net.skullian.skyfactions.common.libraries.flavor.mappings.AnnotationMappings
+import net.skullian.skyfactions.common.libraries.flavor.mappings.AnnotationType
 import net.skullian.skyfactions.common.util.FlavorException
 import net.skullian.skyfactions.common.util.SLogger
 import java.lang.reflect.Method
@@ -26,10 +26,6 @@ class Flavor(
         /**
          * Creates a new [Flavor] instance using [T]'s [KClass],
          * and the [options], if any are given.
-         *
-         * @param T the type of the flavor
-         * @param options the flavor options
-         * @return a new [Flavor] instance
          */
         @JvmStatic
         inline fun <reified T> create(
@@ -50,7 +46,8 @@ class Flavor(
         fun create(
             initializer: KClass<*>,
             options: FlavorOptions = FlavorOptions()
-        ): Flavor {
+        ): Flavor
+        {
             return Flavor(initializer, options)
         }
     }
@@ -77,24 +74,39 @@ class Flavor(
     }
 
     /**
-     * Inherits an arbitrary [FlavorBinderContainer] and populates our binders with its ones.
-     *
-     * @param container the flavor binder container to inherit
-     * @return the current [Flavor] instance
+     * Inherit an arbitrary [FlavorBinderContainer]
+     * and populate our binders with its ones.
      */
     fun inherit(container: FlavorBinderContainer): Flavor
     {
+        container.javaClass.methods
+            .filter {
+                AnnotationMappings.matchesAny(AnnotationType.Extract, it.annotations)
+            }
+            .forEach {
+                this.binders += FlavorBinder(it.returnType.kotlin) to it.invoke(container)
+            }
+
+        container.javaClass.fields
+            .filter {
+                AnnotationMappings.matchesAny(AnnotationType.Extract, it.annotations)
+            }
+            .forEach {
+                this.binders += FlavorBinder(it.type.kotlin) to it.get(container)
+            }
+
         container.populate()
         binders += container.binders
         return this
     }
 
     /**
-     * Searches for and returns a service matching type [T].
+     * Searches for & returns a
+     * service matching type [T].
      *
-     * @param T the service type
-     * @return the service instance
-     * @throws RuntimeException if there is no service matching type [T]
+     * @return the service
+     * @throws RuntimeException if there is
+     * no service matching type [T].
      */
     inline fun <reified T> service(): T
     {
@@ -106,9 +118,6 @@ class Flavor(
 
     /**
      * Creates a new [FlavorBinder] for type [T].
-     *
-     * @param T the type to bind
-     * @return a new [FlavorBinder] instance
      */
     inline fun <reified T : Any> bind(): FlavorBinder<T>
     {
@@ -134,38 +143,49 @@ class Flavor(
     }
 
     /**
-     * Creates and injects a new instance of [T].
-     *
-     * @param T the type to inject
-     * @param params the parameters for the constructor
-     * @return a new injected instance of [T]
+     * Creates & inject a new injected instance of [T].
      */
-    inline fun <reified T : Any> injected(
-        vararg params: Any
-    ): T
+    inline fun <reified T : Any> injected(): T
     {
-        val instance = T::class.java.let { clazz ->
-            if (params.isEmpty())
-            {
-                clazz.newInstance()
-            } else
-            {
-                clazz.getConstructor(
-                    *params.map { it.javaClass }.toTypedArray()
-                ).newInstance(
-                    *params.toList().toTypedArray()
-                )
+        val boundClasses = this.binders.map { it.kClass.java }
+
+        val constructor = T::class.java.constructors
+            .firstOrNull {
+                AnnotationMappings
+                    .matchesAny(
+                        AnnotationType.Inject, it.annotations
+                    ) &&
+                        it.parameterTypes
+                            .all { type ->
+                                type in boundClasses
+                            }
             }
+            ?: error("Unable to find constructor with all fields injected")
+
+        val orderedInstances = mutableListOf<Any>()
+
+        constructor.parameters.forEach {
+            val injectionInstance = this
+                .findInstanceForInjection(
+                    it.type, it.annotations
+                )
+
+            orderedInstances += injectionInstance
         }
 
+        val instance = constructor
+            .newInstance(
+                *orderedInstances.toTypedArray()
+            )
+
+        // injection on instance variables marked with an injection annotation
         inject(instance)
-        return instance
+
+        return instance as T
     }
 
     /**
-     * Injects fields into a pre-existing class.
-     *
-     * @param any the object to inject fields into
+     * Injects fields into a pre-existing class, [any].
      */
     fun inject(any: Any)
     {
@@ -178,15 +198,12 @@ class Flavor(
      */
     fun startup()
     {
-
         val classes = reflections
             .getTypesAnnotatedWith<Service>()
             .sortedByDescending {
                 it.getAnnotation(Service::class.java)
                     ?.priority ?: 1
             }
-
-        println("CLASSES WITH ANNOTATION: " + classes.size)
 
         for (clazz in classes)
         {
@@ -200,7 +217,7 @@ class Flavor(
                 kotlin.runCatching {
                     scanAndInject(clazz.kotlin, clazz.objectInstance())
                 }.onFailure {
-                    SLogger.warn("An exception was thrown during injection, {}", it)
+                    SLogger.fatal("An exception was thrown during injection: {}", it)
                 }
             }
         }
@@ -215,7 +232,9 @@ class Flavor(
         for (entry in services.entries)
         {
             val close = entry.key.java.declaredMethods
-                .firstOrNull { it.isAnnotationPresent(Close::class.java) }
+                .firstOrNull {
+                    AnnotationMappings.matchesAny(AnnotationType.PreDestroy, it.annotations)
+                }
 
             val service = entry.key.java
                 .getDeclaredAnnotation(Service::class.java)
@@ -227,14 +246,14 @@ class Flavor(
             if (milli != -1L)
             {
                 SLogger.info("Shutdown service [${
-                    service.name.ifEmpty { 
+                    service.name.ifEmpty {
                         entry.key.java.simpleName
                     }
                 }] in ${milli}ms")
             } else
             {
                 SLogger.fatal("Failed to shutdown service [${
-                    service.name.ifEmpty { 
+                    service.name.ifEmpty {
                         entry.key.java.simpleName
                     }
                 }]!")
@@ -258,7 +277,7 @@ class Flavor(
             lambda.invoke()
         } catch (exception: Exception)
         {
-            SLogger.fatal("Failed to invoke lambda: {}", exception)
+            SLogger.fatal("Failed to invoke method: {}", exception)
             return -1
         }
 
@@ -322,7 +341,7 @@ class Flavor(
         {
             // making sure this field is annotated with
             // Inject before modifying its value.
-            if (field.isAnnotationPresent(Inject::class.java))
+            if (AnnotationMappings.matchesAny(AnnotationType.Inject, field.annotations))
             {
                 val injectionInstance = this
                     .findInstanceForInjection(
@@ -339,8 +358,25 @@ class Flavor(
 
         for (method in clazz.java.declaredMethods)
         {
+            if (
+                AnnotationMappings.matchesAny(
+                    AnnotationType.Inject, method.annotations
+                ) && method.parameterCount == 1
+            )
+            {
+                val injectionInstance = this
+                    .findInstanceForInjection(
+                        method.parameterTypes.first(),
+                        method.annotations
+                    )
+
+                method.invoke(singleton, injectionInstance)
+            }
+
             val annotations = method.annotations
-                .filter { scanners[it::class] != null }
+                .filter {
+                    scanners[it::class] != null
+                }
 
             for (annotation in annotations)
             {
@@ -350,7 +386,7 @@ class Flavor(
                         ?.invoke(method, singleton)
                 } catch (exception: Exception)
                 {
-                    SLogger.fatal("An error occurred while invoking function - {}", exception)
+                    SLogger.fatal("An error occurred while invoking function: {}", exception)
                 }
             }
         }
@@ -362,7 +398,9 @@ class Flavor(
         if (isServiceClazz)
         {
             val configure = clazz.java.declaredMethods
-                .firstOrNull { it.isAnnotationPresent(Configure::class.java) }
+                .firstOrNull {
+                    AnnotationMappings.matchesAny(AnnotationType.PostConstruct, it.annotations)
+                }
 
             // singletons should always be non-null
             services[clazz] = singleton
@@ -379,14 +417,14 @@ class Flavor(
             if (milli != -1L)
             {
                 SLogger.info("Loaded service [${
-                    service.name.ifEmpty { 
+                    service.name.ifEmpty {
                         clazz.java.simpleName
                     }
                 }] in ${milli}ms")
             } else
             {
                 SLogger.fatal("Failed to load service [${
-                    service.name.ifEmpty { 
+                    service.name.ifEmpty {
                         clazz.java.simpleName
                     }
                 }]!")

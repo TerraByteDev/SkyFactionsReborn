@@ -4,13 +4,16 @@ kotlinx-version = "1.8.0"
 adventure-version = "4.18.0"
 adventure-platform-version = "4.3.4"
 reflections-version = "0.10.2"
-jakarta-version = "2.0.1"
+jakarta-inject-version = "2.0.1"
+jakarta-annotations-version = "3.0.0"
 
 [libraries]
 ## Common
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-version" }
 reflections = { group = "org.reflections", name = "reflections", version.ref = "reflections-version" }
-jakarta-inject = { group = "jakarta.inject", name = "jakarta.inject-api", version.ref = "jakarta-version" }
+
+jakarta-inject = { group = "jakarta.inject", name = "jakarta.inject-api", version.ref = "jakarta-inject-version" }
+jakarta-annotations = { group = "jakarta.annotation", name = "jakarta.annotation-api", version.ref = "jakarta-annotations-version" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version = "1" }
 
 jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.18.3" }

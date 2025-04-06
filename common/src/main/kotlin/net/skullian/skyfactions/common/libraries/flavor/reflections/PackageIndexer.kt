@@ -31,9 +31,24 @@ class PackageIndexer(
                 .addScanners(
                     MethodAnnotationsScanner(),
                     TypeAnnotationsScanner(),
-                    SubTypesScanner()
+                    SubTypesScanner(false)
                 )
         )
+
+    init {
+        fun getAllClassesInPackage(packageName: String): Set<Class<*>> {
+            val reflections = Reflections(
+                ConfigurationBuilder()
+                    .forPackage(packageName)
+                    .addScanners(SubTypesScanner(false))
+            )
+
+            return reflections.getSubTypesOf(Any::class.java)
+        }
+
+        val classes = getAllClassesInPackage("net.skullian.skyfactions.api.service")
+        classes.forEach { println(it.name) }
+    }
 
     /**
      * Returns a list of subtypes of the specified type.

@@ -29,7 +29,7 @@ class PaperSkyApi : SkyApi {
 
         this.flavor = Flavor.create<PaperSkyApi>(
             options = FlavorOptions(
-                "net.skullian.skyfactions.paper.service"
+                "net.skullian.skyfactions.paper.service",
             )
         )
 
@@ -51,6 +51,7 @@ class PaperSkyApi : SkyApi {
     // ------- Services ------- //
 
     override fun getUserService(): UserService {
+        println(flavor.services.size)
         return flavor.services[PaperUserService::class] as UserService
     }
 

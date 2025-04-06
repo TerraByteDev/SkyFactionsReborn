@@ -15,4 +15,8 @@ dependencies {
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.text.minimessage)
     compileOnly(libs.reflections)
+
+    compileOnly(libs.jakarta.inject)
+    compileOnly(libs.jakarta.annotations)
+    compileOnly(libs.javax.inject)
 }
