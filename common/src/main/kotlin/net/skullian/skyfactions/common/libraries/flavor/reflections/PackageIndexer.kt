@@ -7,6 +7,7 @@ import org.reflections.scanners.MethodAnnotationsScanner
 import org.reflections.scanners.Scanners
 import org.reflections.scanners.SubTypesScanner
 import org.reflections.scanners.TypeAnnotationsScanner
+import org.reflections.util.ClasspathHelper
 import org.reflections.util.ConfigurationBuilder
 import org.reflections.util.QueryFunction
 import java.lang.reflect.Method
@@ -28,27 +29,19 @@ class PackageIndexer(
                     options.`package` ?: this.clazz.java.`package`.name,
                     this.clazz.java.classLoader
                 )
+                .apply {
+                    options.additionalPackages.onEach {
+                        addUrls(
+                            ClasspathHelper.forPackage(it, clazz.java.classLoader)
+                        )
+                    }
+                }
                 .addScanners(
                     MethodAnnotationsScanner(),
                     TypeAnnotationsScanner(),
-                    SubTypesScanner(false)
+                    SubTypesScanner()
                 )
         )
-
-    init {
-        fun getAllClassesInPackage(packageName: String): Set<Class<*>> {
-            val reflections = Reflections(
-                ConfigurationBuilder()
-                    .forPackage(packageName)
-                    .addScanners(SubTypesScanner(false))
-            )
-
-            return reflections.getSubTypesOf(Any::class.java)
-        }
-
-        val classes = getAllClassesInPackage("net.skullian.skyfactions.api.service")
-        classes.forEach { println(it.name) }
-    }
 
     /**
      * Returns a list of subtypes of the specified type.

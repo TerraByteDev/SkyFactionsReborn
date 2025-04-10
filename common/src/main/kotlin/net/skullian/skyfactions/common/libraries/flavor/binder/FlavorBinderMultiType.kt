@@ -13,7 +13,7 @@ class FlavorBinderMultiType(
 )
 {
     val types = mutableListOf<KClass<*>>()
-    private var binderInternalPopulator = { _: FlavorBinder<*> -> }
+    var binderInternalPopulator = { _: FlavorBinder<*> -> }
 
     /**
      * Adds the specified type to the list of types to bind.
@@ -59,7 +59,8 @@ class FlavorBinderMultiType(
         for (type in types)
         {
             container.binders += FlavorBinder(type)
-                .apply(binderInternalPopulator) to instance
+                .apply(binderInternalPopulator)
+                .to(instance)
         }
     }
 }

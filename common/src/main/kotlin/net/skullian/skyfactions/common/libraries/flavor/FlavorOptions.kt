@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.common.libraries.flavor
 
+import java.util.logging.Logger
 
 /**
  * @author GrowlyX
@@ -8,5 +9,7 @@ package net.skullian.skyfactions.common.libraries.flavor
 data class FlavorOptions
 @JvmOverloads
 constructor(
-    val `package`: String? = null
+    val logger: Logger = Logger.getAnonymousLogger(),
+    val `package`: String? = null,
+    val additionalPackages: List<String> = listOf()
 )

@@ -29,7 +29,10 @@ class PaperSkyApi : SkyApi {
 
         this.flavor = Flavor.create<PaperSkyApi>(
             options = FlavorOptions(
-                "net.skullian.skyfactions.paper.service",
+                `package` = "net.skullian.skyfactions.paper.service",
+                additionalPackages = listOf(
+                    "net.skullian.skyfactions.paper.service"
+                )
             )
         )
 

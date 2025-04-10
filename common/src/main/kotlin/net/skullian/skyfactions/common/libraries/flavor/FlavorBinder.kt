@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.common.libraries.flavor
 
+import net.skullian.skyfactions.common.libraries.flavor.inject.InjectScope
 import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 
@@ -16,7 +17,21 @@ class FlavorBinder<T : Any>(
 )
 {
     val annotationChecks = mutableMapOf<KClass<out Annotation>, (Annotation) -> Boolean>()
-    private var instance by Delegates.notNull<Any>()
+
+    var instance by Delegates.notNull<Any>()
+    var scope = InjectScope.NO_SCOPE
+
+    /**
+     * Sets the injection scope for the binder.
+     *
+     * @param scope The injection scope to set.
+     * @return The current `FlavorBinder` instance.
+     */
+    fun scoped(scope: InjectScope): FlavorBinder<T>
+    {
+        this.scope = scope
+        return this
+    }
 
     /**
      * Convert an instance to a [FlavorBinder].
