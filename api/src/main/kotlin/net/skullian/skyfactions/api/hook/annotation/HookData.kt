@@ -1,6 +1,6 @@
-package net.skullian.skyfactions.common.hook.annotation
+package net.skullian.skyfactions.api.hook.annotation
 
-import net.skullian.skyfactions.common.hook.HookLoadOrder
+import net.skullian.skyfactions.api.hook.HookLoadOrder
 
 /**
  * An annotation used to mark classes that are hooks.

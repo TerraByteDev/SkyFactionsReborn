@@ -31,3 +31,6 @@ This plugin contains an abundance of smart features, including:
   reports, use Github issues.
 - [Torrent Network](https://www.torrentsmp.com) - The first server to use this plugin!
 - [Documentation](https://docs.terrabytedev.com) - Extensive documentation for the plugin.
+
+## Acknowledgements
+- [Flavor](https://github.com/GrowlyX/flavor) - A fantastic Kotlin lifecycle framework a few adaptions and fixes.

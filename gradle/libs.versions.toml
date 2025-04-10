@@ -1,25 +1,37 @@
 [versions]
 kotlin-version = "2.1.10"
 kotlinx-version = "1.8.0"
+
 adventure-version = "4.18.0"
 adventure-platform-version = "4.3.4"
+
 reflections-version = "0.10.2"
 jakarta-inject-version = "2.0.1"
 jakarta-annotations-version = "3.0.0"
+
+flyway-version = "11.7.0"
+jooq-version = "3.20.3"
 
 [libraries]
 ## Common
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-version" }
 reflections = { group = "org.reflections", name = "reflections", version.ref = "reflections-version" }
 
+### Services
 jakarta-inject = { group = "jakarta.inject", name = "jakarta.inject-api", version.ref = "jakarta-inject-version" }
 jakarta-annotations = { group = "jakarta.annotation", name = "jakarta.annotation-api", version.ref = "jakarta-annotations-version" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version = "1" }
 
+### For libraries JSON reading (kt serialization does not work well)
 jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.18.3" }
 
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure-version" }
 adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure-version" }
+
+## Database
+flyway-core = { group = "org.flywaydb", name = "flyway-core", version.ref = "flyway-version" }
+jooq = { group = "org.jooq", name = "jooq", version.ref = "jooq-version" }
+sqlite-jdbc = { group = "org.xerial", name = "sqlite-jdbc", version = "3.49.1.0" } # Used for buildscript
 
 ## Paper
 paper-api = { group = "io.papermc.paper", name = "paper-api", version = "1.21.4-R0.1-SNAPSHOT" }
@@ -29,6 +41,11 @@ adventure-platform-bukkit = { group = "net.kyori", name = "adventure-platform-bu
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
 
+## Misc
 shadow = { id = "com.gradleup.shadow", version = "9.0.0-beta11" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }
 dokka = { id = "org.jetbrains.dokka", version = "2.0.0" }
+
+## Database
+flyway = { id = "org.flywaydb.flyway", version.ref = "flyway-version" }
+jooq-codgen = { id = "org.jooq.jooq-codegen-gradle", version.ref = "jooq-version" }

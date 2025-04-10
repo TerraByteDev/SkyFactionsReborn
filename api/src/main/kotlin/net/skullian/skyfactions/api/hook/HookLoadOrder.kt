@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.common.hook
+package net.skullian.skyfactions.api.hook
 
 /**
  * A simple enum that allows hook classes to specify when they should be loaded.

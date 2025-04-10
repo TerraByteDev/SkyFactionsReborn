@@ -16,7 +16,6 @@ class SkyFactionsReborn: JavaPlugin(), SkyPlatform {
         SkyApi.setInstance(PaperSkyApi())
 
         SkyApi.getInstance().onEnable()
-        println(SkyApi.getInstance().getUserService().getAllUsers())
     }
 
     override fun onDisable() {

@@ -1,9 +1,10 @@
-package net.skullian.skyfactions.common.hook
+package net.skullian.skyfactions.api.hook
 
-import net.skullian.skyfactions.api.SkyApi
+import net.skullian.skyfactions.api.exception.HookException
 import net.skullian.skyfactions.api.library.flavor.service.Service
-import net.skullian.skyfactions.common.hook.annotation.HookData
-import net.skullian.skyfactions.common.util.SLogger
+import net.skullian.skyfactions.api.hook.annotation.HookData
+import net.skullian.skyfactions.api.library.flavor.service.Close
+import net.skullian.skyfactions.api.library.flavor.service.Configure
 import java.io.IOException
 import java.net.URL
 import java.util.Enumeration
@@ -14,7 +15,9 @@ import java.util.jar.JarFile
  * An interface for the hook manager.
  * This is used to load and manage hooks.
  */
-@Service
+@Service(
+    name = "Hook Manager"
+)
 interface HookManager {
 
     val hooks: MutableMap<HookLoadOrder, MutableList<SkyHook>>
@@ -88,33 +91,14 @@ interface HookManager {
      * This will be called by the platform to initialize the hooks.
      * @param order The current order of hooks to be loaded. This method is called multiple times for each [HookLoadOrder] stage.
      */
-    fun initialize(order: HookLoadOrder) {
-        val hooks = hooks[order] ?: return
-
-        for (hook in hooks) {
-            val pluginName = getHookPluginName(hook)
-            if (SkyApi.getInstance().getPlatform().isPluginEnabled(pluginName)) {
-                // todo check for hook config
-                SLogger.info("Hooking into {} via SkyHook {}", "<yellow>$pluginName</yellow>", "<green>${hook.javaClass.name}</green>")
-                hook.onEnable()
-
-                loadedHooks.add(hook.javaClass)
-            } else {
-                SLogger.warn("Could not hook into {} as it is not enabled.", "<yellow>${hook.javaClass.name}</yellow>", "<red>$pluginName</red>")
-            }
-        }
-    }
+    @Configure
+    fun initialize(order: HookLoadOrder)
 
     /**
      * Called when the platform disables (typically server shutdown).
      */
-    fun onDisable() {
-        SLogger.info("Disabling hooks...")
-
-        for (hook in loadedHooks) {
-            (hook as SkyHook).onDisable()
-        }
-    }
+    @Close
+    fun onDisable()
 
     /**
      * Fetch a loaded [SkyHook] by its class.
@@ -135,7 +119,7 @@ interface HookManager {
         return annotation.loadOrder
     }
 
-    private fun getHookPluginName(hook: SkyHook): String {
+    fun getHookPluginName(hook: SkyHook): String {
         // no need to check, as it will be checked in the getHookLoadOrder method
         val annotation = hook.javaClass.getAnnotation(HookData::class.java)
         return annotation.pluginName

@@ -85,6 +85,10 @@ subprojects {
     }
 }
 
+dependencies {
+    implementation("org.xerial:sqlite-jdbc:3.42.0.0")
+}
+
 tasks.shadowJar {
     archiveClassifier.set("")
     configurations = listOf(project.configurations.runtimeClasspath.get())
@@ -107,4 +111,6 @@ fun variables(): Map<String, String> = mapOf(
     "reflectionsVersion" to libs.versions.reflections.version.get(),
     "jakartaInjectVersion" to libs.versions.jakarta.inject.version.get(),
     "jakartaAnnotationsVersion" to libs.versions.jakarta.annotations.version.get(),
+    "flywayVersion" to libs.versions.flyway.version.get(),
+    "jooqVersion" to libs.versions.jooq.version.get(),
 )

@@ -2,6 +2,8 @@ package net.skullian.skyfactions.api
 
 import net.kyori.adventure.audience.Audience
 import net.skullian.skyfactions.api.event.bus.EventBus
+import net.skullian.skyfactions.api.hook.HookManager
+import net.skullian.skyfactions.api.hook.SkyHook
 import net.skullian.skyfactions.api.model.user.SkyUser
 import net.skullian.skyfactions.api.service.UserService
 
@@ -58,6 +60,12 @@ interface SkyApi {
      * This facilitates fetching [SkyUser] instances.
      */
     fun getUserService(): UserService
+
+    /**
+     * Get the hook manager.
+     * This facilitates the platform [SkyHook]
+     */
+    fun getHookManager(): HookManager
 
     // ------ Components ------ //
 

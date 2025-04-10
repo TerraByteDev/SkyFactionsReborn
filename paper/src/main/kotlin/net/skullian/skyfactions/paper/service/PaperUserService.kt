@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.paper.service
 
-import net.skullian.skyfactions.api.library.flavor.service.Service
+import net.skullian.skyfactions.api.model.user.OnlineSkyUser
 import net.skullian.skyfactions.api.model.user.SkyUser
 import net.skullian.skyfactions.api.service.UserService
 import java.util.*
@@ -9,11 +9,10 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * The paper implementation of [UserService].
  */
-@Service
 class PaperUserService : UserService {
 
-    private val usersNameCache: MutableMap<String, SkyUser> = ConcurrentHashMap()
-    private val usersUUIDCache: MutableMap<UUID, SkyUser> = ConcurrentHashMap()
+    private val usersNameCache: MutableMap<String, OnlineSkyUser> = ConcurrentHashMap()
+    private val usersUUIDCache: MutableMap<UUID, OnlineSkyUser> = ConcurrentHashMap()
 
     override fun getAllUsers(): List<SkyUser> {
         TODO("Not yet implemented")
@@ -30,7 +29,7 @@ class PaperUserService : UserService {
     /**
      * Cache the [SkyUser] instance into [usersNameCache] and [usersUUIDCache].
      */
-    fun cache(user: SkyUser) {
+    fun cache(user: OnlineSkyUser) {
         usersNameCache[user.getName()] = user
         usersUUIDCache[user.getUniqueId()] = user
     }
@@ -39,7 +38,7 @@ class PaperUserService : UserService {
      * Invalidate a cached [SkyUser] from the [usersNameCache] and [usersUUIDCache],
      * if present.
      */
-    fun invalidate(user: SkyUser) {
+    fun invalidate(user: OnlineSkyUser) {
         usersNameCache.remove(user.getName())
         usersUUIDCache.remove(user.getUniqueId())
     }

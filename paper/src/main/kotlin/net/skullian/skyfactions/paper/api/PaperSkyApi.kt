@@ -5,11 +5,13 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.skullian.skyfactions.api.SkyApi
 import net.skullian.skyfactions.api.SkyPlatform
 import net.skullian.skyfactions.api.event.bus.EventBus
+import net.skullian.skyfactions.api.hook.HookManager
 import net.skullian.skyfactions.api.service.UserService
 import net.skullian.skyfactions.common.eventbus.EventBusImpl
 import net.skullian.skyfactions.common.libraries.flavor.Flavor
 import net.skullian.skyfactions.common.libraries.flavor.FlavorOptions
 import net.skullian.skyfactions.paper.SkyFactionsReborn
+import net.skullian.skyfactions.paper.hook.PaperHookManager
 import net.skullian.skyfactions.paper.service.PaperUserService
 
 /**
@@ -31,7 +33,7 @@ class PaperSkyApi : SkyApi {
             options = FlavorOptions(
                 `package` = "net.skullian.skyfactions.paper.service",
                 additionalPackages = listOf(
-                    "net.skullian.skyfactions.paper.service"
+                    "net.skullian.skyfactions.paper.hook"
                 )
             )
         )
@@ -54,8 +56,11 @@ class PaperSkyApi : SkyApi {
     // ------- Services ------- //
 
     override fun getUserService(): UserService {
-        println(flavor.services.size)
         return flavor.services[PaperUserService::class] as UserService
+    }
+
+    override fun getHookManager(): HookManager {
+        return flavor.services[PaperHookManager::class] as HookManager
     }
 
     // ------ Components ------ //

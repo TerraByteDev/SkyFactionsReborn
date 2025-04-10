@@ -8,7 +8,9 @@ import java.util.UUID
 /**
  * The user service, for fetching [SkyUser] instances.
  */
-@Service
+@Service(
+    name = "User Service"
+)
 interface UserService {
 
     /**

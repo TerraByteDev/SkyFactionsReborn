@@ -1,6 +1,6 @@
-package net.skullian.skyfactions.common.hook
+package net.skullian.skyfactions.api.hook
 
-import net.skullian.skyfactions.common.hook.annotation.HookData
+import net.skullian.skyfactions.api.hook.annotation.HookData
 
 /**
  * An interface representing a plugin / mod hook.

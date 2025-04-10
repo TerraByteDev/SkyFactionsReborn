@@ -78,8 +78,10 @@ class PackageIndexer(
     inline fun <reified T : Annotation> getTypesAnnotatedWith(): List<Class<*>>
     {
         return reflections
-            .getTypesAnnotatedWith(T::class.java)
-            .toList()
+            .get(Scanners.TypesAnnotated.with(T::class.java))
+            .mapNotNull { className ->
+                Class.forName(className)
+            }
     }
 
     /**

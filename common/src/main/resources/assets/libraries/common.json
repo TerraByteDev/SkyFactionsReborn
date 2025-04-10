@@ -13,6 +13,11 @@
       "version": "${kotlinVersion}"
     },
     {
+      "groupId": "org.jetbrains.kotlin",
+      "artifactId": "kotlin-reflect",
+      "version": "${kotlinVersion}"
+    },
+    {
       "groupId": "org.jetbrains.kotlinx",
       "artifactId": "kotlinx-serialization-json",
       "version": "${kotlinxVersion}"
@@ -46,6 +51,16 @@
       "groupId": "javax.inject",
       "artifactId": "javax.inject",
       "version": "1"
+    },
+    {
+      "groupId": "org.flywaydb",
+      "artifactId": "flyway-core",
+      "version": "${flywayVersion}"
+    },
+    {
+      "groupId": "org.jooq",
+      "artifactId": "jooq",
+      "version": "${jooqVersion}"
     }
   ]
 }
