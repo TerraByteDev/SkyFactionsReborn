@@ -11,6 +11,10 @@ plugins {
 }
 
 allprojects {
+    apply(plugin = "java")
+    apply(plugin = "maven-publish")
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+
     group = "net.skullian.skyfactions"
     version = "1.0.0-ALPHA"
 
@@ -20,9 +24,6 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "java")
-    apply(plugin = "maven-publish")
-    apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
     apply(plugin = "com.gradleup.shadow")
     apply(plugin = "io.gitlab.arturbosch.detekt")

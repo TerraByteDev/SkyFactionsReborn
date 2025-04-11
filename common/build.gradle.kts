@@ -7,7 +7,7 @@ buildscript {
     }
 
     // jOOQ and Flyway use SQLite for validating migrations and creating classes, so we
-    // need to add the SQLite JDBC dependency to the buildscript for the plugins/
+    // need to add the SQLite JDBC dependency to the buildscript for the plugins
     dependencies {
         classpath(libs.sqlite.jdbc)
     }
