@@ -17,6 +17,7 @@ public class V1__Init extends BaseJavaMigration {
             .column("id", INTEGER) // Integer ID of all islands. Increments per island creation. Used to determine grid position of island area.
             .column("uuid", BLOB(16)) // byte[] (BLOB) UUID of the island owner.
             .column("last_raided", BIGINT) // Unix timestamp (long) of the last time the island was raided. Used to determine whether the island can be selected for a raid.
+            .column("trusted_players", VARCHAR) // A JSON array string of trusted player UUIDs.
             .primaryKey("id")
             .execute();
     }

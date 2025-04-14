@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.common.database.flyway;
 
-import net.skullian.skyfactions.api.SkyApi;
 import org.flywaydb.core.api.migration.Context;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;

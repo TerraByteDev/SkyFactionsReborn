@@ -94,4 +94,8 @@ tasks {
     jooqCodegen.configure {
         dependsOn("flywayMigrate")
     }
+
+    detekt.configure {
+        dependsOn("jooqCodegen")
+    }
 }

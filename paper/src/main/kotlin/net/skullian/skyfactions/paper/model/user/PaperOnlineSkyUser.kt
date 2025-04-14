@@ -60,7 +60,7 @@ class PaperOnlineSkyUser(val player: Player) : OnlineSkyUser {
         return player.uniqueId
     }
 
-    override fun getName(): String? {
+    override fun getName(): String {
         return player.name
     }
 }
