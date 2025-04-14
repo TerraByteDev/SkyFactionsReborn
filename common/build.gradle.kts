@@ -48,7 +48,7 @@ dependencies {
 }
 
 flyway {
-    url = "jdbc:sqlite:file:./assets/data.sqlite3"
+    url = "jdbc:sqlite:file:${rootProject.rootDir}/assets/data.sqlite3"
     user = "sa"
     password = ""
     locations = arrayOf("classpath:net/skullian/skyfactions/common/database/flyway/migrations")
@@ -76,7 +76,7 @@ jooq {
 
             target {
                 packageName = "net.skullian.skyfactions.common.database.jooq"
-                directory = "common/src/main/kotlin"
+                directory = "src/main/kotlin"
                 isClean = false
             }
         }
@@ -85,6 +85,7 @@ jooq {
 
 tasks {
     flywayMigrate.configure {
+        notCompatibleWithConfigurationCache("Flyway tasks access project during execution.")
         System.setProperty("net.skullian.skyfactions.codegen", "true")
 
         dependsOn("classes")

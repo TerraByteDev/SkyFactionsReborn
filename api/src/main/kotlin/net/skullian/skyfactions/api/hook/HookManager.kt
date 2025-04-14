@@ -119,6 +119,9 @@ interface HookManager {
         return annotation.loadOrder
     }
 
+    /**
+     * Get the plugin name that the specific [SkyHook] depends on.
+     */
     fun getHookPluginName(hook: SkyHook): String {
         // no need to check, as it will be checked in the getHookLoadOrder method
         val annotation = hook.javaClass.getAnnotation(HookData::class.java)

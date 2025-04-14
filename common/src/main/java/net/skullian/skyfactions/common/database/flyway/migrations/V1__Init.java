@@ -4,10 +4,20 @@ import net.skullian.skyfactions.common.database.flyway.FlywayUtils;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
 import org.jooq.DSLContext;
+import org.jooq.impl.SQLDataType;
+
+import static org.jooq.impl.SQLDataType.*;
 
 public class V1__Init extends BaseJavaMigration {
     @Override
     public void migrate(Context context) throws Exception {
         DSLContext ctx = FlywayUtils.getContext(context);
+
+        ctx.createTableIfNotExists("islands")
+            .column("id", INTEGER) // Integer ID of all islands. Increments per island creation. Used to determine grid position of island area.
+            .column("uuid", BLOB(16)) // byte[] (BLOB) UUID of the island owner.
+            .column("last_raided", BIGINT) // Unix timestamp (long) of the last time the island was raided. Used to determine whether the island can be selected for a raid.
+            .primaryKey("id")
+            .execute();
     }
 }
