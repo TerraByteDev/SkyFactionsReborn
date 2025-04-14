@@ -28,6 +28,10 @@ open class IslandsRecord() : UpdatableRecordImpl<IslandsRecord>(Islands.ISLANDS)
         set(value): Unit = set(2, value)
         get(): Long? = get(2) as Long?
 
+    open var trustedPlayers: String?
+        set(value): Unit = set(3, value)
+        get(): String? = get(3) as String?
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -37,10 +41,11 @@ open class IslandsRecord() : UpdatableRecordImpl<IslandsRecord>(Islands.ISLANDS)
     /**
      * Create a detached, initialised IslandsRecord
      */
-    constructor(id: Int? = null, uuid: ByteArray? = null, lastRaided: Long? = null): this() {
+    constructor(id: Int? = null, uuid: ByteArray? = null, lastRaided: Long? = null, trustedPlayers: String? = null): this() {
         this.id = id
         this.uuid = uuid
         this.lastRaided = lastRaided
+        this.trustedPlayers = trustedPlayers
         resetTouchedOnNotNull()
     }
 }

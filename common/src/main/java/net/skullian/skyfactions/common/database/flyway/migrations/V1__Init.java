@@ -4,7 +4,6 @@ import net.skullian.skyfactions.common.database.flyway.FlywayUtils;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
 import org.jooq.DSLContext;
-import org.jooq.impl.SQLDataType;
 
 import static org.jooq.impl.SQLDataType.*;
 
@@ -19,6 +18,13 @@ public class V1__Init extends BaseJavaMigration {
             .column("last_raided", BIGINT) // Unix timestamp (long) of the last time the island was raided. Used to determine whether the island can be selected for a raid.
             .column("trusted_players", VARCHAR) // A JSON array string of trusted player UUIDs.
             .primaryKey("id")
+            .execute();
+
+        ctx.createTableIfNotExists("players")
+            .column("uuid", BLOB(16)) // UUID (BLOB / byte[]) of this playerdata profile.
+            .column("faction", BLOB(16)) // UUID (BLOB / byte[]) of the Faction this player belongs to.
+            .column("last_raid", BIGINT) // Unix timestamp (long) of the last time this player has started a raid.
+            .primaryKey("uuid")
             .execute();
     }
 }

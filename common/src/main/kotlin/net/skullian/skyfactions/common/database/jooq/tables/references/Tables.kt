@@ -7,6 +7,7 @@ package net.skullian.skyfactions.common.database.jooq.tables.references
 
 import net.skullian.skyfactions.common.database.jooq.tables.FlywaySchemaHistory
 import net.skullian.skyfactions.common.database.jooq.tables.Islands
+import net.skullian.skyfactions.common.database.jooq.tables.Players
 
 
 
@@ -19,3 +20,8 @@ val FLYWAY_SCHEMA_HISTORY: FlywaySchemaHistory = FlywaySchemaHistory.FLYWAY_SCHE
  * The table <code>islands</code>.
  */
 val ISLANDS: Islands = Islands.ISLANDS
+
+/**
+ * The table <code>players</code>.
+ */
+val PLAYERS: Players = Players.PLAYERS

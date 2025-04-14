@@ -7,8 +7,10 @@ package net.skullian.skyfactions.common.database.jooq.keys
 
 import net.skullian.skyfactions.common.database.jooq.tables.FlywaySchemaHistory
 import net.skullian.skyfactions.common.database.jooq.tables.Islands
+import net.skullian.skyfactions.common.database.jooq.tables.Players
 import net.skullian.skyfactions.common.database.jooq.tables.records.FlywaySchemaHistoryRecord
 import net.skullian.skyfactions.common.database.jooq.tables.records.IslandsRecord
+import net.skullian.skyfactions.common.database.jooq.tables.records.PlayersRecord
 
 import org.jooq.UniqueKey
 import org.jooq.impl.DSL
@@ -22,3 +24,4 @@ import org.jooq.impl.Internal
 
 val FLYWAY_SCHEMA_HISTORY__PK_FLYWAY_SCHEMA_HISTORY: UniqueKey<FlywaySchemaHistoryRecord> = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("pk_flyway_schema_history"), arrayOf(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK), true)
 val ISLANDS__PK_ISLANDS: UniqueKey<IslandsRecord> = Internal.createUniqueKey(Islands.ISLANDS, DSL.name("pk_islands"), arrayOf(Islands.ISLANDS.ID), true)
+val PLAYERS__PK_PLAYERS: UniqueKey<PlayersRecord> = Internal.createUniqueKey(Players.PLAYERS, DSL.name("pk_players"), arrayOf(Players.PLAYERS.UUID), true)

@@ -83,6 +83,11 @@ open class Islands(
      */
     val LAST_RAIDED: TableField<IslandsRecord, Long?> = createField(DSL.name("last_raided"), SQLDataType.BIGINT, this, "")
 
+    /**
+     * The column <code>islands.trusted_players</code>.
+     */
+    val TRUSTED_PLAYERS: TableField<IslandsRecord, String?> = createField(DSL.name("trusted_players"), SQLDataType.VARCHAR, this, "")
+
     private constructor(alias: Name, aliased: Table<IslandsRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<IslandsRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
     private constructor(alias: Name, aliased: Table<IslandsRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
