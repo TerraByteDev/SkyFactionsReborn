@@ -114,4 +114,5 @@ fun variables(): Map<String, String> = mapOf(
     "jakartaAnnotationsVersion" to libs.versions.jakarta.annotations.version.get(),
     "flywayVersion" to libs.versions.flyway.version.get(),
     "jooqVersion" to libs.versions.jooq.version.get(),
+    "hikariVersion" to libs.versions.hikari.version.get(),
 )

@@ -61,6 +61,11 @@
       "groupId": "org.jooq",
       "artifactId": "jooq",
       "version": "${jooqVersion}"
+    },
+    {
+      "groupId": "com.zaxxer",
+      "artifactId": "hikaricp",
+      "version": "${hikariVersion}"
     }
   ]
 }

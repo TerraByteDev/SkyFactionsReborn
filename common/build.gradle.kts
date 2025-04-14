@@ -32,18 +32,11 @@ dependencies {
     compileOnly(libs.kotlinx.serialization)
     implementation(libs.jackson.databind)
 
-    compileOnly(libs.adventure.api)
-    compileOnly(libs.adventure.text.minimessage)
+    compileOnly(libs.bundles.adventure)
     compileOnly(libs.reflections)
 
-    compileOnly(libs.jakarta.inject)
-    compileOnly(libs.jakarta.annotations)
-    compileOnly(libs.javax.inject)
+    compileOnly(libs.bundles.database)
 
-    compileOnly(libs.flyway.core)
-    compileOnly(libs.jooq)
-
-    compileOnly(libs.sqlite.jdbc)
     jooqCodegen(libs.sqlite.jdbc)
 }
 

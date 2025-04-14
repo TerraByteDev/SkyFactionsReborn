@@ -8,9 +8,7 @@ val branchProvider: Provider<String> = providers.exec {
 
 dependencies {
     compileOnly(libs.kotlinx.serialization)
-    compileOnly(libs.adventure.api)
-
-    compileOnly(libs.reflections)
+    compileOnly(libs.bundles.adventure)
 }
 
 tasks.publish {

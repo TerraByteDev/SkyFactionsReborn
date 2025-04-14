@@ -5,26 +5,27 @@ kotlinx-version = "1.8.0"
 adventure-version = "4.18.0"
 adventure-platform-version = "4.3.4"
 
+configlib-version = "4.5.0"
+
 reflections-version = "0.10.2"
 jakarta-inject-version = "2.0.1"
 jakarta-annotations-version = "3.0.0"
 
 flyway-version = "11.7.0"
 jooq-version = "3.20.3"
+hikari-version = "6.3.0"
 
 [libraries]
 ## Common
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-version" }
 reflections = { group = "org.reflections", name = "reflections", version.ref = "reflections-version" }
 
-### Services
-jakarta-inject = { group = "jakarta.inject", name = "jakarta.inject-api", version.ref = "jakarta-inject-version" }
-jakarta-annotations = { group = "jakarta.annotation", name = "jakarta.annotation-api", version.ref = "jakarta-annotations-version" }
-javax-inject = { group = "javax.inject", name = "javax.inject", version = "1" }
+configlib-yaml = { group = "de.exlll", name = "configlib-yaml", version.ref = "configlib-version" }
 
-### For libraries JSON reading (kt serialization does not work well)
+## For libraries JSON reading (kt serialization does not work well)
 jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.18.3" }
 
+## Adventure
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure-version" }
 adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure-version" }
 
@@ -32,6 +33,7 @@ adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minim
 flyway-core = { group = "org.flywaydb", name = "flyway-core", version.ref = "flyway-version" }
 jooq = { group = "org.jooq", name = "jooq", version.ref = "jooq-version" }
 sqlite-jdbc = { group = "org.xerial", name = "sqlite-jdbc", version = "3.49.1.0" } # Used for buildscript
+hikaricp = { group = "com.zaxxer", name = "hikari-cp", version.ref = "hikari-version" }
 
 ## Paper
 paper-api = { group = "io.papermc.paper", name = "paper-api", version = "1.21.4-R0.1-SNAPSHOT" }
@@ -49,3 +51,7 @@ dokka = { id = "org.jetbrains.dokka", version = "2.0.0" }
 ## Database
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway-version" }
 jooq-codgen = { id = "org.jooq.jooq-codegen-gradle", version.ref = "jooq-version" }
+
+[bundles]
+adventure = ["adventure-api", "adventure-text-minimessage"]
+database = ["hikaricp", "flyway-core", "jooq"]
