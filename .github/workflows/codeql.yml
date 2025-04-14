@@ -25,22 +25,25 @@ jobs:
       matrix:
         include:
         - language: java-kotlin
-          build-mode: manual
         
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin' 
+        java-version: '21'
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        run: |
-          ./gradlew build
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
+    - name: Build with Gradle
+      run: ./gradlew --scan --full-stacktrace -Dorg.gradle.dependency.verification=off
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
