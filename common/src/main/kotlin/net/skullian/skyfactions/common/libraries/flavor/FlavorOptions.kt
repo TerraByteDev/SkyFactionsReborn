@@ -9,7 +9,6 @@ import java.util.logging.Logger
 data class FlavorOptions
 @JvmOverloads
 constructor(
-    val logger: Logger = Logger.getAnonymousLogger(),
     val `package`: String? = null,
     val additionalPackages: List<String> = listOf()
 )

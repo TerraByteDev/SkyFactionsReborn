@@ -188,7 +188,7 @@ class Flavor(
                 kotlin.runCatching {
                     scanAndInject(clazz.kotlin, clazz.objectInstance())
                 }.onFailure {
-                    options.logger.log(Level.WARNING, "An exception was thrown during injection", it)
+                    SLogger.warn("An exception was thrown during service injection: {}", it)
                 }
             }
         }
@@ -214,22 +214,22 @@ class Flavor(
 
             if (milli != -1L)
             {
-                options.logger.info {
-                    "[Services] Shutdown [${
+                SLogger.info(
+                    "Shutdown service [${
                         service.name.ifEmpty {
                             entry.key.java.simpleName
                         }
                     }] in ${milli}ms."
-                }
+                )
             } else
             {
-                options.logger.info {
-                    "[Services] Failed to shutdown [${
+                SLogger.info(
+                    "Shutdown service [${
                         service.name.ifEmpty {
                             entry.key.java.simpleName
                         }
-                    }]!"
-                }
+                    }]."
+                )
             }
         }
     }
@@ -330,11 +330,7 @@ class Flavor(
                         ?.invoke(method, singleton)
                 } catch (exception: Exception)
                 {
-                    options.logger.log(
-                        Level.SEVERE,
-                        "Error occurred while invoking function",
-                        exception
-                    )
+                    SLogger.fatal("An error occurred while invoking service function - {}", exception)
                 }
             }
         }
@@ -362,22 +358,18 @@ class Flavor(
             // while trying to configure the service
             if (milli != -1L)
             {
-                options.logger.info {
-                    "[Services] Loaded [${
-                        service.name.ifEmpty {
-                            clazz.java.simpleName
-                        }
-                    }] in ${milli}ms."
-                }
+                SLogger.info("Loaded service [${
+                    service.name.ifEmpty {
+                        clazz.java.simpleName
+                    }
+                }] in ${milli}ms.")
             } else
             {
-                options.logger.info {
-                    "[Services] Failed to load [${
-                        service.name.ifEmpty {
-                            clazz.java.simpleName
-                        }
-                    }]!"
-                }
+                SLogger.fatal("Failed to load service [${
+                    service.name.ifEmpty {
+                        clazz.java.simpleName
+                    }
+                }].")
             }
         }
     }

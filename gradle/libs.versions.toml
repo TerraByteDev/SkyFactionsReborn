@@ -6,14 +6,13 @@ adventure-version = "4.18.0"
 adventure-platform-version = "4.3.4"
 
 configlib-version = "4.5.0"
-
 reflections-version = "0.10.2"
-jakarta-inject-version = "2.0.1"
-jakarta-annotations-version = "3.0.0"
 
 flyway-version = "11.7.0"
 jooq-version = "3.20.3"
 hikari-version = "6.3.0"
+
+sentry-version = "8.8.0"
 
 [libraries]
 ## Common
@@ -33,7 +32,9 @@ adventure-text-minimessage = { group = "net.kyori", name = "adventure-text-minim
 flyway-core = { group = "org.flywaydb", name = "flyway-core", version.ref = "flyway-version" }
 jooq = { group = "org.jooq", name = "jooq", version.ref = "jooq-version" }
 sqlite-jdbc = { group = "org.xerial", name = "sqlite-jdbc", version = "3.49.1.0" } # Used for buildscript
-hikaricp = { group = "com.zaxxer", name = "hikari-cp", version.ref = "hikari-version" }
+hikaricp = { group = "com.zaxxer", name = "HikariCP", version.ref = "hikari-version" }
+
+sentry = { group = "io.sentry", name = "sentry", version.ref = "sentry-version" }
 
 ## Paper
 paper-api = { group = "io.papermc.paper", name = "paper-api", version = "1.21.4-R0.1-SNAPSHOT" }

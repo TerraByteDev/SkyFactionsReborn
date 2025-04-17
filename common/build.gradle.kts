@@ -16,6 +16,7 @@ buildscript {
 plugins {
     alias(libs.plugins.flyway)
     alias(libs.plugins.jooq.codgen)
+    kotlin("jvm")
 }
 
 repositories {
@@ -29,14 +30,19 @@ dependencies {
         exclude(group = "kotlin")
     }
 
+    compileOnly(libs.configlib.yaml)
     compileOnly(libs.kotlinx.serialization)
+    // we only include jackson databind because kotlinx serialization
+    // doesn't seem to play very nicely when it comes to things like paper classloader
+    // so we use jackson purely for reading library json values in jar resources
     implementation(libs.jackson.databind)
 
     compileOnly(libs.bundles.adventure)
     compileOnly(libs.reflections)
 
-    compileOnly(libs.bundles.database)
+    compileOnly(libs.sentry)
 
+    compileOnly(libs.bundles.database)
     jooqCodegen(libs.sqlite.jdbc)
 }
 

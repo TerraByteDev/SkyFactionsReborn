@@ -4,10 +4,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `maven-publish`
-    alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.shadow)
     alias(libs.plugins.detekt)
+    kotlin("jvm")
 }
 
 allprojects {
@@ -20,6 +20,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven("https://libraries.minecraft.net")
     }
 }
 
@@ -88,6 +89,7 @@ subprojects {
 
 dependencies {
     implementation("org.xerial:sqlite-jdbc:3.42.0.0")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.shadowJar {
@@ -110,9 +112,8 @@ fun variables(): Map<String, String> = mapOf(
     "adventureVersion" to libs.versions.adventure.version.get(),
     "adventurePlatformVersion" to libs.versions.adventure.platform.version.get(),
     "reflectionsVersion" to libs.versions.reflections.version.get(),
-    "jakartaInjectVersion" to libs.versions.jakarta.inject.version.get(),
-    "jakartaAnnotationsVersion" to libs.versions.jakarta.annotations.version.get(),
     "flywayVersion" to libs.versions.flyway.version.get(),
     "jooqVersion" to libs.versions.jooq.version.get(),
     "hikariVersion" to libs.versions.hikari.version.get(),
+    "sentryVersion" to libs.versions.sentry.version.get(),
 )

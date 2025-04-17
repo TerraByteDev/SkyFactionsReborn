@@ -33,7 +33,8 @@ class PaperSkyApi : SkyApi {
             options = FlavorOptions(
                 `package` = "net.skullian.skyfactions.paper.service",
                 additionalPackages = listOf(
-                    "net.skullian.skyfactions.paper.hook"
+                    "net.skullian.skyfactions.paper.hook",
+                    "net.skullian.skyfactions.common.database"
                 )
             )
         )
