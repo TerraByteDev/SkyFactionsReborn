@@ -2,6 +2,7 @@ package net.skullian.skyfactions.paper.api
 
 import info.preva1l.trashcan.flavor.annotations.Close
 import info.preva1l.trashcan.flavor.annotations.Configure
+import info.preva1l.trashcan.flavor.annotations.Service
 import info.preva1l.trashcan.flavor.annotations.inject.Inject
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
@@ -16,6 +17,7 @@ import net.skullian.skyfactions.paper.SkyFactionsReborn
 /**
  * The paper implementation of [SkyApi].
  */
+@Service
 class PaperSkyApi : SkyApi {
 
     private lateinit var platform: SkyPlatform
@@ -33,8 +35,8 @@ class PaperSkyApi : SkyApi {
      */
     @Configure
     fun onEnable() {
-        this.platform = SkyFactionsReborn.getInstance()
-        this.audience = BukkitAudiences.create(SkyFactionsReborn.getInstance())
+        this.platform = plugin
+        this.audience = BukkitAudiences.create(plugin)
     }
 
     /**
@@ -59,7 +61,7 @@ class PaperSkyApi : SkyApi {
     }
 
     override fun getDatabaseService(): DatabaseService {
-        TODO("Not yet implemented")
+        return plugin.getFlavor().service(DatabaseService::class.java)
     }
 
     // ------ Components ------ //

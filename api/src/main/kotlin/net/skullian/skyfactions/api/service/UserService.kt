@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.api.service
 
-import info.preva1l.trashcan.flavor.annotations.Service
 import net.skullian.skyfactions.api.model.user.SkyUser
 import java.util.Optional
 import java.util.UUID
@@ -8,9 +7,6 @@ import java.util.UUID
 /**
  * The user service, for fetching [SkyUser] instances.
  */
-@Service(
-    name = "User Service"
-)
 interface UserService {
 
     /**

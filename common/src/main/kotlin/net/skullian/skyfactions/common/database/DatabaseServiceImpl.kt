@@ -1,5 +1,8 @@
 package net.skullian.skyfactions.common.database
 
+import info.preva1l.trashcan.flavor.annotations.Close
+import info.preva1l.trashcan.flavor.annotations.Configure
+import info.preva1l.trashcan.flavor.annotations.Service
 import net.skullian.skyfactions.api.database.DatabaseService
 import net.skullian.skyfactions.api.database.DatabaseType
 import net.skullian.skyfactions.common.config.Config
@@ -16,10 +19,12 @@ import org.jooq.impl.DefaultExecuteListenerProvider
  * A simple service class that handles database initialisation,
  * as well as database migrations through jOOQ and Flyway.
  */
+@Service
 class DatabaseServiceImpl : DatabaseService {
 
     private var manager: SQLManager? = null
 
+    @Configure
     override fun onEnable() {
         System.setProperty("org.jooq.no-logo", "true")
         System.setProperty("org.jooq.no-tips", "true")
@@ -36,6 +41,7 @@ class DatabaseServiceImpl : DatabaseService {
         manager!!.enable(dialect, configuration)
     }
 
+    @Close
     override fun onDisable() {
         manager?.dispose()
     }

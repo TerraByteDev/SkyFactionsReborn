@@ -1,6 +1,5 @@
 package net.skullian.skyfactions.api
 
-import info.preva1l.trashcan.flavor.annotations.Service
 import net.kyori.adventure.audience.Audience
 import net.skullian.skyfactions.api.database.DatabaseService
 import net.skullian.skyfactions.api.event.bus.EventBus
@@ -11,9 +10,6 @@ import net.skullian.skyfactions.api.service.UserService
  * The main API class for SkyFactions.
  * This class provides access to the various components of the API.
  */
-@Service(
-    priority = 1
-)
 interface SkyApi {
 
     companion object {

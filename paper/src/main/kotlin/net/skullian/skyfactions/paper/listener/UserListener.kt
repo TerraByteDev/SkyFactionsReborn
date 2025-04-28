@@ -13,5 +13,5 @@ class UserListener : Listener {
     @EventHandler
     fun onPreLogin(event: AsyncPlayerPreLoginEvent) {
         
-    }*/ // todo temporary
+    }*/
 }

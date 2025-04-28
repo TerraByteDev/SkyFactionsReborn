@@ -1,5 +1,6 @@
 package net.skullian.skyfactions.paper.service
 
+import info.preva1l.trashcan.flavor.annotations.Service
 import net.skullian.skyfactions.api.model.user.OnlineSkyUser
 import net.skullian.skyfactions.api.model.user.SkyUser
 import net.skullian.skyfactions.api.service.UserService
@@ -9,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * The paper implementation of [UserService].
  */
+@Service
 class PaperUserService : UserService {
 
     private val usersNameCache: MutableMap<String, OnlineSkyUser> = ConcurrentHashMap()
