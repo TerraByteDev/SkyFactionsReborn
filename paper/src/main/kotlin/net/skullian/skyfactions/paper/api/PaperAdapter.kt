@@ -14,35 +14,35 @@ object PaperAdapter {
     /**
      * Convert a [SkyLocation] to a Bukkit [Location].
      */
-    fun location(location: SkyLocation): Location {
+    fun SkyLocation.toBukkitLocation(): Location {
         return Location(
-            Bukkit.getWorld(location.worldName) ?: throw IllegalArgumentException("Unknown world ${location.worldName}!"),
-            location.x,
-            location.y,
-            location.z,
-            location.yaw,
-            location.pitch
+            Bukkit.getWorld(worldName) ?: throw IllegalArgumentException("Unknown world $worldName!"),
+            x,
+            y,
+            z,
+            yaw,
+            pitch
         )
     }
 
     /**
      * Convert a Bukkit [Location] to a [SkyLocation].
      */
-    fun location(location: Location): SkyLocation {
+    fun Location.toSkyLocation(): SkyLocation {
         return SkyLocation(
-            location.world.name,
-            location.x,
-            location.y,
-            location.z,
-            location.yaw,
-            location.pitch
+            world.name,
+            x,
+            y,
+            z,
+            yaw,
+            pitch
         )
     }
 
     /**
      * Convert a [SkyUser] to a Bukkit [Player].
      */
-    fun player(user: SkyUser): Player {
-        return Bukkit.getPlayer(user.getUniqueId()) ?: error("Attempted to fetch Player instance of SkyUser [${user.getUniqueId()}] while offline!")
+    fun SkyUser.toBukkitPlayer(): Player {
+        return Bukkit.getPlayer(getUniqueId()) ?: error("Attempted to fetch Player instance of SkyUser [${getUniqueId()}] while offline!")
     }
 }
