@@ -7,8 +7,6 @@ package net.skullian.skyfactions.common.database.jooq
 import kotlin.collections.List
 
 import net.skullian.skyfactions.common.database.jooq.tables.FlywaySchemaHistory
-import net.skullian.skyfactions.common.database.jooq.tables.Islands
-import net.skullian.skyfactions.common.database.jooq.tables.Players
 
 import org.jooq.Catalog
 import org.jooq.Table
@@ -34,21 +32,9 @@ open class DefaultSchema : SchemaImpl(DSL.name(""), DefaultCatalog.DEFAULT_CATAL
      */
     val FLYWAY_SCHEMA_HISTORY: FlywaySchemaHistory get() = FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY
 
-    /**
-     * The table <code>islands</code>.
-     */
-    val ISLANDS: Islands get() = Islands.ISLANDS
-
-    /**
-     * The table <code>players</code>.
-     */
-    val PLAYERS: Players get() = Players.PLAYERS
-
     override fun getCatalog(): Catalog = DefaultCatalog.DEFAULT_CATALOG
 
     override fun getTables(): List<Table<*>> = listOf(
-        FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
-        Islands.ISLANDS,
-        Players.PLAYERS
+        FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY
     )
 }

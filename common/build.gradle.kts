@@ -2,10 +2,6 @@ import org.jooq.meta.jaxb.Logging
 
 buildscript {
 
-    repositories {
-        mavenCentral()
-    }
-
     // jOOQ and Flyway use SQLite for validating migrations and creating classes, so we
     // need to add the SQLite JDBC dependency to the buildscript for the plugins
     dependencies {
@@ -16,12 +12,10 @@ buildscript {
 plugins {
     alias(libs.plugins.flyway)
     alias(libs.plugins.jooq.codgen)
-    kotlin("jvm")
 }
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
@@ -31,18 +25,10 @@ dependencies {
     }
 
     compileOnly(libs.configlib.yaml)
-    compileOnly(libs.kotlinx.serialization)
-    // we only include jackson databind because kotlinx serialization
-    // doesn't seem to play very nicely when it comes to things like paper classloader
-    // so we use jackson purely for reading library json values in jar resources
-    implementation(libs.jackson.databind)
-
-    compileOnly(libs.bundles.adventure)
-    compileOnly(libs.reflections)
 
     compileOnly(libs.sentry)
+    compileOnly(libs.guava)
 
-    compileOnly(libs.bundles.database)
     jooqCodegen(libs.sqlite.jdbc)
 }
 

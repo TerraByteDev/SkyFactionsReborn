@@ -1,4 +1,4 @@
-package net.skullian.skyfactions.common.eventbus
+package net.skullian.skyfactions.common.event.bus
 
 import net.skullian.skyfactions.api.event.Event
 import net.skullian.skyfactions.api.event.EventPriority

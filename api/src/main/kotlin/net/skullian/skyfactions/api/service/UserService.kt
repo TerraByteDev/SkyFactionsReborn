@@ -1,6 +1,6 @@
 package net.skullian.skyfactions.api.service
 
-import net.skullian.skyfactions.api.library.flavor.service.Service
+import info.preva1l.trashcan.flavor.annotations.Service
 import net.skullian.skyfactions.api.model.user.SkyUser
 import java.util.Optional
 import java.util.UUID

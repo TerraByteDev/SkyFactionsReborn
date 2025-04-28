@@ -6,14 +6,21 @@ import de.exlll.configlib.NameFormatters
 import de.exlll.configlib.YamlConfigurationProperties
 import de.exlll.configlib.YamlConfigurations
 import net.skullian.skyfactions.api.SkyApi
-import net.skullian.skyfactions.common.database.DatabaseType
+import net.skullian.skyfactions.api.database.DatabaseType
 import net.skullian.skyfactions.common.util.SLogger
 import java.nio.file.Path
 
+/**
+ * The main config for SkyFactions.
+ */
 @Configuration
 class Config {
 
 
+    /**
+     * Database configuration.
+     * Facilitates SQLite and MySQL (or similar) database configurations.
+     */
     @Configuration
     class Database {
         @Comment(
@@ -22,7 +29,7 @@ class Config {
             "- SQLITE",
             "- MYSQL",
             "- MARIADB",
-            "- POSTGRES"
+            "- POSTGRESQL"
         )
         var databaseType = DatabaseType.SQLITE
         var databaseHost = "localhost"
@@ -46,6 +53,9 @@ class Config {
         ) var properties: List<String> = emptyList()
     }
 
+    /**
+     * Configurations that apply to multiple (if not all) aspects of the plugin.
+     */
     @Configuration
     class Global {
         @Comment(
@@ -61,6 +71,10 @@ class Config {
             "You can configure the Sentry integration here."
         ) var sentry = SentryDsn()
 
+        /**
+         * Configure sentry.io monitoring.
+         */
+        @Configuration
         class SentryDsn {
             @Comment("Leaving dsn-url empty will disable the Sentry integration.")
             var dsnUrl = ""
@@ -79,7 +93,7 @@ class Config {
     companion object {
         private var instance: Config? = null
 
-        private val fileName = "config.yml"
+        private const val fileName = "config.yml"
         private val header = """
                _____      __  __  _                 
               / ___/___  / /_/ /_(_)___  ____ ______
@@ -98,6 +112,9 @@ class Config {
             .setNameFormatter(NameFormatters.LOWER_KEBAB_CASE)
             .build()
 
+        /**
+         * Get an instance of [Config].
+         */
         @JvmStatic
         fun i(): Config {
             if (instance == null) {
@@ -107,6 +124,9 @@ class Config {
             return instance!!
         }
 
+        /**
+         * Reload config changes after file modifications.
+         */
         @JvmStatic
         fun reload() {
             instance = YamlConfigurations.load(getConfigLocation(), Config::class.java, properties)

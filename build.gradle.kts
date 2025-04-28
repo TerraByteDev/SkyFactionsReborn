@@ -4,10 +4,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `maven-publish`
+    alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.shadow)
     alias(libs.plugins.detekt)
-    kotlin("jvm")
 }
 
 allprojects {
@@ -18,9 +18,18 @@ allprojects {
     group = "net.skullian.skyfactions"
     version = "1.0.0-ALPHA"
 
+    val apiAnnotationProcessor = configurations.maybeCreate("apiAnnotation")
+    plugins.withType<JavaPlugin> {
+        extensions.getByType<SourceSetContainer>().named(SourceSet.MAIN_SOURCE_SET_NAME) {
+            configurations.api.get().extendsFrom(apiAnnotationProcessor)
+            configurations.annotationProcessor.get().extendsFrom(apiAnnotationProcessor)
+        }
+    }
+
     repositories {
         mavenCentral()
         maven("https://libraries.minecraft.net")
+        maven("https://repo.preva1l.info/releases")
     }
 }
 
@@ -28,13 +37,6 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
     apply(plugin = "com.gradleup.shadow")
     apply(plugin = "io.gitlab.arturbosch.detekt")
-
-    tasks.processResources {
-        val tokenMap = variables()
-        filesMatching(listOf("**/*.json", "**/*.yml")) {
-            expand(tokenMap)
-        }
-    }
 
     kotlin {
         jvmToolchain(jdkVersion = 21)
@@ -76,9 +78,8 @@ subprojects {
     }
 
     tasks.getByName("build")
-        .dependsOn(
-            "shadowJar"
-        )
+        .dependsOn("shadowJar")
+
 
     detekt {
         toolVersion = "1.23.8"
@@ -89,31 +90,15 @@ subprojects {
 
 dependencies {
     implementation("org.xerial:sqlite-jdbc:3.42.0.0")
-    implementation(kotlin("stdlib-jdk8"))
 }
 
-tasks.shadowJar {
-    archiveClassifier.set("")
-    configurations = listOf(project.configurations.runtimeClasspath.get())
-    dependencies {
-        include(project(":common"))
-        include(project(":api"))
+tasks {
+    shadowJar {
+        archiveClassifier.set("")
+        configurations = listOf(project.configurations.runtimeClasspath.get())
+        dependencies {
+            include(project(":common"))
+            include(project(":api"))
+        }
     }
 }
-
-/**
- * Variables that are replaced within resource files,
- * during the processResources task.
- */
-fun variables(): Map<String, String> = mapOf(
-    "version" to rootProject.version.toString(),
-    "kotlinVersion" to libs.versions.kotlin.version.get(),
-    "kotlinxVersion" to libs.versions.kotlinx.version.get(),
-    "adventureVersion" to libs.versions.adventure.version.get(),
-    "adventurePlatformVersion" to libs.versions.adventure.platform.version.get(),
-    "reflectionsVersion" to libs.versions.reflections.version.get(),
-    "flywayVersion" to libs.versions.flyway.version.get(),
-    "jooqVersion" to libs.versions.jooq.version.get(),
-    "hikariVersion" to libs.versions.hikari.version.get(),
-    "sentryVersion" to libs.versions.sentry.version.get(),
-)

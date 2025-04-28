@@ -1,9 +1,9 @@
 package net.skullian.skyfactions.api
 
+import info.preva1l.trashcan.flavor.annotations.Service
 import net.kyori.adventure.audience.Audience
+import net.skullian.skyfactions.api.database.DatabaseService
 import net.skullian.skyfactions.api.event.bus.EventBus
-import net.skullian.skyfactions.api.hook.HookManager
-import net.skullian.skyfactions.api.hook.SkyHook
 import net.skullian.skyfactions.api.model.user.SkyUser
 import net.skullian.skyfactions.api.service.UserService
 
@@ -11,6 +11,9 @@ import net.skullian.skyfactions.api.service.UserService
  * The main API class for SkyFactions.
  * This class provides access to the various components of the API.
  */
+@Service(
+    priority = 1
+)
 interface SkyApi {
 
     companion object {
@@ -38,16 +41,6 @@ interface SkyApi {
     }
 
     /**
-     * Called when the platform is initialising.
-     */
-    fun onEnable() {}
-
-    /**
-     * Called on server shutdown.
-     */
-    fun onDisable() {}
-
-    /**
      * Get the [SkyPlatform] instance.
      * This provides useful methods to interact with the platform.
      */
@@ -62,10 +55,10 @@ interface SkyApi {
     fun getUserService(): UserService
 
     /**
-     * Get the hook manager.
-     * This facilitates the platform [SkyHook]
+     * Get the database service.
+     * This facilitates the saving of all persistent data.
      */
-    fun getHookManager(): HookManager
+    fun getDatabaseService(): DatabaseService
 
     // ------ Components ------ //
 

@@ -6,14 +6,12 @@ val branchProvider: Provider<String> = providers.exec {
     commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
 }.standardOutput.asText
 
-repositories {
-    mavenCentral()
-    mavenLocal()
-}
-
 dependencies {
-    compileOnly(libs.kotlinx.serialization)
-    compileOnly(libs.bundles.adventure)
+    api(libs.kotlinx.serialization)
+
+    api(libs.bundles.trashcan.common)
+    api(libs.bundles.adventure)
+    api(libs.bundles.database)
 }
 
 tasks.publish {
