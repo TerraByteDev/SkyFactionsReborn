@@ -1,3 +1,6 @@
+# DISCLAIMER
+This code is pretty awful. I'm in the process of rewriting it. 
+
 ![ ](assets/SkyFactionsReborn.png)
 <div align="center">
       <a href="https://discord.gg/SwxXMrFdjp">
